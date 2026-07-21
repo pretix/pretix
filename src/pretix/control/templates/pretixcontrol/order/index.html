@@ -705,7 +705,7 @@
                                     {% if line.tax_rate %}
                                         <br/>
                                         <small>
-                                            {% blocktrans trimmed with rate=line.tax_rate|floatformat:-2 taxname=line.tax_rule.name|default:s_taxes %}
+                                            {% blocktrans trimmed with rate=line.tax_rate|tax_rate_format taxname=line.tax_rule.name|default:s_taxes %}
                                                 <strong>plus</strong> {{ rate }}% {{ taxname }}
                                             {% endblocktrans %}
                                         </small>
@@ -715,7 +715,7 @@
                                     {% if line.tax_rate and line.price %}
                                         <br/>
                                         <small>
-                                            {% blocktrans trimmed with rate=line.tax_rate|floatformat:-2 taxname=line.tax_rule.name|default:s_taxes %}
+                                            {% blocktrans trimmed with rate=line.tax_rate|tax_rate_format taxname=line.tax_rule.name|default:s_taxes %}
                                                 incl. {{ rate }}% {{ taxname }}
                                             {% endblocktrans %}
                                         </small>
@@ -755,7 +755,7 @@
                                     {% if fee.tax_rate %}
                                         <br/>
                                         <small>
-                                            {% blocktrans trimmed with rate=fee.tax_rate|floatformat:-2 taxname=fee.tax_rule.name|default:s_taxes %}
+                                            {% blocktrans trimmed with rate=fee.tax_rate|tax_rate_format taxname=fee.tax_rule.name|default:s_taxes %}
                                                 <strong>plus</strong> {{ rate }}% {{ taxname }}
                                             {% endblocktrans %}
                                         </small>
@@ -765,7 +765,7 @@
                                     {% if fee.tax_rate %}
                                         <br/>
                                         <small>
-                                            {% blocktrans trimmed with rate=fee.tax_rate|floatformat:-2 taxname=fee.tax_rule.name|default:s_taxes %}
+                                            {% blocktrans trimmed with rate=fee.tax_rate|tax_rate_format taxname=fee.tax_rule.name|default:s_taxes %}
                                                 incl. {{ rate }}% {{ taxname }}
                                             {% endblocktrans %}
                                         </small>
@@ -903,7 +903,7 @@
                                             <tr>
                                                 <td colspan="1"></td>
                                                 <td colspan="5">
-                                                    {{ p.html_info|safe }}
+                                                    {{ p.html_info }}
                                                     {% if staff_session %}
                                                         <p>
                                                             <a href="" class="btn btn-default btn-xs admin-only" data-expandpayment data-id="{{ p.pk }}">
@@ -1018,7 +1018,7 @@
                                                             </dl>
                                                         {% endif %}
                                                         {% if r.html_info %}
-                                                            {{ r.html_info|safe }}
+                                                            {{ r.html_info }}
                                                         {% endif %}
                                                         {% if staff_session %}
                                                             <p>

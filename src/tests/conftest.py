@@ -28,6 +28,7 @@ from django.test import override_settings
 from django.utils import translation
 from django_scopes import scopes_disabled
 from fakeredis import FakeRedisConnection
+from hierarkey.proxy import dirty_cache_keys
 from xdist.dsession import DSession
 
 from pretix.testutils.mock import get_redis_connection
@@ -82,6 +83,11 @@ def reset_locale():
     translation.activate("en")
 
 
+@pytest.fixture(autouse=True)
+def reset_hierarkey_cache_state():
+    dirty_cache_keys.set(set())
+
+
 @pytest.fixture
 def fakeredis_client(monkeypatch):
     worker_id = os.environ.get("PYTEST_XDIST_WORKER")
@@ -120,6 +126,7 @@ def fakeredis_client(monkeypatch):
         redis = get_redis_connection("default", True)
         redis.flushall()
         monkeypatch.setattr('django_redis.get_redis_connection', get_redis_connection, raising=False)
+        monkeypatch.setattr('pretix.base.metrics.redis', redis, raising=False)
         yield redis
 
 

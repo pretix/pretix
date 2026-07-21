@@ -26,6 +26,8 @@ from babel.numbers import format_currency
 from django import template
 from django.conf import settings
 from django.template.defaultfilters import floatformat
+from django.utils import formats
+from django.utils.safestring import mark_safe
 
 from pretix.base.i18n import get_babel_locale
 
@@ -82,3 +84,19 @@ def money_numberfield_filter(value: Decimal, arg=''):
 
     places = settings.CURRENCY_PLACES.get(arg, 2)
     return str(value.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP))
+
+
+@register.filter(is_safe=True)
+def tax_rate_format(number):
+    """
+    Display a Decimal to its significant decimal places, used for tax rates.
+    """
+    assert isinstance(number, Decimal)
+    return mark_safe(
+        formats.number_format(
+            number.normalize(),
+            -number.as_tuple().exponent,
+            use_l10n=True,
+            force_grouping=False,
+        )
+    )

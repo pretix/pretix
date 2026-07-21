@@ -36,7 +36,8 @@ from urllib.parse import quote, urljoin, urlparse
 
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME, logout
-from django.http import Http404
+from django.contrib.auth.views import redirect_to_login
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, resolve_url
 from django.template.response import TemplateResponse
 from django.urls import get_script_prefix, resolve, reverse
@@ -97,6 +98,8 @@ class PermissionMiddleware:
         super().__init__()
 
     def _login_redirect(self, request):
+        from django.contrib.auth.views import redirect_to_login
+
         # Taken from django/contrib/auth/decorators.py
         path = request.build_absolute_uri()
         # urlparse chokes on lazy objects in Python 3, force to str
@@ -109,10 +112,21 @@ class PermissionMiddleware:
         if ((not login_scheme or login_scheme == current_scheme) and
                 (not login_netloc or login_netloc == current_netloc)):
             path = request.get_full_path()
-        from django.contrib.auth.views import redirect_to_login
 
-        return redirect_to_login(
-            path, resolved_login_url, REDIRECT_FIELD_NAME)
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            # It's not useful to return a 302 redirect on a XMLHttpRequest request,  because
+            # the XMLHttpRequest is unable to detect redirects.
+            return HttpResponse(
+                "Authentication required",
+                status=401,
+                headers={
+                    # Appending ?next= is handled by client, because it should be the top-level context url,
+                    # not the URL called in the background
+                    "X-Login-Url": resolved_login_url,
+                }
+            )
+
+        return redirect_to_login(path, resolved_login_url, REDIRECT_FIELD_NAME)
 
     def __call__(self, request):
         url = resolve(request.path_info)
@@ -212,14 +226,17 @@ class AuditLogMiddleware:
         if request.path.startswith(get_script_prefix() + 'control') and request.user.is_authenticated:
             if getattr(request.user, "is_hijacked", False):
                 hijack_history = request.session.get('hijack_history', False)
-                hijacker = get_object_or_404(User, pk=hijack_history[0])
+                hijacker = get_object_or_404(User, pk=hijack_history[0]["user"])
                 ss = hijacker.get_active_staff_session(request.session.get('hijacker_session'))
-                if ss:
-                    ss.logs.create(
-                        url=request.path,
-                        method=request.method,
-                        impersonating=request.user
-                    )
+                if not ss:
+                    # Staff session expired or not found
+                    logout(request)
+                    return redirect_to_login(request.get_full_path())
+                ss.logs.create(
+                    url=request.path,
+                    method=request.method,
+                    impersonating=request.user
+                )
             else:
                 ss = request.user.get_active_staff_session(request.session.session_key)
                 if ss:

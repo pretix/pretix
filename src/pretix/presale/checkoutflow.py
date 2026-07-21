@@ -51,6 +51,7 @@ from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.utils import translation
 from django.utils.functional import cached_property
+from django.utils.html import conditional_escape
 from django.utils.translation import (
     get_language, gettext_lazy as _, pgettext_lazy,
 )
@@ -86,6 +87,7 @@ from pretix.presale.forms.checkout import (
     ContactForm, InvoiceAddressForm, InvoiceNameForm, MembershipForm,
 )
 from pretix.presale.forms.customer import AuthenticationForm, RegistrationForm
+from pretix.presale.productlist import prepare_item_list_for_shop
 from pretix.presale.signals import (
     checkout_all_optional, checkout_confirm_messages, checkout_flow_steps,
     contact_form_fields, contact_form_fields_overrides,
@@ -98,7 +100,6 @@ from pretix.presale.views.cart import (
     _items_from_post_data, cart_session, create_empty_cart_id,
     get_or_create_cart_id,
 )
-from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.questions import QuestionsViewMixin
 
 
@@ -602,7 +603,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
                 if ckey not in item_cache:
                     # Get all items to possibly show
-                    items, _btn = get_grouped_items(
+                    items, _btn = prepare_item_list_for_shop(
                         self.request.event,
                         subevent=cartpos.subevent,
                         voucher=None,
@@ -1158,7 +1159,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 for a in addresses:
                     data = {
                         "_pk": a.pk,
-                        "_country_for_address": a.country.name,
+                        "_country_for_address": a.country.name if a.country else '',
                         "_state_for_address": a.state_for_address,
                         "_name": a.name,
                         "is_business": "business" if a.is_business else "individual",
@@ -1201,7 +1202,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             for p in profiles:
                 data = {
                     "_pk": p.pk,
-                    "_country_for_address": p.country.name,
+                    "_country_for_address": p.country.name if p.country else '',
                     "_state_for_address": p.state_for_address,
                     "_attendee_name": p.attendee_name,
                 }
@@ -1634,7 +1635,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         meta_info = {
             'contact_form_data': self.cart_session.get('contact_form_data', {}),
             'confirm_messages': [
-                str(m) for m in self.confirm_messages.values()
+                conditional_escape(str(m)) for m in self.confirm_messages.values()
             ]
         }
         api_meta = {}

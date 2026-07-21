@@ -23,6 +23,7 @@ import sys
 
 from django.conf import settings
 from django.urls import reverse
+from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext
 
@@ -35,21 +36,23 @@ def get_powered_by(request, safelink=True):
     d = gs.settings.license_check_input
     if d.get('poweredby_name'):
         if d.get('poweredby_url'):
-            msg = gettext('<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>').format(
+            msg = format_html(
+                gettext('<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>'),
                 name=d['poweredby_name'],
-                a_name_attr='href="{}" target="_blank" rel="noopener"'.format(
-                    sl(d['poweredby_url']) if safelink else d['poweredby_url'],
-                ),
-                a_attr='href="{}" target="_blank" rel="noopener"'.format(
+                a_name_attr=mark_safe('href="{}" target="_blank" rel="noopener"'.format(
+                    escape(sl(d['poweredby_url'])) if safelink else escape(d['poweredby_url']),
+                )),
+                a_attr=mark_safe('href="{}" target="_blank" rel="noopener"'.format(
                     sl('https://pretix.eu') if safelink else 'https://pretix.eu',
-                )
+                ))
             )
         else:
-            msg = gettext('<a {a_attr}>powered by {name} based on pretix</a>').format(
+            msg = format_html(
+                gettext('<a {a_attr}>powered by {name} based on pretix</a>'),
                 name=d['poweredby_name'],
-                a_attr='href="{}" target="_blank" rel="noopener"'.format(
+                a_attr=mark_safe('href="{}" target="_blank" rel="noopener"'.format(
                     sl('https://pretix.eu') if safelink else 'https://pretix.eu',
-                )
+                ))
             )
     else:
         msg = gettext('<a %(a_attr)s>ticketing powered by pretix</a>') % {

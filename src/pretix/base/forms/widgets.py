@@ -43,6 +43,10 @@ from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext_lazy as _
 
 from pretix.helpers.format import PlainHtmlAlternativeString
+from pretix.helpers.i18n import (
+    get_format_without_seconds, get_javascript_format,
+    get_javascript_format_without_seconds,
+)
 
 
 def replace_arabic_numbers(inp):
@@ -108,7 +112,7 @@ class DatePickerWidget(forms.DateInput):
 
 
 class TimePickerWidget(forms.TimeInput):
-    def __init__(self, attrs=None, time_format=None):
+    def __init__(self, attrs=None, time_format=None, without_seconds=False):
         attrs = attrs or {}
         if 'placeholder' in attrs:
             del attrs['placeholder']
@@ -117,8 +121,27 @@ class TimePickerWidget(forms.TimeInput):
         time_attrs['class'] += ' timepickerfield'
         time_attrs['autocomplete'] = 'off'
 
+        if time_format or without_seconds:
+            # Explicitly set data-format attributes for the JS layer instead of relying on the body-wide config
+            def time_format_attr():
+                if without_seconds:
+                    return get_javascript_format_without_seconds(time_format or "TIME_INPUT_FORMATS")
+                return get_javascript_format(time_format or "TIME_INPUT_FORMATS")
+
+            time_attrs['data-format'] = lazy(time_format_attr, str)
+
+            def time_format_attr():
+                if without_seconds:
+                    return get_javascript_format_without_seconds(time_format or "TIME_INPUT_FORMATS")
+                return get_javascript_format(time_format or "TIME_INPUT_FORMATS")
+
+            time_attrs['data-format'] = lazy(time_format_attr, str)
+
         def placeholder():
-            tf = time_format or get_format('TIME_INPUT_FORMATS')[0]
+            if without_seconds:
+                tf = time_format or get_format_without_seconds('TIME_INPUT_FORMATS')
+            else:
+                tf = time_format or get_format('TIME_INPUT_FORMATS')[0]
             return now().replace(
                 year=2000, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
             ).strftime(tf)
@@ -182,7 +205,7 @@ class UploadedFileWidget(forms.ClearableFileInput):
 class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
     template_name = 'pretixbase/forms/widgets/splitdatetime.html'
 
-    def __init__(self, attrs=None, date_format=None, time_format=None, min_date=None, max_date=None):
+    def __init__(self, attrs=None, date_format=None, time_format=None, min_date=None, max_date=None, without_seconds=False):
         attrs = attrs or {}
         if 'placeholder' in attrs:
             del attrs['placeholder']
@@ -205,14 +228,36 @@ class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
                 max_date if not isinstance(max_date, datetime) else max_date.astimezone(get_current_timezone()).date()
             ).isoformat()
 
+        if date_format or time_format or without_seconds:
+            # Explicitly set data-format attributes for the JS layer instead of relying on the body-wide config
+            def date_format_attr():
+                if without_seconds:
+                    return get_javascript_format_without_seconds(date_format or "DATE_INPUT_FORMATS")
+                return get_javascript_format(date_format or "DATE_INPUT_FORMATS")
+
+            date_attrs['data-format'] = lazy(date_format_attr, str)
+
+            def time_format_attr():
+                if without_seconds:
+                    return get_javascript_format_without_seconds(time_format or "TIME_INPUT_FORMATS")
+                return get_javascript_format(time_format or "TIME_INPUT_FORMATS")
+
+            time_attrs['data-format'] = lazy(time_format_attr, str)
+
         def date_placeholder():
-            df = date_format or get_format('DATE_INPUT_FORMATS')[0]
+            if without_seconds:
+                df = date_format or get_format_without_seconds('DATE_INPUT_FORMATS')
+            else:
+                df = date_format or get_format('DATE_INPUT_FORMATS')[0]
             return now().replace(
                 year=2000, month=12, day=31, hour=18, minute=0, second=0, microsecond=0
             ).strftime(df)
 
         def time_placeholder():
-            tf = time_format or get_format('TIME_INPUT_FORMATS')[0]
+            if without_seconds:
+                tf = time_format or get_format_without_seconds('TIME_INPUT_FORMATS')
+            else:
+                tf = time_format or get_format('TIME_INPUT_FORMATS')[0]
             return now().replace(
                 year=2000, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
             ).strftime(tf)

@@ -39,6 +39,7 @@ from pretix.base.reldate import RelativeDateTimeField, RelativeDateWrapper
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.control.forms.rrule import RRuleForm
+from pretix.helpers.i18n import get_javascript_format_without_seconds
 from pretix.helpers.money import change_decimal_field
 
 
@@ -80,11 +81,11 @@ class SubEventForm(I18nModelForm):
             'presale_end': SplitDateTimeField,
         }
         widgets = {
-            'date_from': SplitDateTimePickerWidget(),
-            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}),
-            'date_admission': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}),
-            'presale_start': SplitDateTimePickerWidget(),
-            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
+            'date_from': SplitDateTimePickerWidget(without_seconds=True),
+            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}, without_seconds=True),
+            'date_admission': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}, without_seconds=True),
+            'presale_start': SplitDateTimePickerWidget(without_seconds=True),
+            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}, without_seconds=True),
         }
 
 
@@ -162,7 +163,7 @@ class SubEventBulkEditForm(I18nModelForm):
             self.fields[k + '_time'] = forms.TimeField(
                 label=self._meta.model._meta.get_field(k).verbose_name,
                 help_text=self._meta.model._meta.get_field(k).help_text,
-                widget=TimePickerWidget(),
+                widget=TimePickerWidget(without_seconds=True),
                 required=False,
             )
 
@@ -505,6 +506,12 @@ class TimeForm(forms.Form):
         widget=forms.TimeInput(attrs={'class': 'timepickerfield', 'autocomplete': 'off'}),
         required=False
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['time_from'].widget.attrs['data-format'] = get_javascript_format_without_seconds("TIME_INPUT_FORMATS")
+        self.fields['time_to'].widget.attrs['data-format'] = get_javascript_format_without_seconds("TIME_INPUT_FORMATS")
+        self.fields['time_admission'].widget.attrs['data-format'] = get_javascript_format_without_seconds("TIME_INPUT_FORMATS")
 
 
 TimeFormSet = formset_factory(

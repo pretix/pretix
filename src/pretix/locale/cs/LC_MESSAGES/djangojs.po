@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:47+0000\n"
+"POT-Creation-Date: 2026-07-06 15:52+0000\n"
 "PO-Revision-Date: 2026-01-08 04:00+0000\n"
 "Last-Translator: Jiří Pastrňák <jiri@pastrnak.email>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -19,181 +19,336 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 5.15.1\n"
 
-#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
-#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
-#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
+#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js
 msgid "Marked as paid"
 msgstr "Označeno jako zaplacené"
 
-#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
+#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js
 msgid "Comment:"
 msgstr "Komentář:"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:34
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "PayPal"
 msgstr "PayPal"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:35
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Venmo"
 msgstr "Venmo"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:36
-#: pretix/static/pretixpresale/js/walletdetection.js:38
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
+#: pretix/static/pretixpresale/js/walletdetection.js
 msgid "Apple Pay"
 msgstr "Apple Pay"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:37
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Itaú"
 msgstr "Itaú"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:38
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "PayPal Credit"
 msgstr "PayPal Credit"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:39
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Credit Card"
 msgstr "Kreditní karta"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:40
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "PayPal Pay Later"
 msgstr "PayPal Pay Later"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "iDEAL | Wero"
 msgstr ""
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "SEPA Direct Debit"
 msgstr "Inkasní příkaz SEPA"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Bancontact"
 msgstr "Bancontact"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:44
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "giropay"
 msgstr "giropay"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:45
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "SOFORT"
 msgstr "SOFORT"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:46
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "eps"
 msgstr "eps"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:47
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "MyBank"
 msgstr "MyBank"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:48
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Przelewy24"
 msgstr "Przelewy24"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:49
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Verkkopankki"
 msgstr "Verkkopankki"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:50
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "PayU"
 msgstr "PayU"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:51
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "BLIK"
 msgstr "BLIK"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:52
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Trustly"
 msgstr "Trustly"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:53
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Zimpler"
 msgstr "Zimpler"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:54
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Maxima"
 msgstr "Maxima"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:55
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "OXXO"
 msgstr "OXXO"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:56
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Boleto"
 msgstr "Boleto"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:57
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "WeChat Pay"
 msgstr "WeChat Pay"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:58
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/static/pretixpresale/js/ui/cart.js:89
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid "Continue"
 msgstr "Pokračovat"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:244
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:343
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js
 msgid "Confirming your payment …"
 msgstr "Potvrzuji vaši platbu …"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:254
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Payment method unavailable"
 msgstr "Způsob platby není k dispozici"
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Placed orders"
 msgstr "Zadané objednávky"
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Paid orders"
 msgstr "Zaplacené objednávky"
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Attendees (ordered)"
 msgstr ""
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Attendees (paid)"
 msgstr ""
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:51
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Total revenue"
 msgstr "Celkové příjmy"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:15
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js
 msgid "Contacting Stripe …"
 msgstr "Kontaktuji Stripe …"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:72
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js
 msgid "Total"
 msgstr "Celkem"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:291
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js
 msgid "Contacting your bank …"
 msgstr "Kontaktuji vaši banku …"
 
-#: pretix/static/lightbox/js/lightbox.js:96
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Select a check-in list"
+msgstr "Zvolte check-in list"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "No active check-in lists found."
+msgstr "Žádné aktivní check-in listy."
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Switch check-in list"
+msgstr "Změnit check-in list"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Search results"
+msgstr "Vyhledat výsledky"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "No tickets found"
+msgstr "Nenalezeny žádné lístky"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Result"
+msgstr "Výsledek"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "This ticket requires special attention"
+msgstr "Tato vstupenka vyžaduje speciální pozornost"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Switch direction"
+msgstr "Změnit směr"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Entry"
+msgstr "Vstup"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Exit"
+msgstr "Výstup"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Scan a ticket or search and press return…"
+msgstr "Naskenujte vstupenku, nebo ji vyhledejte a zmáčkněte zpět…"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Load more"
+msgstr "Načíst více"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Valid"
+msgstr "Potrvzeno"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Unpaid"
+msgstr "Nezaplaceno"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Canceled"
+msgstr "Zrušeno"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Confirmed"
+msgstr "Potvrzeno"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Approval pending"
+msgstr "Čeká na schválení"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Redeemed"
+msgstr "Uplatněno"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket not paid"
+msgstr "Vstupenka není zaplacena"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "This ticket is not yet paid. Do you want to continue anyways?"
+msgstr "Vstupenka nebyla zaplacena. Chcete i přesto pokračovat?"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Additional information required"
+msgstr "Potřebné další informace"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Valid ticket"
+msgstr "Platná vstupenka"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Exit recorded"
+msgstr "Opustit nahrávané"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket already used"
+msgstr "Vstupenka již byla použita"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Information required"
+msgstr "Informace vyžadována"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Unknown ticket"
+msgstr "Neznámá vstupenka"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket type not allowed here"
+msgstr "Typ vstupenky zde není povolen"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Entry not allowed"
+msgstr "Vstup není povolen"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket code revoked/changed"
+msgstr "Kód vstupenky změněn"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket blocked"
+msgstr "Vstupenka zablokována"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket not valid at this time"
+msgstr "Vstupenka je v tuto chvíli neplatná"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Order canceled"
+msgstr "Objednávka zrušena"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket code is ambiguous on list"
+msgstr "Kód vstupenky je v seznamu nejednoznačný"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Order not approved"
+msgstr "Objednávka nebyla potvrzena"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Checked-in Tickets"
+msgstr "Vyřízené vstupenky"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Valid Tickets"
+msgstr "Platné vstupenky"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Currently inside"
+msgstr "Aktuálně uvnitř"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+#: pretix/static/pretixcontrol/js/ui/question.js
+#: pretix/static/pretixpresale/js/ui/questions.js
+msgid "Yes"
+msgstr "Ano"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+#: pretix/static/pretixcontrol/js/ui/question.js
+#: pretix/static/pretixpresale/js/ui/questions.js
+msgid "No"
+msgstr "Ne"
+
+#: pretix/static/lightbox/js/lightbox.js
 msgid "close"
 msgstr "zavřít"
 
-#: pretix/static/pretixbase/js/addressform.js:108
-#: pretix/static/pretixpresale/js/ui/main.js:529
+#: pretix/static/pretixbase/js/addressform.js
+#: pretix/static/pretixpresale/js/ui/main.js
 msgid "required"
 msgstr "povinný"
 
-#: pretix/static/pretixbase/js/asynctask.js:13
+#: pretix/static/pretixbase/js/asynctask.js
 msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
@@ -201,11 +356,11 @@ msgstr ""
 "Váš požadavek je právě zpracováván. V závislosti na velikosti vaší udalosti, "
 "to může trvat několik minut."
 
-#: pretix/static/pretixbase/js/asynctask.js:17
+#: pretix/static/pretixbase/js/asynctask.js
 msgid "Your request has been queued on the server and will soon be processed."
 msgstr "Váš požadavek byl vložem do fronty serveru a brzy bude zpracován."
 
-#: pretix/static/pretixbase/js/asynctask.js:21
+#: pretix/static/pretixbase/js/asynctask.js
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -215,14 +370,12 @@ msgstr ""
 "Pokud to trvá více jak dvě minuty, prosím kontaktuje nás nebo se vraťte do "
 "vašeho prohlížeče a zkuste to znovu."
 
-#: pretix/static/pretixbase/js/asynctask.js:135
-#: pretix/static/pretixbase/js/asynctask.js:192
-#: pretix/static/pretixbase/js/asynctask.js:196
-#: pretix/static/pretixcontrol/js/ui/mail.js:24
+#: pretix/static/pretixbase/js/asynctask.js
+#: pretix/static/pretixcontrol/js/ui/mail.js
 msgid "An error of type {code} occurred."
 msgstr "Vyskytla se chyba {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:138
+#: pretix/static/pretixbase/js/asynctask.js
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -230,24 +383,24 @@ msgstr ""
 "Momentálně nemůžeme kontaktovat server, ale stále se o to pokoušíme. "
 "Poslední chybový kód: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:172
-#: pretix/static/pretixcontrol/js/ui/mail.js:21
+#: pretix/static/pretixbase/js/asynctask.js
+#: pretix/static/pretixcontrol/js/ui/mail.js
 msgid "The request took too long. Please try again."
 msgstr "Zpracování požadavku trvá příliš dlouho. Prosím zkuste to znovu."
 
-#: pretix/static/pretixbase/js/asynctask.js:198
-#: pretix/static/pretixcontrol/js/ui/mail.js:26
+#: pretix/static/pretixbase/js/asynctask.js
+#: pretix/static/pretixcontrol/js/ui/mail.js
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "Momentálně nemůžeme kontaktovat server. Prosím zkuste to znovu. Chybový kód: "
 "{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:226
+#: pretix/static/pretixbase/js/asynctask.js
 msgid "We are processing your request …"
 msgstr "Zpracováváme váš požadavek …"
 
-#: pretix/static/pretixbase/js/asynctask.js:229
+#: pretix/static/pretixbase/js/asynctask.js
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -257,179 +410,332 @@ msgstr ""
 "prosím zkontrolujte své internetové připojení a znovu načtěte stránku a "
 "zkuste to znovu."
 
-#: pretix/static/pretixbase/js/asynctask.js:286
+#: pretix/static/pretixbase/js/asynctask.js
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr "Pokud akce trvá déle než několik minut, kontaktujte nás."
 
-#: pretix/static/pretixbase/js/asynctask.js:341
+#: pretix/static/pretixbase/js/asynctask.js
 msgid "Close message"
 msgstr "Zavřít zprávu"
 
-#: pretix/static/pretixcontrol/js/clipboard.js:23
+#: pretix/static/pretixcontrol/js/clipboard.js
 msgid "Copied!"
 msgstr "Zkopírováno!"
 
-#: pretix/static/pretixcontrol/js/clipboard.js:29
+#: pretix/static/pretixcontrol/js/clipboard.js
 msgid "Press Ctrl-C to copy!"
 msgstr "Stiskněte Ctrl-C pro zkopírování!"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:171
+#: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
+msgid "Edit"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
+msgid "Visualize"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
+msgid ""
+"Your rule always filters by product or variation, but the following products "
+"or variations are not contained in any of your rule parts so people with "
+"these tickets will not get in:"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
+msgid "Please double-check if this was intentional."
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "All of the conditions below (AND)"
+msgstr "Všechny následující podmínky (AND)"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "At least one of the conditions below (OR)"
+msgstr "Alespoň jedna z následujících podmínek (OR)"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Event start"
+msgstr "Začátek akce"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Event end"
+msgstr "Konec akce"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Event admission"
+msgstr "Vstup na akci"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "custom date and time"
+msgstr "Pevný termín"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "custom time"
+msgstr "Pevná doba"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Tolerance (minutes)"
+msgstr "Tolerance (v minutách)"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Add condition"
+msgstr "Přidat podmínku"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "minutes"
+msgstr "minuty"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Duplicate"
+msgstr "Duplikát"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgctxt "entry_status"
+msgid "present"
+msgstr "přítomen"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgctxt "entry_status"
+msgid "absent"
+msgstr "nepřítomen"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "is one of"
+msgstr "je jedním z"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "is before"
+msgstr "je před"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "is after"
+msgstr "je po"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "="
+msgstr "="
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Product"
+msgstr "Produkt"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Product variation"
+msgstr "Varianta produktu"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Gate"
+msgstr "Brána"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Current date and time"
+msgstr "Současný čas"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+msgstr "Aktuální den týdne (1 = pondělí, 7 = neděle)"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Current entry status"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Number of previous entries"
+msgstr "Počet předchozích záznamů"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Number of previous entries since midnight"
+msgstr "Počet záznamů od půlnoci"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+#, fuzzy
+#| msgid "Number of previous entries"
+msgid "Number of previous entries since"
+msgstr "Počet předchozích záznamů"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+#, fuzzy
+#| msgid "Number of previous entries"
+msgid "Number of previous entries before"
+msgstr "Počet předchozích záznamů"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Number of days with a previous entry"
+msgstr "Počet dní bez úprav"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+#, fuzzy
+#| msgid "Number of days with a previous entry"
+msgid "Number of days with a previous entry since"
+msgstr "Počet dní bez úprav"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+#, fuzzy
+#| msgid "Number of days with a previous entry"
+msgid "Number of days with a previous entry before"
+msgstr "Počet dní bez úprav"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Minutes since last entry (-1 on first entry)"
+msgstr "Minuty od předchozího vstupu (-1 pro první vstup)"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Minutes since first entry (-1 on first entry)"
+msgstr "Minuty od prvního vstupu (-1 pro první vstup)"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/django-interop.ts
+msgid "Error: Product not found!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/django-interop.ts
+msgid "Error: Variation not found!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Check-in QR"
 msgstr "Check-in QR kód"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:549
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Pozadí PDF nemohl být načten:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:904
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Group of objects"
 msgstr "Skupina objektů"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:909
+#: pretix/static/pretixcontrol/js/ui/editor.js
 #, fuzzy
 #| msgid "Text object"
 msgid "Text object (deprecated)"
 msgstr "Textový objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:911
+#: pretix/static/pretixcontrol/js/ui/editor.js
 #, fuzzy
 #| msgid "Text object"
 msgid "Text box"
 msgstr "Textový objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:913
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Barcode area"
 msgstr "Oblast s QR kódem"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:915
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Image area"
 msgstr "Oblast obrazu"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:917
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Powered by pretix"
 msgstr "Poháněno společností pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:919
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:923
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Ticket design"
 msgstr "Design vstupenky"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1292
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Saving failed."
 msgstr "Uložení se nepodařilo."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1361
-#: pretix/static/pretixcontrol/js/ui/editor.js:1412
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Při nahrávání souboru PDF došlo k problému, zkuste to prosím znovu."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1395
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Opravdu chcete opustit editor bez uložení změn?"
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:19
+#: pretix/static/pretixcontrol/js/ui/mail.js
 msgid "An error has occurred."
 msgstr "Vyskytla se chyba."
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:52
+#: pretix/static/pretixcontrol/js/ui/mail.js
 msgid "Generating messages …"
 msgstr "Vytváření zpráv…"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:69
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Unknown error."
 msgstr "Neznámá chyba."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:310
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr "Tato barva má velmi dobrý kontrast a je velmi dobře čitelná."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:314
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
 msgstr ""
 "Tato barva má slušný kontrast a pravděpodobně je dostatečně dobře čitelná."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:318
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:446
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Search query"
 msgstr "Hledaný výraz"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:464
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "All"
 msgstr "Všechny"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:465
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "None"
 msgstr "Žádný"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:469
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Selected only"
 msgstr "Pouze vybrané"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:845
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1003
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Use a different name internally"
 msgstr "Interně používat jiný název"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1043
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Click to close"
 msgstr "Kliknutím zavřete"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1124
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "You have unsaved changes!"
 msgstr "Máte neuložené změny!"
 
-#: pretix/static/pretixcontrol/js/ui/orderchange.js:25
+#: pretix/static/pretixcontrol/js/ui/orderchange.js
 msgid "Calculating default price…"
 msgstr "Výpočet standardní ceny…"
 
-#: pretix/static/pretixcontrol/js/ui/plugins.js:69
+#: pretix/static/pretixcontrol/js/ui/plugins.js
 msgid "No results"
 msgstr "Žádné výsledky"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:41
+#: pretix/static/pretixcontrol/js/ui/question.js
 msgid "Others"
 msgstr "Další"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:81
+#: pretix/static/pretixcontrol/js/ui/question.js
 msgid "Count"
 msgstr "Počet"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "Ano"
-
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "Ne"
-
-#: pretix/static/pretixcontrol/js/ui/subevent.js:112
+#: pretix/static/pretixcontrol/js/ui/subevent.js
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
 msgstr[0] "(jeden další termín)"
 msgstr[1] "({num} další termíny)"
 msgstr[2] "({num} dalších termínů)"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:47
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
@@ -437,16 +743,15 @@ msgstr ""
 "Produkty v nákupním košíku již nejsou pro vás rezervovány. Pokud je lístek "
 "stále dostupný, můžete objednávku dokončit."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:49
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid "Cart expired"
 msgstr "Rezervace košíku vypršela"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:58
-#: pretix/static/pretixpresale/js/ui/cart.js:84
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid "Your cart is about to expire."
 msgstr "Nákupní košík brzy vyprší."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:62
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
@@ -456,11 +761,11 @@ msgstr[1] ""
 msgstr[2] ""
 "Produkty v nákupním košíku jsou pro vás rezervovány na dalších {num} minut."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:83
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid "Your cart has expired."
 msgstr "Platnost rezervace vašeho košíku vypršela."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:86
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
@@ -468,193 +773,223 @@ msgstr ""
 "Produkty v nákupním košíku již nejsou rezervovány. Svou objednávku se přesto "
 "můžete pokusit dokončit, některé položky však už nemusí být dostupné."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:87
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid "Do you want to renew the reservation period?"
 msgstr "Chcete obnovit rezervaci košíku?"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:90
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid "Renew reservation"
 msgstr "Obnovit rezervaci"
 
-#: pretix/static/pretixpresale/js/ui/main.js:194
+#: pretix/static/pretixpresale/js/ui/main.js
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "Organizátor si ponechává %(currency)s %(amount)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:202
+#: pretix/static/pretixpresale/js/ui/main.js
 msgid "You get %(currency)s %(amount)s back"
 msgstr "Dostanete %(currency)s %(amount)s zpět"
 
-#: pretix/static/pretixpresale/js/ui/main.js:218
+#: pretix/static/pretixpresale/js/ui/main.js
 msgid "Please enter the amount the organizer can keep."
 msgstr "Zadejte částku, kterou si organizátor může ponechat."
 
-#: pretix/static/pretixpresale/js/ui/main.js:577
+#: pretix/static/pretixpresale/js/ui/main.js
 msgid "Your local time:"
 msgstr "Místní čas:"
 
-#: pretix/static/pretixpresale/js/walletdetection.js:39
+#: pretix/static/pretixpresale/js/walletdetection.js
 msgid "Google Pay"
 msgstr "Google Pay"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:16
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Quantity"
 msgstr "Počet"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:17
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Decrease quantity"
 msgstr "Snížit počet"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:18
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Increase quantity"
 msgstr "Zvýšit počet"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:19
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Filter events by"
 msgstr "Filtrovat události"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:20
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Filter"
 msgstr "Filtrovat"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:21
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Price"
 msgstr "Cena"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:22
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
 msgstr "Původní cena: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:23
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "New price: %s"
 msgstr "Nová cena: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:24
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Select"
 msgstr "Vybrat"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:25
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Select %s"
 msgstr "Vybrat %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:26
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
 msgstr "Vybrat variantu %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:27
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Sold out"
 msgstr "Vyprodáno"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:28
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Buy"
 msgstr "Koupit"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:29
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Register"
 msgstr "Zaregistrovat"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:30
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Reserved"
 msgstr "Rezervováno"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:31
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "FREE"
 msgstr "ZDARMA"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:32
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
 msgstr "od %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:33
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
 msgstr "Obrázek%s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:34
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
 msgstr "včetně %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:35
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
 msgstr "plus %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:36
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "incl. taxes"
 msgstr "včetně daní"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:37
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "plus taxes"
 msgstr "plus daně"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:38
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
 msgstr "aktuálně k dispozici: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:39
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Only available with a voucher"
 msgstr "K dispozici pouze s poukazem"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:40
-#: pretix/static/pretixpresale/js/widget/widget.js:43
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Not yet available"
 msgstr "Zatím není k dispozici"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:41
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Not available anymore"
 msgstr "Již není k dispozici"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:42
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Currently not available"
 msgstr "Momentálně není k dispozici"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:44
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
 msgstr "minimální množství pro objednávku: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:45
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Close ticket shop"
 msgstr "Zavřít obchod"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:46
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
 msgstr "Obchod vstupenek nemohl být načten."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:47
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
@@ -663,22 +998,26 @@ msgstr ""
 "V současné době je v tomto obchodě s vstupenkami mnoho uživatelů. Otevřete "
 "prosím obchod v nové kartě."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:49
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Open ticket shop"
 msgstr "Obchod vstupenek otevřit"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:50
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Checkout"
 msgstr "Přejít k platbě"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:51
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr "Nákupní košík se nepodařilo vytvořit. Zkuste to prosím znovu"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:52
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
 "We could not create your cart, since there are currently too many users in "
@@ -688,12 +1027,14 @@ msgstr ""
 "mnoho uživatelů. Klikněte prosím na \"Pokračovat\" a zkuste to znovu na nové "
 "kartě."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:54
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "Čekací listina"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:55
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
@@ -702,32 +1043,38 @@ msgstr ""
 "V současné době máte aktivní košík pro tuto událost. Pokud vyberete další "
 "produkty, budou přidány do vašeho košíku."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:57
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "Obnovit checkout"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:58
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Uplatnit poukázku"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Uplatnit"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Kód poukázky"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Close"
 msgstr "Zavřít"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "Resume checkout"
@@ -735,67 +1082,80 @@ msgctxt "widget"
 msgid "Close checkout"
 msgstr "Obnovit checkout"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Continue"
 msgstr "Pokračovat"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:65
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Show variants"
 msgstr "Zobrazit možnosti"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Hide variants"
 msgstr "Skrýt možnosti"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "Vybrat jinou událost"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Choose a different date"
 msgstr "Vybrat jiný datum"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Back"
 msgstr "Zpět"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:70
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Next month"
 msgstr "Následující měsíc"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:71
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Previous month"
 msgstr "Předchozí měsíc"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:72
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Next week"
 msgstr "Příští týden"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:73
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Previous week"
 msgstr "Předchozí týden"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:74
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Open seat selection"
 msgstr "Otevřete výběr míst"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:75
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
 "Some or all ticket categories are currently sold out. If you want, you can "
@@ -806,331 +1166,141 @@ msgstr ""
 "Pokud chcete, můžete se přidat na čekací listinu. Poté vás budeme "
 "informovat, pokud budou místa opět volná."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:76
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Load more"
 msgstr "Načíst více"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:78
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Mo"
 msgstr "Po"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:79
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Tu"
 msgstr "Út"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:80
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "We"
 msgstr "St"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:81
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Th"
 msgstr "Čt"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:82
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Fr"
 msgstr "Pá"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:83
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Sa"
 msgstr "So"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:84
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Su"
 msgstr "Ne"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:85
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Monday"
 msgstr "Pondělí"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:86
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Tuesday"
 msgstr "Úterý"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:87
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Wednesday"
 msgstr "Středa"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:88
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Thursday"
 msgstr "Čtvrtek"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:89
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Friday"
 msgstr "Pátek"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:90
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Saturday"
 msgstr "Sobota"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:91
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Sunday"
 msgstr "Neděle"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:94
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "January"
 msgstr "Leden"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:95
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "February"
 msgstr "Únor"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:96
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "March"
 msgstr "Březen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:97
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "April"
 msgstr "Duben"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:98
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "May"
 msgstr "Květen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:99
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "June"
 msgstr "červen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:100
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "July"
 msgstr "Červenec"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:101
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "August"
 msgstr "Srpen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:102
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "September"
 msgstr "Září"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:103
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "October"
 msgstr "Říjen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:104
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "November"
 msgstr "Listopad"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:105
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "December"
 msgstr "Prosinec"
-
-#~ msgid "Select a check-in list"
-#~ msgstr "Zvolte check-in list"
-
-#~ msgid "No active check-in lists found."
-#~ msgstr "Žádné aktivní check-in listy."
-
-#~ msgid "Switch check-in list"
-#~ msgstr "Změnit check-in list"
-
-#~ msgid "Search results"
-#~ msgstr "Vyhledat výsledky"
-
-#~ msgid "No tickets found"
-#~ msgstr "Nenalezeny žádné lístky"
-
-#~ msgid "Result"
-#~ msgstr "Výsledek"
-
-#~ msgid "This ticket requires special attention"
-#~ msgstr "Tato vstupenka vyžaduje speciální pozornost"
-
-#~ msgid "Switch direction"
-#~ msgstr "Změnit směr"
-
-#~ msgid "Entry"
-#~ msgstr "Vstup"
-
-#~ msgid "Exit"
-#~ msgstr "Výstup"
-
-#~ msgid "Scan a ticket or search and press return…"
-#~ msgstr "Naskenujte vstupenku, nebo ji vyhledejte a zmáčkněte zpět…"
-
-#~ msgid "Load more"
-#~ msgstr "Načíst více"
-
-#~ msgid "Valid"
-#~ msgstr "Potrvzeno"
-
-#~ msgid "Unpaid"
-#~ msgstr "Nezaplaceno"
-
-#~ msgid "Canceled"
-#~ msgstr "Zrušeno"
-
-#~ msgid "Confirmed"
-#~ msgstr "Potvrzeno"
-
-#~ msgid "Approval pending"
-#~ msgstr "Čeká na schválení"
-
-#~ msgid "Redeemed"
-#~ msgstr "Uplatněno"
-
-#~ msgid "Cancel"
-#~ msgstr "Zrušit"
-
-#~ msgid "Ticket not paid"
-#~ msgstr "Vstupenka není zaplacena"
-
-#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
-#~ msgstr "Vstupenka nebyla zaplacena. Chcete i přesto pokračovat?"
-
-#~ msgid "Additional information required"
-#~ msgstr "Potřebné další informace"
-
-#~ msgid "Valid ticket"
-#~ msgstr "Platná vstupenka"
-
-#~ msgid "Exit recorded"
-#~ msgstr "Opustit nahrávané"
-
-#~ msgid "Ticket already used"
-#~ msgstr "Vstupenka již byla použita"
-
-#~ msgid "Information required"
-#~ msgstr "Informace vyžadována"
-
-#~ msgid "Unknown ticket"
-#~ msgstr "Neznámá vstupenka"
-
-#~ msgid "Ticket type not allowed here"
-#~ msgstr "Typ vstupenky zde není povolen"
-
-#~ msgid "Entry not allowed"
-#~ msgstr "Vstup není povolen"
-
-#~ msgid "Ticket code revoked/changed"
-#~ msgstr "Kód vstupenky změněn"
-
-#~ msgid "Ticket blocked"
-#~ msgstr "Vstupenka zablokována"
-
-#~ msgid "Ticket not valid at this time"
-#~ msgstr "Vstupenka je v tuto chvíli neplatná"
-
-#~ msgid "Order canceled"
-#~ msgstr "Objednávka zrušena"
-
-#~ msgid "Ticket code is ambiguous on list"
-#~ msgstr "Kód vstupenky je v seznamu nejednoznačný"
-
-#~ msgid "Order not approved"
-#~ msgstr "Objednávka nebyla potvrzena"
-
-#~ msgid "Checked-in Tickets"
-#~ msgstr "Vyřízené vstupenky"
-
-#~ msgid "Valid Tickets"
-#~ msgstr "Platné vstupenky"
-
-#~ msgid "Currently inside"
-#~ msgstr "Aktuálně uvnitř"
-
-#~ msgid "is one of"
-#~ msgstr "je jedním z"
-
-#~ msgid "is before"
-#~ msgstr "je před"
-
-#~ msgid "is after"
-#~ msgstr "je po"
-
-#~ msgid "="
-#~ msgstr "="
-
-#~ msgid "Product"
-#~ msgstr "Produkt"
-
-#~ msgid "Product variation"
-#~ msgstr "Varianta produktu"
-
-#~ msgid "Gate"
-#~ msgstr "Brána"
-
-#~ msgid "Current date and time"
-#~ msgstr "Současný čas"
-
-#~ msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-#~ msgstr "Aktuální den týdne (1 = pondělí, 7 = neděle)"
-
-#~ msgid "Number of previous entries"
-#~ msgstr "Počet předchozích záznamů"
-
-#~ msgid "Number of previous entries since midnight"
-#~ msgstr "Počet záznamů od půlnoci"
-
-#, fuzzy
-#~| msgid "Number of previous entries"
-#~ msgid "Number of previous entries since"
-#~ msgstr "Počet předchozích záznamů"
-
-#, fuzzy
-#~| msgid "Number of previous entries"
-#~ msgid "Number of previous entries before"
-#~ msgstr "Počet předchozích záznamů"
-
-#~ msgid "Number of days with a previous entry"
-#~ msgstr "Počet dní bez úprav"
-
-#, fuzzy
-#~| msgid "Number of days with a previous entry"
-#~ msgid "Number of days with a previous entry since"
-#~ msgstr "Počet dní bez úprav"
-
-#, fuzzy
-#~| msgid "Number of days with a previous entry"
-#~ msgid "Number of days with a previous entry before"
-#~ msgstr "Počet dní bez úprav"
-
-#~ msgid "Minutes since last entry (-1 on first entry)"
-#~ msgstr "Minuty od předchozího vstupu (-1 pro první vstup)"
-
-#~ msgid "Minutes since first entry (-1 on first entry)"
-#~ msgstr "Minuty od prvního vstupu (-1 pro první vstup)"
-
-#~ msgid "All of the conditions below (AND)"
-#~ msgstr "Všechny následující podmínky (AND)"
-
-#~ msgid "At least one of the conditions below (OR)"
-#~ msgstr "Alespoň jedna z následujících podmínek (OR)"
-
-#~ msgid "Event start"
-#~ msgstr "Začátek akce"
-
-#~ msgid "Event end"
-#~ msgstr "Konec akce"
-
-#~ msgid "Event admission"
-#~ msgstr "Vstup na akci"
-
-#~ msgid "custom date and time"
-#~ msgstr "Pevný termín"
-
-#~ msgid "custom time"
-#~ msgstr "Pevná doba"
-
-#~ msgid "Tolerance (minutes)"
-#~ msgstr "Tolerance (v minutách)"
-
-#~ msgid "Add condition"
-#~ msgstr "Přidat podmínku"
-
-#~ msgid "minutes"
-#~ msgstr "minuty"
-
-#~ msgid "Duplicate"
-#~ msgstr "Duplikát"
-
-#~ msgctxt "entry_status"
-#~ msgid "present"
-#~ msgstr "přítomen"
-
-#~ msgctxt "entry_status"
-#~ msgid "absent"
-#~ msgstr "nepřítomen"
 
 #~ msgid "iDEAL"
 #~ msgstr "iDEAL"

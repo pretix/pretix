@@ -994,10 +994,52 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             self.order.refresh_from_db()
             assert self.order.total == Decimal('23.00')
 
-    def test_do_not_remove_unavailable_on_adding(self):
+    def test_do_not_remove_timeunavailable_on_adding(self):
         self.iao.max_count = 2
         self.iao.save()
         self.workshop1.available_until = now() - datetime.timedelta(days=1)
+        self.workshop1.save()
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.total += Decimal("12")
+            self.order.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert '<li>1x Workshop 1</li>' in response.content.decode()
+        assert f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}' not in response.content.decode()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        assert 'alert-success' in response.content.decode()
+
+        with scopes_disabled():
+            assert self.ticket_pos.addons.count() == 2
+
+    def test_do_not_remove_dependencyunavailable_on_adding(self):
+        self.iao.max_count = 2
+        self.iao.save()
+        self.workshop1.hidden_if_item_available = self.workshop2
         self.workshop1.save()
         with scopes_disabled():
             OrderPosition.objects.create(

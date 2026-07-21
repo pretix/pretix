@@ -78,6 +78,7 @@ IBANs
 iCal
 ics
 iDEAL
+Instagram
 Itaú
 integrations
 intra

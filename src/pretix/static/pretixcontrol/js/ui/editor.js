@@ -1,4 +1,7 @@
 /*globals $, gettext, fabric, PDFJS*/
+
+window.module = {}  // Hack to load ajv-compiled schema without actual module loading
+
 fabric.Poweredby = fabric.util.createClass(fabric.Image, {
     type: 'poweredby',
 
@@ -219,7 +222,6 @@ var editor = {
     uploaded_file_id: null,
     _window_loaded: false,
     _fabric_loaded: false,
-    schema: null,
 
     _px2mm: function (v) {
         return v / editor.pdf_scale / 72 * editor.pdf_page.userUnit * 25.4;
@@ -1320,14 +1322,11 @@ var editor = {
 
     _source_save: function () {
         try {
-            var Ajv = window.ajv2020
-            var ajv = new Ajv()
-            var validate = ajv.compile(editor.schema)
             var data = JSON.parse($("#source-textarea").val())
-            var valid = validate(data)
+            var valid = validate30(data)
 
             if (!valid) {
-                console.log(validate.errors)
+                console.log(validate30.errors)
                 alert("Invalid input syntax. If you're familiar with this, check out the developer console for a full " +
                       "error log. Otherwise, please contact support.")
             } else {
@@ -1463,10 +1462,6 @@ var editor = {
             editor._update_save_button();
         });
         $("#pdf-info-width, #pdf-info-height").bind('change input', editor._paper_size_warning);
-
-        $.getJSON($("#schema-url").text(), function (data) {
-            editor.schema = data;
-        })
     }
 };
 

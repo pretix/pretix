@@ -74,6 +74,7 @@ Bokmål
 Boleto
 Branding-Informationen
 Browsereinstellungen
+Browserfenster
 BSD-Lizenz
 bspw
 Bundles
@@ -134,6 +135,7 @@ Einlasskontrolle
 Einmalpasswörter
 einzuchecken
 email
+E-Mail-App
 E-Mail-Renderer
 Enterprise-Lizenz
 Enterprise-Lizenzen
@@ -152,6 +154,7 @@ erstmalig
 etc
 EU-USt-ID-Nr
 Event
+Event-Absage
 Event-Eigenschaft
 Eventeingang
 Event-Erstellung
@@ -206,6 +209,7 @@ innenname
 innennamen
 innergemeinschaftliche
 Innergemeinschaftlicher
+Instagram
 Installations-ID
 Integrationen
 invalidieren
@@ -227,6 +231,7 @@ Linktext
 lit
 Log-ID
 Logindaten
+Loginvorgangs
 Macau
 MapQuest-API-Key
 max
@@ -450,6 +455,7 @@ Strong
 Swish
 systemweiten
 Tab
+Tabs
 tag
 Teammitglied
 Teamname

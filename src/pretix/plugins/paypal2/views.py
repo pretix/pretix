@@ -36,13 +36,10 @@ import logging
 from decimal import Decimal
 
 from django.contrib import messages
-from django.core import signing
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Sum
-from django.http import (
-    Http404, HttpResponse, HttpResponseBadRequest, JsonResponse,
-)
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -102,21 +99,6 @@ class PaypalOrderView:
             'order': self.order.code,
             'secret': self.order.secret
         }) + ('?paid=yes' if self.order.status == Order.STATUS_PAID else ''))
-
-
-@xframe_options_exempt
-def redirect_view(request, *args, **kwargs):
-    signer = signing.Signer(salt='safe-redirect')
-    try:
-        url = signer.unsign(request.GET.get('url', ''))
-    except signing.BadSignature:
-        return HttpResponseBadRequest('Invalid parameter')
-
-    r = render(request, 'pretixplugins/paypal2/redirect.html', {
-        'url': url,
-    })
-    r._csp_ignore = True
-    return r
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -180,7 +162,6 @@ class XHRView(View):
 
         paypal_order = prov._create_paypal_order(request, None, cart_total)
         r = JsonResponse(paypal_order.dict() if paypal_order else {})
-        r._csp_ignore = True
         return r
 
 

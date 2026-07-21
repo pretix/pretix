@@ -87,6 +87,7 @@ from pretix.base.timemachine import time_machine_now
 
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
+from ...helpers.models import NormalizedDecimalField
 from ...helpers.names import build_name
 from ...testutils.middleware import debugflags_var
 from ._transactions import (
@@ -224,8 +225,6 @@ class Order(LockModel, LoggedModel):
         "Organizer",
         related_name="orders",
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
     )
     event = models.ForeignKey(
         Event,
@@ -329,7 +328,7 @@ class Order(LockModel, LoggedModel):
         default="line",
     )
 
-    objects = ScopedManager(OrderQuerySet.as_manager().__class__, organizer='event__organizer')
+    objects = ScopedManager(OrderQuerySet.as_manager().__class__, organizer='organizer')
 
     class Meta:
         verbose_name = _("Order")
@@ -354,38 +353,60 @@ class Order(LockModel, LoggedModel):
     def _transaction_key_reset(self):
         self.__initial_status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
 
-    def gracefully_delete(self, user=None, auth=None):
-        from . import GiftCard, GiftCardTransaction, Membership, Voucher
-
-        if not self.testmode:
-            raise TypeError("Only test mode orders can be deleted.")
-        self.log_action(
-            'pretix.event.order.deleted', user=user, auth=auth,
-            data={
-                'code': self.code,
-            }
+    @classmethod
+    def gracefully_delete_bulk(cls, event, orders, user=None, auth=None):
+        # Expects to be called in a transaction
+        from . import (
+            GiftCard, GiftCardTransaction, LogEntry, Membership, Voucher,
         )
 
-        order_gracefully_delete.send(self.event, order=self)
+        if not transaction.get_connection().in_atomic_block:
+            raise Exception('gracefully_delete_bulk should only be called in atomic transaction!')
 
-        if self.status != Order.STATUS_CANCELED:
-            for position in self.positions.all():
-                if position.voucher:
-                    Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
+        logs_create = []
+        for o in orders:
+            if not o.testmode:
+                raise TypeError("Only test mode orders can be deleted.")
+            order_gracefully_delete.send(event, order=o)
+            logs_create.append(o.log_action(
+                'pretix.event.order.deleted', user=user, auth=auth,
+                data={
+                    'code': o.code,
+                },
+                save=False,
+            ))
+        LogEntry.bulk_create_and_postprocess(logs_create)
 
-        GiftCardTransaction.objects.filter(payment__in=self.payments.all()).update(payment=None)
-        GiftCardTransaction.objects.filter(refund__in=self.refunds.all()).update(refund=None)
-        GiftCardTransaction.objects.filter(order=self).update(order=None)
-        GiftCard.objects.filter(issued_in__in=self.positions.all()).update(issued_in=None)
-        Membership.objects.filter(granted_in__order=self, testmode=True).update(granted_in=None)
-        OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
-        OrderPosition.all.filter(order=self).delete()
-        OrderFee.all.filter(order=self).delete()
-        Transaction.objects.filter(order=self).delete()
-        self.refunds.all().delete()
-        self.payments.all().delete()
-        self.event.cache.delete('complain_testmode_orders')
-        self.delete()
+        voucher_ids = OrderPosition.objects.filter(
+            order__in=orders,
+            voucher__isnull=False
+        ).exclude(order__status=Order.STATUS_CANCELED).values_list("voucher_id", flat=True)
+        voucher_usages = Counter(voucher_ids)
+        for v_id, usage_count in voucher_usages.items():
+            Voucher.objects.filter(pk=v_id).update(redeemed=Greatest(0, F('redeemed') - usage_count))
+
+        GiftCardTransaction.objects.filter(payment__order__in=orders).update(payment=None)
+        GiftCardTransaction.objects.filter(refund__order__in=orders).update(refund=None)
+        GiftCardTransaction.objects.filter(order__in=orders).update(order=None)
+        GiftCard.objects.filter(issued_in__order__in=orders).update(issued_in=None)
+        Membership.objects.filter(granted_in__order__in=orders, testmode=True).update(granted_in=None)
+        OrderPosition.all.filter(order__in=orders, addon_to__isnull=False).delete()
+        OrderPosition.all.filter(order__in=orders).delete()
+        OrderFee.all.filter(order__in=orders).delete()
+        Transaction.objects.filter(order__in=orders).delete()
+        OrderRefund.objects.filter(order__in=orders).delete()
+        OrderPayment.objects.filter(order__in=orders).delete()
+        if isinstance(orders, models.QuerySet):
+            orders.delete()
+        else:
+            Order.objects.filter(pk__in=[o.pk for o in orders]).delete()
+        event.cache.delete('complain_testmode_orders')
+
+    def gracefully_delete(self, user=None, auth=None):
+        if not self.testmode:
+            raise TypeError("Only test mode orders can be deleted.")
+
+        Order.gracefully_delete_bulk(self.event, Order.objects.filter(pk=self.pk), user, auth)
 
     def email_confirm_secret(self):
         return self.tagged_secret("email_confirm", 9)
@@ -1675,7 +1696,7 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
             self.company,
             self.street,
             (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
-            self.country.name
+            self.country.name if self.country else ''
         ]
         lines = [r.strip() for r in lines if r]
         return '\n'.join(lines).strip()
@@ -2334,8 +2355,8 @@ class OrderFee(RoundingCorrectionMixin, models.Model):
     )
     description = models.CharField(max_length=190, blank=True)
     internal_type = models.CharField(max_length=255, blank=True)
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2,
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4,
         verbose_name=_('Tax rate')
     )
     tax_rule = models.ForeignKey(
@@ -2519,8 +2540,6 @@ class OrderPosition(AbstractPosition):
         "Organizer",
         related_name="order_positions",
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
     )
     order = models.ForeignKey(
         Order,
@@ -2533,8 +2552,8 @@ class OrderPosition(AbstractPosition):
         max_digits=13, decimal_places=2, null=True, blank=True,
     )
 
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2,
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4,
         verbose_name=_('Tax rate')
     )
     tax_rule = models.ForeignKey(
@@ -2577,7 +2596,7 @@ class OrderPosition(AbstractPosition):
         blank=True,
     )
 
-    all = ScopedManager(organizer='order__event__organizer')
+    all = ScopedManager(organizer='organizer')
     objects = ActivePositionManager()
 
     def __init__(self, *args, **kwargs):
@@ -3052,8 +3071,8 @@ class Transaction(models.Model):
     price_includes_rounding_correction = models.DecimalField(
         max_digits=13, decimal_places=2, default=Decimal("0.00")
     )
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2,
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4,
         verbose_name=_('Tax rate')
     )
     tax_rule = models.ForeignKey(
@@ -3168,8 +3187,8 @@ class CartPosition(AbstractPosition):
         verbose_name=_("Limit for extending expiration date"),
         null=True
     )
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2, default=Decimal('0.00'),
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4, default=Decimal('0'),
         verbose_name=_('Tax rate')
     )
     tax_code = models.CharField(
@@ -3416,7 +3435,7 @@ class InvoiceAddress(models.Model):
             self.name,
             self.street,
             (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
-            self.country.name,
+            self.country.name if self.country else '',
             self.vat_id,
             self.custom_field,
             self.internal_reference,
