@@ -330,7 +330,7 @@ def add_to_response_csp(response, csp_to_merge):
 
 
 def add_to_response_csp_via_request(request, csp_to_merge):
-    _merge_csp(request.csp_to_merge, csp_to_merge)
+    _merge_csp(request._csp_to_merge, csp_to_merge)
 
 
 def calculate_csp_hash(data):
@@ -356,7 +356,7 @@ class SecurityMiddleware(MiddlewareMixin):
     )
 
     def process_request(self, request):
-        request.csp_to_merge = {}
+        request._csp_to_merge = {}
 
     def process_response(self, request, resp):
         if settings.DEBUG and resp.status_code >= 400:
@@ -429,8 +429,8 @@ class SecurityMiddleware(MiddlewareMixin):
         if settings.LOG_CSP:
             h['report-uri'] = ["/csp_report/"]
 
-        if request.csp_to_merge:
-            _merge_csp(h, request.csp_to_merge)
+        if request._csp_to_merge:
+            _merge_csp(h, request._csp_to_merge)
 
         if 'Content-Security-Policy' in resp:
             _merge_csp(h, _parse_csp(resp['Content-Security-Policy']))
