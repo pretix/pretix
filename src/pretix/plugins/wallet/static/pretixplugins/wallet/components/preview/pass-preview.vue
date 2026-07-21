@@ -11,8 +11,9 @@ const props = defineProps<{ layout: Array<PreviewLayout> }>();
 <template lang="pug">
     div.pass-container
         div.pass-content
-            RowPreview(v-for="row in layout" :config="row")
+            RowPreview(v-for="row of layout" :config="row")
 </template>
+
 <style lang="css" scoped>
 .pass-container {
     margin: 1em;
