@@ -31,7 +31,9 @@ from django import template
 from django.conf import settings
 from django.utils.safestring import mark_safe
 
-from pretix.base.middleware import add_to_response_csp_via_request, calculate_csp_hash
+from pretix.base.middleware import (
+    add_to_response_csp_via_request, calculate_csp_hash,
+)
 
 register = template.Library()
 LOGGER = logging.getLogger(__name__)
