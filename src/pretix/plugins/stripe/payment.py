@@ -1140,7 +1140,7 @@ class StripeCC(StripeMethod):
     @property
     def walletqueries(self):
         # ToDo: Check against Stripe API, if ApplePay and GooglePay are even activated/available
-        # This is probably only really feasable once the Payment Methods Configuration API is out of beta
+        # This is probably only really feasible once the Payment Methods Configuration API is out of beta
         # https://stripe.com/docs/connect/payment-method-configurations
         if self.settings.get("walletdetection", True, as_type=bool):
             return [WalletQueries.APPLEPAY, WalletQueries.GOOGLEPAY]
