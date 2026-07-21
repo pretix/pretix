@@ -134,7 +134,7 @@ def _use_vite(request):
         origin = '/'.join(referer.split('/', 3)[:3])
     if origin and vue_origins:
         origins_list = [o.strip() for o in vue_origins.strip().splitlines() if o.strip()]
-        return not origin in origins_list
+        return origin not in origins_list
     return True
 
 
