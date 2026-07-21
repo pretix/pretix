@@ -42,6 +42,7 @@ from pretix.base.templatetags.rich_text import (
     markdown_compile_email, truelink_callback,
 )
 from pretix.helpers.format import FormattedString, SafeFormatter, format_map
+from pretix.helpers.ssrf import should_block_access
 
 from pretix.base.services.placeholders import (  # noqa
     get_available_placeholders, PlaceholderContext
@@ -51,7 +52,6 @@ from pretix.base.services.placeholders import ( # noqa
     SimpleFunctionalTextPlaceholder as SimpleFunctionalMailTextPlaceholder,
 )
 from pretix.base.settings import get_name_parts_localized # noqa
-from pretix.helpers.ssrf import should_block_access
 
 logger = logging.getLogger('pretix.base.email')
 
