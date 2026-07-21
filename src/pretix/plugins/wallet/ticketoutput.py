@@ -91,6 +91,7 @@ class GoogleWalletTicketOutput(WalletOutput):
                     forms.CharField(
                         label=_("Google Wallet Issuer/Merchant ID"),
                         help_text=_(
+                            # TODO: update text
                             "After getting accepted by Google into the Google Pay API for Passes program, "
                             "your Issuer ID can be found in the Merchant center at "
                             "https://wallet.google.com/merchant/walletobjects/"
@@ -108,6 +109,7 @@ class GoogleWalletTicketOutput(WalletOutput):
                             "for Passes Issuer ID"
                         ),
                         required=False,
+                        # TODO: add validator
                         # validators=[validate_json_credentials]
                     ),
                 ),
@@ -189,18 +191,5 @@ class AppleWalletTicketOutput(WalletOutput):
                 ),
             ]
         )
-
-
-# settings_hierarkey.add_default("wallet_apple_certificate_file", None, File)
-# settings_hierarkey.add_default("wallet_apple_wwdr_certificate_file", None, File)
-# settings_hierarkey.add_default("ticketoutput_wallet_apple_background", None, File)
-# settings_hierarkey.add_default("ticketoutput_wallet_apple_background2x", None, File)
-# settings_hierarkey.add_default("ticketoutput_wallet_apple_background3x", None, File)
-# settings_hierarkey.add_default("ticketoutput_wallet_apple_icon", None, File)
-# settings_hierarkey.add_default("ticketoutput_wallet_apple_icon2x", None, File)
-# settings_hierarkey.add_default("ticketoutput_wallet_apple_icon3x", None, File)
-# settings_hierarkey.add_default("ticketoutput_wallet_apple_logo", None, File)
-# settings_hierarkey.add_default("ticketoutput_wallet_apple_logo2x", None, File)
-# settings_hierarkey.add_default("ticketoutput_wallet_apple_logo3x", None, File)
 
 OUTPUTS = [WalletSettingsHolder, GoogleWalletTicketOutput, AppleWalletTicketOutput]
