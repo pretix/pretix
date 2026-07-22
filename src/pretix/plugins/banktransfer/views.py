@@ -73,7 +73,9 @@ from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.plugins.banktransfer.refund_export import (
     build_sepa_xml, get_refund_export_csv,
 )
-from pretix.plugins.banktransfer.tasks import process_banktransfers
+from pretix.plugins.banktransfer.tasks import (
+    notify_incomplete_payment, process_banktransfers,
+)
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
 
@@ -165,6 +167,11 @@ class ActionView(View):
             provider='banktransfer',
             state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
         ).update(state=OrderPayment.PAYMENT_STATE_CANCELED)
+
+        trans.order.refresh_from_db()
+        if trans.order.pending_sum > Decimal('0.00') and trans.order.status == Order.STATUS_PENDING:
+            notify_incomplete_payment(trans.order)
+
         return JsonResponse({
             'status': 'ok',
         })
