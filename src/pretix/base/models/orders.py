@@ -2286,9 +2286,12 @@ class OrderRefund(models.Model):
         super().save(*args, **kwargs)
 
 
-class ActivePositionManager(ScopedManager(organizer='order__event__organizer').__class__):
-    def get_queryset(self):
-        return super().get_queryset().filter(canceled=False)
+def ActivePositionManager(**scope):
+    class InnerClass(ScopedManager(**scope).__class__):
+        def get_queryset(self):
+            return super().get_queryset().filter(canceled=False)
+
+    return InnerClass()
 
 
 class OrderFee(RoundingCorrectionMixin, models.Model):
@@ -2378,7 +2381,7 @@ class OrderFee(RoundingCorrectionMixin, models.Model):
     canceled = models.BooleanField(default=False)
 
     all = ScopedManager(organizer='order__event__organizer')
-    objects = ActivePositionManager()
+    objects = ActivePositionManager(organizer='order__event__organizer')
 
     @property
     def net_value(self):
@@ -2597,7 +2600,7 @@ class OrderPosition(AbstractPosition):
     )
 
     all = ScopedManager(organizer='organizer')
-    objects = ActivePositionManager()
+    objects = ActivePositionManager(organizer='organizer')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
