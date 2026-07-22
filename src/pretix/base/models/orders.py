@@ -508,20 +508,20 @@ class Order(LockModel, LoggedModel):
 
     @classmethod
     def annotate_overpayments(cls, qs, results=True, refunds=True, sums=False):
-        payment_sum = OrderPayment.objects.filter(
+        payment_sum = OrderPayment.objects.with_scopes_disabled().filter(
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
             order=OuterRef('pk')
         ).order_by().values('order').annotate(s=Sum('amount')).values('s')
-        refund_sum = OrderRefund.objects.filter(
+        refund_sum = OrderRefund.objects.with_scopes_disabled().filter(
             state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
                        OrderRefund.REFUND_STATE_CREATED),
             order=OuterRef('pk')
         ).order_by().values('order').annotate(s=Sum('amount')).values('s')
-        external_refund = OrderRefund.objects.filter(
+        external_refund = OrderRefund.objects.with_scopes_disabled().filter(
             state=OrderRefund.REFUND_STATE_EXTERNAL,
             order=OuterRef('pk')
         )
-        pending_refund = OrderRefund.objects.filter(
+        pending_refund = OrderRefund.objects.with_scopes_disabled().filter(
             state__in=(OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT),
             order=OuterRef('pk')
         )
