@@ -44,7 +44,6 @@ export function createButtonInstance (element: Element, htmlId?: string): App {
 	})
 
 	const observer = new MutationObserver((mutationList) => {
-		console.log(mutationList)
 		for (const mutation of mutationList) {
 			if (mutation.type === 'attributes' && mutation.attributeName?.startsWith('data-')) {
 				const attrName = mutation.attributeName.substring(5)
