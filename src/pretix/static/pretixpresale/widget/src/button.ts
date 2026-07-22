@@ -71,7 +71,7 @@ export function createButtonInstance (element: Element, htmlId?: string): App {
 		fragment.firstChild.setAttribute(attr.name, attr.value)
 	}
 	observer.observe(fragment.firstChild, { attributes: true })
-	element.parentNode.replaceChild(fragment, element);
+	element.parentNode.replaceChild(fragment, element)
 
 	return app
 }
