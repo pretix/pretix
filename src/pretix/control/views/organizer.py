@@ -134,7 +134,7 @@ from pretix.control.permissions import (
     organizer_permission_required,
 )
 from pretix.control.signals import nav_organizer
-from pretix.control.views import PaginationMixin
+from pretix.control.views import LargeResultSetPaginator, PaginationMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.helpers import OF_SELF, GroupConcat
 from pretix.helpers.compat import CompatDeleteView
@@ -2664,6 +2664,7 @@ class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     template_name = 'pretixcontrol/organizers/logs.html'
     permission = 'organizer.settings.general:write'
     model = LogEntry
+    paginator_class = LargeResultSetPaginator
     context_object_name = 'logs'
 
     def get_queryset(self):

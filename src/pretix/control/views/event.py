@@ -121,7 +121,7 @@ from ...helpers.format import (
 )
 from ..forms.filter import LogFilterForm
 from ..logdisplay import OVERVIEW_BANLIST
-from . import CreateView, PaginationMixin, UpdateView
+from . import CreateView, LargeResultSetPaginator, PaginationMixin, UpdateView
 
 logger = logging.getLogger(__name__)
 
@@ -1254,6 +1254,7 @@ class EventDelete(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixi
 class EventLog(EventPermissionRequiredMixin, PaginationMixin, ListView):
     template_name = 'pretixcontrol/event/logs.html'
     model = LogEntry
+    paginator_class = LargeResultSetPaginator
     context_object_name = 'logs'
 
     def get_queryset(self):
