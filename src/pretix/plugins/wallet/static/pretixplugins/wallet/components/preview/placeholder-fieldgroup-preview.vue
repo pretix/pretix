@@ -56,7 +56,8 @@ const props = defineProps<{
     /* center content */
     display: flex;
 	align-items: center;
-	text-align: center;
+    text-align: center;
+	justify-content: center;
     padding: 1em;
     overflow-wrap: anywhere;
 }
