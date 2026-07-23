@@ -1994,7 +1994,6 @@ class OrderChange(OrderView):
             f.form = OrderFeeChangeForm(
                 prefix='of-{}'.format(f.pk),
                 instance=f,
-                tax_rules=self.tax_rules,
                 data=self.request.POST if self.request.method == "POST" else None
             )
         return fees
