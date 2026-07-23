@@ -196,9 +196,10 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
             fname, mimet, data = platform.generate(layout, p)
             resp = HttpResponse(data, content_type=mimet)
             ftype = fname.split(".")[-1]
-            resp["Content-Disposition"] = (
-                'attachment; filename="ticket-preview.{}"'.format(ftype)
-            )
+            if not mimet.startswith("text/"):
+                resp["Content-Disposition"] = (
+                    'attachment; filename="ticket-preview.{}"'.format(ftype)
+                )
             return resp
 
 
