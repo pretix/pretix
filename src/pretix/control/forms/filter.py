@@ -3010,7 +3010,7 @@ class OutgoingMailFilterForm(FilterForm):
         return qs
 
 
-class EventLogFilterForm(FilterForm):
+class LogFilterForm(FilterForm):
     source = forms.ChoiceField(
         label=_('Source'),
         choices=[
@@ -3049,15 +3049,15 @@ class EventLogFilterForm(FilterForm):
     )
 
     def __init__(self, *args, **kwargs):
-        self.event = kwargs.pop('event')
+        self.organizer = kwargs.pop('organizer')
         super().__init__(*args, **kwargs)
 
-        self.fields['device'].queryset = self.event.organizer.devices.all().order_by('device_id')
+        self.fields['device'].queryset = self.organizer.devices.all().order_by('device_id')
         self.fields['device'].widget = Select2(
             attrs={
                 'data-model-select2': 'generic',
                 'data-select2-url': reverse('control:organizer.devices.select2', kwargs={
-                    'organizer': self.event.organizer.slug,
+                    'organizer': self.organizer.slug,
                 }),
                 'data-placeholder': _('All devices'),
             }
@@ -3075,7 +3075,7 @@ class EventLogFilterForm(FilterForm):
             qs = qs.filter(user__isnull=True, device__isnull=True)
 
         if fdata.get('device'):
-            qs = qs.filter(device_id=fdata.get('device').pk)
+            qs = qs.filter(device_id=fdata['device'].pk)
 
         if fdata.get('action_type'):
             qs = qs.filter(action_type=fdata['action_type'])

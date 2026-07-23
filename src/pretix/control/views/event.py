@@ -119,7 +119,7 @@ from ...helpers.compat import CompatDeleteView
 from ...helpers.format import (
     PlainHtmlAlternativeString, SafeFormatter, format_map,
 )
-from ..forms.filter import EventLogFilterForm
+from ..forms.filter import LogFilterForm
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
 
@@ -1295,7 +1295,7 @@ class EventLog(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
     @cached_property
     def filter_form(self):
-        return EventLogFilterForm(data=self.request.GET, event=self.request.event)
+        return LogFilterForm(data=self.request.GET, organizer=self.request.organizer)
 
 
 class EventComment(EventPermissionRequiredMixin, View):
