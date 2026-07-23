@@ -33,6 +33,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import functools
 from collections import defaultdict
 from datetime import datetime
 from decimal import Decimal
@@ -69,6 +70,15 @@ OVERVIEW_BANLIST = [
 ]
 
 
+@functools.lru_cache(maxsize=32)
+def object_id_to_string(model_class, **kwargs):
+    # The cache is thread-local and persists requests, but it's small enough that we can accept that
+    try:
+        return str(model_class.objects.get(**kwargs))
+    except model_class.DoesNotExist:
+        return "?"
+
+
 class OrderChangeLogEntryType(OrderLogEntryType):
     prefix = _('The order has been changed:')
 
@@ -93,10 +103,10 @@ class OrderItemChanged(OrderChangeLogEntryType):
     def display_prefixed(self, event: Event, logentry: LogEntry, data):
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:
-            old_item += ' - ' + str(ItemVariation.objects.get(item__event=event, pk=data['old_variation']))
+            old_item += ' - ' + str(object_id_to_string(ItemVariation, item__event_id=event.pk, pk=data['old_variation']))
         new_item = str(event.items.get(pk=data['new_item']))
         if data['new_variation']:
-            new_item += ' - ' + str(ItemVariation.objects.get(item__event=event, pk=data['new_variation']))
+            new_item += ' - ' + str(object_id_to_string(ItemVariation, item__event_id=event.pk, pk=data['new_variation']))
         return _('Position #{posid}: {old_item} ({old_price}) changed to {new_item} ({new_price}).').format(
             posid=data.get('positionid', '?'),
             old_item=old_item, new_item=new_item,
@@ -153,14 +163,14 @@ class OrderTaxRuleChanged(OrderChangeLogEntryType):
         if 'positionid' in data:
             return _('Tax rule of position #{posid} changed from {old_rule} to {new_rule}.').format(
                 posid=data.get('positionid', '?'),
-                old_rule=TaxRule.objects.get(pk=data['old_taxrule']) if data['old_taxrule'] else '–',
-                new_rule=TaxRule.objects.get(pk=data['new_taxrule']),
+                old_rule=object_id_to_string(TaxRule, pk=data['old_taxrule']) if data['old_taxrule'] else '–',
+                new_rule=object_id_to_string(TaxRule, pk=data['new_taxrule']),
             )
         elif 'fee' in data:
             return _('Tax rule of fee #{fee} changed from {old_rule} to {new_rule}.').format(
                 fee=data.get('fee', '?'),
-                old_rule=TaxRule.objects.get(pk=data['old_taxrule']) if data['old_taxrule'] else '–',
-                new_rule=TaxRule.objects.get(pk=data['new_taxrule']),
+                old_rule=object_id_to_string(TaxRule, pk=data['old_taxrule']) if data['old_taxrule'] else '–',
+                new_rule=object_id_to_string(TaxRule, pk=data['new_taxrule']),
             )
 
 
@@ -204,7 +214,7 @@ class OrderCanceled(OrderChangeLogEntryType):
     def display_prefixed(self, event: Event, logentry: LogEntry, data):
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:
-            old_item += ' - ' + str(ItemVariation.objects.get(pk=data['old_variation']))
+            old_item += ' - ' + object_id_to_string(ItemVariation, pk=data['old_variation'])
         return _('Position #{posid} ({old_item}, {old_price}) canceled.').format(
             posid=data.get('positionid', '?'),
             old_item=old_item,
@@ -219,7 +229,7 @@ class OrderPositionAdded(OrderChangeLogEntryType):
     def display_prefixed(self, event: Event, logentry: LogEntry, data):
         item = str(event.items.get(pk=data['item']))
         if data['variation']:
-            item += ' - ' + str(ItemVariation.objects.get(item__event=event, pk=data['variation']))
+            item += ' - ' + object_id_to_string(ItemVariation, item__event_id=event.pk, pk=data['variation'])
         if data['addon_to']:
             addon_to = OrderPosition.objects.get(order__event=event, pk=data['addon_to'])
             return _('Position #{posid} created: {item} ({price}) as an add-on to position #{addon_to}.').format(
@@ -283,7 +293,7 @@ class OrderChangedSplit(OrderChangeLogEntryType):
     def display_prefixed(self, event: Event, logentry: LogEntry, data):
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:
-            old_item += ' - ' + str(ItemVariation.objects.get(pk=data['old_variation']))
+            old_item += ' - ' + object_id_to_string(ItemVariation, pk=data['old_variation'])
         url = reverse('control:event.order', kwargs={
             'event': event.slug,
             'organizer': event.organizer.slug,
@@ -339,6 +349,7 @@ class OrderChangedSplitFrom(OrderLogEntryType):
     'pretix.event.checkin.reverted': _('The check-in of position #{posid} on list "{list}" has been reverted.'),
 })
 class CheckinErrorLogEntryType(OrderLogEntryType):
+
     def display(self, logentry: LogEntry, data):
         return self.display_plain(self.plain, logentry, data)
 
@@ -353,10 +364,7 @@ class CheckinErrorLogEntryType(OrderLogEntryType):
         event = logentry.event
 
         if 'list' in data and event:
-            try:
-                data['list'] = event.checkin_lists.get(pk=data.get('list')).name
-            except CheckinList.DoesNotExist:
-                data['list'] = _("(unknown)")
+            data['list'] = object_id_to_string(CheckinList, event_id=event.id, pk=data['list'])
         else:
             data['list'] = _("(unknown)")
 
