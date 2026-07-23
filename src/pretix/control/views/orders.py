@@ -602,7 +602,7 @@ class OrderDetail(OrderView):
         ).prefetch_related(
             'item__questions', 'issued_gift_cards', 'owned_gift_cards', 'linked_media',
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
-            Prefetch('all_checkins', queryset=Checkin.all.select_related('list').order_by('datetime')),
+            Prefetch('all_checkins', queryset=Checkin.all.select_related('list', 'gate').order_by('datetime')),
             Prefetch('print_logs', queryset=PrintLog.objects.select_related('device').order_by('datetime')),
             Prefetch('subevent', queryset=self.request.event.subevents.all()),
         ).order_by('positionid')
