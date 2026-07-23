@@ -81,7 +81,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, CachedTicket, Checkin, GiftCard, Invoice, InvoiceAddress, Item,
     ItemVariation, LogEntry, Order, QuestionAnswer, Quota,
-    ScheduledEventExport, generate_secret, SeatCategoryMapping,
+    ScheduledEventExport, SeatCategoryMapping, generate_secret,
 )
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
