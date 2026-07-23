@@ -113,7 +113,8 @@ from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.exports import ScheduledOrganizerExportForm
 from pretix.control.forms.filter import (
     CustomerFilterForm, DeviceFilterForm, EventFilterForm, GiftCardFilterForm,
-    OrganizerFilterForm, ReusableMediaFilterForm, TeamFilterForm, LogFilterForm,
+    LogFilterForm, OrganizerFilterForm, ReusableMediaFilterForm,
+    TeamFilterForm,
 )
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
