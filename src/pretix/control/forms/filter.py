@@ -3078,7 +3078,7 @@ class LogFilterForm(FilterForm):
             qs = qs.filter(device_id=fdata['device'].pk)
 
         if fdata.get('action_type'):
-            qs = qs.filter(action_type=fdata['action_type'])
+            qs = qs.filter(action_type__in=fdata['action_type'].split(','))
 
         if fdata.get('user_email'):
             try:
