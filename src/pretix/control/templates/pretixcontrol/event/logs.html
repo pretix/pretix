@@ -1,41 +1,46 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
 {% load static %}
+{% load bootstrap3 %}
+{% load icon %}
 {% block title %}{% trans "Event logs" %}{% endblock %}
 {% block inside %}
     <h1>{% trans "Event logs" %}</h1>
-    <form class="form-inline helper-display-inline" action="" method="get">
-        <input type="hidden" name="content_type" value="{{ request.GET.content_type }}">
-        <input type="hidden" name="object" value="{{ request.GET.object }}">
-        <p>
-            <select name="user" class="form-control">
-                <option value="">{% trans "All actions" %}</option>
-                <option value="yes" {% if request.GET.user == "yes" %}selected="selected"{% endif %}>
-                    {% trans "Team actions" %}
-                </option>
-                <option value="no" {% if request.GET.user == "no" %}selected="selected"{% endif %}>
-                    {% trans "Customer actions" %}
-                </option>
-                {% for up in userlist %}
-                    {% if up.user__id %}
-                        <option value="{{ up.user__id }}"
-                                {% if request.GET.user == up.user__id %}selected="selected"{% endif %}>
-                            {{ up.user__email }}
-                        </option>
-                    {% endif %}
-                {% endfor %}
-                {% for d in devicelist %}
-                    {% if d.device__id %}
-                        <option value="d-{{ d.device__id }}"
-                                {% if "d-" in request.GET.user and request.GET.user|slice:"2:" == d.device__id|slugify %}selected="selected"{% endif %}>
-                            {{ d.device__name }}
-                        </option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-            <button class="btn btn-primary" type="submit">{% trans "Filter" %}</button>
-        </p>
-    </form>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Filter" %}
+            </h3>
+        </div>
+        <form class="panel-body filter-form" action="" method="get">
+            <div class="row">
+                <div class="col-md-3 col-xs-6">
+                    {% bootstrap_field filter_form.source %}
+                </div>
+                <div class="col-md-3 col-xs-6">
+                    {% bootstrap_field filter_form.device %}
+                </div>
+                <div class="col-md-3 col-xs-6">
+                    {% bootstrap_field filter_form.user_email %}
+                </div>
+            </div>
+            {{ filter_form.action_type }}
+            {{ filter_form.content_type }}
+            {{ filter_form.object }}
+            {% if filter_form.is_valid and filter_form.cleaned_data.action_type %}
+                {% icon "filter" %} <code>{{ filter_form.cleaned_data.action_type }}</code>
+            {% endif %}
+            {% if filter_form.is_valid and filter_form.cleaned_data.content_type and filter_form.cleaned_data.object %}
+                {% icon "filter" %} {% trans "Specific object selected" %}
+            {% endif %}
+            <div class="text-right flip">
+                <button class="btn btn-primary btn-lg" type="submit">
+                    <span class="fa fa-filter"></span>
+                    {% trans "Filter" %}
+                </button>
+            </div>
+        </form>
+    </div>
     <ul class="list-group">
         {% for log in logs %}
             <li class="list-group-item logentry">

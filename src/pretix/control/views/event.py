@@ -60,7 +60,7 @@ from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed,
     JsonResponse,
 )
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.urls import NoReverseMatch, reverse
 from django.utils.functional import cached_property
 from django.utils.html import conditional_escape, format_html
@@ -119,6 +119,7 @@ from ...helpers.compat import CompatDeleteView
 from ...helpers.format import (
     PlainHtmlAlternativeString, SafeFormatter, format_map,
 )
+from ..forms.filter import EventLogFilterForm
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
 
@@ -1282,31 +1283,19 @@ class EventLog(EventPermissionRequiredMixin, PaginationMixin, ListView):
                 ]
             qs = qs.filter(content_type__in=allowed_types)
 
-        if self.request.GET.get('user') == 'yes':
-            qs = qs.filter(user__isnull=False)
-        elif self.request.GET.get('user') == 'no':
-            qs = qs.filter(user__isnull=True)
-        elif self.request.GET.get('user', '').startswith('d-'):
-            qs = qs.filter(device_id=self.request.GET.get('user')[2:])
-        elif self.request.GET.get('user'):
-            qs = qs.filter(user_id=self.request.GET.get('user'))
-
-        if self.request.GET.get('action_type'):
-            qs = qs.filter(action_type=self.request.GET['action_type'])
-
-        if self.request.GET.get('content_type'):
-            qs = qs.filter(content_type=get_object_or_404(ContentType, pk=self.request.GET.get('content_type')))
-
-            if self.request.GET.get('object'):
-                qs = qs.filter(object_id=self.request.GET.get('object'))
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
 
         return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-        ctx['userlist'] = self.request.event.logentry_set.order_by().distinct().values('user__id', 'user__email')
-        ctx['devicelist'] = self.request.event.logentry_set.order_by('device__name').distinct().values('device__id', 'device__name')
+        ctx['filter_form'] = self.filter_form
         return ctx
+
+    @cached_property
+    def filter_form(self):
+        return EventLogFilterForm(data=self.request.GET, event=self.request.event)
 
 
 class EventComment(EventPermissionRequiredMixin, View):
