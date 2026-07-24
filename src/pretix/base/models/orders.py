@@ -2072,6 +2072,17 @@ class OrderPayment(models.Model):
         """
         return '{}-P-{}'.format(self.order.code, self.local_id)
 
+    @property
+    def global_id(self):
+        """
+        The global ID of this payment, constructed by the organizer slug, event slug, and the full id.
+        """
+        return "{organizer}-{event}-{full_id}".format(
+            organizer=self.order.organizer.slug.upper(),
+            event=self.order.event.slug.upper(),
+            full_id=self.full_id,
+        )
+
     def save(self, *args, **kwargs):
         if not self.local_id:
             self.local_id = (self.order.payments.aggregate(m=Max('local_id'))['m'] or 0) + 1
@@ -2271,6 +2282,17 @@ class OrderRefund(models.Model):
         :return:
         """
         return '{}-R-{}'.format(self.order.code, self.local_id)
+
+    @property
+    def global_id(self):
+        """
+        The global ID of this refund, constructed by the organizer slug, event slug, and the full id.
+        """
+        return "{organizer}-{event}-{full_id}".format(
+            organizer=self.order.organizer.slug.upper(),
+            event=self.order.event.slug.upper(),
+            full_id=self.full_id,
+        )
 
     def save(self, *args, **kwargs):
         if not self.local_id:
