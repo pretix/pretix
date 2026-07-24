@@ -10,6 +10,50 @@ function freezeRec(o) {
 	return Object.freeze(Object.fromEntries(Object.entries(o).map(([k, v]) => [k, v && Object.getPrototypeOf(v) === Object.prototype ? freezeRec(v) : v])))
 }
 
+export function localeComp(fn) {
+	return function(a, b) {
+		return fn(a).localeCompare(fn(b));
+	}
+}
+export function numericComp(fn) {
+	return function(a, b) {
+		return fn(a) - fn(b);
+	}
+}
+export function pick(key) {
+	return function(obj) {
+		return obj[key];
+	}
+}
+export function sort(array, ...orderBy) {
+	array.sort(function(a, b) {
+		for(let comp of orderBy) {
+			const result = comp(a, b);
+			if (result !== 0) {
+				return result;
+			}
+		}
+		return 0;
+	});
+}
+export function *groupBy(array, key) {
+	let lastKey, lastArray;
+	for(const x of array){
+		const k = key(x);
+		if (lastKey !== k || !lastArray) {
+			if (lastArray) {
+				yield [lastKey, lastArray];
+			}
+			lastKey = k; lastArray = [x];
+		} else {
+			lastArray.push(x);
+		}
+	}
+	if (lastArray) {
+		yield [lastKey, lastArray];
+	}
+}
+
 export const QUESTION_TYPE = {
   NUMBER: "N",
   STRING: "S",
@@ -25,7 +69,7 @@ export const QUESTION_TYPE = {
   PHONENUMBER: "TEL",
 };
 
-const _ = x => x;
+export const _ = x => x;
 
 export const QUESTION_TYPE_LABEL = {
     NUMBER: _("Number"),

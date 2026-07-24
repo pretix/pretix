@@ -4,7 +4,7 @@ import NativeDialog from './NativeDialog.vue';
 import I18nTextField from './I18nTextField.vue';
 import {useId, ref, computed} from 'vue'
 import { DragHandle } from 'vue-slicksort';
-import {get_datafield_edit_url} from "./api";
+import {getDatafieldEditUrl} from "./api";
 
 const id = useId();
 const props = defineProps(['question', 'datafields', 'editable', 'possible_dependencies'])
@@ -99,7 +99,7 @@ const editor = ref();
             <p class="form-control-static">
 							<template v-if="typeof question.question === 'number'">
 								{{ df.internal_name }}
-								<a :href="get_datafield_edit_url(df.id)" target="_blank">Manage data field details</a>
+								<a :href="getDatafieldEditUrl(df.id)" target="_blank">Manage data field details</a>
 							</template>
 							<template v-else>
 								{{ question.question }}
@@ -117,6 +117,18 @@ const editor = ref();
             </select>
           </div>
         </div>
+        <div class="form-group">
+        	<label class="col-md-3 control-label label-empty">&nbsp;</label>
+          <div class="col-md-9">
+          	<div class="checkbox">
+							<label>
+								<input type="checkbox" v-model="question.required">
+								{{ gettext('Required question') }}
+							</label>
+						</div>
+          </div>
+        </div>
+
         <div class="form-group">
           <label class="col-md-3 control-label">
             {{ gettext('Only visible if...') }}

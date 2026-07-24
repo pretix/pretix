@@ -204,7 +204,7 @@
                             {% endif %}
                         {% endif %}
                         {% for q in line.questions %}
-                            <dt>{{ q.question }}</dt>
+                            <dt>{{ q.label }}</dt>
                             <dd>
                                 {% if q.answer %}
                                     {% if q.answer.file %}

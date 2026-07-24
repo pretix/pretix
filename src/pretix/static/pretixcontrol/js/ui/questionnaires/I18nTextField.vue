@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, useId, defineProps } from 'vue';
-import {get_event_locales} from "./api";
+import {getEventLocales} from "./api";
 
-const locales = get_event_locales();
+const locales = getEventLocales();
 
 const props = defineProps(['value', 'id']);
 

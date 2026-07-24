@@ -30,34 +30,38 @@ async function api_json_request(resource, method, json_body) {
 	})).json();
 }
 
-export async function get_datafields() {
+export async function getDatafields() {
 	return await api_get_all<Datafield>(`organizers/${organizer_slug}/events/${event_slug}/datafields/`);
 }
 
-export async function get_questionnaires() {
+export async function getQuestionnaires() {
 	return await api_get_all<Questionnaire>(`organizers/${organizer_slug}/events/${event_slug}/questionnaires/`);
 }
 
-export async function update_questionnaire(id, data) {
+export async function updateQuestionnaire(id, data) {
 	return await api_json_request(`organizers/${organizer_slug}/events/${event_slug}/questionnaires/${id}/`, 'PATCH', data);
 }
 
-export async function create_questionnaire(data) {
+export async function createQuestionnaire(data) {
 	return await api_json_request(`organizers/${organizer_slug}/events/${event_slug}/questionnaires/`, 'POST', data);
 }
 
-export async function get_items() {
+export async function getItems() {
 	return await api_get_all<Item>(`organizers/${organizer_slug}/events/${event_slug}/items/`);
+}
+
+export async function getCategories() {
+	return await api_get_all<Item>(`organizers/${organizer_slug}/events/${event_slug}/categories/`);
 }
 
 function get_json_script_value(id) {
 	return JSON.parse(document.getElementById(id).innerText);
 }
 
-export function get_event_locales() {
+export function getEventLocales() {
 	return get_json_script_value('event_locales');
 }
 
-export function get_datafield_edit_url(datafield_id) {
+export function getDatafieldEditUrl(datafield_id) {
 	return get_json_script_value('datafield_edit_url').replace('/0/', `/${datafield_id}/`);
 }

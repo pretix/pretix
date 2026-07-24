@@ -14,7 +14,7 @@ const newTextblockTitle = ref();
 const newTextblockText = ref();
 
 const id = useId();
-const props = defineProps(['questionnaire', 'datafields', 'selected_product', 'items'])
+const props = defineProps(['questionnaire', 'datafields', 'selected_product', 'grouped_items'])
 const gettext = (window as any).gettext
 
 function toggleItem() {
@@ -106,15 +106,18 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
             <input type="text" class="form-control" v-model="questionnaire.internal_name"/>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" v-if="grouped_items">
           <label class="col-md-3 control-label">
             {{ gettext('Visible on products') }}
           </label>
           <div class="col-md-9">
-						<div class="checkbox" v-for="item in items">
-							<label :for="id + '_' + item.id">
-								<input :id="id + '_' + item.id" type="checkbox" :checked="questionnaire.items.indexOf(item.id) !== -1"> {{ item.internal_name || i18n_any(item.name) }}
-							</label>
+						<div v-for="[category, items] in grouped_items">
+							<div class="category-header">{{ category.internal_name || i18n_any(category.name) }}</div>
+							<div class="checkbox" v-for="item in items">
+								<label :for="id + '_' + item.id">
+									<input :id="id + '_' + item.id" type="checkbox" :checked="questionnaire.items.indexOf(item.id) !== -1"> {{ item.internal_name || i18n_any(item.name) }}
+								</label>
+							</div>
 						</div>
           </div>
         </div>
