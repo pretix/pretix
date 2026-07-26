@@ -271,37 +271,6 @@ def quota_widgets(sender, subevent=None, lazy=False, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
-def shop_state_widget(sender, **kwargs):
-    return [{
-        'display_size': 'small',
-        'priority': 1000,
-        'content': format_html(
-            '<div class="shopstate">{t1}<br><span class="{cls}"><span class="fa {icon}"></span> {state}</span>{t2}</div>',
-            t1=_('Your ticket shop is'), t2=_('Click here to change'),
-            state=_('live') if sender.live and not sender.testmode else (
-                _('live and in test mode') if sender.live else (
-                    _('not yet public') if not sender.testmode else (
-                        _('in private test mode')
-                    )
-                )
-            ),
-            icon='fa-check-circle' if sender.live and not sender.testmode else (
-                'fa-warning' if sender.live else (
-                    'fa-times-circle' if not sender.testmode else (
-                        'fa-times-circle'
-                    )
-                )
-            ),
-            cls='live' if sender.live else 'off'
-        ),
-        'url': reverse('control:event.live', kwargs={
-            'event': sender.slug,
-            'organizer': sender.organizer.slug
-        })
-    }]
-
-
-@receiver(signal=event_dashboard_widgets)
 def checkin_widget(sender, subevent=None, lazy=False, **kwargs):
     widgets = []
     qs = sender.checkin_lists.filter(subevent=subevent)
@@ -356,8 +325,6 @@ def build_json_response(widgets):
 
 
 def event_index(request, organizer, event):
-    from pretix.control.forms.event import CommentForm
-
     subevent = None
     if request.GET.get("subevent", "") != "" and request.event.has_subevents:
         i = request.GET.get("subevent", "")
@@ -368,8 +335,6 @@ def event_index(request, organizer, event):
 
     can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'event.orders:read',
                                                         request=request)
-    can_change_event_settings = request.user.has_event_permission(request.organizer, request.event,
-                                                                  'event.settings.general:write', request=request)
 
     widgets = []
     widgets_override = ''
@@ -387,17 +352,17 @@ def event_index(request, organizer, event):
         'widgets': rearrange(widgets),
         'widgets_override': widgets_override,
         'subevent': subevent,
-        'comment_form': CommentForm(initial={'comment': request.event.comment}, readonly=not can_change_event_settings),
     }
 
-    ctx['timeline'] = [
-        {
-            'date': t.datetime.astimezone(request.event.timezone).date(),
-            'entry': t,
-            'time': t.datetime.astimezone(request.event.timezone)
-        }
-        for t in timeline_for_event(request.event, subevent)
-    ]
+    if not request.event.has_subevents:
+        ctx['timeline'] = [
+            {
+                'date': t.datetime.astimezone(request.event.timezone).date(),
+                'entry': t,
+                'time': t.datetime.astimezone(request.event.timezone)
+            }
+            for t in timeline_for_event(request.event, None)
+        ]
     ctx['today'] = now().astimezone(request.event.timezone).date()
     ctx['nearly_now'] = now().astimezone(request.event.timezone) - timedelta(seconds=20)
     resp = render(request, 'pretixcontrol/event/index.html', ctx)

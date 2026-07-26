@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load bootstrap3 %}
+<form class="form" method="post"
+      hx-post="{% url "control:event.index.comment" event=request.event.slug organizer=request.event.organizer.slug %}">
+    {% csrf_token %}
+    <div>
+        <p>
+            {% bootstrap_field form.comment layout="inline" show_help=True show_label=False horizontal_field_class="col-md-12" %}
+        </p>
+        <p class="text-right flip">
+            <button class="btn btn-default">
+                {% trans "Update comment" %}
+            </button>
+        </p>
+    </div>
+</form>
