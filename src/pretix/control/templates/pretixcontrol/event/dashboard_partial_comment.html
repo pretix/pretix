@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load icon %}
+<div id="comment-form">
+    <strong>{% trans "Comment" %}:</strong>
+    {% if "event.settings.general:write" in request.eventpermset %}
+        <button type="button" class="btn btn-default btn-xs"
+                hx-get="{% url "control:event.index.comment" organizer=request.organizer.slug event=request.event.slug %}"
+                hx-target="#comment-form">
+            {% icon "edit" %}
+        </button>
+    {% endif %}
+    {% if request.event.comment %}
+        <p>
+            {{ request.event.comment|linebreaksbr }}
+        </p>
+    {% endif %}
+</div>

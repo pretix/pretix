@@ -57,10 +57,9 @@ from django.db import transaction
 from django.db.models import Count, ProtectedError
 from django.forms import inlineformset_factory
 from django.http import (
-    Http404, HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed,
-    JsonResponse,
+    Http404, HttpResponse, HttpResponseBadRequest, JsonResponse,
 )
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import NoReverseMatch, reverse
 from django.utils.functional import cached_property
 from django.utils.html import conditional_escape, format_html
@@ -1299,24 +1298,23 @@ class EventLog(EventPermissionRequiredMixin, PaginationMixin, ListView):
         return LogFilterForm(data=self.request.GET, organizer=self.request.organizer)
 
 
-class EventComment(EventPermissionRequiredMixin, View):
+class EventComment(EventPermissionRequiredMixin, UpdateView):
     permission = 'event.settings.general:write'
+    form_class = CommentForm
+    template_name = 'pretixcontrol/event/dashboard_partial_comment_form.html'
 
-    def post(self, *args, **kwargs):
-        form = CommentForm(self.request.POST)
-        if form.is_valid():
-            self.request.event.comment = form.cleaned_data.get('comment')
-            self.request.event.save()
-            self.request.event.log_action('pretix.event.comment', user=self.request.user, data={
-                'new_comment': form.cleaned_data.get('comment')
-            })
-            messages.success(self.request, _('The comment has been updated.'))
-        else:
-            messages.error(self.request, _('Could not update the comment.'))
-        return redirect(self.get_success_url())
+    def get_object(self, queryset=None):
+        return self.request.event
 
-    def get(self, *args, **kwargs):
-        return HttpResponseNotAllowed(['POST'])
+    def form_valid(self, form):
+        form.save()
+        self.request.event.log_action('pretix.event.comment', user=self.request.user, data={
+            'new_comment': form.cleaned_data.get('comment')
+        })
+        return render(
+            self.request,
+            'pretixcontrol/event/dashboard_partial_comment.html',
+        )
 
     def get_success_url(self) -> str:
         return reverse('control:event.index', kwargs={

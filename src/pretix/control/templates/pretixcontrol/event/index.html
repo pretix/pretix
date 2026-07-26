@@ -4,9 +4,10 @@
 {% load bootstrap3 %}
 {% load static %}
 {% load eventsignal %}
+{% load icon %}
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
-    <h1>
+    <h1 class="event-dashboard-header">
         {{ request.event.name }}
         <small>
             {% if request.event.has_subevents %}
@@ -14,11 +15,43 @@
             {% else %}
                 {{ request.event.get_date_range_display }}
             {% endif %}
-            <span id="warnings_loading" class="fa fa-cog fa-spin"></span>
+            <span id="warnings_indicator" class="htmx-indicator">{% icon "cog fa-spin" %}</span>
         </small>
+        <div class="pull-right flip">
+            <a href="{% url "control:event.live" organizer=request.organizer.slug event=request.event.slug %}"
+               data-toggle="tooltip"
+               title="{% trans "Click to change shop status" %}">
+                {% icon "pencil" %}</a>
+            <a href="{% url "control:event.live" organizer=request.organizer.slug event=request.event.slug %}"
+               data-toggle="tooltip"
+               title="{% trans "Click to change shop status" %}">
+                {% if request.event.live and request.event.testmode %}
+                    <span class="label label-warning">
+                        <span class="fa fa-warning"></span>
+                        {% trans "public test mode" %}
+                    </span>
+                {% elif request.event.live %}
+                    <span class="label label-success">
+                        <span class="fa fa-check"></span>
+                        {% trans "live" %}
+                    </span>
+                {% elif request.event.testmode %}
+                    <span class="label label-warning">
+                        <span class="fa fa-power-off"></span>
+                        {% trans "private test mode" %}
+                    </span>
+                {% else %}
+                    <span class="label label-danger">
+                        <span class="fa fa-power-off"></span>
+                        {% trans "offline" %}
+                    </span>
+                {% endif %}
+            </a>
+        </div>
+        <div class="clearfix"></div>
     </h1>
     <div class="helper-space-below">
-        {% trans "Shop URL:" %}
+        <strong>{% trans "Shop URL:" %}</strong>
         <span id="shop_url" class="text-muted">{% abseventurl request.event "presale:event.index" %}</span>
         <button type="button" class="btn btn-default btn-xs btn-clipboard js-only" data-clipboard-target="#shop_url">
             <i class="fa fa-clipboard" aria-hidden="true"></i>
@@ -31,16 +64,18 @@
             {% include "pretixcontrol/event/fragment_qr_dropdown.html" with url=0 %}
         </div>
         <div class="clearfix"></div>
+        {% include "pretixcontrol/event/dashboard_partial_comment.html" with url=0 %}
     </div>
+
+
+    <div hx-get="{% url "control:event.index.warnings" organizer=request.organizer.slug event=request.event.slug %}"
+         hx-indicator="#warnings_indicator"
+         hx-trigger="load"></div>
+
     <div id="warnings_target"></div>
     {% eventsignal request.event "pretix.control.signals.event_dashboard_top" request=request %}
 
-    {% if request.event.has_subevents %}
-        <form class="form-inline helper-display-inline" action="" method="get">
-            {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
-        </form>
-    {% endif %}
-    {% if not request.event.has_subevents or subevent %}
+    {% if not request.event.has_subevents %}
         {% include "pretixcontrol/event/fragment_timeline.html" %}
     {% endif %}
     {% if widgets_override %}
@@ -81,30 +116,6 @@
     {% endif %}
 
     <p>&nbsp;</p>
-    <div class="panel panel-default items">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                {% trans "Internal comment" %}
-            </h3>
-        </div>
-        <div class="panel-body">
-            <form class="form" method="post"
-                  action="{% url "control:event.comment" event=request.event.slug organizer=request.event.organizer.slug %}">
-                {% csrf_token %}
-                <div class="row">
-                    {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
-                </div>
-                {% if not comment_form.readonly %}
-                    <p class="text-right flip">
-                        <br>
-                        <button class="btn btn-default">
-                            {% trans "Update comment" %}
-                        </button>
-                    </p>
-                {% endif %}
-            </form>
-        </div>
-    </div>
     {% if "event.orders:read" in request.eventpermset or "event.orders:write" in request.eventpermset or "event.settings.general:write" in request.eventpermset or "event.items:write" in request.eventpermset %}
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -112,7 +123,7 @@
                     {% trans "Event logs" %}
                 </h3>
             </div>
-            <ul class="list-group" id="logs_target">
+            <ul class="list-group" hx-get="{% url "control:event.index.logs" organizer=request.organizer.slug event=request.event.slug %}" hx-trigger="load">
                 <div class="logs-lazy-loading">
                     <span class="fa fa-cog fa-4x"></span>
                 </div>
