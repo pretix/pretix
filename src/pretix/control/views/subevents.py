@@ -69,6 +69,7 @@ from pretix.base.models.orders import CancellationRequest
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services import tickets
 from pretix.base.services.quotas import QuotaAvailability
+from pretix.base.timeline import timeline_for_event
 from pretix.base.views.tasks import AsyncFormView
 from pretix.control.forms.checkin import SimpleCheckinListForm
 from pretix.control.forms.filter import SubEventFilterForm
@@ -565,6 +566,15 @@ class SubEventDetail(EventPermissionRequiredMixin, DetailView):
         qa.compute()
         for quota in ctx["quotas"]:
             quota.cached_avail = qa.results[quota]
+
+        ctx['timeline'] = [
+            {
+                'date': t.datetime.astimezone(self.request.event.timezone).date(),
+                'entry': t,
+                'time': t.datetime.astimezone(self.request.event.timezone)
+            }
+            for t in timeline_for_event(self.request.event, self.object)
+        ]
 
         return super().get_context_data(
             **kwargs,
