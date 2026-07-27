@@ -33,192 +33,48 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from datetime import timedelta
-from decimal import Decimal
 from zoneinfo import ZoneInfo
 
-from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.humanize.templatetags.humanize import intcomma
 from django.db.models import (
-    Count, IntegerField, Max, Min, OuterRef, Prefetch, Q, Subquery, Sum,
+    Count, IntegerField, Max, Min, OuterRef, Q, Subquery,
 )
 from django.db.models.functions import Coalesce, Greatest
-from django.dispatch import receiver
 from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.formats import date_format
-from django.utils.html import conditional_escape, escape, format_html
+from django.utils.html import (
+    conditional_escape, escape, format_html, format_html_join,
+)
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, ngettext, pgettext
 
-from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    Item, ItemCategory, ItemVariation, Order, OrderPosition, OrderRefund,
-    Question, Quota, SubEvent, Voucher, WaitingListEntry,
+    Item, ItemCategory, Order, OrderRefund, Question, Quota, Voucher,
+    WaitingListEntry,
 )
 from pretix.base.timeline import timeline_for_event
 from pretix.control.signals import (
-    event_dashboard_widgets, event_dashboard_widgets_override,
-    user_dashboard_widgets,
+    event_dashboard_statistics, user_dashboard_widgets,
 )
 from pretix.helpers.daterange import daterange
 
 from ...base.models.orders import CancellationRequest
 from ...base.models.organizer import TeamQuerySet
-from ...base.templatetags.money import money_filter
 from ..logdisplay import OVERVIEW_BANLIST
 from .utils import prepare_quotas_for_boxes
 
-NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="text">{text}</span></div>'
 
-
-@receiver(signal=event_dashboard_widgets)
-def base_widgets(sender, subevent=None, lazy=False, widgets_override_active=False, **kwargs):
-    if widgets_override_active:
-        return []
-    if not lazy:
-        if subevent:
-            opqs = OrderPosition.objects.filter(subevent=subevent)
-        else:
-            opqs = OrderPosition.objects
-
-        tickc = opqs.filter(
-            order__event=sender, item__admission=True,
-            order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING),
-        ).count()
-
-        paidc = opqs.filter(
-            order__event=sender, item__admission=True,
-            order__status=Order.STATUS_PAID,
-        ).count()
-
-        if subevent:
-            rev = opqs.filter(
-                order__event=sender, order__status=Order.STATUS_PAID
-            ).aggregate(
-                sum=Sum('price')
-            )['sum'] or Decimal('0.00')
-        else:
-            rev = Order.objects.filter(
-                event=sender,
-                status=Order.STATUS_PAID
-            ).aggregate(sum=Sum('total'))['sum'] or Decimal('0.00')
-
-    return [
+def event_index_waiting_lazy(request, organizer, event):
+    wles = WaitingListEntry.objects.filter(event=request.event, voucher__isnull=True)
+    return render(
+        request,
+        'pretixcontrol/event/dashboard_partial_waiting.html',
         {
-            'content': None if lazy else format_html(NUM_WIDGET, num=intcomma(tickc), text=_('Attendees (ordered)')),
-            'lazy': 'attendees-ordered',
-            'display_size': 'small',
-            'priority': 100,
-            'url': reverse('control:event.orders', kwargs={
-                'event': sender.slug,
-                'organizer': sender.organizer.slug
-            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
-        },
-        {
-            'content': None if lazy else format_html(NUM_WIDGET, num=intcomma(paidc), text=_('Attendees (paid)')),
-            'lazy': 'attendees-paid',
-            'display_size': 'small',
-            'priority': 100,
-            'url': reverse('control:event.orders.overview', kwargs={
-                'event': sender.slug,
-                'organizer': sender.organizer.slug
-            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
-        },
-        {
-            'content': None if lazy else format_html(
-                NUM_WIDGET,
-                num=money_filter(round_decimal(rev, sender.currency), sender.currency, hide_currency=True),
-                text=_('Total revenue ({currency})').format(currency=sender.currency)
-            ),
-            'lazy': 'total-revenue',
-            'display_size': 'small',
-            'priority': 100,
-            'url': reverse('control:event.orders.overview', kwargs={
-                'event': sender.slug,
-                'organizer': sender.organizer.slug
-            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
-        },
-    ]
-
-
-@receiver(signal=event_dashboard_widgets)
-def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
-    widgets = []
-
-    wles = WaitingListEntry.objects.filter(event=sender, subevent=subevent, voucher__isnull=True)
-    if wles.exists():
-        if not lazy:
-            quota_cache = {}
-            happy = 0
-            tuples = wles.values('item', 'variation').order_by().annotate(cnt=Count('id'))
-
-            items = {
-                i.pk: i for i in sender.items.filter(id__in=[t['item'] for t in tuples]).prefetch_related(
-                    Prefetch('quotas',
-                             to_attr='_subevent_quotas',
-                             queryset=sender.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)),
-                )
-            }
-            vars = {
-                i.pk: i for i in ItemVariation.objects.filter(
-                    item__event=sender, id__in=[t['variation'] for t in tuples if t['variation']]
-                ).prefetch_related(
-                    Prefetch('quotas',
-                             to_attr='_subevent_quotas',
-                             queryset=sender.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)),
-                )
-            }
-
-            for wlt in tuples:
-                item = items.get(wlt['item'])
-                variation = vars.get(wlt['variation'])
-                if not item:
-                    continue
-                quotas = (
-                    variation._get_quotas(subevent=subevent)
-                    if variation
-                    else item._get_quotas(subevent=subevent)
-                )
-                row = (
-                    variation.check_quotas(subevent=subevent, count_waitinglist=False, _cache=quota_cache)
-                    if variation
-                    else item.check_quotas(subevent=subevent, count_waitinglist=False, _cache=quota_cache)
-                )
-                if row[1] is None:
-                    happy += wlt['cnt']
-                elif row[1] > 0:
-                    happy += min(wlt['cnt'], row[1])
-                    for q in quotas:
-                        if q.size is not None:
-                            quota_cache[q.pk] = (quota_cache[q.pk][0], quota_cache[q.pk][1] - min(wlt['cnt'], row[1]))
-
-        widgets.append({
-            'content': None if lazy else format_html(
-                NUM_WIDGET, num=intcomma(happy), text=_('available to give to people on waiting list')
-            ),
-            'lazy': 'waitinglist-avail',
-            'priority': 50,
-            'url': reverse('control:event.orders.waitinglist', kwargs={
-                'event': sender.slug,
-                'organizer': sender.organizer.slug,
-            })
-        })
-        widgets.append({
-            'content': None if lazy else format_html(
-                NUM_WIDGET, num=intcomma(wles.count()), text=_('total waiting list length')
-            ),
-            'lazy': 'waitinglist-length',
-            'display_size': 'small',
-            'priority': 50,
-            'url': reverse('control:event.orders.waitinglist', kwargs={
-                'event': sender.slug,
-                'organizer': sender.organizer.slug,
-            })
-        })
-
-    return widgets
+            'count': wles.count,
+        }
+    )
 
 
 def build_json_response(widgets):
@@ -228,33 +84,20 @@ def build_json_response(widgets):
 
 
 def event_index(request, organizer, event):
-    subevent = None
-    if request.GET.get("subevent", "") != "" and request.event.has_subevents:
-        i = request.GET.get("subevent", "")
-        try:
-            subevent = request.event.subevents.get(pk=i)
-        except SubEvent.DoesNotExist:
-            pass
+    can_view_orders = request.user.has_event_permission(
+        request.organizer,
+        request.event,
+        'event.orders:read',
+        request=request
+    )
 
-    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'event.orders:read',
-                                                        request=request)
-
-    widgets = []
-    widgets_override = ''
+    stats = []
     if can_view_orders:
-        for r, result in event_dashboard_widgets_override.send(sender=request.event, subevent=subevent, request=request):
-            if result:
-                widgets_override += result
-        for r, result in event_dashboard_widgets.send(
-            sender=request.event, subevent=subevent, lazy=True,
-            widgets_override_active=bool(widgets_override),
-        ):
-            widgets.extend(result)
+        for r, result in event_dashboard_statistics.send(sender=request.event, request=request):
+            stats.append(result)
 
     ctx = {
-        'widgets': rearrange(widgets),
-        'widgets_override': widgets_override,
-        'subevent': subevent,
+        'stats': format_html_join("", "{}", [(s,) for s in stats]),
     }
 
     if not request.event.has_subevents:
@@ -271,22 +114,6 @@ def event_index(request, organizer, event):
     ctx['has_checkin_widgets'] = not request.event.has_subevents or request.event.checkin_lists.filter(subevent=None).exists()
     resp = render(request, 'pretixcontrol/event/index.html', ctx)
     return resp
-
-
-def event_index_widgets_lazy(request, organizer, event):
-    subevent = None
-    if request.GET.get("subevent", "") != "" and request.event.has_subevents:
-        i = request.GET.get("subevent", "")
-        try:
-            subevent = request.event.subevents.get(pk=i)
-        except SubEvent.DoesNotExist:
-            pass
-
-    widgets = []
-    for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=False):
-        widgets.extend(result)
-
-    return build_json_response(widgets)
 
 
 def event_index_warnings_lazy(request, organizer, event):

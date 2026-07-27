@@ -272,10 +272,10 @@ urlpatterns = [
     re_path(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
         re_path(r'^$', dashboards.event_index, name='event.index'),
         re_path(r'^qrcode.(?P<filetype>(png|jpeg|gif|svg))$', event.EventQRCode.as_view(), name='event.qrcode'),
-        re_path(r'^widgets.json$', dashboards.event_index_widgets_lazy, name='event.index.widgets'),
         re_path(r'^dashboard/partials/logs$', dashboards.event_index_log_lazy, name='event.index.logs'),
         re_path(r'^dashboard/partials/warnings$', dashboards.event_index_warnings_lazy, name='event.index.warnings'),
         re_path(r'^dashboard/partials/quotas$', dashboards.event_index_quotas_lazy, name='event.index.quotas'),
+        re_path(r'^dashboard/partials/waiting$', dashboards.event_index_waiting_lazy, name='event.index.waiting'),
         re_path(r'^dashboard/partials/checkin$', dashboards.event_index_checkin_lazy, name='event.index.checkin'),
         re_path(r'^dashboard/partials/comment$', event.EventComment.as_view(), name='event.index.comment'),
         re_path(r'^live/$', event.EventLive.as_view(), name='event.live'),

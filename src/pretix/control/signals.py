@@ -133,47 +133,14 @@ This signal is sent out to include custom HTML in the top part of the the event 
 Receivers should return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
-An additional keyword argument ``subevent`` *can* contain a sub-event.
 """
 
-event_dashboard_widgets = EventPluginSignal()
+event_dashboard_statistics = EventPluginSignal()
 """
-This signal is sent out to include widgets in the event dashboard. Receivers
-should return a list of dictionaries, where each dictionary can have the keys:
-
-* content (SafeString, containing HTML)
-* display_size (str, one of "full" (whole row), "big" (half a row) or "small"
-  (quarter of a row). May be ignored on small displays, default is "small")
-* priority (int, used for ordering, higher comes first, default is 1)
-* url (str, optional, if the full widget should be a link)
+This signal is sent out to include statistical content on the event dashboard.
+Receivers should return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
-An additional keyword argument ``subevent`` *can* contain a sub-event.
-
-The keyword argument ``widgets_override_active`` is set to ``True`` when a plugin
-has returned content from :py:data:`event_dashboard_widgets_override` and is taking
-over the KPI section of the dashboard. Receivers that produce widgets which would
-be redundant with such a replacement (e.g. the built-in attendees/revenue/products
-KPI tiles) should return an empty list in that case. Receivers that provide widgets
-unrelated to the KPI tiles (waitinglist, quotas, check-in lists, shop state, etc.)
-should ignore the flag and continue to return their widgets — those will render
-below the override block.
-"""
-
-event_dashboard_widgets_override = EventPluginSignal()
-"""
-This signal allows a plugin to take over the KPI section of the event dashboard
-with custom HTML. Receivers should return an HTML string (or an empty string /
-``None`` to opt out). If any receiver returns non-empty HTML, that HTML is
-rendered at the top of the dashboard, and receivers of
-:py:data:`event_dashboard_widgets` are informed via the
-``widgets_override_active=True`` keyword argument so they can suppress widgets
-that the override replaces. The remaining widgets (those that don't opt out)
-still render below the override block. Multiple receivers' return values are
-concatenated.
-
-As with all event plugin signals, the ``sender`` keyword argument will contain
-the event. An additional keyword argument ``subevent`` *can* contain a sub-event.
 """
 
 user_dashboard_widgets = GlobalSignal()

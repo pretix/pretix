@@ -71,16 +71,25 @@
          hx-indicator="#warnings_indicator"
          hx-trigger="load"></div>
 
+    {% if stats %}
+        {{ stats }}
+    {% endif %}
+    <p>&nbsp;</p>
+
     {% if not request.event.items.exists %}
         {% include "pretixcontrol/event/dashboard_partial_welcome.html" %}
-    {% endif %}
-
-    {% if not request.event.has_subevents %}
+    {% elif not request.event.has_subevents %}
         {% include "pretixcontrol/event/fragment_timeline.html" %}
         <div class="row">
             <div class="col-md-6 col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
+                        <div class="pull-right">
+                            <div hx-get="{% url "control:event.index.waiting" organizer=request.organizer.slug event=request.event.slug %}"
+                                 hx-trigger="load">
+                                <span class="loading-mock loading-mock-text-short"></span>
+                            </div>
+                        </div>
                         <h2 class="panel-title">{% trans "Quotas" %}</h2>
                     </div>
                     <div class="panel-body">
@@ -124,43 +133,6 @@
             </div>
         </div>
     {% endif %}
-    {% if widgets_override and 0 %}
-        {{ widgets_override|safe }}
-    {% endif %}
-    {% if widgets %}
-        <div class="dashboard">
-            {% for w in widgets %}
-                <div class="widget-container widget-{{ w.display_size|default:"small" }} {% if w.lazy %}widget-lazy-loading{% endif %}" data-lazy-id="{{ w.lazy }}">
-                    {% if w.url %}{# backwards compatibility #}
-                        <a href="{{ w.url }}" class="widget">
-                            {% if w.lazy %}
-                                <span class="fa fa-cog fa-4x"></span>
-                            {% else %}
-                                {{ w.content }}
-                            {% endif %}
-                        </a>
-                    {% elif w.link %}
-                        <a href="{{ w.link }}" class="widget">
-                            {% if w.lazy %}
-                                <span class="fa fa-cog fa-4x´"></span>
-                            {% else %}
-                                {{ w.content }}
-                            {% endif %}
-                        </a>
-                    {% else %}
-                        <div class="widget">
-                            {% if w.lazy %}
-                                <span class="fa fa-cog fa-4x"></span>
-                            {% else %}
-                                {{ w.content }}
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-    <p>&nbsp;</p>
     {% if "event.orders:read" in request.eventpermset or "event.orders:write" in request.eventpermset or "event.settings.general:write" in request.eventpermset or "event.items:write" in request.eventpermset %}
         <div class="panel panel-default">
             <div class="panel-heading">
