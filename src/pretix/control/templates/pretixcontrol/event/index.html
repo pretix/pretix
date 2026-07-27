@@ -76,27 +76,51 @@
     {% if not request.event.has_subevents %}
         {% include "pretixcontrol/event/fragment_timeline.html" %}
         <div class="row">
-            <div class="col-md-6 col-sm-12 dashboard-quota-row">
-                <div hx-get="{% url "control:event.index.quotas" organizer=request.organizer.slug event=request.event.slug %}"
-                     hx-trigger="load">
-                    {% for i in "12" %}
-                        <a class="quotabox quotabox-full">
-                            <strong>
-                                <span class="loading-mock loading-mock-text-short"></span>
-                            </strong>
-                            <div class="progress loading-mock"></div>
-                            <div class="numbers">
-                                <span class="loading-mock loading-mock-text-short"></span>
-                            </div>
-                        </a>
-                    {% endfor %}
+            <div class="col-md-6 col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{% trans "Quotas" %}</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div hx-get="{% url "control:event.index.quotas" organizer=request.organizer.slug event=request.event.slug %}"
+                             hx-trigger="load">
+                            {% for i in "12" %}
+                                {% include "pretixcontrol/fragment_quota_box_mock.html" %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6 col-sm-12">
-                Checkin-lists
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{% trans "Check-in lists" %}</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div hx-get="{% url "control:event.index.checkin" organizer=request.organizer.slug event=request.event.slug %}"
+                             hx-trigger="load">
+                            {% for i in "12" %}
+                                {% include "pretixcontrol/fragment_quota_box_mock.html" %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
+    {% elif has_checkin_widgets %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{% trans "Check-in lists" %}</h2>
+            </div>
+            <div class="panel-body">
+                <div hx-get="{% url "control:event.index.checkin" organizer=request.organizer.slug event=request.event.slug %}"
+                     hx-trigger="load">
+                    {% for i in "12" %}
+                        {% include "pretixcontrol/fragment_quota_box_mock.html" %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     {% endif %}
     {% if widgets_override and 0 %}
         {{ widgets_override|safe }}

@@ -10,6 +10,14 @@ def prepare_quotas_for_boxes(quotas):
     for q in quotas:
         q.cached_avail = qa.results[q]
         q.cached_availability_paid_orders = qa.count_paid_orders.get(q, 0)
+        q.used = (
+            qa.count_paid_orders.get(q, 0) +
+            qa.count_pending_orders.get(q, 0) +
+            qa.count_exited_orders.get(q, 0) +
+            qa.count_vouchers.get(q, 0) +
+            qa.count_waitinglist.get(q, 0) +
+            qa.count_cart.get(q, 0)
+        )
         if q.size is not None:
             other_blocked = q.size - q.cached_availability_paid_orders - q.cached_avail[1]
             q.percent_paid = min(
