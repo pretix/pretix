@@ -46,7 +46,6 @@ from django.db.models.functions import Coalesce, Greatest
 from django.dispatch import receiver
 from django.http import Http404, JsonResponse
 from django.shortcuts import render
-from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.html import conditional_escape, escape, format_html
@@ -79,13 +78,6 @@ def base_widgets(sender, subevent=None, lazy=False, widgets_override_active=Fals
     if widgets_override_active:
         return []
     if not lazy:
-        prodc = Item.objects.filter(
-            event=sender, active=True,
-        ).filter(
-            (Q(available_until__isnull=True) | Q(available_until__gte=now())) &
-            (Q(available_from__isnull=True) | Q(available_from__lte=now()))
-        ).count()
-
         if subevent:
             opqs = OrderPosition.objects.filter(subevent=subevent)
         else:
@@ -147,16 +139,6 @@ def base_widgets(sender, subevent=None, lazy=False, widgets_override_active=Fals
                 'event': sender.slug,
                 'organizer': sender.organizer.slug
             }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
-        },
-        {
-            'content': None if lazy else format_html(NUM_WIDGET, num=prodc, text=_('Active products')),
-            'lazy': 'active-products',
-            'display_size': 'small',
-            'priority': 100,
-            'url': reverse('control:event.items', kwargs={
-                'event': sender.slug,
-                'organizer': sender.organizer.slug
-            })
         },
     ]
 
@@ -237,31 +219,6 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
         })
 
     return widgets
-
-
-@receiver(signal=event_dashboard_widgets)
-def welcome_wizard_widget(sender, **kwargs):
-    template = get_template('pretixcontrol/event/dashboard_widget_welcome.html')
-    ctx = {
-        'title': _('Welcome to pretix!')
-    }
-    kwargs = {'event': sender.slug, 'organizer': sender.organizer.slug}
-
-    if not sender.items.exists():
-        ctx.update({
-            'subtitle': _('Get started with our setup tool'),
-            'text': _('To start selling tickets, you need to create products or quotas. The fastest way to create '
-                      'this is to use our setup tool.'),
-            'button_text': _('Set up event'),
-            'button_url': reverse('control:event.quick', kwargs=kwargs)
-        })
-    else:
-        return []
-    return [{
-        'display_size': 'full',
-        'priority': 2000,
-        'content': template.render(ctx)
-    }]
 
 
 def build_json_response(widgets):
