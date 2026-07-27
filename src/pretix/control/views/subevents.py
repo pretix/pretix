@@ -84,6 +84,7 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import subevent_forms
 from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
+from pretix.control.views.utils import prepare_quotas_for_boxes
 from pretix.helpers import GroupConcat
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.i18n import get_format_without_seconds
@@ -145,19 +146,7 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryM
             s.first_quotas = s.first_quotas[:4]
             quotas += list(s.first_quotas)
 
-        qa = QuotaAvailability(early_out=False)
-        for q in quotas:
-            qa.queue(q)
-        qa.compute()
-
-        for q in quotas:
-            q.cached_avail = qa.results[q]
-            q.cached_availability_paid_orders = qa.count_paid_orders.get(q, 0)
-            if q.size is not None:
-                q.percent_paid = min(
-                    100,
-                    round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
-                )
+        prepare_quotas_for_boxes(quotas)
         return ctx
 
 

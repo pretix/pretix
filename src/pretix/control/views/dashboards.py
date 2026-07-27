@@ -44,7 +44,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.dispatch import receiver
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.urls import reverse
@@ -58,7 +58,6 @@ from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Order, OrderPosition, OrderRefund,
     Question, Quota, SubEvent, Voucher, WaitingListEntry,
 )
-from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.timeline import timeline_for_event
 from pretix.control.signals import (
     event_dashboard_widgets, event_dashboard_widgets_override,
@@ -70,6 +69,7 @@ from ...base.models.orders import CancellationRequest
 from ...base.models.organizer import TeamQuerySet
 from ...base.templatetags.money import money_filter
 from ..logdisplay import OVERVIEW_BANLIST
+from .utils import prepare_quotas_for_boxes
 
 NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="text">{text}</span></div>'
 
@@ -240,37 +240,6 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
-def quota_widgets(sender, subevent=None, lazy=False, **kwargs):
-    widgets = []
-    quotas = sender.quotas.filter(subevent=subevent)
-
-    qa = QuotaAvailability()
-    if quotas:
-        qa.queue(*quotas)
-        qa.compute(allow_cache=True)
-
-    for q in quotas:
-        if not lazy:
-            status, left = qa.results[q] if q in qa.results else q.availability(allow_cache=True)
-        widgets.append({
-            'content': None if lazy else format_html(
-                NUM_WIDGET,
-                num='{}/{}'.format(intcomma(left), intcomma(q.size)) if q.size is not None else '\u221e',
-                text=format_html(_('{quota} left'), quota=q.name)
-            ),
-            'lazy': 'quota-{}'.format(q.pk),
-            'display_size': 'small',
-            'priority': 50,
-            'url': reverse('control:event.items.quotas.show', kwargs={
-                'event': sender.slug,
-                'organizer': sender.organizer.slug,
-                'quota': q.id
-            })
-        })
-    return widgets
-
-
-@receiver(signal=event_dashboard_widgets)
 def checkin_widget(sender, subevent=None, lazy=False, **kwargs):
     widgets = []
     qs = sender.checkin_lists.filter(subevent=subevent)
@@ -418,6 +387,21 @@ def event_index_warnings_lazy(request, organizer, event):
         request,
         'pretixcontrol/event/dashboard_partial_warnings.html',
         ctx
+    )
+
+
+def event_index_quotas_lazy(request, organizer, event):
+    if request.event.has_subevents:
+        raise Http404()
+
+    quotas = request.event.quotas.filter(subevent=None)[:10]
+    prepare_quotas_for_boxes(quotas)
+    return render(
+        request,
+        'pretixcontrol/event/dashboard_partial_quotas.html',
+        {
+            'quotas': quotas,
+        }
     )
 
 

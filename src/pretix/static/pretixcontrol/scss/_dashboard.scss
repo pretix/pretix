@@ -20,10 +20,7 @@
 }
 
 .loading-mock {
-  display: inline-block;
   background: #eee;
-  border-radius: $border-radius-base;
-  height: 1em;
   animation: loading-mock-pulse 3s infinite;
   background-size: 200% 100%;
   background-image: linear-gradient(
@@ -42,6 +39,11 @@
   &.loading-mock-text-long {
     width: 200px;
   }
+}
+span.loading-mock {
+  display: inline-block;
+  border-radius: $border-radius-base;
+  height: 1em;
 }
 
 
