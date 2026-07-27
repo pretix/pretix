@@ -1984,10 +1984,6 @@ class OrderChange(OrderView):
         return self.request.event.items.prefetch_related('variations', 'tax_rule').all()
 
     @cached_property
-    def tax_rules(self):
-        return self.request.event.tax_rules.all()
-
-    @cached_property
     def fees(self):
         fees = list(self.order.fees.all())
         for f in fees:
