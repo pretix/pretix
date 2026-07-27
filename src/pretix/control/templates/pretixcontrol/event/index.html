@@ -121,10 +121,27 @@
                     {% trans "Event logs" %}
                 </h3>
             </div>
-            <ul class="list-group" hx-get="{% url "control:event.index.logs" organizer=request.organizer.slug event=request.event.slug %}" hx-trigger="load">
-                <div class="logs-lazy-loading">
-                    <span class="fa fa-cog fa-4x"></span>
-                </div>
+            <ul class="list-group"
+                hx-get="{% url "control:event.index.logs" organizer=request.organizer.slug event=request.event.slug %}"
+                hx-trigger="load">
+                {% for i in "12345" %}
+                    <li class="list-group-item logentry">
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-6 col-xs-12">
+                                <span class="loading-mock loading-mock-text-medium"></span>
+                            </div>
+                            <div class="col-lg-2 col-sm-6 col-xs-12">
+                                <span class="loading-mock loading-mock-text-short"></span>
+                            </div>
+                            <div class="col-lg-2 col-sm-12 col-xs-12">
+                                <span class="loading-mock loading-mock-text-medium"></span>
+                            </div>
+                            <div class="col-lg-6 col-sm-12 col-xs-12">
+                                <span class="loading-mock loading-mock-text-long"></span>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
             </ul>
             <div class="panel-footer">
                 <a href="{% url "control:event.log" event=request.event.slug organizer=request.event.organizer.slug %}">
