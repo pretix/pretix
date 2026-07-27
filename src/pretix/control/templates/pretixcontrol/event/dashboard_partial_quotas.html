@@ -1,0 +1,4 @@
+{% load i18n %}
+{% for q in quotas %}
+    {% include "pretixcontrol/fragment_quota_box.html" with quota=q full=1 %}
+{% endfor %}

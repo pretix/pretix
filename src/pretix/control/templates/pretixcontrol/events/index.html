@@ -151,7 +151,7 @@
                     </td>
                     <td>
                         {% for q in e.first_quotas|slice:":3" %}
-                            {% include "pretixcontrol/fragment_quota_box_paid.html" with quota=q %}
+                            {% include "pretixcontrol/fragment_quota_box.html" with quota=q %}
                         {% endfor %}
                         {% if e.first_quotas|length > 3 %}
                             <a href="{% url "control:event.items.quotas" organizer=e.organizer.slug event=e.slug %}"
