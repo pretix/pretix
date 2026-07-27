@@ -564,6 +564,8 @@ class SubEventDetail(EventPermissionRequiredMixin, DetailView):
             }
             for t in timeline_for_event(self.request.event, self.object)
         ]
+        ctx['today'] = now().astimezone(self.request.event.timezone).date()
+        ctx['nearly_now'] = now().astimezone(self.request.event.timezone) - timedelta(seconds=20)
 
         return super().get_context_data(
             **kwargs,
