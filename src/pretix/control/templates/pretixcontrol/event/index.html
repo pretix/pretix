@@ -71,7 +71,9 @@
          hx-indicator="#warnings_indicator"
          hx-trigger="load"></div>
 
-    <div id="warnings_target"></div>
+    {% if not request.event.items.exists %}
+        {% include "pretixcontrol/event/dashboard_partial_welcome.html" %}
+    {% endif %}
 
     {% if not request.event.has_subevents %}
         {% include "pretixcontrol/event/fragment_timeline.html" %}
