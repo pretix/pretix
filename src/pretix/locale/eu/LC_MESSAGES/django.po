@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-07 09:30+0000\n"
-"PO-Revision-Date: 2024-09-23 18:00+0000\n"
+"PO-Revision-Date: 2026-07-27 17:00+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
-"Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
-">\n"
+"Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/"
+"eu/>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 2026.7.1\n"
 
 #: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html
 #: pretix/control/templates/pretixcontrol/events/index.html
@@ -13559,10 +13559,8 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/order_details.html
 #: pretix/presale/templates/pretixpresale/event/base.html
 #: pretix/presale/templates/pretixpresale/organizers/base.html
-#, fuzzy
-#| msgid "Contact:"
 msgid "Contact"
-msgstr "Kontaktua:"
+msgstr "Harremanetarako"
 
 #: pretix/base/templates/pretixbase/email/shred_completed.txt
 #, fuzzy, python-format
@@ -18285,7 +18283,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html
 #: pretix/presale/templates/pretixpresale/organizers/index.html
 msgid "Tickets"
-msgstr ""
+msgstr "Sarrerak"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/event/tax.html
@@ -33876,12 +33874,11 @@ msgid "Show full-size image of %(item)s"
 msgstr "Erakutsi %(item)s-ren irudi osoa"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#, fuzzy, python-format
-#| msgid "Upcoming events"
+#, python-format
 msgid "%(amount)s× in your cart"
 msgid_plural "%(amount)s× in your cart"
-msgstr[0] "Hurrengo ekitaldiak"
-msgstr[1] "Hurrengo ekitaldiak"
+msgstr[0] "%(amount)s× zure saskian"
+msgstr[1] "%(amount)s× zure saskian"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 #: pretix/presale/templates/pretixpresale/event/voucher.html
@@ -34125,18 +34122,14 @@ msgstr ""
 "Kontuan izan oraindik zure ordainketaren zain gaudela prozesua osatzeko."
 
 #: pretix/presale/templates/pretixpresale/event/order.html
-#, fuzzy
-#| msgid ""
-#| "Please bookmark or save the link to this exact page if you want to access "
-#| "your order later. We also sent you an email containing the link to the "
-#| "address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
 "your order later. We also sent you an email to the address you specified "
 "containing the link to this page."
 msgstr ""
 "Mesedez, gorde orri honetarako esteka zure eskaera geroago ikusi nahi "
-"baduzu. E-mail bat ere bidali dizugu, zehaztutako helbidera lotura duena."
+"baduzu. E-mail bat ere bidali dizugu zehaztu duzun helbidera, orrialde "
+"honetarako estekarekin."
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 #, fuzzy
