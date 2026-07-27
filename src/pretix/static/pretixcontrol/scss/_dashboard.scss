@@ -10,6 +10,41 @@
   }
 }
 
+@keyframes loading-mock-pulse {
+  0% {
+    background-position: 20% 50%;
+  }
+  100% {
+    background-position: -100% 50%;
+  }
+}
+
+.loading-mock {
+  display: inline-block;
+  background: #eee;
+  border-radius: $border-radius-base;
+  height: 1em;
+  animation: loading-mock-pulse 3s infinite;
+  background-size: 200% 100%;
+  background-image: linear-gradient(
+        to right,
+        rgb(244, 247, 250) 0%,
+        rgb(255, 255, 255) 10%,
+        rgb(244, 247, 250) 20%
+  );
+
+  &.loading-mock-text-short {
+    width: 50px;
+  }
+  &.loading-mock-text-medium {
+    width: 100px;
+  }
+  &.loading-mock-text-long {
+    width: 200px;
+  }
+}
+
+
 .dashboard {
   display: flex;
   flex-wrap: wrap;
