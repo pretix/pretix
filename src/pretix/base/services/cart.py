@@ -53,6 +53,7 @@ from django.utils.translation import (
 )
 from django_scopes import scopes_disabled
 
+from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
@@ -916,6 +917,8 @@ class CartManager:
                 if custom_price > 99_999_999_999:
                     raise CartError(error_messages['price_too_high'])
 
+                custom_price = round_decimal(custom_price, currency=self.event.currency)
+
             op = self.AddOperation(
                 count=i['count'],
                 item=item,
@@ -1037,6 +1040,8 @@ class CartManager:
                         raise CartError(error_messages['price_not_a_number'])
                 if custom_price > 99_999_999_999:
                     raise CartError(error_messages['price_too_high'])
+
+                custom_price = round_decimal(custom_price, currency=self.event.currency)
 
             # Fix positions with wrong price (TODO: happens out-of-cartmanager-transaction and therefore a little hacky)
             for ca in current_addons[cp][a['item'], a['variation']]:
