@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-07 09:30+0000\n"
-"PO-Revision-Date: 2026-06-20 17:00+0000\n"
+"PO-Revision-Date: 2026-07-27 17:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
-"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
-">\n"
+"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
+"da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.1\n"
+"X-Generator: Weblate 2026.7.1\n"
 
 #: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html
 #: pretix/control/templates/pretixcontrol/events/index.html
@@ -177,7 +177,7 @@ msgstr "Spansk (Latinamerika)"
 
 #: pretix/_base_settings.py
 msgid "Thai"
-msgstr ""
+msgstr "Thai"
 
 #: pretix/_base_settings.py
 msgid "Turkish"
@@ -436,7 +436,7 @@ msgstr ""
 #: pretix/api/serializers/organizer.py pretix/control/views/organizer.py
 #, python-format
 msgid "You've been invited to join %(organizer)s"
-msgstr ""
+msgstr "Du er blevet inviteret til at tilslutte dig %(organizer)s"
 
 #: pretix/api/serializers/organizer.py pretix/control/views/organizer.py
 msgid "This user already has been invited for this team."
@@ -458,9 +458,8 @@ msgid "Medium connected to other event"
 msgstr "Medie er tilknyttet et andet arrangement"
 
 #: pretix/api/views/checkin.py
-#, fuzzy
 msgid "You cannot exchange a medium for a medium."
-msgstr "Du kan ikke annullere denne bestilling."
+msgstr "Du kan ikke bytte en medium mod en anden medium."
 
 #: pretix/api/views/oauth.py pretix/control/logdisplay.py
 #, python-brace-format
@@ -4056,43 +4055,32 @@ msgid "Users"
 msgstr "Brugere"
 
 #: pretix/base/models/auth.py
-#, fuzzy
-#| msgid "Changes to your account at {organizer}"
 msgid "Changes to your account"
-msgstr "Ændringer på din konto hos {organizer}"
+msgstr "Ændringer på din konto"
 
 #: pretix/base/models/auth.py
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "to confirm changing your email address from {old_email}\n"
-#| "to {new_email}, use the following code:"
+#, python-brace-format
 msgid ""
 "To change your email address from {old_email} to {new_email}, use the "
 "following code:"
 msgstr ""
-"For at bekræfte ændringen af din e-mailadresse fra {old_email}\n"
-"til {new_email} skal du bruge følgende kode:"
+"Hvis du vil ændre din e-mailadresse fra {old_email} til {new_email}, skal du "
+"bruge følgende kode:"
 
 #: pretix/base/models/auth.py
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "to confirm changing your email address from {old_email}\n"
-#| "to {new_email}, use the following code:"
+#, python-brace-format
 msgid ""
 "To verify your email address {email} on {instance}, use the following code:"
 msgstr ""
-"For at bekræfte ændringen af din e-mailadresse fra {old_email}\n"
-"til {new_email} skal du bruge følgende kode:"
+"Brug følgende kode til at bekræfte din e-mailadresse {email} på {instance}:"
 
 #: pretix/base/models/auth.py
-#, fuzzy
 msgid "Your confirmation code"
-msgstr "Bekræftelsestekst"
+msgstr "Din bekræftelseskode"
 
 #: pretix/base/models/auth.py
-#, fuzzy
 msgid "Reset your password"
-msgstr "Nulstil adgangskode"
+msgstr "Nulstil din adgangskode"
 
 #: pretix/base/models/checkin.py
 msgid "All products (including newly created ones)"
@@ -4253,22 +4241,16 @@ msgid "Check-in annulled"
 msgstr "Check-in annulleret"
 
 #: pretix/base/models/checkin.py
-#, fuzzy
-#| msgid "Ticket already used"
 msgid "Ticket already exchanged"
-msgstr "Billet allerede i brug"
+msgstr "Billetten er allerede ombyttet"
 
 #: pretix/base/models/checkin.py
-#, fuzzy
-#| msgid "Reusable media"
 msgid "Reusable medium invalid"
-msgstr "Genanvendelige medier"
+msgstr "Genanvendeligt medium er ugyldigt"
 
 #: pretix/base/models/checkin.py
-#, fuzzy
-#| msgid "Reusable media type"
 msgid "Reusable medium already exists"
-msgstr "Genanvendelig medietype"
+msgstr "Det genanvendelige medium findes allerede"
 
 #: pretix/base/models/customers.py
 msgid "Provider name"
@@ -4843,10 +4825,8 @@ msgstr ""
 "begge dele."
 
 #: pretix/base/models/event.py
-#, fuzzy
-#| msgid "The bundled item must belong to the same event as the item."
 msgid "Property and event must belong to the same organizer."
-msgstr "Artikelpakken skal tilhøre samme arrangement som selve artiklen."
+msgstr "Ejendommen og arrangementet skal tilhøre den samme arrangør."
 
 #: pretix/base/models/event.py pretix/base/models/organizer.py
 msgid "Link text"
@@ -5082,42 +5062,40 @@ msgid "Show product with info on why it’s unavailable"
 msgstr "Vis produktet med oplysninger om, hvorfor det ikke er tilgængeligt"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Don't use re-usable media, use regular one-off tickets"
 msgid "Don't use reusable media, use regular one-off tickets"
-msgstr "Brug ikke genanvendelige medier, brug almindelige engangsbilletter"
+msgstr "Brug ikke genanvendelige medier, men almindelige engangsbilletter"
 
 #: pretix/base/models/items.py
 msgid "Require a previously unknown medium to be newly added"
 msgstr "Påkræv, at et førhen ukendt medie bliver tilføjet fornylig"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Require an existing medium to be re-used"
 msgid "Require an existing medium to be reused, replacing any previous tickets"
-msgstr "Påkræv genanvendelse af et eksisterende medie"
+msgstr ""
+"Påkræv, at et eksisterende medium genbruges, hvorved eventuelle tidligere "
+"billetter erstattes"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Require either an existing or a new medium to be used"
 msgid ""
 "Require either an existing or a new medium to be used, replacing any "
 "previous tickets"
-msgstr "Påkræv, at der enten bruges et eksisterende eller et nyt medie"
+msgstr ""
+"Påkræv, at der anvendes enten et eksisterende eller et nyt medium, som "
+"erstatter eventuelle tidligere billetter"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Require an existing medium to be re-used"
 msgid "Require an existing medium to be reused, adding to any previous tickets"
-msgstr "Påkræv genanvendelse af et eksisterende medie"
+msgstr ""
+"Påkræv, at et eksisterende medium genbruges og tilføjes samtlige tidligere "
+"billetter"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Require either an existing or a new medium to be used"
 msgid ""
 "Require either an existing or a new medium to be used, adding to any "
 "previous tickets"
-msgstr "Påkræv, at der enten bruges et eksisterende eller et nyt medie"
+msgstr ""
+"Påkræv, at der anvendes enten et eksisterende eller et nyt medie, hvilket "
+"tilføjes til eventuelle tidligere billetter"
 
 #: pretix/base/models/items.py
 msgid "Category"
