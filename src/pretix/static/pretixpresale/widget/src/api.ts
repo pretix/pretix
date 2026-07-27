@@ -22,6 +22,7 @@ export interface ProductListResponse {
 	location?: string
 	items_by_category?: Category[]
 	currency?: string
+	currency_places?: number
 	display_net_prices?: boolean
 	voucher_explanation_text?: string
 	error?: string
