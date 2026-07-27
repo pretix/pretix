@@ -240,29 +240,6 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
 
 
 @receiver(signal=event_dashboard_widgets)
-def checkin_widget(sender, subevent=None, lazy=False, **kwargs):
-    widgets = []
-    qs = sender.checkin_lists.filter(subevent=subevent)
-    for cl in qs:
-        widgets.append({
-            'content': None if lazy else format_html(
-                NUM_WIDGET,
-                num='{}/{}'.format(intcomma(cl.inside_count), intcomma(cl.position_count)),
-                text=format_html(_('Present – {list}'), list=cl.name)
-            ),
-            'lazy': 'checkin-{}'.format(cl.pk),
-            'display_size': 'small',
-            'priority': 50,
-            'url': reverse('control:event.orders.checkinlists.show', kwargs={
-                'event': sender.slug,
-                'organizer': sender.organizer.slug,
-                'list': cl.pk
-            })
-        })
-    return widgets
-
-
-@receiver(signal=event_dashboard_widgets)
 def welcome_wizard_widget(sender, **kwargs):
     template = get_template('pretixcontrol/event/dashboard_widget_welcome.html')
     ctx = {
@@ -334,6 +311,7 @@ def event_index(request, organizer, event):
         ]
     ctx['today'] = now().astimezone(request.event.timezone).date()
     ctx['nearly_now'] = now().astimezone(request.event.timezone) - timedelta(seconds=20)
+    ctx['has_checkin_widgets'] = not request.event.has_subevents or request.event.checkin_lists.filter(subevent=None).exists()
     resp = render(request, 'pretixcontrol/event/index.html', ctx)
     return resp
 
@@ -401,6 +379,17 @@ def event_index_quotas_lazy(request, organizer, event):
         'pretixcontrol/event/dashboard_partial_quotas.html',
         {
             'quotas': quotas,
+        }
+    )
+
+
+def event_index_checkin_lazy(request, organizer, event):
+    lists = request.event.checkin_lists.filter(subevent=None)[:10]
+    return render(
+        request,
+        'pretixcontrol/event/dashboard_partial_checkin.html',
+        {
+            'lists': lists,
         }
     )
 
