@@ -3,7 +3,6 @@
 {% load eventurl %}
 {% load bootstrap3 %}
 {% load static %}
-{% load eventsignal %}
 {% load icon %}
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
@@ -67,13 +66,12 @@
         {% include "pretixcontrol/event/dashboard_partial_comment.html" with url=0 %}
     </div>
 
-
     <div hx-get="{% url "control:event.index.warnings" organizer=request.organizer.slug event=request.event.slug %}"
+         {# loading indicator is somewhere else because the happy case is "no warnings" and shouldn't make the page jump #}
          hx-indicator="#warnings_indicator"
          hx-trigger="load"></div>
 
     <div id="warnings_target"></div>
-    {% eventsignal request.event "pretix.control.signals.event_dashboard_top" request=request %}
 
     {% if not request.event.has_subevents %}
         {% include "pretixcontrol/event/fragment_timeline.html" %}
