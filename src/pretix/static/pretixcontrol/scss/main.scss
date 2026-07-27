@@ -727,6 +727,10 @@ h1 .label {
 }
 
 .timeline {
+    max-height: 200px;
+    overflow-y: auto;
+    position: relative;
+
     .col-date {
         position: relative;
         min-height: 1px;
