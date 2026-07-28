@@ -5,7 +5,7 @@ from .models import WalletLayout, WalletPlatformLayout
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from .views import get_layout_variables
+from .views import get_editor_placeholders
 from rest_framework import serializers
 
 
@@ -34,7 +34,7 @@ class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
             style = platform_styles[data["style"]]
 
             layout = PassLayout(style=style, layout=data["layout"])
-            context = {"placeholders": get_layout_variables(self.context['event'])}
+            context = {"placeholders": get_editor_placeholders(self.context['event'])}
             layout.validate(context=context)
         return data
 

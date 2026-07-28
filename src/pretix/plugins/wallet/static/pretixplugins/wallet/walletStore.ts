@@ -72,7 +72,7 @@ export function createWalletStore(config: {
 							if (entry.type == "custom") {
 								value = i18nstringLocalize(entry.content);
 							} else if (entry.type == "placeholder") {
-								value = placeholder.editor_sample;
+								value = placeholder?.sample || `(unknown placeholder: ${entry.content})`;
 							}
 							content[fieldgroup.identifier].push({
 								entry,
@@ -185,9 +185,12 @@ export function createWalletStore(config: {
 								entries: JSON.parse(
 									JSON.stringify(newFieldGroups[key].default_entries),
 								),
+								active: newFieldGroups[key].required || newFieldGroups[key].default_entries.length > 0
 							};
 						} else {
-							this.currentPlatformLayout.layout.fieldgroups[key] = {};
+							this.currentPlatformLayout.layout.fieldgroups[key] = {
+								active: newFieldGroups[key].required
+							};
 						}
 					}
 
