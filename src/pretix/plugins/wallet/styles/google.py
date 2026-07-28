@@ -10,7 +10,7 @@ from .base import (
     TextFieldGroup,
     WalletPlatform,
 )
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils.translation import gettext as _
 import json
 
 from walletobjects import ButtonJWT, EventTicketClass, EventTicketObject
@@ -72,7 +72,7 @@ def get_translated_dict(string, locales):
 
     for locale in locales:
         translation.activate(locale)
-        translated[locale] = gettext(string)
+        translated[locale] = _(string)
         translation.deactivate()
 
     return translated
@@ -80,7 +80,7 @@ def get_translated_dict(string, locales):
 
 def get_translated_string(string, locale):
     translation.activate(locale)
-    translated = gettext(string)
+    translated = _(string)
     translation.deactivate()
 
     return translated
@@ -92,26 +92,24 @@ class GooglePlatform(WalletPlatform):
 
     @classmethod
     def generate(cls, layout: PassLayout, op: OrderPosition):
-        from ..views import get_layout_variables
+        context = cls.get_context(op)
 
         order = op.order
         event = order.event
 
-        context = {
-            "placeholders": get_layout_variables(event),  # TODO: move to higher class
-            "evaluation_context": [op, order, event],
-            "credentials": event.settings.get("wallet_google_credentials").read(),
-            "locale": event.settings.locale,
-            "locales": event.settings.locales,
-            "issuerName": event.organizer.name,
-            "eventName": event.name,
-            # TODO: use other classId and objectId in preview mode
-            "classId": get_class_id(event),
-            "objectId": get_object_id(op),
-            "homepageUrl": eventreverse_absolute(event, "presale:event.index"),
-            # TODO: add webhook view & register in pass
-            "webhookUrl": "",  # eventreverse_absolute(event.organizer,"plugins:wallet:google_webhook",))
-        }
+        context.update(
+            {
+                "credentials": event.settings.get("wallet_google_credentials").read(),
+                "issuerName": event.organizer.name,
+                "eventName": event.name,
+                # TODO: use other classId and objectId in preview mode
+                "classId": get_class_id(event),
+                "objectId": get_object_id(op),
+                "homepageUrl": eventreverse_absolute(event, "presale:event.index"),
+                # TODO: add webhook view & register in pass
+                # "webhookUrl": eventreverse_absolute(event.organizer,"plugins:wallet:google_webhook",)
+            }
+        )
 
         data = layout.generate(context)
         return "url", "text/plain", data
@@ -135,8 +133,9 @@ class GoogleWalletStyle(PassStyle):
             get_translated_string("Website", context["locale"]),
             get_translated_dict("Website", context["locales"]),
         )
-        # TODO: add webhook view & register in pass
-        # output_class.callback_url(context['webhookUrl'])
+
+        if context.get("webhookUrl"):  # TODO: enforce that it exists
+            output_class.callback_url(context["webhookUrl"])
 
         # TODO: move to pass settings or set defaults
         # if (event.settings.get('ticketoutput_googlepaypasses_latitude')
@@ -249,54 +248,20 @@ class GoogleWalletStyle(PassStyle):
         class_object = self._generate_class(layout, context, fields)
         ticket_object = self._generate_object(layout, context, fields)
 
+        # TODO: privacy screen
+        class_object = comms.put_item(ClassType.eventTicketClass, class_object['id'], class_object)
+        ticket_object = comms.put_item(ObjectType.eventTicketObject, ticket_object['id'], ticket_object)
+
         generated_jwt = comms.sign_jwt(
             ButtonJWT(
                 origins=[settings.SITE_URL],
                 issuer=comms.client_email,
-                event_ticket_classes=[class_object],
                 event_ticket_objects=[ticket_object],
-                skinny=False,
+                skinny=True,
             )
         )
 
         return "https://pay.google.com/gp/v/save/%s" % generated_jwt
-
-        # from ..views import get_layout_variables
-
-        # order = op.order
-        # event = order.event
-        # filename = "{}-{}.pkpass".format(order.event.slug, order.code)
-
-        # ticket = str(op.item.name)
-        # if op.variation:
-        #     ticket += " - " + str(op.variation)
-
-        # serialNumber = "%s-%s-%s-%d" % (
-        #     order.event.organizer.slug,
-        #     order.event.slug,
-        #     order.code,
-        #     op.pk,
-        # )
-
-        # context = {
-        #     "placeholders": get_layout_variables(op.order.event),
-        #     "evaluation_context": [op, order, order.event],
-        #     "ca_certificate": order.event.settings.wallet_apple_ca_certificate.read(),
-        #     "certificate": order.event.settings.wallet_apple_certificate.read(),
-        #     "key": order.event.settings.wallet_apple_key.read(),
-        #     "password": order.event.settings.wallet_apple_key_password,
-        #     "description": _("Ticket for {event} ({product})").format(  # TODO: i18n
-        #         event=event.name, product=ticket
-        #     ),
-        #     "organizationName": event.organizer.name,
-        #     "passTypeIdentifier": order.event.settings.wallet_apple_pass_type_id,
-        #     "teamIdentifier": order.event.settings.wallet_apple_team_id,
-        #     "serialNumber": serialNumber,
-        #     "locales": event.settings.locales,
-        # }
-
-        # data = layout.generate(context)
-        # return filename, "application/vnd.apple.pkpass", data
 
 
 class GoogleWalletEventTicket(GoogleWalletStyle):
@@ -352,17 +317,23 @@ class GoogleWalletEventTicket(GoogleWalletStyle):
                     {"value": "12:34", "label": "Time"},
                 ]
             },
-            {"fieldgroup": "seating"},
+            {"fieldgroup": "seating",
+             "sample": [
+                    {"content": "5", "label": "Row"},
+                    {"content": "2", "label": "Seat"},
+                ]
+            },
             {"fieldgroup": "code"},
         ]
     ]
-
 
     def _generate_object(self, layout: PassLayout, context, fields):
         output_object = super()._generate_object(layout, context, fields)
 
         if fields["code"]:
-            output_object.barcode(Barcode.qrCode, fields["code"][0]["value"], fields["code"][0]["value"])
+            output_object.barcode(
+                Barcode.qrCode, fields["code"][0]["value"], fields["code"][0]["value"]
+            )
 
         # output_object.reservation_info("%s-%s" % (op.order.event.slug, op.order.code))
         # output_object.ticket_holder_name(op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''))

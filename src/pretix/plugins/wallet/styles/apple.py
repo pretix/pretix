@@ -32,7 +32,7 @@ class ApplePlatform(WalletPlatform):
 
     @classmethod
     def generate(cls, layout: PassLayout, op: OrderPosition):
-        from ..views import get_layout_variables
+        context = cls.get_context(op)
 
         order = op.order
         event = order.event
@@ -49,9 +49,7 @@ class ApplePlatform(WalletPlatform):
             op.pk,
         )
 
-        context = {
-            "placeholders": get_layout_variables(op.order.event),
-            "evaluation_context": [op, order, order.event],
+        context.update({
             "ca_certificate": order.event.settings.wallet_apple_ca_certificate.read(),
             "certificate": order.event.settings.wallet_apple_certificate.read(),
             "key": order.event.settings.wallet_apple_key.read(),
@@ -63,8 +61,7 @@ class ApplePlatform(WalletPlatform):
             "passTypeIdentifier": order.event.settings.wallet_apple_pass_type_id,
             "teamIdentifier": order.event.settings.wallet_apple_team_id,
             "serialNumber": serialNumber,
-            "locales": event.settings.locales,
-        }
+        })
 
         data = layout.generate(context)
         return filename, "application/vnd.apple.pkpass", data
@@ -234,6 +231,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                     content="poweredby",
                 )
             ],
+            required=True
         ),
         ImageFieldGroup(
             identifier="logo",
@@ -245,6 +243,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                     content="poweredby",
                 )
             ],
+            required=True
         ),
         TextFieldGroup(
             identifier="logo_text",
@@ -265,6 +264,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 )
             ],  # TODO: support Lazyi18nproxy here
             description=_("These fields appear prominently featured on the pass."),
+            required=True
         ),
         TextFieldGroup(
             identifier="secondary", name=_("Secondary"), max_entries=4
