@@ -1,12 +1,31 @@
 import enum
+from typing import Any
 from i18nfield.strings import LazyI18nString
 import jsonschema
 from django.core.exceptions import ValidationError
+from pretix.base.models import OrderPosition
 
 class WalletPlatform:
     identifier: str
     name: str
 
+    @classmethod
+    def generate(cls, layout: "PassLayout", op: OrderPosition) -> Any: # TODO: Typing
+        pass
+
+    @classmethod
+    def get_context(cls, op):
+        from ..placeholders import get_wallet_placeholders, WalletPlaceholderContext
+
+        order = op.order
+        event = order.event
+
+        return {
+            "placeholders": get_wallet_placeholders(event),
+            "placeholder_context": WalletPlaceholderContext(event=event, order=order, order_position=op),
+            "locale": event.settings.locale, # TODO: should probably be order locale
+            "locales": event.settings.locales,
+        }
 
 class FieldGroupType(enum.Enum):
     PLACEHOLDER = "placeholder"
@@ -287,11 +306,9 @@ class PassStyle:
             .get(content)
         )
         if placeholder:
-            placeholder_value = placeholder["evaluate"](
-                *context.get("evaluation_context", [])
-            )
+            placeholder_value = context['placeholder_context'].render_placeholder(placeholder)
             if placeholder_value:
-                return placeholder["label"], placeholder_value
+                return placeholder.label, placeholder_value
 
         return None, None
 
