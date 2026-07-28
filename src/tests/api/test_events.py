@@ -1165,6 +1165,22 @@ def test_event_update_seating(token_client, organizer, event, item, seatingplan)
 
 
 @pytest.mark.django_db
+def test_event_no_create_or_delete_seats(token_client, organizer, event, item, seatingplan):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/seats/'.format(organizer.slug, event.slug),
+        {
+            'blocked': False,
+        },
+        format='json'
+    )
+    assert resp.status_code == 405
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/events/{}/seats/3/'.format(organizer.slug, event.slug),
+    )
+    assert resp.status_code == 405
+
+
+@pytest.mark.django_db
 def test_event_update_seating_invalid_product(token_client, organizer, event, item, seatingplan):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
