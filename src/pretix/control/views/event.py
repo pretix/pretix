@@ -1568,7 +1568,7 @@ class WidgetSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
         return ctx
 
 
-class QuickSetupView(FormView):
+class QuickSetupView(EventPermissionRequiredMixin, FormView):
     template_name = 'pretixcontrol/event/quick_setup.html'
     permission = 'event.settings.general:write'
     form_class = QuickSetupForm
