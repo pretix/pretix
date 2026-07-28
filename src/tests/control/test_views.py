@@ -225,12 +225,8 @@ def test_one_view(logged_in_client, url, expected, event, item, item_category, o
     response = logged_in_client.get(url)
     assert response.status_code == expected
 
-
-@pytest.mark.django_db
-def test_csp_header_control(logged_in_client):
     # Do not reintroduce any CSP nonces into control responses, as discussed in PR #6387
-    response = logged_in_client.get('/control/')
-    assert response.status_code == 200
+    assert 'script-src' in response['Content-Security-Policy']
     assert 'nonce-' not in response['Content-Security-Policy']
 
 
