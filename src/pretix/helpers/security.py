@@ -28,7 +28,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.gis import geoip2
 from django.core.cache import cache
 from django.utils.formats import date_format
-from django.utils.timezone import now
+from django.utils.timezone import localtime, now, override
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import Country
 from geoip2.errors import AddressNotFoundError
@@ -167,13 +167,13 @@ def handle_login_source(user, request):
         })
         if user.known_login_sources.count() > 1:
             # Do not send on first login or first login after introduction of this feature:
-            with language(user.locale):
+            with language(user.locale), override(user.timezone):
                 mail(
                     user.email,
                     _('New sign-in to your account'),
                     'pretixcontrol/email/login_notice.txt',
                     {
-                        'when': date_format(src.last_seen, 'DATETIME_FORMAT'),
+                        'when': date_format(localtime(src.last_seen), 'DATETIME_FORMAT'),
                         'agent': src.agent_type,
                         'os': src.os_type,
                         # ua-parser returns "Other" for unidentified desktop devices.
