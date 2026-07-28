@@ -3,6 +3,7 @@ type BaseFieldGroupDefinition = {
 	identifier: string;
 	name: string;
 	required: boolean;
+	description: string;
 };
 
 type FieldGroupDefinition =
@@ -50,7 +51,7 @@ type Style = {
 
 type Variable = {
 	label: string;
-	editor_sample: I18nString;
+	sample: string;
 };
 
 type Platform = {
@@ -67,9 +68,12 @@ type Platforms = Platform[];
 type PlaceholderFieldGroupConfig = {
 	entries: Array<FieldEntry>;
 	overflow: string | null;
+	active: boolean;
 };
 
-type PredefinedFieldGroupConfig = {};
+type PredefinedFieldGroupConfig = {
+	active: boolean;
+};
 
 type FieldGroupConfig =
 	| PlaceholderFieldGroupConfig
