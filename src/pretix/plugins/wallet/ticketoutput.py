@@ -26,13 +26,10 @@ from pretix.base.models import Event
 from pretix.base.settings import SettingsSandbox
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
-from .styles import AVAILABLE_STYLES_DICT
-from .styles.base import PassLayout, WalletPlatform
+from .styles.base import WalletPlatform
 from .styles.apple import ApplePlatform
 from .styles.google import GooglePlatform
 from collections import OrderedDict
-from .models import WalletLayout
-from .views import get_layout_variables
 from django import forms
 from .forms import CertificateFileField, validate_rsa_privkey
 from pretix.control.forms import ClearableBasenameFileInput
