@@ -256,6 +256,7 @@ class EventViewSet(viewsets.ModelViewSet):
                 data=self.request.data
             )
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         copy_from = None
         if 'clone_from' in self.request.GET:
@@ -319,6 +320,7 @@ class EventViewSet(viewsets.ModelViewSet):
             data=self.request.data
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         if not instance.allow_delete():
             raise PermissionDenied('The event can not be deleted as it already contains orders. Please set \'live\''
@@ -354,6 +356,7 @@ class CloneEventViewSet(viewsets.ModelViewSet):
         ctx['organizer'] = self.request.organizer
         return ctx
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         # Weird edge case: Requires settings permission on the event (to read) but also on the organizer (two write)
         perm_holder = (self.request.auth if isinstance(self.request.auth, (Device, TeamAPIToken))
@@ -512,6 +515,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
         resp['X-Page-Generated'] = date
         return resp
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         original_data = self.get_serializer(instance=serializer.instance).data
         super().perform_update(serializer)
@@ -528,6 +532,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
             data=self.request.data
         )
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -537,6 +542,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
             data=self.request.data
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         if not instance.allow_delete():
             raise PermissionDenied('The sub-event can not be deleted as it has already been used in orders. Please set'
@@ -565,6 +571,7 @@ class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.event.tax_rules.all()
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         super().perform_update(serializer)
         serializer.instance.log_action(
@@ -574,6 +581,7 @@ class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
             data=self.request.data
         )
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -583,6 +591,7 @@ class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
             data=self.request.data
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         if not instance.allow_delete():
             raise PermissionDenied('This tax rule can not be deleted as it is currently in use.')
@@ -756,6 +765,7 @@ class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
         }
         return ctx
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         super().perform_update(serializer)
         serializer.instance.event.log_action(
@@ -765,6 +775,7 @@ class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
             data={"seats": [serializer.instance.pk]},
         )
 
+    @transaction.atomic()
     def bulk_change_blocked(self, blocked):
         s = SeatBulkBlockInputSerializer(
             data=self.request.data,

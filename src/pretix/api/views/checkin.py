@@ -139,6 +139,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
             )
         return qs
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -153,6 +154,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         ctx['event'] = self.request.event
         return ctx
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
