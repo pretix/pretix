@@ -90,6 +90,7 @@ event_urls = [
     "delete/",
     "dangerzone/",
     "cancel/",
+    "quickstart/",
     "settings/",
     "settings/plugins",
     "settings/payment",
@@ -310,6 +311,7 @@ event_permission_urls = [
     ("event.settings.general:write", "live/", 200, HTTP_GET),
     ("event.settings.general:write", "delete/", 200, HTTP_GET),
     ("event.settings.general:write", "dangerzone/", 200, HTTP_GET),
+    ("event.settings.general:write", "quickstart/", 200, HTTP_GET),
     ("event.settings.general:write", "settings/", 200, HTTP_GET),
     # ("event.settings.payment:write", "settings/payment", 200, HTTP_GET),  GET allowed also with other permissions
     ("event.settings.payment:write", "settings/payment", 200, HTTP_POST),
