@@ -21,7 +21,6 @@ const props = defineProps<{ layout: Array<PreviewLayout> }>();
     width: 100%;
     aspect-ratio: 9 / 11;
     max-width: 360px;
-    max-height: 440px;
     vertical-align: top;
     display: inline-block;
 
