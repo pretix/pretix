@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed, inject, reactive, watchEffect } from "vue";
 import Select from "./input/select.vue";
-import Input from "./input/input.vue";
+import Checkbox from "./input/checkbox.vue";
 import I18nInput from "./input/i18ninput.vue";
 import TextContent from "./text-content.vue";
 import { StoreKey } from "../walletStore";
 
-const store = inject(StoreKey)!
+const store = inject(StoreKey)!;
 
 const gettext = (window as any).gettext;
 
@@ -14,7 +14,9 @@ const props = defineProps<{
 	fieldgroup: PlaceholderFieldGroupDefinition;
 	overflows: FieldGroupDefinition[];
 }>();
-const fieldConfig = defineModel<PlaceholderFieldGroupConfig>({ required: true });
+const fieldConfig = defineModel<PlaceholderFieldGroupConfig>({
+	required: true,
+});
 
 const overflowOptions = computed((): Array<[string | null, string]> => {
 	if (props.overflows.length) {
@@ -32,17 +34,25 @@ function addVariable() {
 }
 
 watchEffect(() => {
-    if (!fieldConfig.value) {
-        fieldConfig.value = {overflow: null, entries: JSON.parse(JSON.stringify(props.fieldgroup.default_entries))};
-    }
-    if (fieldConfig.value && !fieldConfig.value.entries) {
-        fieldConfig.value.entries = JSON.parse(JSON.stringify(props.fieldgroup.default_entries))
-    }
+	if (!fieldConfig.value) {
+		fieldConfig.value = {
+			overflow: null,
+			entries: JSON.parse(JSON.stringify(props.fieldgroup.default_entries)),
+			active:
+				props.fieldgroup.required ||
+				props.fieldgroup.default_entries.length > 0,
+		};
+	}
+	if (fieldConfig.value && !fieldConfig.value.entries) {
+		fieldConfig.value.entries = JSON.parse(
+			JSON.stringify(props.fieldgroup.default_entries),
+		);
+	}
 });
 </script>
 
 <template lang="pug">
-    .panel.panel-default
+    .panel.panel-default.walletsettings-panel
         .panel-heading
             h3.panel-title {{ fieldgroup.name }}
         .panel-body(v-if="fieldConfig")

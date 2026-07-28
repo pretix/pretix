@@ -12,7 +12,6 @@ const props = defineProps<{
 </script>
 
 <template lang="pug">
-    // TODO: support predefined group
     div.fieldgroup-container(:style="{'flex-grow': config.relSize, 'flex-direction': config.direction || 'row'}")
         div.fieldgroup-item(v-for="{ entry, label, content } of store.currentLayoutFieldContent[config.fieldgroup]")
             div.fieldgroup-item-qrcode(v-if="style_def.display == 'code'") {{ label }}

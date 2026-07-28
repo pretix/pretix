@@ -49,8 +49,7 @@ const platformChoices = computed(() => {
 });
 
 const preview_layout = computed(() => {
-	return store.currentPlatformStyles[store.currentPlatformLayout.style]
-		.preview_layout;
+	return store.currentPlatformStyles[store.currentPlatformLayout.style]?.preview_layout;
 });
 </script>
 
@@ -93,3 +92,20 @@ const preview_layout = computed(() => {
             button.btn.btn-primary.btn-save(type="submit") Submit
 
 </template>
+
+
+<style lang="css">
+.walletsettings-panel .panel-heading {
+  .checkbox {
+    padding: 0;
+    display: inline-block;
+    input[type=checkbox] {
+      margin-top: 0;
+      margin-right: 5px;
+      margin-left: 0px;
+      position: relative;
+      top: 1px;
+    }
+  }
+}
+</style>

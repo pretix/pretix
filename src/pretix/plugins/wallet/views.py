@@ -29,38 +29,24 @@ from django.contrib import messages
 from django.contrib.staticfiles import finders
 from django.utils.functional import cached_property
 from django.templatetags.static import static
-
-def get_layout_variables(event):
-    return {
-        "text": get_variables(event),
-        "image": get_images(event)
-        | {
-            "poweredby": {
-                "label": _("pretix-Logo"),
-                "evaluate": lambda *_: open(
-                    finders.find("pretix_passbook/logo.png"), "rb"
-                ),
-                "editor_sample": static("pretix_passbook/logo.png")
-            },
-            "poweredby_icon": {
-                "label": _("pretix-Icon"),
-                "evaluate": lambda *_: open(
-                    finders.find("pretix_passbook/icon.png"), "rb"
-                ),
-                "editor_sample": static("pretix_passbook/icon.png")
-            },
-        },  # TODO: image upload
-    }
+from .placeholders import get_wallet_placeholders, WalletPlaceholderContext
 
 
-def get_editor_variables(event):
-    return {
-        t: {
-            vid: {"label": v.get("label"), "editor_sample": v.get("editor_sample")}
-            for vid, v in vs.items()
+def get_editor_placeholders(event):
+    with (
+        rolledback_transaction(),
+        language(event.settings.locale, event.settings.region),
+    ):
+        p = get_preview_position(event)
+        context = WalletPlaceholderContext(event=event, order=p.order, order_position=p)
+        placeholders = {
+            t: {
+                pid: {"label": str(p.label), "sample": str(context.render_sample(p))}
+                for pid, p in ps.items()
+            }
+            for t, ps in get_wallet_placeholders(event).items()
         }
-        for t, vs in get_layout_variables(event).items()
-    }
+    return placeholders
 
 
 class WalletLayoutMixin:
@@ -97,10 +83,7 @@ class LayoutEditorView(LayoutDetailView):
             }
             for platform in AVAILABLE_PLATFORMS
         ]
-        # context["styles"] = {
-        #     style.identifier: style.asdict() for style in self.get_platform_styles()
-        # }
-        context["variables"] = get_editor_variables(self.request.event)
+        context["variables"] = get_editor_placeholders(self.request.event)
         context["locales"] = {
             l: dict(settings.LANGUAGES).get(l, l)
             for l in self.request.event.settings.get("locales")
@@ -190,7 +173,7 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
         ):
             p = get_preview_position(request.event)
             layout = PassLayout(style=style, layout=layout)
-            context = {"placeholders": get_layout_variables(event)}
+            context = {"placeholders": get_wallet_placeholders(event)}
             layout.validate(context=context)
 
             fname, mimet, data = platform.generate(layout, p)
