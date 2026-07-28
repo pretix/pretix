@@ -20,7 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-from pretix.base.signals import register_ticket_outputs, register_global_settings
+from pretix.base.signals import register_ticket_outputs, register_global_settings, EventPluginSignal
 from .ticketoutput import OUTPUTS
 
 def connect_signals():
@@ -29,9 +29,26 @@ def connect_signals():
         def get_register_func(o):
             def register(sender, **kwargs):
                 return o
-            return register      
+            return register
         register_ticket_outputs.connect(get_register_func(output), dispatch_uid=f"wallet_output_{output.identifier}")
         if hasattr(output, "get_global_settings"):
             register_global_settings.connect(output.get_global_settings, dispatch_uid=f"wallet_global_settings_{output.identifier}")
 
 connect_signals()
+
+
+register_wallet_text_placeholders = EventPluginSignal()
+"""
+This signal is sent out to get all known wallet placeholders. Receivers should return
+an list of subclasses of pretix.plugins.wallet.placeholders.BaseWalletTextPlaceholder.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+register_wallet_image_placeholders = EventPluginSignal()
+"""
+This signal is sent out to get all known wallet placeholders. Receivers should return
+an list of subclasses of pretix.plugins.wallet.placeholders.BaseWalletImagePlaceholder.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
