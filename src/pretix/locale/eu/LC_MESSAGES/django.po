@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-07 09:30+0000\n"
-"PO-Revision-Date: 2026-07-27 17:00+0000\n"
+"PO-Revision-Date: 2026-07-29 11:04+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/"
 "eu/>\n"
@@ -809,16 +809,15 @@ msgstr ""
 "pertsonalizatuetarako erabil daitezke."
 
 #: pretix/base/context.py
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
-msgstr "{name}-ek bultzatua eta <a {a_attr}>pretix</a> -an oinarritua"
+msgstr ""
+"<a {a_name_attr}> {name}-ek bultzatua <a {a_attr}>pretix</a> -en oinarritua"
 
 #: pretix/base/context.py
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_attr}>powered by {name} based on pretix</a>"
-msgstr "{name}-ek bultzatua eta <a {a_attr}>pretix</a> -an oinarritua"
+msgstr "<a {a_attr}>-ek bultzatua <a {name}>pretix</a> -an oinarritua"
 
 #: pretix/base/context.py
 #, python-format
@@ -15605,7 +15604,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py
 msgid "Number of tickets"
-msgstr ""
+msgstr "Sarrera kopurua"
 
 #: pretix/control/forms/item.py
 msgid "Quota name is required."
@@ -16116,7 +16115,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py pretix/plugins/sendmail/forms.py
 msgid "Attach tickets"
-msgstr ""
+msgstr "Sarrerak atxikita"
 
 #: pretix/control/forms/orders.py pretix/plugins/sendmail/forms.py
 msgid ""
