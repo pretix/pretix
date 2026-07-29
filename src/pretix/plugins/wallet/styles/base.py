@@ -9,23 +9,6 @@ class WalletPlatform:
     identifier: str
     name: str
 
-    @classmethod
-    def generate(cls, layout: "PassLayout", op: OrderPosition) -> Any: # TODO: Typing
-        pass
-
-    @classmethod
-    def get_context(cls, op):
-        from ..placeholders import get_wallet_placeholders, WalletPlaceholderContext
-
-        order = op.order
-        event = order.event
-
-        return {
-            "placeholders": get_wallet_placeholders(event),
-            "placeholder_context": WalletPlaceholderContext(event=event, order=order, order_position=op),
-            "locale": event.settings.locale, # TODO: should probably be order locale
-            "locales": event.settings.locales,
-        }
 
 class FieldGroupType(enum.Enum):
     PLACEHOLDER = "placeholder"
@@ -253,19 +236,21 @@ class PassStyle:
     fieldgroups: list[FieldGroup]
     preview_layout: list | None
 
-    def asdict(self):
+    @classmethod
+    def asdict(cls):
         return {
-            "identifier": self.identifier,
-            "name": self.name,
-            "fieldgroups": [x.asdict() for x in self.fieldgroups],
-            "preview_layout": self.preview_layout
+            "identifier": cls.identifier,
+            "name": cls.name,
+            "fieldgroups": [x.asdict() for x in cls.fieldgroups],
+            "preview_layout": cls.preview_layout
         }
 
-    def layout_schema(self, context):
+    @classmethod
+    def layout_schema(cls, context):
         schema = {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
             # TODO: $id
-            "title": self.name,
+            "title": cls.name,
             "type": "object",
             "properties": {
                 "fieldgroups": {
@@ -273,12 +258,12 @@ class PassStyle:
                     "type": "object",
                     "properties": {
                         group.identifier: group.layout_schema(
-                            context=context, remaining_fields=self.fieldgroups[i:]
+                            context=context, remaining_fields=cls.fieldgroups[i:]
                         )
-                        for (i, group) in enumerate(self.fieldgroups)
+                        for (i, group) in enumerate(cls.fieldgroups)
                     },
                     "required": [
-                        group.identifier for group in self.fieldgroups if group.required
+                        group.identifier for group in cls.fieldgroups if group.required
                     ],
                 }
             },
@@ -291,17 +276,15 @@ class PassStyle:
                 }
             },
         }
-        if any(group.required for group in self.fieldgroups):
+        if any(group.required for group in cls.fieldgroups):
             schema["required"] = ["fieldgroups"]
 
         return schema
 
-    def generate(self, layout, context):
-        raise NotImplementedError()
-
-    def render_placeholder(self, context, content_type, content):
+    @classmethod
+    def render_placeholder(cls, context, content_type, content):
         placeholder = (
-            context.get("placeholders")
+            context.get("placeholders", {})
             .get(content_type, {})
             .get(content)
         )
@@ -312,15 +295,31 @@ class PassStyle:
 
         return None, None
 
-    def get_pass_fields(self, layout, context):
+
+    def __init__(self, event, layout):
+        self.event = event
+        self.layout = layout
+
+    def get_layout_context(self):
+        return {"placeholders": {}}
+
+    def validate(self):
+        schema = self.layout_schema(self.get_layout_context())
+        try:
+            jsonschema.validate(self.layout, schema)
+        except jsonschema.ValidationError as e:
+            raise ValidationError("Invalid layout: {}".format(str(e)))
+
+    def get_pass_fields(self, context):
         fields = {}
         for group in self.fieldgroups:
             if isinstance(group, PredefinedFieldGroup):
                 pass
+
             elif isinstance(group, PlaceholderFieldGroup):
                 group_fields = fields.get(group.identifier, [])
-                if group.identifier in layout["fieldgroups"]:
-                    for field in layout["fieldgroups"][group.identifier]["entries"]:
+                if group.identifier in self.layout["fieldgroups"]:
+                    for field in self.layout["fieldgroups"][group.identifier]["entries"]:
                         field_entry = {}
                         if group.display == FieldGroupDisplay.WITH_LABEL:
                             field_entry["label"] = LazyI18nString(field["label"])
@@ -338,30 +337,13 @@ class PassStyle:
                         f"Group {group.identifier} needs at least {group.min_entries} entries, but only {len(group_fields)} were provided"
                     )
                 fields[group.identifier] = group_fields[: group.max_entries]
-                if (overflow_group := layout["fieldgroups"][group.identifier]['overflow']):
+                if (overflow_group := self.layout["fieldgroups"][group.identifier]['overflow']):
                     fields.setdefault(overflow_group, [])
                     fields[overflow_group] += group_fields[group.max_entries:]
+
             else:
                 raise ValueError("Unknown field group")
         return fields
 
-
-class PassLayout:
-    style: PassStyle
-    layout: dict
-
-    def __init__(self, style, layout):
-        self.style = style
-        self.layout = layout
-
-    def validate(self, context):
-        schema = self.style.layout_schema(context)
-        try:
-            jsonschema.validate(self.layout, schema)
-        except jsonschema.ValidationError as e:
-            raise ValidationError("Invalid layout: {}".format(str(e)))
-
-    def generate(self, context):
-        # TODO: how to handle nonexisting placeholders here?
-        self.validate(context)
-        return self.style.generate(self.layout, context)
+    def generate(self, op: OrderPosition):
+        raise NotImplementedError()
