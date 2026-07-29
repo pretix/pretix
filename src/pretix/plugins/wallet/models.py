@@ -23,12 +23,12 @@ from django.db import models
 from django.db.models import constraints, Q
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.models import LoggedModel
+from pretix.base.models import LoggedModel, OrderPosition
 from django_scopes import ScopedManager
 from django.core.exceptions import ValidationError
 
 from pretix.plugins.wallet.styles import get_style
-from pretix.plugins.wallet.styles.base import PassLayout
+from pretix.plugins.wallet.styles.base import PassStyle
 
 
 class WalletLayout(LoggedModel):
@@ -69,7 +69,10 @@ class WalletPlatformLayout(LoggedModel):
     @property
     def pass_layout(self):
         style = get_style(self.platform, self.style)
-        return PassLayout(style=style, layout=self.layout)
+        if style:
+            return style(event=self.parent.event, layout=self.layout)
+        else:
+            raise RuntimeError(f"Style {self.platform}.{self.style} not found")
 
 class WalletLayoutItem(models.Model):
     item = models.OneToOneField('pretixbase.Item', null=True, blank=True, related_name='walletlayout',
@@ -79,3 +82,10 @@ class WalletLayoutItem(models.Model):
     def clean(self):
         if self.item.event != self.layout.event:
             raise ValidationError("cannot bind layout to item of different event")
+
+# smth like this for apple, lets see what the best architecture for google will be
+# class AppleWalletPass(models.Model):
+#     platform_layout = models.ForeignKey(WalletPlatformLayout, on_delete=models.PROTECT)
+#     order_position = models.ForeignKey(OrderPosition, on_delete=models.PROTECT)
+#     content = models.BinaryField()
+#     updated_at = models.DateTimeField(null=True, auto_now=True)

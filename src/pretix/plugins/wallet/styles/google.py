@@ -3,7 +3,6 @@ from pretix.base.models import Event, OrderPosition
 from .base import (
     FieldGroupDisplay,
     ImageFieldGroup,
-    PassLayout,
     PassStyle,
     PlaceholderFieldEntry,
     PredefinedFieldGroup,
@@ -90,52 +89,28 @@ class GooglePlatform(WalletPlatform):
     identifier = "google"
     name = _("Google")
 
-    @classmethod
-    def generate(cls, layout: PassLayout, op: OrderPosition):
-        context = cls.get_context(op)
-
-        order = op.order
-        event = order.event
-
-        context.update(
-            {
-                "credentials": event.settings.get("wallet_google_credentials").read(),
-                "issuerName": event.organizer.name,
-                "eventName": event.name,
-                # TODO: use other classId and objectId in preview mode
-                "classId": get_class_id(event),
-                "objectId": get_object_id(op),
-                "homepageUrl": eventreverse_absolute(event, "presale:event.index"),
-                # TODO: add webhook view & register in pass
-                # "webhookUrl": eventreverse_absolute(event.organizer,"plugins:wallet:google_webhook",)
-            }
-        )
-
-        data = layout.generate(context)
-        return "url", "text/plain", data
-
 
 class GoogleWalletStyle(PassStyle):
     platform = GooglePlatform
 
-    def _generate_class(self, layout: PassLayout, context, fields):
+    def _generate_class(self):
         output_class = EventTicketClass(
-            context["issuerName"],
-            context["classId"],
+            self.event.organizer.name,
+            get_class_id(self.event),
             MultipleDevicesAndHoldersAllowedStatus.multipleHolders,  # TODO: Make configurable
-            context["eventName"],
+            self.event.name,
             ReviewStatus.underReview,
-            context["locale"],
+            self.event.settings.locale,
         )
 
         output_class.homepage_uri(
-            context["homepageUrl"],
-            get_translated_string("Website", context["locale"]),
-            get_translated_dict("Website", context["locales"]),
+            eventreverse_absolute(self.event, "presale:event.index"),
+            get_translated_string("Website", self.event.settings.locale),
+            get_translated_dict("Website", self.event.settings.locales),
         )
 
-        if context.get("webhookUrl"):  # TODO: enforce that it exists
-            output_class.callback_url(context["webhookUrl"])
+        # TODO: callback url
+        # output_class.callback_url(eventreverse_absolute(event.organizer,"plugins:wallet:google_webhook",))
 
         # TODO: move to pass settings or set defaults
         # if (event.settings.get('ticketoutput_googlepaypasses_latitude')
@@ -200,53 +175,18 @@ class GoogleWalletStyle(PassStyle):
         # return self._comms().put_item(ClassType.eventTicketClass, class_name, output_class)
         return output_class
 
-    def _generate_object(self, layout: PassLayout, context, fields):
-        class_id = context["classId"]
-        object_id = context["objectId"]
+    def _generate_object(self, op: OrderPosition, class_id: str):
         output_object = EventTicketObject(
-            object_id, class_id, ObjectState.active, context["locale"]
+            get_object_id(op), class_id, ObjectState.active, self.event.settings.locale
         )
-
-        # output_object.barcode(Barcode.qrCode, op.secret, op.secret)
-
-        # output_object.reservation_info("%s-%s" % (op.order.event.slug, op.order.code))
-        # output_object.ticket_holder_name(op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''))
-        # output_object.ticket_number(op.secret)
-        # output_object.ticket_type(
-        #     get_translated_dict(
-        #         str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
-        #         op.order.event.settings.get('locales')
-        #     )
-        # )
-
-        # places = django_settings.CURRENCY_PLACES.get(op.order.event.currency, 2)
-        # output_object.face_value(int(op.price * 1000 ** places), op.order.event.currency)
-
-        # if op.order.event.seating_plan_id is not None:
-        #     if op.seat:
-        #         output_object.seat(
-        #             get_translated_dict(
-        #                 _(str(op.seat)),
-        #                 op.order.event.settings.get('locales')
-        #             )
-        #         )
-        #     else:
-        #         output_object.seat(
-        #             get_translated_dict(
-        #                 _('General admission'),
-        #                 op.order.event.settings.get('locales')
-        #             )
-        #         )
-
-        # return self._comms().put_item(ObjectType.eventTicketObject, object_name, output_object)
         return output_object
 
-    def generate(self, layout, context):
-        comms = Comms(context["credentials"])
-        fields = self.get_pass_fields(layout, context)
+    def generate(self, op):
+        self.op = op
+        comms = Comms(self.event.settings.get("wallet_google_credentials").read())
 
-        class_object = self._generate_class(layout, context, fields)
-        ticket_object = self._generate_object(layout, context, fields)
+        class_object = self._generate_class()
+        ticket_object = self._generate_object(op, class_id=class_object['id'])
 
         # TODO: privacy screen
         class_object = comms.put_item(ClassType.eventTicketClass, class_object['id'], class_object)
@@ -327,8 +267,8 @@ class GoogleWalletEventTicket(GoogleWalletStyle):
         ]
     ]
 
-    def _generate_object(self, layout: PassLayout, context, fields):
-        output_object = super()._generate_object(layout, context, fields)
+    def _generate_object(self, op: OrderPosition, class_id: str):
+        output_object = super()._generate_object(op, class_id)
 
         if fields["code"]:
             output_object.barcode(
