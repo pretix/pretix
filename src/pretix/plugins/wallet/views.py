@@ -23,7 +23,6 @@ from .styles import (
     AVAILABLE_STYLES,
     AVAILABLE_PLATFORMS,
     AVAILABLE_STYLES_DICT,
-    PassLayout,
 )
 from django.contrib import messages
 from django.contrib.staticfiles import finders
@@ -172,9 +171,8 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
             language(request.event.settings.locale, request.event.settings.region),
         ):
             p = get_preview_position(request.event)
-            layout = PassLayout(style=style, layout=layout)
-            context = {"placeholders": get_wallet_placeholders(event)}
-            layout.validate(context=context)
+            layout = style(event=event, layout=layout)
+            layout.validate()
 
             fname, mimet, data = platform.generate(layout, p)
             resp = HttpResponse(data, content_type=mimet)
