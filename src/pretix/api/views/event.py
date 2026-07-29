@@ -45,6 +45,7 @@ from rest_framework.exceptions import (
     NotFound, PermissionDenied, ValidationError,
 )
 from rest_framework.generics import get_object_or_404
+from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 
 from pretix.api.auth.permission import EventCRUDPermission
@@ -711,7 +712,7 @@ class SeatFilter(FilterSet):
         fields = ('zone_name', 'row_name', 'row_label', 'seat_number', 'seat_label', 'seat_guid', 'blocked',)
 
 
-class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
+class SeatViewSet(ConditionalListView, UpdateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = SeatSerializer
     queryset = Seat.objects.none()
     write_permission = 'event.settings.general:write'
