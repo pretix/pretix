@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from django.db import transaction
-from .styles import PassLayout, AVAILABLE_STYLES_DICT, AVAILABLE_PLATFORMS
+from .styles import AVAILABLE_STYLES_DICT, AVAILABLE_PLATFORMS
 from .models import WalletLayout, WalletPlatformLayout
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from django.core.exceptions import ValidationError
@@ -33,9 +33,8 @@ class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
                 raise ValidationError(_("Invalid style"))
             style = platform_styles[data["style"]]
 
-            layout = PassLayout(style=style, layout=data["layout"])
-            context = {"placeholders": get_editor_placeholders(self.context['event'])}
-            layout.validate(context=context)
+            style = style(event=self.context['event'], layout=data["layout"])
+            style.validate()
         return data
 
 

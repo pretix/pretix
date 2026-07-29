@@ -10,7 +10,6 @@ from .base import (
     WalletPlatform,
     PassStyle,
     PlaceholderFieldEntry,
-    PassLayout,
 )
 from django.utils.translation import gettext as _
 from i18nfield.strings import LazyI18nString
@@ -29,42 +28,6 @@ from django.utils.encoding import force_bytes
 class ApplePlatform(WalletPlatform):
     identifier = "apple"
     name = _("Apple")
-
-    @classmethod
-    def generate(cls, layout: PassLayout, op: OrderPosition):
-        context = cls.get_context(op)
-
-        order = op.order
-        event = order.event
-        filename = "{}-{}.pkpass".format(order.event.slug, order.code)
-
-        ticket = str(op.item.name)
-        if op.variation:
-            ticket += " - " + str(op.variation)
-
-        serialNumber = "%s-%s-%s-%d" % (
-            order.event.organizer.slug,
-            order.event.slug,
-            order.code,
-            op.pk,
-        )
-
-        context.update({
-            "ca_certificate": order.event.settings.wallet_apple_ca_certificate.read(),
-            "certificate": order.event.settings.wallet_apple_certificate.read(),
-            "key": order.event.settings.wallet_apple_key.read(),
-            "password": order.event.settings.wallet_apple_key_password,
-            "description": _("Ticket for {event} ({product})").format(  # TODO: i18n
-                event=event.name, product=ticket
-            ),
-            "organizationName": event.organizer.name,
-            "passTypeIdentifier": order.event.settings.wallet_apple_pass_type_id,
-            "teamIdentifier": order.event.settings.wallet_apple_team_id,
-            "serialNumber": serialNumber,
-        })
-
-        data = layout.generate(context)
-        return filename, "application/vnd.apple.pkpass", data
 
 
 class StringResource:
@@ -181,10 +144,39 @@ class AppleWalletStyle(PassStyle):
         }
         return pass_json
 
-    def generate(self, layout, context):
-        for key in ["ca_certificate", "certificate", "key", "password", "locales"]:
-            if key not in context:
-                raise ValueError(f"{key} missing from context")
+    def generate(self, op: OrderPosition):
+        context = self.get_context(op)
+
+        order = op.order
+        event = order.event
+        filename = "{}-{}.pkpass".format(order.event.slug, order.code)
+
+        ticket = str(op.item.name)
+        if op.variation:
+            ticket += " - " + str(op.variation)
+
+        serialNumber = "%s-%s-%s-%d" % (
+            order.event.organizer.slug,
+            order.event.slug,
+            order.code,
+            op.pk,
+        )
+
+        context.update({
+            "ca_certificate": order.event.settings.wallet_apple_ca_certificate.read(),
+            "certificate": order.event.settings.wallet_apple_certificate.read(),
+            "key": order.event.settings.wallet_apple_key.read(),
+            "password": order.event.settings.wallet_apple_key_password,
+            "description": _("Ticket for {event} ({product})").format(  # TODO: i18n
+                event=event.name, product=ticket
+            ),
+            "organizationName": event.organizer.name,
+            "passTypeIdentifier": order.event.settings.wallet_apple_pass_type_id,
+            "teamIdentifier": order.event.settings.wallet_apple_team_id,
+            "serialNumber": serialNumber,
+        })
+
+
 
         fields = self.get_pass_fields(layout, context)
 
@@ -214,7 +206,9 @@ class AppleWalletStyle(PassStyle):
         for lang, content in strings.generate().items():
             pkpass.add_file(f"{lang}.lproj/pass.strings", content)
         pkpass.add_file("pass.json", json.dumps(pass_json))
-        return pkpass.finish()
+        result = pkpass.finish()
+        return filename, "application/vnd.apple.pkpass", result
+
 
 
 class AppleWalletEventTicket(AppleWalletStyle):
