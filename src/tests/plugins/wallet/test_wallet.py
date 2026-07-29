@@ -4,9 +4,9 @@ from pretix.plugins.wallet.styles.base import (
     WalletPlatform,
     PlaceholderFieldGroup,
     FieldContentType,
-    PassLayout,
     FieldGroupType,
     FieldEntryType,
+    FieldGroupDisplay
 )
 from django.utils.translation import gettext as _
 import jsonschema
@@ -49,50 +49,20 @@ class TicketTestStyle(PassStyle):
             name=_("Text 2"),
             content_type=FieldContentType.TEXT,
             required=False,
-            labels=False,
+            display=FieldGroupDisplay.PLAIN,
         ),
         PlaceholderFieldGroup(
             identifier="image1",
             name=_("Image 1"),
             content_type=FieldContentType.IMAGE,
             required=False,
-            labels=False,
+            display=FieldGroupDisplay.PLAIN,
         ),
     ]
 
-    def generate(self, layout, context):
-        output = f"Generated Pass: {self.name}\n\n"
-        for group in self.fieldgroups:
-            if group.identifier in layout["fieldgroups"]:
-                output += f"Group: {group.name}\n"
-                if isinstance(group, PredefinedFieldGroup):
-                    output += "PREDEFINED\n"
-                elif isinstance(group, PlaceholderFieldGroup):
-                    for field in layout["fieldgroups"][group.identifier]["entries"]:
-                        if group.labels:
-                            label = LazyI18nString(field["label"])
-                            output += f"{label}: "
-                        if field["type"] == FieldEntryType.PLACEHOLDER.value:
-                            placeholder = (
-                                context.get("placeholders")
-                                .get(group.content_type.value, {})
-                                .get(field["content"])
-                            )
-                            if placeholder:
-                                output += placeholder["evaluate"](
-                                    *context.get("evaluation_context", [])
-                                )
-                            else:
-                                output += f"UNKNOWN: {field['content']}"
-                        elif field["type"] == FieldEntryType.TEXT.value:
-                            output += str(LazyI18nString(field["content"]))
-                        elif field["type"] == FieldEntryType.IMAGE.value:
-                            output += f"<IMG>{field['content']}</IMG>"
-                        output += "\n"
-                else:
-                    raise ValueError("Unknown field group")
-                output += "\n"
-        return output
+    def generate(self, op):
+        fields = self.get_pass_fields({})
+        return fields
 
 
 @pytest.fixture
@@ -105,7 +75,7 @@ def layout_context():
 
 
 def test_schema_generation_minimal():
-    style = MinimalTestStyle()
+    style = MinimalTestStyle
     context = {}
     schema = style.layout_schema(context)
     assert isinstance(schema, dict)
@@ -117,7 +87,7 @@ def test_schema_generation_minimal():
 
 
 def test_schema_ticket_generation(layout_context):
-    style = TicketTestStyle()
+    style = TicketTestStyle
     schema = style.layout_schema(layout_context)
     assert isinstance(schema, dict)
     assert "properties" in schema
@@ -194,7 +164,7 @@ def test_schema_ticket_generation(layout_context):
     ],
 )
 def test_schema_ticket_valid(layout_context, layout):
-    style = TicketTestStyle()
+    style = TicketTestStyle
     schema = style.layout_schema(layout_context)
 
     jsonschema.validate(layout, schema)
@@ -287,7 +257,7 @@ def test_schema_ticket_valid(layout_context, layout):
     ],
 )
 def test_schema_ticket_invalid(layout_context, layout):
-    style = TicketTestStyle()
+    style = TicketTestStyle
     schema = style.layout_schema(layout_context)
 
     with pytest.raises(jsonschema.ValidationError):
@@ -295,7 +265,7 @@ def test_schema_ticket_invalid(layout_context, layout):
 
 
 def test_style_representation():
-    style = TicketTestStyle()
+    style = TicketTestStyle
     style_dict = style.asdict()
     assert style_dict["platform"] == "test_platform"
     assert style_dict["identifier"] == "test_ticket"
@@ -309,7 +279,7 @@ def test_style_representation():
 
 
 def test_layout_generate(layout_context):
-    style = TicketTestStyle()
+    style = TicketTestStyle
     layout = {
         "fieldgroups": {
             "text1": {
@@ -325,8 +295,8 @@ def test_layout_generate(layout_context):
             }
         }
     }
-
-    pass_layout = PassLayout(style, layout)
+    # TODO: create event and pass here
+    pass_layout = style(event=None, layout=layout)
     generated_pass = pass_layout.generate(layout_context)
 
     assert (
