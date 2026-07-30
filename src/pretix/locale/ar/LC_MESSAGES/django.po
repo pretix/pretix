@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-07 09:30+0000\n"
+"POT-Creation-Date: 2026-07-30 13:52+0000\n"
 "PO-Revision-Date: 2026-07-20 08:01+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/"
-"ar/>\n"
+"Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
+">\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,38 +19,6 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Weblate 2026.7.1\n"
-
-#: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/views/dashboards.py
-msgid "Shop disabled"
-msgstr "المتجر معطل"
-
-#: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/index.html
-msgid "Presale over"
-msgstr "انتهى العرض المسبق"
-
-#: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/index.html
-msgid "Presale not started"
-msgstr "لم يبدأ البيع المسبق بعد"
-
-#: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/index.html
-#: pretix/control/views/dashboards.py
-msgid "On sale"
-msgstr "معروض للبيع"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -615,8 +583,8 @@ msgid ""
 "This includes related events like creation, deletion, opening or closing of "
 "quotas. No webhook is sent for changes to the resulting availability."
 msgstr ""
-"ويشمل ذلك الأحداث ذات الصلة مثل إنشاء الحصص أو حذفها أو فتحها أو إغلاقها. ولا "
-"يتم إرسال أي ويب هوك عند حدوث تغييرات في التوافر الناتج."
+"ويشمل ذلك الأحداث ذات الصلة مثل إنشاء الحصص أو حذفها أو فتحها أو إغلاقها. "
+"ولا يتم إرسال أي ويب هوك عند حدوث تغييرات في التوافر الناتج."
 
 #: pretix/api/webhooks.py
 msgid "Shop taken live"
@@ -833,7 +801,8 @@ msgstr ""
 msgid ""
 "Field \"{field_name}\" does not exist. Please check your {provider_name} "
 "settings."
-msgstr "الحقل ”{field_name}“ غير موجود. يرجى التحقق من إعدادات {provider_name}."
+msgstr ""
+"الحقل ”{field_name}“ غير موجود. يرجى التحقق من إعدادات {provider_name}."
 
 #: pretix/base/datasync/datasync.py
 #, python-brace-format
@@ -1230,6 +1199,19 @@ msgstr "حسابات العملاء"
 msgid "Download a spreadsheet of all currently registered customer accounts."
 msgstr "قم بتنزيل جدول بيانات يضم جميع حسابات العملاء المسجلة حاليًا."
 
+#: pretix/base/exporters/customers.py pretix/base/permissions.py
+#: pretix/control/navigation.py
+#: pretix/control/templates/pretixcontrol/organizers/customers.html
+msgid "Customers"
+msgstr "عملاء"
+
+#: pretix/base/exporters/customers.py pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/organizers/customer.html
+#: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
+#: pretix/presale/views/customer.py
+msgid "Memberships"
+msgstr "العضويات"
+
 #: pretix/base/exporters/customers.py pretix/base/models/customers.py
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/customers.html
@@ -1362,6 +1344,72 @@ msgstr "نعم"
 msgid "No"
 msgstr "من"
 
+#: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
+#: pretix/base/models/memberships.py pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/event/live.html
+msgid "Test mode"
+msgstr "وضع الاختبار"
+
+#: pretix/base/exporters/customers.py pretix/base/models/memberships.py
+#: pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html
+#: pretix/control/templates/pretixcontrol/orders/overview.html
+#: pretix/control/templates/pretixcontrol/organizers/customer_membership.html
+#: pretix/plugins/reports/exporters.py
+#: pretix/presale/templates/pretixpresale/event/fragment_order_status.html
+#: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
+#: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
+msgid "Canceled"
+msgstr "تم إلغاؤه"
+
+#: pretix/base/exporters/customers.py pretix/base/models/memberships.py
+#: pretix/control/templates/pretixcontrol/organizers/customer.html
+#: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
+msgid "Membership type"
+msgstr "نوع العضوية"
+
+#: pretix/base/exporters/customers.py
+#, fuzzy
+#| msgid "Purchase time"
+msgid "Purchase ticket"
+msgstr "الوقت المكتسب"
+
+#: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
+#: pretix/base/exporters/waitinglist.py pretix/base/forms/questions.py
+#: pretix/base/models/memberships.py pretix/control/forms/rrule.py
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/control/templates/pretixcontrol/orders/refunds.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/search/payments.html
+#: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
+#: pretix/control/templates/pretixcontrol/user/staff_session_list.html
+#: pretix/plugins/checkinlists/exporters.py
+msgid "Start date"
+msgstr "تاريخ البدء"
+
+#: pretix/base/exporters/customers.py
+#, fuzzy
+#| msgid "Start time from"
+msgid "Start time"
+msgstr "وقت البدء من"
+
+#: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
+#: pretix/base/exporters/waitinglist.py pretix/base/models/memberships.py
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
+#: pretix/control/templates/pretixcontrol/user/staff_session_list.html
+#: pretix/plugins/checkinlists/exporters.py
+msgid "End date"
+msgstr "تاريخ الانتهاء"
+
+#: pretix/base/exporters/customers.py
+#, fuzzy
+#| msgid "End: %(time)s"
+msgid "End time"
+msgstr "النهاية: %(time)s"
+
 #: pretix/base/exporters/dekodi.py pretix/base/exporters/invoices.py
 msgctxt "export_category"
 msgid "Invoices"
@@ -1392,8 +1440,8 @@ msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
 msgstr ""
-"يرجى تضمين الفواتير الصادرة خلال هذه الفترة الزمنية فقط. يرجى ملاحظة أن تاريخ "
-"الفاتورة لا يتطابق دائمًا مع تاريخ الطلب أو تاريخ الدفع."
+"يرجى تضمين الفواتير الصادرة خلال هذه الفترة الزمنية فقط. يرجى ملاحظة أن "
+"تاريخ الفاتورة لا يتطابق دائمًا مع تاريخ الطلب أو تاريخ الدفع."
 
 #: pretix/base/exporters/events.py
 msgid "Event data"
@@ -1986,9 +2034,9 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
-"قم بتنزيل جدول بيانات يحتوي على جميع الطلبات. سيتضمن الجدول ثلاث أوراق: واحدة "
-"تحتوي على سطر لكل طلب، وأخرى تحتوي على سطر لكل مركز تداول في الطلب، وثالثة "
-"تحتوي على سطر لكل رسوم إضافية يتم تحصيلها في الطلب."
+"قم بتنزيل جدول بيانات يحتوي على جميع الطلبات. سيتضمن الجدول ثلاث أوراق: "
+"واحدة تحتوي على سطر لكل طلب، وأخرى تحتوي على سطر لكل مركز تداول في الطلب، "
+"وثالثة تحتوي على سطر لكل رسوم إضافية يتم تحصيلها في الطلب."
 
 #: pretix/base/exporters/orderlist.py pretix/base/models/orders.py
 #: pretix/base/permissions.py pretix/control/navigation.py
@@ -2065,9 +2113,9 @@ msgid ""
 "contain at least one position of this product. The order totals etc. still "
 "include all products contained in the order."
 msgstr ""
-"قم بتنزيل جدول بيانات يحتوي على جميع الطلبات. سيتضمن الجدول ثلاث أوراق: واحدة "
-"تحتوي على سطر لكل طلب، وأخرى تحتوي على سطر لكل مركز تداول في الطلب، وثالثة "
-"تحتوي على سطر لكل رسوم إضافية يتم تحصيلها في الطلب."
+"قم بتنزيل جدول بيانات يحتوي على جميع الطلبات. سيتضمن الجدول ثلاث أوراق: "
+"واحدة تحتوي على سطر لكل طلب، وأخرى تحتوي على سطر لكل مركز تداول في الطلب، "
+"وثالثة تحتوي على سطر لكل رسوم إضافية يتم تحصيلها في الطلب."
 
 #: pretix/base/exporters/orderlist.py pretix/base/exporters/waitinglist.py
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
@@ -2213,30 +2261,6 @@ msgstr "تم إلغاؤه"
 #: pretix/base/exporters/orderlist.py pretix/plugins/checkinlists/exporters.py
 msgid "Position ID"
 msgstr "رقم الوظيفة"
-
-#: pretix/base/exporters/orderlist.py pretix/base/exporters/waitinglist.py
-#: pretix/base/forms/questions.py pretix/base/models/memberships.py
-#: pretix/control/forms/rrule.py
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/templates/pretixcontrol/orders/refunds.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/search/payments.html
-#: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
-#: pretix/control/templates/pretixcontrol/user/staff_session_list.html
-#: pretix/plugins/checkinlists/exporters.py
-msgid "Start date"
-msgstr "تاريخ البدء"
-
-#: pretix/base/exporters/orderlist.py pretix/base/exporters/waitinglist.py
-#: pretix/base/models/memberships.py
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
-#: pretix/control/templates/pretixcontrol/user/staff_session_list.html
-#: pretix/plugins/checkinlists/exporters.py
-msgid "End date"
-msgstr "تاريخ الانتهاء"
 
 #: pretix/base/exporters/orderlist.py pretix/base/exporters/waitinglist.py
 #: pretix/base/modelimport_orders.py pretix/base/modelimport_vouchers.py
@@ -2457,8 +2481,8 @@ msgid ""
 "This value is supplied for informational purposes, it is not part of the "
 "original transaction data and might have changed since the transaction."
 msgstr ""
-"يُقدم هذا الرقم لأغراض إعلامية فقط، وهو لا يشكل جزءًا من بيانات المعاملة الأصلية، "
-"وقد يكون قد تغير منذ إجراء المعاملة."
+"يُقدم هذا الرقم لأغراض إعلامية فقط، وهو لا يشكل جزءًا من بيانات المعاملة "
+"الأصلية، وقد يكون قد تغير منذ إجراء المعاملة."
 
 #: pretix/base/exporters/orderlist.py
 msgid "Converted from legacy version"
@@ -2470,7 +2494,8 @@ msgstr "المدفوعات وعمليات استرداد الأموال"
 
 #: pretix/base/exporters/orderlist.py
 msgid "Download a spreadsheet of all payments or refunds of every order."
-msgstr "قم بتنزيل جدول بيانات يتضمن جميع المدفوعات أو المبالغ المستردة لكل طلب."
+msgstr ""
+"قم بتنزيل جدول بيانات يتضمن جميع المدفوعات أو المبالغ المستردة لكل طلب."
 
 #: pretix/base/exporters/orderlist.py
 msgid "Date range (payment date)"
@@ -2637,12 +2662,6 @@ msgstr "قم بتنزيل جدول بيانات يحتوي على جميع مع�
 msgid "Gift card code"
 msgstr "رمز بطاقة الهدية"
 
-#: pretix/base/exporters/orderlist.py pretix/base/models/memberships.py
-#: pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/event/live.html
-msgid "Test mode"
-msgstr "وضع الاختبار"
-
 #: pretix/base/exporters/orderlist.py pretix/base/models/organizer.py
 #: pretix/control/forms/event.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/email_setup.html
@@ -2759,7 +2778,7 @@ msgstr "منتهية الصلاحية وذات قيمة"
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/reports/exporters.py pretix/plugins/sendmail/forms.py
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html
 msgid "Expired"
@@ -2818,8 +2837,8 @@ msgstr "وسائط قابلة لإعادة الاستخدام"
 msgid ""
 "Download a spread sheet with the data of all reusable medias on your account."
 msgstr ""
-"قم بتنزيل جدول بيانات يحتوي على معلومات جميع الوسائط القابلة لإعادة الاستخدام "
-"في حسابك."
+"قم بتنزيل جدول بيانات يحتوي على معلومات جميع الوسائط القابلة لإعادة "
+"الاستخدام في حسابك."
 
 #: pretix/base/exporters/reusablemedia.py pretix/base/models/media.py
 msgctxt "reusable_medium"
@@ -2917,8 +2936,8 @@ msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
-"لأسباب فنية، لا يمكنك تعيين المدخلات التي يجب إخفاءها (مثل كلمات المرور) على %"
-"(value)s."
+"لأسباب فنية، لا يمكنك تعيين المدخلات التي يجب إخفاءها (مثل كلمات المرور) على "
+"%(value)s."
 
 #: pretix/base/forms/auth.py
 msgid "Keep me logged in"
@@ -2929,7 +2948,7 @@ msgid "This combination of credentials is not known to our system."
 msgstr "مجموعة بيانات الاعتماد هذه غير معروفة لدى نظامنا."
 
 #: pretix/base/forms/auth.py pretix/base/forms/user.py
-#: pretix/presale/forms/customer.py
+#: pretix/control/views/user.py pretix/presale/forms/customer.py
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr "لأسباب أمنية، يرجى الانتظار لمدة 5 دقائق قبل إعادة المحاولة."
 
@@ -3072,8 +3091,8 @@ msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
-"هذا الأمر اختياري، ولكن قد يكون مطلوبًا منك للمطالبة بالمزايا الضريبية الواردة "
-"في فاتورتك، اعتمادًا على بلد إقامتك وبلد إقامة البائع."
+"هذا الأمر اختياري، ولكن قد يكون مطلوبًا منك للمطالبة بالمزايا الضريبية "
+"الواردة في فاتورتك، اعتمادًا على بلد إقامتك وبلد إقامة البائع."
 
 #: pretix/base/forms/questions.py
 msgid "No invoice requested"
@@ -3282,10 +3301,10 @@ msgid ""
 "in accordance with the procedures and terms set forth in No. 89757/2018 of "
 "April 30, 2018, issued by the Director of the Revenue Agency."
 msgstr ""
-"هذا المستند بصيغة PDF هو نسخة مرئية من الفاتورة ولا يُعتبر فاتورة لأغراض ضريبة "
-"القيمة المضافة. يتم إصدار الفاتورة بتنسيق XML، ويتم إرسالها وفقًا للإجراءات "
-"والشروط المنصوص عليها في القرار رقم 89757/2018 المؤرخ 30 أبريل 2018، الصادر "
-"عن مدير مصلحة الضرائب."
+"هذا المستند بصيغة PDF هو نسخة مرئية من الفاتورة ولا يُعتبر فاتورة لأغراض "
+"ضريبة القيمة المضافة. يتم إصدار الفاتورة بتنسيق XML، ويتم إرسالها وفقًا "
+"للإجراءات والشروط المنصوص عليها في القرار رقم 89757/2018 المؤرخ 30 أبريل "
+"2018، الصادر عن مدير مصلحة الضرائب."
 
 #: pretix/base/invoicing/pdf.py
 #, python-format
@@ -3577,9 +3596,9 @@ msgid ""
 "invoice for VAT purposes. The original invoice is issued in XML format and "
 "transmitted through the Peppol network."
 msgstr ""
-"هذا المستند بصيغة PDF هو نسخة مرئية من الفاتورة ولا يُعتبر فاتورة لأغراض ضريبة "
-"القيمة المضافة. يتم إصدار الفاتورة الأصلية بتنسيق XML وإرسالها عبر شبكة "
-"Peppol."
+"هذا المستند بصيغة PDF هو نسخة مرئية من الفاتورة ولا يُعتبر فاتورة لأغراض "
+"ضريبة القيمة المضافة. يتم إصدار الفاتورة الأصلية بتنسيق XML وإرسالها عبر "
+"شبكة Peppol."
 
 #: pretix/base/logentrytype_registry.py
 msgid ""
@@ -3714,8 +3733,8 @@ msgid ""
 "The date can be specified through its full name, full date and time, or "
 "internal ID, provided only one date in the system matches the input."
 msgstr ""
-"يمكن تحديد التاريخ من خلال اسمه الكامل، أو التاريخ والوقت الكاملين، أو المعرّف "
-"الداخلي، شريطة ألا يتطابق سوى تاريخ واحد في النظام مع ما تم إدخاله."
+"يمكن تحديد التاريخ من خلال اسمه الكامل، أو التاريخ والوقت الكاملين، أو "
+"المعرّف الداخلي، شريطة ألا يتطابق سوى تاريخ واحد في النظام مع ما تم إدخاله."
 
 #: pretix/base/modelimport_orders.py pretix/presale/views/waiting.py
 msgctxt "subevent"
@@ -3899,6 +3918,7 @@ msgstr "السماح بتجاوز الحصة"
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 #: pretix/control/views/vouchers.py
 msgid "Price effect"
@@ -4075,8 +4095,8 @@ msgid ""
 "This is relevant in various situations, e.g. for deciding if a ticket can "
 "still be canceled by the customer."
 msgstr ""
-"وهذا الأمر مهم في حالات عديدة، مثل تحديد ما إذا كان لا يزال بإمكان العميل إلغاء "
-"التذكرة أم لا."
+"وهذا الأمر مهم في حالات عديدة، مثل تحديد ما إذا كان لا يزال بإمكان العميل "
+"إلغاء التذكرة أم لا."
 
 #: pretix/base/models/checkin.py
 msgctxt "checkin"
@@ -4235,8 +4255,8 @@ msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores. It must start and end with a letter or number."
 msgstr ""
-"لا يجوز أن يحتوي المعرّف إلا على أحرف وأرقام ونقاط وشرطات وشرطات سفلية. ويجب أن "
-"يبدأ وينتهي بحرف أو رقم."
+"لا يجوز أن يحتوي المعرّف إلا على أحرف وأرقام ونقاط وشرطات وشرطات سفلية. ويجب "
+"أن يبدأ وينتهي بحرف أو رقم."
 
 #: pretix/base/models/customers.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
@@ -4401,9 +4421,9 @@ msgid ""
 "out quota will still be considered."
 msgstr ""
 "إذا تم تحديد هذا الخيار، فلن يتم أخذ المنتجات التي حصلت بالفعل على خصم من "
-"خلال قسيمة في الاعتبار عند تطبيق هذا الخصم. ومع ذلك، فإن المنتجات التي تُستخدم "
-"فيها القسيمة فقط، على سبيل المثال، لفتح منتج مخفي أو للوصول إلى حصة منتجات "
-"نفدت من المخزون، ستظل مؤهلة للحصول على هذا الخصم."
+"خلال قسيمة في الاعتبار عند تطبيق هذا الخصم. ومع ذلك، فإن المنتجات التي "
+"تُستخدم فيها القسيمة فقط، على سبيل المثال، لفتح منتج مخفي أو للوصول إلى حصة "
+"منتجات نفدت من المخزون، ستظل مؤهلة للحصول على هذا الخصم."
 
 #: pretix/base/models/discount.py
 msgid "Minimum number of matching products"
@@ -4449,10 +4469,11 @@ msgid ""
 "this field empty."
 msgstr ""
 "يتيح لك هذا الخيار إنشاء خصومات من نوع «اشترِ X واحصل على Y بسعر مخفض/مجانًا». "
-"على سبيل المثال، إذا قمت بتعيين «الحد الأدنى لعدد المنتجات المطابقة» على أربعة"
-"، وهذه القيمة على اثنين، فسيتم تقسيم سلة التسوق الخاصة بالعميل إلى مجموعات "
-"مكونة من أربع تذاكر، وسيتم تطبيق الخصم على أرخص تذكرتين ضمن كل مجموعة. إذا "
-"كنت ترغب في منح الخصم على جميع المنتجات المطابقة، فاترك هذا الحقل فارغًا."
+"على سبيل المثال، إذا قمت بتعيين «الحد الأدنى لعدد المنتجات المطابقة» على "
+"أربعة، وهذه القيمة على اثنين، فسيتم تقسيم سلة التسوق الخاصة بالعميل إلى "
+"مجموعات مكونة من أربع تذاكر، وسيتم تطبيق الخصم على أرخص تذكرتين ضمن كل "
+"مجموعة. إذا كنت ترغب في منح الخصم على جميع المنتجات المطابقة، فاترك هذا "
+"الحقل فارغًا."
 
 #: pretix/base/models/discount.py
 msgid "Apply to add-on products"
@@ -4485,8 +4506,8 @@ msgid ""
 "You can either set a minimum number of matching products or a minimum value, "
 "not both."
 msgstr ""
-"يمكنك إما تحديد الحد الأدنى لعدد المنتجات المطابقة أو الحد الأدنى للقيمة، وليس "
-"كليهما معًا."
+"يمكنك إما تحديد الحد الأدنى لعدد المنتجات المطابقة أو الحد الأدنى للقيمة، "
+"وليس كليهما معًا."
 
 #: pretix/base/models/discount.py
 msgid ""
@@ -4575,9 +4596,13 @@ msgid "This event is remote or partially remote."
 msgstr "يُعقد هذا الحدث عن بُعد أو بشكل جزئي عن بُعد."
 
 #: pretix/base/models/event.py
+#, fuzzy
+#| msgid ""
+#| "This will be used to let users know if the event is in a different "
+#| "timezone and let’s us calculate users’ local times."
 msgid ""
-"This will be used to let users know if the event is in a different timezone "
-"and let’s us calculate users’ local times."
+"This will be used to let users know if the event is in a different timezone, "
+"and to let us calculate the local time of a user."
 msgstr ""
 "سيُستخدم هذا لإعلام المستخدمين إذا كان الحدث يقام في منطقة زمنية مختلفة، كما "
 "يتيح لنا حساب التوقيت المحلي للمستخدمين."
@@ -5074,9 +5099,9 @@ msgid ""
 "have without the free price option. This will be ignored if a voucher is "
 "used that lowers the price."
 msgstr ""
-"سيُستخدم هذا السعر كقيمة افتراضية لحقل الإدخال. يمكن للمستخدم اختيار قيمة أقل، "
-"على ألا تقل عن السعر الذي سيكون عليه هذا المنتج في حالة عدم تفعيل خيار السعر "
-"المجاني. وسيتم تجاهل هذا الإعداد في حالة استخدام قسيمة تخفض السعر."
+"سيُستخدم هذا السعر كقيمة افتراضية لحقل الإدخال. يمكن للمستخدم اختيار قيمة "
+"أقل، على ألا تقل عن السعر الذي سيكون عليه هذا المنتج في حالة عدم تفعيل خيار "
+"السعر المجاني. وسيتم تجاهل هذا الإعداد في حالة استخدام قسيمة تخفض السعر."
 
 #: pretix/base/models/items.py
 msgid "Whether or not buying this product allows a person to enter your event"
@@ -5145,12 +5170,12 @@ msgid ""
 "products are visible while all tickets of the referenced product are "
 "reserved, but not yet sold."
 msgstr ""
-"إذا قمت باختيار منتج هنا، فلن يظهر هذا المنتج إلا عندما يصبح المنتج الآخر غير "
-"متوفر. ويحدث ذلك إما لأن المنتج الآخر قد نفد، أو لأن الوقت يقع خارج فترة العرض "
-"الخاصة بالمنتج الآخر. وإذا تم دمج ذلك مع خيار إخفاء المنتجات التي نفدت، "
-"فسيتيح لك ذلك استبدال المنتجات بأخرى أغلى ثمناً بمجرد نفاد الخيار الأرخص. قد "
-"تكون هناك فترة قصيرة يظهر خلالها كلا المنتجين معاً، في حين أن جميع تذاكر المنتج "
-"المشار إليه محجوزة، ولكن لم يتم بيعها بعد."
+"إذا قمت باختيار منتج هنا، فلن يظهر هذا المنتج إلا عندما يصبح المنتج الآخر "
+"غير متوفر. ويحدث ذلك إما لأن المنتج الآخر قد نفد، أو لأن الوقت يقع خارج فترة "
+"العرض الخاصة بالمنتج الآخر. وإذا تم دمج ذلك مع خيار إخفاء المنتجات التي "
+"نفدت، فسيتيح لك ذلك استبدال المنتجات بأخرى أغلى ثمناً بمجرد نفاد الخيار "
+"الأرخص. قد تكون هناك فترة قصيرة يظهر خلالها كلا المنتجين معاً، في حين أن جميع "
+"تذاكر المنتج المشار إليه محجوزة، ولكن لم يتم بيعها بعد."
 
 #: pretix/base/models/items.py
 msgid ""
@@ -5268,8 +5293,8 @@ msgid ""
 "Do not show this unless the customer is logged in and has a valid "
 "membership. Be aware that this means it will never be visible in the widget."
 msgstr ""
-"لا تُظهر هذا إلا إذا كان العميل قد سجل الدخول ولديه عضوية صالحة. يرجى ملاحظة أن "
-"هذا يعني أنه لن يظهر أبدًا في الأداة المصغرة."
+"لا تُظهر هذا إلا إذا كان العميل قد سجل الدخول ولديه عضوية صالحة. يرجى ملاحظة "
+"أن هذا يعني أنه لن يظهر أبدًا في الأداة المصغرة."
 
 #: pretix/base/models/items.py
 msgid "This product creates a membership of type"
@@ -5305,12 +5330,12 @@ msgid ""
 "change but keep their current validity."
 msgstr ""
 "عند إعداد حدث منتظم، أو سلسلة أحداث ذات فترات زمنية محددة، لا تحتاج عادةً إلى "
-"تغيير هذه القيمة. يعني الإعداد الافتراضي أن مدة صلاحية التذاكر لن يتحددها المنتج"
-"، بل سيتحددها إعدادات الحدث وإجراءات تسجيل الوصول. لا تستخدم الخيارات الأخرى "
-"إلا إذا كنت بحاجة إليها لتنفيذ أمور مثل حجز تذكرة صالحة لمدة عام كامل بتاريخ "
-"بدء ديناميكي. يرجى ملاحظة أن مدة الصلاحية سيتم تخزينها مع التذكرة، لذا إذا قمت "
-"بتغيير الإعدادات هنا لاحقًا، فلن تتأثر التذاكر الحالية بهذا التغيير بل ستحتفظ "
-"بمدة صلاحيتها الحالية."
+"تغيير هذه القيمة. يعني الإعداد الافتراضي أن مدة صلاحية التذاكر لن يتحددها "
+"المنتج، بل سيتحددها إعدادات الحدث وإجراءات تسجيل الوصول. لا تستخدم الخيارات "
+"الأخرى إلا إذا كنت بحاجة إليها لتنفيذ أمور مثل حجز تذكرة صالحة لمدة عام كامل "
+"بتاريخ بدء ديناميكي. يرجى ملاحظة أن مدة الصلاحية سيتم تخزينها مع التذكرة، "
+"لذا إذا قمت بتغيير الإعدادات هنا لاحقًا، فلن تتأثر التذاكر الحالية بهذا "
+"التغيير بل ستحتفظ بمدة صلاحيتها الحالية."
 
 #: pretix/base/models/items.py pretix/control/forms/item.py
 msgid "Start of validity"
@@ -5365,12 +5390,12 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
-"إذا كان من المقرر تخزين هذا المنتج على وسيط مادي قابل لإعادة الاستخدام، فيمكنك "
-"إرفاق سياسة خاصة بالوسائط المادية. وهذا الأمر ليس إلزاميًا بالنسبة للتذاكر "
-"العادية، التي تستخدم فقط رمزًا شريطيًّا يُستخدم لمرة واحدة، بل يقتصر على "
+"إذا كان من المقرر تخزين هذا المنتج على وسيط مادي قابل لإعادة الاستخدام، "
+"فيمكنك إرفاق سياسة خاصة بالوسائط المادية. وهذا الأمر ليس إلزاميًا بالنسبة "
+"للتذاكر العادية، التي تستخدم فقط رمزًا شريطيًّا يُستخدم لمرة واحدة، بل يقتصر على "
 "المنتجات مثل التذاكر الموسمية القابلة للتجديد أو أساور بطاقات الهدايا "
-"القابلة لإعادة الشحن. وهذه ميزة متقدمة تتطلب أيضًا تكوينًا محددًا لإعدادات إصدار "
-"التذاكر والطباعة."
+"القابلة لإعادة الشحن. وهذه ميزة متقدمة تتطلب أيضًا تكوينًا محددًا لإعدادات "
+"إصدار التذاكر والطباعة."
 
 #: pretix/base/models/items.py
 msgid "Reusable media type"
@@ -5383,8 +5408,8 @@ msgid ""
 "media types are supported across all sales channels or check-in processes."
 msgstr ""
 "حدد نوع الوسيلة المادية التي ينبغي استخدامها لهذا المنتج. يرجى ملاحظة أن "
-"أنواع الوسائط لا تدعم جميع أنواع المنتجات، كما أن أنواع الوسائط لا تُدعم جميعها "
-"عبر جميع قنوات البيع أو إجراءات تسجيل الوصول."
+"أنواع الوسائط لا تدعم جميع أنواع المنتجات، كما أن أنواع الوسائط لا تُدعم "
+"جميعها عبر جميع قنوات البيع أو إجراءات تسجيل الوصول."
 
 #: pretix/base/models/items.py
 msgid ""
@@ -5424,9 +5449,9 @@ msgid ""
 "Instead, gift cards for some reusable media types can be created or re-"
 "charged directly at the POS."
 msgstr ""
-"لا يمكنك حاليًا إنشاء بطاقات هدايا تخضع لسياسة الوسائط القابلة لإعادة الاستخدام. "
-"بدلاً من ذلك، يمكن إنشاء بطاقات الهدايا الخاصة ببعض أنواع الوسائط القابلة "
-"لإعادة الاستخدام أو إعادة شحنها مباشرةً عند نقطة البيع."
+"لا يمكنك حاليًا إنشاء بطاقات هدايا تخضع لسياسة الوسائط القابلة لإعادة "
+"الاستخدام. بدلاً من ذلك، يمكن إنشاء بطاقات الهدايا الخاصة ببعض أنواع الوسائط "
+"القابلة لإعادة الاستخدام أو إعادة شحنها مباشرةً عند نقطة البيع."
 
 #: pretix/base/models/items.py
 msgid ""
@@ -6011,23 +6036,6 @@ msgstr ""
 #: pretix/base/models/memberships.py
 msgid "Number of times this membership can be used in a purchase."
 msgstr "عدد المرات التي يمكن فيها استخدام هذه العضوية في الشراء."
-
-#: pretix/base/models/memberships.py pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html
-#: pretix/control/templates/pretixcontrol/orders/overview.html
-#: pretix/control/templates/pretixcontrol/organizers/customer_membership.html
-#: pretix/plugins/reports/exporters.py
-#: pretix/presale/templates/pretixpresale/event/fragment_order_status.html
-#: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
-#: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
-msgid "Canceled"
-msgstr "تم إلغاؤه"
-
-#: pretix/base/models/memberships.py
-#: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
-msgid "Membership type"
-msgstr "نوع العضوية"
 
 #: pretix/base/models/orders.py
 msgid "pending"
@@ -6657,8 +6665,8 @@ msgid ""
 "organizers. Use custom rules instead."
 msgstr ""
 "سيتم إزالة هذه الميزة في المستقبل، لأنها لا تتعامل مع ضريبة القيمة المضافة "
-"للعملاء غير التجاريين في دول الاتحاد الأوروبي الأخرى بطريقة تناسب جميع المنظمين. "
-"يرجى استخدام القواعد المخصصة بدلاً من ذلك."
+"للعملاء غير التجاريين في دول الاتحاد الأوروبي الأخرى بطريقة تناسب جميع "
+"المنظمين. يرجى استخدام القواعد المخصصة بدلاً من ذلك."
 
 #: pretix/base/models/tax.py
 msgid "DEPRECATED"
@@ -6768,10 +6776,10 @@ msgid ""
 "cancellations."
 msgstr ""
 "إذا تم تعيين القيمة على أكثر من «واحد»، فيجب استبدال القسيمة بهذا العدد من "
-"المنتجات عند استخدامها لأول مرة. أما في مرات الاستخدام اللاحقة، فيمكن استخدامها "
-"لشراء عدد أقل من المنتجات. تجدر الإشارة إلى أن هذا يعني أن العدد الإجمالي "
-"لمرات الاستخدام قد يكون في بعض الحالات أقل من هذا الحد، على سبيل المثال في "
-"حالة الإلغاء."
+"المنتجات عند استخدامها لأول مرة. أما في مرات الاستخدام اللاحقة، فيمكن "
+"استخدامها لشراء عدد أقل من المنتجات. تجدر الإشارة إلى أن هذا يعني أن العدد "
+"الإجمالي لمرات الاستخدام قد يكون في بعض الحالات أقل من هذا الحد، على سبيل "
+"المثال في حالة الإلغاء."
 
 #: pretix/base/models/vouchers.py
 msgid ""
@@ -6853,8 +6861,8 @@ msgid ""
 "as part of a bundle, since vouchers cannot be applied to add-on products or "
 "bundled products."
 msgstr ""
-"لا يمكنك اختيار منتج لا يتوفر إلا كمنتج إضافي أو كجزء من حزمة، حيث لا يمكن تطبيق "
-"القسائم على المنتجات الإضافية أو المنتجات المجمعة."
+"لا يمكنك اختيار منتج لا يتوفر إلا كمنتج إضافي أو كجزء من حزمة، حيث لا يمكن "
+"تطبيق القسائم على المنتجات الإضافية أو المنتجات المجمعة."
 
 #: pretix/base/models/vouchers.py
 msgid "You cannot select a product that belongs to a different event."
@@ -6874,7 +6882,7 @@ msgstr "هذا المتغير لا ينتمي إلى هذا المنتج."
 msgid "It is currently not possible to create vouchers for add-on products."
 msgstr "لا يمكن حاليا إنشاء أكواد الخصم للمنتجات الإضافية."
 
-#: pretix/base/models/vouchers.py
+#: pretix/base/models/vouchers.py pretix/control/forms/vouchers.py
 msgid ""
 "You need to select a specific product or quota if this voucher should "
 "reserve tickets."
@@ -6895,9 +6903,10 @@ msgid ""
 "The maximum number of usages may not be lower than the minimum number of "
 "usages."
 msgstr ""
-"يجب ألا يقل الحد الأقصى لعدد مرات الاستخدام عن الحد الأدنى لعدد مرات الاستخدام."
+"يجب ألا يقل الحد الأقصى لعدد مرات الاستخدام عن الحد الأدنى لعدد مرات "
+"الاستخدام."
 
-#: pretix/base/models/vouchers.py
+#: pretix/base/models/vouchers.py pretix/control/forms/vouchers.py
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
 msgstr ""
@@ -7405,6 +7414,15 @@ msgstr "لم يتم قبول بطاقة الهدايا هذه من قبل منظ
 #: pretix/base/payment.py
 msgid "This gift card was used in the meantime. Please try again."
 msgstr "تم استخدام بطاقة الهدايا هذه في هذه الأثناء. حاول مرة اخرى."
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid ""
+#| "This payment provider does not exist or the respective plugin is disabled."
+msgid ""
+"This payment provider exists for historical purposes only and is no longer "
+"usable."
+msgstr "عدم وجود هذا مزود خدمة الدفع أو تعطيل البرنامج المساعد المعني."
 
 #: pretix/base/pdf.py
 msgid "Ticket code (barcode content)"
@@ -7953,7 +7971,8 @@ msgstr "الوصول إلى الأحداث الحالية وإنشاء أحدا�
 msgid ""
 "The level of access to events is determined in detail by the settings below."
 msgstr ""
-"يتم تحديد مستوى الوصول إلى الفعاليات بالتفصيل من خلال الإعدادات الواردة أدناه."
+"يتم تحديد مستوى الوصول إلى الفعاليات بالتفصيل من خلال الإعدادات الواردة "
+"أدناه."
 
 #: pretix/base/permissions.py pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/event/invoicing.html
@@ -7978,11 +7997,6 @@ msgid ""
 "Includes the ability to give someone (including oneself) additional "
 "permissions."
 msgstr "يتضمن القدرة على منح شخص ما (بما في ذلك الشخص نفسه) أذونات إضافية."
-
-#: pretix/base/permissions.py pretix/control/navigation.py
-#: pretix/control/templates/pretixcontrol/organizers/customers.html
-msgid "Customers"
-msgstr "عملاء"
 
 #: pretix/base/permissions.py pretix/control/navigation.py
 msgid "Devices"
@@ -8079,9 +8093,9 @@ msgid ""
 "pretix signature scheme 1 (for very large events, changes semantics of "
 "offline scanning – please refer to documentation or support for details)"
 msgstr ""
-"نظام التوقيع «pretix signature scheme 1» (مخصص للفعاليات الضخمة جدًّا، ولا يعمل "
-"مع تطبيق pretixSCAN على نظام iOS ويُغيّر طريقة عمل المسح الضوئي في وضع عدم "
-"الاتصال — يرجى الرجوع إلى الوثائق أو فريق الدعم للحصول على التفاصيل)"
+"نظام التوقيع «pretix signature scheme 1» (مخصص للفعاليات الضخمة جدًّا، ولا "
+"يعمل مع تطبيق pretixSCAN على نظام iOS ويُغيّر طريقة عمل المسح الضوئي في وضع "
+"عدم الاتصال — يرجى الرجوع إلى الوثائق أو فريق الدعم للحصول على التفاصيل)"
 
 #: pretix/base/services/cancelevent.py
 msgid "Event canceled"
@@ -8207,23 +8221,23 @@ msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr[0] ""
-"لقد أزلنا %(product)s من سلة التسوق الخاصة بك، حيث لا يمكنك شراء أقل من %(min)"
-"s قطعة منها."
+"لقد أزلنا %(product)s من سلة التسوق الخاصة بك، حيث لا يمكنك شراء أقل من "
+"%(min)s قطعة منها."
 msgstr[1] ""
-"لقد أزلنا %(product)s من سلة التسوق الخاصة بك، حيث لا يمكنك شراء أقل من %(min)"
-"s قطعة منها."
+"لقد أزلنا %(product)s من سلة التسوق الخاصة بك، حيث لا يمكنك شراء أقل من "
+"%(min)s قطعة منها."
 msgstr[2] ""
-"لقد أزلنا %(product)s من سلة التسوق الخاصة بك، حيث لا يمكنك شراء أقل من %(min)"
-"s قطعة منها."
+"لقد أزلنا %(product)s من سلة التسوق الخاصة بك، حيث لا يمكنك شراء أقل من "
+"%(min)s قطعة منها."
 msgstr[3] ""
-"لقد أزلنا %(product)s من سلة التسوق الخاصة بك، حيث لا يمكنك شراء أقل من %(min)"
-"s قطعة منها."
+"لقد أزلنا %(product)s من سلة التسوق الخاصة بك، حيث لا يمكنك شراء أقل من "
+"%(min)s قطعة منها."
 msgstr[4] ""
-"لقد أزلنا %(product)s من سلة التسوق الخاصة بك، حيث لا يمكنك شراء أقل من %(min)"
-"s قطعة منها."
+"لقد أزلنا %(product)s من سلة التسوق الخاصة بك، حيث لا يمكنك شراء أقل من "
+"%(min)s قطعة منها."
 msgstr[5] ""
-"لقد أزلنا %(product)s من سلة التسوق الخاصة بك، حيث لا يمكنك شراء أقل من %(min)"
-"s قطعة منها."
+"لقد أزلنا %(product)s من سلة التسوق الخاصة بك، حيث لا يمكنك شراء أقل من "
+"%(min)s قطعة منها."
 
 #: pretix/base/services/cart.py pretix/base/services/orders.py
 #: pretix/presale/templates/pretixpresale/event/index.html
@@ -8280,23 +8294,23 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
-"لا يمكن استخدام رمز القسيمة \"%(voucher)s\" إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s منتجًا مطابقًا."
+"لا يمكن استخدام رمز القسيمة \"%(voucher)s\" إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s منتجًا مطابقًا."
 msgstr[1] ""
-"لا يمكن استخدام رمز القسيمة \"%(voucher)s\" إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s منتجًا مطابقًا."
+"لا يمكن استخدام رمز القسيمة \"%(voucher)s\" إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s منتجًا مطابقًا."
 msgstr[2] ""
-"لا يمكن استخدام رمز القسيمة \"%(voucher)s\" إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s منتجًا مطابقًا."
+"لا يمكن استخدام رمز القسيمة \"%(voucher)s\" إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s منتجًا مطابقًا."
 msgstr[3] ""
-"لا يمكن استخدام رمز القسيمة \"%(voucher)s\" إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s منتجًا مطابقًا."
+"لا يمكن استخدام رمز القسيمة \"%(voucher)s\" إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s منتجًا مطابقًا."
 msgstr[4] ""
-"لا يمكن استخدام رمز القسيمة \"%(voucher)s\" إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s منتجًا مطابقًا."
+"لا يمكن استخدام رمز القسيمة \"%(voucher)s\" إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s منتجًا مطابقًا."
 msgstr[5] ""
-"لا يمكن استخدام رمز القسيمة \"%(voucher)s\" إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s منتجًا مطابقًا."
+"لا يمكن استخدام رمز القسيمة \"%(voucher)s\" إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s منتجًا مطابقًا."
 
 #: pretix/base/services/cart.py
 #, python-format
@@ -8309,29 +8323,29 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
-"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s منتج مطابق. ولذلك، قمنا بإزالة بعض العناصر من سلة التسوق الخاصة بك"
-"، حيث لم يعد من الممكن شراؤها بهذه الطريقة."
+"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s منتج مطابق. ولذلك، قمنا بإزالة بعض العناصر من سلة التسوق الخاصة "
+"بك، حيث لم يعد من الممكن شراؤها بهذه الطريقة."
 msgstr[1] ""
-"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s منتج مطابق. ولذلك، قمنا بإزالة بعض العناصر من سلة التسوق الخاصة بك"
-"، حيث لم يعد من الممكن شراؤها بهذه الطريقة."
+"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s منتج مطابق. ولذلك، قمنا بإزالة بعض العناصر من سلة التسوق الخاصة "
+"بك، حيث لم يعد من الممكن شراؤها بهذه الطريقة."
 msgstr[2] ""
-"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s منتج مطابق. ولذلك، قمنا بإزالة بعض العناصر من سلة التسوق الخاصة بك"
-"، حيث لم يعد من الممكن شراؤها بهذه الطريقة."
+"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s منتج مطابق. ولذلك، قمنا بإزالة بعض العناصر من سلة التسوق الخاصة "
+"بك، حيث لم يعد من الممكن شراؤها بهذه الطريقة."
 msgstr[3] ""
-"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s منتج مطابق. ولذلك، قمنا بإزالة بعض العناصر من سلة التسوق الخاصة بك"
-"، حيث لم يعد من الممكن شراؤها بهذه الطريقة."
+"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s منتج مطابق. ولذلك، قمنا بإزالة بعض العناصر من سلة التسوق الخاصة "
+"بك، حيث لم يعد من الممكن شراؤها بهذه الطريقة."
 msgstr[4] ""
-"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s منتج مطابق. ولذلك، قمنا بإزالة بعض العناصر من سلة التسوق الخاصة بك"
-"، حيث لم يعد من الممكن شراؤها بهذه الطريقة."
+"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s منتج مطابق. ولذلك، قمنا بإزالة بعض العناصر من سلة التسوق الخاصة "
+"بك، حيث لم يعد من الممكن شراؤها بهذه الطريقة."
 msgstr[5] ""
-"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s منتج مطابق. ولذلك، قمنا بإزالة بعض العناصر من سلة التسوق الخاصة بك"
-"، حيث لم يعد من الممكن شراؤها بهذه الطريقة."
+"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s منتج مطابق. ولذلك، قمنا بإزالة بعض العناصر من سلة التسوق الخاصة "
+"بك، حيث لم يعد من الممكن شراؤها بهذه الطريقة."
 
 #: pretix/base/services/cart.py
 msgid ""
@@ -8508,7 +8522,8 @@ msgid ""
 "The configuration of this product requires mapping to a physical medium, "
 "which is currently not available online."
 msgstr ""
-"يتطلب تكوين هذا المنتج تخصيصه لوسيلة مادية، وهي غير متوفرة حاليًا عبر الإنترنت."
+"يتطلب تكوين هذا المنتج تخصيصه لوسيلة مادية، وهي غير متوفرة حاليًا عبر "
+"الإنترنت."
 
 #: pretix/base/services/checkin.py
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html
@@ -8580,7 +8595,8 @@ msgstr "عدد الإدخالات اليوم، مع وجود إدخال منذ {
 #, python-brace-format
 msgid "number of days with an entry before {datetime}"
 msgstr ""
-"عدد السجلات التي تم إدخالها في الأيام الأخيرة والتي تحتوي على سجل قبل {datetime}"
+"عدد السجلات التي تم إدخالها في الأيام الأخيرة والتي تحتوي على سجل قبل "
+"{datetime}"
 
 #: pretix/base/services/checkin.py
 msgid "week day"
@@ -8914,7 +8930,8 @@ msgstr "تم إلغاء نوع العضوية الذي اخترته."
 msgid ""
 "You can not use a test mode membership for tickets that are not in test mode."
 msgstr ""
-"لا يمكنك استخدام عضوية «وضع الاختبار» إلا مع التذاكر التي ليست في «وضع الاختبار»."
+"لا يمكنك استخدام عضوية «وضع الاختبار» إلا مع التذاكر التي ليست في «وضع "
+"الاختبار»."
 
 #: pretix/base/services/memberships.py
 msgid ""
@@ -9021,8 +9038,8 @@ msgid ""
 "The grouping \"%(value)s\" occurs on non-consecutive lines (seen again on "
 "line %(row)s)."
 msgstr ""
-"يظهر التجميع ”%(value)s“ في أسطر غير متتالية (كما يظهر مرة أخرى في السطر %"
-"(row)s)."
+"يظهر التجميع ”%(value)s“ في أسطر غير متتالية (كما يظهر مرة أخرى في السطر "
+"%(row)s)."
 
 #: pretix/base/services/modelimport.py
 #, python-brace-format
@@ -9163,23 +9180,23 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
-"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s من المنتجات المطابقة."
+"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s من المنتجات المطابقة."
 msgstr[1] ""
-"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s من المنتجات المطابقة."
+"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s من المنتجات المطابقة."
 msgstr[2] ""
-"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s من المنتجات المطابقة."
+"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s من المنتجات المطابقة."
 msgstr[3] ""
-"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s من المنتجات المطابقة."
+"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s من المنتجات المطابقة."
 msgstr[4] ""
-"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s من المنتجات المطابقة."
+"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s من المنتجات المطابقة."
 msgstr[5] ""
-"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن %"
-"(number)s من المنتجات المطابقة."
+"لا يمكن استخدام رمز القسيمة ”%(voucher)s“ إلا إذا قمت باختيار ما لا يقل عن "
+"%(number)s من المنتجات المطابقة."
 
 #: pretix/base/services/orders.py
 msgid ""
@@ -9375,6 +9392,16 @@ msgstr "تم حظر البلد المحدد من خلال القاعدة الض�
 msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
+msgstr "لا يمكنك تغيير سعر العنصر الذي تم استخدامه لإصدار بطاقة هدايا."
+
+#: pretix/base/services/orders.py
+#, fuzzy
+#| msgid ""
+#| "You cannot change the price of a position that has been used to issue a "
+#| "gift card."
+msgid ""
+"You cannot change the ticket secret of a position that has been used to "
+"issue a gift card."
 msgstr "لا يمكنك تغيير سعر العنصر الذي تم استخدامه لإصدار بطاقة هدايا."
 
 #: pretix/base/services/orders.py
@@ -9578,8 +9605,8 @@ msgid ""
 "For business customers, compute taxes based on net total. For individuals, "
 "use line-based rounding"
 msgstr ""
-"بالنسبة للعملاء من الشركات، تُحسب الضرائب على أساس المجموع الصافي. أما بالنسبة "
-"للأفراد، فيُستخدم التقريب على أساس كل سطر على حدة"
+"بالنسبة للعملاء من الشركات، تُحسب الضرائب على أساس المجموع الصافي. أما "
+"بالنسبة للأفراد، فيُستخدم التقريب على أساس كل سطر على حدة"
 
 #: pretix/base/settings.py
 msgid "Compute taxes based on net total with stable gross prices"
@@ -9653,8 +9680,8 @@ msgid ""
 "different tickets or gift cards later."
 msgstr ""
 "تتيح لك ميزة الوسائط القابلة لإعادة الاستخدام ربط التذاكر وبطاقات الهدايا "
-"بوسائط مادية مثل الأساور أو البطاقات الذكية، والتي يمكن إعادة استخدامها لاحقًا "
-"مع تذاكر أو بطاقات هدايا أخرى."
+"بوسائط مادية مثل الأساور أو البطاقات الذكية، والتي يمكن إعادة استخدامها "
+"لاحقًا مع تذاكر أو بطاقات هدايا أخرى."
 
 #: pretix/base/settings.py
 msgid "Enforce the usage of issued reusable media for check-in"
@@ -9670,8 +9697,8 @@ msgid ""
 msgstr ""
 "في حالة تمكين هذا الخيار، لن يتم قبول الباركود الخاص بالتذكرة بعد الآن، إذا "
 "تم إنشاء وسيط قابل لإعادة الاستخدام وربطه بالتذكرة. أما في حالة إبقاء هذا "
-"الخيار معطلاً، فسيتم التعامل مع الوسيط القابل لإعادة الاستخدام والتذكرة على قدم "
-"المساواة."
+"الخيار معطلاً، فسيتم التعامل مع الوسيط القابل لإعادة الاستخدام والتذكرة على "
+"قدم المساواة."
 
 #: pretix/base/settings.py
 msgid "Length of barcodes"
@@ -9726,9 +9753,9 @@ msgid ""
 "page of the individual attendees. The ticket buyer will of course see the "
 "price."
 msgstr ""
-"إذا اشترى شخص ما عدة تذاكر وقمت بإرسال رسائل بريد إلكتروني إلى جميع الحاضرين"
-"، فإن سعر التذكرة لن يظهر، عند استخدام هذا الخيار، على صفحة التذكرة الخاصة "
-"بكل حاضر على حدة. وبالطبع، سيتمكن مشتري التذاكر من رؤية السعر."
+"إذا اشترى شخص ما عدة تذاكر وقمت بإرسال رسائل بريد إلكتروني إلى جميع "
+"الحاضرين، فإن سعر التذكرة لن يظهر، عند استخدام هذا الخيار، على صفحة التذكرة "
+"الخاصة بكل حاضر على حدة. وبالطبع، سيتمكن مشتري التذاكر من رؤية السعر."
 
 #: pretix/base/settings.py
 msgid "Ask for attendee names"
@@ -9736,7 +9763,8 @@ msgstr "اسأل عن أسماء الحضور"
 
 #: pretix/base/settings.py
 msgid "Ask for a name for all personalized tickets."
-msgstr "اطلب تسمية جميع التذاكر التي تشمل الدخول إلى الحدث بـ«التذاكر المخصصة»."
+msgstr ""
+"اطلب تسمية جميع التذاكر التي تشمل الدخول إلى الحدث بـ«التذاكر المخصصة»."
 
 #: pretix/base/settings.py
 msgid "Require attendee names"
@@ -9828,8 +9856,8 @@ msgid ""
 "differences if your external system rounds differently than pretix."
 msgstr ""
 "يرجى ملاحظة أنه في حالة نقل بيانات المبيعات من Pretix إلى نظام خارجي لأغراض "
-"الإبلاغ الضريبي، يجب عليك التأكد من مراعاة الاختلافات المحتملة في التقريب إذا "
-"كان نظامك الخارجي يستخدم طريقة تقريب مختلفة عن تلك المستخدمة في Pretix."
+"الإبلاغ الضريبي، يجب عليك التأكد من مراعاة الاختلافات المحتملة في التقريب "
+"إذا كان نظامك الخارجي يستخدم طريقة تقريب مختلفة عن تلك المستخدمة في Pretix."
 
 #: pretix/base/settings.py
 msgid "Ask for invoice address"
@@ -9889,8 +9917,8 @@ msgid ""
 "Based on National Bank of Poland daily rates, whenever the invoice amount is "
 "not in PLN."
 msgstr ""
-"استنادًا إلى الأسعار اليومية للبنك الوطني البولندي، كلما كان مبلغ الفاتورة غير "
-"بالزلوتي البولندي."
+"استنادًا إلى الأسعار اليومية للبنك الوطني البولندي، كلما كان مبلغ الفاتورة "
+"غير بالزلوتي البولندي."
 
 #: pretix/base/settings.py
 msgid "Require invoice address"
@@ -9920,10 +9948,10 @@ msgid ""
 "details as well as for displaying the value on the invoice. It will be shown "
 "on the invoice below the headline. The field will not be required."
 msgstr ""
-"إذا كنت ترغب في إضافة حقل نصي مخصص، على سبيل المثال لرقم تسجيل خاص ببلد معين"
-"، إلى نموذج عنوان الفاتورة، يرجى إدخال التسمية هنا. ستُستخدم هذه التسمية لطلب "
-"إدخال المستخدم لبياناته وكذلك لعرض القيمة على الفاتورة. وستظهر على الفاتورة "
-"أسفل العنوان الرئيسي. ولن يكون هذا الحقل إلزاميًا."
+"إذا كنت ترغب في إضافة حقل نصي مخصص، على سبيل المثال لرقم تسجيل خاص ببلد "
+"معين، إلى نموذج عنوان الفاتورة، يرجى إدخال التسمية هنا. ستُستخدم هذه التسمية "
+"لطلب إدخال المستخدم لبياناته وكذلك لعرض القيمة على الفاتورة. وستظهر على "
+"الفاتورة أسفل العنوان الرئيسي. ولن يكون هذا الحقل إلزاميًا."
 
 #: pretix/base/settings.py
 msgid "Custom recipient field help text"
@@ -9948,8 +9976,8 @@ msgid ""
 "Only works if an invoice address is asked for. VAT ID is only requested from "
 "business customers in the following countries: {countries}."
 msgstr ""
-"لا يُطلب ذلك إلا في حالة طلب عنوان الفاتورة. ولا يُطلب رقم التعريف الضريبي (VAT) "
-"إلا من العملاء من الشركات في البلدان التالية: {countries}."
+"لا يُطلب ذلك إلا في حالة طلب عنوان الفاتورة. ولا يُطلب رقم التعريف الضريبي "
+"(VAT) إلا من العملاء من الشركات في البلدان التالية: {countries}."
 
 #: pretix/base/settings.py
 msgid "Require VAT ID in"
@@ -9961,8 +9989,8 @@ msgid ""
 "ID in all countries. VAT ID will be required for all business addresses in "
 "the selected countries."
 msgstr ""
-"يُعتبر رقم ضريبة القيمة المضافة اختياريًّا بشكل افتراضي، لأن ليس كل الشركات تحصل "
-"على رقم ضريبة القيمة المضافة في جميع البلدان. وسيكون رقم ضريبة القيمة "
+"يُعتبر رقم ضريبة القيمة المضافة اختياريًّا بشكل افتراضي، لأن ليس كل الشركات "
+"تحصل على رقم ضريبة القيمة المضافة في جميع البلدان. وسيكون رقم ضريبة القيمة "
 "المضافة مطلوبًا لجميع عناوين الشركات في البلدان المحددة."
 
 #: pretix/base/settings.py
@@ -10397,9 +10425,9 @@ msgid ""
 "most countries, we recommend to leave this option turned off and always "
 "issue a new invoice if a change needs to be made."
 msgstr ""
-"بشكل افتراضي، لا يمكن تعديل الفواتير مطلقًا بعد إصدارها. في معظم البلدان، نوصي "
-"بإبقاء هذا الخيار معطلاً، وإصدار فاتورة جديدة دائمًا في حال الحاجة إلى إجراء أي "
-"تغيير."
+"بشكل افتراضي، لا يمكن تعديل الفواتير مطلقًا بعد إصدارها. في معظم البلدان، "
+"نوصي بإبقاء هذا الخيار معطلاً، وإصدار فاتورة جديدة دائمًا في حال الحاجة إلى "
+"إجراء أي تغيير."
 
 #: pretix/base/settings.py
 msgid "Only issue invoices to business customers"
@@ -10547,8 +10575,8 @@ msgid ""
 msgstr ""
 "قم بإلغاء تحديد هذا المربع إذا كنت تبيع فقط منتجًا لا يرتبط بتاريخ محدد، مثل "
 "بطاقات الهدايا أو التذاكر التي يمكن استخدامها في أي وقت. عندئذٍ سيتوقف النظام "
-"عن عرض تاريخ الحدث في بعض الأماكن، مثل صفحة بداية الحدث. لاحظ أن Pretix لا يزال "
-"نظامًا مبنيًّا على أساس الأحداث، وقد يستمر ظهور التاريخ في أماكن أخرى."
+"عن عرض تاريخ الحدث في بعض الأماكن، مثل صفحة بداية الحدث. لاحظ أن Pretix لا "
+"يزال نظامًا مبنيًّا على أساس الأحداث، وقد يستمر ظهور التاريخ في أماكن أخرى."
 
 #: pretix/base/settings.py
 msgid "Show event end date"
@@ -10598,8 +10626,8 @@ msgid ""
 "notification with a voucher that can be used to buy a ticket."
 msgstr ""
 "بمجرد نفاد التذاكر، يمكن للأشخاص إضافة أسمائهم إلى قائمة الانتظار. وما أن "
-"تتوفر تذكرة مرة أخرى، سيتم حجزها لأول شخص في قائمة الانتظار، وسيتلقى هذا الشخص "
-"إشعارًا عبر البريد الإلكتروني يتضمن قسيمة يمكن استخدامها لشراء تذكرة."
+"تتوفر تذكرة مرة أخرى، سيتم حجزها لأول شخص في قائمة الانتظار، وسيتلقى هذا "
+"الشخص إشعارًا عبر البريد الإلكتروني يتضمن قسيمة يمكن استخدامها لشراء تذكرة."
 
 #: pretix/base/settings.py
 msgid "Automatic waiting list assignments"
@@ -10616,7 +10644,8 @@ msgstr ""
 "إذا أصبحت هناك تذاكر متاحة، فسيتم إنشاء قسيمة تلقائيًا وإرسالها إلى أول شخص "
 "في قائمة الانتظار الخاصة بهذا المنتج. إذا لم تكن هذه الميزة نشطة، فلن يتم "
 "إرسال الرسائل الإلكترونية تلقائيًا، ولكن يمكنك إرسالها يدويًّا عبر لوحة التحكم. "
-"إذا قمت بتعطيل قائمة الانتظار مع إبقاء هذا الخيار نشطًا، فسيستمر إرسال التذاكر."
+"إذا قمت بتعطيل قائمة الانتظار مع إبقاء هذا الخيار نشطًا، فسيستمر إرسال "
+"التذاكر."
 
 #: pretix/base/settings.py
 msgid "Waiting list response time"
@@ -10629,8 +10658,8 @@ msgid ""
 "to the next person on the list."
 msgstr ""
 "إذا تم إرسال قسيمة تذكرة إلى شخص مدرج في قائمة الانتظار، فيجب استبدالها خلال "
-"هذا العدد من الساعات قبل أن تنتهي صلاحيتها ويتم إعادة تخصيصها للشخص التالي في "
-"القائمة."
+"هذا العدد من الساعات قبل أن تنتهي صلاحيتها ويتم إعادة تخصيصها للشخص التالي "
+"في القائمة."
 
 #: pretix/base/settings.py
 msgid "Disable waiting list"
@@ -10704,10 +10733,10 @@ msgid ""
 "if they want more than one ticket, as every entry only grants one single "
 "ticket at a time."
 msgstr ""
-"مع زيادة الحد الأقصى، يمكن للعميل طلب أكثر من تذكرة واحدة لمنتج معين باستخدام "
-"نفس عنوان البريد الإلكتروني الفريد. ومع ذلك، وبغض النظر عن هذا الإعداد، سيتعين "
-"عليه ملء نموذج قائمة الانتظار عدة مرات إذا أراد الحصول على أكثر من تذكرة واحدة"
-"، حيث إن كل عملية تسجيل تمنح تذكرة واحدة فقط في كل مرة."
+"مع زيادة الحد الأقصى، يمكن للعميل طلب أكثر من تذكرة واحدة لمنتج معين "
+"باستخدام نفس عنوان البريد الإلكتروني الفريد. ومع ذلك، وبغض النظر عن هذا "
+"الإعداد، سيتعين عليه ملء نموذج قائمة الانتظار عدة مرات إذا أراد الحصول على "
+"أكثر من تذكرة واحدة، حيث إن كل عملية تسجيل تمنح تذكرة واحدة فقط في كل مرة."
 
 #: pretix/base/settings.py
 msgid "Show number of check-ins to customer"
@@ -10723,10 +10752,11 @@ msgid ""
 "check-in lists."
 msgstr ""
 "عند تمكين هذا الخيار، سيتمكن عملاؤك من معرفة عدد المرات التي دخلوا فيها إلى "
-"الفعالية. لا يُعد هذا الأمر ضروريًا في العادة، ولكنه قد يكون مفيدًا عند استخدامه "
-"مع التذاكر التي يمكن استخدامها لعدد محدد من المرات، بحيث يتمكن العملاء من "
-"معرفة عدد المرات التي تم استخدامها فيها بالفعل. لن يتم احتساب حالات الخروج أو "
-"عمليات المسح الفاشلة، ولن يرى المستخدم قوائم تسجيل الدخول المختلفة."
+"الفعالية. لا يُعد هذا الأمر ضروريًا في العادة، ولكنه قد يكون مفيدًا عند "
+"استخدامه مع التذاكر التي يمكن استخدامها لعدد محدد من المرات، بحيث يتمكن "
+"العملاء من معرفة عدد المرات التي تم استخدامها فيها بالفعل. لن يتم احتساب "
+"حالات الخروج أو عمليات المسح الفاشلة، ولن يرى المستخدم قوائم تسجيل الدخول "
+"المختلفة."
 
 #: pretix/base/settings.py
 msgid "Allow users to download tickets"
@@ -10819,9 +10849,9 @@ msgid ""
 "availability will not be shown publicly."
 msgstr ""
 "إذا انخفضت نسبة التذاكر المتاحة إلى ما دون هذه النسبة المئوية، فسيتم تمييز "
-"الحدث (أو التاريخ، في حالة سلسلة الأحداث) في قائمة الأحداث أو التقويم للإشارة "
-"إلى انخفاض نسبة التذاكر المتاحة. إذا تركت هذا الخيار فارغًا، فلن يتم عرض "
-"انخفاض نسبة التذاكر المتاحة للجمهور."
+"الحدث (أو التاريخ، في حالة سلسلة الأحداث) في قائمة الأحداث أو التقويم "
+"للإشارة إلى انخفاض نسبة التذاكر المتاحة. إذا تركت هذا الخيار فارغًا، فلن يتم "
+"عرض انخفاض نسبة التذاكر المتاحة للجمهور."
 
 #: pretix/base/settings.py
 msgid "Show availability in event overviews"
@@ -11014,9 +11044,9 @@ msgid ""
 "customer."
 msgstr ""
 "بشكل افتراضي، لا يمكن إجراء أي تغييرات إلا للشخص الذي قام بحجز التذاكر. إذا "
-"قمت بتحديد هذا المربع، فسيتمكن الحاضرون الأفراد أيضًا من إجراء تغييرات. ومع ذلك"
-"، لا يمكن للحاضرين الأفراد إجراء سوى التغييرات التي لا تؤثر على السعر الإجمالي "
-"للطلب. ولا يمكن إجراء مثل هذه التغييرات إلا من قِبل العميل الرئيسي."
+"قمت بتحديد هذا المربع، فسيتمكن الحاضرون الأفراد أيضًا من إجراء تغييرات. ومع "
+"ذلك، لا يمكن للحاضرين الأفراد إجراء سوى التغييرات التي لا تؤثر على السعر "
+"الإجمالي للطلب. ولا يمكن إجراء مثل هذه التغييرات إلا من قِبل العميل الرئيسي."
 
 #: pretix/base/settings.py
 msgid "Customers can cancel their unpaid orders"
@@ -11187,20 +11217,20 @@ msgstr "عنوان الإتصال"
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr "سيظهر هذا علنا للسماح للحاضرين بالاتصال بك."
 
-#: pretix/base/settings.py pretix/control/forms/event.py
+#: pretix/base/settings.py
 msgid "Contact URL"
 msgstr "جهة الاتصال: الرابط"
 
-#: pretix/base/settings.py pretix/control/forms/event.py
+#: pretix/base/settings.py
 msgid ""
 "If you set this, the footer contact link will point here instead of using "
 "the email address above. Please note that you still need to add a contact "
 "email address that will be shared with all emails you send."
 msgstr ""
-"إذا قمت بتعيين هذا الخيار، فسيشير رابط الاتصال الموجود في التذييل إلى هنا بدلاً "
-"من استخدام عنوان البريد الإلكتروني المذكور أعلاه. يرجى ملاحظة أنه لا يزال يتعين "
-"عليك إضافة عنوان بريد إلكتروني للاتصال سيتم تضمينه في جميع رسائل البريد "
-"الإلكتروني التي ترسلها."
+"إذا قمت بتعيين هذا الخيار، فسيشير رابط الاتصال الموجود في التذييل إلى هنا "
+"بدلاً من استخدام عنوان البريد الإلكتروني المذكور أعلاه. يرجى ملاحظة أنه لا "
+"يزال يتعين عليك إضافة عنوان بريد إلكتروني للاتصال سيتم تضمينه في جميع رسائل "
+"البريد الإلكتروني التي ترسلها."
 
 #: pretix/base/settings.py pretix/control/forms/event.py
 msgid "Imprint URL"
@@ -11534,8 +11564,8 @@ msgstr ""
 "بالطلب والمشاركين. يمكنك استخدام هذا الملف، على سبيل المثال، لإرسال شروط "
 "الخدمة الخاصة بك. لا تستخدمه لإرسال معلومات غير عامة، حيث قد يتم إرسال هذا "
 "الملف قبل تأكيد الدفع أو الموافقة على الطلب. لتجنب وصول هذه الرسالة "
-"الإلكترونية المهمة إلى مجلد البريد العشوائي، لا يمكنك تحميل سوى ملفات PDF بحجم "
-"لا يتجاوز {size} ميغابايت."
+"الإلكترونية المهمة إلى مجلد البريد العشوائي، لا يمكنك تحميل سوى ملفات PDF "
+"بحجم لا يتجاوز {size} ميغابايت."
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11785,8 +11815,8 @@ msgstr ""
 "\n"
 "لقد فشلت محاولة الدفع الخاصة بطلبك لـ {event}.\n"
 "\n"
-"لا يزال طلبك ساريًا ويمكنك محاولة الدفع مرة أخرى باستخدام طريقة الدفع نفسها أو "
-"طريقة أخرى. يرجى إتمام الدفع قبل {expire_date}.\n"
+"لا يزال طلبك ساريًا ويمكنك محاولة الدفع مرة أخرى باستخدام طريقة الدفع نفسها "
+"أو طريقة أخرى. يرجى إتمام الدفع قبل {expire_date}.\n"
 "\n"
 "يمكنك إعادة محاولة الدفع والاطلاع على حالة طلبك على الرابط التالي:\n"
 "{url}\n"
@@ -12048,8 +12078,8 @@ msgid ""
 msgstr ""
 "مرحبًا،\n"
 "\n"
-"يرجى الاطلاع على الفاتورة الجديدة المرفقة الخاصة بالطلب {code} لـ {event}. تم "
-"تقديم هذا الطلب من قِبل {order_email}.\n"
+"يرجى الاطلاع على الفاتورة الجديدة المرفقة الخاصة بالطلب {code} لـ {event}. "
+"تم تقديم هذا الطلب من قِبل {order_email}.\n"
 "\n"
 "مع أطيب التحيات،  \n"
 "\n"
@@ -12347,8 +12377,8 @@ msgid ""
 "used, this option will be ignored and the event title will always be shown."
 msgstr ""
 "سيتم عرض العنوان على الصفحة الرئيسية للحدث فقط. إذا لم يتم تحميل أي صورة رأس "
-"للحدث، وتم استخدام صورة الرأس الموجودة في ملف تعريف المنظم بدلاً من ذلك، فسيتم "
-"تجاهل هذا الخيار وسيتم عرض عنوان الحدث دائمًا."
+"للحدث، وتم استخدام صورة الرأس الموجودة في ملف تعريف المنظم بدلاً من ذلك، "
+"فسيتم تجاهل هذا الخيار وسيتم عرض عنوان الحدث دائمًا."
 
 #: pretix/base/settings.py pretix/control/forms/organizer.py
 msgid ""
@@ -12367,7 +12397,8 @@ msgstr ""
 #: pretix/base/settings.py
 msgid "Use header image also for events without an individually uploaded logo"
 msgstr ""
-"استخدم صورة العنوان أيضًا للفعاليات التي لا تحتوي على شعار تم تحميله بشكل منفصل"
+"استخدم صورة العنوان أيضًا للفعاليات التي لا تحتوي على شعار تم تحميله بشكل "
+"منفصل"
 
 #: pretix/base/settings.py
 msgid "Favicon"
@@ -12572,8 +12603,8 @@ msgid ""
 "By clicking \"Accept all cookies\", you agree to the storing of cookies and "
 "use of similar technologies on your device."
 msgstr ""
-"بالنقر على «قبول جميع ملفات تعريف الارتباط»، فإنك توافق على تخزين ملفات تعريف "
-"الارتباط واستخدام التقنيات المماثلة على جهازك."
+"بالنقر على «قبول جميع ملفات تعريف الارتباط»، فإنك توافق على تخزين ملفات "
+"تعريف الارتباط واستخدام التقنيات المماثلة على جهازك."
 
 #: pretix/base/settings.py
 msgid "Dialog text"
@@ -12940,8 +12971,8 @@ msgid ""
 "If you just configured this as a domain for your ticket shop, you now need "
 "to set this up as a \"custom domain\" in your organizer account."
 msgstr ""
-"إذا كنت قد قمت للتو بتكوين هذا النطاق لمتجر التذاكر الخاص بك، فأنت بحاجة الآن "
-"إلى إعداده كـ«نطاق مخصص» في حسابك كمنظم."
+"إذا كنت قد قمت للتو بتكوين هذا النطاق لمتجر التذاكر الخاص بك، فأنت بحاجة "
+"الآن إلى إعداده كـ«نطاق مخصص» في حسابك كمنظم."
 
 #: pretix/base/templates/403.html
 msgid "Permission denied"
@@ -13118,6 +13149,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html
 #: pretix/control/templates/pretixcontrol/organizers/customers.html
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html
@@ -13184,8 +13216,8 @@ msgid ""
 "This sales channel cannot be used properly since the respective plugin is "
 "not active for this event."
 msgstr ""
-"لا يمكن استخدام قناة المبيعات هذه بشكل صحيح لأن المكون الإضافي المعني غير نشط "
-"لهذا الحدث."
+"لا يمكن استخدام قناة المبيعات هذه بشكل صحيح لأن المكون الإضافي المعني غير "
+"نشط لهذا الحدث."
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html
 msgid "Upload photo"
@@ -13218,8 +13250,7 @@ msgstr "لأسباب أمنية، لا يمكن تنفيذ الخطوة التا
 #: pretix/base/templates/pretixbase/framebreak.html
 msgid ""
 "If the new tab did not open automatically, please click the following button:"
-msgstr ""
-"إذا لم تفتح علامة التبويب الجديدة تلقائيًّا، يرجى النقر على الزر التالي:"
+msgstr "إذا لم تفتح علامة التبويب الجديدة تلقائيًّا، يرجى النقر على الزر التالي:"
 
 #: pretix/base/templates/pretixbase/framebreak.html
 #: pretix/presale/templates/pretixpresale/event/cookies.html
@@ -13576,7 +13607,8 @@ msgid ""
 "You entered an URL, which is not allowed. Please remove %(match)s from your "
 "input."
 msgstr ""
-"لقد أدخلت عنوان URL غير مسموح به. يرجى حذف %(match)s من المدخلات التي أدخلتها."
+"لقد أدخلت عنوان URL غير مسموح به. يرجى حذف %(match)s من المدخلات التي "
+"أدخلتها."
 
 #: pretix/base/views/errors.py
 msgid ""
@@ -13676,8 +13708,8 @@ msgid ""
 "href=\"{translate_url}\" target=\"_blank\">help translating</a>."
 msgstr ""
 "لا يتولى فريق pretix صيانة هذه الترجمات. لا يمكننا ضمان صحتها، وقد لا تكون "
-"الميزات الجديدة أو التي تم تغييرها مؤخرًا مترجمة، وستظهر باللغة الإنجليزية بدلاً "
-"من ذلك. يمكنك <a href=\"{translate_url}\" target=\"_blank\">المساعدة في "
+"الميزات الجديدة أو التي تم تغييرها مؤخرًا مترجمة، وستظهر باللغة الإنجليزية "
+"بدلاً من ذلك. يمكنك <a href=\"{translate_url}\" target=\"_blank\">المساعدة في "
 "الترجمة</a>."
 
 #: pretix/control/forms/__init__.py
@@ -13824,7 +13856,8 @@ msgid ""
 "You cannot choose a team that would give you more access than you have on "
 "the event you are copying."
 msgstr ""
-"لا يمكنك اختيار فريق يمنحك صلاحيات وصول أكبر مما لديك في الحدث الذي تقوم بنسخه."
+"لا يمكنك اختيار فريق يمنحك صلاحيات وصول أكبر مما لديك في الحدث الذي تقوم "
+"بنسخه."
 
 #: pretix/control/forms/event.py
 msgid "Copy configuration from"
@@ -13975,8 +14008,8 @@ msgid ""
 msgstr ""
 "يُنصح باستخدام هذه الميزة للفواتير الإلكترونية عندما تكون معظم مبيعاتك موجهة "
 "إلى عملاء من الشركات، وتعرض الأسعار للعملاء دون الضريبة. قد يتم تعديل السعر "
-"الإجمالي لبعض المنتجات لضمان التقريب الصحيح، في حين ستبقى الأسعار الصافية كما "
-"تم تكوينها. وقد يؤدي ذلك إلى اختلاف مبلغ الدفع الفعلي."
+"الإجمالي لبعض المنتجات لضمان التقريب الصحيح، في حين ستبقى الأسعار الصافية "
+"كما تم تكوينها. وقد يؤدي ذلك إلى اختلاف مبلغ الدفع الفعلي."
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -13998,11 +14031,11 @@ msgid ""
 "configured whenever possible. Gross prices may still change if they are "
 "impossible to derive from a rounded net price."
 msgstr ""
-"يُنصح باستخدامه للفواتير الإلكترونية عندما تكون معظم مبيعاتك موجهة للمستهلكين. "
-"قد يتم تغيير السعر الإجمالي أو الصافي لبعض المنتجات تلقائيًا لضمان التقريب "
-"الصحيح لمجموع قيمة الطلب. يحاول النظام الحفاظ على الأسعار الإجمالية وفقًا "
-"للإعدادات المحددة كلما أمكن ذلك. ومع ذلك، قد تتغير الأسعار الإجمالية إذا تعذر "
-"استنتاجها من السعر الصافي المقرب."
+"يُنصح باستخدامه للفواتير الإلكترونية عندما تكون معظم مبيعاتك موجهة "
+"للمستهلكين. قد يتم تغيير السعر الإجمالي أو الصافي لبعض المنتجات تلقائيًا "
+"لضمان التقريب الصحيح لمجموع قيمة الطلب. يحاول النظام الحفاظ على الأسعار "
+"الإجمالية وفقًا للإعدادات المحددة كلما أمكن ذلك. ومع ذلك، قد تتغير الأسعار "
+"الإجمالية إذا تعذر استنتاجها من السعر الصافي المقرب."
 
 #: pretix/control/forms/event.py
 msgid "Generate invoices for Sales channels"
@@ -14040,8 +14073,7 @@ msgstr ""
 msgid ""
 "None of the currently configured payment methods will cause an invoice to be "
 "issued before payment."
-msgstr ""
-"لن تؤدي أي من طرق الدفع المُعدة حاليًا إلى إصدار فاتورة قبل سداد المبلغ."
+msgstr "لن تؤدي أي من طرق الدفع المُعدة حاليًا إلى إصدار فاتورة قبل سداد المبلغ."
 
 #: pretix/control/forms/event.py
 msgid "Recommended"
@@ -14198,8 +14230,8 @@ msgid ""
 "Formatting is not supported, as some accounting departments process mail "
 "automatically and do not handle formatted emails properly."
 msgstr ""
-"لا يتم دعم التنسيق، حيث إن بعض أقسام المحاسبة تعالج البريد الإلكتروني تلقائيًا "
-"ولا تتعامل مع رسائل البريد الإلكتروني المنسقة بشكل صحيح."
+"لا يتم دعم التنسيق، حيث إن بعض أقسام المحاسبة تعالج البريد الإلكتروني "
+"تلقائيًا ولا تتعامل مع رسائل البريد الإلكتروني المنسقة بشكل صحيح."
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -14441,7 +14473,7 @@ msgstr "جميع الطلبات"
 msgid "Valid orders"
 msgstr "طلبات صحيحة"
 
-#: pretix/control/forms/filter.py
+#: pretix/control/forms/filter.py pretix/plugins/sendmail/forms.py
 msgid "Paid (or canceled with paid fee)"
 msgstr "مدفوع (أو ملغى بعد دفع الرسوم)"
 
@@ -14465,7 +14497,7 @@ msgstr "بانتظار أو المدفوعة"
 msgid "Cancellations"
 msgstr "الإلغاءات"
 
-#: pretix/control/forms/filter.py
+#: pretix/control/forms/filter.py pretix/plugins/sendmail/forms.py
 msgid "Canceled (fully)"
 msgstr "إلغاء (كلي)"
 
@@ -14641,6 +14673,22 @@ msgid "Inactive"
 msgstr "غير نشط"
 
 #: pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/index.html
+msgid "Presale not started"
+msgstr "لم يبدأ البيع المسبق بعد"
+
+#: pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/index.html
+msgid "Presale over"
+msgstr "انتهى العرض المسبق"
+
+#: pretix/control/forms/filter.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html
 msgid "Date from"
 msgstr "التاريخ من"
@@ -14676,13 +14724,6 @@ msgstr "نشط"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 msgid "not yet activated"
 msgstr "لم يتم تفعيله بعد"
-
-#: pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
-#: pretix/presale/views/customer.py
-msgid "Memberships"
-msgstr "العضويات"
 
 #: pretix/control/forms/filter.py
 msgid "Has no memberships"
@@ -14911,6 +14952,42 @@ msgstr "الأجهزة التي تم إلغاء ترخيصها"
 msgid "Search email address or subject"
 msgstr "ابحث عن عنوان البريد الإلكتروني أو موضوع الرسالة"
 
+#: pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/control/templates/pretixcontrol/orders/refunds.html
+msgid "Source"
+msgstr "مصدر"
+
+#: pretix/control/forms/filter.py
+#, fuzzy
+#| msgid "All vouchers"
+msgid "All sources"
+msgstr "جميع القسائم"
+
+#: pretix/control/forms/filter.py
+msgid "Team actions"
+msgstr "الإجراءات فريق"
+
+#: pretix/control/forms/filter.py
+msgid "Customer actions"
+msgstr "إجراءات العملاء"
+
+#: pretix/control/forms/filter.py
+#, fuzzy
+#| msgid "Device status"
+msgid "Device actions"
+msgstr "حالة الجهاز"
+
+#: pretix/control/forms/filter.py
+#, fuzzy
+#| msgid "Order email"
+msgid "User email"
+msgstr "البريد الإلكتروني الخاص بالطلب"
+
+#: pretix/control/forms/filter.py pretix/control/navigation.py
+msgid "All users"
+msgstr "جميع المستخدمين"
+
 #: pretix/control/forms/global_settings.py
 msgid "Additional footer text"
 msgstr "نص تذييل إضافية"
@@ -15038,8 +15115,8 @@ msgid ""
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
 "as-a-Service company)."
 msgstr ""
-"أستخدم «بريتيكس» لبيع تذاكر منظمي الفعاليات الآخرين (مثل شركة بيع التذاكر) أو "
-"أقدم خدمات «بريتيكس» للآخرين (مثل شركة تقدم البرمجيات كخدمة)."
+"أستخدم «بريتيكس» لبيع تذاكر منظمي الفعاليات الآخرين (مثل شركة بيع التذاكر) "
+"أو أقدم خدمات «بريتيكس» للآخرين (مثل شركة تقدم البرمجيات كخدمة)."
 
 #: pretix/control/forms/global_settings.py
 msgid "I'm not sure which option applies."
@@ -15055,8 +15132,8 @@ msgid ""
 "the copyright holders which allows me to not share modifications if I only "
 "use pretix internally."
 msgstr ""
-"أرغب في استخدام Pretix بموجب الإذن الإضافي الذي منحه أصحاب حقوق النشر للجميع، "
-"والذي يسمح لي بعدم مشاركة التعديلات إذا كنت أستخدم Pretix داخليًّا فقط."
+"أرغب في استخدام Pretix بموجب الإذن الإضافي الذي منحه أصحاب حقوق النشر "
+"للجميع، والذي يسمح لي بعدم مشاركة التعديلات إذا كنت أستخدم Pretix داخليًّا فقط."
 
 #: pretix/control/forms/global_settings.py
 msgid ""
@@ -15064,8 +15141,8 @@ msgid ""
 "restriction on the scope of usage and therefore without making use of any "
 "additional permission."
 msgstr ""
-"أرغب في استخدام pretix بموجب شروط ترخيص AGPLv3 دون أي قيود على نطاق الاستخدام"
-"، وبالتالي دون الحاجة إلى الحصول على أي إذن إضافي."
+"أرغب في استخدام pretix بموجب شروط ترخيص AGPLv3 دون أي قيود على نطاق "
+"الاستخدام، وبالتالي دون الحاجة إلى الحصول على أي إذن إضافي."
 
 #: pretix/control/forms/global_settings.py
 msgid ""
@@ -15146,7 +15223,8 @@ msgstr ""
 #: pretix/control/forms/item.py
 msgid ""
 "Products in this category are regular products displayed on the front page."
-msgstr "المنتجات في هذه الفئة هي المنتجات العادية المعروضة على الصفحة الرئيسية."
+msgstr ""
+"المنتجات في هذه الفئة هي المنتجات العادية المعروضة على الصفحة الرئيسية."
 
 #: pretix/control/forms/item.py
 msgid "Add-on product category"
@@ -15314,8 +15392,8 @@ msgid ""
 "in your organizer settings."
 msgstr ""
 "لا تقم بتحديد مدة صلاحية محددة لمنتجات بطاقات الهدايا، لأن ذلك لن يؤثر على "
-"صلاحية البطاقة. يمكن ضبط مدة صلاحية بطاقات الهدايا من خلال إعدادات المنظم الخاص "
-"بك."
+"صلاحية البطاقة. يمكن ضبط مدة صلاحية بطاقات الهدايا من خلال إعدادات المنظم "
+"الخاص بك."
 
 #: pretix/control/forms/item.py
 msgid ""
@@ -15333,8 +15411,8 @@ msgid ""
 "the membership type to be transferable."
 msgstr ""
 "يمنح منتجك عضوية غير قابلة للتحويل، ولذلك يجب أن تكون تذكرة دخول مخصصة "
-"لمالكها. وإلا فقد لا يتمكن العملاء من استخدام العضوية لاحقًا. إذا كنت ترغب في أن "
-"تكون العضوية غير مخصصة، فاضبط نوع العضوية على «قابلة للتحويل»."
+"لمالكها. وإلا فقد لا يتمكن العملاء من استخدام العضوية لاحقًا. إذا كنت ترغب في "
+"أن تكون العضوية غير مخصصة، فاضبط نوع العضوية على «قابلة للتحويل»."
 
 #: pretix/control/forms/item.py
 msgid "The start of validity must be before the end of validity."
@@ -15448,8 +15526,8 @@ msgid ""
 "You are not allowed to use this mail server, please choose one with a public "
 "IP address instead."
 msgstr ""
-"لا يُسمح لك باستخدام خادم البريد هذا، يرجى اختيار خادم آخر له عنوان IP عام بدلاً "
-"منه."
+"لا يُسمح لك باستخدام خادم البريد هذا، يرجى اختيار خادم آخر له عنوان IP عام "
+"بدلاً منه."
 
 #: pretix/control/forms/mailsetup.py
 msgid "We were unable to resolve this hostname."
@@ -15539,10 +15617,10 @@ msgstr ""
 "إذا قمت بتحديد هذا المربع، فسيتم التعامل مع هذا الطلب كطلب مدفوع في معظم "
 "الحالات، على الرغم من أنه لم يتم دفع قيمته بعد. وهذا يعني أنه يمكن للعميل "
 "بالفعل تنزيل التذاكر واستخدامها بغض النظر عن إعدادات الحدث الخاص بك، وقد "
-"تعامل بعض المكونات الإضافية هذا الطلب على أنه مدفوع. إذا قمت بتحديد هذا الخيار"
-"، فلن يتم وضع علامة «منتهي الصلاحية» على هذا الطلب تلقائيًا عند حلول الموعد "
-"النهائي للدفع، حيث نتوقع أنك ترغب في تحصيل المبلغ بطريقة ما وعدم إلغاء الطلب "
-"تلقائيًا."
+"تعامل بعض المكونات الإضافية هذا الطلب على أنه مدفوع. إذا قمت بتحديد هذا "
+"الخيار، فلن يتم وضع علامة «منتهي الصلاحية» على هذا الطلب تلقائيًا عند حلول "
+"الموعد النهائي للدفع، حيث نتوقع أنك ترغب في تحصيل المبلغ بطريقة ما وعدم "
+"إلغاء الطلب تلقائيًا."
 
 #: pretix/control/forms/orders.py
 msgid "Overbook quota"
@@ -15780,8 +15858,8 @@ msgid ""
 "Note that payment fees have a special semantic and might automatically be "
 "changed if the payment method of the order is changed."
 msgstr ""
-"يرجى ملاحظة أن رسوم الدفع لها معنى خاص، وقد تتغير تلقائيًا في حالة تغيير طريقة "
-"الدفع الخاصة بالطلب."
+"يرجى ملاحظة أن رسوم الدفع لها معنى خاص، وقد تتغير تلقائيًا في حالة تغيير "
+"طريقة الدفع الخاصة بالطلب."
 
 #: pretix/control/forms/orders.py
 #: pretix/control/templates/pretixcontrol/order/change.html
@@ -15885,10 +15963,10 @@ msgid ""
 "orders by offsetting with different orders or issuing gift cards."
 msgstr ""
 "سيتم إنشاء عمليات استرداد يدوية، وستُدرج في قائمة مهام الاسترداد اليدوي. وعند "
-"دمجها مع وظيفة الاسترداد التلقائي، لن تظهر في قائمة مهام الاسترداد اليدوي سوى "
-"المدفوعات التي تستخدم وسيلة دفع لا تدعم الاسترداد التلقائي. لا تحدد هذه الخانة "
-"إذا كنت ترغب في استرداد قيمة بعض الطلبات عن طريق المقاصة مع طلبات أخرى أو "
-"إصدار بطاقات هدايا."
+"دمجها مع وظيفة الاسترداد التلقائي، لن تظهر في قائمة مهام الاسترداد اليدوي "
+"سوى المدفوعات التي تستخدم وسيلة دفع لا تدعم الاسترداد التلقائي. لا تحدد هذه "
+"الخانة إذا كنت ترغب في استرداد قيمة بعض الطلبات عن طريق المقاصة مع طلبات "
+"أخرى أو إصدار بطاقات هدايا."
 
 #: pretix/control/forms/orders.py
 msgid ""
@@ -15920,8 +15998,8 @@ msgid ""
 "dates."
 msgstr ""
 "لن يتم استرداد أنواع الرسوم المحددة، بل ستُضاف إلى رسوم الإلغاء. ولا يتم "
-"استرداد الرسوم أبدًا في حالة الإلغاء الجزئي لطلب شراء تذاكر ضمن سلسلة فعاليات، "
-"نظرًا لأن هذا الطلب يتضمن تذاكر لعدة تواريخ."
+"استرداد الرسوم أبدًا في حالة الإلغاء الجزئي لطلب شراء تذاكر ضمن سلسلة "
+"فعاليات، نظرًا لأن هذا الطلب يتضمن تذاكر لعدة تواريخ."
 
 #: pretix/control/forms/orders.py
 msgid "Send information via email"
@@ -16081,8 +16159,8 @@ msgid ""
 "This feature is currently in an experimental stage. It only supports very "
 "limited use cases and might change at any point."
 msgstr ""
-"هذه الميزة لا تزال حاليًا في مرحلة تجريبية. وهي لا تدعم سوى حالات استخدام محدودة "
-"جدًّا، وقد تتغير في أي وقت."
+"هذه الميزة لا تزال حاليًا في مرحلة تجريبية. وهي لا تدعم سوى حالات استخدام "
+"محدودة جدًّا، وقد تتغير في أي وقت."
 
 #: pretix/control/forms/organizer.py
 msgid "Sensitive emails like password resets will not be sent in Bcc."
@@ -16158,8 +16236,8 @@ msgid ""
 "We will assume that the contents of the user ID fields are unique and can "
 "never change for a user."
 msgstr ""
-"سنفترض أن محتويات حقول معرّف المستخدم فريدة ولا يمكن أن تتغير أبدًا بالنسبة لأي "
-"مستخدم."
+"سنفترض أن محتويات حقول معرّف المستخدم فريدة ولا يمكن أن تتغير أبدًا بالنسبة "
+"لأي مستخدم."
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
@@ -16217,8 +16295,8 @@ msgid ""
 "will grant the other organizer access to cryptographic key material required "
 "to interact with the media type."
 msgstr ""
-"يُعد هذا الأمر ضروريًا إذا كنت ترغب في أن يشارك المنظم الآخر في نظام مشترك يتضمن"
-"، على سبيل المثال، شرائح الدفع التي تعمل بتقنية NFC. يجب ألا تستخدم هذا "
+"يُعد هذا الأمر ضروريًا إذا كنت ترغب في أن يشارك المنظم الآخر في نظام مشترك "
+"يتضمن، على سبيل المثال، شرائح الدفع التي تعمل بتقنية NFC. يجب ألا تستخدم هذا "
 "الخيار إلا مع المنظمين الذين تثق بهم، حيث إن ذلك (حسب أنواع الوسائط المُفعَّلة) "
 "سيمنح المنظم الآخر حق الوصول إلى مواد المفاتيح التشفيرية اللازمة للتفاعل مع "
 "نوع الوسائط المذكور."
@@ -16248,6 +16326,7 @@ msgstr "اختياري"
 #: pretix/control/forms/renderers.py
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 msgctxt "form_bulk"
 msgid "change"
 msgstr "تغيير"
@@ -16366,6 +16445,65 @@ msgid ""
 msgstr "القسيمة لا تتطابق إلا مع المنتجات المخفية، لكنك لم تحدد خيار عرضها."
 
 #: pretix/control/forms/vouchers.py
+#, python-format
+msgid ""
+"You cannot reduce the maximum number of redemptions to %(max_usages)s, "
+"because at least one of the selected vouchers has already been redeemed "
+"%(max_redeemed)s times."
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
+#, fuzzy
+#| msgid ""
+#| "You cannot create a voucher that blocks quota as the selected product or "
+#| "quota is currently sold out or completely reserved."
+msgid ""
+"You cannot create a voucher that allows selection of a quota but has no date "
+"selected."
+msgstr ""
+"لا يمكنك إنشاء كود خصم يمنع الحصة لأن المنتج أو الحصة المحددة تم بيعها حاليا "
+"أو حجزها بالكامل."
+
+#: pretix/control/forms/vouchers.py
+#, fuzzy
+#| msgid "The selected product does not allow to select a seat."
+msgid "The selected quota does not match the selected subevent."
+msgstr "المنتج المحدد لا يسمح باختيار مقعد."
+
+#: pretix/control/forms/vouchers.py
+#, fuzzy
+#| msgid ""
+#| "There is not enough quota available on quota \"{}\" to perform the "
+#| "operation."
+msgid "There is no sufficient quota available to perform this change."
+msgstr "لا توجد حصة كافية متاحة في الحصة \"{}\" لإجراء العملية."
+
+#: pretix/control/forms/vouchers.py
+msgid ""
+"Changing the maximum number of usages in bulk is not supported if any of the "
+"selected vouchers is assigned a seat."
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
+msgctxt "subevent"
+msgid ""
+"Changing the date in bulk is not supported if any of the selected vouchers "
+"is assigned a seat."
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
+msgid ""
+"Changing the product to a quota is not supported if any of the selected "
+"vouchers is assigned a seat."
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
+msgid ""
+"This change cannot be completed because not all assigned seats of the "
+"vouchers are still available"
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
 msgid "Codes"
 msgstr "رموز"
 
@@ -16433,8 +16571,8 @@ msgid ""
 "columns \"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
 "يمكنك إما تقديم قائمة بعناوين البريد الإلكتروني بحيث يكون كل عنوان في سطر "
-"منفصل، أو محتويات ملف CSV يحتوي على صف عناوين وأحد الأعمدة التالية أو أكثر: «"
-"البريد الإلكتروني»، «الرقم»، «الاسم»، أو «العلامة»."
+"منفصل، أو محتويات ملف CSV يحتوي على صف عناوين وأحد الأعمدة التالية أو أكثر: "
+"«البريد الإلكتروني»، «الرقم»، «الاسم»، أو «العلامة»."
 
 #: pretix/control/forms/vouchers.py
 msgid "Maximum usages per voucher"
@@ -16711,8 +16849,8 @@ msgid ""
 "Annulled scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"تم إلغاء عملية المسح الخاصة بالمنصب رقم #{posid} في {datetime} للقائمة \""
-"{list}\"، من النوع \"{type}\"."
+"تم إلغاء عملية المسح الخاصة بالمنصب رقم #{posid} في {datetime} للقائمة "
+"\"{list}\"، من النوع \"{type}\"."
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16736,8 +16874,8 @@ msgstr ""
 msgid ""
 "Ignored annulment of position #{posid} for list \"{list}\", type \"{type}\"."
 msgstr ""
-"تم تجاهل إلغاء المنصب رقم #{posid} الخاص بالقائمة \"{list}\"، من النوع \""
-"{type}\"."
+"تم تجاهل إلغاء المنصب رقم #{posid} الخاص بالقائمة \"{list}\"، من النوع "
+"\"{type}\"."
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16937,8 +17075,8 @@ msgid ""
 "The email address has been confirmed to be working (the user clicked on a "
 "link in the email for the first time)."
 msgstr ""
-"تم التأكد من أن عنوان البريد الإلكتروني يعمل (قام المستخدم بالنقر على رابط في "
-"الرسالة الإلكترونية للمرة الأولى)."
+"تم التأكد من أن عنوان البريد الإلكتروني يعمل (قام المستخدم بالنقر على رابط "
+"في الرسالة الإلكترونية للمرة الأولى)."
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16988,8 +17126,8 @@ msgid ""
 "Invoice {full_invoice_no} has not been transmitted because the transmission "
 "provider does not support test mode invoices."
 msgstr ""
-"لم يتم إرسال الفاتورة {full_invoice_no} لأن مزود خدمة الإرسال لا يدعم الفواتير "
-"الصادرة في الوضع التجريبي."
+"لم يتم إرسال الفاتورة {full_invoice_no} لأن مزود خدمة الإرسال لا يدعم "
+"الفواتير الصادرة في الوضع التجريبي."
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -17133,7 +17271,8 @@ msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
 msgstr ""
-"تم تحديد تاريخ انتهاء صلاحية القسيمة لأن المستلم قد أزال اسمه من قائمة الانتظار."
+"تم تحديد تاريخ انتهاء صلاحية القسيمة لأن المستلم قد أزال اسمه من قائمة "
+"الانتظار."
 
 #: pretix/control/logdisplay.py
 msgid "The voucher has been changed."
@@ -18141,10 +18280,6 @@ msgid "Account history"
 msgstr "تاريخ الحساب"
 
 #: pretix/control/navigation.py
-msgid "All users"
-msgstr "جميع المستخدمين"
-
-#: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html
 msgid "Admin sessions"
 msgstr "جلسات مشرف"
@@ -18426,6 +18561,7 @@ msgstr "كلمة المرور الجديدة تعيين"
 #: pretix/control/templates/pretixcontrol/users/create.html
 #: pretix/control/templates/pretixcontrol/users/form.html
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 #: pretix/control/templates/pretixcontrol/waitinglist/edit.html
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html
@@ -18491,8 +18627,8 @@ msgid ""
 "Internet Explorer is an old browser that does not support lots of recent web-"
 "based technologies and is no longer supported by this website."
 msgstr ""
-"إنترنت إكسبلورر هو متصفح قديم لا يدعم العديد من التقنيات الحديثة المستندة إلى "
-"الويب، ولم يعد هذا الموقع الإلكتروني يدعمه."
+"إنترنت إكسبلورر هو متصفح قديم لا يدعم العديد من التقنيات الحديثة المستندة "
+"إلى الويب، ولم يعد هذا الموقع الإلكتروني يدعمه."
 
 #: pretix/control/templates/pretixcontrol/base.html
 #: pretix/presale/templates/pretixpresale/base.html
@@ -18546,8 +18682,8 @@ msgid ""
 "Click here to do a license compliance check to make sure your usage of "
 "pretix is in line with pretix' license."
 msgstr ""
-"انقر هنا لإجراء فحص للتأكد من التزامك بشروط الترخيص، للتأكد من أن استخدامك لـ "
-"pretix يتوافق مع ترخيص pretix."
+"انقر هنا لإجراء فحص للتأكد من التزامك بشروط الترخيص، للتأكد من أن استخدامك "
+"لـ pretix يتوافق مع ترخيص pretix."
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid ""
@@ -18882,8 +19018,8 @@ msgstr "حذف"
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
-#: pretix/control/templates/pretixcontrol/event/logs.html
 #: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/fragment_log_filter_form.html
 #: pretix/control/templates/pretixcontrol/items/question.html
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 #: pretix/control/templates/pretixcontrol/orders/index.html
@@ -18894,7 +19030,6 @@ msgstr "حذف"
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
 #: pretix/control/templates/pretixcontrol/organizers/index.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html
 #: pretix/control/templates/pretixcontrol/organizers/teams.html
@@ -19029,6 +19164,7 @@ msgstr "الطابع الزمني"
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 #: pretix/control/templates/pretixcontrol/subevents/index.html
+#: pretix/control/templates/pretixcontrol/vouchers/index.html
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "Select all results on other pages as well"
 msgstr "اختر جميع النتائج الموجودة في الصفحات الأخرى أيضًا"
@@ -19098,9 +19234,9 @@ msgid ""
 "specific check-in situations. Please reach out to support if you have "
 "questions about setting this up."
 msgstr ""
-"الإعدادات الواردة في هذه الصفحة مخصصة للمستخدمين المحترفين الذين يواجهون حالات "
-"تسجيل وصول محددة للغاية. يرجى التواصل مع فريق الدعم إذا كانت لديك أي أسئلة "
-"حول كيفية إعداد هذه الإعدادات."
+"الإعدادات الواردة في هذه الصفحة مخصصة للمستخدمين المحترفين الذين يواجهون "
+"حالات تسجيل وصول محددة للغاية. يرجى التواصل مع فريق الدعم إذا كانت لديك أي "
+"أسئلة حول كيفية إعداد هذه الإعدادات."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
 msgid ""
@@ -19204,10 +19340,10 @@ msgid ""
 "attendees or printed any real badges or tickets."
 msgstr ""
 "باستخدام هذه الميزة، يمكنك إعادة تعيين حالة تسجيل الحضور للحدث بالكامل. "
-"سيؤدي ذلك إلى حذف جميع سجلات تسجيل الحضور، بالإضافة إلى جميع سجلات التذاكر أو "
-"الشارات المطبوعة. نوصي باستخدام هذه الميزة بعد اختبار إعدادات الأجهزة، ولكن "
-"قبل بدء الحدث مباشرةً، وقبل السماح بدخول أي حاضرين فعليين أو طباعة أي شارات "
-"أو تذاكر فعلية."
+"سيؤدي ذلك إلى حذف جميع سجلات تسجيل الحضور، بالإضافة إلى جميع سجلات التذاكر "
+"أو الشارات المطبوعة. نوصي باستخدام هذه الميزة بعد اختبار إعدادات الأجهزة، "
+"ولكن قبل بدء الحدث مباشرةً، وقبل السماح بدخول أي حاضرين فعليين أو طباعة أي "
+"شارات أو تذاكر فعلية."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
 #, fuzzy, python-format
@@ -19242,8 +19378,8 @@ msgid ""
 "The deleted entries will still show up in the \"Order history\" section, but "
 "for all other purposes the system will behave as if they never existed."
 msgstr ""
-"ستظل الإدخالات المحذوفة تظهر في قسم «سجل الطلبات»، ولكن بالنسبة لجميع الأغراض "
-"الأخرى، سيتصرف النظام كما لو أنها لم تكن موجودة أبدًا."
+"ستظل الإدخالات المحذوفة تظهر في قسم «سجل الطلبات»، ولكن بالنسبة لجميع "
+"الأغراض الأخرى، سيتصرف النظام كما لو أنها لم تكن موجودة أبدًا."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
 msgid "Proceed with reset"
@@ -19288,8 +19424,8 @@ msgid ""
 "This ticket needs to be exchanged into a <strong>%(media_type)s</strong> "
 "reusable medium. <strong>%(media_policy)s</strong>."
 msgstr ""
-"يجب استبدال هذه التذكرة بوسيلة قابلة لإعادة الاستخدام من نوع <strong>%"
-"(media_type)s</strong>. <strong>%(media_policy)s</strong>."
+"يجب استبدال هذه التذكرة بوسيلة قابلة لإعادة الاستخدام من نوع "
+"<strong>%(media_type)s</strong>. <strong>%(media_policy)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 msgid "Special attention required"
@@ -19480,8 +19616,8 @@ msgstr ""
 "مرحبًا،\n"
 "\n"
 "طلب أحد المستخدمين استخدام %(address)s كعنوان مرسل على %(instance)s. وبمجرد "
-"التحقق من صحة هذا الطلب، ستظهر رسائل البريد الإلكتروني المرسلة من %(instance)"
-"s بهذا العنوان كمرسل.\n"
+"التحقق من صحة هذا الطلب، ستظهر رسائل البريد الإلكتروني المرسلة من "
+"%(instance)s بهذا العنوان كمرسل.\n"
 "\n"
 "إذا كنت أنت من طلب ذلك، فأدخل الرمز التالي في نموذج الإعداد:\n"
 "\n"
@@ -19556,7 +19692,8 @@ msgstr ""
 "\n"
 "%(url)s\n"
 "\n"
-"إذا كنت لا ترغب في الانضمام، يمكنك تجاهل هذه الرسالة الإلكترونية دون أي قلق.\n"
+"إذا كنت لا ترغب في الانضمام، يمكنك تجاهل هذه الرسالة الإلكترونية دون أي "
+"قلق.\n"
 "\n"
 "شكرًا،  \n"
 "فريق %(instance)s\n"
@@ -19627,8 +19764,8 @@ msgstr ""
 "\n"
 "%(messages)s\n"
 "\n"
-"إذا لم تكن أنت من أجرى هذه التغييرات، فيُرجى الاتصال بفريق الدعم في %(instance)"
-"s على الفور.\n"
+"إذا لم تكن أنت من أجرى هذه التغييرات، فيُرجى الاتصال بفريق الدعم في "
+"%(instance)s على الفور.\n"
 "\n"
 "يمكنك مراجعة إعدادات حسابك هنا:\n"
 "\n"
@@ -19677,9 +19814,10 @@ msgid ""
 "directly from you, but it also might require some extra steps to ensure good "
 "deliverability."
 msgstr ""
-"سيتم إرسال رسائل البريد الإلكتروني عبر الخادم الافتراضي للنظام، ولكن باستخدام "
-"عنوان المرسل الخاص بك. سيجعل ذلك رسائلك تبدو أكثر تخصيصًا وكأنها مرسلة منك "
-"مباشرةً، ولكنه قد يتطلب أيضًا اتخاذ بعض الخطوات الإضافية لضمان وصولها بشكل جيد."
+"سيتم إرسال رسائل البريد الإلكتروني عبر الخادم الافتراضي للنظام، ولكن "
+"باستخدام عنوان المرسل الخاص بك. سيجعل ذلك رسائلك تبدو أكثر تخصيصًا وكأنها "
+"مرسلة منك مباشرةً، ولكنه قد يتطلب أيضًا اتخاذ بعض الخطوات الإضافية لضمان "
+"وصولها بشكل جيد."
 
 #: pretix/control/templates/pretixcontrol/email_setup.html
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html
@@ -19720,6 +19858,32 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
 msgid "We found an SPF record on your domain that includes this system. Great!"
+msgstr "لقد عثرنا على سجل SPF في نطاقك يتضمن هذا النظام. رائع!"
+
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#, fuzzy
+#| msgid "Your new SPF record could look like this:"
+msgid "Your new DKIM record should be set up as a CNAME record like this:"
+msgstr "قد يبدو سجل SPF الجديد الخاص بك كما يلي:"
+
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#, fuzzy
+#| msgid ""
+#| "We found an SPF record on your domain that includes this system. Great!"
+msgid "We found a DKIM record on your domain for this system. Great!"
+msgstr "لقد عثرنا على سجل SPF في نطاقك يتضمن هذا النظام. رائع!"
+
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#, fuzzy
+#| msgid "Your new SPF record could look like this:"
+msgid "Your new DMARC record could look like this:"
+msgstr "قد يبدو سجل SPF الجديد الخاص بك كما يلي:"
+
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#, fuzzy
+#| msgid ""
+#| "We found an SPF record on your domain that includes this system. Great!"
+msgid "We found a DMARC record on your domain for this system. Great!"
 msgstr "لقد عثرنا على سجل SPF في نطاقك يتضمن هذا النظام. رائع!"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
@@ -19814,8 +19978,8 @@ msgid ""
 "If an add-on product is newly added, the system currently does not validate "
 "if there are required questions or fields that need to be filled out."
 msgstr ""
-"في حالة إضافة منتج إضافي جديد، لا يقوم النظام حاليًا بالتحقق مما إذا كانت هناك "
-"أسئلة أو حقول إلزامية يتعين ملؤها."
+"في حالة إضافة منتج إضافي جديد، لا يقوم النظام حاليًا بالتحقق مما إذا كانت "
+"هناك أسئلة أو حقول إلزامية يتعين ملؤها."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html
 msgid ""
@@ -19829,7 +19993,8 @@ msgstr ""
 msgid ""
 "Additional constraints and validation steps added by plugins are not "
 "enforced."
-msgstr "لا يتم فرض القيود الإضافية وخطوات التحقق التي تضيفها المكونات الإضافية."
+msgstr ""
+"لا يتم فرض القيود الإضافية وخطوات التحقق التي تضيفها المكونات الإضافية."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html
 msgid ""
@@ -19837,16 +20002,16 @@ msgid ""
 "for self-service cancellations, the system will try to refund the money "
 "automatically."
 msgstr ""
-"إذا أدى التغيير إلى انخفاض السعر وكانت ميزة استرداد الأموال التلقائي مفعَّلة في "
-"حالات الإلغاء الذاتي، فسيحاول النظام استرداد المبلغ تلقائيًّا."
+"إذا أدى التغيير إلى انخفاض السعر وكانت ميزة استرداد الأموال التلقائي مفعَّلة "
+"في حالات الإلغاء الذاتي، فسيحاول النظام استرداد المبلغ تلقائيًّا."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html
 msgid ""
 "Refunds can be issued as a gift card if the respective option is set, but "
 "there is no customer choice between gift card and direct refund."
 msgstr ""
-"يمكن إصدار المبالغ المستردة على شكل بطاقة هدايا إذا تم تفعيل الخيار ذي الصلة"
-"، ولكن لا يتاح للعميل الاختيار بين بطاقة الهدايا والاسترداد المباشر."
+"يمكن إصدار المبالغ المستردة على شكل بطاقة هدايا إذا تم تفعيل الخيار ذي "
+"الصلة، ولكن لا يتاح للعميل الاختيار بين بطاقة الهدايا والاسترداد المباشر."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html
 #: pretix/control/templates/pretixcontrol/event/live.html
@@ -19865,8 +20030,8 @@ msgid ""
 "You can take your event offline. Nobody except your team will be able to see "
 "or access it any more."
 msgstr ""
-"يمكنك تحويل فعاليتك إلى وضع غير متصل بالإنترنت. ولن يتمكن أحد، باستثناء فريقك"
-"، من رؤيتها أو الوصول إليها بعد ذلك."
+"يمكنك تحويل فعاليتك إلى وضع غير متصل بالإنترنت. ولن يتمكن أحد، باستثناء "
+"فريقك، من رؤيتها أو الوصول إليها بعد ذلك."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
@@ -19897,8 +20062,8 @@ msgid ""
 "event and only retain the financial information such as the number and type "
 "of tickets sold."
 msgstr ""
-"يمكنك حذف البيانات الشخصية، مثل الأسماء وعناوين البريد الإلكتروني، من فعاليتك "
-"والاحتفاظ فقط بالمعلومات المالية، مثل عدد التذاكر المباعة ونوعها."
+"يمكنك حذف البيانات الشخصية، مثل الأسماء وعناوين البريد الإلكتروني، من "
+"فعاليتك والاحتفاظ فقط بالمعلومات المالية، مثل عدد التذاكر المباعة ونوعها."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html
 #: pretix/control/templates/pretixcontrol/event/delete.html
@@ -19912,6 +20077,107 @@ msgid ""
 msgstr ""
 "لا يمكنك حذف الحدث الخاص بك تمامًا إلا إذا كان لا يحتوي على أي بيانات لا يمكن "
 "حذفها، مثل الطلبات التي لم يتم تنفيذها في الوضع التجريبي."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_logs.html
+#: pretix/control/templates/pretixcontrol/event/logs.html
+#: pretix/control/templates/pretixcontrol/includes/logs.html
+#: pretix/control/templates/pretixcontrol/organizers/device_logs.html
+#: pretix/control/templates/pretixcontrol/organizers/logs.html
+msgid "Personal data was cleared from this log entry."
+msgstr "تم مسح البيانات الشخصية من إدخال هذا السجل."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_logs.html
+#: pretix/control/templates/pretixcontrol/event/logs.html
+#: pretix/control/templates/pretixcontrol/includes/logs.html
+#: pretix/control/templates/pretixcontrol/organizers/logs.html
+msgid "This change was performed by a pretix administrator."
+msgstr "تم إجراء هذا التغيير من قبل مسؤول pretix."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_logs.html
+#: pretix/control/templates/pretixcontrol/event/logs.html
+#: pretix/control/templates/pretixcontrol/includes/logs.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/control/templates/pretixcontrol/organizers/device_logs.html
+#: pretix/control/templates/pretixcontrol/organizers/logs.html
+#: pretix/control/templates/pretixcontrol/search/payments.html
+msgid "Inspect"
+msgstr "فحص"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"This event contains <strong>overpaid orders</strong>, for example due to "
+"duplicate payment attempts. You should review the cases and consider "
+"refunding the overpaid amount to the user."
+msgstr ""
+"يحتوي هذا الحدث على <strong> زائدة أوامر </strong>، أو على سبيل المثال بسبب "
+"محاولات دفع مكررة. يجب مراجعة الحالات والنظر في ردها على كمية زائدة للمستخدم."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show overpaid orders"
+msgstr "عرض زائدة أوامر"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"This event contains <strong>pending refunds</strong> that you should take "
+"care of."
+msgstr ""
+"يحتوي هذا الحدث على <strong> استرداد انتظار </strong> التي يجب أن تأخذ "
+"الرعاية."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show pending refunds"
+msgstr "عرض استرداد انتظار"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"This event contains <strong>requested cancellations</strong> that you should "
+"take care of."
+msgstr ""
+"تحتوي هذ الفعالية على طلب <strong> طلبات الإلغاء </strong> والتي يجب عليك "
+"العناية بها."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show orders requesting cancellation"
+msgstr "أظهر طلبات الإلغاء"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"This event contains <strong>pending approvals</strong> that you should take "
+"care of."
+msgstr ""
+"يحتوي هذا الحدث على <strong> الموافقات المعلقة </strong> التي يجب أن تأخذ "
+"الرعاية."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show orders pending approval"
+msgstr "مشاهدة الأوامر المعلقة موافقة"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"This event contains <strong>fully paid orders</strong> that are not marked "
+"as paid, probably because no quota was left at the time their payment "
+"arrived. You should review the cases and consider either refunding the "
+"customer or creating more space."
+msgstr ""
+"يحتوي هذا الحدث على <strong> أوامر مدفوع بالكامل </strong> التي لم يتم وضع "
+"علامة على دفع، وربما لأنه لم يترك أي حصة في وقت وصلت الدفع الخاصة بهم. يجب "
+"مراجعة الحالات والنظر إما برد العملاء أو خلق مساحة أكبر."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show affected orders"
+msgstr "تظهر أوامر المتضررين"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"Orders in this event could not be <strong>synced to an external system</"
+"strong> as configured."
+msgstr ""
+"لم تتمكن الطلبات في هذه الحالة من <strong>المزامنة مع نظام خارجي</strong> "
+"وفقًا للإعدادات المحددة."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show sync problems"
+msgstr "إظهار مشاكل المزامنة"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html
 msgid ""
@@ -20038,82 +20304,6 @@ msgid "Create QR code"
 msgstr "إنشاء رمز QR"
 
 #: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"This event contains <strong>overpaid orders</strong>, for example due to "
-"duplicate payment attempts. You should review the cases and consider "
-"refunding the overpaid amount to the user."
-msgstr ""
-"يحتوي هذا الحدث على <strong> زائدة أوامر </strong>، أو على سبيل المثال بسبب "
-"محاولات دفع مكررة. يجب مراجعة الحالات والنظر في ردها على كمية زائدة للمستخدم."
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show overpaid orders"
-msgstr "عرض زائدة أوامر"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"This event contains <strong>pending refunds</strong> that you should take "
-"care of."
-msgstr ""
-"يحتوي هذا الحدث على <strong> استرداد انتظار </strong> التي يجب أن تأخذ "
-"الرعاية."
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show pending refunds"
-msgstr "عرض استرداد انتظار"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"This event contains <strong>requested cancellations</strong> that you should "
-"take care of."
-msgstr ""
-"تحتوي هذ الفعالية على طلب <strong> طلبات الإلغاء </strong> والتي يجب عليك "
-"العناية بها."
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show orders requesting cancellation"
-msgstr "أظهر طلبات الإلغاء"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"This event contains <strong>pending approvals</strong> that you should take "
-"care of."
-msgstr ""
-"يحتوي هذا الحدث على <strong> الموافقات المعلقة </strong> التي يجب أن تأخذ "
-"الرعاية."
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show orders pending approval"
-msgstr "مشاهدة الأوامر المعلقة موافقة"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"This event contains <strong>fully paid orders</strong> that are not marked "
-"as paid, probably because no quota was left at the time their payment "
-"arrived. You should review the cases and consider either refunding the "
-"customer or creating more space."
-msgstr ""
-"يحتوي هذا الحدث على <strong> أوامر مدفوع بالكامل </strong> التي لم يتم وضع "
-"علامة على دفع، وربما لأنه لم يترك أي حصة في وقت وصلت الدفع الخاصة بهم. يجب "
-"مراجعة الحالات والنظر إما برد العملاء أو خلق مساحة أكبر."
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show affected orders"
-msgstr "تظهر أوامر المتضررين"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"Orders in this event could not be <strong>synced to an external system</"
-"strong> as configured."
-msgstr ""
-"لم تتمكن الطلبات في هذه الحالة من <strong>المزامنة مع نظام خارجي</strong> "
-"وفقًا للإعدادات المحددة."
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show sync problems"
-msgstr "إظهار مشاكل المزامنة"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Update comment"
 msgstr "تحديث تعليق"
@@ -20178,9 +20368,9 @@ msgid ""
 "customers may depend on the country of the customer or whether the customer "
 "is entering a business address."
 msgstr ""
-"قد يعتمد ما إذا كانت طريقة الإرسال المذكورة هنا متاحة فعليًّا للعملاء أم لا على "
-"البلد الذي ينتمي إليه العميل أو على ما إذا كان العميل يقوم بإدخال عنوان عمل "
-"أم لا."
+"قد يعتمد ما إذا كانت طريقة الإرسال المذكورة هنا متاحة فعليًّا للعملاء أم لا "
+"على البلد الذي ينتمي إليه العميل أو على ما إذا كان العميل يقوم بإدخال عنوان "
+"عمل أم لا."
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html
 msgid "Transmission method"
@@ -20228,8 +20418,8 @@ msgid ""
 "Your shop is already live, however the following issues would normally "
 "prevent your shop to go live:"
 msgstr ""
-"متجرك قيد التشغيل بالفعل، إلا أن المشكلات التالية عادةً ما تمنع متجرك من الدخول "
-"حيز التشغيل:"
+"متجرك قيد التشغيل بالفعل، إلا أن المشكلات التالية عادةً ما تمنع متجرك من "
+"الدخول حيز التشغيل:"
 
 #: pretix/control/templates/pretixcontrol/event/live.html
 msgid ""
@@ -20312,44 +20502,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/live.html
 msgid "Enable test mode"
 msgstr "تمكين وضع الاختبار"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
-msgid "All actions"
-msgstr "جميع الإجراءات"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-msgid "Team actions"
-msgstr "الإجراءات فريق"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-msgid "Customer actions"
-msgstr "إجراءات العملاء"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-#: pretix/control/templates/pretixcontrol/event/logs_embed.html
-#: pretix/control/templates/pretixcontrol/includes/logs.html
-#: pretix/control/templates/pretixcontrol/organizers/device_logs.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
-msgid "Personal data was cleared from this log entry."
-msgstr "تم مسح البيانات الشخصية من إدخال هذا السجل."
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-#: pretix/control/templates/pretixcontrol/event/logs_embed.html
-#: pretix/control/templates/pretixcontrol/includes/logs.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
-msgid "This change was performed by a pretix administrator."
-msgstr "تم إجراء هذا التغيير من قبل مسؤول pretix."
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-#: pretix/control/templates/pretixcontrol/event/logs_embed.html
-#: pretix/control/templates/pretixcontrol/includes/logs.html
-#: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/templates/pretixcontrol/organizers/device_logs.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
-#: pretix/control/templates/pretixcontrol/search/payments.html
-msgid "Inspect"
-msgstr "فحص"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html
@@ -20901,8 +21053,8 @@ msgid ""
 msgstr ""
 "تحدد قائمة الانتظار مدى التوافر بناءً على الحصص بشكل أساسي. إذا كنت تستخدم "
 "مخطط توزيع المقاعد وكان عدد المقاعد المتاحة لديك أقل من الحصة المتاحة، فقد "
-"تواجه حالات يتم فيها إرسال بريد إلكتروني إلى الأشخاص المدرجين في قائمة الانتظار"
-"، لكنهم لا يزالون غير قادرين على حجز مقعد."
+"تواجه حالات يتم فيها إرسال بريد إلكتروني إلى الأشخاص المدرجين في قائمة "
+"الانتظار، لكنهم لا يزالون غير قادرين على حجز مقعد."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html
 msgid ""
@@ -21036,8 +21188,8 @@ msgid ""
 "You cannot delete a tax rule that is in use for a product, has been in use "
 "for any existing orders, or is the default tax rule of the event."
 msgstr ""
-"لا يمكنك حذف قاعدة ضريبية مستخدمة حالياً لمنتج ما، أو كانت مستخدمة في أي طلبات "
-"قائمة، أو تُعد القاعدة الضريبية الافتراضية للحدث."
+"لا يمكنك حذف قاعدة ضريبية مستخدمة حالياً لمنتج ما، أو كانت مستخدمة في أي "
+"طلبات قائمة، أو تُعد القاعدة الضريبية الافتراضية للحدث."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
 #, python-format
@@ -21234,8 +21386,8 @@ msgid ""
 msgstr ""
 "هذا هو العنوان الذي يمكن للمستخدمين من خلاله شراء تذاكرك. يجب أن يكون قصيرًا، "
 "وأن يحتوي فقط على أحرف صغيرة وأرقام ونقاط وشرطات، كما يجب أن يكون فريدًا بين "
-"فعالياتك. نوصي باستخدام اختصار ما أو تاريخ يتكون من أقل من 10 أحرف يسهل تذكره"
-"، ولكن يمكنك أيضًا اختيار استخدام قيمة عشوائية."
+"فعالياتك. نوصي باستخدام اختصار ما أو تاريخ يتكون من أقل من 10 أحرف يسهل "
+"تذكره، ولكن يمكنك أيضًا اختيار استخدام قيمة عشوائية."
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
 msgid ""
@@ -21294,9 +21446,9 @@ msgid ""
 "Examples: Conferences, workshops, trade fairs, one-off concerts, sale of "
 "digital content, multi-day events with combination tickets."
 msgstr ""
-"أمثلة: المؤتمرات، وورش العمل، والمعارض التجارية، والحفلات الموسيقية التي تُقام "
-"لمرة واحدة، وبيع المحتوى الرقمي، والفعاليات التي تمتد لعدة أيام مع تذاكر "
-"شاملة."
+"أمثلة: المؤتمرات، وورش العمل، والمعارض التجارية، والحفلات الموسيقية التي "
+"تُقام لمرة واحدة، وبيع المحتوى الرقمي، والفعاليات التي تمتد لعدة أيام مع "
+"تذاكر شاملة."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
 msgid "Event series or time slot booking"
@@ -21360,6 +21512,20 @@ msgstr "المزيد من الحصص"
 
 #: pretix/control/templates/pretixcontrol/events/index.html
 #: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/views/dashboards.py
+msgid "Shop disabled"
+msgstr "المتجر معطل"
+
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/index.html
+#: pretix/control/views/dashboards.py
+msgid "On sale"
+msgstr "معروض للبيع"
+
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
 msgid "Open event dashboard"
 msgstr "فتح لوحة أجهزة القياس الحدث"
 
@@ -21367,6 +21533,12 @@ msgstr "فتح لوحة أجهزة القياس الحدث"
 msgctxt "typography"
 msgid "The quick brown fox jumps over the lazy dog."
 msgstr "الثعلب البني السريع يقفز فوق الكلب الكسول."
+
+#: pretix/control/templates/pretixcontrol/fragment_log_filter_form.html
+#, fuzzy
+#| msgid "Specific seat"
+msgid "Specific object selected"
+msgstr "مقعد محدد"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html
@@ -21466,8 +21638,8 @@ msgid ""
 "usage of pretix is in compliance with the Enterprise license you purchased."
 msgstr ""
 "ويخدم ذلك غرضين: جمع المعلومات المفيدة التي قد تساعد في تصحيح الأخطاء في "
-"تثبيت pretix الخاص بك، والتحقق من أن استخدامك لـ pretix يتوافق مع ترخيص «"
-"Enterprise» الذي اشتريته."
+"تثبيت pretix الخاص بك، والتحقق من أن استخدامك لـ pretix يتوافق مع ترخيص "
+"«Enterprise» الذي اشتريته."
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "First month of license term:"
@@ -21632,16 +21804,16 @@ msgid ""
 "This product is currently not being shown since you configured below that it "
 "should only be visible if a certain other quota is already sold out."
 msgstr ""
-"لا يتم عرض هذا المنتج حاليًا لأنك قمت بالتعيين أدناه بأنه يجب ألا يظهر إلا إذا "
-"كانت حصة معينة أخرى قد نفدت بالفعل."
+"لا يتم عرض هذا المنتج حاليًا لأنك قمت بالتعيين أدناه بأنه يجب ألا يظهر إلا "
+"إذا كانت حصة معينة أخرى قد نفدت بالفعل."
 
 #: pretix/control/templates/pretixcontrol/item/base.html
 msgid ""
 "This product is currently not being shown since you configured below that it "
 "should only be visible if a certain other product is already sold out."
 msgstr ""
-"لا يتم عرض هذا المنتج حاليًا لأنك قمت بالتعيين أدناه بأنه يجب ألا يظهر إلا إذا "
-"كان منتج آخر معين قد نفد بالفعل."
+"لا يتم عرض هذا المنتج حاليًا لأنك قمت بالتعيين أدناه بأنه يجب ألا يظهر إلا "
+"إذا كان منتج آخر معين قد نفد بالفعل."
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
@@ -21717,8 +21889,8 @@ msgid ""
 "When this ticket is purchased, the system will ask for a name or other "
 "details according to your event settings."
 msgstr ""
-"عند شراء هذه التذكرة، سيطلب منك النظام إدخال اسم أو تفاصيل أخرى وفقًا لإعدادات "
-"الفعالية الخاصة بك."
+"عند شراء هذه التذكرة، سيطلب منك النظام إدخال اسم أو تفاصيل أخرى وفقًا "
+"لإعدادات الفعالية الخاصة بك."
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
@@ -21850,8 +22022,8 @@ msgstr ""
 "من ورش العمل، فيمكنك تعريف ورش العمل على أنها إضافات لتذكرة المؤتمر. وبهذا "
 "الإعداد، لا يمكن شراء ورش العمل بمفردها، بل فقط بالاقتران مع تذكرة المؤتمر. "
 "يمكنك هنا تحديد فئات المنتجات التي يمكن استخدامها كإضافات لهذا المنتج. يمكنك "
-"أيضًا تحديد الحد الأدنى والحد الأقصى لعدد الإضافات من الفئة المحددة التي يمكن أو "
-"يجب اختيارها."
+"أيضًا تحديد الحد الأدنى والحد الأقصى لعدد الإضافات من الفئة المحددة التي يمكن "
+"أو يجب اختيارها."
 
 #: pretix/control/templates/pretixcontrol/item/include_addons.html
 msgid "Add-On"
@@ -21965,10 +22137,10 @@ msgid ""
 "if you enter \"1 day\", the ticket will be valid until the end of the day it "
 "starts on."
 msgstr ""
-"إذا اخترت مدة محددة بالأيام أو الأشهر أو السنوات، فستنتهي صلاحية التذكرة دائمًا "
-"في نهاية يوم كامل (منتصف الليل)، مضافًا إليها عدد الدقائق والساعات المحددة "
-"أعلاه. ويتم تضمين تاريخ البدء في الحساب؛ لذا، إذا أدخلت «يوم واحد»، فستظل "
-"التذكرة صالحة حتى نهاية اليوم الذي تبدأ فيه."
+"إذا اخترت مدة محددة بالأيام أو الأشهر أو السنوات، فستنتهي صلاحية التذكرة "
+"دائمًا في نهاية يوم كامل (منتصف الليل)، مضافًا إليها عدد الدقائق والساعات "
+"المحددة أعلاه. ويتم تضمين تاريخ البدء في الحساب؛ لذا، إذا أدخلت «يوم واحد»، "
+"فستظل التذكرة صالحة حتى نهاية اليوم الذي تبدأ فيه."
 
 #: pretix/control/templates/pretixcontrol/item/index.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
@@ -22033,8 +22205,8 @@ msgid ""
 "feature and are not suitable for strictly ensuring that products are only "
 "available in certain combinations."
 msgstr ""
-"يرجى ملاحظة أن فئات «البيع التكميلي» تُعتبر ميزة تسويقية، ولا تصلح لضمان تقييد "
-"توفر المنتجات في تركيبات معينة فقط."
+"يرجى ملاحظة أن فئات «البيع التكميلي» تُعتبر ميزة تسويقية، ولا تصلح لضمان "
+"تقييد توفر المنتجات في تركيبات معينة فقط."
 
 #: pretix/control/templates/pretixcontrol/items/category.html
 msgid "Category history"
@@ -22116,10 +22288,10 @@ msgid ""
 "can create group discounts like \"get 20%% off if you buy 3 or more "
 "tickets\" or \"buy 2 tickets, get 1 free\"."
 msgstr ""
-"بفضل ميزة الخصومات التلقائية، يمكنك تطبيق خصم تلقائيًا على مشتريات عملائك بناءً "
-"على شروط معينة. على سبيل المثال، يمكنك إنشاء خصومات جماعية مثل «احصل على خصم "
-"بنسبة 20%%% عند شراء 3 تذاكر أو أكثر» أو «اشترِ تذكرتين واحصل على تذكرة ثالثة "
-"مجانًا»."
+"بفضل ميزة الخصومات التلقائية، يمكنك تطبيق خصم تلقائيًا على مشتريات عملائك "
+"بناءً على شروط معينة. على سبيل المثال، يمكنك إنشاء خصومات جماعية مثل «احصل "
+"على خصم بنسبة 20%%% عند شراء 3 تذاكر أو أكثر» أو «اشترِ تذكرتين واحصل على "
+"تذكرة ثالثة مجانًا»."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 msgid ""
@@ -22129,11 +22301,11 @@ msgid ""
 "purchases (\"buy a package of 10 you can turn into individual tickets "
 "later\"), you can use customer accounts and memberships instead."
 msgstr ""
-"تتوفر الخصومات التلقائية لجميع العملاء طالما كانت حساباتهم نشطة. إذا كنت ترغب "
-"في تقديم أسعار خاصة لعملاء محددين فقط، فيمكنك استخدام القسائم بدلاً من ذلك. أما "
-"إذا كنت ترغب في تقديم خصومات على عدة عمليات شراء («اشترِ حزمة من 10 تذاكر "
-"يمكنك تحويلها إلى تذاكر فردية لاحقًا»)، فيمكنك استخدام حسابات العملاء والعضويات "
-"بدلاً من ذلك."
+"تتوفر الخصومات التلقائية لجميع العملاء طالما كانت حساباتهم نشطة. إذا كنت "
+"ترغب في تقديم أسعار خاصة لعملاء محددين فقط، فيمكنك استخدام القسائم بدلاً من "
+"ذلك. أما إذا كنت ترغب في تقديم خصومات على عدة عمليات شراء («اشترِ حزمة من 10 "
+"تذاكر يمكنك تحويلها إلى تذاكر فردية لاحقًا»)، فيمكنك استخدام حسابات العملاء "
+"والعضويات بدلاً من ذلك."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 msgid ""
@@ -22375,8 +22547,8 @@ msgid ""
 "such customers edit their answers, they need to select a different option."
 msgstr ""
 "إذا قمت بحذف أحد خيارات الإجابة، فلن تتمكن بعد ذلك من الاطلاع على البيانات "
-"الإحصائية المتعلقة بالعملاء الذين اختاروا هذا الخيار سابقًا، وعندما يقوم هؤلاء "
-"العملاء بتعديل إجاباتهم، سيتعين عليهم اختيار خيار آخر."
+"الإحصائية المتعلقة بالعملاء الذين اختاروا هذا الخيار سابقًا، وعندما يقوم "
+"هؤلاء العملاء بتعديل إجاباتهم، سيتعين عليهم اختيار خيار آخر."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 #, python-format
@@ -22497,6 +22669,7 @@ msgstr "تغيير حصص متعددة"
 #: pretix/control/templates/pretixcontrol/items/quota_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #, python-format
 msgid "%(number)s selected"
 msgstr "%(number)s تم اختيارها"
@@ -22597,6 +22770,7 @@ msgstr "احذف المختار"
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/subevents/index.html
+#: pretix/control/templates/pretixcontrol/vouchers/index.html
 msgid "Edit selected"
 msgstr "تحرير العناصر المحددة"
 
@@ -22930,6 +23104,13 @@ msgstr ""
 "العضوية. يمكن إدارة العضويات من خلال حساب العميل."
 
 #: pretix/control/templates/pretixcontrol/order/change.html
+#: pretix/control/views/orders.py
+msgid ""
+"Ticket secrets of order positions that have been used to issue a gift card "
+"can not be changed. Only the link will be changed in this case."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
 "Removing or splitting this position will also remove or split all add-ons to "
 "this position."
@@ -23112,10 +23293,10 @@ msgid ""
 "generated once the customer pays the invoice or selects a payment method "
 "that requires an invoice."
 msgstr ""
-"تم تعديل هذا الطلب بعد إصدار الفاتورة الأخيرة. ولم يتم إصدار فاتورة جديدة بعد"
-"، لأن الإعدادات المحددة للفواتير تنص على إصدارها عند السداد أو إذا تطلبت طريقة "
-"الدفع ذلك. وسيتم إصدار فاتورة جديدة بمجرد قيام العميل بسداد الفاتورة أو "
-"اختيار طريقة دفع تتطلب إصدار فاتورة."
+"تم تعديل هذا الطلب بعد إصدار الفاتورة الأخيرة. ولم يتم إصدار فاتورة جديدة "
+"بعد، لأن الإعدادات المحددة للفواتير تنص على إصدارها عند السداد أو إذا تطلبت "
+"طريقة الدفع ذلك. وسيتم إصدار فاتورة جديدة بمجرد قيام العميل بسداد الفاتورة "
+"أو اختيار طريقة دفع تتطلب إصدار فاتورة."
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Reissue invoice"
@@ -23370,11 +23551,6 @@ msgid "Create a refund"
 msgstr "إنشاء استرداد"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/templates/pretixcontrol/orders/refunds.html
-msgid "Source"
-msgstr "مصدر"
-
-#: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Cancel transfer"
 msgstr "إلغاء نقل"
 
@@ -23429,8 +23605,8 @@ msgid ""
 "This email has been sent with an older version of pretix. We are therefore "
 "not able to display it here accurately."
 msgstr ""
-"تم إرسال هذه الرسالة الإلكترونية باستخدام إصدار قديم من برنامج pretix. ولذلك، "
-"لا يمكننا عرضها هنا بدقة."
+"تم إرسال هذه الرسالة الإلكترونية باستخدام إصدار قديم من برنامج pretix. "
+"ولذلك، لا يمكننا عرضها هنا بدقة."
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html
@@ -23747,8 +23923,8 @@ msgid ""
 "All actions performed on this page are irreversible. If in doubt, please "
 "contact support before using it."
 msgstr ""
-"جميع الإجراءات التي يتم تنفيذها على هذه الصفحة لا رجعة فيها. إذا كان لديك أي شك"
-"، يرجى الاتصال بفريق الدعم قبل استخدامها."
+"جميع الإجراءات التي يتم تنفيذها على هذه الصفحة لا رجعة فيها. إذا كان لديك أي "
+"شك، يرجى الاتصال بفريق الدعم قبل استخدامها."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgctxt "subevents"
@@ -23774,9 +23950,9 @@ msgid ""
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
-"نظرًا لأنك تقوم برد قيمة طلبات عملائك على شكل بطاقات هدايا، فيجب عليك شرح كيفية "
-"الوصول إلى بطاقات الهدايا الخاصة بهم. وأسهل طريقة للقيام بذلك هي تضمين شرح "
-"ورابط إلى طلبهم باستخدام وظيفة البريد الإلكتروني المتوفرة هنا."
+"نظرًا لأنك تقوم برد قيمة طلبات عملائك على شكل بطاقات هدايا، فيجب عليك شرح "
+"كيفية الوصول إلى بطاقات الهدايا الخاصة بهم. وأسهل طريقة للقيام بذلك هي تضمين "
+"شرح ورابط إلى طلبهم باستخدام وظيفة البريد الإلكتروني المتوفرة هنا."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgid ""
@@ -23784,9 +23960,9 @@ msgid ""
 "new tickets due to the products being disabled. You can choose to inform "
 "people on the waiting list by using this option."
 msgstr ""
-"لن يتم حذف قائمة الانتظار الخاصة بك تلقائيًا، ولكن لن يتم إضافة أي طلبات جديدة "
-"إليها نظرًا لتعطيل المنتجات. يمكنك اختيار إخطار الأشخاص المدرجين في قائمة "
-"الانتظار باستخدام هذا الخيار."
+"لن يتم حذف قائمة الانتظار الخاصة بك تلقائيًا، ولكن لن يتم إضافة أي طلبات "
+"جديدة إليها نظرًا لتعطيل المنتجات. يمكنك اختيار إخطار الأشخاص المدرجين في "
+"قائمة الانتظار باستخدام هذا الخيار."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgid ""
@@ -24129,8 +24305,8 @@ msgid ""
 "The import will be performed regardless of your quotas, so it will be "
 "possible to overbook your event using this option."
 msgstr ""
-"سيتم إجراء عملية الاستيراد بغض النظر عن الحصص المخصصة لك، لذا سيكون من الممكن "
-"إجراء حجز زائد لحدثك باستخدام هذا الخيار."
+"سيتم إجراء عملية الاستيراد بغض النظر عن الحصص المخصصة لك، لذا سيكون من "
+"الممكن إجراء حجز زائد لحدثك باستخدام هذا الخيار."
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html
@@ -24275,8 +24451,8 @@ msgid ""
 "This sum includes canceled orders. For your ticket revenue, look at the "
 "\"order overview\"."
 msgstr ""
-"يشمل هذا المبلغ الطلبات الملغاة. للاطلاع على إيرادات التذاكر، يرجى الرجوع إلى «"
-"نظرة عامة على الطلبات»."
+"يشمل هذا المبلغ الطلبات الملغاة. للاطلاع على إيرادات التذاكر، يرجى الرجوع "
+"إلى «نظرة عامة على الطلبات»."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid "Select action"
@@ -24321,8 +24497,8 @@ msgid ""
 "be removed in the future. Use the \"Accounting report\" in the export "
 "section instead."
 msgstr ""
-"لا يُنصح بتصفية هذا التقرير حسب التاريخ، حيث قد يؤدي ذلك إلى معلومات مضللة؛ لأن "
-"هذا التقرير يعرض الحالة الحالية لأي طلب فقط، وليس أي تغييرات أُجريت عليه "
+"لا يُنصح بتصفية هذا التقرير حسب التاريخ، حيث قد يؤدي ذلك إلى معلومات مضللة؛ "
+"لأن هذا التقرير يعرض الحالة الحالية لأي طلب فقط، وليس أي تغييرات أُجريت عليه "
 "سابقًا. وقد يتم إزالة فلتر التاريخ هذا في المستقبل. استخدم «التقرير المحاسبي» "
 "الموجود في قسم التصدير بدلاً من ذلك."
 
@@ -24378,8 +24554,8 @@ msgid ""
 "This sales channel cannot be deleted since it has already been used to sell "
 "orders or because it is a core element of the system."
 msgstr ""
-"لا يمكن حذف قناة المبيعات هذه لأنها استُخدمت بالفعل لبيع الطلبات أو لأنها عنصر "
-"أساسي في النظام."
+"لا يمكن حذف قناة المبيعات هذه لأنها استُخدمت بالفعل لبيع الطلبات أو لأنها "
+"عنصر أساسي في النظام."
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html
 msgid "Sales channel:"
@@ -24497,8 +24673,8 @@ msgid ""
 "This membership cannot be deleted since it has been used in an order. Change "
 "its end date to the past instead."
 msgstr ""
-"لا يمكن حذف هذه العضوية لأنها استُخدمت في طلب شراء. قم بدلاً من ذلك بتغيير تاريخ "
-"انتهائها إلى تاريخ مضى."
+"لا يمكن حذف هذه العضوية لأنها استُخدمت في طلب شراء. قم بدلاً من ذلك بتغيير "
+"تاريخ انتهائها إلى تاريخ مضى."
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html
 msgid "No customer accounts have been created yet."
@@ -24548,6 +24724,7 @@ msgstr "تغيير أجهزة متعددة"
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "Advanced settings"
 msgstr "إعدادات متقدمة"
@@ -24760,9 +24937,9 @@ msgid ""
 msgstr ""
 "في النهاية، تقع على عاتقك مسؤولية التأكد من الامتثال لجميع القوانين ذات "
 "الصلة. نحن نسعى إلى مساعدتك من خلال توفير هذه الإعدادات، لكننا لا نتحمل أي "
-"مسؤولية لأننا لا نعرف التكوين الدقيق لاستخدامك لـ pretix، ولا التفاصيل القانونية "
-"السارية في نطاق ولايتك القضائية المحددة، ولا الاتفاقيات المبرمة بينك وبين أطراف "
-"ثالثة مثل مزودي خدمات الدفع أو التتبع."
+"مسؤولية لأننا لا نعرف التكوين الدقيق لاستخدامك لـ pretix، ولا التفاصيل "
+"القانونية السارية في نطاق ولايتك القضائية المحددة، ولا الاتفاقيات المبرمة "
+"بينك وبين أطراف ثالثة مثل مزودي خدمات الدفع أو التتبع."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "Accessibility"
@@ -24777,8 +24954,8 @@ msgid ""
 msgstr ""
 "تشترط بعض الولايات القضائية، بما في ذلك الاتحاد الأوروبي، نشر معلومات حول "
 "إمكانية الوصول إلى متجر التذاكر الخاص بك. يمكنك العثور على نموذج في <a "
-"href=\"https://docs.pretix.eu/trust/accessibility/\" target=\"_blank\">"
-"وثائقنا</a>."
+"href=\"https://docs.pretix.eu/trust/accessibility/\" "
+"target=\"_blank\">وثائقنا</a>."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
@@ -24801,10 +24978,10 @@ msgid ""
 "same barcode may be re-used during the sale of a different product."
 msgstr ""
 "يمكن أن يكون «الوسيط الباركودي» أي تمثيل مطبوع أو رقمي للباركود. ويتم إنشاء "
-"هذا الوسيط في البداية من خلال بيع منتج تخضع سياسة الوسائط الخاصة به لشرط وجود "
-"مثل هذا الوسيط، بالإضافة إلى تصميم تذكرة أو شارة يتضمن «معرّف الوسيط القابل "
-"لإعادة الاستخدام» في شكل رمز QR. وفي وقت لاحق، يمكن إعادة استخدام نفس الرمز "
-"الشريطي أثناء بيع منتج آخر."
+"هذا الوسيط في البداية من خلال بيع منتج تخضع سياسة الوسائط الخاصة به لشرط "
+"وجود مثل هذا الوسيط، بالإضافة إلى تصميم تذكرة أو شارة يتضمن «معرّف الوسيط "
+"القابل لإعادة الاستخدام» في شكل رمز QR. وفي وقت لاحق، يمكن إعادة استخدام نفس "
+"الرمز الشريطي أثناء بيع منتج آخر."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "Barcode media can currently only be connected to tickets."
@@ -24815,7 +24992,8 @@ msgid ""
 "This subsequent reuse of the barcode is currently only supported during POS "
 "sales."
 msgstr ""
-"لا يُدعم إعادة استخدام الباركود هذه حاليًا إلا أثناء عمليات البيع في نقاط البيع."
+"لا يُدعم إعادة استخدام الباركود هذه حاليًا إلا أثناء عمليات البيع في نقاط "
+"البيع."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
@@ -24845,8 +25023,8 @@ msgid ""
 "but requires all chips to be encoded prior to use."
 msgstr ""
 "يعمل هذا النوع من الوسائط فقط مع رقائق NFC من طراز Mifare Ultralight AES "
-"المصنعة من قبل شركة NXP. ويوفر هذا مستوى أعلى من الأمان مقارنة بالطرق الأخرى، "
-"لكنه يتطلب ترميز جميع الرقائق قبل استخدامها."
+"المصنعة من قبل شركة NXP. ويوفر هذا مستوى أعلى من الأمان مقارنة بالطرق "
+"الأخرى، لكنه يتطلب ترميز جميع الرقائق قبل استخدامها."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "Domains"
@@ -24958,8 +25136,8 @@ msgid ""
 "do so, the other organizer can add you to their list and afterwards, you can "
 "confirm this here."
 msgstr ""
-"أنت لا تقبل بطاقات الهدايا من المنظمين الآخرين حتى الآن. إذا كنت ترغب في ذلك، "
-"يمكن للمنظم الآخر إضافتك إلى قائمته، وبعد ذلك يمكنك تأكيد ذلك هنا."
+"أنت لا تقبل بطاقات الهدايا من المنظمين الآخرين حتى الآن. إذا كنت ترغب في "
+"ذلك، يمكن للمنظم الآخر إضافتك إلى قائمته، وبعد ذلك يمكنك تأكيد ذلك هنا."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid "invited"
@@ -24992,8 +25170,8 @@ msgid ""
 "between the two organizers."
 msgstr ""
 "يمكنك دعوة منظمين آخرين لقبول بطاقات الهدايا الخاصة بك. وبعد قيامك بذلك، "
-"يتعين عليهم الانتقال إلى الصفحة نفسها في حساباتهم وقبول دعوتك. يرجى ملاحظة أن "
-"المنظمين الآخرين سيتمكنون أيضًا من إضافة أموال إلى بطاقات الهدايا، والتي "
+"يتعين عليهم الانتقال إلى الصفحة نفسها في حساباتهم وقبول دعوتك. يرجى ملاحظة "
+"أن المنظمين الآخرين سيتمكنون أيضًا من إضافة أموال إلى بطاقات الهدايا، والتي "
 "سيتعين عليك تحصيلها منهم. تقع على عاتقك مسؤولية إدارة عملية تبادل الأموال "
 "لتسوية المعاملات بين المنظمين."
 
@@ -25091,9 +25269,9 @@ msgid ""
 "in one event, and require valid memberships to allow purchases in another "
 "event."
 msgstr ""
-"يمكنك تحديد أنواع العضوية. تتيح لك هذه الأنواع ربط المنتجات من فعاليات مختلفة "
-"ببعضها البعض. يمكنك بيع عضوية كجزء من منتج في إحدى الفعاليات، وشرط وجود "
-"عضويات سارية المفعول للسماح بإجراء عمليات الشراء في فعالية أخرى."
+"يمكنك تحديد أنواع العضوية. تتيح لك هذه الأنواع ربط المنتجات من فعاليات "
+"مختلفة ببعضها البعض. يمكنك بيع عضوية كجزء من منتج في إحدى الفعاليات، وشرط "
+"وجود عضويات سارية المفعول للسماح بإجراء عمليات الشراء في فعالية أخرى."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html
 msgid ""
@@ -25237,8 +25415,8 @@ msgid ""
 "events to third-party services, or apply other forms of customizations."
 msgstr ""
 "في هذه الصفحة، يمكنك اختيار المكونات الإضافية التي ترغب في تفعيلها لحسابك "
-"كمنظم. قد توفر المكونات الإضافية وظائف برمجية إضافية، أو تربط فعالياتك بخدمات "
-"جهات خارجية، أو تطبق أشكالًا أخرى من التخصيصات."
+"كمنظم. قد توفر المكونات الإضافية وظائف برمجية إضافية، أو تربط فعالياتك "
+"بخدمات جهات خارجية، أو تطبق أشكالًا أخرى من التخصيصات."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid "Active (all events)"
@@ -25468,9 +25646,9 @@ msgid ""
 "some information about gift cards linked to a customer account, even if they "
 "generally can't see gift cards directly."
 msgstr ""
-"على سبيل المثال، سيتمكن أي شخص لديه صلاحية الوصول إلى حسابات العملاء من الاطلاع "
-"على بعض المعلومات المتعلقة ببطاقات الهدايا المرتبطة بحساب أحد العملاء، حتى لو "
-"لم يكن بإمكانه عادةً الاطلاع على بطاقات الهدايا مباشرةً."
+"على سبيل المثال، سيتمكن أي شخص لديه صلاحية الوصول إلى حسابات العملاء من "
+"الاطلاع على بعض المعلومات المتعلقة ببطاقات الهدايا المرتبطة بحساب أحد "
+"العملاء، حتى لو لم يكن بإمكانه عادةً الاطلاع على بطاقات الهدايا مباشرةً."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html
 msgid ""
@@ -25577,8 +25755,8 @@ msgid ""
 "Webhooks scheduled to be retried in less than %(minutes)s minutes may not be "
 "listed here and can no longer be stopped or expedited."
 msgstr ""
-"قد لا تظهر هنا عمليات Webhooks المقرر إعادة محاولتها في غضون أقل من %(minutes)"
-"s دقيقة، ولم يعد من الممكن إيقافها أو تسريعها."
+"قد لا تظهر هنا عمليات Webhooks المقرر إعادة محاولتها في غضون أقل من "
+"%(minutes)s دقيقة، ولم يعد من الممكن إيقافها أو تسريعها."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 msgid "This webhook was retried since it previously failed."
@@ -25808,7 +25986,8 @@ msgid ""
 "You can upload a PDF to use as a custom background. The paper size will "
 "match the PDF."
 msgstr ""
-"يمكنك تحميل ملف PDF لاستخدامه كخلفية مخصصة. وسيتطابق حجم الورق مع حجم ملف PDF."
+"يمكنك تحميل ملف PDF لاستخدامه كخلفية مخصصة. وسيتطابق حجم الورق مع حجم ملف "
+"PDF."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 #, python-format
@@ -25951,8 +26130,8 @@ msgid ""
 "version %(scan_version)s (or newer)."
 msgstr ""
 "يستخدم هذا التصميم ميزات جديدة. إذا كنت ترغب في الطباعة من جهازك، فتأكد من "
-"استخدام الإصدار %(print_version)s من pretixPRINT (أو إصدار أحدث) أو الإصدار %"
-"(scan_version)s من pretixSCAN Desktop (أو إصدار أحدث)."
+"استخدام الإصدار %(print_version)s من pretixPRINT (أو إصدار أحدث) أو الإصدار "
+"%(scan_version)s من pretixSCAN Desktop (أو إصدار أحدث)."
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html
 msgid "Available placeholders"
@@ -25969,9 +26148,9 @@ msgid ""
 msgstr ""
 "يمكنك استخدام العناصر النائبة في النصوص المخصصة على التذاكر لإثراء النص "
 "ببيانات فردية. وتعتمد العناصر النائبة المتاحة على إعدادات الحدث الخاص بك، "
-"والمكونات الإضافية التي تم تفعيلها، والمنتج المحدد، بالإضافة إلى المدخلات التي "
-"يدخلها المستخدم. تسرد هذه الصفحة جميع العناصر النائبة المتاحة تقنيًّا لحدثك، "
-"إلا أن معظمها قد يكون فارغًا في بعض الحالات اعتمادًا على التكوين."
+"والمكونات الإضافية التي تم تفعيلها، والمنتج المحدد، بالإضافة إلى المدخلات "
+"التي يدخلها المستخدم. تسرد هذه الصفحة جميع العناصر النائبة المتاحة تقنيًّا "
+"لحدثك، إلا أن معظمها قد يكون فارغًا في بعض الحالات اعتمادًا على التكوين."
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html
 msgid "Placeholder"
@@ -25996,8 +26175,8 @@ msgid ""
 "We couldn't find any payments that you have access to and that match your "
 "search query."
 msgstr ""
-"لم نتمكن من العثور على أي مدفوعات يمكنك الاطلاع عليها وتتطابق مع استعلام البحث "
-"الذي أدخلته."
+"لم نتمكن من العثور على أي مدفوعات يمكنك الاطلاع عليها وتتطابق مع استعلام "
+"البحث الذي أدخلته."
 
 #: pretix/control/templates/pretixcontrol/select2_widget.html
 msgid "Please enable JavaScript in your browser."
@@ -26290,8 +26469,8 @@ msgid ""
 "data attached to them. In that case, they will be disabled instead."
 msgstr ""
 "من المحتمل ألا يمكن حذف بعض التواريخ المذكورة أعلاه إذا كانت هناك بيانات "
-"مرتبطة بها من خلال أحد المكونات الإضافية. وفي هذه الحالة، سيتم تعطيلها بدلاً من "
-"ذلك."
+"مرتبطة بها من خلال أحد المكونات الإضافية. وفي هذه الحالة، سيتم تعطيلها بدلاً "
+"من ذلك."
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html
 msgid ""
@@ -26680,16 +26859,16 @@ msgid ""
 "This changes the email address used to login to your account, as well as "
 "where we send email notifications."
 msgstr ""
-"سيؤدي هذا إلى تغيير عنوان البريد الإلكتروني المستخدم لتسجيل الدخول إلى حسابك، "
-"وكذلك العنوان الذي نرسل إليه إشعارات البريد الإلكتروني."
+"سيؤدي هذا إلى تغيير عنوان البريد الإلكتروني المستخدم لتسجيل الدخول إلى "
+"حسابك، وكذلك العنوان الذي نرسل إليه إشعارات البريد الإلكتروني."
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html
 msgid ""
 "We will send a confirmation code to your new email address, which you need "
 "to enter in the next step to confirm the email address is correct."
 msgstr ""
-"سنرسل رمز تأكيد إلى عنوان بريدك الإلكتروني الجديد، ويجب عليك إدخاله في الخطوة "
-"التالية للتأكد من صحة عنوان البريد الإلكتروني."
+"سنرسل رمز تأكيد إلى عنوان بريدك الإلكتروني الجديد، ويجب عليك إدخاله في "
+"الخطوة التالية للتأكد من صحة عنوان البريد الإلكتروني."
 
 #: pretix/control/templates/pretixcontrol/user/change_password.html
 #: pretix/control/templates/pretixcontrol/user/settings.html
@@ -26932,11 +27111,13 @@ msgid "Copy codes"
 msgstr "رموز نسخة"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "Voucher details"
 msgstr "تفاصيل قسيمة"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid ""
 "If you choose \"any product\" for a specific quota and choose to reserve "
@@ -26946,6 +27127,12 @@ msgstr ""
 "إذا اخترت \"أي منتج\" لحصص محددة واختيار حصة احتياطي لهذا قسيمة أعلاه، يمكن "
 "أن يكون المنتج لا تزال متاحة لصاحب القسيمة إذا تم بيع حصص أخرى مرتبطة مع "
 "المنتج خارج!"
+
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
+#, fuzzy
+#| msgid "Create multiple vouchers"
+msgid "Change multiple vouchers"
+msgstr "إنشاء قسائم متعددة"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
@@ -26984,8 +27171,8 @@ msgid ""
 "Are you sure you want to delete any cart positions with voucher "
 "<strong>%(voucher)s</strong>?"
 msgstr ""
-"هل أنت متأكد من رغبتك في حذف أي عناصر من سلة التسوق تحتوي على قسائم <strong>%"
-"(voucher)s</strong>؟"
+"هل أنت متأكد من رغبتك في حذف أي عناصر من سلة التسوق تحتوي على قسائم "
+"<strong>%(voucher)s</strong>؟"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html
 msgid ""
@@ -26994,8 +27181,8 @@ msgid ""
 "session is no longer in use."
 msgstr ""
 "سيؤدي هذا إلى إزالة المنتجات بصمت من سلة التسوق الخاصة بالمستخدم الذي يقوم "
-"حالياً بعملية شراء. وقد يكون هذا الأمر مربكاً للغاية. لا تستخدم هذه الطريقة إلا "
-"إذا كنت متأكداً من أن الجلسة لم تعد قيد الاستخدام."
+"حالياً بعملية شراء. وقد يكون هذا الأمر مربكاً للغاية. لا تستخدم هذه الطريقة "
+"إلا إذا كنت متأكداً من أن الجلسة لم تعد قيد الاستخدام."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "This voucher already has been used. It is not recommended to modify it."
@@ -27146,16 +27333,17 @@ msgid ""
 "The waiting list is no longer active for this event. The waiting list no "
 "longer affects quotas and no longer notifies waiting users."
 msgstr ""
-"لم تعد قائمة الانتظار سارية المفعول بالنسبة لهذا الحدث. ولم تعد قائمة الانتظار "
-"تؤثر على الحصص، كما لم تعد تُرسل إشعارات إلى المستخدمين المدرجين فيها."
+"لم تعد قائمة الانتظار سارية المفعول بالنسبة لهذا الحدث. ولم تعد قائمة "
+"الانتظار تؤثر على الحصص، كما لم تعد تُرسل إشعارات إلى المستخدمين المدرجين "
+"فيها."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid ""
 "According to your event settings, sold out products are hidden from "
 "customers. This way, customers will not be able to discover the waiting list."
 msgstr ""
-"وفقًا لإعدادات الحدث الخاص بك، يتم إخفاء المنتجات التي نفدت كمياتها عن العملاء. "
-"وبهذه الطريقة، لن يتمكن العملاء من الاطلاع على قائمة الانتظار."
+"وفقًا لإعدادات الحدث الخاص بك، يتم إخفاء المنتجات التي نفدت كمياتها عن "
+"العملاء. وبهذه الطريقة، لن يتمكن العملاء من الاطلاع على قائمة الانتظار."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "Send vouchers"
@@ -27179,8 +27367,8 @@ msgid ""
 "Currently, no vouchers will be sent since your event is not live or is not "
 "selling tickets."
 msgstr ""
-"في الوقت الحالي، لن يتم إرسال أي قسائم لأن فعاليتك ليست قيد الانعقاد أو لا يتم "
-"بيع تذاكر لها."
+"في الوقت الحالي، لن يتم إرسال أي قسائم لأن فعاليتك ليست قيد الانعقاد أو لا "
+"يتم بيع تذاكر لها."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid ""
@@ -27234,8 +27422,8 @@ msgid ""
 "For safety reasons, the waiting list does not run if the quota is set to "
 "unlimited."
 msgstr ""
-"لأسباب تتعلق بالسلامة، لا يتم تفعيل قائمة الانتظار إذا تم تعيين الحصة على «غير "
-"محدودة»."
+"لأسباب تتعلق بالسلامة، لا يتم تفعيل قائمة الانتظار إذا تم تعيين الحصة على "
+"«غير محدودة»."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "Quota unlimited"
@@ -27334,8 +27522,9 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "You cannot accept the invitation for \"{}\" as you already are part of this "
-"team."
-msgstr "لا يمكنك قبول الدعوة ل \"{}\" كما كنت بالفعل جزءا من هذا الفريق."
+"team. If you want to add a different user or create a new account, log out "
+"and click the invitation link again."
+msgstr ""
 
 #: pretix/control/views/auth.py
 #, python-brace-format
@@ -27596,8 +27785,8 @@ msgid ""
 "You do not have sufficient permission to enable plugins that need to be "
 "enabled for the entire organizer account."
 msgstr ""
-"لا تملك الأذونات الكافية لتفعيل المكونات الإضافية التي يتعين تفعيلها على مستوى "
-"حساب المنظم بأكمله."
+"لا تملك الأذونات الكافية لتفعيل المكونات الإضافية التي يتعين تفعيلها على "
+"مستوى حساب المنظم بأكمله."
 
 #: pretix/control/views/event.py pretix/control/views/organizer.py
 #, python-brace-format
@@ -27779,8 +27968,8 @@ msgid ""
 "keep it up to date!"
 msgstr ""
 "يجب عليك إتاحة جميع التعديلات التي أجريتها على كود مصدر «بريتيكس» مجانًا لكل "
-"زائر لموقعك في شكل كود مصدر، بموجب شروط الترخيص نفسها التي يخضع لها «بريتيكس"
-"» (AGPLv3 + قيود إضافية). احرص على تحديثه باستمرار!"
+"زائر لموقعك في شكل كود مصدر، بموجب شروط الترخيص نفسها التي يخضع لها "
+"«بريتيكس» (AGPLv3 + قيود إضافية). احرص على تحديثه باستمرار!"
 
 #: pretix/control/views/global_settings.py
 msgid ""
@@ -27816,8 +28005,8 @@ msgid ""
 "You selected that you have no copyleft-licensed plugins installed, but we "
 "found the plugin \"{plugin}\" with license \"{license}\"."
 msgstr ""
-"لقد حددت أنه لا توجد لديك أي مكونات إضافية مرخصة بموجب رخصة «copyleft» مثبتة، "
-"لكننا عثرنا على المكون الإضافي «{plugin}» المرخص برخصة «{license}»."
+"لقد حددت أنه لا توجد لديك أي مكونات إضافية مرخصة بموجب رخصة «copyleft» "
+"مثبتة، لكننا عثرنا على المكون الإضافي «{plugin}» المرخص برخصة «{license}»."
 
 #: pretix/control/views/global_settings.py
 #, python-brace-format
@@ -27949,8 +28138,8 @@ msgid ""
 "functionality, so the product has been disabled instead."
 msgstr ""
 "لم يتسن حذف المنتج لأن بعض القيود (مثل البيانات التي أنشأتها المكونات "
-"الإضافية) لم تسمح بذلك. وقد يؤدي حذفه إلى تعطيل إعداد التقارير أو وظائف أخرى، "
-"لذا تم تعطيل المنتج بدلاً من ذلك."
+"الإضافية) لم تسمح بذلك. وقد يؤدي حذفه إلى تعطيل إعداد التقارير أو وظائف "
+"أخرى، لذا تم تعطيل المنتج بدلاً من ذلك."
 
 #: pretix/control/views/item.py
 msgid "The selected product has been deleted."
@@ -28011,9 +28200,9 @@ msgid ""
 "registered your domain with."
 msgstr ""
 "لم نتمكن من العثور على سجل SPF محدد للنطاق الذي تحاول استخدامه. وهذا يعني أن "
-"هناك احتمالًا كبيرًا جدًّا بأن يتم رفض معظم رسائل البريد الإلكتروني أو تصنيفها على "
-"أنها بريد مزعج. نوصي بشدة بإعداد سجل SPF على هذا النطاق. يمكنك القيام بذلك "
-"من خلال إعدادات DNS لدى المزود الذي سجلت نطاقك عنده."
+"هناك احتمالًا كبيرًا جدًّا بأن يتم رفض معظم رسائل البريد الإلكتروني أو تصنيفها "
+"على أنها بريد مزعج. نوصي بشدة بإعداد سجل SPF على هذا النطاق. يمكنك القيام "
+"بذلك من خلال إعدادات DNS لدى المزود الذي سجلت نطاقك عنده."
 
 #: pretix/control/views/mailsetup.py
 msgid ""
@@ -28023,10 +28212,67 @@ msgid ""
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
 msgstr ""
-"لقد وجدنا سجل SPF محددًا للنطاق الذي تحاول استخدامه، لكنه لا يتضمن خادم البريد "
-"الإلكتروني لهذا النظام. وهذا يعني أن هناك احتمالًا كبيرًا جدًّا بأن يتم رفض معظم "
-"رسائل البريد الإلكتروني أو تصنيفها على أنها بريد مزعج. يجب عليك تحديث إعدادات "
-"DNS لنطاقك لتضمين هذا النظام في سجل SPF."
+"لقد وجدنا سجل SPF محددًا للنطاق الذي تحاول استخدامه، لكنه لا يتضمن خادم "
+"البريد الإلكتروني لهذا النظام. وهذا يعني أن هناك احتمالًا كبيرًا جدًّا بأن يتم "
+"رفض معظم رسائل البريد الإلكتروني أو تصنيفها على أنها بريد مزعج. يجب عليك "
+"تحديث إعدادات DNS لنطاقك لتضمين هذا النظام في سجل SPF."
+
+#: pretix/control/views/mailsetup.py
+#, fuzzy
+#| msgid ""
+#| "We could not find an SPF record set for the domain you are trying to use. "
+#| "This means that there is a very high change most of the emails will be "
+#| "rejected or marked as spam. We strongly recommend setting an SPF record "
+#| "on the domain. You can do so through the DNS settings at the provider you "
+#| "registered your domain with."
+msgid ""
+"We could not find a CNAME record pointing to our DKIM key for domain you are "
+"trying to use. This means that there is a very high change most of the "
+"emails will be rejected or marked as spam. We strongly recommend setting up "
+"DKIM through a CNAME record. You can do so through the DNS settings at the "
+"provider you registered your domain with."
+msgstr ""
+"لم نتمكن من العثور على سجل SPF محدد للنطاق الذي تحاول استخدامه. وهذا يعني أن "
+"هناك احتمالًا كبيرًا جدًّا بأن يتم رفض معظم رسائل البريد الإلكتروني أو تصنيفها "
+"على أنها بريد مزعج. نوصي بشدة بإعداد سجل SPF على هذا النطاق. يمكنك القيام "
+"بذلك من خلال إعدادات DNS لدى المزود الذي سجلت نطاقك عنده."
+
+#: pretix/control/views/mailsetup.py
+#, fuzzy
+#| msgid ""
+#| "We found an SPF record set for the domain you are trying to use, but it "
+#| "does not include this system's email server. This means that there is a "
+#| "very high chance most of the emails will be rejected or marked as spam. "
+#| "You should update the DNS settings of your domain to include this system "
+#| "in the SPF record."
+msgid ""
+"We found a CNAME record for a DKIM key, but it is not pointing to the right "
+"location. This means that there is a very high chance most of the emails "
+"will be rejected or marked as spam. You should update the DNS settings of "
+"your domain."
+msgstr ""
+"لقد وجدنا سجل SPF محددًا للنطاق الذي تحاول استخدامه، لكنه لا يتضمن خادم "
+"البريد الإلكتروني لهذا النظام. وهذا يعني أن هناك احتمالًا كبيرًا جدًّا بأن يتم "
+"رفض معظم رسائل البريد الإلكتروني أو تصنيفها على أنها بريد مزعج. يجب عليك "
+"تحديث إعدادات DNS لنطاقك لتضمين هذا النظام في سجل SPF."
+
+#: pretix/control/views/mailsetup.py
+#, fuzzy
+#| msgid ""
+#| "We found an SPF record set for the domain you are trying to use, but it "
+#| "does not include this system's email server. This means that there is a "
+#| "very high chance most of the emails will be rejected or marked as spam. "
+#| "You should update the DNS settings of your domain to include this system "
+#| "in the SPF record."
+msgid ""
+"We did not find DMARC record for your domain. This means that there is a "
+"very high chance most of the emails will be rejected or marked as spam. You "
+"should update the DNS settings of your domain."
+msgstr ""
+"لقد وجدنا سجل SPF محددًا للنطاق الذي تحاول استخدامه، لكنه لا يتضمن خادم "
+"البريد الإلكتروني لهذا النظام. وهذا يعني أن هناك احتمالًا كبيرًا جدًّا بأن يتم "
+"رفض معظم رسائل البريد الإلكتروني أو تصنيفها على أنها بريد مزعج. يجب عليك "
+"تحديث إعدادات DNS لنطاقك لتضمين هذا النظام في سجل SPF."
 
 #: pretix/control/views/mailsetup.py
 msgid "The verification code was incorrect, please try again."
@@ -28051,8 +28297,8 @@ msgid ""
 "period."
 msgstr ""
 "نوصي بعدم استخدام بريد Google لإرسال رسائل البريد الإلكتروني المتعلقة "
-"بالمعاملات. فإذا حاولت إرسال عدد كبير من رسائل البريد الإلكتروني في فترة زمنية "
-"قصيرة، على سبيل المثال عند إرسال معلومات إلى جميع مشتري التذاكر، فهناك "
+"بالمعاملات. فإذا حاولت إرسال عدد كبير من رسائل البريد الإلكتروني في فترة "
+"زمنية قصيرة، على سبيل المثال عند إرسال معلومات إلى جميع مشتري التذاكر، فهناك "
 "احتمال كبير ألا تقوم Google بتسليم جميع رسائلك، حيث إنها تفرض حدًا أقصى لعدد "
 "الرسائل المسموح بإرسالها في كل فترة زمنية."
 
@@ -28088,7 +28334,8 @@ msgid ""
 "avoid problems during import."
 msgstr ""
 "تحتوي عدة أعمدة في ملف CSV على نفس الاسم، وقد تمت إعادة تسميتها تلقائيًا. "
-"نوصيك بإعادة تسمية هذه الأعمدة في ملفك الأصلي لتجنب حدوث مشاكل أثناء الاستيراد."
+"نوصيك بإعادة تسمية هذه الأعمدة في ملفك الأصلي لتجنب حدوث مشاكل أثناء "
+"الاستيراد."
 
 #: pretix/control/views/modelimport.py
 msgid "The import was successful."
@@ -28484,16 +28731,16 @@ msgid ""
 "Your user account does not have sufficient permission to run this report, "
 "therefore you cannot change it."
 msgstr ""
-"لا يمتلك حساب المستخدم الخاص بك الأذونات الكافية لتشغيل هذا التقرير، ولذلك لا "
-"يمكنك تعديله."
+"لا يمتلك حساب المستخدم الخاص بك الأذونات الكافية لتشغيل هذا التقرير، ولذلك "
+"لا يمكنك تعديله."
 
 #: pretix/control/views/orders.py pretix/control/views/organizer.py
 msgid ""
 "Your user account does not have sufficient permission to run this report, "
 "therefore you cannot schedule it."
 msgstr ""
-"لا يمتلك حساب المستخدم الخاص بك الأذونات الكافية لتشغيل هذا التقرير، ولذلك لا "
-"يمكنك جدولة تنفيذه."
+"لا يمتلك حساب المستخدم الخاص بك الأذونات الكافية لتشغيل هذا التقرير، ولذلك "
+"لا يمكنك جدولة تنفيذه."
 
 #: pretix/control/views/orders.py pretix/control/views/organizer.py
 #, python-brace-format
@@ -28501,8 +28748,8 @@ msgid ""
 "Your export schedule has been saved. The next export will start around "
 "{datetime}."
 msgstr ""
-"تم حفظ جدول التصدير الخاص بك. ستبدأ عملية التصدير التالية في حوالي {datetime}"
-"."
+"تم حفظ جدول التصدير الخاص بك. ستبدأ عملية التصدير التالية في حوالي "
+"{datetime}."
 
 #: pretix/control/views/orders.py pretix/control/views/organizer.py
 msgid "Your export schedule has been saved, but no next export is planned."
@@ -28631,8 +28878,8 @@ msgid ""
 "The team could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
 msgstr ""
-"لم يكن بالإمكان حذف الفريق لأن بعض القيود (مثل البيانات التي أنشأتها المكونات "
-"الإضافية) لا تسمح بذلك."
+"لم يكن بالإمكان حذف الفريق لأن بعض القيود (مثل البيانات التي أنشأتها "
+"المكونات الإضافية) لا تسمح بذلك."
 
 #: pretix/control/views/organizer.py
 msgid "The selected team has been deleted."
@@ -29036,8 +29283,8 @@ msgid ""
 "Please enter the confirmation code we sent to your email address "
 "<strong>{email}</strong>."
 msgstr ""
-"يرجى إدخال رمز التأكيد الذي أرسلناه إلى عنوان بريدك الإلكتروني <strong>{email}"
-"</strong>."
+"يرجى إدخال رمز التأكيد الذي أرسلناه إلى عنوان بريدك الإلكتروني "
+"<strong>{email}</strong>."
 
 #: pretix/control/views/user.py
 msgid "We were unable to verify your confirmation code. Please try again."
@@ -29190,6 +29437,7 @@ msgid "Macao"
 msgstr "ماكاو"
 
 #: pretix/helpers/daterange.py
+#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html
 #: pretix/presale/templates/pretixpresale/organizers/index.html
@@ -29496,7 +29744,8 @@ msgid ""
 "are not a number."
 msgstr ""
 "تعذر تحويل بياناتك وفقًا لطلبك. وقد يكون السبب في ذلك وجود قيم غير صالحة في "
-"قواعد البيانات الخاصة بك، مثل الإجابات على الأسئلة العددية التي لا تتضمن أرقامًا."
+"قواعد البيانات الخاصة بك، مثل الإجابات على الأسئلة العددية التي لا تتضمن "
+"أرقامًا."
 
 #: pretix/plugins/badges/forms.py
 msgid "Template"
@@ -29676,8 +29925,8 @@ msgid ""
 "Please note: special characters other than letters, numbers, and some "
 "punctuation can cause problems with some banks."
 msgstr ""
-"يرجى ملاحظة ما يلي: قد تتسبب الأحرف الخاصة، بخلاف الحروف والأرقام وبعض علامات "
-"الترقيم، في حدوث مشاكل مع بعض البنوك."
+"يرجى ملاحظة ما يلي: قد تتسبب الأحرف الخاصة، بخلاف الحروف والأرقام وبعض "
+"علامات الترقيم، في حدوث مشاكل مع بعض البنوك."
 
 #: pretix/plugins/banktransfer/payment.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html
@@ -29780,8 +30029,8 @@ msgid ""
 "Only allow choosing this payment provider for customers who enter an invoice "
 "address and select \"Business or institutional customer\"."
 msgstr ""
-"لا تسمح باختيار مزود الدفع هذا إلا للعملاء الذين يدخلون عنوان الفاتورة ويختارون "
-"خيار «عميل تجاري أو مؤسسي»."
+"لا تسمح باختيار مزود الدفع هذا إلا للعملاء الذين يدخلون عنوان الفاتورة "
+"ويختارون خيار «عميل تجاري أو مؤسسي»."
 
 #: pretix/plugins/banktransfer/payment.py
 msgid "Please fill out your bank account details."
@@ -30084,8 +30333,8 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid "In test mode, your exports will only contain test mode orders."
 msgstr ""
-"في وضع الاختبار، لن تحتوي عمليات التصدير الخاصة بك إلا على الطلبات الخاصة بوضع "
-"الاختبار."
+"في وضع الاختبار، لن تحتوي عمليات التصدير الخاصة بك إلا على الطلبات الخاصة "
+"بوضع الاختبار."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid ""
@@ -30397,8 +30646,8 @@ msgid ""
 "a different system. Does not included blocked codes or personal data."
 msgstr ""
 "قم بتنزيل جدول بيانات يحتوي على جميع الرموز الشريطية الصالحة لتسجيل الوصول، "
-"على سبيل المثال لاستيرادها إلى نظام آخر. ولا يتضمن هذا الجدول الرموز المحظورة "
-"أو البيانات الشخصية."
+"على سبيل المثال لاستيرادها إلى نظام آخر. ولا يتضمن هذا الجدول الرموز "
+"المحظورة أو البيانات الشخصية."
 
 #: pretix/plugins/checkinlists/exporters.py
 msgid "Check-in log (all scans)"
@@ -30472,11 +30721,6 @@ msgstr ""
 #: pretix/plugins/paypal/payment.py
 msgid "PayPal account"
 msgstr "حساب PayPal"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-#, python-brace-format
-msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
-msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
 #: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
 msgid "Click here for a tutorial on how to obtain the required keys"
@@ -30623,10 +30867,10 @@ msgid ""
 "even need a PayPal account. PayPal is one of the most popular payment "
 "methods world-wide."
 msgstr ""
-"استقبل المدفوعات عبر حساب PayPal الخاص بك. بالإضافة إلى المدفوعات العادية عبر "
-"PayPal، يمكنك الآن أيضًا أن تتيح لعملائك الدفع عبر مجموعة متنوعة من طرق الدفع "
-"المحلية، مثل eps وiDEAL وغيرها الكثير — دون أن يحتاجوا حتى إلى حساب PayPal. "
-"يُعد PayPal أحد أكثر طرق الدفع شيوعًا على مستوى العالم."
+"استقبل المدفوعات عبر حساب PayPal الخاص بك. بالإضافة إلى المدفوعات العادية "
+"عبر PayPal، يمكنك الآن أيضًا أن تتيح لعملائك الدفع عبر مجموعة متنوعة من طرق "
+"الدفع المحلية، مثل eps وiDEAL وغيرها الكثير — دون أن يحتاجوا حتى إلى حساب "
+"PayPal. يُعد PayPal أحد أكثر طرق الدفع شيوعًا على مستوى العالم."
 
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal Merchant ID"
@@ -30655,10 +30899,10 @@ msgid ""
 "PayPal Plus."
 msgstr ""
 "بالإضافة إلى الدفع عبر حساب PayPal، يمكنك أيضًا أن توفر لعملائك خيار الدفع "
-"ببطاقات الائتمان وطرق الدفع المحلية الأخرى مثل eps وiDEAL وغيرها الكثير — حتى "
-"في حالة عدم امتلاكهم لحساب PayPal. وسيتم تحديد طرق الدفع المتاحة بناءً على "
-"موقع المتسوق. بالنسبة للتجار الألمان، يُعد هذا الخيار الخلف المباشر لـ PayPal "
-"Plus."
+"ببطاقات الائتمان وطرق الدفع المحلية الأخرى مثل eps وiDEAL وغيرها الكثير — "
+"حتى في حالة عدم امتلاكهم لحساب PayPal. وسيتم تحديد طرق الدفع المتاحة بناءً "
+"على موقع المتسوق. بالنسبة للتجار الألمان، يُعد هذا الخيار الخلف المباشر لـ "
+"PayPal Plus."
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Disable SEPA Direct Debit"
@@ -30770,8 +31014,8 @@ msgid ""
 "Refunding the amount via PayPal failed: The original payment does not "
 "contain the required information to issue an automated refund."
 msgstr ""
-"فشل رد المبلغ عبر PayPal: لا تحتوي عملية الدفع الأصلية على المعلومات المطلوبة "
-"لإجراء رد تلقائي."
+"فشل رد المبلغ عبر PayPal: لا تحتوي عملية الدفع الأصلية على المعلومات "
+"المطلوبة لإجراء رد تلقائي."
 
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal APM"
@@ -30874,8 +31118,8 @@ msgid ""
 "A PayPal account is required to use this online payment method. Please keep "
 "your account information ready to enter in the next step."
 msgstr ""
-"يلزم وجود حساب PayPal لاستخدام طريقة الدفع هذه عبر الإنترنت. يرجى تجهيز بيانات "
-"حسابك لإدخالها في الخطوة التالية."
+"يلزم وجود حساب PayPal لاستخدام طريقة الدفع هذه عبر الإنترنت. يرجى تجهيز "
+"بيانات حسابك لإدخالها في الخطوة التالية."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html
 msgid ""
@@ -30951,7 +31195,8 @@ msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
 "try again."
 msgstr ""
-"حدث خطأ أثناء الاستلام من PayPal: معلمات الطلب مفقودة. يرجى المحاولة مرة أخرى."
+"حدث خطأ أثناء الاستلام من PayPal: معلمات الطلب مفقودة. يرجى المحاولة مرة "
+"أخرى."
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
@@ -30966,8 +31211,8 @@ msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
 msgstr ""
-"حدث خطأ أثناء الاستلام من PayPal: معلمة الجلسة غير متطابقة. يرجى المحاولة مرة "
-"أخرى."
+"حدث خطأ أثناء الاستلام من PayPal: معلمة الجلسة غير متطابقة. يرجى المحاولة "
+"مرة أخرى."
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
@@ -31034,8 +31279,8 @@ msgid ""
 "the time frame."
 msgstr ""
 "يشمل الإطار الزمني للتقرير بيانات تم إنشاؤها باستخدام إصدار قديم من البرنامج "
-"لم يكن قد قام بعد بتخزين جميع البيانات المطلوبة لإعداد هذا التقرير. ولذلك، قد "
-"يكون التقرير غير دقيق فيما يتعلق بالطلبات التي تم تعديلها خلال هذا الإطار "
+"لم يكن قد قام بعد بتخزين جميع البيانات المطلوبة لإعداد هذا التقرير. ولذلك، "
+"قد يكون التقرير غير دقيق فيما يتعلق بالطلبات التي تم تعديلها خلال هذا الإطار "
 "الزمني."
 
 #: pretix/plugins/reports/accountingreport.py
@@ -31188,14 +31433,24 @@ msgid "Base redirection URLs"
 msgstr "قاعدة عناوين URL لإعادة التوجيه"
 
 #: pretix/plugins/returnurl/views.py
+#, fuzzy
+#| msgid ""
+#| "Redirection will only be allowed to URLs that start with one of these "
+#| "prefixes. Enter one or more allowed URL prefix per line. URL prefixes "
+#| "must include a slash after the hostname."
 msgid ""
 "Redirection will only be allowed to URLs that start with one of these "
-"prefixes. Enter one or more allowed URL prefix per line. URL prefixes must "
-"include a slash after the hostname."
+"prefixes. Enter one allowed URL prefix per line. URL prefixes must include a "
+"slash after the hostname."
 msgstr ""
 "لن يُسمح بإعادة التوجيه إلا إلى عناوين URL التي تبدأ بإحدى هذه البادئات. أدخل "
 "بادئة URL مسموح بها واحدة أو أكثر في كل سطر. يجب أن تتضمن بادئات عناوين URL "
 "شرطة مائلة بعد اسم المضيف."
+
+#: pretix/plugins/returnurl/views.py
+msgid ""
+"All values must be URLs that include at last one slash after the hostname."
+msgstr ""
 
 #: pretix/plugins/sendmail/apps.py
 msgid "Send out emails to all your customers or specific groups of customers."
@@ -31293,7 +31548,8 @@ msgstr "الدفع قيد الانتظار ولكنه تم تأكيده بالف
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/views.py
 msgid "payment pending (except unapproved or already confirmed)"
 msgstr ""
-"الدفع قيد الانتظار (باستثناء المدفوعات غير المعتمدة أو التي تم تأكيدها بالفعل)"
+"الدفع قيد الانتظار (باستثناء المدفوعات غير المعتمدة أو التي تم تأكيدها "
+"بالفعل)"
 
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/views.py
 msgid "pending with payment overdue"
@@ -31512,8 +31768,8 @@ msgid ""
 "This page shows you all mass emails you sent out manually. It does not "
 "include emails sent out automatically."
 msgstr ""
-"تعرض هذه الصفحة جميع رسائل البريد الإلكتروني الجماعية التي أرسلتها يدويًّا. ولا "
-"تشمل الرسائل التي تم إرسالها تلقائيًّا."
+"تعرض هذه الصفحة جميع رسائل البريد الإلكتروني الجماعية التي أرسلتها يدويًّا. "
+"ولا تشمل الرسائل التي تم إرسالها تلقائيًّا."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html
 msgid "Send a new email based on this"
@@ -31654,7 +31910,8 @@ msgid ""
 "yet been sent."
 msgstr ""
 "تم إرسال هذه الرسالة الإلكترونية بالفعل بالنسبة لبعض التواريخ في سلسلتك. ولن "
-"يؤثر تغييرها إلا على التواريخ التي لم يتم إرسال الرسالة الإلكترونية بشأنها بعد."
+"يؤثر تغييرها إلا على التواريخ التي لم يتم إرسال الرسالة الإلكترونية بشأنها "
+"بعد."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html
 msgid "You need to preview your email before you can send it."
@@ -31674,8 +31931,8 @@ msgid ""
 "Your message has been queued and will be sent to the contact addresses of %s "
 "in the next few minutes."
 msgstr ""
-"تم إدراج رسالتك في قائمة الانتظار، وسيتم إرسالها إلى عناوين الاتصال الخاصة بـ "
-"%s خلال الدقائق القليلة القادمة."
+"تم إدراج رسالتك في قائمة الانتظار، وسيتم إرسالها إلى عناوين الاتصال الخاصة "
+"بـ %s خلال الدقائق القليلة القادمة."
 
 #: pretix/plugins/sendmail/views.py
 msgid "Orders or attendees"
@@ -31760,10 +32017,10 @@ msgstr ""
 "يتم عرض المشاركين في الطلبات المدفوعة على دفعات متعددة باستخدام تاريخ الدفعة "
 "الأخيرة. تعكس تواريخ الطلبات الوقت الذي تم فيه تقديم الطلب لأول مرة؛ أما "
 "المشاركون الذين تمت إضافتهم لاحقًا عبر بنود إضافية في الطلب، فيظلون يستخدمون "
-"تاريخ الطلب الأصلي. يشمل المشاركون في الطلبات المقدمة أولئك الموجودين في جميع "
-"حالات الطلب (معلقة، مدفوعة، ملغاة، ومنتهية الصلاحية)؛ أما المشاركون في الطلبات "
-"المدفوعة فيشملون فقط أولئك الموجودين في الطلبات المدفوعة ويستبعدون أولئك "
-"الموجودين في الطلبات الملغاة."
+"تاريخ الطلب الأصلي. يشمل المشاركون في الطلبات المقدمة أولئك الموجودين في "
+"جميع حالات الطلب (معلقة، مدفوعة، ملغاة، ومنتهية الصلاحية)؛ أما المشاركون في "
+"الطلبات المدفوعة فيشملون فقط أولئك الموجودين في الطلبات المدفوعة ويستبعدون "
+"أولئك الموجودين في الطلبات الملغاة."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Attendees by time"
@@ -31992,7 +32249,8 @@ msgid ""
 "usage with pretix."
 msgstr ""
 "سيؤدي الضغط على الزر أعلاه إلى تثبيت تطبيق Stripe الخاص بنا على حسابك، كما "
-"سيقوم بإنشاء مفاتيح API لك بمستوى الأذونات الموصى به للاستخدام الأمثل مع pretix."
+"سيقوم بإنشاء مفاتيح API لك بمستوى الأذونات الموصى به للاستخدام الأمثل مع "
+"pretix."
 
 #: pretix/plugins/stripe/payment.py
 msgid "Secret key"
@@ -32034,10 +32292,10 @@ msgid ""
 "of characters is allowed. We do not recommend entering more than {cnt} "
 "characters into this field."
 msgstr ""
-"سيظهر أي رقم يتم إدخاله هنا في فاتورة بطاقة الائتمان الخاصة بالعميل أو في سجل "
-"معاملات حسابه المصرفي. وسنقوم تلقائيًا بإضافة رمز الطلب أمامه. يرجى ملاحظة أنه، "
-"اعتمادًا على طريقة الدفع، لا يُسمح إلا بعدد محدود جدًّا من الأحرف. ولا نوصي بإدخال "
-"أكثر من {cnt} حرفًا في هذا الحقل."
+"سيظهر أي رقم يتم إدخاله هنا في فاتورة بطاقة الائتمان الخاصة بالعميل أو في "
+"سجل معاملات حسابه المصرفي. وسنقوم تلقائيًا بإضافة رمز الطلب أمامه. يرجى "
+"ملاحظة أنه، اعتمادًا على طريقة الدفع، لا يُسمح إلا بعدد محدود جدًّا من الأحرف. "
+"ولا نوصي بإدخال أكثر من {cnt} حرفًا في هذا الحقل."
 
 #: pretix/plugins/stripe/payment.py
 msgid "Credit card payments"
@@ -32074,10 +32332,10 @@ msgid ""
 "some cases. Please only activate this payment method if your payment term "
 "allows for this lag."
 msgstr ""
-"لا تتم معالجة مدفوعات الخصم المباشر SEPA عبر Stripe <strong>فورًا</strong>، بل "
-"قد تستغرق ما يصل إلى <strong>14 يومًا</strong> حتى يتم تأكيدها في بعض الحالات. "
-"يرجى تفعيل طريقة الدفع هذه فقط إذا كانت شروط الدفع الخاصة بك تسمح بهذا "
-"التأخير."
+"لا تتم معالجة مدفوعات الخصم المباشر SEPA عبر Stripe <strong>فورًا</strong>، "
+"بل قد تستغرق ما يصل إلى <strong>14 يومًا</strong> حتى يتم تأكيدها في بعض "
+"الحالات. يرجى تفعيل طريقة الدفع هذه فقط إذا كانت شروط الدفع الخاصة بك تسمح "
+"بهذا التأخير."
 
 #: pretix/plugins/stripe/payment.py
 msgid "SEPA Creditor Mandate Name"
@@ -32113,9 +32371,9 @@ msgid ""
 "Currently only available for charges in GBP and customers with UK bank "
 "accounts, and in private preview for France and Germany."
 msgstr ""
-"هذه الخدمة متاحة حاليًا فقط للمعاملات بالجنيه الإسترليني وللعملاء الذين يمتلكون "
-"حسابات مصرفية في المملكة المتحدة، كما أنها في مرحلة العرض المسبق الخاص في "
-"فرنسا وألمانيا."
+"هذه الخدمة متاحة حاليًا فقط للمعاملات بالجنيه الإسترليني وللعملاء الذين "
+"يمتلكون حسابات مصرفية في المملكة المتحدة، كما أنها في مرحلة العرض المسبق "
+"الخاص في فرنسا وألمانيا."
 
 #: pretix/plugins/stripe/payment.py
 msgid "WeChat Pay"
@@ -32283,9 +32541,9 @@ msgid ""
 "German banks, usually after one-time activation. Please keep your online "
 "banking account and login information available."
 msgstr ""
-"تُعد «جيروباي» طريقة دفع عبر الإنترنت متاحة لجميع عملاء معظم البنوك الألمانية، "
-"وعادةً ما يتطلب الأمر تفعيلها لمرة واحدة. يرجى تجهيز حسابك المصرفي عبر الإنترنت "
-"ومعلومات تسجيل الدخول الخاصة بك."
+"تُعد «جيروباي» طريقة دفع عبر الإنترنت متاحة لجميع عملاء معظم البنوك "
+"الألمانية، وعادةً ما يتطلب الأمر تفعيلها لمرة واحدة. يرجى تجهيز حسابك المصرفي "
+"عبر الإنترنت ومعلومات تسجيل الدخول الخاصة بك."
 
 #: pretix/plugins/stripe/payment.py
 msgid "unknown name"
@@ -32457,8 +32715,8 @@ msgid ""
 "This payment method is available to PromptPay users in Thailand. Please have "
 "your app ready."
 msgstr ""
-"طريقة الدفع هذه متاحة لمستخدمي PromptPay في تايلاند. يرجى تجهيز التطبيق الخاص "
-"بك."
+"طريقة الدفع هذه متاحة لمستخدمي PromptPay في تايلاند. يرجى تجهيز التطبيق "
+"الخاص بك."
 
 #: pretix/plugins/stripe/payment.py
 msgid "TWINT via Stripe"
@@ -32490,9 +32748,9 @@ msgid ""
 "banking institutions support WERO either through their native banking apps "
 "or through the WERO wallet app. Please have you app ready."
 msgstr ""
-"طريقة الدفع هذه متاحة لمستخدمي الخدمات المصرفية عبر الإنترنت في أوروبا، الذين "
-"تدعم مؤسساتهم المصرفية خدمة WERO إما من خلال تطبيقاتهم المصرفية الأصلية أو من "
-"خلال تطبيق محفظة WERO. يرجى تجهيز التطبيق الخاص بك."
+"طريقة الدفع هذه متاحة لمستخدمي الخدمات المصرفية عبر الإنترنت في أوروبا، "
+"الذين تدعم مؤسساتهم المصرفية خدمة WERO إما من خلال تطبيقاتهم المصرفية "
+"الأصلية أو من خلال تطبيق محفظة WERO. يرجى تجهيز التطبيق الخاص بك."
 
 #: pretix/plugins/stripe/signals.py
 msgid "Charge succeeded."
@@ -32666,10 +32924,10 @@ msgid ""
 "statement that you can obtain from your bank. You agree to receive "
 "notifications for future debits up to 2 days before they occur."
 msgstr ""
-"من خلال تقديم معلومات الدفع الخاصة بك وتأكيد هذه الدفعة، فإنك تفوض (أ) %"
-"(sepa_creditor_name)s وشركة Stripe، مزود خدمة الدفع لدينا و/أو PPRO، مزود "
-"الخدمة المحلي التابع لها، بإرسال تعليمات إلى مصرفك لخصم المبلغ من حسابك، و"
-"(ب) مصرفك بخصم المبلغ من حسابك وفقًا لتلك التعليمات. كجزء من حقوقك، يحق لك "
+"من خلال تقديم معلومات الدفع الخاصة بك وتأكيد هذه الدفعة، فإنك تفوض (أ) "
+"%(sepa_creditor_name)s وشركة Stripe، مزود خدمة الدفع لدينا و/أو PPRO، مزود "
+"الخدمة المحلي التابع لها، بإرسال تعليمات إلى مصرفك لخصم المبلغ من حسابك، "
+"و(ب) مصرفك بخصم المبلغ من حسابك وفقًا لتلك التعليمات. كجزء من حقوقك، يحق لك "
 "الحصول على استرداد من البنك الذي تتعامل معه بموجب شروط وأحكام الاتفاقية "
 "المبرمة بينك وبين البنك. يجب المطالبة بالاسترداد في غضون 8 أسابيع بدءًا من "
 "تاريخ خصم المبلغ من حسابك. يتم شرح حقوقك في بيان يمكنك الحصول عليه من البنك "
@@ -33348,8 +33606,8 @@ msgid ""
 "You are currently using the time machine. The ticket shop is rendered as if "
 "it were %(datetime)s."
 msgstr ""
-"أنت تستخدم حالياً «آلة الزمن». يتم عرض متجر التذاكر كما لو كان في %(datetime)"
-"s."
+"أنت تستخدم حالياً «آلة الزمن». يتم عرض متجر التذاكر كما لو كان في "
+"%(datetime)s."
 
 #: pretix/presale/templates/pretixpresale/event/base.html
 #, python-format
@@ -33358,8 +33616,9 @@ msgid ""
 "href=\"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-"
 "hidden=\"true\"></span>time machine</a>."
 msgstr ""
-"لعرض متجرك في أوقات مختلفة، يمكنك تفعيل <a href=\"%(time_machine_link)s\">"
-"<span class=\"fa fa-clock-o\" aria-hidden=\"true\"></span>آلة الزمن</a>."
+"لعرض متجرك في أوقات مختلفة، يمكنك تفعيل <a "
+"href=\"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-"
+"hidden=\"true\"></span>آلة الزمن</a>."
 
 #: pretix/presale/templates/pretixpresale/event/base.html
 msgid ""
@@ -33517,8 +33776,8 @@ msgid ""
 "approval by the event organizer before it can be confirmed and forms a valid "
 "contract."
 msgstr ""
-"بعد إرسال طلبك باستخدام الزر أدناه، سيتطلب الأمر موافقة منظم الحدث قبل أن يتم "
-"تأكيده ويصبح عقدًا ساري المفعول."
+"بعد إرسال طلبك باستخدام الزر أدناه، سيتطلب الأمر موافقة منظم الحدث قبل أن "
+"يتم تأكيده ويصبح عقدًا ساري المفعول."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 msgid ""
@@ -33859,8 +34118,8 @@ msgid ""
 "There are products selected in this add-on category that currently cannot be "
 "changed because they are not on sale:"
 msgstr ""
-"هناك منتجات مختارة في فئة الإضافات هذه لا يمكن تغييرها حاليًا لأنها غير معروضة "
-"للبيع:"
+"هناك منتجات مختارة في فئة الإضافات هذه لا يمكن تغييرها حاليًا لأنها غير "
+"معروضة للبيع:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 msgid "There are no add-ons available for this product."
@@ -34049,9 +34308,9 @@ msgid ""
 "exclusive price. Due to rounding, this caused a small change to the total "
 "price."
 msgstr ""
-"نظرًا لأنك أدخلت عنوانًا تجاريًّا، فقد تم حساب السعر استنادًا إلى السعر غير الشامل "
-"لضريبة القيمة المضافة. وقد أدى ذلك، بسبب عملية التقريب، إلى حدوث تغيير طفيف "
-"في السعر الإجمالي."
+"نظرًا لأنك أدخلت عنوانًا تجاريًّا، فقد تم حساب السعر استنادًا إلى السعر غير "
+"الشامل لضريبة القيمة المضافة. وقد أدى ذلك، بسبب عملية التقريب، إلى حدوث "
+"تغيير طفيف في السعر الإجمالي."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, python-format
@@ -34619,8 +34878,8 @@ msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email to the address you specified containing the link."
 msgstr ""
-"يرجى حفظ الرابط التالي إذا كنت ترغب في الوصول إلى طلبك لاحقًا. كما أرسلنا إليك "
-"رسالة بريد إلكتروني إلى العنوان الذي حددته تحتوي على هذا الرابط."
+"يرجى حفظ الرابط التالي إذا كنت ترغب في الوصول إلى طلبك لاحقًا. كما أرسلنا "
+"إليك رسالة بريد إلكتروني إلى العنوان الذي حددته تحتوي على هذا الرابط."
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 #: pretix/presale/templates/pretixpresale/event/position.html
@@ -35017,8 +35276,8 @@ msgid ""
 "changes, please get in touch with the person who bought the ticket "
 "(%(email)s)."
 msgstr ""
-"لا يمكنك إجراء سوى بعض التغييرات على هذه التذكرة بنفسك. لإجراء تغييرات إضافية، "
-"يرجى الاتصال بالشخص الذي اشترى التذكرة (%(email)s)."
+"لا يمكنك إجراء سوى بعض التغييرات على هذه التذكرة بنفسك. لإجراء تغييرات "
+"إضافية، يرجى الاتصال بالشخص الذي اشترى التذكرة (%(email)s)."
 
 #: pretix/presale/templates/pretixpresale/event/position.html
 #: pretix/presale/templates/pretixpresale/event/position_change.html
@@ -35031,8 +35290,8 @@ msgid ""
 "Please select the desired changes to your ticket. Note that you can only "
 "perform changes that do not change the total price of the ticket."
 msgstr ""
-"يرجى تحديد التغييرات التي ترغب في إجرائها على تذكرتك. يرجى ملاحظة أنه لا يمكنك "
-"إجراء سوى التغييرات التي لا تؤثر على السعر الإجمالي للتذكرة."
+"يرجى تحديد التغييرات التي ترغب في إجرائها على تذكرتك. يرجى ملاحظة أنه لا "
+"يمكنك إجراء سوى التغييرات التي لا تؤثر على السعر الإجمالي للتذكرة."
 
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html
 msgid "Please confirm the following changes to your ticket."
@@ -35070,8 +35329,8 @@ msgid ""
 "the shop that affect quotas, such as the validity period of carts and "
 "vouchers."
 msgstr ""
-"يرجى ملاحظة أن التوقيت المعدل لا يؤخذ في الاعتبار فيما يتعلق بجوانب المتجر التي "
-"تؤثر على الحصص، مثل فترة صلاحية سلال التسوق والقسائم."
+"يرجى ملاحظة أن التوقيت المعدل لا يؤخذ في الاعتبار فيما يتعلق بجوانب المتجر "
+"التي تؤثر على الحصص، مثل فترة صلاحية سلال التسوق والقسائم."
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html
 msgid "Enable time machine"
@@ -35139,8 +35398,8 @@ msgid ""
 "guarantee that you will receive a certain number of tickets."
 msgstr ""
 "يرجى ملاحظة أنك ستحصل على تذكرة واحدة فقط. إذا كنت بحاجة إلى عدة تذاكر، فيجب "
-"عليك إضافة اسمك إلى قائمة الانتظار عدة مرات. ولا يوجد ضمان بأنك ستحصل على عدد "
-"معين من التذاكر."
+"عليك إضافة اسمك إلى قائمة الانتظار عدة مرات. ولا يوجد ضمان بأنك ستحصل على "
+"عدد معين من التذاكر."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html
 msgid ""
@@ -35334,8 +35593,8 @@ msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
 msgstr ""
-"ملفات تعريف الارتباط الوظيفية (مثل سلة التسوق، وتسجيل الدخول، والدفع، وتفضيلات "
-"اللغة) وملفات تعريف الارتباط التقنية (مثل الأغراض الأمنية)"
+"ملفات تعريف الارتباط الوظيفية (مثل سلة التسوق، وتسجيل الدخول، والدفع، "
+"وتفضيلات اللغة) وملفات تعريف الارتباط التقنية (مثل الأغراض الأمنية)"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgctxt "cookie_usage"
@@ -35370,8 +35629,8 @@ msgid ""
 "Please tick a checkbox or enter a quantity for one of the ticket types to "
 "add to the cart."
 msgstr ""
-"يرجى تحديد خانة الاختيار أو إدخال الكمية المطلوبة لأحد أنواع التذاكر لإضافتها "
-"إلى سلة التسوق."
+"يرجى تحديد خانة الاختيار أو إدخال الكمية المطلوبة لأحد أنواع التذاكر "
+"لإضافتها إلى سلة التسوق."
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html
 #, python-format
@@ -35438,7 +35697,8 @@ msgstr "الأحداث في %(month)s"
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html
 msgid "Note that the events in this view are in different timezones."
-msgstr "يرجى ملاحظة أن الأحداث الواردة في هذه الشاشة تقع في مناطق زمنية مختلفة."
+msgstr ""
+"يرجى ملاحظة أن الأحداث الواردة في هذه الشاشة تقع في مناطق زمنية مختلفة."
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html
 #, python-format
@@ -35562,9 +35822,9 @@ msgid ""
 "You started logging in from a link opened inside an app (such as Instagram "
 "or an email app), and then continued the login in your main browser."
 msgstr ""
-"لقد بدأت عملية تسجيل الدخول من خلال رابط تم فتحه داخل أحد التطبيقات (مثل «"
-"إنستغرام» أو تطبيق البريد الإلكتروني)، ثم أكملت عملية تسجيل الدخول في متصفحك "
-"الرئيسي."
+"لقد بدأت عملية تسجيل الدخول من خلال رابط تم فتحه داخل أحد التطبيقات (مثل "
+"«إنستغرام» أو تطبيق البريد الإلكتروني)، ثم أكملت عملية تسجيل الدخول في "
+"متصفحك الرئيسي."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "You refreshed the page or used the back button during login."
@@ -35601,7 +35861,8 @@ msgid ""
 "apps part-way through."
 msgstr ""
 "ابدأ عملية الدفع أو تسجيل الدخول من جديد وأكملها في نفس نافذة المتصفح، دون "
-"تحديث الصفحة أو فتح علامات تبويب جديدة أو التبديل بين التطبيقات أثناء العملية."
+"تحديث الصفحة أو فتح علامات تبويب جديدة أو التبديل بين التطبيقات أثناء "
+"العملية."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
@@ -35772,7 +36033,8 @@ msgstr ""
 #: pretix/presale/views/cart.py
 msgid ""
 "The gift card has been saved to your cart. Please continue your checkout."
-msgstr "تم حفظ بطاقة الهدية في سلة التسوق الخاصة بك. يرجى متابعة إجراءات الدفع."
+msgstr ""
+"تم حفظ بطاقة الهدية في سلة التسوق الخاصة بك. يرجى متابعة إجراءات الدفع."
 
 #: pretix/presale/views/cart.py
 msgid "Your cart has been updated."
@@ -35876,8 +36138,8 @@ msgid ""
 "We were unable to use your login since the email address {email} is already "
 "used for a different account in this system."
 msgstr ""
-"لم نتمكن من استخدام بيانات تسجيل الدخول الخاصة بك لأن عنوان البريد الإلكتروني "
-"{email} مستخدم بالفعل لحساب آخر في هذا النظام."
+"لم نتمكن من استخدام بيانات تسجيل الدخول الخاصة بك لأن عنوان البريد "
+"الإلكتروني {email} مستخدم بالفعل لحساب آخر في هذا النظام."
 
 #: pretix/presale/views/event.py
 msgid "Unknown event code or not authorized to access this event."
@@ -36042,8 +36304,8 @@ msgid ""
 "No ticket types are available for the waiting list, have a look at the "
 "ticket shop instead."
 msgstr ""
-"لا توجد أنواع تذاكر متاحة لقائمة الانتظار، يرجى الاطلاع على متجر التذاكر بدلاً من "
-"ذلك."
+"لا توجد أنواع تذاكر متاحة لقائمة الانتظار، يرجى الاطلاع على متجر التذاكر "
+"بدلاً من ذلك."
 
 #: pretix/presale/views/waiting.py
 msgid "Waiting lists are disabled for this event."
@@ -36118,6 +36380,20 @@ msgstr "الوصول إلى الكتابة"
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr "كوسوفو"
+
+#~ msgid "All actions"
+#~ msgstr "جميع الإجراءات"
+
+#, python-brace-format
+#~ msgid ""
+#~ "You cannot accept the invitation for \"{}\" as you already are part of "
+#~ "this team."
+#~ msgstr "لا يمكنك قبول الدعوة ل \"{}\" كما كنت بالفعل جزءا من هذا الفريق."
+
+#, python-brace-format
+#~ msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
+#~ msgstr ""
+#~ "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
 #~ msgid "Account invitation"
 #~ msgstr "دعوة إلى فتح حساب"
