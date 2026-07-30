@@ -19,23 +19,19 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.apps import AppConfig
-from django.utils.translation import gettext_lazy as _
 
-from pretix import __version__ as version
+from pretix.base.signals import register_ticket_outputs, register_global_settings, EventPluginSignal
+from .ticketoutput import OUTPUTS
 
+def connect_signals():
+    for output in OUTPUTS:
+        # DIY functools.partial to make get_defining_app happy
+        def get_register_func(o):
+            def register(sender, **kwargs):
+                return o
+            return register
+        register_ticket_outputs.connect(get_register_func(output), dispatch_uid=f"wallet_output_{output.identifier}")
+        if hasattr(output, "get_global_settings"):
+            register_global_settings.connect(output.get_global_settings, dispatch_uid=f"wallet_global_settings_{output.identifier}")
 
-class WalletApp(AppConfig):
-    name = 'pretix.plugins.wallet'
-    verbose_name = _("wallet")
-
-    class PretixPluginMeta:
-        name = _("wallet")
-        author = _("the pretix team")
-        version = version
-        category = 'FORMAT'
-        description = _("Issue wallet passes for tickets (e.g. apple wallet, google wallet)")
-
-    def ready(self):
-        from . import receivers  # NOQA
-
+connect_signals()

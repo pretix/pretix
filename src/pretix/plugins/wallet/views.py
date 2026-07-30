@@ -40,7 +40,7 @@ def get_editor_placeholders(event):
         context = WalletPlaceholderContext(event=event, order=p.order, order_position=p)
         placeholders = {
             t: {
-                pid: {"label": str(p.label), "sample": str(context.render_sample(p))}
+                pid: {"label": str(p.label), "sample": str(context.render_sample(p)), "required_context": list(sorted(p.required_context))}
                 for pid, p in ps.items()
             }
             for t, ps in get_wallet_placeholders(event).items()
@@ -76,7 +76,7 @@ class LayoutEditorView(LayoutDetailView):
                 "identifier": platform.identifier,
                 "name": platform.name,
                 "styles": {
-                    style.identifier: style.asdict()
+                    style.identifier: style(self.request.event, None).asdict()
                     for style in AVAILABLE_STYLES.get(platform.identifier)
                 },
             }
@@ -174,7 +174,7 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
             layout = style(event=event, layout=layout)
             layout.validate()
 
-            fname, mimet, data = platform.generate(layout, p)
+            fname, mimet, data = layout.generate(p)
             resp = HttpResponse(data, content_type=mimet)
             ftype = fname.split(".")[-1]
             if not mimet.startswith("text/"):
