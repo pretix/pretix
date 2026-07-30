@@ -6,7 +6,7 @@ import { i18nstringLocalize } from "../../helpers";
 const store = inject(StoreKey)!;
 
 const props = defineProps<{
-	config: PreviewFieldgroup;
+	config: PredefinedFieldGroupConfig;
 	style_def: PredefinedFieldGroupDefinition;
 }>();
 
@@ -17,10 +17,10 @@ const isActive = computed(
 </script>
 
 <template lang="pug">
-    div.fieldgroup-container(v-if="isActive" :style="{'flex-grow': config.relSize, 'flex-direction': config.direction || 'row'}")
-        div.fieldgroup-item(v-for="{ label, content } of config.sample")
-            div.fieldgroup-label.nowrap(v-if="!!label") {{ label }}
-            div.nowrap.content(v-if="!!content" :class="config.display") {{ content }}
+	div.fieldgroup-container(v-if="isActive" :style="{'flex-grow': config.relSize, 'flex-direction': config.direction || 'row'}")
+		div.fieldgroup-item(v-for="{ label, content } of config.sample")
+			div.fieldgroup-label.nowrap(v-if="!!label") {{ i18nstringLocalize(label) }}
+			div.nowrap.content(v-if="!!content" :class="config.display") {{ i18nstringLocalize(content) }}
 
 
 </template>

@@ -1,3 +1,5 @@
+from i18nfield.fields import LazyI18nString
+
 from pretix.base.models import Event, OrderPosition
 
 from .base import (
@@ -186,11 +188,15 @@ class GoogleWalletStyle(PassStyle):
         comms = Comms(self.event.settings.get("wallet_google_credentials").read())
 
         class_object = self._generate_class()
-        ticket_object = self._generate_object(op, class_id=class_object['id'])
+        ticket_object = self._generate_object(op, class_id=class_object["id"])
 
         # TODO: privacy screen
-        class_object = comms.put_item(ClassType.eventTicketClass, class_object['id'], class_object)
-        ticket_object = comms.put_item(ObjectType.eventTicketObject, ticket_object['id'], ticket_object)
+        class_object = comms.put_item(
+            ClassType.eventTicketClass, class_object["id"], class_object
+        )
+        ticket_object = comms.put_item(
+            ObjectType.eventTicketObject, ticket_object["id"], ticket_object
+        )
 
         generated_jwt = comms.sign_jwt(
             ButtonJWT(
@@ -201,8 +207,7 @@ class GoogleWalletStyle(PassStyle):
             )
         )
 
-        return "https://pay.google.com/gp/v/save/%s" % generated_jwt
-
+        return 'googlepaypass', 'text/uri-list', 'https://pay.google.com/gp/v/save/%s' % generated_jwt
 
 class GoogleWalletEventTicket(GoogleWalletStyle):
     identifier = "event"
@@ -219,6 +224,8 @@ class GoogleWalletEventTicket(GoogleWalletStyle):
                 )
             ],
         ),
+        PredefinedFieldGroup(identifier="venue", name=_("Venue")),
+        PredefinedFieldGroup(identifier="date", name=_("Date")),
         PredefinedFieldGroup(identifier="seating", name=_("Seating")),
         TextFieldGroup(
             identifier="code",
@@ -230,46 +237,75 @@ class GoogleWalletEventTicket(GoogleWalletStyle):
                     content="secret",
                 )
             ],
+            context_args={"event", "order", "order_position"},
         ),
     ]
-    preview_layout = [
-        [
-            {
-                "children": [
-                    {"fieldgroup": "logo", "relSize": 1},
-                    {
-                        "value": "issuerName",
-                        "relSize": 3,
-                        "display": ["large", "centered"],
-                    },
-                ]
-            },
-            {
-                "children": [
-                    {"value": "venueName", "display": "small"},
-                    {"value": "eventName", "display": "large"},
-                ],
-                "direction": "column",
-            },
-            {
-                "children": [
-                    {"value": "01/01/1970", "label": "Date"},
-                    {"value": "12:34", "label": "Time"},
-                ]
-            },
-            {"fieldgroup": "seating",
-             "sample": [
-                    {"content": "5", "label": "Row"},
-                    {"content": "2", "label": "Seat"},
-                ]
-            },
-            {"fieldgroup": "code"},
+
+    @property
+    def preview_layout(self):
+        return [
+            [
+                {
+                    "children": [
+                        {"fieldgroup": "logo", "relSize": 1},
+                        {
+                            "value": str(self.event.organizer.name),
+                            "relSize": 3,
+                            "display": ["large", "centered"],
+                        },
+                    ]
+                },
+                {
+                    "children": [
+                        {
+                            "fieldgroup": "venue",
+                            "sample": [
+                                {"content": self.venue()[0], "label": ""},
+                            ],
+                        },
+                        {"value": str(self.event.name), "display": "large"},
+                    ],
+                    "direction": "column",
+                    "display": ["tight"]
+                },
+                {
+                    "fieldgroup": "date",
+                    "sample": [
+                        {"content": "01/01/1970", "label": "Date"},
+                        {"content": "12:34", "label": "Time"},
+                    ],
+                },
+                {
+                    "fieldgroup": "seating",
+                    "sample": [
+                        {"content": "5", "label": "Row"},
+                        {"content": "2", "label": "Seat"},
+                    ],
+                },
+                {"fieldgroup": "code"},
+            ]
         ]
-    ]
+
+    def venue(self):
+        if self.event.location:
+            name = {}
+            address = {}
+
+            for key, value in  self.event.location.data.items():
+                lines = value.splitlines()
+                name[key] = lines[0]
+                # We must provide at least one address line each for the name and address - no way around it.
+                if len(lines) > 1:
+                    address[key] = '\n'.join(value.splitlines()[1:])
+                else:
+                    address[key] = lines[0]
+
+            return name, address
+        return None, None
 
     def _generate_object(self, op: OrderPosition, class_id: str):
         output_object = super()._generate_object(op, class_id)
-
+        fields = self.get_pass_fields(op)
         if fields["code"]:
             output_object.barcode(
                 Barcode.qrCode, fields["code"][0]["value"], fields["code"][0]["value"]

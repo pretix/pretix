@@ -7,13 +7,11 @@ import { StoreKey } from "../walletStore";
 const store = inject(StoreKey)!
 const gettext = (window as any).gettext
 
-const entry = defineModel<FieldEntry>({ required: true })
+const props = defineProps<{
+	placeholderChoices: [string|null, string][];
+}>();
 
-const selectChoices = computed(() =>{
-    const choices = Object.entries(store.variables.text).map(([k,v]): [string, string] => [k, v.label])
-    choices.push(["other", gettext("Other…")])
-    return choices
-});
+const entry = defineModel<FieldEntry>({ required: true })
 
 const selection = computed({
     get() {
@@ -53,7 +51,7 @@ const textContent = computed({
     .i18n-form-group
         Select(
             v-model="selection"
-            :choices="selectChoices"
+            :choices="placeholderChoices"
         )
         I18nInput(v-model="textContent" v-if="selection === 'other'" :locales="store.locales")
 </template>
