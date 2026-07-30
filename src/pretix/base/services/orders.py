@@ -48,7 +48,7 @@ from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
-from django.db import models, transaction
+from django.db import transaction
 from django.db.models import (
     Case, Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, QuerySet,
     Subquery, Sum, Value, When,
