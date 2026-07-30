@@ -27,8 +27,6 @@ from pretix.base.models import LoggedModel, OrderPosition
 from django_scopes import ScopedManager
 from django.core.exceptions import ValidationError
 
-from pretix.plugins.wallet.styles import get_style
-from pretix.plugins.wallet.styles.base import PassStyle
 
 
 class WalletLayout(LoggedModel):
@@ -68,6 +66,8 @@ class WalletPlatformLayout(LoggedModel):
 
     @property
     def pass_layout(self):
+        from pretix.plugins.wallet.styles import get_style
+
         style = get_style(self.platform, self.style)
         if style:
             return style(event=self.parent.event, layout=self.layout)

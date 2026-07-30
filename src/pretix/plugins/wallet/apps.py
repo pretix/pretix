@@ -37,5 +37,5 @@ class WalletApp(AppConfig):
         description = _("Issue wallet passes for tickets (e.g. apple wallet, google wallet)")
 
     def ready(self):
-        from . import signals  # NOQA
+        from . import receivers  # NOQA
 
