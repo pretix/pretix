@@ -9,14 +9,20 @@ const props = defineProps<{
 </script>
 
 <template lang="pug">
-    div.preview-row(v-if="'children' in config" :style="{flexDirection: config.direction || 'row'}")
-        RowPreview(v-for="child of config.children" :config="child")
+    div.preview-row(v-if="'children' in config" :style="{ flexDirection: config.direction || 'row' }" :class="config.display")
+        RowPreview(v-for="child of config.children" :config="child" )
     FieldgroupPreview(v-else-if="'fieldgroup' in config" :config="config")
     FixedPreview(v-else-if="'value' in config" :config="config")
 
 </template>
 <style lang="css" scoped>
 .preview-row {
-width: 100%; display: flex; gap: 1em; display: flex
+    width: 100%;
+    display: flex;
+    gap: 1em;
+    display: flex
+}
+.tight {
+    gap: 0;
 }
 </style>

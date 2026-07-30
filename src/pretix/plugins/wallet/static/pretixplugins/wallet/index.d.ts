@@ -19,6 +19,7 @@ type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
 	display: FieldGroupDisplay;
 	min_entries: number | null;
 	max_entries: number | null;
+	context_args: string[]
 };
 
 type PredefinedFieldGroupDefinition = BaseFieldGroupDefinition & {
@@ -52,6 +53,7 @@ type Style = {
 type Variable = {
 	label: string;
 	sample: string;
+	required_context: string[];
 };
 
 type Platform = {
