@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-07-28 16:02+0000\n"
+"PO-Revision-Date: 2026-07-30 18:31+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1388,10 +1388,8 @@ msgid "Membership type"
 msgstr "Mitgliedschafts-Typ"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "Purchase time"
 msgid "Purchase ticket"
-msgstr "Kaufuhrzeit"
+msgstr "Kaufticket"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
 #: pretix/base/exporters/waitinglist.py pretix/base/forms/questions.py
@@ -1408,10 +1406,8 @@ msgid "Start date"
 msgstr "Beginn"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "Start time from"
 msgid "Start time"
-msgstr "Beginn ab"
+msgstr "Start"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
 #: pretix/base/exporters/waitinglist.py pretix/base/models/memberships.py
@@ -1424,10 +1420,8 @@ msgid "End date"
 msgstr "Ende"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "End: %(time)s"
 msgid "End time"
-msgstr "Ende: %(time)s Uhr"
+msgstr "Ende"
 
 #: pretix/base/exporters/dekodi.py pretix/base/exporters/invoices.py
 msgctxt "export_category"
@@ -4663,10 +4657,6 @@ msgid "This event is remote or partially remote."
 msgstr "Diese Veranstaltung findet ganz oder teilweise remote statt."
 
 #: pretix/base/models/event.py
-#, fuzzy
-#| msgid ""
-#| "This will be used to let users know if the event is in a different "
-#| "timezone and let’s us calculate users’ local times."
 msgid ""
 "This will be used to let users know if the event is in a different timezone, "
 "and to let us calculate the local time of a user."
@@ -7621,15 +7611,12 @@ msgstr ""
 "versuchen."
 
 #: pretix/base/payment.py
-#, fuzzy
-#| msgid ""
-#| "This payment provider does not exist or the respective plugin is disabled."
 msgid ""
 "This payment provider exists for historical purposes only and is no longer "
 "usable."
 msgstr ""
-"Diese Zahlungsmethode existiert nicht oder die entsprechende Erweiterung ist "
-"deaktiviert."
+"Diese Zahlungsmethode existiert nur zur Darstellung historischer Zahlungen "
+"und kann nicht mehr verwendet werden."
 
 #: pretix/base/pdf.py
 msgid "Ticket code (barcode content)"
@@ -9542,15 +9529,11 @@ msgstr ""
 "wurde, nicht ändern."
 
 #: pretix/base/services/orders.py
-#, fuzzy
-#| msgid ""
-#| "You cannot change the price of a position that has been used to issue a "
-#| "gift card."
 msgid ""
 "You cannot change the ticket secret of a position that has been used to "
 "issue a gift card."
 msgstr ""
-"Du kannst den Preis einer Position, aus der ein Wertgutschein erstellt "
+"Du kannst den Ticketcode einer Position, aus der ein Wertgutschein erstellt "
 "wurde, nicht ändern."
 
 #: pretix/base/services/orders.py
@@ -15288,10 +15271,8 @@ msgid "Source"
 msgstr "Quelle"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "All vouchers"
 msgid "All sources"
-msgstr "Alle Gutscheine"
+msgstr "Alle Quellen"
 
 #: pretix/control/forms/filter.py
 msgid "Team actions"
@@ -15302,16 +15283,12 @@ msgid "Customer actions"
 msgstr "Kunden-Aktionen"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Device status"
 msgid "Device actions"
-msgstr "Gerätestatus"
+msgstr "Geräte-Aktionen"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Order email"
 msgid "User email"
-msgstr "E-Mail-Adresse der Bestellung"
+msgstr "E-Mail-Adresse des Nutzers"
 
 #: pretix/control/forms/filter.py pretix/control/navigation.py
 msgid "All users"
@@ -16849,12 +16826,11 @@ msgid ""
 "because at least one of the selected vouchers has already been redeemed "
 "%(max_redeemed)s times."
 msgstr ""
+"Du kannst die maximale Anzahl Einlösungen nicht auf %(max_usages)s "
+"reduzieren, weil mindestens einer der gewählten Gutscheine bereits %"
+"(max_redeemed)s mal eingelöst wurde."
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid ""
-#| "You cannot create a voucher that blocks quota as the selected product or "
-#| "quota is currently sold out or completely reserved."
 msgid ""
 "You cannot create a voucher that allows selection of a quota but has no date "
 "selected."
@@ -16863,25 +16839,22 @@ msgstr ""
 "Produkt oder das Kontingent derzeit ausverkauft oder komplett reserviert ist."
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid "The selected product does not allow to select a seat."
 msgid "The selected quota does not match the selected subevent."
-msgstr "Das ausgewählte Produkt erlaubt keine Sitzplatzwahl."
+msgstr "Das ausgewählte Kontingent passt nicht zum gewählten Termin."
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid ""
-#| "There is not enough quota available on quota \"{}\" to perform the "
-#| "operation."
 msgid "There is no sufficient quota available to perform this change."
 msgstr ""
-"Das Kontingent \"{}\" hat nicht genug freie Kapazität für diese Änderung."
+"Es ist kein ausreichendes Kontingent verfügbar, um diese Änderung "
+"durchzuführen."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "Changing the maximum number of usages in bulk is not supported if any of the "
 "selected vouchers is assigned a seat."
 msgstr ""
+"Die massenweise Änderung der maximalen Anzahl Nutzungen ist nicht möglich, "
+"wenn einer der ausgewählten Gutscheine einem Sitzplatz zugewiesen ist."
 
 #: pretix/control/forms/vouchers.py
 msgctxt "subevent"
@@ -16889,18 +16862,24 @@ msgid ""
 "Changing the date in bulk is not supported if any of the selected vouchers "
 "is assigned a seat."
 msgstr ""
+"Die massenweise Änderung des Termins ist nicht möglich, wenn einer der "
+"Gutscheine einem Sitz zugewiesen ist."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "Changing the product to a quota is not supported if any of the selected "
 "vouchers is assigned a seat."
 msgstr ""
+"Die Änderung von einem Produkt zu Kontingent ist nicht möglich, wenn einer "
+"der ausgewählten Gutscheine einem Sitzplatz zugewiesen ist."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "This change cannot be completed because not all assigned seats of the "
 "vouchers are still available"
 msgstr ""
+"Diese Änderung kann nicht abgeschlossen werden, da nicht alle Sitzplätze der "
+"Gutscheine noch verfügbar sind"
 
 #: pretix/control/forms/vouchers.py
 msgid "Codes"
@@ -20319,32 +20298,23 @@ msgstr ""
 "Wir haben einen SPF-Eintrag gefunden, der dieses System enthält. Klasse!"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid "Your new SPF record could look like this:"
 msgid "Your new DKIM record should be set up as a CNAME record like this:"
-msgstr "Dein neuer SPF-Eintrag könnte z.B. so aussehen:"
+msgstr ""
+"Dein neuer DKIM-Eintrag sollte als CNAME-Eintrag wie folgt eingerichtet "
+"werden:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid ""
-#| "We found an SPF record on your domain that includes this system. Great!"
 msgid "We found a DKIM record on your domain for this system. Great!"
 msgstr ""
-"Wir haben einen SPF-Eintrag gefunden, der dieses System enthält. Klasse!"
+"Wir haben einen DKIM-Eintrag gefunden, der dieses System enthält. Klasse!"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid "Your new SPF record could look like this:"
 msgid "Your new DMARC record could look like this:"
-msgstr "Dein neuer SPF-Eintrag könnte z.B. so aussehen:"
+msgstr "Dein neuer DMARC-Eintrag könnte so aussehen:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid ""
-#| "We found an SPF record on your domain that includes this system. Great!"
 msgid "We found a DMARC record on your domain for this system. Great!"
-msgstr ""
-"Wir haben einen SPF-Eintrag gefunden, der dieses System enthält. Klasse!"
+msgstr "Wir haben einen DMARC-Eintrag gefunden. Klasse!"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
 msgid "Verification"
@@ -22048,10 +22018,8 @@ msgid "The quick brown fox jumps over the lazy dog."
 msgstr "Franz jagt im komplett verwahrlosten Taxi quer durch Bayern."
 
 #: pretix/control/templates/pretixcontrol/fragment_log_filter_form.html
-#, fuzzy
-#| msgid "Specific seat"
 msgid "Specific object selected"
-msgstr "Zugewiesener Sitzplatz"
+msgstr "Einzelnes Objekt ausgewählt"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html
@@ -23663,6 +23631,9 @@ msgid ""
 "Ticket secrets of order positions that have been used to issue a gift card "
 "can not be changed. Only the link will be changed in this case."
 msgstr ""
+"Ticketcodes von Bestellpositionen, aus denen ein Wertgutschein erstellt "
+"wurde, können nicht geändert werden. Nur der Link wird in diesem Fall "
+"geändert."
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
@@ -27776,10 +27747,8 @@ msgstr ""
 "eines anderen Kontingentes ausverkauft ist!"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
-#, fuzzy
-#| msgid "Create multiple vouchers"
 msgid "Change multiple vouchers"
-msgstr "Mehrere Gutscheine erstellen"
+msgstr "Mehrere Gutscheine ändern"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
@@ -28189,6 +28158,10 @@ msgid ""
 "team. If you want to add a different user or create a new account, log out "
 "and click the invitation link again."
 msgstr ""
+"Du kannst die Einladung für \"{}\" nicht akzeptieren, da du bereits Teil des "
+"Teams bist. Wenn du ein anderes Benutzerkonto hinzufügen oder ein neues "
+"erstellen willst, melde dich ab und klicke erneut auf den Link aus der "
+"Einladung."
 
 #: pretix/control/views/auth.py
 #, python-brace-format
@@ -28872,13 +28845,6 @@ msgstr ""
 "so anpassen, dass sie dieses System im SPF-Eintrag enthalten."
 
 #: pretix/control/views/mailsetup.py
-#, fuzzy
-#| msgid ""
-#| "We could not find an SPF record set for the domain you are trying to use. "
-#| "This means that there is a very high change most of the emails will be "
-#| "rejected or marked as spam. We strongly recommend setting an SPF record "
-#| "on the domain. You can do so through the DNS settings at the provider you "
-#| "registered your domain with."
 msgid ""
 "We could not find a CNAME record pointing to our DKIM key for domain you are "
 "trying to use. This means that there is a very high change most of the "
@@ -28886,48 +28852,33 @@ msgid ""
 "DKIM through a CNAME record. You can do so through the DNS settings at the "
 "provider you registered your domain with."
 msgstr ""
-"Wir konnten keinen SPF-Eintrag für die verwendete Domain finden. Daher gibt "
-"es eine große Chance, dass die E-Mails beim Empfänger in den Spam-Ordner "
-"sortiert werden oder nicht ankommen. Wir empfehlen daher dringend einen SPF-"
-"Eintrag zu setzen. Dies kannst du in den DNS-Einstellungen des Providers "
-"vornehmen, bei dem die Domain registriert wurde."
+"Wir konnten keinen CNAME-Eintrag für die Domain finden, der auf unseren DKIM-"
+"Schlüssel verweist. Es gibt daher eine hohe Chance, dass die E-Mails "
+"abgelehnt werden oder im Spam landen. Du solltest einen DKIM-Schlüssel als "
+"CNAME-Eintrag hinzufügen. Dies kannst du in den DNS-Einstellungen des "
+"Providers tun, bei dem du deine Domain registriert hast."
 
 #: pretix/control/views/mailsetup.py
-#, fuzzy
-#| msgid ""
-#| "We found an SPF record set for the domain you are trying to use, but it "
-#| "does not include this system's email server. This means that there is a "
-#| "very high chance most of the emails will be rejected or marked as spam. "
-#| "You should update the DNS settings of your domain to include this system "
-#| "in the SPF record."
 msgid ""
 "We found a CNAME record for a DKIM key, but it is not pointing to the right "
 "location. This means that there is a very high chance most of the emails "
 "will be rejected or marked as spam. You should update the DNS settings of "
 "your domain."
 msgstr ""
-"Wir haben einen SPF-Eintrag für die Domain gefunden, aber es enthält unseren "
-"Mailserver nicht. Es gibt daher eine hohe Chance, dass die E-Mails abgelehnt "
-"werden oder im Spam landen. Du solltest die DNS-Einstellungen deiner Domain "
-"so anpassen, dass sie dieses System im SPF-Eintrag enthalten."
+"Wir haben einen CNAME-Eintrag für einen DKIM-Schlüssel gefunden, aber er "
+"zeigt nicht an den richtigen Ort. Es gibt daher eine hohe Chance, dass die E-"
+"Mails abgelehnt werden oder im Spam landen. Du solltest die DNS-"
+"Einstellungen deiner Domain anpassen."
 
 #: pretix/control/views/mailsetup.py
-#, fuzzy
-#| msgid ""
-#| "We found an SPF record set for the domain you are trying to use, but it "
-#| "does not include this system's email server. This means that there is a "
-#| "very high chance most of the emails will be rejected or marked as spam. "
-#| "You should update the DNS settings of your domain to include this system "
-#| "in the SPF record."
 msgid ""
 "We did not find DMARC record for your domain. This means that there is a "
 "very high chance most of the emails will be rejected or marked as spam. You "
 "should update the DNS settings of your domain."
 msgstr ""
-"Wir haben einen SPF-Eintrag für die Domain gefunden, aber es enthält unseren "
-"Mailserver nicht. Es gibt daher eine hohe Chance, dass die E-Mails abgelehnt "
-"werden oder im Spam landen. Du solltest die DNS-Einstellungen deiner Domain "
-"so anpassen, dass sie dieses System im SPF-Eintrag enthalten."
+"Wir haben keinen DMARC-Eintrag für die Domain gefunden Es gibt daher eine "
+"hohe Chance, dass die E-Mails abgelehnt werden oder im Spam landen. Du "
+"solltest die DNS-Einstellungen deiner Domain anpassen."
 
 #: pretix/control/views/mailsetup.py
 msgid "The verification code was incorrect, please try again."
@@ -32185,24 +32136,21 @@ msgid "Base redirection URLs"
 msgstr "Basis-URLs zur Weiterleitung"
 
 #: pretix/plugins/returnurl/views.py
-#, fuzzy
-#| msgid ""
-#| "Redirection will only be allowed to URLs that start with one of these "
-#| "prefixes. Enter one or more allowed URL prefix per line. URL prefixes "
-#| "must include a slash after the hostname."
 msgid ""
 "Redirection will only be allowed to URLs that start with one of these "
 "prefixes. Enter one allowed URL prefix per line. URL prefixes must include a "
 "slash after the hostname."
 msgstr ""
 "Die Weiterleitung ist nur für URLs erlaubt, die mit einem dieser Präfixe "
-"starten. Gib eine oder mehrere Präfixe pro Zeile ein. Die Präfixe müssen "
-"einen Schrägstrich nach dem Hostnamen enthalten."
+"starten. Gib einen Präfix pro Zeile ein. Die Präfixe müssen einen "
+"Schrägstrich nach dem Hostnamen enthalten."
 
 #: pretix/plugins/returnurl/views.py
 msgid ""
 "All values must be URLs that include at last one slash after the hostname."
 msgstr ""
+"Alle Werte müssen URLs sein, die mindestens einen Schrägstrich nach dem "
+"Hostnamen enthalten."
 
 #: pretix/plugins/sendmail/apps.py
 msgid "Send out emails to all your customers or specific groups of customers."
