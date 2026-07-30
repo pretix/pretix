@@ -20,22 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-from pretix.base.signals import register_ticket_outputs, register_global_settings, EventPluginSignal
-from .ticketoutput import OUTPUTS
-
-def connect_signals():
-    for output in OUTPUTS:
-        # DIY functools.partial to make get_defining_app happy
-        def get_register_func(o):
-            def register(sender, **kwargs):
-                return o
-            return register
-        register_ticket_outputs.connect(get_register_func(output), dispatch_uid=f"wallet_output_{output.identifier}")
-        if hasattr(output, "get_global_settings"):
-            register_global_settings.connect(output.get_global_settings, dispatch_uid=f"wallet_global_settings_{output.identifier}")
-
-connect_signals()
-
+from pretix.base.signals import EventPluginSignal
 
 register_wallet_text_placeholders = EventPluginSignal()
 """
