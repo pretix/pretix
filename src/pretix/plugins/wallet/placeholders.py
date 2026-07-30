@@ -181,6 +181,11 @@ class WalletPlaceholderContext:
             k: v for k, v in self.context_args.items() if k in placeholder.required_context
         }
 
+    @classmethod
+    def is_available(cls, placeholder: BaseWalletPlaceholder, context_args: set[str]):
+        missing_context = placeholder.required_context - context_args
+        return not missing_context
+
     def render_placeholder(self, placeholder: BaseWalletPlaceholder):
         if placeholder.identifier in self.cache:
             return self.cache[placeholder.identifier]
@@ -192,7 +197,7 @@ class WalletPlaceholderContext:
         return placeholder.render_sample(**self._get_placeholder_context(placeholder))
 
 
-def get_wallet_placeholders(event):
+def get_wallet_placeholders(event) -> dict[str, dict[str, BaseWalletPlaceholder]]:
     placeholders = {
         "text": {
             v.identifier: v
