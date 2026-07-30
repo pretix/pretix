@@ -11,43 +11,54 @@ const store = inject(StoreKey)!;
 const gettext = (window as any).gettext;
 
 const props = defineProps<{
-	fieldgroup: PlaceholderFieldGroupDefinition;
-	overflows: FieldGroupDefinition[];
+    fieldgroup: PlaceholderFieldGroupDefinition;
+    overflows: FieldGroupDefinition[];
 }>();
 const fieldConfig = defineModel<PlaceholderFieldGroupConfig>({
-	required: true,
+    required: true,
 });
 
 const overflowOptions = computed((): Array<[string | null, string]> => {
-	if (props.overflows.length) {
-		return [
-			...props.overflows.map((x): [string, string] => [x.identifier, x.name]),
-			[null, "Do not overflow"],
-		];
-	} else {
-		return [];
-	}
+    if (props.overflows.length) {
+        return [
+            ...props.overflows.map((x): [string, string] => [x.identifier, x.name]),
+            [null, "Do not overflow"],
+        ];
+    } else {
+        return [];
+    }
 });
 
 function addVariable() {
-	fieldConfig.value.entries.push({ type: "placeholder", label: "" });
+    fieldConfig.value.entries.push({ type: "placeholder", label: "" });
 }
 
 watchEffect(() => {
-	if (!fieldConfig.value) {
-		fieldConfig.value = {
-			overflow: null,
-			entries: JSON.parse(JSON.stringify(props.fieldgroup.default_entries)),
-			active:
-				props.fieldgroup.required ||
-				props.fieldgroup.default_entries.length > 0,
-		};
-	}
-	if (fieldConfig.value && !fieldConfig.value.entries) {
-		fieldConfig.value.entries = JSON.parse(
-			JSON.stringify(props.fieldgroup.default_entries),
-		);
-	}
+    if (!fieldConfig.value) {
+        fieldConfig.value = {
+            overflow: null,
+            entries: JSON.parse(JSON.stringify(props.fieldgroup.default_entries)),
+            active:
+                props.fieldgroup.required ||
+                props.fieldgroup.default_entries.length > 0,
+        };
+    }
+    if (fieldConfig.value && !fieldConfig.value.entries) {
+        fieldConfig.value.entries = JSON.parse(
+            JSON.stringify(props.fieldgroup.default_entries),
+        );
+    }
+});
+
+const placeholderChoices = computed(() => {
+    const availableContext = new Set(props.fieldgroup.context_args);
+    const choices = Object.entries(store.variables.text)
+        .filter(([_, { required_context }]) =>
+            new Set(required_context).isSubsetOf(availableContext),
+        )
+        .map(([k, v]): [string, string] => [k, v.label]);
+    choices.push(["other", gettext("Other…")]);
+    return choices;
 });
 </script>
 
@@ -66,21 +77,22 @@ watchEffect(() => {
                             th(:class="'col-md-' + (fieldgroup.display == 'with_label' ? '6' : '11')") {{ gettext('Content') }}
                             th.col-xs-1
                     tbody
-                        tr(v-for="n,i in fieldConfig.entries.length" :key="i")
+                        tr(v-for="n, i in fieldConfig.entries.length" :key="i")
                             td(v-if="fieldgroup.display == 'with_label'")
                                 .i18n-form-group
-                                    I18nInput(v-model="fieldConfig.entries[n-1].label")
+                                    I18nInput(v-model="fieldConfig.entries[n - 1].label")
                             td
                                 TextContent(v-if='fieldgroup.content_type == "text"'
-                                            v-model="fieldConfig.entries[n-1]")
+                                            v-model="fieldConfig.entries[n - 1]"
+                                            :placeholderChoices="placeholderChoices")
                                 Select(v-else-if='fieldgroup.content_type == "image"'
-                                        v-model="fieldConfig.entries[n-1].content"
-                                        :choices="Object.entries(store.variables.image).map(([k,v]) => [k, v.label])"
+                                        v-model="fieldConfig.entries[n - 1].content"
+                                        :choices="Object.entries(store.variables.image).map(([k, v]) => [k, v.label])"
                                     )
                             td.text-right
-                                button.btn.btn-danger.form-control-static(type="button" @click="fieldConfig.entries.splice(n-1, 1)")
+                                button.btn.btn-danger.form-control-static(type="button" @click="fieldConfig.entries.splice(n - 1, 1)")
                                     i.fa.fa-trash
-                                    span.sr-only {{ gettext('Delete')}}
+                                    span.sr-only {{ gettext('Delete') }}
 
                 button.btn.btn-default(type="button" @click="addVariable")
                     i.fa.fa-plus

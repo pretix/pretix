@@ -1,23 +1,32 @@
 import enum
-from typing import Any
+from typing import Any, TypedDict
+from black.nodes import is_vararg
 from i18nfield.strings import LazyI18nString
 import jsonschema
 from django.core.exceptions import ValidationError
 from pretix.base.models import OrderPosition
+from ..placeholders import WalletPlaceholderContext, get_wallet_placeholders
+
 
 class WalletPlatform:
     identifier: str
     name: str
 
 
+class LayoutContext(TypedDict):
+    placeholders: dict[str, dict]
+
+
 class FieldGroupType(enum.Enum):
     PLACEHOLDER = "placeholder"
     PREDEFINED = "predefined"
+
 
 class FieldGroupDisplay(enum.Enum):
     PLAIN = "plain"
     WITH_LABEL = "with_label"
     CODE = "code"
+
 
 class FieldGroup:
     type: FieldGroupType
@@ -35,7 +44,7 @@ class FieldGroup:
     def layout_schema(
         self,
         remaining_fields: list["FieldGroup"],
-        context: dict,
+        context: LayoutContext,
     ) -> dict:
         raise NotImplemented()
 
@@ -72,16 +81,19 @@ class FieldEntry[T]:
         self.content = content
 
     def asdict(self) -> dict:
-        return {"type": self.type.value, "content": self.content, "label": self.label.data if self.label else None}
+        return {
+            "type": self.type.value,
+            "content": self.content,
+            "label": self.label.data if self.label else None,
+        }
+
 
 class PlaceholderFieldEntry(FieldEntry[str]):
     type = FieldEntryType.PLACEHOLDER
     label: LazyI18nString | None
     content: str
 
-    def __init__(
-        self, content: str, label: LazyI18nString | None = None
-    ):
+    def __init__(self, content: str, label: LazyI18nString | None = None):
         self.label = label
         self.content = content
 
@@ -92,8 +104,11 @@ class CustomFieldEntry(FieldEntry[LazyI18nString]):
     content: LazyI18nString
 
     def asdict(self) -> dict:
-        return {"type": self.type.value, "content": self.content.data, "label": self.label.data if self.label else None}
-
+        return {
+            "type": self.type.value,
+            "content": self.content.data,
+            "label": self.label.data if self.label else None,
+        }
 
 
 class PredefinedFieldGroup(FieldGroup):
@@ -102,11 +117,10 @@ class PredefinedFieldGroup(FieldGroup):
     def layout_schema(
         self,
         remaining_fields: list["FieldGroup"],
-        context: dict,
+        context: LayoutContext,
     ):
-        return {
-            "type": "object"
-        }
+        return {"type": "object"}
+
 
 class PlaceholderFieldGroup(FieldGroup):
     type = FieldGroupType.PLACEHOLDER
@@ -115,18 +129,22 @@ class PlaceholderFieldGroup(FieldGroup):
     display: FieldGroupDisplay
     min_entries: int | None
     max_entries: int | None
+    context_args: set[
+        str
+    ]  # what context arguments are available when rendering this fieldgroup
 
     def __init__(
         self,
         identifier: str,
         name: str,
         content_type: FieldContentType,
-        description: str="",
+        description: str = "",
         required=False,
         default_entries=None,
         min_entries=None,
         max_entries=None,
         display=FieldGroupDisplay.WITH_LABEL,
+        context_args: set[str] | None = None,
     ):
         super().__init__(identifier, name, description, required)
         self.content_type = content_type
@@ -134,6 +152,7 @@ class PlaceholderFieldGroup(FieldGroup):
         self.min_entries = min_entries
         self.max_entries = max_entries
         self.display = display
+        self.context_args = context_args or set()
 
         if self.required and (self.min_entries is None or self.min_entries < 1):
             self.min_entries = 1
@@ -146,18 +165,26 @@ class PlaceholderFieldGroup(FieldGroup):
             "display": self.display.value,
             "min_entries": self.min_entries,
             "max_entries": self.max_entries,
+            "context_args": list(sorted(self.context_args))
         }
 
     def layout_schema(
         self,
         remaining_fields: list["FieldGroup"],
-        context: dict,
+        context: LayoutContext,
     ):
-        placeholders = list(context.get("placeholders", {}).get(self.content_type.value, {}).keys())
+        content_type_placeholders = (
+            context["placeholders"].get(self.content_type.value, {}).values()
+        )
+        available_placeholders = [
+            x.identifier
+            for x in content_type_placeholders
+            if WalletPlaceholderContext.is_available(x, self.context_args)
+        ]
         return {
             "type": "object",
             "properties": {
-                "entries": self.entries_schema(placeholders=placeholders),
+                "entries": self.entries_schema(placeholders=available_placeholders),
                 "overflow": {
                     "anyOf": [
                         {"type": "null"},
@@ -212,7 +239,6 @@ class PlaceholderFieldGroup(FieldGroup):
         return schema
 
 
-
 class TextFieldGroup(PlaceholderFieldGroup):
     content_type = FieldContentType.TEXT
 
@@ -234,23 +260,25 @@ class PassStyle:
     # order here limits in what order users can configure field "overspilling" (if too many fields are defined, where should the rest go) -> can only go down in the list
     # we evaluate the fields in this order, so they overspill in this order as well (fields from primary are appended to the overspilling field before fields from secondary are etc)
     fieldgroups: list[FieldGroup]
-    preview_layout: list | None
 
-    @classmethod
-    def asdict(cls):
+    @property
+    def preview_layout(self) -> list | None:
+        return None
+
+    def asdict(self):
         return {
-            "identifier": cls.identifier,
-            "name": cls.name,
-            "fieldgroups": [x.asdict() for x in cls.fieldgroups],
-            "preview_layout": cls.preview_layout
+            "identifier": self.identifier,
+            "name": self.name,
+            "fieldgroups": [x.asdict() for x in self.fieldgroups],
+            "preview_layout": self.preview_layout,
         }
 
-    @classmethod
-    def layout_schema(cls, context):
+    def layout_schema(self):
+        context = LayoutContext(placeholders=self.placeholders)
         schema = {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
             # TODO: $id
-            "title": cls.name,
+            "title": self.name,
             "type": "object",
             "properties": {
                 "fieldgroups": {
@@ -258,12 +286,12 @@ class PassStyle:
                     "type": "object",
                     "properties": {
                         group.identifier: group.layout_schema(
-                            context=context, remaining_fields=cls.fieldgroups[i:]
+                            context=context, remaining_fields=self.fieldgroups[i:]
                         )
-                        for (i, group) in enumerate(cls.fieldgroups)
+                        for (i, group) in enumerate(self.fieldgroups)
                     },
                     "required": [
-                        group.identifier for group in cls.fieldgroups if group.required
+                        group.identifier for group in self.fieldgroups if group.required
                     ],
                 }
             },
@@ -276,41 +304,37 @@ class PassStyle:
                 }
             },
         }
-        if any(group.required for group in cls.fieldgroups):
+        if any(group.required for group in self.fieldgroups):
             schema["required"] = ["fieldgroups"]
 
         return schema
 
-    @classmethod
-    def render_placeholder(cls, context, content_type, content):
-        placeholder = (
-            context.get("placeholders", {})
-            .get(content_type, {})
-            .get(content)
-        )
+    def render_placeholder(self, context, content_type, content):
+        placeholder = self.placeholders.get(content_type, {}).get(content)
         if placeholder:
-            placeholder_value = context['placeholder_context'].render_placeholder(placeholder)
+            placeholder_value = context.render_placeholder(placeholder)
             if placeholder_value:
                 return placeholder.label, placeholder_value
 
         return None, None
 
-
     def __init__(self, event, layout):
         self.event = event
         self.layout = layout
-
-    def get_layout_context(self):
-        return {"placeholders": {}}
+        self.placeholders = get_wallet_placeholders(self.event)
 
     def validate(self):
-        schema = self.layout_schema(self.get_layout_context())
+        schema = self.layout_schema()
         try:
             jsonschema.validate(self.layout, schema)
         except jsonschema.ValidationError as e:
             raise ValidationError("Invalid layout: {}".format(str(e)))
 
-    def get_pass_fields(self, context):
+    def get_pass_fields(self, op: OrderPosition):
+        context = WalletPlaceholderContext(
+            event=self.event, order=op.order, order_position=op
+        )
+
         fields = {}
         for group in self.fieldgroups:
             if isinstance(group, PredefinedFieldGroup):
@@ -319,14 +343,22 @@ class PassStyle:
             elif isinstance(group, PlaceholderFieldGroup):
                 group_fields = fields.get(group.identifier, [])
                 if group.identifier in self.layout["fieldgroups"]:
-                    for field in self.layout["fieldgroups"][group.identifier]["entries"]:
+                    for field in self.layout["fieldgroups"][group.identifier][
+                        "entries"
+                    ]:
                         field_entry = {}
                         if group.display == FieldGroupDisplay.WITH_LABEL:
                             field_entry["label"] = LazyI18nString(field["label"])
                         if field["type"] == FieldEntryType.PLACEHOLDER.value:
-                            label, field_entry["value"] = self.render_placeholder(context, group.content_type.value, field['content'])
-                            if group.display == FieldGroupDisplay.WITH_LABEL and not str(field_entry['label']) and label:
-                                field_entry['label'] = LazyI18nString(label)
+                            label, field_entry["value"] = self.render_placeholder(
+                                context, group.content_type.value, field["content"]
+                            )
+                            if (
+                                group.display == FieldGroupDisplay.WITH_LABEL
+                                and not str(field_entry["label"])
+                                and label
+                            ):
+                                field_entry["label"] = LazyI18nString(label)
 
                         elif field["type"] == FieldEntryType.CUSTOM.value:
                             field_entry["value"] = LazyI18nString(field["content"])
@@ -337,9 +369,11 @@ class PassStyle:
                         f"Group {group.identifier} needs at least {group.min_entries} entries, but only {len(group_fields)} were provided"
                     )
                 fields[group.identifier] = group_fields[: group.max_entries]
-                if (overflow_group := self.layout["fieldgroups"][group.identifier]['overflow']):
+                if overflow_group := self.layout["fieldgroups"][group.identifier][
+                    "overflow"
+                ]:
                     fields.setdefault(overflow_group, [])
-                    fields[overflow_group] += group_fields[group.max_entries:]
+                    fields[overflow_group] += group_fields[group.max_entries :]
 
             else:
                 raise ValueError("Unknown field group")
