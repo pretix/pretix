@@ -30,16 +30,24 @@ class ApplePlatform(WalletPlatform):
     name = _("Apple")
 
 
+class FormattedLazyI18nString:
+    def __init__(self, base_str: LazyI18nString, **format_args: str):
+        self.base_str = base_str
+        self.format_args = format_args
+
+    def localize(self, language):
+        return self.base_str.localize(language).format(**self.format_args)
+
+
 class StringResource:
-    # mapping string in default event locale -> LazyI18nString
-    entries: dict[str, LazyI18nString]
+    entries: dict[str, LazyI18nString | FormattedLazyI18nString]
     locales: set[str]
 
     def __init__(self, locales):
         self.entries = {}
         self.locales = set(locales)
 
-    def add_entry(self, key: str, value: LazyI18nString):
+    def add_entry(self, key: str, value: LazyI18nString | FormattedLazyI18nString):
         if key in self.entries:
             raise ValueError(f"{key} already exists in this StringResource")
         self.entries[key] = value
@@ -126,69 +134,51 @@ class AppleWalletStyle(PassStyle):
     def pass_content(self, fields, strings):
         raise NotImplementedError()
 
-    def generate_pass_json(self, fields, context, strings):
-        def add_from_context(key):
-            value = context.get(key)
-            if not value:
-                raise ValueError(f"{key} must be set to a truthy value")
-            return value
+    def generate_pass_json(self, fields, op, strings):
+        ticket = str(op.item.name)
+        if op.variation:
+            ticket += " - " + str(op.variation)
+
+        description = FormattedLazyI18nString(
+            LazyI18nString.from_gettext("Ticket for {event} ({product})"),
+            event=self.event.name,
+            product=ticket,
+        )
+        strings.add_entry("description", description)
+
+        serialNumber = "%s-%s-%s-%d" % (
+            self.event.organizer.slug,
+            self.event.slug,
+            op.order.code,
+            op.pk,
+        )
 
         pass_json = {
             "formatVersion": 1,
-            "description": add_from_context("description"),
-            "organizationName": add_from_context("organizationName"),
-            "passTypeIdentifier": add_from_context("passTypeIdentifier"),
-            "teamIdentifier": add_from_context("teamIdentifier"),
-            "serialNumber": add_from_context("serialNumber"),
+            "description": "description",
+            "organizationName": self.event.organizer.name,
+            "passTypeIdentifier": self.event.settings.wallet_apple_pass_type_id,
+            "teamIdentifier": self.event.settings.wallet_apple_team_id,
+            "serialNumber": serialNumber,
             **self.pass_content(fields, strings),
         }
         return pass_json
 
     def generate(self, op: OrderPosition):
-        context = self.get_context(op)
-
         order = op.order
-        event = order.event
         filename = "{}-{}.pkpass".format(order.event.slug, order.code)
 
-        ticket = str(op.item.name)
-        if op.variation:
-            ticket += " - " + str(op.variation)
-
-        serialNumber = "%s-%s-%s-%d" % (
-            order.event.organizer.slug,
-            order.event.slug,
-            order.code,
-            op.pk,
-        )
-
-        context.update({
-            "ca_certificate": order.event.settings.wallet_apple_ca_certificate.read(),
-            "certificate": order.event.settings.wallet_apple_certificate.read(),
-            "key": order.event.settings.wallet_apple_key.read(),
-            "password": order.event.settings.wallet_apple_key_password,
-            "description": _("Ticket for {event} ({product})").format(  # TODO: i18n
-                event=event.name, product=ticket
-            ),
-            "organizationName": event.organizer.name,
-            "passTypeIdentifier": order.event.settings.wallet_apple_pass_type_id,
-            "teamIdentifier": order.event.settings.wallet_apple_team_id,
-            "serialNumber": serialNumber,
-        })
-
-
-
-        fields = self.get_pass_fields(layout, context)
+        fields = self.get_pass_fields(op)
 
         pkpass = SignedZipFile(
-            context["ca_certificate"],
-            context["certificate"],
-            context["key"],
-            context["password"],
+            self.event.settings.wallet_apple_ca_certificate.read(),
+            self.event.settings.wallet_apple_certificate.read(),
+            self.event.settings.wallet_apple_key.read(),
+            self.event.settings.wallet_apple_key_password,
         )
-        strings = StringResource(locales=context["locales"])
+        strings = StringResource(locales=self.event.settings.locales)
 
-        pass_json = self.generate_pass_json(fields, context, strings)
+        pass_json = self.generate_pass_json(fields, op, strings)
         print(pass_json)
         if fields["logo"]:
             logo = fields["logo"][0]["value"]
@@ -210,7 +200,6 @@ class AppleWalletStyle(PassStyle):
         return filename, "application/vnd.apple.pkpass", result
 
 
-
 class AppleWalletEventTicket(AppleWalletStyle):
     identifier = "event_1"
     name = _("Event Ticket Layout 1")
@@ -225,7 +214,8 @@ class AppleWalletEventTicket(AppleWalletStyle):
                     content="poweredby",
                 )
             ],
-            required=True
+            required=True,
+            context_args={"event", "order", "order_position"},
         ),
         ImageFieldGroup(
             identifier="logo",
@@ -237,7 +227,8 @@ class AppleWalletEventTicket(AppleWalletStyle):
                     content="poweredby",
                 )
             ],
-            required=True
+            required=True,
+            context_args={"event", "order", "order_position"},
         ),
         TextFieldGroup(
             identifier="logo_text",
@@ -245,6 +236,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
             max_entries=1,
             display=FieldGroupDisplay.PLAIN,
             default_entries=[],
+            context_args={"event", "order", "order_position"},
         ),
         TextFieldGroup(
             identifier="primary",
@@ -258,13 +250,27 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 )
             ],  # TODO: support Lazyi18nproxy here
             description=_("These fields appear prominently featured on the pass."),
-            required=True
+            required=True,
+            context_args={"event", "order", "order_position"},
         ),
         TextFieldGroup(
-            identifier="secondary", name=_("Secondary"), max_entries=4
+            identifier="secondary",
+            name=_("Secondary"),
+            max_entries=4,
+            context_args={"event", "order", "order_position"},
         ),  # TODO: validation of max field count if combined "Coupons, store cards, and generic passes with a square barcode can have a total of up to four secondary and auxiliary fields, combined."
-        TextFieldGroup(identifier="header", name=_("Header"), max_entries=3),
-        TextFieldGroup(identifier="auxiliary", name=_("Auxiliary"), max_entries=4),
+        TextFieldGroup(
+            identifier="header",
+            name=_("Header"),
+            max_entries=3,
+            context_args={"event", "order", "order_position"},
+        ),
+        TextFieldGroup(
+            identifier="auxiliary",
+            name=_("Auxiliary"),
+            max_entries=4,
+            context_args={"event", "order", "order_position"},
+        ),
         TextFieldGroup(
             identifier="code",
             name=_("QR-Code"),
@@ -275,8 +281,13 @@ class AppleWalletEventTicket(AppleWalletStyle):
                     content="secret",
                 )
             ],
+            context_args={"event", "order", "order_position"},
         ),
-        TextFieldGroup(identifier="back", name=_("Back")),
+        TextFieldGroup(
+            identifier="back",
+            name=_("Back"),
+            context_args={"event", "order", "order_position"},
+        ),
     ]
     preview_layout = [
         [
