@@ -28,11 +28,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install system dependencies
-        run: sudo apt update && sudo apt install -y gettext unzip
+        run: sudo apt update && sudo apt install -y gettext unzip jq
       - name: Install node dependencies
         run: sudo npm install --global @cyclonedx/cyclonedx-npm
-      - name: Install CycloneDX CLI
-        run: wget https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.32.0/cyclonedx-linux-x64 && chmod +x cyclonedx-linux-x64
       - name: Install Python dependencies
         run: pip3 install -U uv cyclonedx-bom prisma-sbom-submit
       - name: Create empty environment
@@ -46,7 +44,7 @@ jobs:
       - name: Create JavaScript SBOM
         run: cyclonedx-npm > sbom-npm.json
       - name: Merge SBOMs
-        run: ./cyclonedx-linux-x64 merge --input-files sbom-python.json sbom-npm.json --output-format json --output-file sbom.json
+        run: jq -s "[.[0], .[1]]" sbom-python.json sbom-npm.json > sbom.json
       - name: Submit SBOM
         run: prisma-sbom-submit --server https://prisma.pretix.com sbom.json
         env:
