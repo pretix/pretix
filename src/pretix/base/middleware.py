@@ -280,8 +280,8 @@ def _parse_csp(header):
 
 
 VALID_CSP_DIRECTIVES = [
-    "child-src", "connect-src", "default-src", "fenced-frame-src", "font-src", "form-action", "frame-src", "img-src",
-    "manifest-src", "media-src", "object-src", "prefetch-src", "report-uri", "script-src", "script-src-elem",
+    "child-src", "connect-src", "default-src", "fenced-frame-src", "font-src", "form-action", "frame-src", "frame-ancestors",
+    "img-src", "manifest-src", "media-src", "object-src", "prefetch-src", "report-uri", "script-src", "script-src-elem",
     "script-src-attr", "style-src", "style-src-elem", "style-src-attr", "worker-src",
 ]
 
