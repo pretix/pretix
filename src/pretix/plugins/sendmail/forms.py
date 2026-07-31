@@ -384,8 +384,8 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
             ]
         )
 
-        self._set_field_placeholders('subject', ['event', 'order', 'event_or_subevent'])
-        self._set_field_placeholders('template', ['event', 'order', 'event_or_subevent'], rich=True)
+        self._set_field_placeholders('subject', ['event', 'order', 'position_or_address'])
+        self._set_field_placeholders('template', ['event', 'order', 'position_or_address'], rich=True)
 
         choices = [
             (Order.STATUS_PAID, _('Paid (or canceled with paid fee)')),
