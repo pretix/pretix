@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-07-27 17:00+0000\n"
+"PO-Revision-Date: 2026-07-31 18:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
-"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
-">\n"
+"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
+"da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1381,10 +1381,8 @@ msgid "Membership type"
 msgstr "Medlemskabstype"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "Purchase time"
 msgid "Purchase ticket"
-msgstr "Købsdato"
+msgstr "Køb billet"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
 #: pretix/base/exporters/waitinglist.py pretix/base/forms/questions.py
@@ -1401,10 +1399,8 @@ msgid "Start date"
 msgstr "Starttidspunkt"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "Start time from"
 msgid "Start time"
-msgstr "Starttidspunkt fra"
+msgstr "Starttidspunkt"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
 #: pretix/base/exporters/waitinglist.py pretix/base/models/memberships.py
@@ -1417,10 +1413,8 @@ msgid "End date"
 msgstr "Sluttidspunkt"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "End: %(time)s"
 msgid "End time"
-msgstr "Slut: %(time)s"
+msgstr "Sluttidspunkt"
 
 #: pretix/base/exporters/dekodi.py pretix/base/exporters/invoices.py
 msgctxt "export_category"
@@ -4641,16 +4635,12 @@ msgid "This event is remote or partially remote."
 msgstr "Dette arrangement afholdes online eller delvist online."
 
 #: pretix/base/models/event.py
-#, fuzzy
-#| msgid ""
-#| "This will be used to let users know if the event is in a different "
-#| "timezone and let’s us calculate users’ local times."
 msgid ""
 "This will be used to let users know if the event is in a different timezone, "
 "and to let us calculate the local time of a user."
 msgstr ""
 "Dette vil blive brugt til at informere brugerne om, hvorvidt begivenheden "
-"finder sted i en anden tidszone, og til at beregne brugernes lokale tid."
+"finder sted i en anden tidszone, og til at beregne brugerens lokale tid."
 
 #: pretix/base/models/event.py pretix/base/models/organizer.py
 #: pretix/control/navigation.py
@@ -5472,14 +5462,6 @@ msgid "Reusable media policy"
 msgstr "Politik for genanvendelige medier"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid ""
-#| "If this product should be stored on a re-usable physical medium, you can "
-#| "attach a physical media policy. This is not required for regular tickets, "
-#| "which just use a one-time barcode, but only for products like renewable "
-#| "season tickets or re-chargeable gift card wristbands. This is an advanced "
-#| "feature that also requires specific configuration of ticketing and "
-#| "printing settings."
 msgid ""
 "If this product should be stored on a reusable physical medium, you can "
 "attach a physical media policy. This is not required for regular tickets, "
@@ -5488,12 +5470,12 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
-"Hvis dette produkt skal opbevares på et genanvendeligt fysisk medie, kan du "
-"vedhæfte en politik for fysiske medier. Dette er ikke nødvendigt for "
-"almindelige billetter, som bare bruger en engangs-stregkode, men kun for "
-"produkter som f.eks. fornyelige sæsonkort eller genopladelige gavekort-"
-"armbånd. Dette er en avanceret funktion, som også kræver en specifik "
-"konfiguration af billet- og printindstillinger."
+"Hvis dette produkt skal opbevares på et genanvendeligt fysisk medium, kan du "
+"knytte en politik for fysiske medier til det. Dette er ikke påkrævet for "
+"almindelige billetter, som blot bruger en engangsstregkode, men gælder kun "
+"for produkter som sæsonkort, der kan fornyes, eller gavekortarmbånd, som kan "
+"blive genopladet. Dette er en avanceret funktion, der også kræver en "
+"specifik konfiguration af billet- og udskrivningsindstillingerne."
 
 #: pretix/base/models/items.py
 msgid "Reusable media type"
@@ -5537,6 +5519,9 @@ msgid ""
 "prior to their usage. Therefore, the selected media policy does not make "
 "sense for this media type."
 msgstr ""
+"Den valgte medietype kræver, at alle medier registreres i systemet, inden de "
+"tages i brug. Derfor giver den valgte mediepolitik ikke mening for denne "
+"medietype."
 
 #: pretix/base/models/items.py
 msgid ""
@@ -6090,18 +6075,16 @@ msgstr "afvist"
 #: pretix/base/models/media.py
 msgctxt "reusable_medium"
 msgid "Claim token"
-msgstr ""
+msgstr "Hent token"
 
 #: pretix/base/models/media.py
 msgctxt "reusable_medium"
 msgid "Label"
-msgstr ""
+msgstr "Etiket"
 
 #: pretix/base/models/media.py
-#, fuzzy
-#| msgid "Linked ticket"
 msgid "Linked tickets"
-msgstr "Forbundet billet"
+msgstr "Sammenkædede billetter"
 
 #: pretix/base/models/media.py
 msgid ""
@@ -6109,6 +6092,9 @@ msgid ""
 "validity. If multiple tickets are valid at once, this will lead to failed "
 "check-ins."
 msgstr ""
+"Hvis du linker til mere end én billet, skal du sikre dig, at der ikke er "
+"nogen overlapning i gyldighedsperioden. Hvis flere billetter er gyldige på "
+"samme tid, vil det medføre, at check-in mislykkes."
 
 #: pretix/base/models/memberships.py
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
@@ -7568,6 +7554,8 @@ msgid ""
 "This payment provider exists for historical purposes only and is no longer "
 "usable."
 msgstr ""
+"Denne betalingsudbyder findes udelukkende af historiske årsager og kan ikke "
+"længere benyttes."
 
 #: pretix/base/pdf.py
 msgid "Ticket code (barcode content)"
@@ -7802,15 +7790,12 @@ msgid "Atlantis"
 msgstr "Eksempelland"
 
 #: pretix/base/pdf.py
-#, fuzzy
 msgid "Invoice custom recipient field"
-msgstr "Fakturamodtager:"
+msgstr "Brugerdefineret modtagerfelt på fakturaen"
 
 #: pretix/base/pdf.py
-#, fuzzy
-#| msgid "Custom recipient field label"
 msgid "Custom recipient field"
-msgstr "Brugerdefineret etiket til modtagerfelt"
+msgstr "Brugerdefineret modtagerfelt"
 
 #: pretix/base/pdf.py
 msgid "List of Add-Ons"
@@ -8252,7 +8237,7 @@ msgstr "Arrangement aflyst"
 
 #: pretix/base/services/cancelevent.py
 msgid "Confirm event cancellation and bulk refund"
-msgstr ""
+msgstr "Bekræft aflysning af begivenhed og samlet refusion"
 
 #: pretix/base/services/cart.py pretix/base/services/modelimport.py
 #: pretix/base/services/orders.py
@@ -8781,13 +8766,15 @@ msgstr "Du skal svare på spørgsmål for at gennemføre dette tjek-ind."
 
 #: pretix/base/services/checkin.py
 msgid "Ticket needs to be exchanged to a suitable medium."
-msgstr ""
+msgstr "Billetten skal ombyttes til et passende medium."
 
 #: pretix/base/services/checkin.py
 msgid ""
 "This ticket has already been exchanged for a reusable medium that now needs "
 "to be used instead."
 msgstr ""
+"Denne billet er allerede blevet ombyttet til et genanvendeligt medium, som "
+"nu skal bruges i stedet."
 
 #: pretix/base/services/checkin.py
 msgid "This ticket has already been redeemed."
@@ -8818,9 +8805,8 @@ msgid "Your export did not contain any data."
 msgstr "Din eksport indeholdt ingen data."
 
 #: pretix/base/services/export.py
-#, fuzzy
 msgid "Scheduled export failed"
-msgstr "Start eksport"
+msgstr "Den planlagte eksport mislykkedes"
 
 #: pretix/base/services/export.py
 msgid "Permission denied."
@@ -8947,60 +8933,44 @@ msgid "You are receiving this email because you placed an order for {event}."
 msgstr "Du modtager denne e-mail, fordi du har afgivet en ordre til {event}."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "Invalid input type."
 msgid "Invalid medium type."
-msgstr "Ugyldig indtastning."
+msgstr "Ugyldig medietype."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid "Medium type is not enabled for organizer."
-msgstr "Den valgte medietype er ikke aktiveret i dine arrangør-indstillinger."
+msgstr "Medie-typen er ikke aktiveret for arrangøren."
 
 #: pretix/base/services/media.py
 msgid "Incorrect medium type for product."
-msgstr ""
+msgstr "Forkert medietype for produktet."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "This ticket has already been redeemed."
 msgid "Ticket is already exchanged for reusable medium."
-msgstr "Denne billet er allerede blevet indløst."
+msgstr "Billetten er allerede ombyttet til et genanvendeligt medium."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "Reusable Medium ID"
 msgid "Reusable medium not found."
-msgstr "ID for genanvendeligt medie"
+msgstr "Genanvendeligt medie blev ikke fundet."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "The reusable medium has been created."
 msgid "Reusable medium is inactive or expired."
-msgstr "Det genanvendelige medie er blevet oprettet."
+msgstr "Det genanvendelige medium er inaktivt eller udløbet."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "The reusable medium has been created."
 msgid "Reusable medium not found and could not be created."
-msgstr "Det genanvendelige medie er blevet oprettet."
+msgstr "Genanvendeligt medie blev ikke fundet og kunne ikke oprettes."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "Reusable media type"
 msgid "Reusable medium already exists."
-msgstr "Genanvendelig medietype"
+msgstr "Det genanvendelige medie findes allerede."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "The reusable medium has been created."
 msgid "Reusable medium could not be created."
-msgstr "Det genanvendelige medie er blevet oprettet."
+msgstr "Det var ikke muligt at oprette det genanvendelige medie."
 
 #: pretix/base/services/media.py
 msgid "Product does not support medium exchange."
-msgstr ""
+msgstr "Produktet understøtter ikke udskiftning af medier."
 
 #: pretix/base/services/memberships.py
 #, python-brace-format
@@ -9164,6 +9134,7 @@ msgstr "En voucher kan ikke oprettes uden kode."
 msgid ""
 "Voucher codes must be unique. Code \"{code}\" already exists in this import."
 msgstr ""
+"Kuponkoder skal være unikke. Koden \"{code}\" findes allerede i denne import."
 
 #: pretix/base/services/modelimport.py
 #, python-brace-format
@@ -9172,13 +9143,19 @@ msgid ""
 msgid_plural ""
 "Voucher codes must be unique. Import contains existing voucher codes {code}."
 msgstr[0] ""
+"Rabatkoder skal være unikke. Importen indeholder den eksisterende rabatkode "
+"{code}."
 msgstr[1] ""
+"Rabatkoder skal være unikke. Importen indeholder de eksisterende rabatkoder "
+"{code}."
 
 #: pretix/base/services/modelimport.py
 msgid ""
 "Vouchers could not be imported, probably due to a voucher code already being "
 "in use."
 msgstr ""
+"Rabatkoder kunne ikke importeres, sandsynligvis fordi en kuponkode allerede "
+"var i brug."
 
 #: pretix/base/services/orders.py
 msgid ""
@@ -9462,16 +9439,12 @@ msgstr ""
 "gavekort."
 
 #: pretix/base/services/orders.py
-#, fuzzy
-#| msgid ""
-#| "You cannot change the price of a position that has been used to issue a "
-#| "gift card."
 msgid ""
 "You cannot change the ticket secret of a position that has been used to "
 "issue a gift card."
 msgstr ""
-"Du kan ikke ændre prisen af en post, som er blevet brugt til at udstede et "
-"gavekort."
+"Du kan ikke ændre billetkoden for en position, der er blevet brugt til at "
+"udstede et gavekort."
 
 #: pretix/base/services/orders.py
 #, python-brace-format
@@ -9558,10 +9531,9 @@ msgid "Something happened in your event after the export, please try again."
 msgstr "Der skete noget i din begivenhed efter eksporten, prøv venligst igen."
 
 #: pretix/base/services/shredder.py
-#, fuzzy, python-format
-#| msgid "Data shredding completed"
+#, python-format
 msgid "Data shredding completed for %(event)s"
-msgstr "Makulering af data afsluttet"
+msgstr "Datadestruktion for %(event)s er afsluttet"
 
 #: pretix/base/services/stats.py
 msgid "Uncategorized"
@@ -9738,29 +9710,24 @@ msgstr ""
 "ind under købet."
 
 #: pretix/base/settings.py
-#, fuzzy
-#| msgid "Activate re-usable media"
 msgid "Activate reusable media"
 msgstr "Aktiver genanvendelige medier"
 
 #: pretix/base/settings.py
-#, fuzzy
-#| msgid ""
-#| "The re-usable media feature allows you to connect tickets and gift cards "
-#| "with physical media such as wristbands or chip cards that may be re-used "
-#| "for different tickets or gift cards later."
 msgid ""
 "The reusable media feature allows you to connect tickets and gift cards with "
 "physical media such as wristbands or chip cards that may be reused for "
 "different tickets or gift cards later."
 msgstr ""
-"Funktionen \"Genanvendelige medier\" gør det muligt at forbinde billetter og "
-"voucher med fysiske medier som armbånd eller chipkort, der kan genbruges til "
-"andre billetter eller voucher senere."
+"Med funktionen \"Genanvendelige medier\" kan du knytte billetter og gavekort "
+"til fysiske medier såsom armbånd eller chipkort, som senere kan genbruges "
+"til andre billetter eller gavekort."
 
 #: pretix/base/settings.py
 msgid "Enforce the usage of issued reusable media for check-in"
 msgstr ""
+"Gennemtving, at der udelukkende anvendes de udleverede genanvendelige medier "
+"ved check-in"
 
 #: pretix/base/settings.py
 msgid ""
@@ -9768,6 +9735,10 @@ msgid ""
 "medium has been created and linked to a ticket. Keeping this option turned "
 "off will treat the reusable medium and ticket as equals."
 msgstr ""
+"Hvis denne indstilling er aktiveret, accepteres en billetstregkode ikke "
+"længere, hvis der er oprettet et genanvendeligt medie, som er knyttet til en "
+"billet. Hvis denne indstilling forbliver deaktiveret, behandles det "
+"genanvendelige medie og billetten på samme måde."
 
 #: pretix/base/settings.py
 msgid "Length of barcodes"
@@ -11336,10 +11307,8 @@ msgid "We'll show this publicly to allow attendees to contact you."
 msgstr "Vi vil vise dette offentligt, så deltagerne kan kontakte dig."
 
 #: pretix/base/settings.py
-#, fuzzy
-#| msgid "Contact"
 msgid "Contact URL"
-msgstr "Kontakt"
+msgstr "Kontakt-URL"
 
 #: pretix/base/settings.py
 msgid ""
@@ -11347,6 +11316,9 @@ msgid ""
 "the email address above. Please note that you still need to add a contact "
 "email address that will be shared with all emails you send."
 msgstr ""
+"Hvis du indstiller dette, vil kontaktlinket i sidefoden pege hertil i stedet "
+"for at bruge ovenstående e-mailadresse. Bemærk, at du stadig skal tilføje en "
+"kontakt-e-mailadresse, som vil blive angivet i alle de e-mails, du sender."
 
 #: pretix/base/settings.py pretix/control/forms/event.py
 msgid "Imprint URL"
@@ -13213,30 +13185,19 @@ msgstr ""
 "os."
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
-#, fuzzy
-#| msgid ""
-#| "You have requested us to cancel an event which includes a larger bulk-"
-#| "refund:"
 msgid "You requested to cancel an event that involves a large bulk refund:"
 msgstr ""
-"Du har bedt os om at aflyse et arrangement, der indebærer en større samlet "
+"Du har anmodet om at annullere en begivenhed, der medfører en stor samlet "
 "refusion:"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
-#, fuzzy
-#| msgid "Estimated refund amount"
 msgid "Estimated refund"
-msgstr "Anslået refusionsbeløb"
+msgstr "Anslået tilbagebetaling"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
-#, fuzzy
-#| msgid ""
-#| "Please confirm that you want to proceed by coping the following "
-#| "confirmation code into the cancellation form:"
 msgid "To confirm, paste the following code into the cancellation form:"
 msgstr ""
-"Bekræft venligst, at du ønsker at fortsætte ved at indsætte følgende "
-"bekræftelseskode i afmeldingsformularen:"
+"For at bekræfte skal du indsætte følgende kode i afbestillingsformularen:"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 #, python-format
@@ -13244,6 +13205,8 @@ msgid ""
 "Don't share this code with anyone. The %(instance)s team will never ask you "
 "for it."
 msgstr ""
+"Del ikke denne kode med nogen. %(instance)s-teamet vil aldrig bede dig om "
+"den."
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 #: pretix/base/templates/pretixbase/email/export_failed.txt
@@ -13252,6 +13215,8 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team"
 msgstr ""
+"Tak,  \n"
+"%(instance)s-teamet"
 
 #: pretix/base/templates/pretixbase/email/email_footer.html
 #, python-format
@@ -13259,51 +13224,38 @@ msgid "powered by <a %(a_attr)s>pretix</a>"
 msgstr "drevet af <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt
-#, fuzzy
-#| msgid "Your export failed."
 msgid "Your scheduled export failed."
-msgstr "Din eksport mislykkedes."
+msgstr "Din planlagte eksport mislykkedes."
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
-#, fuzzy
 msgid "Reason"
-msgstr "Tilbagebetal bestilling"
+msgstr "Begrundelse"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt
-#, fuzzy
-#| msgid "If your export fails five times in a row, it will no longer be sent."
 msgid "If an export fails five times in a row, we'll stop sending it."
 msgstr ""
-"Hvis din eksport mislykkes fem gange i træk, vil den ikke længere blive "
-"sendt."
+"Hvis en eksport mislykkes fem gange i træk, vil vi stoppe med at sende den."
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt
-#, fuzzy
-#| msgid "You can request to cancel this order."
 msgid "You can adjust or remove this export here:"
-msgstr "Du kan anmode om at annullere denne bestilling."
+msgstr "Du kan ændre eller fjerne denne eksport her:"
 
 #: pretix/base/templates/pretixbase/email/notification.html
 #: pretix/base/templates/pretixbase/email/notification.txt
-#, fuzzy
-#| msgid "You receive these emails based on your notification settings."
 msgid "You're receiving this email based on your notification settings."
 msgstr ""
-"Du modtager disse e-mails i henhold til dine indstillinger for "
-"notifikationer."
+"Du modtager denne e-mail i henhold til dine indstillinger for meddelelser."
 
 #: pretix/base/templates/pretixbase/email/notification.html
 #: pretix/base/templates/pretixbase/email/notification.txt
-#, fuzzy
 msgid "Manage settings"
-msgstr "Basisindstillinger"
+msgstr "Administrer indstillinger"
 
 #: pretix/base/templates/pretixbase/email/notification.html
 #: pretix/base/templates/pretixbase/email/notification.txt
-#, fuzzy
 msgid "Disable all notifications"
-msgstr "E-mailnotifikationer"
+msgstr "Deaktiver alle notifikationer"
 
 #: pretix/base/templates/pretixbase/email/order_details.html
 msgid ""
@@ -13362,25 +13314,7 @@ msgid "Contact"
 msgstr "Kontakt"
 
 #: pretix/base/templates/pretixbase/email/shred_completed.txt
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we hereby confirm that the following data shredding job has been "
-#| "completed:\n"
-#| "\n"
-#| "Organizer: %(organizer)s\n"
-#| "\n"
-#| "Event: %(event)s\n"
-#| "\n"
-#| "Data selection: %(shredders)s\n"
-#| "\n"
-#| "Start time: %(start_time)s (new data added after this time might not have "
-#| "been deleted)\n"
-#| "\n"
-#| "Best regards,\n"
-#| "\n"
-#| "Your %(instance)s team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -13398,20 +13332,19 @@ msgid ""
 msgstr ""
 "Hej,\n"
 "\n"
-"vi bekræfter hermed, at følgende datadestruktionsopgave er afsluttet:\n"
+"Følgende datadestruktionsopgave er afsluttet:\n"
 "\n"
-"Arrangør: %(organizer)s\n"
+"- Arrangør: %(organizer)s\n"
+"- Begivenhed: %(event)s\n"
+"- Dataudvælgelse: %(shredders)s\n"
+"- Starttidspunkt: %(start_time)s\n"
 "\n"
-"Begivenhed: %(event)s\n"
+"Data, der er tilføjet til begivenheden efter starttidspunktet, er muligvis "
+"ikke blevet slettet.\n"
 "\n"
-"Dataudvælgelse: %(shredders)s\n"
+"Med venlig hilsen,  \n"
 "\n"
-"Starttidspunkt: %(start_time)s (nye data tilføjet efter dette tidspunkt er "
-"muligvis ikke blevet slettet)\n"
-"\n"
-"Med venlig hilsen,\n"
-"\n"
-"Dit %(instance)s-team\n"
+"%(instance)s-teamet\n"
 
 #: pretix/base/templates/pretixbase/forms/widgets/checkbox_sales_channel_option.html
 msgid ""
@@ -13443,22 +13376,23 @@ msgstr "%(number)s dage %(relation)s %(relation_to)s på %(time_of_day)s"
 #: pretix/base/templates/pretixbase/framebreak.html
 #: pretix/presale/templates/pretixpresale/event/cookies.html
 msgid "Please continue in a new tab"
-msgstr ""
+msgstr "Fortsæt venligst i en ny fane"
 
 #: pretix/base/templates/pretixbase/framebreak.html
 msgid "For security reasons, the following step is only possible in a new tab."
 msgstr ""
+"Af sikkerhedsmæssige årsager kan det følgende trin kun udføres i en ny fane."
 
 #: pretix/base/templates/pretixbase/framebreak.html
 msgid ""
 "If the new tab did not open automatically, please click the following button:"
 msgstr ""
+"Hvis den nye fane ikke åbnede automatisk, skal du klikke på følgende knap:"
 
 #: pretix/base/templates/pretixbase/framebreak.html
 #: pretix/presale/templates/pretixpresale/event/cookies.html
-#, fuzzy
 msgid "Continue in new tab"
-msgstr "Opret gruppe"
+msgstr "Fortsæt i en ny fane"
 
 #: pretix/base/templates/pretixbase/redirect.html
 msgid "Redirect"
@@ -15184,13 +15118,11 @@ msgstr "Søg efter e-mailadresse eller emne"
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/refunds.html
 msgid "Source"
-msgstr ""
+msgstr "Kilde"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "All vouchers"
 msgid "All sources"
-msgstr "Alle vouchere"
+msgstr "Alle kilder"
 
 #: pretix/control/forms/filter.py
 msgid "Team actions"
@@ -15201,21 +15133,16 @@ msgid "Customer actions"
 msgstr "Kundehandlinger"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Device status"
 msgid "Device actions"
-msgstr "Enhedsstatus"
+msgstr "Enhedshandlinger"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Order email"
 msgid "User email"
-msgstr "Bestillings-e-mail"
+msgstr "Brugerens e-mailadresse"
 
 #: pretix/control/forms/filter.py pretix/control/navigation.py
-#, fuzzy
 msgid "All users"
-msgstr "Alle vouchere"
+msgstr "Alle brugere"
 
 #: pretix/control/forms/global_settings.py
 msgid "Additional footer text"
@@ -16724,40 +16651,34 @@ msgid ""
 "because at least one of the selected vouchers has already been redeemed "
 "%(max_redeemed)s times."
 msgstr ""
+"Du kan ikke reducere det maksimale antal indløsninger til %(max_usages)s, da "
+"mindst én af de valgte kuponer allerede er blevet indløst %(max_redeemed)s "
+"gange."
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid ""
-#| "You cannot create a voucher that blocks quota as the selected product or "
-#| "quota is currently sold out or completely reserved."
 msgid ""
 "You cannot create a voucher that allows selection of a quota but has no date "
 "selected."
 msgstr ""
-"Du kan ikke oprette en rabatkode der blokerer en kvote idet det valgte "
-"produkt eller kvote pt. er udsolgt eller fuldt reserveret."
+"Du kan ikke oprette en kupon, hvor det er muligt at vælge en kvote, men hvor "
+"der ikke er valgt nogen dato."
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid "The selected product does not allow to select a seat."
 msgid "The selected quota does not match the selected subevent."
-msgstr "Det valgte produkt tillader ikke, at du vælger en plads."
+msgstr "Den valgte kvote stemmer ikke overens med den valgte underbegivenhed."
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid ""
-#| "There is not enough quota available on quota \"{}\" to perform the "
-#| "operation."
 msgid "There is no sufficient quota available to perform this change."
 msgstr ""
-"Der er ikke enheder nok tilbage på kvoten \"{}\" til at udføre denne "
-"operation."
+"Der er ikke tilstrækkelig kvote til rådighed til at gennemføre denne ændring."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "Changing the maximum number of usages in bulk is not supported if any of the "
 "selected vouchers is assigned a seat."
 msgstr ""
+"Det er ikke muligt at ændre det maksimale antal anvendelser samlet, hvis en "
+"af de valgte kuponer er tildelt en plads."
 
 #: pretix/control/forms/vouchers.py
 msgctxt "subevent"
@@ -16765,18 +16686,24 @@ msgid ""
 "Changing the date in bulk is not supported if any of the selected vouchers "
 "is assigned a seat."
 msgstr ""
+"Det er ikke muligt at ændre datoen for flere billetter på én gang, hvis en "
+"af de valgte billetter er tildelt en plads."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "Changing the product to a quota is not supported if any of the selected "
 "vouchers is assigned a seat."
 msgstr ""
+"Det er ikke muligt at ændre produktet til en kvote, hvis en af de valgte "
+"kuponer er tildelt en plads."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "This change cannot be completed because not all assigned seats of the "
 "vouchers are still available"
 msgstr ""
+"Denne ændring kan ikke gennemføres, da ikke alle de tildelte pladser på "
+"billetterne stadig er ledige"
 
 #: pretix/control/forms/vouchers.py
 msgid "Codes"
@@ -17897,16 +17824,12 @@ msgid "The reusable medium has been changed."
 msgstr "Det genanvendelige medie er blevet udskiftet."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "The new member has been added to the team."
 msgid "A new ticket has been added to the medium."
-msgstr "Det nye medlem er blevet føjet til gruppen."
+msgstr "Der er blevet tilføjet en ny billet til mediet."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "{user} has been removed from the team."
 msgid "A ticket has been removed from the medium."
-msgstr "{user} er fjernet fra gruppen."
+msgstr "En billet er blevet fjernet fra mediet."
 
 #: pretix/control/logdisplay.py
 msgid "The medium has been connected to a new ticket."
@@ -17918,6 +17841,8 @@ msgid ""
 "The ticket #{positionid} was exchanged for reusable medium "
 "{medium_identifier}."
 msgstr ""
+"Billetten #{positionid} blev ombyttet til et genanvendeligt medie "
+"{medium_identifier}."
 
 #: pretix/control/logdisplay.py
 msgid "The medium has been connected to a new gift card."
@@ -18328,14 +18253,14 @@ msgid "Payment {local_id} has been confirmed."
 msgstr "Betalingen {local_id} er blevet bekræftet."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payment {local_id} has been canceled."
-msgstr "Bestillingen er blevet annulleret."
+msgstr "Betalingen {local_id} er blevet annulleret."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Canceling payment {local_id} has failed."
-msgstr "Bestillingen er blevet annulleret."
+msgstr "Det lykkedes ikke at annullere betalingen {local_id}."
 
 #: pretix/control/logdisplay.py
 #, fuzzy, python-brace-format
@@ -21795,54 +21720,51 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "January"
-msgstr ""
+msgstr "januar"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "February"
-msgstr ""
+msgstr "februar"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
-#, fuzzy
 msgid "March"
-msgstr "Marts"
+msgstr "marts"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "April"
-msgstr ""
+msgstr "april"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
-#, fuzzy
-#| msgid "Day"
 msgid "May"
-msgstr "Dag"
+msgstr "maj"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "June"
-msgstr ""
+msgstr "juni"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "July"
-msgstr ""
+msgstr "juli"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "August"
-msgstr ""
+msgstr "august"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "September"
-msgstr "September"
+msgstr "september"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "October"
-msgstr ""
+msgstr "oktober"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "November"
-msgstr "November"
+msgstr "november"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "December"
-msgstr "December"
+msgstr "december"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 #, fuzzy
