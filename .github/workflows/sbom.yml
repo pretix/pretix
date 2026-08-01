@@ -31,7 +31,9 @@ jobs:
         run: sudo apt update && sudo apt install -y gettext unzip
       - name: Install Python dependencies
         run: pip3 install -U "prisma-sbom-submit[python]"
-      - name: Submit SBOM
+      - name: Debug
+        run: which npm
+      - name: Create SBOM
         run: prisma-sbom-submit collect . sbom.json
       - name: Submit SBOM
         run: prisma-sbom-submit upload --server https://prisma.pretix.com sbom.json
