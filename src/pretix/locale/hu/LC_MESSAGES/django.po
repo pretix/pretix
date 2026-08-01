@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-07-23 15:35+0000\n"
+"PO-Revision-Date: 2026-08-01 21:00+0000\n"
 "Last-Translator: szurofkamarciidfbe08444ef04788 <szurofkamarcii@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -1377,10 +1377,8 @@ msgid "Membership type"
 msgstr "Tagságtípus"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "Purchase time"
 msgid "Purchase ticket"
-msgstr "Vásárlás időpontja"
+msgstr "Jegy vásárlása"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
 #: pretix/base/exporters/waitinglist.py pretix/base/forms/questions.py
@@ -1397,10 +1395,8 @@ msgid "Start date"
 msgstr "Kezdő dátum"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "Start time from"
 msgid "Start time"
-msgstr "Kezdési időpont ettől"
+msgstr "Kezdési időpont"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
 #: pretix/base/exporters/waitinglist.py pretix/base/models/memberships.py
@@ -1413,10 +1409,8 @@ msgid "End date"
 msgstr "Záró dátum"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "End: %(time)s"
 msgid "End time"
-msgstr "Vége: %(time)s"
+msgstr "Záró időpont"
 
 #: pretix/base/exporters/dekodi.py pretix/base/exporters/invoices.py
 msgctxt "export_category"
@@ -4641,10 +4635,6 @@ msgid "This event is remote or partially remote."
 msgstr "Ez az rendezvény távoli vagy részben távoli."
 
 #: pretix/base/models/event.py
-#, fuzzy
-#| msgid ""
-#| "This will be used to let users know if the event is in a different "
-#| "timezone and let’s us calculate users’ local times."
 msgid ""
 "This will be used to let users know if the event is in a different timezone, "
 "and to let us calculate the local time of a user."
@@ -7578,15 +7568,11 @@ msgid "This gift card was used in the meantime. Please try again."
 msgstr "Ezt az ajándékkártyát időközben felhasználták. Kérjük, próbálja újra."
 
 #: pretix/base/payment.py
-#, fuzzy
-#| msgid ""
-#| "This payment provider does not exist or the respective plugin is disabled."
 msgid ""
 "This payment provider exists for historical purposes only and is no longer "
 "usable."
 msgstr ""
-"Ez a fizetési szolgáltató nem létezik, vagy a hozzá tartozó bővítmény le van "
-"tiltva."
+"Ez a fizetési szolgáltató egy korábbi funkció volt, már nem használható."
 
 #: pretix/base/pdf.py
 msgid "Ticket code (barcode content)"
