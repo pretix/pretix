@@ -35,6 +35,8 @@ jobs:
         run: sudo apt update && sudo apt install -y gettext unzip
       - name: Install Python dependencies
         run: pip3 install -U "prisma-sbom-submit[python]"
+      - name: Test
+        run: /opt/hostedtoolcache/node/24.18.0/x64/bin/npm install --global @cyclonedx/cyclonedx-npm
       - name: Create SBOM
         run: NPM=$(which npm) prisma-sbom-submit collect . sbom.json
       - name: Submit SBOM
