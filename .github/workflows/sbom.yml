@@ -36,7 +36,7 @@ jobs:
       - name: Install Python dependencies
         run: pip3 install -U "prisma-sbom-submit[python]"
       - name: Create SBOM
-        run: prisma-sbom-submit collect . sbom.json
+        run: NPM=$(which npm) prisma-sbom-submit collect . sbom.json
       - name: Submit SBOM
         run: prisma-sbom-submit upload --server https://prisma.pretix.com sbom.json
         env:
