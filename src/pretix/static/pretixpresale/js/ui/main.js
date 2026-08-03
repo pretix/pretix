@@ -144,13 +144,34 @@ var form_handlers = function (el) {
         ).find("canvas").attr("role", "img").attr("aria-label", this.getAttribute("data-desc"));
     });
 
+    /*
+    - fieldset-max-count (MAX NUMBER PER SECTION)
+    - availability-box input (I vari input)
+    - count-desc (TEXT TO SHOW WHEN MAX IS REACHED)
+    - count-in-cart (If present (hasAttribute), count how many of the items are already in the cart and add them to the count)
+    - max-count
 
-    el.find("fieldset[data-addon-max-count]").each(function() {
+    Per contare:
+    - Per ogni input, predere l'item id e cercarlo nel cart quanti di quell'item id sono già nel carrello
+    - sommare quanti item sono nella selezione
+
+    Se count > max, mantenere logica
+    */
+
+    el.find("fieldset[data-max-count]").each(function() {
         // usually addons are only allowed once one per item
-        var multipleAllowed = this.hasAttribute("data-addon-multi-allowed");
+        var multipleAllowed = this.hasAttribute("data-multi-allowed");
+        var countInCart = this.hasAttribute("data-count-in-cart");
         var $inputs = $(".availability-box input", this);
-        var max = parseInt(this.getAttribute("data-addon-max-count"));
-        var desc = $(".addon-count-desc", this).text().trim();
+        var max = parseInt(this.getAttribute("data-max-count"));
+        var desc = $(".count-desc", this).text().trim();
+
+        var showToolTip = function (element) {
+            $(element).trigger("change").closest(".availability-box").tooltip({
+                "title": desc,
+            }).tooltip('show');
+        }
+
         this.addEventListener("change", function (e) {
             var variations = e.target.closest(".variations");
             if (variations && !multipleAllowed && e.target.checked) {
@@ -158,27 +179,44 @@ var form_handlers = function (el) {
                 $(".availability-box input:checked", variations).not(e.target).prop("checked", false).trigger("change");
             }
 
+            var totalSelected = $inputs.toArray().reduce(function(a, e) {
+                return a + (e.type == "checkbox" ? (e.checked ? parseInt(e.value) : 0) : parseInt(e.value) || 0);
+            }, 0);
+            var totalInCart = countInCart ? $inputs.toArray().reduce(function(a, e) {
+                return a + parseInt(e.getAttribute("already-in-cart") || 0);
+            }, 0) : 0;
+            var total = totalSelected + totalInCart;
             if (max === 1) {
                 if (e.target.checked) {
-                    $inputs.filter(":checked").not(e.target).prop("checked", false).trigger("change");
+                    if (totalInCart > 0) {
+                        e.target.checked = false;
+                        //We don't care destroying this, since the only action that can be done is to remove the element from the cart, 
+                        // which triggers a page reload anyway
+                        showToolTip(e.target);
+                        e.preventDefault();
+                    } else {
+                        $inputs.filter(":checked").not(e.target).prop("checked", false).trigger("change");
+                    }
                 }
                 return;
             }
-            var total = $inputs.toArray().reduce(function(a, e) {
-                return a + (e.type == "checkbox" ? (e.checked ? parseInt(e.value) : 0) : parseInt(e.value) || 0);
-            }, 0);
             if (total > max) {
                 if (e.target.type == "checkbox") {
                     e.target.checked = false;
                 } else {
                     e.target.value = e.target.value - (total - max);
                 }
-                $(e.target).trigger("change").closest(".availability-box").tooltip({
-                    "title": desc,
-                }).tooltip('show');
+                showToolTip(e.target);
                 e.preventDefault();
             } else {
                 $(".availability-box", this).tooltip('destroy')
+            }
+
+            //This MUST be done after the tooltip, otherwise the total calculation would never show it in some cases (IE all other items = 0, this being increased using the + button)
+            var maxSelection = parseInt(e.target.getAttribute("max-selection")) || max;
+            var value = parseInt(e.target.value) || 0;
+            if (value > maxSelection) {
+                e.target.value = maxSelection;
             }
         });
     });

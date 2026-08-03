@@ -558,7 +558,7 @@ class CartManager:
             cartsize += sum([op.count for op in self._operations if isinstance(op, self.AddOperation) and not op.addon_to])
             cartsize -= len([1 for op in self._operations if isinstance(op, self.RemoveOperation) if
                              not op.position.addon_to_id])
-            limit = min(int(self.event.settings.max_items_per_order), settings.PRETIX_MAX_ORDER_SIZE)
+            limit = self.event.max_items_per_order
             if cartsize > limit:
                 raise CartError(error_messages['max_items'] % limit)
 
