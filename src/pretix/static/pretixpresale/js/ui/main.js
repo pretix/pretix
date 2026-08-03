@@ -252,11 +252,27 @@ function setup_basics(el) {
             $($(this).attr("data-target")).collapse('show');
         }
     });
-    $("fieldset.accordion-panel > legend input[type=radio]").change(function() {
-        $(this).closest("fieldset").siblings("fieldset").prop('disabled', true).children('.panel-body').slideUp();
-        $(this).closest("fieldset").prop('disabled', false).children('.panel-body').slideDown();
-    }).filter(':not(:checked)').each(function() { $(this).closest("fieldset").prop('disabled', true).children('.panel-body').hide(); });
+   // New Fix: Handle change event when a payment method radio button is selected
+    $(document).on("change", ".accordion-radio input[type=radio], fieldset.accordion-panel input[type=radio]", function() {
+        var $currentFieldset = $(this).closest("fieldset, .accordion-panel");
+        
+        // Close and disable unselected sibling containers
+        $currentFieldset.siblings("fieldset, .accordion-panel")
+            .prop('disabled', true)
+            .find('.panel-body, .collapse').stop().slideUp();
+            
+        // Open and enable the currently selected container
+        $currentFieldset.prop('disabled', false)
+            .find('.panel-body, .collapse').stop().slideDown();
+    });
 
+    // On page load: Automatically hide and disable unchecked panels to prevent overlap
+    $(".accordion-radio input[type=radio], fieldset.accordion-panel input[type=radio]")
+        .filter(':not(:checked)').each(function() { 
+            $(this).closest("fieldset, .accordion-panel")
+                .prop('disabled', true)
+                .find('.panel-body, .collapse').hide(); 
+        });
     el.find(".js-only").removeClass("js-only");
     el.find(".js-hidden").hide();
 
