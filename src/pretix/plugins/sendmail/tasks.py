@@ -70,6 +70,8 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
         except InvoiceAddress.DoesNotExist:
             ia = InvoiceAddress(order=o)
 
+        parent_op = None
+        sent_to_parent_positions = set()
         if recipients in ('both', 'attendees'):
             for p in o.positions.annotate(
                 any_checkins=Exists(
@@ -84,9 +86,14 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                         list_id__in=checkin_lists or []
                     )
                 ),
-            ).prefetch_related('addons', 'subevent'):
+            ).order_by('pk').prefetch_related('addons', 'subevent'):
 
-                if p.item_id not in items and not any(a.item_id in items for a in p.addons.all()):
+                is_addon = p.addon_to_id is not None
+
+                if not is_addon:
+                    parent_op = p
+
+                if p.item_id not in items:
                     continue
 
                 if filter_checkins:
@@ -97,17 +104,28 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                     if not allowed:
                         continue
 
+                send_to_email = ''
+
                 if not p.attendee_email:
                     if recipients == 'attendees':
-                        send_to_order = True
+                        if is_addon:
+                            if p.addon_to_id in sent_to_parent_positions:
+                                continue
+                            elif parent_op and parent_op.id == p.addon_to_id and parent_op.attendee_email:
+                                send_to_email = parent_op.attendee_email
+                            else:
+                                send_to_order = True
+                                continue
+                        else:
+                            send_to_order = True
+                            continue
+                elif is_addon and p.addon_to_id in sent_to_parent_positions and p.attendee_email == parent_op.attendee_email:
                     continue
+                else:
+                    send_to_email = p.attendee_email
 
-                if p.attendee_email == o.email and send_to_order:
+                if send_to_email == o.email and send_to_order:
                     continue
-                # the amount of mails could be further restricted if we filter out those where the addon-attendee-email
-                # is the same as the main-product-attendee-email, however, that bears many issues, e.g. if one of
-                # those mail-addresses was only a placeholder or if restrictions are set and the main-product is
-                # excluded -- for now it seems best not to filter them at this point in time
 
                 if subevent and p.subevent_id != subevent:
                     continue
@@ -121,7 +139,7 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                 with language(o.locale, event.settings.region):
                     email_context = get_email_context(event=event, order=o, invoice_address=ia, position=p)
                     outgoing_mail = mail(
-                        p.attendee_email,
+                        send_to_email,
                         subject,
                         message,
                         email_context,
@@ -139,6 +157,7 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                             user=user,
                             data=outgoing_mail.log_data(),
                         )
+                        sent_to_parent_positions.add(p.id)
 
         if send_to_order and o.email:
             with language(o.locale, event.settings.region):
