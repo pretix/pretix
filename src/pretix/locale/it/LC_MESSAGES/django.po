@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-02 22:00+0000\n"
+"PO-Revision-Date: 2026-08-03 23:00+0000\n"
 "Last-Translator: \"Luca Sorace \\\"Stranck\\\"\" <strdjn@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -11422,15 +11422,20 @@ msgid ""
 "total price of the order. Such changes can always only be made by the main "
 "customer."
 msgstr ""
+"Di default, solo la persona che ha effettuato l'ordine di questo biglietto "
+"può eseguire modifiche. Selezionando questa opzione, anche i singoli "
+"partecipanti potranno fare cambiamenti. In ogni caso, i singoli partecipanti "
+"non potranno effettuare operazioni che cambiano il costo dell'ordine. Queste "
+"operazioni sono possibili solamente per chi originariamente ha creato "
+"l'ordine."
 
 #: pretix/base/settings.py
 msgid "Customers can cancel their unpaid orders"
-msgstr ""
+msgstr "I clienti possono annullare i loro ordini non pagati"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Charge a fixed cancellation fee"
-msgstr "Cancellazione di"
+msgstr "Addebita una quota di cancellazione fissa"
 
 #: pretix/base/settings.py
 msgid ""
@@ -11438,50 +11443,58 @@ msgid ""
 "never charged. Note that it will be your responsibility to claim the "
 "cancellation fee from the user."
 msgstr ""
+"Interessa solamente gli ordini con pagamenti in attesa, la quota di "
+"cancellazione non viene mai addebitata sugli ordini gratuiti. Nota: è tua "
+"responsabilità collezionare la quota di cancellazione dall'utente."
 
 #: pretix/base/settings.py
 msgid "Charge payment, shipping and service fees"
-msgstr ""
+msgstr "Addebita la quota di spedizione, pagamento e servizio"
 
 #: pretix/base/settings.py
 msgid "Charge a percentual cancellation fee"
-msgstr ""
+msgstr "Addebita una quota di quota di cancellazione in percentuale"
 
 #: pretix/base/settings.py
 msgid "Do not allow cancellations after"
-msgstr ""
+msgstr "Non permettere di annullare gli ordine dopo il"
 
 #: pretix/base/settings.py
 msgid "Customers can cancel their paid orders"
-msgstr ""
+msgstr "I clienti possono annullare i loro ordini già pagati"
 
 #: pretix/base/settings.py
 msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
 msgstr ""
+"Il denaro già incassato sarà automaticamente restituito se il metodo di "
+"pagamento lo permette. Altrimenti, un rimborso manuale verrà creato così che "
+"tu possa processarlo manualmente."
 
 #: pretix/base/settings.py pretix/control/forms/orders.py
 msgid "Keep a fixed cancellation fee"
-msgstr ""
+msgstr "Trattieni una quota di cancellazione fissa"
 
 #: pretix/base/settings.py
 msgid "Keep payment, shipping and service fees"
-msgstr ""
+msgstr "Trattieni la quota di spedizione, pagamento e servizio"
 
 #: pretix/base/settings.py pretix/control/forms/orders.py
 msgid "Keep a percentual cancellation fee"
-msgstr ""
+msgstr "Trattieni una quota di cancellazione in percentuale"
 
 #: pretix/base/settings.py
 msgid "Allow customers to voluntarily choose a lower refund"
-msgstr ""
+msgstr "Permetti si clienti di scegliere volontariamente un rimborso minore"
 
 #: pretix/base/settings.py
 msgid ""
 "With this option enabled, your customers can choose to get a smaller refund "
 "to support you."
 msgstr ""
+"Con questa opzione attiva, i tuoi clienti potranno scegliere di ottenere un "
+"rimborso minore al dovuto, per effettuare una donazione nei vostri confronti."
 
 #: pretix/base/settings.py
 msgid ""
