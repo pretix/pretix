@@ -41,7 +41,6 @@ from typing import List, Optional
 
 from celery.exceptions import MaxRetriesExceededError
 from django import forms
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Value

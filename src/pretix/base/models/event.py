@@ -864,7 +864,7 @@ class Event(EventMixin, LoggedModel):
             self.settings.get('payment_term_last', as_type=RelativeDateWrapper).datetime(self).date(),
             time(hour=23, minute=59, second=59)
         ), tz)
-        
+
     @property
     def max_items_per_order(self):
         """

@@ -144,20 +144,6 @@ var form_handlers = function (el) {
         ).find("canvas").attr("role", "img").attr("aria-label", this.getAttribute("data-desc"));
     });
 
-    /*
-    - fieldset-max-count (MAX NUMBER PER SECTION)
-    - availability-box input (I vari input)
-    - count-desc (TEXT TO SHOW WHEN MAX IS REACHED)
-    - count-in-cart (If present (hasAttribute), count how many of the items are already in the cart and add them to the count)
-    - max-count
-
-    Per contare:
-    - Per ogni input, predere l'item id e cercarlo nel cart quanti di quell'item id sono già nel carrello
-    - sommare quanti item sono nella selezione
-
-    Se count > max, mantenere logica
-    */
-
     el.find("fieldset[data-max-count]").each(function() {
         // usually addons are only allowed once one per item
         var multipleAllowed = this.hasAttribute("data-multi-allowed");
