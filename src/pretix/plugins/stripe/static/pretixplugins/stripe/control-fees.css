@@ -1,0 +1,19 @@
+.form-plugins .form-group:has(.stripe-method-fee-nested) {
+    margin-bottom: 10px;
+}
+.form-plugins .form-group:has(.stripe-method-fee-nested) > .control-label {
+    font-weight: normal;
+    color: #555;
+}
+.form-plugins .form-group:has(input.stripe-method-fee-nested[type="checkbox"]) {
+    margin-top: -5px;
+    margin-bottom: 5px;
+}
+.form-plugins .form-group:has(.stripe-method-fee-nested) > .col-md-9,
+.form-plugins .form-group:has(.stripe-method-fee-nested) > [class*="col-"] {
+    padding-left: 40px;
+}
+.form-plugins .form-group:has(input.stripe-method-fee-value) {
+    margin-top: 0;
+    margin-bottom: 8px;
+}

@@ -39,7 +39,7 @@ import urllib.parse
 import zoneinfo
 from collections import OrderedDict
 from datetime import datetime
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from json import JSONDecodeError
 
 import stripe
@@ -75,6 +75,7 @@ from pretix.base.views.redirect import safelink
 from pretix.helpers import OF_SELF
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.http import get_client_ip
+from pretix.helpers.money import DecimalTextInput
 from pretix.helpers.urls import mainreverse_absolute
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.stripe.forms import StripeKeyValidator
@@ -85,6 +86,27 @@ from pretix.plugins.stripe.tasks import (
     get_stripe_account_key, stripe_verify_domain,
 )
 from pretix.presale.views.cart import cart_session
+
+# Must stay in sync with method_* toggles in StripeSettingsHolder.settings_form_fields.
+STRIPE_METHOD_FEE_STEMS = (
+    'card',
+    'ideal',
+    'alipay',
+    'bancontact',
+    'sepa_debit',
+    'eps',
+    'multibanco',
+    'przelewy24',
+    'pay_by_bank',
+    'wechatpay',
+    'revolut_pay',
+    'promptpay',
+    'swish',
+    'twint',
+    'affirm',
+    'klarna',
+    'mobilepay',
+)
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -231,6 +253,78 @@ class StripeSettingsHolder(BasePaymentProvider):
                   'and to process asynchronous payment methods like SOFORT.'),
                 mainreverse_absolute('plugins:stripe:webhook')
             )
+
+    def _method_has_fee_override(self, stem):
+        return (
+            self.settings.get('method_{}_fee_abs'.format(stem), as_type=Decimal) is not None or
+            self.settings.get('method_{}_fee_percent'.format(stem), as_type=Decimal) is not None
+        )
+
+    def _method_fee_override_fields(self, stem, method_label):
+        places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
+        method_dep = '#id_payment_stripe_method_{}'.format(stem)
+        custom_dep = '#id_payment_stripe_method_{}_fee_custom'.format(stem)
+        nested = 'stripe-method-fee-nested'
+        return [
+            ('method_{}_fee_custom'.format(stem),
+             forms.BooleanField(
+                 label=_('Customize payment fee'),
+                 help_text=_('Override the default Stripe fees below for {method}. Leave individual fields empty to '
+                             'keep the default for that part.').format(method=method_label),
+                 required=False,
+                 initial=self._method_has_fee_override(stem),
+                 widget=forms.CheckboxInput(attrs={
+                     'class': nested,
+                     'data-display-dependency': method_dep,
+                 }),
+             )),
+            ('method_{}_fee_abs'.format(stem),
+             forms.DecimalField(
+                 label=_('Absolute fee'),
+                 help_text=_('Leave empty to use the default absolute fee.'),
+                 localize=True,
+                 required=False,
+                 decimal_places=places,
+                 widget=DecimalTextInput(places=places, attrs={
+                     'class': '{} stripe-method-fee-value'.format(nested),
+                     'data-display-dependency': custom_dep,
+                     'addon_after': self.event.currency,
+                     'placeholder': _('default'),
+                 }),
+             )),
+            ('method_{}_fee_percent'.format(stem),
+             forms.DecimalField(
+                 label=_('Percent fee'),
+                 help_text=_('Leave empty to use the default percent fee.'),
+                 localize=True,
+                 required=False,
+                 widget=forms.TextInput(attrs={
+                     'class': '{} stripe-method-fee-value'.format(nested),
+                     'data-display-dependency': custom_dep,
+                     'addon_after': '%',
+                     'placeholder': _('default'),
+                 }),
+             )),
+        ]
+
+    def settings_form_clean(self, cleaned_data):
+        prefix = self.settings.get_prefix()
+        for stem in STRIPE_METHOD_FEE_STEMS:
+            base = prefix + 'method_' + stem
+            custom_key = base + '_fee_custom'
+            abs_key = base + '_fee_abs'
+            percent_key = base + '_fee_percent'
+            method_on = cleaned_data.get(base)
+            custom_on = cleaned_data.get(custom_key)
+            both_empty = cleaned_data.get(abs_key) is None and cleaned_data.get(percent_key) is None
+            if not method_on or not custom_on or both_empty:
+                # Delete custom bit too so freeze can't pin a lying False
+                cleaned_data[custom_key] = None
+                cleaned_data[abs_key] = None
+                cleaned_data[percent_key] = None
+            else:
+                cleaned_data[custom_key] = True
+        return cleaned_data
 
     @property
     def settings_form_fields(self):
@@ -540,6 +634,25 @@ class StripeSettingsHolder(BasePaymentProvider):
                 #  )),
             ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
         )
+        d_with_fees = OrderedDict()
+        for key, field in d.items():
+            d_with_fees[key] = field
+            if key.startswith('method_'):
+                stem = key[len('method_'):]
+                if stem in STRIPE_METHOD_FEE_STEMS:
+                    for fee_key, fee_field in self._method_fee_override_fields(stem, field.label):
+                        d_with_fees[fee_key] = fee_field
+        d = d_with_fees
+        if '_fee_abs' in d:
+            d['_fee_abs'].help_text = _(
+                'Absolute value. Default for all Stripe payment methods unless a method-specific fee is customized '
+                'above.'
+            )
+        if '_fee_percent' in d:
+            d['_fee_percent'].help_text = _(
+                'Percentage of the order total. Default for all Stripe payment methods unless a method-specific fee '
+                'is customized above.'
+            )
         if not self.settings.connect_client_id or self.settings.secret_key:
             d['connect_destination'] = forms.CharField(
                 label=_('Destination'),
@@ -563,6 +676,34 @@ class StripeMethod(BasePaymentProvider):
     def __init__(self, event: Event):
         super().__init__(event)
         self.settings = SettingsSandbox('payment', 'stripe', event)
+
+    @property
+    def method_config_key(self) -> str:
+        # Settings stems use identifier (przelewy24/wechatpay), not Stripe API types (p24/wechat_pay).
+        if self.identifier == 'stripe':
+            return 'card'
+        return self.identifier.removeprefix('stripe_')
+
+    def _resolved_fee_value(self, override_key: str, baseline_key: str) -> Decimal:
+        override = self.settings.get(override_key, as_type=Decimal)
+        if override is not None:
+            return override
+        return self.settings.get(baseline_key, as_type=Decimal, default=0)
+
+    def calculate_fee(self, price: Decimal) -> Decimal:
+        stem = self.method_config_key
+        fee_abs = self._resolved_fee_value('method_{}_fee_abs'.format(stem), '_fee_abs')
+        fee_percent = self._resolved_fee_value('method_{}_fee_percent'.format(stem), '_fee_percent')
+        fee_reverse_calc = self.settings.get('_fee_reverse_calc', as_type=bool, default=True)
+        places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
+        if fee_reverse_calc:
+            return ((price + fee_abs) * (1 / (1 - fee_percent / 100)) - price).quantize(
+                Decimal('1') / 10 ** places, ROUND_HALF_UP
+            )
+        else:
+            return (price * fee_percent / 100 + fee_abs).quantize(
+                Decimal('1') / 10 ** places, ROUND_HALF_UP
+            )
 
     @property
     def test_mode_message(self):

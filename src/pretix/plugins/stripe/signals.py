@@ -26,6 +26,7 @@ from django import forms
 from django.dispatch import receiver
 from django.http import HttpRequest
 from django.template.loader import get_template
+from django.templatetags.static import static
 from django.urls import resolve, reverse
 from django.utils.translation import gettext_lazy as _
 from paypalhttp import HttpResponse
@@ -36,7 +37,7 @@ from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
     logentry_display, register_global_settings, register_payment_providers,
 )
-from pretix.control.signals import nav_organizer
+from pretix.control.signals import html_head as control_html_head, nav_organizer
 from pretix.plugins.stripe.forms import StripeKeyValidator
 from pretix.presale.signals import html_head, process_response
 
@@ -79,6 +80,16 @@ def html_head_presale(sender, request=None, **kwargs):
         return template.render(ctx)
     else:
         return ""
+
+
+@receiver(control_html_head, dispatch_uid="stripe_control_html_head")
+def html_head_control(sender, request=None, **kwargs):
+    url = resolve(request.path_info)
+    if url.url_name == 'event.settings.payment.provider' and url.kwargs.get('provider') == 'stripe_settings':
+        return '<link rel="stylesheet" type="text/css" href="{}">'.format(
+            static('pretixplugins/stripe/control-fees.css')
+        )
+    return ''
 
 
 @receiver(signal=logentry_display, dispatch_uid="stripe_logentry_display")
