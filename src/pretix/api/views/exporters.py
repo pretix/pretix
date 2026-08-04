@@ -45,7 +45,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.organizer import TeamQuerySet
 from pretix.base.services.export import (
-    export, init_event_exporters, init_organizer_exporters, multiexport,
+    export, init_event_exporters, init_organizer_exporters, multiexport, ExportError,
 )
 from pretix.helpers.http import ChunkBasedFileResponse
 
@@ -149,8 +149,11 @@ class EventExportersViewSet(ExportersMixin, viewsets.ViewSet):
         ))
         exporters = []
         for ex in sorted(raw_exporters, key=lambda ex: str(ex.verbose_name)):
-            ex._serializer = JobRunSerializer(exporter=ex)
-            exporters.append(ex)
+            try:
+                ex._serializer = JobRunSerializer(exporter=ex)
+                exporters.append(ex)
+            except ExportError:
+                pass
         return exporters
 
     def do_export(self, cf, instance, data):
@@ -180,8 +183,11 @@ class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
         ))
         exporters = []
         for ex in sorted(raw_exporters, key=lambda ex: str(ex.verbose_name)):
-            ex._serializer = JobRunSerializer(exporter=ex)
-            exporters.append(ex)
+            try:
+                ex._serializer = JobRunSerializer(exporter=ex)
+                exporters.append(ex)
+            except ExportError:
+                pass
         return exporters
 
     def do_export(self, cf, instance, data):
