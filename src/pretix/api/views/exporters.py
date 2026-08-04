@@ -45,7 +45,8 @@ from pretix.base.models import (
 )
 from pretix.base.models.organizer import TeamQuerySet
 from pretix.base.services.export import (
-    export, init_event_exporters, init_organizer_exporters, multiexport, ExportError,
+    ExportError, export, init_event_exporters, init_organizer_exporters,
+    multiexport,
 )
 from pretix.helpers.http import ChunkBasedFileResponse
 
