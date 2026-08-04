@@ -172,7 +172,9 @@ class CachedFileInput(forms.ClearableFileInput):
         from ...base.models import CachedFile
         v = super().value_from_datadict(data, files, name)
         if v is None and data.get(name + '-cachedfile'):  # An explicit "[x] clear" would be False, not None
-            return CachedFile.objects.filter(id=data[name + '-cachedfile']).first()
+            v = CachedFile.objects.filter(id=data[name + '-cachedfile']).first()
+            if self.request and not v.allowed_for_session(self.request):
+                v = None
         return v
 
     def get_context(self, name, value, attrs):
@@ -244,6 +246,11 @@ class ExtFileField(ExtValidationMixin, SizeFileField):
 class CachedFileField(ExtFileField):
     widget = CachedFileInput
 
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request", None)
+        super().__init__(*args, **kwargs)
+        self.widget.request = self.request
+
     def to_python(self, data):
         from ...base.models import CachedFile
 
@@ -271,6 +278,8 @@ class CachedFileField(ExtFileField):
                 filename=data.name,
                 type=data.content_type,
             )
+            if self.request:
+                cf.bind_to_session(self.request)  # no salt because we want direct web access
             cf.file.save(data.name, data.file)
             cf.save()
             data._uploaded_to = cf
@@ -294,6 +303,8 @@ class CachedFileField(ExtFileField):
                 filename=data.name,
                 type=data.content_type,
             )
+            if self.request:
+                cf.bind_to_session(self.request)  # no salt because we want direct web access
             cf.file.save(data.name, data.file)
             cf.save()
             data._uploaded_to = cf
