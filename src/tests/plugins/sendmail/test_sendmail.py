@@ -464,7 +464,7 @@ def test_sendmail_attendee_subevent_range_filter(logged_in_client, sendmail_url,
                                           'recipients': 'attendees',
                                           'items': item.pk,
                                           'subject_0': 'Test subject',
-                                          'message_0': 'This is a test file for sending mails.',
+                                          'message_0': 'This is a test file for sending mails. {event}, {event_location}, Admission {event_admission_time}',
                                           'subevents_from_0': '2023-07-01',
                                           'subevents_from_1': '00:00:00',
                                           'subevents_to_0': '2023-08-01',
@@ -477,6 +477,7 @@ def test_sendmail_attendee_subevent_range_filter(logged_in_client, sendmail_url,
     assert djmail.outbox[0].to == ['attendee1@dummy.test']
     assert '/ticket/' in djmail.outbox[0].body
     assert '/order/' not in djmail.outbox[0].body
+    assert 'This is a test file for sending mails. ' in djmail.outbox[0].body
 
 
 @pytest.mark.django_db
@@ -599,7 +600,7 @@ def test_waitinglist_sendmail_simple_case(logged_in_client, sendmail_url, event,
                                      {'action': 'send',
                                       'items': waitinglistentry.item_id,
                                       'subject_0': 'Test subject',
-                                      'message_0': 'This is a test file for sending mails.',
+                                      'message_0': 'This is a test file for sending mails. {event}, {event_location}, Admission {event_admission_time}',
                                       },
                                      follow=True)
     assert response.status_code == 200
@@ -608,7 +609,7 @@ def test_waitinglist_sendmail_simple_case(logged_in_client, sendmail_url, event,
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].to == [waitinglistentry.email]
     assert djmail.outbox[0].subject == 'Test subject'
-    assert 'This is a test file for sending mails.' in djmail.outbox[0].body
+    assert 'This is a test file for sending mails. Dummy, Foo City, Admission 12:30' in djmail.outbox[0].body
 
     url = sendmail_url + 'history/'
     response = logged_in_client.get(url)

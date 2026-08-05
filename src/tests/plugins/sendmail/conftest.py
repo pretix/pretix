@@ -35,6 +35,8 @@ def event():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), live=True,
         plugins='pretix.plugins.sendmail,tests.testdummy',
+        location='Foo City',
+        date_admission=now().replace(hour=12, minute=30),
     )
     return event
 
