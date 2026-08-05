@@ -32,6 +32,7 @@ from pretix.base.models import LoggedModel
 from pretix.base.permissions import (
     AnyPermissionOf, assert_valid_event_permission,
 )
+from pretix.helpers import BrinIndexIgnoredOnSQLite
 
 
 @scopes_disabled()
@@ -287,3 +288,22 @@ class Device(LoggedModel):
             return self.get_events_with_any_permission()
         else:
             return self.organizer.events.none()
+
+
+class DeviceLastSeen(models.Model):
+    # This is a separate model since we expect it to get A LOT of writes and PostgreSQL always
+    # writes full rows and then needs to update all indexes on the row, so this is going to save a
+    # lot of write traffic on the databse
+    device = models.OneToOneField("Device", on_delete=models.CASCADE, related_name="last_seen")
+    last_seen = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            BrinIndexIgnoredOnSQLite(
+                # BRIN indexes are highly efficient on lots of updates, especially of chronological data
+                # and especially if we later want to query them by range, as we likely want to.
+                "last_seen",
+                name="pretixbase_device_last_seen",
+                autosummarize=True
+            )
+        ]
