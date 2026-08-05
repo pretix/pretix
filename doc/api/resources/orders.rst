@@ -2038,7 +2038,7 @@ Manipulating individual positions
 
    * ``order`` (mandatory, specified as a string mapping to a ``code``)
 
-   * ``addon_to`` (optional, specified as an integer mapping to the ``positionid`` of the parent position)
+   * ``addon_to`` (optional, specified as an integer mapping to ``positionid`` - the number of the position within the order, see :ref:`_order-position-resource` - of the parent position)
 
    * ``item`` (mandatory)
 
