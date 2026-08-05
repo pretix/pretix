@@ -108,6 +108,7 @@ from pretix.base.services.export import (
     init_organizer_exporters, multiexport, scheduled_organizer_export,
 )
 from pretix.base.services.mail import mail, prefix_subject
+from pretix.base.services.placeholders import prepare_sample_context_for_preview
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.exports import ScheduledOrganizerExportForm
@@ -345,16 +346,11 @@ class MailSettingsPreview(OrganizerPermissionRequiredMixin, View):
 
     # get all supported placeholders with dummy values
     def placeholders(self, item):
-        ctx = {}
-        for p, s in MailSettingsForm(obj=self.request.organizer)._get_sample_context(
-                MailSettingsForm.base_context[item]).items():
-            if s.strip().startswith('*'):
-                ctx[p] = s
-            else:
-                ctx[p] = '<span class="placeholder" title="{}">{}</span>'.format(
-                    _('This value will be replaced based on dynamic parameters.'),
-                    s
-                )
+        ctx = prepare_sample_context_for_preview(
+            MailSettingsForm(obj=self.request.organizer)._get_sample_context(
+                MailSettingsForm.base_context[item]
+            )
+        )
         return self.SafeDict(ctx)
 
     def post(self, request, *args, **kwargs):
