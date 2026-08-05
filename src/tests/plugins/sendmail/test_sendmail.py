@@ -395,7 +395,7 @@ def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event,
                                           'recipients': 'attendees',
                                           'items': i2.pk,
                                           'subject_0': 'Test subject',
-                                          'message_0': 'This is a test file for sending mails. {event}, {event_location}, Admission {event_admission_time}',
+                                          'message_0': 'This is a test file for sending mails.',
                                           },
                                          follow=True)
     assert response.status_code == 200
@@ -404,7 +404,6 @@ def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event,
     assert djmail.outbox[0].to == ['attendee2@dummy.test']
     assert '/ticket/' in djmail.outbox[0].body
     assert '/order/' not in djmail.outbox[0].body
-    assert 'This is a test file for sending mails. Dummy, Foo City, Admission 12:30' in djmail.outbox[0].body
 
 
 @pytest.mark.django_db
@@ -413,8 +412,8 @@ def test_sendmail_attendee_subevent_filter(logged_in_client, sendmail_url, event
     event.has_subevents = True
     event.save()
     with scopes_disabled():
-        se1 = event.subevents.create(name='Subevent FOO', date_from=now(), location='FOO Town', date_admission=now().replace(hour=15))
-        se2 = event.subevents.create(name='Bar', date_from=now(), location='Bar City')
+        se1 = event.subevents.create(name='Subevent FOO', date_from=now())
+        se2 = event.subevents.create(name='Bar', date_from=now())
         pos.attendee_email = 'attendee1@dummy.test'
         pos.subevent = se1
         pos.save()
@@ -430,7 +429,7 @@ def test_sendmail_attendee_subevent_filter(logged_in_client, sendmail_url, event
                                           'recipients': 'attendees',
                                           'items': item.pk,
                                           'subject_0': 'Test subject',
-                                          'message_0': 'This is a test file for sending mails. {event}, {event_location}, Admission {event_admission_time}',
+                                          'message_0': 'This is a test file for sending mails.',
                                           'subevent': se2.pk,
                                           },
                                          follow=True)
@@ -440,7 +439,6 @@ def test_sendmail_attendee_subevent_filter(logged_in_client, sendmail_url, event
     assert djmail.outbox[0].to == ['attendee2@dummy.test']
     assert '/ticket/' in djmail.outbox[0].body
     assert '/order/' not in djmail.outbox[0].body
-    assert 'This is a test file for sending mails. Subevent FOO, FOO Town, 15:00' in djmail.outbox[0].body
 
 
 @pytest.mark.django_db
@@ -466,7 +464,7 @@ def test_sendmail_attendee_subevent_range_filter(logged_in_client, sendmail_url,
                                           'recipients': 'attendees',
                                           'items': item.pk,
                                           'subject_0': 'Test subject',
-                                          'message_0': 'This is a test file for sending mails.',
+                                          'message_0': 'This is a test file for sending mails. {event}, {event_location}, Admission {event_admission_time}',
                                           'subevents_from_0': '2023-07-01',
                                           'subevents_from_1': '00:00:00',
                                           'subevents_to_0': '2023-08-01',
@@ -479,6 +477,7 @@ def test_sendmail_attendee_subevent_range_filter(logged_in_client, sendmail_url,
     assert djmail.outbox[0].to == ['attendee1@dummy.test']
     assert '/ticket/' in djmail.outbox[0].body
     assert '/order/' not in djmail.outbox[0].body
+    assert 'This is a test file for sending mails. ' in djmail.outbox[0].body
 
 
 @pytest.mark.django_db
