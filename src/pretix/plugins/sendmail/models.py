@@ -194,7 +194,19 @@ class ScheduledMail(models.Model):
 
                     for p in positions:
                         if p.id in position_ids:
-                            if p.attendee_email and (p.attendee_email != o.email or not o_sent):
+                            email_to = p.attendee_email if p.attendee_email else None
+
+                            if not email_to and p.addon_to_id is not None:
+                                try:
+                                    parent_op = o.positions.get(
+                                        id=p.addon_to_id)  # should we rethink the whole positions logic here to reduce DB queries?
+                                except OrderPosition.DoesNotExist:
+                                    raise OrderPosition.DoesNotExist  # this should not happen, but just in case
+                                if parent_op.attendee_email:
+                                    email_to = parent_op.attendee_email
+                                    mail_to_parent = True
+
+                            if email_to != o.email or not o_sent:
                                 email_ctx = get_email_context(
                                     event=e,
                                     order=o,
@@ -204,7 +216,8 @@ class ScheduledMail(models.Model):
                                 )
                                 p.send_mail(self.rule.subject, self.rule.template, email_ctx,
                                             attach_ical=self.rule.attach_ical,
-                                            log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
+                                            log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent',
+                                            diff_recipient=email_to if mail_to_parent else None)
                             elif not o_sent and o.email:
                                 email_ctx = get_email_context(
                                     event=e,
@@ -227,7 +240,8 @@ class Rule(models.Model, LoggingMixin):
 
     SEND_TO_CHOICES = [
         (CUSTOMERS, _("Everyone who created a ticket order")),
-        (ATTENDEES, _("Every attendee (falling back to the order contact when no attendee email address is given)")),
+        (ATTENDEES,
+         _("Every attendee (falling back to the order contact when no attendee email address is given or the ticket's contact in the case of add-ons)")),
         (BOTH, _('Both (all order contact addresses and all attendee email addresses)'))
     ]
 

@@ -2912,7 +2912,8 @@ class OrderPosition(AbstractPosition):
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
                   user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
-                  auth=None, attach_tickets=False, attach_ical=False, attach_other_files: list=None):
+                  auth=None, attach_tickets=False, attach_ical=False, attach_other_files: list = None,
+                  diff_recipient=None):
         """
         Sends an email to the attendee. Basically, this method does two things:
 
@@ -2930,14 +2931,15 @@ class OrderPosition(AbstractPosition):
         :param sender: Custom email sender.
         :param attach_tickets: Attach tickets of this order, if they are existing and ready to download
         :param attach_ical: Attach relevant ICS files
+        :param diff_recipient: A different recipient in case of unpersonalized add-ons.
         """
         from pretix.base.services.mail import mail
 
-        if not self.attendee_email:
+        if not self.attendee_email and not self.diff_recipient:
             return
 
         with language(self.order.locale, self.order.event.settings.region):
-            recipient = self.attendee_email
+            recipient = self.attendee_email if self.attendee_email else self.diff_recipient
             outgoing_mail = mail(
                 recipient, subject, template, context,
                 self.event, self.order.locale, order=self.order, headers=headers, sender=sender,
