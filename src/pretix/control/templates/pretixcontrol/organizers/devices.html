@@ -118,6 +118,18 @@
                                 </td>
                             {% endif %}
                             <td>
+                                {% if d.last_seen and d.last_seen.is_recent %}
+                                    <span class="fa fa-check-circle text-success"
+                                          data-toggle="tooltip"
+                                          title="{% if d.last_seen %}{% blocktrans with time=d.last_seen.last_seen|date:"SHORT_DATETIME_FORMAT" %}Last seen: {{ time }}{% endblocktrans %}{% else %}{% trans "No recent contact" %}{% endif %}"
+                                    ></span>
+                                {% else %}
+                                    <span class="fa fa-circle text-danger"
+                                          data-toggle="tooltip"
+                                          title="{% if d.last_seen %}{% blocktrans with time=d.last_seen.last_seen|date:"SHORT_DATETIME_FORMAT" %}Last seen: {{ time }}{% endblocktrans %}{% else %}{% trans "No recent contact" %}{% endif %}"
+                                    ></span>
+                                {% endif %}
+
                                 {{ d.device_id }}
                             </td>
                             <td>
@@ -125,6 +137,7 @@
                                     <del>{% endif %}
                                 {{ d.name }}
                                 {% if d.revoked %}</del>{% endif %}
+
                                 {% if d.gate %}
                                     <br>
                                     <small class="text-muted">{{ d.gate.name }}</small>

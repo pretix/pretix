@@ -20,11 +20,13 @@
 # <https://www.gnu.org/licenses/>.
 #
 import string
+from datetime import timedelta
 
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Max
 from django.utils.crypto import get_random_string
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
 
@@ -307,3 +309,8 @@ class DeviceLastSeen(models.Model):
                 autosummarize=True
             )
         ]
+
+    @property
+    def is_recent(self):
+        # pretixSCAN/pretixPOS sync every 5 minutes, so 7 minutes can be considered "offline"
+        return self.last_seen - now() < timedelta(minutes=7)
