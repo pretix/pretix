@@ -48,7 +48,7 @@ dependencies = [
   "django-hijack==3.7.*",
   "django-i18nfield==1.11.*",
   "django-libsass==0.9",
-  "django-localflavor==5.0",
+  "django-localflavor==5.1",
   "django-markup",
   "django-oauth-toolkit==2.3.*",
   "django-otp==1.7.*",
