@@ -269,8 +269,8 @@ class MailSettingsSetupView(TemplateView):
             if settings.MAIL_CUSTOM_SENDER_DMARC_REQUIRED:
                 dmarc_record = get_dmarc_record(hostname)
                 if not dmarc_record:
-                    spf_warning = _(
-                        'We did not find DMARC record for your domain. This means that there is a very high chance '
+                    dmarc_warning = _(
+                        'We did not find a DMARC record for your domain. This means that there is a very high chance '
                         'most of the emails will be rejected or marked as spam. You should update the DNS settings '
                         'of your domain.'
                     )
