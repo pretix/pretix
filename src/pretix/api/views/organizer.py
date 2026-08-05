@@ -394,6 +394,7 @@ class TeamViewSet(viewsets.ModelViewSet):
         )
         return inst
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         instance.log_action('pretix.team.deleted', user=self.request.user, auth=self.request.auth)
         instance.delete()
@@ -693,6 +694,7 @@ class MembershipTypeViewSet(viewsets.ModelViewSet):
         ctx['organizer'] = self.request.organizer
         return ctx
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         if not instance.allow_delete():
             raise PermissionDenied("Can only be deleted if unused.")
@@ -833,6 +835,7 @@ class SalesChannelViewSet(viewsets.ModelViewSet):
         )
         return inst
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         if not instance.allow_delete():
             raise PermissionDenied("Can only be deleted if unused.")

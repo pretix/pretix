@@ -23,6 +23,7 @@ from datetime import timedelta
 
 from celery.result import AsyncResult
 from django.conf import settings
+from django.db import transaction
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
@@ -227,6 +228,7 @@ class ScheduledEventExportViewSet(ScheduledExportersViewSet):
             qs = self.request.event.scheduled_exports
         return qs.select_related("owner")
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated:
             raise PermissionDenied('Creation of exports requires user-specific API access.')
@@ -257,6 +259,7 @@ class ScheduledEventExportViewSet(ScheduledExportersViewSet):
         ))
         return {e.identifier: e for e in exporters}
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         if not self.request.user.is_authenticated or self.request.user != serializer.instance.owner:
             # This is to prevent a possible privilege escalation where user A creates a scheduled export and
@@ -282,6 +285,7 @@ class ScheduledEventExportViewSet(ScheduledExportersViewSet):
             data=self.request.data
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         self.request.event.log_action(
             'pretix.event.export.schedule.deleted',
@@ -309,6 +313,7 @@ class ScheduledOrganizerExportViewSet(ScheduledExportersViewSet):
             qs = self.request.organizer.scheduled_exports
         return qs.select_related("owner")
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated:
             raise PermissionDenied('Creation of exports requires user-specific API access.')
@@ -339,6 +344,7 @@ class ScheduledOrganizerExportViewSet(ScheduledExportersViewSet):
         ))
         return {e.identifier: e for e in exporters}
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         if not self.request.user.is_authenticated or self.request.user != serializer.instance.owner:
             # This is to prevent a possible privilege escalation where user A creates a scheduled export and
@@ -389,6 +395,7 @@ class ScheduledOrganizerExportViewSet(ScheduledExportersViewSet):
             data=self.request.data
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         self.request.organizer.log_action(
             'pretix.organizer.export.schedule.deleted',
