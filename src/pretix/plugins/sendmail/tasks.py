@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 from datetime import datetime
 
-from django.db.models import Exists, OuterRef, Q, F
+from django.db.models import Exists, F, OuterRef, Q
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_email_context
