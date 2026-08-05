@@ -108,7 +108,9 @@ from pretix.base.services.export import (
     init_organizer_exporters, multiexport, scheduled_organizer_export,
 )
 from pretix.base.services.mail import mail, prefix_subject
-from pretix.base.services.placeholders import prepare_sample_context_for_preview
+from pretix.base.services.placeholders import (
+    prepare_sample_context_for_preview,
+)
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.exports import ScheduledOrganizerExportForm
