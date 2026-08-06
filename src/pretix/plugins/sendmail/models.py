@@ -191,15 +191,13 @@ class ScheduledMail(models.Model):
                         positions = [p for p in positions if p.subevent_id == self.subevent_id]
 
                     parent_op = None
-                    sent_to_parent_positions = set()
+                    sent_to_positions = set()
                     for p in positions:
 
                         if p.addon_to_id is None:
                             parent_op = p
                         if not self.rule.all_products and p.item_id not in position_ids:
                             continue
-                        else:
-                            sent_to_parent_positions.add(p.id)
 
                         if p.id in position_ids:
                             mail_to_parent = False
@@ -208,13 +206,12 @@ class ScheduledMail(models.Model):
                             if p.addon_to_id is not None:
                                 # without attendee-email
                                 if not p.attendee_email:
-                                    if p.addon_to_id in sent_to_parent_positions:
+                                    if p.addon_to_id in sent_to_positions:
                                         continue
                                     elif parent_op.attendee_email:
-                                        sent_to_parent_positions.add(parent_op.id)
                                         mail_to_parent = True
                                 # with attendee-email but same as parent's and sent to parent
-                                elif parent_op.attendee_email and p.attendee_email == parent_op.attendee_email and parent_op in sent_to_parent_positions:
+                                elif parent_op.attendee_email and p.attendee_email == parent_op.attendee_email and parent_op in sent_to_positions:
                                     continue
 
                             if p.attendee_email and (p.attendee_email != o.email or not o_sent):
@@ -228,6 +225,7 @@ class ScheduledMail(models.Model):
                                 p.send_mail(self.rule.subject, self.rule.template, email_ctx,
                                             attach_ical=self.rule.attach_ical,
                                             log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
+                                sent_to_positions.add(p.id)
                             elif mail_to_parent and (parent_op.attendee_email != o.email or not o_sent):
                                 email_ctx = get_email_context(
                                     event=e,
@@ -239,6 +237,7 @@ class ScheduledMail(models.Model):
                                 parent_op.send_mail(self.rule.subject, self.rule.template, email_ctx,
                                                     attach_ical=self.rule.attach_ical,
                                                     log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
+                                sent_to_positions.add(parent_op.id)
                             elif not o_sent and o.email:
                                 email_ctx = get_email_context(
                                     event=e,
@@ -262,7 +261,7 @@ class Rule(models.Model, LoggingMixin):
     SEND_TO_CHOICES = [
         (CUSTOMERS, _("Everyone who created a ticket order")),
         (ATTENDEES,
-         _("Every attendee (falling back to the order contact when no attendee email address is given or the ticket's contact in the case of add-ons)")),
+         _("Every attendee (falling back to the order contact when no attendee email address is given)")),
         (BOTH, _('Both (all order contact addresses and all attendee email addresses)'))
     ]
 
