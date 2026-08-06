@@ -260,8 +260,7 @@ class Rule(models.Model, LoggingMixin):
 
     SEND_TO_CHOICES = [
         (CUSTOMERS, _("Everyone who created a ticket order")),
-        (ATTENDEES,
-         _("Every attendee (falling back to the order contact when no attendee email address is given)")),
+        (ATTENDEES, _("Every attendee (falling back to the order contact when no attendee email address is given)")),
         (BOTH, _('Both (all order contact addresses and all attendee email addresses)'))
     ]
 
