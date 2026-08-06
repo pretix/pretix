@@ -108,7 +108,9 @@ from pretix.base.services.export import (
     init_organizer_exporters, multiexport, scheduled_organizer_export,
 )
 from pretix.base.services.mail import mail, prefix_subject
-from pretix.base.services.placeholders import prepare_sample_context_for_preview
+from pretix.base.services.placeholders import (
+    prepare_sample_context_for_preview,
+)
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.exports import ScheduledOrganizerExportForm
@@ -1206,7 +1208,7 @@ class DeviceQueryMixin:
     def get_queryset(self):
         qs = self.request.organizer.devices.prefetch_related(
             'limit_events', 'gate',
-        ).order_by('revoked', '-device_id')
+        ).select_related('last_seen').order_by('revoked', '-device_id')
 
         if 'device' in self.request_data and '__ALL' not in self.request_data:
             qs = qs.filter(
