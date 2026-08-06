@@ -424,6 +424,8 @@ def webhook(request, *args, **kwargs):
         **event_json,
         '_order_state': sale.dict(),
     })
+    payment.info = json.dumps(sale.dict())
+    payment.save()
 
     if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED and sale['status'] in ('PARTIALLY_REFUNDED', 'REFUNDED', 'COMPLETED'):
         if event_json['resource_type'] == 'refund':
