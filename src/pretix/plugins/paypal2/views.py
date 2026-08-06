@@ -366,8 +366,8 @@ def webhook(request, *args, **kwargs):
     elif event_json['resource_type'] == 'refund' or event_json['resource_type'] == 'capture':
         payloadid = get_link(event_json['resource']['links'], 'up')['href'].split('/')[-1]
     else:
-        logger.exception('Unknown webhook ressource received. Event data: %s' % str(event_json))
-        return HttpResponse("Unable to handle ressource", status=200)
+        logger.exception('Unknown webhook resource received. Event data: %s' % str(event_json))
+        return HttpResponse("Unable to handle resource", status=200)
 
     refs = [payloadid]
     if event_json['resource'].get('supplementary_data', {}).get('related_ids', {}).get('order_id'):
