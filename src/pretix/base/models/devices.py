@@ -313,4 +313,4 @@ class DeviceLastSeen(models.Model):
     @property
     def is_recent(self):
         # pretixSCAN/pretixPOS sync every 5 minutes, so 7 minutes can be considered "offline"
-        return self.last_seen - now() < timedelta(minutes=7)
+        return now() - self.last_seen < timedelta(minutes=7)
