@@ -357,17 +357,13 @@ def webhook(request, *args, **kwargs):
     if 'resource_type' not in event_json:
         return HttpResponse("Invalid body, no resource_type given", status=400)
 
-    if event_json['resource_type'] not in ["checkout-order", "refund", "capture"]:
-        return HttpResponse("Not interested in this resource type", status=200)
-
     # Retrieve the Charge ID of the refunded payment
     if event_json['resource_type'] == 'checkout-order':
         payloadid = event_json['resource']['id']
     elif event_json['resource_type'] == 'refund' or event_json['resource_type'] == 'capture':
         payloadid = get_link(event_json['resource']['links'], 'up')['href'].split('/')[-1]
     else:
-        logger.exception('Unknown webhook resource received. Event data: %s' % str(event_json))
-        return HttpResponse("Unable to handle resource", status=200)
+        return HttpResponse("Not interested in this resource type", status=200)
 
     refs = [payloadid]
     if event_json['resource'].get('supplementary_data', {}).get('related_ids', {}).get('order_id'):
