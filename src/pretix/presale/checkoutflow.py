@@ -100,7 +100,7 @@ from pretix.presale.views.cart import (
     _items_from_post_data, cart_session, create_empty_cart_id,
     get_or_create_cart_id,
 )
-from pretix.presale.views.questions import QuestionsViewMixin
+from pretix.presale.views.questions import CartQuestionsViewMixin
 
 
 class BaseCheckoutFlowStep:
@@ -772,7 +772,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                        sales_channel=request.sales_channel.identifier, override_now_dt=time_machine_now(default=None))
 
 
-class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
+class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
     priority = 50
     identifier = "questions"
     template_name = "pretixpresale/event/checkout_questions.html"
