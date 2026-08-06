@@ -48,10 +48,10 @@ from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
-from django.db import transaction
+from django.db import models, transaction
 from django.db.models import (
-    Case, Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, QuerySet,
-    Subquery, Sum, Value, When,
+    Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, QuerySet, Subquery,
+    Sum, Value,
 )
 from django.db.models.functions import Cast, Greatest
 from django.db.transaction import get_connection
@@ -1498,11 +1498,10 @@ def send_download_reminders(sender, **kwargs):
             Event_SettingsStore.objects.filter(
                 object=OuterRef('id'),
                 key='mail_days_download_reminder'
+            ).exclude(
+                value="None"
             ).annotate(
-                val=Case(
-                    When(value="None", then=None),
-                    default=Cast(F("value"), output_field=models.IntegerField()),
-                )
+                val=Cast(F("value"), output_field=models.IntegerField()),
             ).values("val")
         )
     ).filter(
@@ -1510,17 +1509,23 @@ def send_download_reminders(sender, **kwargs):
     ).order_by()
 
     for event in events.iterator(chunk_size=10_000):
-        event_reminder_date = (event.date_from - timedelta(days=event.reminder_days)).replace(hour=0, minute=0, second=0, microsecond=0)
-        if not event.has_subevents and now() < event_reminder_date:
-            continue
-
-        qs = event.orders.annotate(
-            first_date=Min('all_positions__subevent__date_from')
-        ).filter(
-            Q(first_date__isnull=True) | Q(first_date__gte=today),
+        qs = event.orders.filter(
             download_reminder_sent=False,
             datetime__lte=now() - timedelta(hours=2),
-        ).only(
+        )
+
+        if event.has_subevents:
+            qs = qs.annotate(
+                first_date=Min('all_positions__subevent__date_from')
+            ).filter(
+                Q(first_date__gte=today)
+            )
+        else:
+            event_reminder_date = (event.date_from - timedelta(days=event.reminder_days)).replace(hour=0, minute=0, second=0, microsecond=0)
+            if now() < event_reminder_date:
+                continue
+
+        qs = qs.only(
             'pk', 'event_id', 'sales_channel', 'datetime',
         ).order_by()
 
