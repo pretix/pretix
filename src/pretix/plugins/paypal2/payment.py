@@ -677,6 +677,8 @@ class PaypalMethod(BasePaymentProvider):
                 raise PaymentException(_('We had trouble communicating with PayPal'))
             else:
                 pp_captured_order = response.result
+                payment.info = json.dumps(pp_captured_order.dict())
+                payment.save()
 
             try:
                 ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=pp_captured_order.id)
