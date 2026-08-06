@@ -1533,7 +1533,10 @@ def send_download_reminders(sender, **kwargs):
             if o.sales_channel.identifier not in event.settings.mail_sales_channel_download_reminder:
                 continue
 
-            reminder_date = ((o.first_date or event.date_from) - timedelta(days=event.reminder_days)).replace(hour=0, minute=0, second=0, microsecond=0)
+            if event.has_subevents:
+                reminder_date = ((o.first_date or event.date_from) - timedelta(days=event.reminder_days)).replace(hour=0, minute=0, second=0, microsecond=0)
+            else:
+                reminder_date = event_reminder_date
             if now() < reminder_date or o.datetime > reminder_date:
                 continue
 
