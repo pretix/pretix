@@ -1165,6 +1165,22 @@ def test_event_update_seating(token_client, organizer, event, item, seatingplan)
 
 
 @pytest.mark.django_db
+def test_event_no_create_or_delete_seats(token_client, organizer, event, item, seatingplan):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/seats/'.format(organizer.slug, event.slug),
+        {
+            'blocked': False,
+        },
+        format='json'
+    )
+    assert resp.status_code == 405
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/events/{}/seats/3/'.format(organizer.slug, event.slug),
+    )
+    assert resp.status_code == 405
+
+
+@pytest.mark.django_db
 def test_event_update_seating_invalid_product(token_client, organizer, event, item, seatingplan):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
@@ -1413,11 +1429,13 @@ def test_event_create_with_seating_maps(token_client, organizer, event, meta_pro
 @pytest.mark.django_db
 def test_get_event_settings(token_client, organizer, event):
     event.settings.imprint_url = "https://example.org"
+    event.settings.contact_url = "https://example.org/contact"
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
     )
     assert resp.status_code == 200
     assert resp.data['imprint_url'] == "https://example.org"
+    assert resp.data['contact_url'] == "https://example.org/contact"
     assert resp.data['seating_allow_blocked_seats_for_channel'] == []
 
     resp = token_client.get(
@@ -1443,9 +1461,11 @@ def test_patch_event_settings(token_client, organizer, event, team):
     team.save()
 
     organizer.settings.imprint_url = 'https://example.org'
+    organizer.settings.contact_url = 'https://example.org/contact'
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
         {
+            'contact_url': 'https://example.com/contact',
             'imprint_url': 'https://example.com',
             'confirm_texts': [
                 {
@@ -1458,10 +1478,12 @@ def test_patch_event_settings(token_client, organizer, event, team):
         format='json'
     )
     assert resp.status_code == 200
+    assert resp.data['contact_url'] == "https://example.com/contact"
     assert resp.data['imprint_url'] == "https://example.com"
     assert resp.data['seating_allow_blocked_seats_for_channel'] == ['web']
     assert not resp.data['reusable_media_active']
     event.settings.flush()
+    assert event.settings.contact_url == 'https://example.com/contact'
     assert event.settings.imprint_url == 'https://example.com'
     assert event.settings.seating_allow_blocked_seats_for_channel == ['web']
     assert not event.settings.reusable_media_active
@@ -1471,6 +1493,7 @@ def test_patch_event_settings(token_client, organizer, event, team):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
         {
+            'contact_url': 'https://example.com/contact',
             'imprint_url': 'https://example.com',
             'confirm_texts': [
                 {
@@ -1513,13 +1536,16 @@ def test_patch_event_settings(token_client, organizer, event, team):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
         {
+            'contact_url': None,
             'imprint_url': None,
         },
         format='json'
     )
     assert resp.status_code == 200
+    assert resp.data['contact_url'] == "https://example.org/contact"
     assert resp.data['imprint_url'] == "https://example.org"
     event.settings.flush()
+    assert event.settings.contact_url == 'https://example.org/contact'
     assert event.settings.imprint_url == 'https://example.org'
 
     resp = token_client.put(
@@ -1583,6 +1609,18 @@ def test_patch_event_settings(token_client, organizer, event, team):
 
 @pytest.mark.django_db
 def test_patch_event_settings_validation(token_client, organizer, event):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'contact_url': 'invalid',
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'contact_url': ['Enter a valid URL.']
+    }
+
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
         {
@@ -1826,7 +1864,7 @@ def test_event_block_unblock_seat_bulk(token_client, organizer, event, seatingpl
     assert not s2.blocked
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_event_expand_seat_filter_and_querycount(token_client, organizer, event, seatingplan, item):
     event.settings.seating_minimal_distance = 2
 
@@ -1843,7 +1881,7 @@ def test_event_expand_seat_filter_and_querycount(token_client, organizer, event,
     assert resp.status_code == 200
     event.refresh_from_db()
 
-    with assert_num_queries(12):
+    with assert_num_queries(10):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/'
                                 '?expand=orderposition&expand=cartposition&expand=voucher&is_available=true'
                                 .format(organizer.slug, event.slug))
@@ -1853,7 +1891,7 @@ def test_event_expand_seat_filter_and_querycount(token_client, organizer, event,
     with scope(organizer=organizer):
         v0 = event.vouchers.create(item=item, seat=event.seats.get(seat_guid='0-0'))
 
-    with assert_num_queries(14):
+    with assert_num_queries(12):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/'
                                 '?expand=orderposition&expand=cartposition&expand=voucher&is_available=false'
                                 .format(organizer.slug, event.slug))
@@ -1861,7 +1899,7 @@ def test_event_expand_seat_filter_and_querycount(token_client, organizer, event,
         assert len(resp.data['results']) == 1
         assert resp.data['results'][0]['voucher']['id'] == v0.pk
 
-    with assert_num_queries(12):
+    with assert_num_queries(10):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/'
                                 '?expand=orderposition&expand=cartposition&expand=voucher&is_available=true'
                                 .format(organizer.slug, event.slug))
@@ -1872,7 +1910,7 @@ def test_event_expand_seat_filter_and_querycount(token_client, organizer, event,
         v1 = event.vouchers.create(item=item, seat=event.seats.get(seat_guid='0-1'))
         v2 = event.vouchers.create(item=item, seat=event.seats.get(seat_guid='0-2'))
 
-    with assert_num_queries(16):
+    with assert_num_queries(14):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/'
                                 '?expand=orderposition&expand=cartposition&expand=voucher&is_available=false'
                                 .format(organizer.slug, event.slug))

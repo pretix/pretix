@@ -864,6 +864,9 @@ Generating new secrets
 
    Triggers generation of new ``secret`` and ``web_secret`` attributes for both the order and all order positions.
 
+   Ticket secrets of order positions that have been used to issue a gift card can not
+   be changed. Only the link (``web_secret``) will be changed in this case.
+
    **Example request**:
 
    .. sourcecode:: http
@@ -894,6 +897,9 @@ Generating new secrets
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/regenerate_secrets/
 
    Triggers generation of a new ``secret`` and ``web_secret`` attribute for a single order position.
+
+   Ticket secrets of order positions that have been used to issue a gift card can not
+   be changed. Only the link (``web_secret``) will be changed in this case.
 
    **Example request**:
 

@@ -230,10 +230,15 @@ class OrderMailForm(BaseMailForm):
             self.fields['attach_tickets'].help_text = _("Attachment of tickets is disabled in this event's email "
                                                         "settings.")
 
-        choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n']
-        choices.insert(0, ('valid_if_pending', _('payment pending but already confirmed')))
-        choices.insert(0, ('na', _('payment pending (except unapproved or already confirmed)')))
-        choices.insert(0, ('pa', _('approval pending')))
+        choices = [
+            (Order.STATUS_PAID, _('Paid (or canceled with paid fee)')),
+            ('valid_if_pending', _('payment pending but already confirmed')),
+            ('na', _('payment pending (except unapproved or already confirmed)')),
+            ('pa', _('approval pending')),
+            (Order.STATUS_CANCELED, _('Canceled (fully)')),
+            (Order.STATUS_EXPIRED, _("Expired")),
+        ]
+
         if not event.settings.get('payment_term_expire_automatically', as_type=bool):
             choices.append(
                 ('overdue', _('pending with payment overdue'))
@@ -382,11 +387,15 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
         self._set_field_placeholders('subject', ['event', 'order', 'event_or_subevent'])
         self._set_field_placeholders('template', ['event', 'order', 'event_or_subevent'], rich=True)
 
-        choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n']
-        choices.insert(0, ('n__valid_if_pending', _('payment pending but already confirmed')))
-        choices.insert(0, ('n__not_pending_approval_and_not_valid_if_pending',
-                           _('payment pending (except unapproved or already confirmed)')))
-        choices.insert(0, ('n__pending_approval', _('approval pending')))
+        choices = [
+            (Order.STATUS_PAID, _('Paid (or canceled with paid fee)')),
+            ('n__valid_if_pending', _('payment pending but already confirmed')),
+            ('n__not_pending_approval_and_not_valid_if_pending',
+                _('payment pending (except unapproved or already confirmed)')),
+            ('n__pending_approval', _('approval pending')),
+            (Order.STATUS_CANCELED, _('Canceled (fully)')),
+            (Order.STATUS_EXPIRED, _("Expired")),
+        ]
         if not self.event.settings.get('payment_term_expire_automatically', as_type=bool):
             choices.append(
                 ('n__pending_overdue', _('pending with payment overdue'))

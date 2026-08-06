@@ -35,7 +35,6 @@
 from collections import OrderedDict
 from datetime import timezone
 
-import bleach
 import dateutil.parser
 from django import forms
 from django.db.models import (
@@ -44,6 +43,7 @@ from django.db.models import (
 from django.db.models.functions import Coalesce, NullIf
 from django.urls import reverse
 from django.utils.formats import date_format
+from django.utils.html import escape
 from django.utils.timezone import is_aware, make_aware, now
 from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
@@ -64,7 +64,9 @@ from pretix.base.timeframes import (
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.filenames import safe_for_filename
 from pretix.helpers.iter import chunked_iterable
-from pretix.helpers.reportlab import FontFallbackParagraph
+from pretix.helpers.reportlab import (
+    FontFallbackParagraph, PlainTextParagraph, normalize_text,
+)
 from pretix.helpers.templatetags.jsonfield import JSONExtract
 from pretix.plugins.reports.exporters import ReportlabExportMixin
 
@@ -343,7 +345,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
         ]
 
         story = [
-            FontFallbackParagraph(
+            PlainTextParagraph(
                 cl.name,
                 headlinestyle
             ),
@@ -351,7 +353,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
         if cl.subevent:
             story += [
                 Spacer(1, 3 * mm),
-                FontFallbackParagraph(
+                PlainTextParagraph(
                     '{} ({} {})'.format(
                         cl.subevent.name,
                         cl.subevent.get_date_range_display(),
@@ -381,10 +383,10 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
         headrowstyle.fontName = 'OpenSansBd'
         for q in questions:
             txt = str(q.question)
-            p = FontFallbackParagraph(txt, headrowstyle)
+            p = PlainTextParagraph(txt, headrowstyle)
             while p.wrap(colwidths[len(tdata[0])], 5000)[1] > 30 * mm:
                 txt = txt[:len(txt) - 50] + "..."
-                p = FontFallbackParagraph(txt, headrowstyle)
+                p = PlainTextParagraph(txt, headrowstyle)
             tdata[0].append(p)
 
         qs = self._get_queryset(cl, form_data)
@@ -409,7 +411,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
             company = op.company or (op.addon_to.company if op.addon_to else '') or iac
             if company:
                 if name:
-                    name += "<br/>"
+                    name += "\n"
                 name += company
 
             item = "{} ({})".format(
@@ -417,13 +419,17 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 money_filter(op.price, self.event.currency),
             )
             if self.event.has_subevents and not cl.subevent:
-                item += '<br/>{} ({})'.format(
+                item += '\n{} ({})'.format(
                     op.subevent.name,
                     date_format(op.subevent.date_from.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
                 )
             if op.seat:
-                item += '<br/>' + str(op.seat)
-            name = bleach.clean(str(name), tags={'br'}).strip().replace('<br>', '<br/>')
+                item += '\n' + str(op.seat)
+
+            name = normalize_text(name)
+            name = escape(name)
+            name = name.replace("\n", "<br/>")
+
             if op.blocked:
                 name = '<font face="OpenSansBd">[' + _('Blocked') + ']</font> ' + name
             row = [
@@ -432,7 +438,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
                 FontFallbackParagraph(name, self.get_style()),
-                FontFallbackParagraph(bleach.clean(str(item), tags={'br'}).strip().replace('<br>', '<br/>'), self.get_style()),
+                PlainTextParagraph(item, self.get_style()),
             ]
             acache = {}
             if op.addon_to:
@@ -442,11 +448,10 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 acache[a.question_id] = format_answer_for_export(a)
             for q in questions:
                 txt = acache.get(q.pk, '')
-                txt = bleach.clean(txt, tags={'br'}).strip().replace('<br>', '<br/>')
-                p = FontFallbackParagraph(txt, self.get_style())
+                p = PlainTextParagraph(txt, self.get_style())
                 while p.wrap(colwidths[len(row)], 5000)[1] > 50 * mm:
                     txt = txt[:len(txt) - 50] + "..."
-                    p = FontFallbackParagraph(txt, self.get_style())
+                    p = PlainTextParagraph(txt, self.get_style())
                 row.append(p)
             if op.order.status != Order.STATUS_PAID:
                 tstyledata += [

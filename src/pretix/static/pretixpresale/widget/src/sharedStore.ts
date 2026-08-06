@@ -71,6 +71,7 @@ export function createWidgetStore (config: {
 			frontpageText: null as string | null,
 			categories: [] as Category[],
 			currency: '',
+			currency_places: 2,
 			displayNetPrices: false,
 			voucherExplanationText: null as string | null,
 			displayAddToCart: false,
@@ -299,6 +300,7 @@ export function createWidgetStore (config: {
 						this.location = data.location ?? null
 						this.categories = data.items_by_category ?? []
 						this.currency = data.currency ?? ''
+						this.currency_places = data.currency_places ?? 2
 						this.displayNetPrices = data.display_net_prices ?? false
 						this.voucherExplanationText = data.voucher_explanation_text ?? null
 						this.error = data.error ?? null
@@ -338,6 +340,7 @@ export function createWidgetStore (config: {
 				} catch (e) {
 					this.categories = []
 					this.currency = ''
+					this.currency_places = 2
 					if (e instanceof ApiError && e.status === 429) {
 						this.error = STRINGS.loading_error_429
 					} else {

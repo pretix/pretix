@@ -139,6 +139,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
             )
         return qs
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -153,6 +154,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         ctx['event'] = self.request.event
         return ctx
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -872,6 +874,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'media_policy': e.media_policy,
                 'media_type': e.media_type,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
+                'reason': e.code,
                 'reason_explanation': e.msg,
             }, status=400)
         except CheckInError as e:

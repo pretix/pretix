@@ -162,6 +162,8 @@ class ScheduledMail(models.Model):
         send_to_orders = self.rule.send_to in (Rule.CUSTOMERS, Rule.BOTH)
         send_to_attendees = self.rule.send_to in (Rule.ATTENDEES, Rule.BOTH)
 
+        position_ids = op_qs.values_list('id', flat=True)
+
         for o in orders:
             with language(o.locale, e.settings.region):
                 positions = list(o.positions.all())
@@ -191,28 +193,29 @@ class ScheduledMail(models.Model):
                         positions = [p for p in positions if p.subevent_id == self.subevent_id]
 
                     for p in positions:
-                        if p.attendee_email and (p.attendee_email != o.email or not o_sent):
-                            email_ctx = get_email_context(
-                                event=e,
-                                order=o,
-                                invoice_address=ia,
-                                position=p,
-                                event_or_subevent=self.subevent or e,
-                            )
-                            p.send_mail(self.rule.subject, self.rule.template, email_ctx,
-                                        attach_ical=self.rule.attach_ical,
-                                        log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
-                        elif not o_sent and o.email:
-                            email_ctx = get_email_context(
-                                event=e,
-                                order=o,
-                                invoice_address=ia,
-                                event_or_subevent=self.subevent or e,
-                            )
-                            o.send_mail(self.rule.subject, self.rule.template, email_ctx,
-                                        attach_ical=self.rule.attach_ical,
-                                        log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
-                            o_sent = True
+                        if p.id in position_ids:
+                            if p.attendee_email and (p.attendee_email != o.email or not o_sent):
+                                email_ctx = get_email_context(
+                                    event=e,
+                                    order=o,
+                                    invoice_address=ia,
+                                    position=p,
+                                    event_or_subevent=self.subevent or e,
+                                )
+                                p.send_mail(self.rule.subject, self.rule.template, email_ctx,
+                                            attach_ical=self.rule.attach_ical,
+                                            log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
+                            elif not o_sent and o.email:
+                                email_ctx = get_email_context(
+                                    event=e,
+                                    order=o,
+                                    invoice_address=ia,
+                                    event_or_subevent=self.subevent or e,
+                                )
+                                o.send_mail(self.rule.subject, self.rule.template, email_ctx,
+                                            attach_ical=self.rule.attach_ical,
+                                            log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
+                                o_sent = True
 
                 self.last_successful_order_id = o.pk
 
@@ -270,7 +273,7 @@ class Rule(models.Model, LoggingMixin):
 
     date_is_absolute = models.BooleanField(default=True, blank=True)
     offset_to_event_end = models.BooleanField(default=False, blank=True)  # no verbose name because not actually
-    offset_is_after = models.BooleanField(default=False, blank=True)      # displayed in any forms
+    offset_is_after = models.BooleanField(default=False, blank=True)  # displayed in any forms
 
     send_to = models.CharField(max_length=10, choices=SEND_TO_CHOICES, default=CUSTOMERS, verbose_name=_('Send email to'))
 

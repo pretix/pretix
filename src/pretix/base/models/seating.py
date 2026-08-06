@@ -118,7 +118,10 @@ class SeatingPlan(LoggedModel):
         for zi, z in enumerate(self.layout_data['zones']):
             zpos = (z['position']['x'], z['position']['y'])
             for ri, r in enumerate(z['rows']):
-                rpos = (zpos[0] + r['position']['x'], zpos[1] + r['position']['y'])
+                rpos = (
+                    zpos[0] + r.get('position', {}).get('x', 0),
+                    zpos[1] + r.get('position', {}).get('y', 0),
+                )
                 row_label = None
                 if r.get('row_label'):
                     row_label = r['row_label'].replace("%s", r.get('row_number', str(ri)))
@@ -147,8 +150,8 @@ class SeatingPlan(LoggedModel):
                         zone=z['name'],
                         category=s['category'],
                         sorting_rank=rank,
-                        x=rpos[0] + s['position']['x'],
-                        y=rpos[1] + s['position']['y'],
+                        x=rpos[0] + s.get('position', {}).get('x', 0),
+                        y=rpos[1] + s.get('position', {}).get('y', 0),
                     )
 
 

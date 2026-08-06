@@ -32,7 +32,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.forms import SecretKeySettingsField
 from pretix.base.logentrytypes import EventLogEntryType, log_entry_types
-from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
+from pretix.base.middleware import add_to_response_csp
 from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
     register_global_settings, register_payment_providers,
@@ -144,12 +144,7 @@ def signal_process_response(sender, request: HttpRequest, response: HttpResponse
             (url.url_name == "event.checkout" and url.kwargs['step'] == "payment") or
             (url.namespace == "plugins:paypal2" and url.url_name == "pay")
     ):
-        if 'Content-Security-Policy' in response:
-            h = _parse_csp(response['Content-Security-Policy'])
-        else:
-            h = {}
-
-        csps = {
+        add_to_response_csp(response, {
             'script-src': ['https://www.paypal.com', "'nonce-{}'".format(_nonce(request))],
 
             # When the stars align in an unpredictable manner and the temperature is just right, the PayPal SDK might
@@ -164,12 +159,7 @@ def signal_process_response(sender, request: HttpRequest, response: HttpResponse
             'connect-src': ['https://www.paypal.com', 'https://www.sandbox.paypal.com'],  # Or not - seems to only affect PayPal logging...
             'img-src': ['https://t.paypal.com', 'https://www.paypalobjects.com'],
             'style-src': ["'unsafe-inline'"]  # PayPal does not comply with our nonce unfortunately, see Z#23113213
-        }
-
-        _merge_csp(h, csps)
-
-        if h:
-            response['Content-Security-Policy'] = _render_csp(h)
+        })
 
     return response
 

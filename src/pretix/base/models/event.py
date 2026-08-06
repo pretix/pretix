@@ -40,6 +40,7 @@ import warnings
 from collections import Counter, OrderedDict, defaultdict
 from datetime import datetime, time, timedelta
 from operator import attrgetter
+from typing import TYPE_CHECKING
 from urllib.parse import urljoin
 from zoneinfo import ZoneInfo
 
@@ -79,10 +80,16 @@ from pretix.helpers.thumb import get_thumbnail
 from ..settings import settings_hierarkey
 from .organizer import Organizer, Team
 
+if TYPE_CHECKING:
+    from hierarkey.proxy import HierarkeyProxy
+
 logger = logging.getLogger(__name__)
 
 
 class EventMixin:
+    if TYPE_CHECKING:
+        settings: HierarkeyProxy
+
     def clean(self):
         if self.presale_start and self.presale_end and self.presale_start > self.presale_end:
             raise ValidationError({'presale_end': _('The end of the presale period has to be later than its start.')})
@@ -172,6 +179,12 @@ class EventMixin:
             self.date_to.astimezone(tz), ("D" if short else "l")
         )
 
+    def is_same_day(self):
+        if not self.date_to:
+            return True
+        else:
+            return self.date_from.astimezone(self.timezone).date() == self.date_to.astimezone(self.timezone).date()
+
     def get_date_range_display(self, tz=None, force_show_end=False, as_html=False, try_to_show_times=False) -> str:
         """
         Returns a formatted string containing the start date and the end date
@@ -225,6 +238,9 @@ class EventMixin:
 
     @property
     def timezone(self):
+        # If we get rid of the shim, verify that
+        # https://github.com/py-vobject/vobject/issues/117#issuecomment-5045645314
+        # has been released and included
         return pytz_deprecation_shim.timezone(self.settings.timezone)
 
     @property
@@ -642,7 +658,7 @@ class Event(EventMixin, LoggedModel):
     is_remote = models.BooleanField(
         default=False,
         verbose_name=_("This event is remote or partially remote."),
-        help_text=_("This will be used to let users know if the event is in a different timezone and let’s us calculate users’ local times."),
+        help_text=_("This will be used to let users know if the event is in a different timezone, and to let us calculate the local time of a user."),
     )
     geo_lat = models.FloatField(
         verbose_name=_("Latitude"),
@@ -724,7 +740,7 @@ class Event(EventMixin, LoggedModel):
 
     @property
     def social_image(self):
-        from pretix.multidomain.urlreverse import build_absolute_uri
+        from pretix.multidomain.urlreverse import eventreverse_absolute
 
         img = None
         logo_file = self.settings.get('logo_image', as_type=str, default='')[7:]
@@ -742,7 +758,7 @@ class Event(EventMixin, LoggedModel):
                 logger.exception(f'Failed to create thumbnail of {logo_file}')
                 img = default_storage.url(logo_file)
         if img:
-            return urljoin(build_absolute_uri(self, 'presale:event.index'), img)
+            return urljoin(eventreverse_absolute(self, 'presale:event.index'), img)
 
     def _seats(self, ignore_voucher=None):
         from .seating import Seat
@@ -883,6 +899,8 @@ class Event(EventMixin, LoggedModel):
             ItemProgramTime, ItemVariationMetaValue, Question, Quota,
         )
 
+        is_cross_organizer = other.organizer_id != self.organizer_id
+
         #  Note: avoid self.set_active_plugins(), it causes trouble e.g. for the badges plugin.
         #  Plugins can create data in installed() hook based on existing data of the event.
         #  Calling set_active_plugins() results in defaults being created while actually data
@@ -897,7 +915,7 @@ class Event(EventMixin, LoggedModel):
         self.save()
         self.log_action('pretix.object.cloned', data={'source': other.slug, 'source_id': other.pk})
 
-        if hasattr(other, 'alternative_domain_assignment'):
+        if hasattr(other, 'alternative_domain_assignment') and not is_cross_organizer:
             other.alternative_domain_assignment.domain.event_assignments.create(event=self)
 
         if not self.all_sales_channels:
@@ -911,6 +929,15 @@ class Event(EventMixin, LoggedModel):
             for emv in EventMetaValue.objects.filter(event=other):
                 emv.pk = None
                 emv.event = self
+                if is_cross_organizer:
+                    try:
+                        emv.property = self.organizer.meta_properties.get(name=emv.property.name)
+                    except EventMetaProperty.DoesNotExist:
+                        meta_prop = emv.property
+                        meta_prop.pk = None
+                        meta_prop.organizer = self.organizer
+                        meta_prop.save(force_insert=True)
+                        emv.property = meta_prop
                 emv.save(force_insert=True)
 
         for fl in EventFooterLink.objects.filter(event=other):
@@ -964,13 +991,13 @@ class Event(EventMixin, LoggedModel):
             if i.tax_rule_id:
                 i.tax_rule = tax_map[i.tax_rule_id]
 
-            if i.grant_membership_type and other.organizer_id != self.organizer_id:
+            if i.grant_membership_type and is_cross_organizer:
                 i.grant_membership_type = None
 
             i.save()  # no force_insert since i.picture.save could have already inserted
             i.log_action('pretix.object.cloned')
 
-            if require_membership_types and other.organizer_id == self.organizer_id:
+            if require_membership_types and not is_cross_organizer:
                 i.require_membership_types.set(require_membership_types)
 
             if not i.all_sales_channels:
@@ -985,7 +1012,7 @@ class Event(EventMixin, LoggedModel):
                 v._prefetched_objects_cache = {}
                 v.save(force_insert=True)
 
-                if require_membership_types and other.organizer_id == self.organizer_id:
+                if require_membership_types and not is_cross_organizer:
                     v.require_membership_types.set(require_membership_types)
                 if not v.all_sales_channels:
                     v.limit_sales_channels.set(self.organizer.sales_channels.filter(identifier__in=[s.identifier for s in limit_sales_channels]))
@@ -1385,15 +1412,12 @@ class Event(EventMixin, LoggedModel):
 
         for mp in self.organizer.meta_properties.all():
             if mp.required and not self.meta_data.get(mp.name):
-                issues.append(
-                    ('<a {a_attr}>' + gettext('You need to fill the meta parameter "{property}".') + '</a>').format(
-                        property=mp.name,
-                        a_attr='href="%s#id_prop-%d-value"' % (
-                            reverse('control:event.settings', kwargs={'organizer': self.organizer.slug, 'event': self.slug}),
-                            mp.pk
-                        )
-                    )
-                )
+                issues.append(format_html(
+                    '<a href="{href}{href_hash}">{text}</a>',
+                    text=gettext('You need to fill the meta parameter "{property}".').format(property=mp.name),
+                    href=reverse('control:event.settings', kwargs={'organizer': self.organizer.slug, 'event': self.slug}),
+                    href_hash=f'#id_prop-{mp.pk}-value',
+                ))
 
         responses = event_live_issues.send(self)
         for receiver, response in sorted(responses, key=lambda r: str(r[0])):
@@ -1836,6 +1860,7 @@ class EventMetaProperty(LoggedModel):
 
     class Meta:
         ordering = ("position", "name",)
+        unique_together = ('organizer', 'name')
 
     @property
     def choice_keys(self):
@@ -1869,6 +1894,8 @@ class EventMetaValue(LoggedModel):
             self.event.cache.clear()
 
     def save(self, *args, **kwargs):
+        if self.event and self.event.organizer != self.property.organizer:
+            raise ValidationError(_("Property and event must belong to the same organizer."))
         super().save(*args, **kwargs)
         if self.event:
             self.event.cache.clear()

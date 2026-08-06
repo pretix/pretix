@@ -36,6 +36,7 @@ from django.template.loader import get_template
 from django.templatetags.static import static
 from django.urls import resolve, reverse
 from django.utils.crypto import get_random_string
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext as __, gettext_lazy as _
@@ -56,8 +57,8 @@ from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers import OF_SELF
-from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.helpers.urls import mainreverse_absolute
+from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.plugins.paypal2.client.core.environment import (
     LiveEnvironment, SandboxEnvironment,
 )
@@ -110,7 +111,8 @@ class PaypalSettingsHolder(BasePaymentProvider):
                      label=_('Client ID'),
                      max_length=80,
                      min_length=80,
-                     help_text=_('<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>').format(
+                     help_text=format_html(
+                         '<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>',
                          text=_('Click here for a tutorial on how to obtain the required keys'),
                          docs_url='https://docs.pretix.eu/en/latest/user/payments/paypal.html'
                      )
@@ -264,7 +266,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
             settings_content = "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
                 _('Please configure a PayPal Webhook to the following endpoint in order to automatically cancel orders '
                   'when payments are refunded externally.'),
-                build_global_uri('plugins:paypal2:webhook')
+                mainreverse_absolute('plugins:paypal2:webhook')
             )
 
         if self.event.currency not in SUPPORTED_CURRENCIES:
@@ -321,7 +323,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                 ],
                 "partner_config_override": {
                     "partner_logo_url": urllib.parse.urljoin(settings.SITE_URL, static('pretixbase/img/pretix-logo.svg')),
-                    "return_url": build_global_uri('plugins:paypal2:isu.return', kwargs={
+                    "return_url": mainreverse_absolute('plugins:paypal2:isu.return', kwargs={
                         'organizer': self.event.organizer.slug,
                         'event': self.event.slug,
                     })
@@ -585,8 +587,8 @@ class PaypalMethod(BasePaymentProvider):
                     'locale': request.LANGUAGE_CODE.split('-')[0],
                     'shipping_preference': 'NO_SHIPPING',  # 'SET_PROVIDED_ADDRESS',  # Do not set on non-ship order?
                     'user_action': 'CONTINUE',
-                    'return_url': build_absolute_uri(request.event, 'plugins:paypal2:return', kwargs=kwargs),
-                    'cancel_url': build_absolute_uri(request.event, 'plugins:paypal2:abort', kwargs=kwargs),
+                    'return_url': eventreverse_absolute(request.event, 'plugins:paypal2:return', kwargs=kwargs),
+                    'cancel_url': eventreverse_absolute(request.event, 'plugins:paypal2:abort', kwargs=kwargs),
                 },
             })
             response = self.client.execute(paymentreq)
@@ -675,6 +677,8 @@ class PaypalMethod(BasePaymentProvider):
                 raise PaymentException(_('We had trouble communicating with PayPal'))
             else:
                 pp_captured_order = response.result
+                payment.info = json.dumps(pp_captured_order.dict())
+                payment.save()
 
             try:
                 ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=pp_captured_order.id)

@@ -57,7 +57,7 @@ from django_otp.models import Device
 from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
-from pretix.helpers.urls import build_absolute_uri
+from pretix.helpers.urls import mainreverse_absolute
 
 from ...helpers.countries import FastCountryField
 from ...helpers.u2f import pub_key_from_der, websafe_decode
@@ -373,12 +373,12 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
         mail(
             email or self.email,
-            _('Account information changed'),
+            _('Changes to your account'),
             'pretixcontrol/email/security_notice.txt',
             {
                 'user': self,
                 'messages': msg,
-                'url': build_absolute_uri('control:user.settings'),
+                'url': mainreverse_absolute('control:user.settings'),
                 'instance': settings.PRETIX_INSTANCE_NAME,
             },
             event=None,
@@ -400,12 +400,13 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
         with language(self.locale):
             if reason == 'email_change':
-                msg = str(_('to confirm changing your email address from {old_email}\nto {new_email}, use the following code:').format(
+                msg = str(_('To change your email address from {old_email} to {new_email}, use the following code:').format(
                     old_email=self.email, new_email=email,
                 ))
             elif reason == 'email_verify':
-                msg = str(_('to confirm that your email address {email} belongs to your pretix account, use the following code:').format(
+                msg = str(_('To verify your email address {email} on {instance}, use the following code:').format(
                     email=self.email,
+                    instance=settings.PRETIX_INSTANCE_NAME,
                 ))
             else:
                 raise Exception('Invalid confirmation code reason')
@@ -418,7 +419,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         }
         mail(
             email or self.email,
-            _('pretix confirmation code'),
+            _('Your confirmation code'),
             'pretixcontrol/email/confirmation_code.txt',
             {
                 'user': self,
@@ -462,11 +463,13 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         from pretix.base.services.mail import mail
 
         mail(
-            self.email, _('Password recovery'), 'pretixcontrol/email/forgot.txt',
+            self.email,
+            _('Reset your password'),
+            'pretixcontrol/email/forgot.txt',
             {
                 'instance': settings.PRETIX_INSTANCE_NAME,
                 'user': self,
-                'url': (build_absolute_uri('control:auth.forgot.recover')
+                'url': (mainreverse_absolute('control:auth.forgot.recover')
                         + '?id=%d&token=%s' % (self.id, default_token_generator.make_token(self)))
             },
             None, locale=self.locale, user=self
@@ -647,25 +650,22 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             id__in=self.teams.filter(TeamQuerySet.organizer_permission_q(permission)).values_list('organizer', flat=True)
         )
 
-    def has_active_staff_session(self, session_key=None):
+    def has_active_staff_session(self, session_key):
         """
         Returns whether or not a user has an active staff session (formerly known as superuser session)
         with the given session key.
         """
         return self.get_active_staff_session(session_key) is not None
 
-    def get_active_staff_session(self, session_key=None):
-        if not self.is_staff:
+    def get_active_staff_session(self, session_key):
+        if not self.is_staff or not session_key:
             return None
         if not hasattr(self, '_staff_session_cache'):
             self._staff_session_cache = {}
         if session_key not in self._staff_session_cache:
-            qs = StaffSession.objects.filter(
-                user=self, date_end__isnull=True
-            )
-            if session_key:
-                qs = qs.filter(session_key=session_key)
-            sess = qs.first()
+            sess = StaffSession.objects.filter(
+                user=self, date_end__isnull=True, session_key=session_key
+            ).first()
             if sess:
                 if sess.date_start < now() - timedelta(seconds=settings.PRETIX_SESSION_TIMEOUT_ABSOLUTE):
                     sess.date_end = now()

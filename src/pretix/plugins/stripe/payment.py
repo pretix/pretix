@@ -46,7 +46,6 @@ import stripe
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.core import signing
 from django.db import transaction
 from django.http import HttpRequest
 from django.template.loader import get_template
@@ -72,11 +71,12 @@ from pretix.base.payment import (
 )
 from pretix.base.plugins import get_all_plugins
 from pretix.base.settings import SettingsSandbox
+from pretix.base.views.redirect import safelink
 from pretix.helpers import OF_SELF
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.http import get_client_ip
-from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.helpers.urls import mainreverse_absolute
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.stripe.forms import StripeKeyValidator
 from pretix.plugins.stripe.models import (
     ReferencedStripeObject, RegisteredApplePayDomain,
@@ -197,7 +197,7 @@ class StripeSettingsHolder(BasePaymentProvider):
         ).format(
             self.settings.connect_client_id,
             request.session['payment_stripe_oauth_token'],
-            urllib.parse.quote(build_global_uri('plugins:stripe:oauth.return')),
+            urllib.parse.quote(mainreverse_absolute('plugins:stripe:oauth.return')),
         )
 
     def settings_content_render(self, request):
@@ -229,7 +229,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                 _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '
                   'the following endpoint in order to automatically cancel orders when charges are refunded externally '
                   'and to process asynchronous payment methods like SOFORT.'),
-                build_global_uri('plugins:stripe:webhook')
+                mainreverse_absolute('plugins:stripe:webhook')
             )
 
     @property
@@ -745,15 +745,7 @@ class StripeMethod(BasePaymentProvider):
 
     def redirect(self, request, url):
         if request.session.get('iframe_session', False):
-            return (
-                build_absolute_uri(request.event, 'plugins:stripe:redirect') +
-                '?data=' + signing.dumps({
-                    'url': url,
-                    'session': {
-                        'payment_stripe_order_secret': request.session['payment_stripe_order_secret'],
-                    },
-                }, salt='safe-redirect')
-            )
+            return safelink(url, framebreak=True)
         else:
             return str(url)
 
@@ -941,7 +933,7 @@ class StripeMethod(BasePaymentProvider):
                     },
                     # TODO: Is this sufficient?
                     idempotency_key=str(self.event.id) + payment.order.code + idempotency_key_seed,
-                    return_url=build_absolute_uri(self.event, 'plugins:stripe:sca.return', kwargs={
+                    return_url=eventreverse_absolute(self.event, 'plugins:stripe:sca.return', kwargs={
                         'order': payment.order.code,
                         'payment': payment.pk,
                         'hash': payment.order.tagged_secret('plugins:stripe'),
@@ -1047,17 +1039,13 @@ class StripeMethod(BasePaymentProvider):
                 raise PaymentException(_('Stripe reported an error: %s') % intent.last_payment_error.message)
 
     def _redirect_to_sca(self, request, payment):
-        url = build_absolute_uri(self.event, 'plugins:stripe:sca', kwargs={
+        url = eventreverse_absolute(self.event, 'plugins:stripe:sca', kwargs={
             'order': payment.order.code,
             'payment': payment.pk,
             'hash': payment.order.tagged_secret('plugins:stripe'),
         })
         if not self.redirect_in_widget_allowed and request.session.get('iframe_session', False):
-            return build_absolute_uri(self.event, 'plugins:stripe:redirect') + '?data=' + signing.dumps({
-                'url': url,
-                'session': {},
-            }, salt='safe-redirect')
-
+            return safelink(url, framebreak=True)
         return url
 
     def _confirm_payment_intent(self, request, payment):
@@ -1068,7 +1056,7 @@ class StripeMethod(BasePaymentProvider):
 
             intent = stripe.PaymentIntent.confirm(
                 payment_info['id'],
-                return_url=build_absolute_uri(self.event, 'plugins:stripe:sca.return', kwargs={
+                return_url=eventreverse_absolute(self.event, 'plugins:stripe:sca.return', kwargs={
                     'order': payment.order.code,
                     'payment': payment.pk,
                     'hash': payment.order.tagged_secret('plugins:stripe'),

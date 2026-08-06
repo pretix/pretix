@@ -380,16 +380,16 @@ Vue.component('pricebox', {
         },
         display_price: function () {
             if (this.$root.display_net_prices) {
-                return floatformat(parseFloat(this.price.net), 2);
+                return floatformat(this.price.net, this.$root.currency_places);
             } else {
-                return floatformat(parseFloat(this.price.gross), 2);
+                return floatformat(this.price.gross, this.$root.currency_places);
             }
         },
         display_price_nonlocalized: function () {
             if (this.$root.display_net_prices) {
-                return parseFloat(this.price.net).toFixed(2);
+                return parseFloat(this.price.net).toFixed(this.$root.currency_places);
             } else {
-                return parseFloat(this.price.gross).toFixed(2);
+                return parseFloat(this.price.gross).toFixed(this.$root.currency_places);
             }
         },
         suggested_price_nonlocalized: function () {
@@ -398,9 +398,9 @@ Vue.component('pricebox', {
                 price = this.price;
             }
             if (this.$root.display_net_prices) {
-                return parseFloat(price.net).toFixed(2);
+                return parseFloat(price.net).toFixed(this.$root.currency_places);
             } else {
-                return parseFloat(price.gross).toFixed(2);
+                return parseFloat(price.gross).toFixed(this.$root.currency_places);
             }
         },
         original_price_aria_label: function () {
@@ -410,7 +410,7 @@ Vue.component('pricebox', {
             return django.interpolate(strings.new_price, [this.stripHTML(this.priceline)]);
         },
         original_line: function () {
-            return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + floatformat(parseFloat(this.original_price), 2);
+            return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + floatformat(this.original_price, this.$root.currency_places);
         },
         priceline: function () {
             if (this.price.gross === "0.00") {
@@ -645,19 +645,19 @@ Vue.component('item', {
             if (this.item.free_price) {
                 return django.interpolate(strings.price_from, {
                     'currency': this.$root.currency,
-                    'price': floatformat(this.item.min_price, 2)
+                    'price': floatformat(this.item.min_price, this.$root.currency_places)
                 }, true).replace(this.$root.currency, '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + '</span>');
             } else if (this.item.min_price !== this.item.max_price) {
-                return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " 
-                    + floatformat(this.item.min_price, 2) + " – "
-                    + floatformat(this.item.max_price, 2);
+                return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> "
+                    + floatformat(this.item.min_price, this.$root.currency_places) + " – "
+                    + floatformat(this.item.max_price, this.$root.currency_places);
             } else if (this.item.min_price === "0.00" && this.item.max_price === "0.00") {
                 if (this.item.mandatory_priced_addons) {
                     return "\xA0"; // nbsp, because an empty string would cause the HTML element to collapse
                 }
                 return strings.free;
             } else {
-                return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + floatformat(this.item.min_price, 2);
+                return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + floatformat(this.item.min_price, this.$root.currency_places);
             }
         },
         variationsToggleLabel: function () {
@@ -1949,6 +1949,7 @@ var shared_root_methods = {
                 root.location = data.location;
                 root.categories = data.items_by_category;
                 root.currency = data.currency;
+                root.currency_places = data.currency_places;
                 root.display_net_prices = data.display_net_prices;
                 root.voucher_explanation_text = data.voucher_explanation_text;
                 root.error = data.error;
@@ -1983,6 +1984,7 @@ var shared_root_methods = {
         }, function (error) {
             root.categories = [];
             root.currency = '';
+            root.currency_places = 2;
             if (error.status === 429) {
                 root.error = strings['loading_error_429'];
                 root.connection_error = true;
@@ -2339,6 +2341,7 @@ var create_widget = function (element, html_id=null) {
                 is_button: false,
                 categories: null,
                 currency: null,
+                currency_places: 2,
                 name: null,
                 date_range: null,
                 location: null,

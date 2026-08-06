@@ -19,19 +19,23 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import hmac
 import json
 from contextlib import contextmanager
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import (
-    BACKEND_SESSION_KEY, get_user_model, load_backend, login,
+    BACKEND_SESSION_KEY, HASH_SESSION_KEY, get_user_model, load_backend, login,
+    logout,
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import redirect_to_login
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
-from django.utils.crypto import get_random_string
+from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views import View
@@ -218,11 +222,13 @@ class UserImpersonateView(AdministratorPermissionRequiredMixin, RecentAuthentica
 
     def post(self, request, *args, **kwargs):
         self.object = get_object_or_404(User, pk=self.kwargs.get("id"))
+        staff_session = request.user.get_active_staff_session(request.session.session_key)
         self.request.user.log_action('pretix.control.auth.user.impersonated',
                                      user=request.user,
                                      data={
                                          'other': self.kwargs.get("id"),
-                                         'other_email': self.object.email
+                                         'other_email': self.object.email,
+                                         'staff_session': staff_session.pk,
                                      })
         oldkey = request.session.session_key
 
@@ -230,13 +236,27 @@ class UserImpersonateView(AdministratorPermissionRequiredMixin, RecentAuthentica
         hijacked = self.object
 
         hijack_history = request.session.get("hijack_history", [])
-        hijack_history.append(request.user._meta.pk.value_to_string(hijacker))
+        hijack_history.append({
+            "user": request.user.pk,
+            # We include the auth_hash, because it is unguessable. So should an attacker gain an attack vector to
+            # modify hijack_history, they can't just insert or change a user that shouldn't be there. We HMAC it
+            # again, though, since we also do not want the auth_hash of the admin user to be in the session of an
+            # unprivileged user to contain the risk if there is some leak of session data.
+            "auth_hash": salted_hmac(key_salt=b"hijack-history-hash", value=request.session[HASH_SESSION_KEY],
+                                     algorithm="sha256", secret=settings.SECRET_KEY).hexdigest(),
+        })
 
         backend = get_used_backend(request)
         backend = f"{backend.__module__}.{backend.__class__.__name__}"
 
         with signals.no_update_last_login(), keep_session_age(request.session):
             login(request, hijacked, backend=backend)
+
+        request.session.save()
+        staff_session.logs.create(
+            method='(NOTE)',
+            url=f'Begin impersonating user #{hijacked.pk} (request session {oldkey[:8]} -> {request.session.session_key[:8]})',
+        )
 
         request.session["hijack_history"] = hijack_history
 
@@ -254,13 +274,28 @@ class UserImpersonateView(AdministratorPermissionRequiredMixin, RecentAuthentica
 class UserImpersonateStopView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
-        impersonated = request.user
-
-        hijs = request.session['hijacker_session']
+        staff_session_key = request.session['hijacker_session']
+        prev_session_key = request.session.session_key
         hijack_history = request.session.get("hijack_history", [])
         hijacked = request.user
-        user_pk = hijack_history.pop()
-        hijacker = get_object_or_404(get_user_model(), pk=user_pk)
+        prev_session = hijack_history.pop()
+        hijacker = get_object_or_404(get_user_model(), pk=prev_session["user"])
+        staff_session = hijacker.get_active_staff_session(staff_session_key)
+        if not staff_session:
+            raise PermissionDenied
+
+        expected_hash = salted_hmac(
+            key_salt=b"hijack-history-hash",
+            value=hijacker.get_session_auth_hash(),
+            algorithm="sha256",
+            secret=settings.SECRET_KEY
+        ).hexdigest()
+        if not hmac.compare_digest(expected_hash, prev_session["auth_hash"]):
+            # Could be an attacker-controlled hijack history, but could also be e.g. a password change of the admin user
+            # that happened during the hijack session
+            logout(request)
+            return redirect_to_login(request.get_full_path())
+
         backend = get_used_backend(request)
         backend = f"{backend.__module__}.{backend.__class__.__name__}"
         with signals.no_update_last_login(), keep_session_age(request.session):
@@ -275,17 +310,22 @@ class UserImpersonateStopView(LoginRequiredMixin, View):
             hijacked=hijacked,
         )
 
-        ss = request.user.get_active_staff_session(hijs)
-        if ss:
-            request.session.save()
-            ss.session_key = request.session.session_key
-            ss.save()
+        request.session.save()
+        staff_session.session_key = request.session.session_key
+        staff_session.save()
+
+        staff_session.logs.create(
+            method='(NOTE)',
+            url=f'Stop impersonating user #{hijacked.pk} (request session {prev_session_key[:8]}, '
+                f'staff session {staff_session_key[:8]} -> {request.session.session_key[:8]})',
+        )
 
         request.user.log_action('pretix.control.auth.user.impersonate_stopped',
                                 user=request.user,
                                 data={
-                                    'other': impersonated.pk,
-                                    'other_email': impersonated.email
+                                    'other': hijacked.pk,
+                                    'other_email': hijacked.email,
+                                    'staff_session': staff_session.pk,
                                 })
         return redirect(reverse('control:index'))
 

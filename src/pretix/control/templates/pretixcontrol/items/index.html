@@ -156,11 +156,11 @@
                                     <br/>
                                     <small class="text-muted">
                                         {% if not i.tax_rule.price_includes_tax %}
-                                            {% blocktrans trimmed with rate=i.tax_rule.rate|floatformat:-2 taxname=i.tax_rule.name %}
+                                            {% blocktrans trimmed with rate=i.tax_rule.rate|tax_rate_format taxname=i.tax_rule.name %}
                                                 <strong>plus</strong> {{ rate }}% {{ taxname }}
                                             {% endblocktrans %}
                                         {% else %}
-                                            {% blocktrans trimmed with rate=i.tax_rule.rate|floatformat:-2 taxname=i.tax_rule.name|default:s_taxes %}
+                                            {% blocktrans trimmed with rate=i.tax_rule.rate|tax_rate_format taxname=i.tax_rule.name|default:s_taxes %}
                                                 incl. {{ rate }}% {{ taxname }}
                                             {% endblocktrans %}
                                         {% endif %}

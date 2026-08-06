@@ -26,8 +26,9 @@ from typing import List
 from django.conf import settings as django_settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.db.utils import IntegrityError
 from django.utils.timezone import now
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, ngettext
 
 from pretix.base.i18n import language
 from pretix.base.modelimport import DataImportError, ImportColumn, parse_csv
@@ -260,6 +261,7 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
         # Prepare model objects. Yes, this might consume lots of RAM, but allows us to make the actual SQL transaction
         # shorter. We'll see what works better in reality…
         vouchers = []
+        codes = set()
         lock_seats = []
         for i, record in enumerate(data):
             try:
@@ -268,6 +270,14 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
 
                 if not record.get("code"):
                     raise ValidationError(_('A voucher cannot be created without a code.'))
+                code = record.get("code")
+                if code.upper() in codes:
+                    raise ValidationError(
+                        _('Voucher codes must be unique. Code "{code}" already exists in this import.').format(
+                            code=code,
+                        )
+                    )
+                codes.add(code.upper())
                 Voucher.clean_item_properties(
                     record,
                     event,
@@ -286,8 +296,22 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
                     lock_seats.append(voucher.seat)
             except (ValidationError, ImportError) as e:
                 raise DataImportError(
-                    _('Invalid data in row {row}: {message}').format(row=i, message=str(e))
+                    _('Invalid data in row {row}: {message}').format(row=i + 1, message=str(e))
                 )
+        existing_codes = Voucher.objects.filter(
+            event=event,
+            code__in=codes,
+        ).values_list("code", flat=True)
+        if len(existing_codes):
+            raise DataImportError(
+                ngettext(
+                    'Voucher codes must be unique. Import contains existing voucher code {code}.',
+                    'Voucher codes must be unique. Import contains existing voucher codes {code}.',
+                    len(existing_codes)
+                ).format(
+                    code=", ".join(existing_codes)
+                )
+            )
 
         with transaction.atomic():
             # We don't support quotas here, so we only need to lock if seats are in use
@@ -300,7 +324,13 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
 
             save_logentries = []
             for v in vouchers:
-                v.save()
+                try:
+                    v.save()
+                except IntegrityError:
+                    # should not happen as we check existing codes before, but we did not lock so we might have a race-condition
+                    raise DataImportError(
+                        _('Vouchers could not be imported, probably due to a voucher code already being in use.')
+                    )
                 save_logentries.append(v.log_action(
                     'pretix.voucher.added',
                     user=user,

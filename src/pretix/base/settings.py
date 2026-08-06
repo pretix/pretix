@@ -1276,7 +1276,7 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
-            label=_("Allow to update existing invoices"),
+            label=_("Allow updating existing invoices"),
             help_text=_("By default, invoices can never again be changed once they are issued. In most countries, we "
                         "recommend to leave this option turned off and always issue a new invoice if a change needs "
                         "to be made."),
@@ -1924,8 +1924,6 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Hide all past dates from calendar"),
-            help_text=_("This option currently only affects the calendar of this event series, not the organizer-wide "
-                        "calendar.")
         )
     },
     'allow_modifications': {
@@ -2284,6 +2282,17 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Contact address"),
             help_text=_("We'll show this publicly to allow attendees to contact you.")
+        )
+    },
+    'contact_url': {
+        'default': None,
+        'type': str,
+        'serializer_class': serializers.URLField,
+        'form_class': forms.URLField,
+        'form_kwargs': dict(
+            label=_("Contact URL"),
+            help_text=_("If you set this, the footer contact link will point here instead of using the email address above. "
+                        "Please note that you still need to add a contact email address that will be shared with all emails you send.")
         )
     },
     'imprint_url': {

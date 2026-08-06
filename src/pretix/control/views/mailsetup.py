@@ -28,7 +28,7 @@ from django.core.mail import get_connection
 from django.shortcuts import redirect
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic import TemplateView
 
 from pretix.base import email
@@ -41,6 +41,30 @@ from pretix.control.forms.mailsetup import SimpleMailForm, SMTPMailForm
 logger = logging.getLogger(__name__)
 
 
+def get_cname_record(hostname):
+    try:
+        r = dns.resolver.Resolver()
+        answers = r.resolve(hostname, 'CNAME')
+        answers = list(answers)
+        if len(answers) != 1:
+            logger.exception('Found multiple CNAME records for {}'.format(hostname))
+            return
+        return str(answers[0].target).lower()
+    except:
+        logger.exception('Could not fetch CNAME record for {}'.format(hostname))
+
+
+def get_dmarc_record(hostname):
+    try:
+        r = dns.resolver.Resolver()
+        for resp in r.resolve("_dmarc." + hostname, 'TXT'):
+            data = b''.join(resp.strings).decode()
+            if 'DMARC1' in data.strip():
+                return data
+    except:
+        logger.exception("Could not fetch DMARC record for {}".format(hostname))
+
+
 def get_spf_record(hostname):
     try:
         r = dns.resolver.Resolver()
@@ -49,7 +73,7 @@ def get_spf_record(hostname):
             if data.lower().strip().startswith('v=spf1 '):  # RFC7208, section 4.5
                 return data
     except:
-        logger.exception("Could not fetch SPF record")
+        logger.exception("Could not fetch SPF record for {}".format(hostname))
 
 
 def _check_spf_record(not_found_lookup_parts, spf_record, depth):
@@ -168,10 +192,15 @@ class MailSettingsSetupView(TemplateView):
                 return super().get(request, *args, **kwargs)
 
             session_key = f'sender_mail_verification_code_{self.request.path}_{self.simple_form.cleaned_data.get("mail_from")}'
+            verify_dns = (
+                settings.MAIL_CUSTOM_SENDER_SPF_STRING or
+                (settings.MAIL_CUSTOM_SENDER_DKIM_CNAME and settings.MAIL_CUSTOM_SENDER_DKIM_SELECTOR) or
+                settings.MAIL_CUSTOM_SENDER_DMARC_REQUIRED
+            )
             allow_save = (
                 (not settings.MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED or
                  ('verification' in self.request.POST and self.request.POST.get('verification', '') == self.request.session.get(session_key, None))) and
-                (not settings.MAIL_CUSTOM_SENDER_SPF_STRING or self.request.POST.get('state') == 'save')
+                (not verify_dns or self.request.POST.get('state') == 'save')
             )
 
             if allow_save:
@@ -192,8 +221,8 @@ class MailSettingsSetupView(TemplateView):
 
             spf_warning = None
             spf_record = None
+            hostname = self.simple_form.cleaned_data['mail_from'].split('@')[-1]
             if settings.MAIL_CUSTOM_SENDER_SPF_STRING:
-                hostname = self.simple_form.cleaned_data['mail_from'].split('@')[-1]
                 spf_record = get_spf_record(hostname)
                 if not spf_record:
                     spf_warning = _(
@@ -210,19 +239,56 @@ class MailSettingsSetupView(TemplateView):
                         'this system in the SPF record.'
                     )
 
-            verification = settings.MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED and not spf_warning
+            dkim_warning = None
+            dkim_hostname = None
+            dkim_cname = None
+            if settings.MAIL_CUSTOM_SENDER_DKIM_CNAME and settings.MAIL_CUSTOM_SENDER_DKIM_SELECTOR:
+                dkim_hostname = settings.MAIL_CUSTOM_SENDER_DKIM_SELECTOR + '._domainkey.' + hostname
+                cname_target = get_cname_record(dkim_hostname)
+                dkim_cname = settings.MAIL_CUSTOM_SENDER_DKIM_CNAME
+                if not dkim_cname.endswith("."):
+                    dkim_cname += "."
+                if "%s" in dkim_cname:
+                    dkim_cname = dkim_cname.replace("%s", hostname.replace(".", "-").lower())
+                if not cname_target:
+                    dkim_warning = _(
+                        'We could not find a CNAME record pointing to our DKIM key for domain you are trying to use. '
+                        'This means that there is a very high change most of the emails will be rejected or marked as '
+                        'spam. We strongly recommend setting up DKIM through a CNAME record. You can do so through the '
+                        'DNS settings at the provider you registered your domain with.'
+                    )
+                elif cname_target != dkim_cname:
+                    dkim_warning = _(
+                        'We found a CNAME record for a DKIM key, but it is not pointing to the right location. '
+                        'This means that there is a very high chance most of the emails will be rejected or marked as '
+                        'spam. You should update the DNS settings of your domain.'
+                    )
+
+            dmarc_warning = None
+            dmarc_record = None
+            if settings.MAIL_CUSTOM_SENDER_DMARC_REQUIRED:
+                dmarc_record = get_dmarc_record(hostname)
+                if not dmarc_record:
+                    dmarc_warning = _(
+                        'We did not find a DMARC record for your domain. This means that there is a very high chance '
+                        'most of the emails will be rejected or marked as spam. You should update the DNS settings '
+                        'of your domain.'
+                    )
+
+            verification = settings.MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED and not spf_warning and not dkim_warning and not dmarc_warning
             if verification:
                 if 'verification' in self.request.POST:
                     messages.error(request, _('The verification code was incorrect, please try again.'))
                 else:
                     self.request.session[session_key] = get_random_string(length=6, allowed_chars='1234567890')
+                    sender_address = self.simple_form.cleaned_data.get('mail_from')
                     mail(
-                        self.simple_form.cleaned_data.get('mail_from'),
-                        _('Sender address verification'),
+                        sender_address,
+                        gettext('Confirm %(address)s as a sender address') % {'address': sender_address},
                         'pretixcontrol/email/email_setup.txt',
                         {
                             'code': self.request.session[session_key],
-                            'address': self.simple_form.cleaned_data.get('mail_from'),
+                            'address': sender_address,
                             'instance': settings.PRETIX_INSTANCE_NAME,
                         },
                         None,
@@ -240,6 +306,12 @@ class MailSettingsSetupView(TemplateView):
                     'spf_warning': spf_warning,
                     'spf_record': spf_record,
                     'spf_key': settings.MAIL_CUSTOM_SENDER_SPF_STRING,
+                    'dkim_warning': dkim_warning,
+                    'dkim_hostname': dkim_hostname,
+                    'dkim_cname': dkim_cname,
+                    'dmarc_warning': dmarc_warning,
+                    'dmarc_record': dmarc_record,
+                    'hostname': hostname,
                     'recp': self.simple_form.cleaned_data.get('mail_from')
                 },
                 using=self.template_engine,

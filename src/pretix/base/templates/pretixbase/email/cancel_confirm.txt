@@ -1,10 +1,14 @@
 {% load i18n %}
-{% trans "You have requested us to cancel an event which includes a larger bulk-refund:" %}
+{% trans "You requested to cancel an event that involves a large bulk refund:" %}
 
-{% trans "Event" %}: {{ event }}
+- {% trans "Event" %}: {{ event }}
+- {% trans "Estimated refund" %}: **{{ amount }}**
 
-{% trans "Estimated refund amount" %}: **{{ amount }}**
+{% trans "To confirm, paste the following code into the cancellation form:" %}
 
-{% trans "Please confirm that you want to proceed by coping the following confirmation code into the cancellation form:" %}
+    {{ confirmation_code }}
 
-**{{ confirmation_code }}**
+{% blocktrans with instance=instance %}Don't share this code with anyone. The {{ instance }} team will never ask you for it.{% endblocktrans %}
+
+{% blocktrans with instance=instance %}Thanks,  
+The {{ instance }} Team{% endblocktrans %}
