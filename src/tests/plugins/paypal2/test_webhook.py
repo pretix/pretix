@@ -22,6 +22,7 @@
 import json
 from datetime import timedelta
 from decimal import Decimal
+from unittest.mock import MagicMock
 
 import pytest
 from django.utils.timezone import now
@@ -409,7 +410,8 @@ def test_webhook_mark_paid(env, client, monkeypatch):
         order.payments.update(state=OrderPayment.PAYMENT_STATE_PENDING)
 
     pp_order = Result(get_test_order())
-    monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
+    mock_orders_get_request = MagicMock(return_value=pp_order)
+    monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", mock_orders_get_request)
     monkeypatch.setattr("pretix.plugins.paypal2.payment.PaypalMethod.init_api", init_api)
     with scopes_disabled():
         ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
@@ -497,7 +499,7 @@ def test_webhook_mark_paid(env, client, monkeypatch):
             "resource_version": "2.0"
         }
     ), content_type='application_json')
-
+    mock_orders_get_request.assert_called_once_with('806440346Y391300T')
     order.refresh_from_db()
     assert order.status == Order.STATUS_PAID
 
