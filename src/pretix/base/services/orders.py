@@ -802,7 +802,7 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
     v_avail = Counter()
 
     # Check maximum order size
-    limit = min(int(event.settings.max_items_per_order), settings.PRETIX_MAX_ORDER_SIZE)
+    limit = event.max_items_per_order
     if sum(1 for cp in sorted_positions if not cp.addon_to) > limit:
         err = err or (error_messages['max_items'] % limit)
 
