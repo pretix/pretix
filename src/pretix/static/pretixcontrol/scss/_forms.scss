@@ -780,6 +780,8 @@ fieldset.accordion-panel > legend {
   }
 }
 
+
+/* These classes are not only used for tax rules, but also for event meta properties  */
 .tax-rules-formset {
   margin-left: -15px;
   margin-right: -15px;
@@ -801,6 +803,7 @@ fieldset.accordion-panel > legend {
   border-bottom: 1px solid $input-border;
   padding-bottom: 5px;
 }
+
 
 .batch-select-label {
   display: block;

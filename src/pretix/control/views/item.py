@@ -56,7 +56,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.generic import FormView, ListView, View
+from django.views.generic import FormView, ListView, TemplateView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django_countries.fields import Country
 
@@ -440,87 +440,7 @@ class QuestionList(ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        questions = []
-
-        if self.request.event.settings.attendee_names_asked:
-            questions.append(
-                FakeQuestion(
-                    id='attendee_name_parts',
-                    question=_('Attendee name'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'attendee_name_parts', 0
-                    ),
-                    required=self.request.event.settings.attendee_names_required,
-                )
-            )
-
-        if self.request.event.settings.attendee_emails_asked:
-            questions.append(
-                FakeQuestion(
-                    id='attendee_email',
-                    question=_('Attendee email'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'attendee_email', 0
-                    ),
-                    required=self.request.event.settings.attendee_emails_required,
-                )
-            )
-
-        if self.request.event.settings.attendee_company_asked:
-            questions.append(
-                FakeQuestion(
-                    id='company',
-                    question=_('Company'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'company', 0
-                    ),
-                    required=self.request.event.settings.attendee_company_required,
-                )
-            )
-
-        if self.request.event.settings.attendee_addresses_asked:
-            questions.append(
-                FakeQuestion(
-                    id='street',
-                    question=_('Street'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'street', 0
-                    ),
-                    required=self.request.event.settings.attendee_addresses_required,
-                )
-            )
-            questions.append(
-                FakeQuestion(
-                    id='zipcode',
-                    question=_('ZIP code'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'zipcode', 0
-                    ),
-                    required=self.request.event.settings.attendee_addresses_required,
-                )
-            )
-            questions.append(
-                FakeQuestion(
-                    id='city',
-                    question=_('City'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'city', 0
-                    ),
-                    required=self.request.event.settings.attendee_addresses_required,
-                )
-            )
-            questions.append(
-                FakeQuestion(
-                    id='country',
-                    question=_('Country'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'country', 0
-                    ),
-                    required=self.request.event.settings.attendee_addresses_required,
-                )
-            )
-
-        questions += list(ctx['questions'])
+        questions = list(ctx['questions'])
         questions.sort(key=lambda q: q.position)
         ctx['questions'] = questions
         return ctx
@@ -836,6 +756,11 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
         return ret
 
 
+class QuestionnairesEditor(EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_change_items'
+    template_name = 'pretixcontrol/items/questionnaires.html'
+
+
 class QuotaQueryMixin:
 
     @cached_property
@@ -861,7 +786,7 @@ class QuotaQueryMixin:
         return QuotaFilterForm(data=self.request_data, prefix='filter', event=self.request.event)
 
 
-class QuotaList(PaginationMixin, QuotaQueryMixin, ListView):
+class QuotaList(PaginationMixin, ListView):
     model = Quota
     context_object_name = 'quotas'
     template_name = 'pretixcontrol/items/quotas.html'

@@ -72,7 +72,7 @@ from pretix.helpers.countries import CachedCountries
 from pretix.helpers.format import format_map
 from pretix.helpers.money import DecimalTextInput
 from pretix.multidomain.urlreverse import eventreverse_absolute
-from pretix.presale.views import get_cart
+from pretix.presale.views import get_cart_positions
 from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
 logger = logging.getLogger(__name__)
@@ -1148,7 +1148,7 @@ class FreeOrderProvider(BasePaymentProvider):
     def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
         from .services.cart import get_fees
 
-        cart = get_cart(request)
+        cart = get_cart_positions(request)
 
         try:
             fees = get_fees(event=request.event, request=request,
@@ -1416,7 +1416,7 @@ class GiftCardPayment(BasePaymentProvider):
                 for p in cs.get('payments', [])
                 if p.get('info_data', {}).get('gift_card')
             ]
-            positions = get_cart(request)
+            positions = get_cart_positions(request)
             testmode = self.event.testmode
         else:
             used_cards = []

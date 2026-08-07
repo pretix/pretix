@@ -27,7 +27,7 @@ from decimal import Decimal
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
 from django.db import IntegrityError
-from django.db.models import Prefetch, QuerySet
+from django.db.models import Prefetch, Q, QuerySet
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 
@@ -36,7 +36,7 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, Question, QuestionAnswer,
-    QuestionOption,
+    QuestionnaireChild, QuestionOption,
 )
 from pretix.base.models.customers import AttendeeProfile
 from pretix.presale.signals import contact_form_fields_overrides
@@ -55,6 +55,20 @@ class BaseQuestionsViewMixin:
 
     def question_form_kwargs(self, cr):
         return {}
+
+    @cached_property
+    def order_questions_form(self):
+        kwargs = {}  # self.question_form_kwargs(cr)
+        form = self.form_class(event=self.request.event,
+                               prefix='order',
+                               request=self.request,
+                               cartpos=None,
+                               orderpos=None,
+                               all_optional=self.all_optional,
+                               data=(self.request.POST if self.request.method == 'POST' else None),
+                               files=(self.request.FILES if self.request.method == 'POST' else None),
+                               **kwargs)
+        return form
 
     @cached_property
     def forms(self):
@@ -307,27 +321,37 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
 
     @cached_property
     def positions(self):
-        qqs = self.request.event.questions.all()
+        qqs = self.request.event.questionnaires.all()
         if self.only_user_visible:
-            qqs = qqs.filter(ask_during_checkin=False, hidden=False)
+            qqs = qqs.filter(type='PS')
+        else:
+            qqs = qqs.filter(type__startswith='P')
+        qqs = qqs.filter(
+            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.order.sales_channel.identifier)
+        )
         return list(self.order.positions.select_related(
             'item', 'variation'
         ).prefetch_related(
             Prefetch('answers',
                      QuestionAnswer.objects.prefetch_related('options'),
                      to_attr='answerlist'),
-            Prefetch('item__questions',
+            Prefetch('item__questionnaires',
                      qqs.prefetch_related(
-                         Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
-                             # This prefetch statement is utter bullshit, but it actually prevents Django from doing
-                             # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
-                             # a prefetch lookup on this query...
-                             'question',
-                             Question.objects.none(),
-                             to_attr='dummy'
-                         )))
-                     ).select_related('dependency_question'),
-                     to_attr='questions_to_ask')
+                         Prefetch('children', QuestionnaireChild.objects.prefetch_related(
+                             Prefetch('user_question', Question.objects.prefetch_related(
+                                 Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
+                                     # This prefetch statement is utter bullshit, but it actually prevents Django from doing
+                                     # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
+                                     # a prefetch lookup on this query...
+                                     'question',
+                                     Question.objects.none(),
+                                     to_attr='dummy'
+                                 )))
+                             ))
+                         ),
+                         to_attr='childlist')
+                     ),
+                     to_attr='relevant_questionnaires')
         ))
 
     @cached_property

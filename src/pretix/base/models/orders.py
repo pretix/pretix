@@ -1336,6 +1336,14 @@ class QuestionAnswer(models.Model):
         'CartPosition', null=True, blank=True,
         related_name='answers', on_delete=models.CASCADE
     )
+    order = models.ForeignKey(
+        'Order', null=True, blank=True,
+        related_name='answers', on_delete=models.CASCADE
+    )
+    checkoutsession = models.ForeignKey(
+        'CheckoutSession', null=True, blank=True,
+        related_name='answers', on_delete=models.CASCADE
+    )
     question = models.ForeignKey(
         Question, related_name='answers', on_delete=models.CASCADE
     )
@@ -1351,7 +1359,12 @@ class QuestionAnswer(models.Model):
     objects = ScopedManager(organizer='question__event__organizer')
 
     class Meta:
-        unique_together = [['orderposition', 'question'], ['cartposition', 'question']]
+        unique_together = [
+            ['orderposition', 'question'],
+            ['cartposition', 'question'],
+            ['order', 'question'],
+            ['checkoutsession', 'question'],
+        ]
 
     @property
     def backend_file_url(self):
@@ -1445,6 +1458,12 @@ class QuestionAnswer(models.Model):
         elif self.question.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE) and self.answer and not use_cached:
             return ", ".join(str(o.answer) for o in self.options.all())
         else:
+            return self.answer
+
+    def to_dependency_values(self):
+        if self.question.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+            return [o.identifier for o in self.options.all()]
+        elif self.question.type in (Question.TYPE_BOOLEAN, Question.TYPE_COUNTRYCODE):
             return self.answer
 
     def save(self, *args, **kwargs):
@@ -1591,53 +1610,80 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
 
     def cache_answers(self, all=True):
         """
-        Creates two properties on the object.
-        (1) answ: a dictionary of question.id → answer string
-        (2) questions: a list of Question objects, extended by an 'answer' property
+        Creates a new property on the object:
+        questions: a list of Question objects, extended by an 'answer' property
         """
-        self.answ = {}
-        for a in getattr(self, 'answerlist', self.answers.all()):  # use prefetch_related cache from get_cart
-            self.answ[a.question_id] = a
-
         # We need to clone our question objects, otherwise we will override the cached
         # answers of other items in the same cart if the question objects have been
         # selected via prefetch_related
         if not all:
-            if hasattr(self.item, 'questions_to_ask'):
-                questions = list(copy.copy(q) for q in self.item.questions_to_ask)
+            if hasattr(self.item, 'relevant_questionnaires'):
+                children = list(copy.copy(qc) for qq in self.item.relevant_questionnaires for qc in qq.childlist)
             else:
-                questions = list(copy.copy(q) for q in self.item.questions.filter(ask_during_checkin=False,
-                                                                                  hidden=False))
+                children = list(copy.copy(qc) for qq in self.item.questionnaires.filter(type='PS') for qc in qq.children.all())
         else:
-            questions = list(copy.copy(q) for q in self.item.questions.all())
+            children = list(copy.copy(qc) for qq in self.item.questionnaires.filter(type__startswith='P') for qc in qq.children.all())
 
-        question_cache = {
-            q.pk: q for q in questions
+        qc_cache = {
+            q.pk: q for q in children
         }
 
-        def question_is_visible(parentid, qvals):
-            if parentid not in question_cache:
+        def qc_is_visible(parentid, qvals):
+            if parentid not in qc_cache:
                 return False
-            parentq = question_cache[parentid]
-            if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_values):
+            parentqc = qc_cache[parentid]
+            if parentqc.dependency_question_id and not qc_is_visible(parentqc.dependency_question_id, parentqc.dependency_values):
                 return False
-            if parentid not in self.answ:
-                return False
-            return (
-                ('True' in qvals and self.answ[parentid].answer == 'True')
-                or ('False' in qvals and self.answ[parentid].answer == 'False')
-                or (any(qval in [o.identifier for o in self.answ[parentid].options.all()] for qval in qvals))
-            )
+            answer_values = self.get_dependency_answer_values(parentqc)
+            return any(qval in answer_values for qval in qvals)
 
         self.questions = []
-        for q in questions:
-            if q.id in self.answ:
-                q.answer = self.answ[q.id]
-                q.answer.question = q  # cache object
+        for qc in children:
+            if qc.user_question_id and qc.user_question_id in self.answer_cache:
+                qc.answer = self.answer_cache[qc.user_question_id]
+                #qc.answer.question = qc  # cache object
+            elif qc.system_question:
+                qc.answer = self.get_system_answer(qc.system_question)
+                #qc.answer.question = qc  # cache object
             else:
-                q.answer = ""
-            if not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_values):
-                self.questions.append(q)
+                qc.answer = ""
+            if not qc.dependency_question_id or qc_is_visible(qc.dependency_question_id, qc.dependency_values):
+                self.questions.append(qc)
+
+    @cached_property
+    def answer_cache(self):
+        return {
+            aw.question_id: aw for aw in getattr(self, 'answerlist', self.answers.all())
+        }
+
+    def get_dependency_answer_values(self, qc):
+        if qc.user_question_id:
+            if qc.user_question_id not in self.answer_cache:
+                return None
+            answer = self.answer_cache[qc.user_question_id]
+            return answer.to_dependency_values()
+        elif qc.system_question:
+            return [self.get_system_answer(qc.system_question)]
+        else:
+            raise ValueError('Questionnaire child without question has no answer')
+
+    def get_system_answer(self, system_question_name):
+        if system_question_name == 'attendee_name_parts':
+            return self.attendee_name_parts
+        elif system_question_name == 'attendee_email':
+            return self.attendee_email
+        elif system_question_name == 'street':
+            return self.street
+        elif system_question_name == 'zipcode':
+            return self.zipcode
+        elif system_question_name == 'city':
+            return self.city
+        elif system_question_name == 'state':
+            return self.state
+        elif system_question_name == 'country':
+            return self.country
+        else:
+            raise ValueError('Unknown system question name')
 
     @property
     def net_price(self):
@@ -3177,6 +3223,39 @@ class Transaction(models.Model):
         return self.tax_value_includes_rounding_correction * self.count
 
 
+class CheckoutSession(models.Model):
+    """
+    A checkout session optionally bundles cart positions with additional information. This is historically
+    not required in pretix and currently only used in the Storefront API.
+    """
+    event = models.ForeignKey(
+        Event,
+        verbose_name=_("Event"),
+        related_name="checkout_sessions",
+        on_delete=models.CASCADE,
+    )
+    cart_id = models.CharField(
+        max_length=255, unique=True,
+        verbose_name=_("Cart ID (e.g. session key)"),
+    )
+    created = models.DateTimeField(
+        verbose_name=_("Date"),
+        auto_now_add=True,
+    )
+    customer = models.ForeignKey(
+        Customer,
+        related_name='checkout_sessions',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+    )
+    sales_channel = models.ForeignKey(
+        "SalesChannel",
+        on_delete=models.CASCADE,
+    )
+    testmode = models.BooleanField(default=False)
+    session_data = models.JSONField(default=dict)
+
+
 class CartPosition(AbstractPosition):
     """
     A cart position is similar to an order line, except that it is not
@@ -3381,6 +3460,13 @@ class CartPosition(AbstractPosition):
 
 class InvoiceAddress(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
+    checkout_session = models.OneToOneField(
+        CheckoutSession,
+        null=True,
+        blank=True,
+        related_name='invoice_address',
+        on_delete=models.CASCADE
+    )
     order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address', on_delete=models.CASCADE)
     customer = models.ForeignKey(
         Customer,

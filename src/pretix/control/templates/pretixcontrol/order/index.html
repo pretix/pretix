@@ -602,60 +602,9 @@
                                 {% endif %}
                                 {% if line.has_questions %}
                                     <dl>
-                                        {% if line.item.ask_attendee_data and event.settings.attendee_names_asked %}
-                                            <dt>{% trans "Attendee name" %}</dt>
-                                            <dd>{% if line.attendee_name %}{{ line.attendee_name_all_components }}{% else %}
-                                                <em>{% trans "not answered" %}</em>{% endif %}</dd>
-                                        {% endif %}
-                                        {% if line.item.ask_attendee_data and event.settings.attendee_emails_asked %}
-                                            <dt>{% trans "Attendee email" %}</dt>
-                                            <dd>
-                                                {% if line.attendee_email %}
-                                                    {{ line.attendee_email }}
-                                                    {% if not line.addon_to %}
-                                                        <form class="form-inline helper-display-inline" method="post"
-                                                              action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}">
-                                                            {% csrf_token %}
-                                                            <a href="{% url "control:event.order.position.sendmail" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}"
-                                                               class="btn btn-default btn-xs">
-                                                                <span class="fa fa-envelope-o"></span>
-                                                            </a>
-                                                            <button class="btn btn-default btn-xs">
-                                                                {% trans "Resend link" %}
-                                                            </button>
-                                                        </form>
-                                                    {% endif %}
-                                                {% else %}
-                                                    <em>{% trans "not answered" %}</em>
-                                                {% endif %}
-                                            </dd>
-                                        {% endif %}
-                                        {% if line.item.ask_attendee_data and event.settings.attendee_company_asked %}
-                                            <dt>
-                                                {% trans "Attendee company" %}
-                                            </dt>
-                                            <dd>
-                                                {% if line.company %}{{ line.company }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}
-                                            </dd>
-                                        {% endif %}
-                                        {% if line.item.ask_attendee_data and event.settings.attendee_addresses_asked %}
-                                            <dt>
-                                                {% trans "Attendee address" %}
-                                            </dt>
-                                            <dd>
-                                                {% if line.street or line.zipcode or line.city or line.country %}
-                                                    {{ line.street|default_if_none:""|linebreaksbr }}<br>
-                                                    {{ line.zipcode|default_if_none:"" }} {{ line.city|default_if_none:"" }}<br>
-                                                    {% if line.state %}{{ line.state_for_address }}<br>{% endif %}
-                                                    {{ line.country.name|default_if_none:"" }}
-                                                {% else %}
-                                                    <em>{% trans "not answered" %}</em>
-                                                {% endif %}
-                                            </dd>
-                                        {% endif %}
                                         {% for q in line.questions %}
                                             <dt>
-                                                {{ q.question }}
+                                                {{ q.label }}
                                                 {% if q.ask_during_checkin %}
                                                     <span class="fa fa-qrcode text-muted"
                                                             data-toggle="tooltip"
@@ -683,11 +632,26 @@
                                                         {% endif %}
                                                     {% elif q.type == "M" %}
                                                         {{ q.answer.to_string_i18n|rich_text_snippet }}
-                                                    {% else %}
+                                                    {% elif q.type %}
                                                         {{ q.answer.to_string_i18n|linebreaksbr }}
+                                                    {% else %}{#  TODO: proper separation of QuestionAnswer objects and system answers......   #}
+                                                        {{ q.answer|linebreaksbr }}
                                                     {% endif %}
                                                 {% else %}
                                                     <em>{% trans "not answered" %}</em>
+                                                {% endif %}
+                                                {% if q.system_question == "attendee_email" and not line.addon_to %}
+                                                    <form class="form-inline helper-display-inline" method="post"
+                                                          action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}">
+                                                        {% csrf_token %}
+                                                        <a href="{% url "control:event.order.position.sendmail" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}"
+                                                           class="btn btn-default btn-xs">
+                                                            <span class="fa fa-envelope-o"></span>
+                                                        </a>
+                                                        <button class="btn btn-default btn-xs">
+                                                            {% trans "Resend link" %}
+                                                        </button>
+                                                    </form>
                                                 {% endif %}
                                             </dd>
                                         {% endfor %}

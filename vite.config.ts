@@ -31,6 +31,7 @@ export default defineConfig({
 			// Allow serving source files from sibling plugin directories
 			allow: ['src', ...pluginDirs],
 		},
+		cors: { origin: /^https?:\/\/(?:(?:[^:]+\.)?localhost|127\.0\.0\.1|\[::1\]|[^:]+\.pretix\.work)(?::\d+)?$/ },
 	},
 	build: {
 		manifest: true,
@@ -47,7 +48,7 @@ export default defineConfig({
 	},
 	optimizeDeps: {
 		exclude: ['moment', 'jquery']
-	}
+	},
 })
 
 // Virtual module plugin: generates re-export entries for each shared dep

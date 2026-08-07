@@ -139,11 +139,14 @@ class InvoiceNameForm(InvoiceAddressForm):
                 del self.fields[f]
 
 
-class QuestionsForm(BaseQuestionsForm):
+class CustomerAwareQuestionsForm(BaseQuestionsForm):
     """
-    This form class is responsible for asking order-related questions. This includes
+    The base class is responsible for asking order-related questions. This includes
     the attendee name for admission tickets, if the corresponding setting is enabled,
     as well as additional questions defined by the organizer.
+
+    This class adds support for pre-filling data like name and address from a
+    customer profile, in case the user is logged-in with a customer account.
     """
     required_css_class = 'required'
     address_validation = True

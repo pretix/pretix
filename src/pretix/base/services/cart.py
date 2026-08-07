@@ -61,7 +61,7 @@ from pretix.base.models import (
     Seat, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.orders import OrderFee
+from pretix.base.models.orders import CheckoutSession, OrderFee
 from pretix.base.models.tax import TaxRule
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
@@ -471,6 +471,16 @@ class CartManager:
                 ), self.event.timezone)
                 if term_last < time_machine_now(self.real_now_dt):
                     raise CartError(error_messages['payment_ended'])
+
+    def _ensure_checkout_session(self):
+        CheckoutSession.objects.get_or_create(
+            event=self.event,
+            cart_id=self.cart_id,
+            defaults={
+                "sales_channel": self._sales_channel,
+                "testmode": self.event.testmode,
+            },
+        )
 
     def _extend_expiry_of_valid_existing_positions(self):
         # real_now_dt is initialized at CartManager instantiation, so it's slightly in the past. Add a small
@@ -1559,6 +1569,7 @@ class CartManager:
 
     def commit(self):
         self._check_presale_dates()
+        self._ensure_checkout_session()
         self._check_max_cart_size()
 
         err = self._delete_out_of_timeframe()
