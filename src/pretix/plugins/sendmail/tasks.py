@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 from datetime import datetime
 
-from django.db.models import Exists, F, OuterRef, Q
+from django.db.models import Exists, OuterRef, Q
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_email_context
@@ -86,8 +86,7 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                         list_id__in=checkin_lists or []
                     )
                 ),
-            ).order_by(F("addon_to_id").asc(nulls_first=True)).prefetch_related('addons', 'subevent'):
-                # ordered QuerySet to make sure we always handle parent order positions before add-ons
+            ).order_by('pk').prefetch_related('addons', 'subevent'):
 
                 is_addon = p.addon_to_id is not None
 

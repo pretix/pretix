@@ -23,7 +23,7 @@ from datetime import datetime, time, timedelta
 
 from dateutil.tz import datetime_exists
 from django.db import models
-from django.db.models import Exists, F, OuterRef, Q
+from django.db.models import Exists, OuterRef, Q
 from django.utils import timezone
 from django.utils.formats import date_format
 from django.utils.timezone import make_aware, now
@@ -166,8 +166,7 @@ class ScheduledMail(models.Model):
 
         for o in orders:
             with language(o.locale, e.settings.region):
-                positions = list(o.positions.all().order_by(F("addon_to_id").asc(
-                    nulls_first=True)))  # ordered to make sure we always handle parent order positions before add-ons
+                positions = list(o.positions.all())
                 o_sent = False
 
                 try:
