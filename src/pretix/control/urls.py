@@ -350,6 +350,7 @@ urlpatterns = [
         re_path(r'^questions/(?P<question>\d+)/change$', item.QuestionUpdate.as_view(),
                 name='event.items.questions.edit'),
         re_path(r'^questions/add$', item.QuestionCreate.as_view(), name='event.items.questions.add'),
+        re_path(r'^questionnaires/$', item.QuestionnairesEditor.as_view(), name='event.items.questionnaires'),
         re_path(r'^quotas/$', item.QuotaList.as_view(), name='event.items.quotas'),
         re_path(r'^quotas/bulk_action$', item.QuotaBulkAction.as_view(), name='event.items.quotas.bulkaction'),
         re_path(r'^quotas/bulk_edit$', item.QuotaBulkUpdateView.as_view(), name='event.items.quotas.bulkedit'),

@@ -204,7 +204,7 @@
                             {% endif %}
                         {% endif %}
                         {% for q in line.questions %}
-                            <dt>{{ q.question }}</dt>
+                            <dt>{{ q.label }}</dt>
                             <dd>
                                 {% include "pretixpresale/event/fragment_question_answer.html" with request=request question=q answer=q.answer %}
                             </dd>
