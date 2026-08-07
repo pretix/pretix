@@ -47,14 +47,14 @@ def notify(logentry_ids: list):
         logentry_ids = [logentry_ids]
 
     qs = LogEntry.all.select_related(
-        'event', 'event__organizer'
+        'event', 'event__organizer', 'organizer'
     ).order_by(
-        'action_type', 'event_id',
+        'action_type', 'event_id', 'organizer_id',
     ).filter(id__in=logentry_ids)
 
-    _event, _at, notify_specific, notify_global = None, None, None, None
+    _event, _organizer, _at, notify_specific, notify_global = None, None, None, None, None
     for logentry in qs:
-        if not logentry.event:
+        if not logentry.event and not logentry.organizer:
             break  # Ignore, we only have event-related notifications right now
 
         notification_type = logentry.notification_type
@@ -62,25 +62,36 @@ def notify(logentry_ids: list):
         if not notification_type:
             break  # No suitable plugin
 
-        if _event != logentry.event or _at != logentry.action_type or notify_global is None:
+        if _event != logentry.event or _organizer != logentry.organizer or _at != logentry.action_type or notify_global is None:
             _event = logentry.event
+            _organizer = logentry.organizer
             _at = logentry.action_type
-            # All users that have the permission to get the notification
-            users = logentry.event.get_users_with_permission(
-                notification_type.required_permission
-            ).filter(notifications_send=True, is_active=True)
+
+            if logentry.event:
+                # All users that have the permission to get the notification
+                users = logentry.event.get_users_with_permission(
+                    notification_type.required_permission
+                ).filter(notifications_send=True, is_active=True)
+            else:
+                users = logentry.organizer.get_users_with_permission(
+                    notification_type.required_permission
+                ).filter(notifications_send=True, is_active=True)
+
             if logentry.user:
                 users = users.exclude(pk=logentry.user.pk)
 
             # Get all notification settings, both specific to this event as well as global
-            notify_specific = {
-                (ns.user, ns.method): ns.enabled
-                for ns in NotificationSetting.objects.filter(
-                    event=logentry.event,
-                    action_type=notification_type.action_type,
-                    user__pk__in=users.values_list('pk', flat=True)
-                )
-            }
+            if logentry.event:
+                notify_specific = {
+                    (ns.user, ns.method): ns.enabled
+                    for ns in NotificationSetting.objects.filter(
+                        event=logentry.event,
+                        action_type=notification_type.action_type,
+                        user__pk__in=users.values_list('pk', flat=True)
+                    )
+                }
+            else:
+                notify_specific = {}
             notify_global = {
                 (ns.user, ns.method): ns.enabled
                 for ns in NotificationSetting.objects.filter(
@@ -106,7 +117,9 @@ def notify(logentry_ids: list):
                     priority=get_task_priority("notifications", logentry.organizer_id),
                 )
 
-        notification.send(logentry.event, logentry_id=logentry.id, notification_type=notification_type.action_type)
+        if logentry.event:
+            # FIXME: Signal is currently event-only
+            notification.send(logentry.event, logentry_id=logentry.id, notification_type=notification_type.action_type)
 
 
 @app.task(base=ProfiledTask, acks_late=True, max_retries=9, default_retry_delay=900)
@@ -158,13 +171,19 @@ def send_notification_mail(notification: Notification, user: User):
     body_plain = tpl_plain.render(ctx)
 
     guid = uuid.uuid4()
+    settings_holder = notification.event or notification.organizer
+    prefix = settings_holder.settings.mail_prefix
+    if not prefix and notification.event:
+        prefix = notification.event.slug.upper()
+    elif notification.organizer:
+        prefix = notification.organizer.name
     m = OutgoingMail.objects.create(
         guid=guid,
         user=user,
         to=[user.email],
         subject='[{}] {}: {}'.format(
             settings.PRETIX_INSTANCE_NAME,
-            notification.event.settings.mail_prefix or notification.event.slug.upper(),
+            prefix,
             notification.title
         ),
         body_plain=body_plain,
