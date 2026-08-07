@@ -1115,7 +1115,16 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
         for msg in meta_info.get('confirm_messages', []):
             order.log_action('pretix.event.order.consent', data={'msg': msg})
     if cart_id:
-        CheckoutSession.objects.filter(event=event, cart_id=cart_id).delete()
+        try:
+            session = CheckoutSession.objects.get(event=event, cart_id=cart_id)
+        except CheckoutSession.DoesNotExist:
+            pass
+        else:
+            for answ in session.answers.all():
+                answ.order = order
+                answ.checkoutsession = None
+                answ.save()
+            session.delete()
 
     order_placed.send(event, order=order, bulk=False)
     return order, payments
