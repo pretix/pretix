@@ -1660,6 +1660,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             customer=self.cart_session.get('customer'),
             override_now_dt=time_machine_now(default=None),
             api_meta=api_meta,
+            cart_id=get_or_create_cart_id(request),
         )
 
     def get_success_message(self, value):
