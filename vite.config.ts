@@ -50,7 +50,7 @@ export default defineConfig({
 	},
 	optimizeDeps: {
 		exclude: ['moment', 'jquery']
-	}
+	},
 })
 
 // Virtual module plugin: generates re-export entries for each shared dep
