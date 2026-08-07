@@ -23,7 +23,7 @@ import json
 import logging
 import urllib.parse
 from collections import OrderedDict
-from datetime import timedelta
+from datetime import datetime, timedelta
 from decimal import Decimal
 
 from django import forms
@@ -832,6 +832,7 @@ class PaypalMethod(BasePaymentProvider):
                     payment.info = json.dumps(pp_captured_order.dict())
                     payment.save(update_fields=['info'])
                     payment.confirm()
+                    self.log_payment_duration(payment)
                 except Quota.QuotaExceededException as e:
                     raise PaymentException(str(e))
             # Payment has not any captures yet - so it's probably in created status
@@ -840,6 +841,13 @@ class PaypalMethod(BasePaymentProvider):
         finally:
             if 'payment_paypal_oid' in request.session:
                 del request.session['payment_paypal_oid']
+
+    @staticmethod
+    def log_payment_duration(payment: OrderPayment):
+        if payment.info_data.get('update_time', False) and payment.info_data.get('create_time', False):
+            duration = datetime.fromisoformat(payment.info_data['update_time']) - datetime.fromisoformat(
+                payment.info_data['create_time'])
+            logger.info('{}: {} - paypal payment processing time'.format(str(payment.global_id), str(duration)))
 
     def payment_pending_render(self, request, payment) -> str:
         retry = True
