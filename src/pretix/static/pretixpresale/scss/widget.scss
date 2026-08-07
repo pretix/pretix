@@ -748,6 +748,13 @@ $table-bg-accent: rgba(128, 128, 128, 0.05);
     display: block;
     width: 100%;
   }
+
+  .pretix-widget-event-list-empty,
+  .pretix-widget-event-week-empty,
+  .pretix-widget-event-calendar-empty {
+    padding: 10px 0;
+    text-align: center;
+  }
 }
 
 

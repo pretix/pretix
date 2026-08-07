@@ -611,6 +611,8 @@ class WidgetAPIProductList(EventListMixin, View):
                     cart_namespace=kwargs.get('cart_namespace'),
                     sales_channel=self.request.sales_channel,
                 )
+                if not any(ebd):
+                    data['empty_text'] = str(rich_text(request.event.settings.event_list_empty_text, safelinks=False))
             else:
                 timezones = set()
                 add_events_for_days(
@@ -678,6 +680,8 @@ class WidgetAPIProductList(EventListMixin, View):
                     cart_namespace=kwargs.get('cart_namespace'),
                     sales_channel=self.request.sales_channel,
                 )
+                if not any(ebd):
+                    data['empty_text'] = str(rich_text(request.event.settings.event_list_empty_text, safelinks=False))
             else:
                 timezones = set()
                 add_events_for_days(
@@ -748,6 +752,8 @@ class WidgetAPIProductList(EventListMixin, View):
                         'subevent': ev.pk,
                     } for ev in evs
                 ]
+                if not data['events']:
+                    data['empty_text'] = str(rich_text(request.event.settings.event_list_empty_text, safelinks=False))
             else:
                 data['events'] = []
                 qs = self._get_event_list_queryset()
