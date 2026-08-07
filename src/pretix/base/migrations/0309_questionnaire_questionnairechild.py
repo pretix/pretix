@@ -127,7 +127,7 @@ def migrate_questions_backward(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0307_devicelastseen'),
+        ('pretixbase', '0308_checkoutsession_invoiceaddress_checkout_session'),
     ]
 
     operations = [
