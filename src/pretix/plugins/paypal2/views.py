@@ -490,6 +490,7 @@ def webhook(request, *args, **kwargs):
                     payment.info = json.dumps(sale.dict())
                     payment.save(update_fields=['info'])
                     payment.confirm()
+                    prov.log_payment_duration(payment)
                 except Quota.QuotaExceededException:
                     pass
         elif sale['status'] == 'APPROVED':
