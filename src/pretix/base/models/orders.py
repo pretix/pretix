@@ -1336,6 +1336,14 @@ class QuestionAnswer(models.Model):
         'CartPosition', null=True, blank=True,
         related_name='answers', on_delete=models.CASCADE
     )
+    order = models.ForeignKey(
+        'Order', null=True, blank=True,
+        related_name='answers', on_delete=models.CASCADE
+    )
+    checkoutsession = models.ForeignKey(
+        'CheckoutSession', null=True, blank=True,
+        related_name='answers', on_delete=models.CASCADE
+    )
     question = models.ForeignKey(
         Question, related_name='answers', on_delete=models.CASCADE
     )
@@ -1351,7 +1359,12 @@ class QuestionAnswer(models.Model):
     objects = ScopedManager(organizer='question__event__organizer')
 
     class Meta:
-        unique_together = [['orderposition', 'question'], ['cartposition', 'question']]
+        unique_together = [
+            ['orderposition', 'question'],
+            ['cartposition', 'question'],
+            ['order', 'question'],
+            ['checkoutsession', 'question'],
+        ]
 
     @property
     def backend_file_url(self):
