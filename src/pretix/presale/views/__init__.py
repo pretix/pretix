@@ -95,7 +95,7 @@ class CartMixin:
         """
         A list of this users cart position
         """
-        return list(get_cart(self.request))
+        return list(get_cart_positions(self.request))
 
     @cached_property
     def cart_session(self):
@@ -390,7 +390,7 @@ def cart_exists(request):
     return bool(request._cart_cache)
 
 
-def get_cart(request):
+def get_cart_positions(request):
     from pretix.presale.views.cart import get_or_create_cart_id
 
     if not hasattr(request, '_cart_cache'):
@@ -449,6 +449,8 @@ def get_cart(request):
                     cp.addon_to = by_id[cp.addon_to_id]
     return request._cart_cache
 
+get_cart = get_cart_positions  # legacy compatibility
+
 
 def get_cart_total(request):
     """
@@ -500,7 +502,7 @@ def get_cart_is_free(request):
 
     if not hasattr(request, '_cart_free_cache'):
         cs = cart_session(request)
-        pos = get_cart(request)
+        pos = get_cart_positions(request)
         ia = get_cart_invoice_address(request)
         try:
             fees = get_fees(event=request.event, request=request, invoice_address=ia,
