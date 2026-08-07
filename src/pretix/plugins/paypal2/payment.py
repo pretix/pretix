@@ -25,7 +25,6 @@ import urllib.parse
 from collections import OrderedDict
 from datetime import datetime, timedelta
 from decimal import Decimal
-from pprint import pprint
 
 from django import forms
 from django.conf import settings
