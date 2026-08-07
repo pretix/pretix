@@ -123,6 +123,19 @@ class TransmissionType:
                 data.append((f.label, v))
         return data
 
+    def describe_invoice_destination(self, invoice):
+        info = self.describe_info(
+            invoice.invoice_to_transmission_info or {},
+            invoice.invoice_to_country,
+            invoice.invoice_to_is_business,
+        )
+        destination = ", ".join(f"{k}: {v}" for (k, v) in info)
+        return "{via} {method}{destination}".format(
+            via=_("Via"),
+            method=self.verbose_name,
+            destination=f" ({destination})" if destination else "",
+        )
+
     def pdf_watermark(self) -> Optional[str]:
         """
         Return a watermark that should be rendered across the PDF file.
