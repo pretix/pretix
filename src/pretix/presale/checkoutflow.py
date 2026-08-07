@@ -95,12 +95,12 @@ from pretix.presale.signals import (
     question_form_fields_overrides,
 )
 from pretix.presale.utils import customer_login
-from pretix.presale.views import CartMixin, get_cart, get_cart_is_free
+from pretix.presale.views import CartMixin, get_cart_positions, get_cart_is_free
 from pretix.presale.views.cart import (
     _items_from_post_data, cart_session, create_empty_cart_id,
     get_or_create_cart_id,
 )
-from pretix.presale.views.questions import QuestionsViewMixin
+from pretix.presale.views.questions import CartQuestionsViewMixin
 
 
 class BaseCheckoutFlowStep:
@@ -494,7 +494,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         self.request = request
 
         # check whether addons are applicable
-        if get_cart(request).filter(item__addons__isnull=False).exists():
+        if get_cart_positions(request).filter(item__addons__isnull=False).exists():
             return True
 
         # don't re-check whether cross-selling is applicable if we're already past the AddOnsStep
@@ -772,7 +772,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                        sales_channel=request.sales_channel.identifier, override_now_dt=time_machine_now(default=None))
 
 
-class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
+class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
     priority = 50
     identifier = "questions"
     template_name = "pretixpresale/event/checkout_questions.html"
@@ -1061,26 +1061,18 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 return False
 
         for cp in self._positions_for_questions:
-            answ = {
-                aw.question_id: aw for aw in cp.answerlist
-            }
-            question_cache = {
-                q.pk: q for q in cp.item.questions_to_ask
+            qc_cache = {
+                qc.pk: qc for qq in cp.item.relevant_questionnaires for qc in qq.childlist
             }
 
             def question_is_visible(parentid, qvals):
-                if parentid not in question_cache:
+                if parentid not in qc_cache:
                     return False
-                parentq = question_cache[parentid]
-                if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_values):
+                parentqc = qc_cache[parentid]
+                if parentqc.dependency_question_id and not question_is_visible(parentqc.dependency_question_id, parentqc.dependency_values):
                     return False
-                if parentid not in answ:
-                    return False
-                return (
-                    ('True' in qvals and answ[parentid].answer == 'True')
-                    or ('False' in qvals and answ[parentid].answer == 'False')
-                    or (any(qval in [o.identifier for o in answ[parentid].options.all()] for qval in qvals))
-                )
+                answer_values = cp.get_dependency_answer_values(parentqc)
+                return any(qval in answer_values for qval in qvals)
 
             def question_is_required(q):
                 return (
@@ -1089,31 +1081,16 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 )
 
             if not self.all_optional:
-                for q in cp.item.questions_to_ask:
-                    if question_is_required(q) and q.id not in answ:
-                        if warn:
-                            messages.warning(request, _('Please fill in answers to all required questions.'))
-                        return False
-                if cp.item.ask_attendee_data and self.request.event.settings.get('attendee_names_required', as_type=bool) \
-                        and not cp.attendee_name_parts:
-                    if warn:
-                        messages.warning(request, _('Please fill in answers to all required questions.'))
-                    return False
-                if cp.item.ask_attendee_data and self.request.event.settings.get('attendee_emails_required', as_type=bool) \
-                        and cp.attendee_email is None:
-                    if warn:
-                        messages.warning(request, _('Please fill in answers to all required questions.'))
-                    return False
-                if cp.item.ask_attendee_data and self.request.event.settings.get('attendee_company_required', as_type=bool) \
-                        and cp.company is None:
-                    if warn:
-                        messages.warning(request, _('Please fill in answers to all required questions.'))
-                    return False
-                if cp.item.ask_attendee_data and self.request.event.settings.get('attendee_addresses_required', as_type=bool) \
-                        and (cp.street is None and cp.city is None and cp.country is None):
-                    if warn:
-                        messages.warning(request, _('Please fill in answers to all required questions.'))
-                    return False
+                for qq in cp.item.relevant_questionnaires:
+                    for qc in qq.childlist:
+                        if qc.user_question_id and question_is_required(qc) and qc.user_question_id not in cp.answer_cache:
+                            if warn:
+                                messages.warning(request, _('Please fill in answers to all required questions.'))
+                            return False
+                        if qc.system_question and question_is_required(qc) and not cp.get_system_answer(qc.system_question):
+                            if warn:
+                                messages.warning(request, _('Please fill in answers to all required questions.'))
+                            return False
 
             responses = question_form_fields.send(sender=self.request.event, position=cp)
             form_data = cp.meta_info_data.get('question_form_data', {})

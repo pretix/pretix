@@ -37,7 +37,7 @@ from .invoices import Invoice, InvoiceLine, invoice_filename
 from .items import (
     Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaProperty, ItemMetaValue,
     ItemProgramTime, ItemVariation, ItemVariationMetaValue, Question,
-    QuestionOption, Quota, SubEventItem, SubEventItemVariation,
+    QuestionOption, Questionnaire, QuestionnaireChild, Quota, SubEventItem, SubEventItemVariation,
     itempicture_upload_to,
 )
 from .log import LogEntry
