@@ -42,7 +42,7 @@ from django.conf import settings
 from django.core.mail import get_connection
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -311,6 +311,25 @@ class Organizer(LoggedModel):
                 position=i
             )
             i += 1
+
+    def get_users_with_permission(self, permission):
+        """
+        Returns a queryset of users who have a specific permission to this organizer.
+
+        :return: Iterable of User
+        """
+        from .auth import User
+
+        if permission:
+            qs = Team.objects.with_organizer_permission(permission)
+        else:
+            qs = Team.objects.all()
+
+        team_with_perm = qs.filter(
+            members__pk=OuterRef('pk'),
+            organizer=self,
+        )
+        return User.objects.annotate(twp=Exists(team_with_perm)).filter(twp=True)
 
 
 def generate_invite_token():
