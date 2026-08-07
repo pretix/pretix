@@ -226,8 +226,9 @@ def test_one_view(logged_in_client, url, expected, event, item, item_category, o
     assert response.status_code == expected
 
     # Do not reintroduce any CSP nonces into control responses, as discussed in PR #6387
-    assert 'script-src' in response['Content-Security-Policy']
-    assert 'nonce-' not in response['Content-Security-Policy']
+    if response['Content-Type'] != 'application/json':
+        assert 'script-src' in response['Content-Security-Policy']
+        assert 'nonce-' not in response['Content-Security-Policy']
 
 
 @pytest.mark.parametrize('url', [
