@@ -41,7 +41,7 @@ from itertools import groupby
 
 from django.conf import settings
 from django.contrib import messages
-from django.db.models import Exists, OuterRef, Prefetch, Sum
+from django.db.models import Exists, OuterRef, Prefetch, Q, Sum
 from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -54,6 +54,7 @@ from pretix.base.models import (
     CartPosition, Customer, InvoiceAddress, ItemAddOn, OrderFee, Question,
     QuestionAnswer, QuestionOption, TaxRule,
 )
+from pretix.base.models.items import QuestionnaireChild
 from pretix.base.models.orders import CheckoutSession
 from pretix.base.services.cart import get_fees
 from pretix.base.services.pricing import apply_rounding
@@ -95,7 +96,7 @@ class CartMixin:
         """
         A list of this users cart position
         """
-        return list(get_cart(self.request))
+        return list(get_cart_positions(self.request))
 
     @cached_property
     def cart_session(self):
@@ -399,7 +400,7 @@ def cart_exists(request):
     return bool(request._cart_cache)
 
 
-def get_cart(request):
+def get_cart_positions(request):
     from pretix.presale.views.cart import get_or_create_cart_id
 
     if not hasattr(request, '_cart_cache'):
@@ -407,8 +408,11 @@ def get_cart(request):
         if not cart_id:
             request._cart_cache = CartPosition.objects.none()
         else:
-            qqs = request.event.questions.all()
-            qqs = qqs.filter(ask_during_checkin=False, hidden=False, container_type=Question.ContainerType.ORDERPOSITION)
+            qqs = request.event.questionnaires.all()
+            qqs = qqs.filter(
+                Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=request.sales_channel.identifier),
+                type='PS'
+            )
             request._cart_cache = CartPosition.objects.filter(
                 cart_id=cart_id, event=request.event
             ).annotate(
@@ -429,18 +433,23 @@ def get_cart(request):
                 Prefetch('answers',
                          QuestionAnswer.objects.prefetch_related('options'),
                          to_attr='answerlist'),
-                Prefetch('item__questions',
+                Prefetch('item__questionnaires',
                          qqs.prefetch_related(
-                             Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
-                                 # This prefetch statement is utter bullshit, but it actually prevents Django from doing
-                                 # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
-                                 # a prefetch lookup on this query...
-                                 'question',
-                                 Question.objects.none(),
-                                 to_attr='dummy'
-                             )))
-                         ).select_related('dependency_question'),
-                         to_attr='questions_to_ask')
+                             Prefetch('children', QuestionnaireChild.objects.prefetch_related(
+                                 Prefetch('user_question', Question.objects.prefetch_related(
+                                     Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
+                                         # This prefetch statement is utter bullshit, but it actually prevents Django from doing
+                                         # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
+                                         # a prefetch lookup on this query...
+                                         'question',
+                                         Question.objects.none(),
+                                         to_attr='dummy'
+                                     )))
+                                 ))
+                             ),
+                             to_attr='childlist')
+                         ),
+                         to_attr='relevant_questionnaires')
             )
             by_id = {cp.pk: cp for cp in request._cart_cache}
             for cp in request._cart_cache:
@@ -449,6 +458,8 @@ def get_cart(request):
                 if cp.addon_to_id:
                     cp.addon_to = by_id[cp.addon_to_id]
     return request._cart_cache
+
+get_cart = get_cart_positions  # legacy compatibility
 
 
 def get_cart_total(request):
@@ -501,7 +512,7 @@ def get_cart_is_free(request):
 
     if not hasattr(request, '_cart_free_cache'):
         cs = cart_session(request)
-        pos = get_cart(request)
+        pos = get_cart_positions(request)
         ia = get_cart_invoice_address(request)
         try:
             fees = get_fees(event=request.event, request=request, invoice_address=ia,

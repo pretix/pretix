@@ -56,7 +56,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.generic import FormView, ListView, View
+from django.views.generic import FormView, ListView, TemplateView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django_countries.fields import Country
 
@@ -65,7 +65,6 @@ from pretix.api.serializers.item import (
     ItemVariationSerializer,
 )
 from pretix.base.forms import I18nFormSet
-from pretix.base.forms.questions import get_fake_attendee_questions
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, LogEntry,
     OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
@@ -437,66 +436,7 @@ class QuestionList(ListView):
     template_name = 'pretixcontrol/items/questions.html'
 
     def get_queryset(self):
-        return self.request.event.questions.prefetch_related('items')
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-
-        questions = get_fake_attendee_questions(self.request.event.settings)
-
-        questions += list(ctx['questions'])
-        questions.sort(key=lambda q: q.position)
-        ctx['questions'] = questions
-        return ctx
-
-
-@transaction.atomic
-@event_permission_required("event.items:write")
-@require_http_methods(["POST"])
-def reorder_questions(request, organizer, event):
-    try:
-        ids = json.loads(request.body.decode('utf-8'))['ids']
-    except (JSONDecodeError, KeyError, ValueError):
-        return HttpResponseBadRequest("expected JSON: {ids:[]}")
-
-    qs = request.event.questions.filter(container_type=request.GET['container_type'])
-
-    # filter system_questions - normal questions are int/digit, system_questions strings
-    custom_question_ids = [i for i in ids if i.isdigit()]
-    input_questions = list(qs.filter(id__in=custom_question_ids))
-
-    if len(input_questions) != len(custom_question_ids):
-        raise Http404(_("Some of the provided object ids are invalid."))
-
-    if len(input_questions) != qs.count():
-        raise Http404(_("Not all objects have been selected."))
-
-    for q in input_questions:
-        pos = ids.index(str(q.pk))
-        if pos != q.position:  # Save unneccessary UPDATE queries
-            q.position = pos
-            q.save(update_fields=['position'])
-            q.log_action(
-                'pretix.event.question.reordered', user=request.user, data={
-                    'position': pos,
-                }
-            )
-
-    if request.GET['container_type'] == Question.ContainerType.ORDERPOSITION:
-        system_question_order = {}
-        for s in ('attendee_name_parts', 'attendee_email', 'company', 'street', 'zipcode', 'city', 'country'):
-            if s in ids:
-                system_question_order[s] = ids.index(s)
-            else:
-                system_question_order[s] = -1
-        request.event.settings.system_question_order = system_question_order
-        request.event.log_action(
-            'pretix.event.settings', user=request.user, data={
-                'system_question_order': system_question_order,
-            }
-        )
-
-    return HttpResponse()
+        return self.request.event.questions
 
 
 class QuestionDelete(EventPermissionRequiredMixin, CompatDeleteView):
@@ -764,6 +704,11 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
             self.save_formset(form.instance)
 
         return ret
+
+
+class QuestionnairesEditor(EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_change_items'
+    template_name = 'pretixcontrol/items/questionnaires.html'
 
 
 class QuotaQueryMixin:
