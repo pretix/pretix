@@ -73,8 +73,8 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
-    BlockedTicketSecret, CheckoutSession, InvoiceAddress, OrderFee, OrderRefund,
-    generate_secret,
+    BlockedTicketSecret, CheckoutSession, InvoiceAddress, OrderFee,
+    OrderRefund, generate_secret,
 )
 from pretix.base.models.organizer import SalesChannel, TeamAPIToken
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule

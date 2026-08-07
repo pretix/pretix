@@ -36,7 +36,7 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, Question, QuestionAnswer,
-    QuestionOption, QuestionnaireChild,
+    QuestionnaireChild, QuestionOption,
 )
 from pretix.base.models.customers import AttendeeProfile
 from pretix.presale.signals import contact_form_fields_overrides

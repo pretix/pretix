@@ -90,7 +90,9 @@ from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.http import redirect_to_url
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
-from pretix.presale.forms.checkout import InvoiceAddressForm, CustomerAwareQuestionsForm
+from pretix.presale.forms.checkout import (
+    CustomerAwareQuestionsForm, InvoiceAddressForm,
+)
 from pretix.presale.forms.order import OrderPositionChangeForm
 from pretix.presale.productlist import prepare_item_list_for_shop
 from pretix.presale.signals import question_form_fields_overrides
