@@ -196,7 +196,7 @@ class ScheduledMail(models.Model):
 
                         if p.addon_to_id is None:
                             parent_op = p
-                        if not self.rule.all_products and p.item_id not in position_ids:
+                        if not self.rule.all_products and p.id not in position_ids:
                             continue
 
                         if p.id in position_ids:
