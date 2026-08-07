@@ -201,17 +201,18 @@ class ScheduledMail(models.Model):
                             continue
 
                         if p.id in position_ids:
-                            mail_to_parent = False
-
                             if p.addon_to_id:
                                 if not parent_op or parent_op.id != p.addon_to_id:
-                                    # something mixed up with this order as addons should always come after their parent-position
+                                    # something got mixed up with this order as addons should always come after their parent-position
                                     continue
                                 if not p.attendee_email:
                                     if p.addon_to_id in sent_to_positions:
                                         continue
                                     elif parent_op.attendee_email:
-                                        mail_to_parent = True
+                                        p = parent_op
+                                    else:
+                                        # without parent-op-email it should have already been sent to the order-email when parent-op was handled
+                                        continue
                                 # with attendee-email but same as parent's and sent to parent
                                 elif parent_op.attendee_email and p.attendee_email == parent_op.attendee_email and parent_op in sent_to_positions:
                                     continue
@@ -228,18 +229,6 @@ class ScheduledMail(models.Model):
                                             attach_ical=self.rule.attach_ical,
                                             log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
                                 sent_to_positions.add(p.id)
-                            elif mail_to_parent and (parent_op.attendee_email != o.email or not o_sent):
-                                email_ctx = get_email_context(
-                                    event=e,
-                                    order=o,
-                                    invoice_address=ia,
-                                    position=parent_op,
-                                    event_or_subevent=self.subevent or e,
-                                )
-                                parent_op.send_mail(self.rule.subject, self.rule.template, email_ctx,
-                                                    attach_ical=self.rule.attach_ical,
-                                                    log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
-                                sent_to_positions.add(parent_op.id)
                             elif not o_sent and o.email:
                                 email_ctx = get_email_context(
                                     event=e,
