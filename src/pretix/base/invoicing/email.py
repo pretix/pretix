@@ -82,6 +82,14 @@ class EmailTransmissionType(TransmissionType):
             }
         return {}
 
+    def describe_invoice_destination(self, invoice):
+        info = (invoice.invoice_to_transmission_info or {})
+        if info.get("transmission_email_address"):
+            recipient = info["transmission_email_address"]
+        else:
+            recipient = invoice.order.email
+        return _("Via Email to {recipient}").format(recipient=recipient)
+
 
 @transmission_providers.new()
 class EmailTransmissionProvider(TransmissionProvider):
