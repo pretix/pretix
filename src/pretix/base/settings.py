@@ -979,12 +979,12 @@ DEFAULTS = {
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
         'write_permission': 'event.settings.payment:write',
-        'form_kwargs': dict(
+        'form_kwargs': lambda suffix="", parent=0: dict(
             label=_('Payment term in days'),
             widget=forms.NumberInput(
                 attrs={
-                    'data-display-dependency': '#id_payment_term_mode_0',
-                    'data-required-if': '#id_payment_term_mode_0'
+                    'data-display-dependency': f'#id_payment_term_mode{suffix}_{parent}',
+                    'data-required-if': f'#id_payment_term_mode{suffix}_{parent}'
                 },
             ),
             help_text=_("The number of days after placing an order the user has to pay to preserve their reservation. If "
@@ -1023,7 +1023,7 @@ DEFAULTS = {
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
         'write_permission': 'event.settings.payment:write',
-        'form_kwargs': dict(
+        'form_kwargs': lambda suffix="", parent=0: dict(
             label=_('Payment term in minutes'),
             help_text=_("The number of minutes after placing an order the user has to pay to preserve their reservation. "
                         "Only use this if you exclusively offer real-time payment methods. Please note that for technical reasons, "
@@ -1032,8 +1032,8 @@ DEFAULTS = {
                         MaxValueValidator(1440)],
             widget=forms.NumberInput(
                 attrs={
-                    'data-display-dependency': '#id_payment_term_mode_1',
-                    'data-required-if': '#id_payment_term_mode_1'
+                    'data-display-dependency': f'#id_payment_term_mode{suffix}_{parent}',
+                    'data-required-if': f'#id_payment_term_mode{suffix}_{parent}'
                 },
             ),
         ),

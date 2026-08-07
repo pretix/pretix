@@ -628,9 +628,14 @@ class Order(LockModel, LoggedModel):
     def set_expires(self, now_dt=None, subevents=None):
         now_dt = now_dt or now()
         tz = ZoneInfo(self.event.settings.timezone)
-        mode = self.event.settings.get('payment_term_mode')
+
+        sales_channel_suffix = "_" + self.sales_channel.identifier.replace(".", "_")
+        if not (mode := self.event.settings.get(f'payment_term_mode{sales_channel_suffix}')):
+            mode = self.event.settings.get('payment_term_mode')
+            sales_channel_suffix = ""
+
         if mode == 'days':
-            exp_by_date = now_dt.astimezone(tz) + timedelta(days=self.event.settings.get('payment_term_days', as_type=int))
+            exp_by_date = now_dt.astimezone(tz) + timedelta(days=self.event.settings.get(f'payment_term_days{sales_channel_suffix}', as_type=int))
             exp_by_date = exp_by_date.astimezone(tz).replace(hour=23, minute=59, second=59, microsecond=0)
             if self.event.settings.get('payment_term_weekdays'):
                 if exp_by_date.weekday() == 5:
@@ -638,7 +643,7 @@ class Order(LockModel, LoggedModel):
                 elif exp_by_date.weekday() == 6:
                     exp_by_date += timedelta(days=1)
         elif mode == 'minutes':
-            exp_by_date = now_dt.astimezone(tz) + timedelta(minutes=self.event.settings.get('payment_term_minutes', as_type=int))
+            exp_by_date = now_dt.astimezone(tz) + timedelta(minutes=self.event.settings.get(f'payment_term_minutes{sales_channel_suffix}', as_type=int))
         else:
             raise ValueError("'payment_term_mode' has an invalid value '{}'.".format(mode))
 
