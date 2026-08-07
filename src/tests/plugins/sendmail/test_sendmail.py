@@ -407,6 +407,312 @@ def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event,
 
 
 @pytest.mark.django_db
+def test_sendmail_attendee_addon_filter(logged_in_client, sendmail_url, event, order, pos):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        addon = Item.objects.create(name='Test addon', event=event, default_price=12)
+        p = pos
+        p.attendee_email = 'attendee1@dummy.test'
+        p.save()
+        order.positions.create(
+            item=addon, price=0, attendee_email='add-on-attendee@dummy.test', addon_to=p
+        )
+
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url + 'orders/',
+                                         {'sendto': 'na',
+                                          'action': 'send',
+                                          'recipients': 'attendees',
+                                          'items': addon.pk,
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['add-on-attendee@dummy.test']
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_ticket_and_addon_filter(logged_in_client, sendmail_url, event, order, pos):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        addon = Item.objects.create(name='Test addon', event=event, default_price=12)
+        p = pos
+        p.attendee_email = 'attendee1@dummy.test'
+        p.save()
+        order.positions.create(
+            item=addon, price=0, attendee_email='add-on-attendee@dummy.test', addon_to=p
+        )
+
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url + 'orders/',
+                                         {'sendto': 'na',
+                                          'action': 'send',
+                                          'recipients': 'attendees',
+                                          'items': {addon.pk, p.item_id},
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 2
+    for msg in djmail.outbox:
+        assert msg.to in [['attendee1@dummy.test'], ['add-on-attendee@dummy.test']]
+        assert '/ticket/' in msg.body
+        assert '/order/' not in msg.body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_ticket_and_same_addon_filter(logged_in_client, sendmail_url, event, order, pos):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        addon = Item.objects.create(name='Test addon', event=event, default_price=12)
+        p = pos
+        p.attendee_email = 'attendee1@dummy.test'
+        p.save()
+        order.positions.create(
+            item=addon, price=0, attendee_email='attendee1@dummy.test', addon_to=p
+        )
+
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url + 'orders/',
+                                         {'sendto': 'na',
+                                          'action': 'send',
+                                          'recipients': 'attendees',
+                                          'items': {addon.pk, p.item_id},
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['attendee1@dummy.test']
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_addon_unpersonalized_filter(logged_in_client, sendmail_url, event, order, pos):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        addon = Item.objects.create(name='Test addon', event=event, default_price=12)
+        p = pos
+        p.attendee_email = 'attendee1@dummy.test'
+        p.save()
+        order.positions.create(
+            item=addon, price=0, addon_to=p
+        )
+
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url + 'orders/',
+                                         {'sendto': 'na',
+                                          'action': 'send',
+                                          'recipients': 'attendees',
+                                          'items': addon.pk,
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['attendee1@dummy.test']
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_ticket_and_addon_unp_filter(logged_in_client, sendmail_url, event, order, pos):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        addon = Item.objects.create(name='Test addon', event=event, default_price=12)
+        p = pos
+        p.attendee_email = 'attendee1@dummy.test'
+        p.save()
+        order.positions.create(
+            item=addon, price=0, addon_to=p
+        )
+
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url + 'orders/',
+                                         {'sendto': 'na',
+                                          'action': 'send',
+                                          'recipients': 'attendees',
+                                          'items': {addon.pk, p.item_id},
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['attendee1@dummy.test']
+    assert '/ticket/' in djmail.outbox[0].body
+    assert '/order/' not in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_ticket_unp_and_addon_filter(logged_in_client, sendmail_url, event, order, pos):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        addon = Item.objects.create(name='Test addon', event=event, default_price=12)
+        order.positions.create(
+            item=addon, price=0, attendee_email='add-on-attendee@dummy.test', addon_to=pos
+        )
+
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url + 'orders/',
+                                         {'sendto': 'na',
+                                          'action': 'send',
+                                          'recipients': 'attendees',
+                                          'items': {addon.pk, pos.item_id},
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 2
+    for msg in djmail.outbox:
+        assert msg.to in [[order.email], ['add-on-attendee@dummy.test']]
+        if msg.to == [order.email]:
+            assert '/ticket/' not in msg.body
+            assert '/order/' in msg.body
+        else:
+            assert msg.to == ['add-on-attendee@dummy.test']
+            assert '/ticket/' in msg.body
+            assert '/order/' not in msg.body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_addon_unp_unp_filter(logged_in_client, sendmail_url, event, order, pos):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        addon = Item.objects.create(name='Test addon', event=event, default_price=12)
+        order.positions.create(
+            item=addon, price=0, addon_to=pos
+        )
+
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url + 'orders/',
+                                         {'sendto': 'na',
+                                          'action': 'send',
+                                          'recipients': 'attendees',
+                                          'items': addon.pk,
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [order.email]
+    assert '/ticket/' not in djmail.outbox[0].body
+    assert '/order/' in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_and_addon_unp_unp_filter(logged_in_client, sendmail_url, event, order, pos):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        addon = Item.objects.create(name='Test addon', event=event, default_price=12)
+        order.positions.create(
+            item=addon, price=0, addon_to=pos
+        )
+
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url + 'orders/',
+                                         {'sendto': 'na',
+                                          'action': 'send',
+                                          'recipients': 'attendees',
+                                          'items': {addon.pk, pos.item_id},
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [order.email]
+    assert '/ticket/' not in djmail.outbox[0].body
+    assert '/order/' in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_two_addons_one_unp_filter(logged_in_client, sendmail_url, event, order, pos):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        p = pos
+        p.attendee_email = 'attendee1@dummy.test'
+        p.save()
+        addon = Item.objects.create(name='Test addon', event=event, default_price=12)
+        order.positions.create(
+            item=addon, price=0, attendee_email='add-on-attendee@dummy.test', addon_to=p
+        )
+        order.positions.create(
+            item=addon, price=0, addon_to=p
+        )
+
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url + 'orders/',
+                                         {'sendto': 'na',
+                                          'action': 'send',
+                                          'recipients': 'attendees',
+                                          'items': addon.pk,
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 2
+    for msg in djmail.outbox:
+        assert msg.to in [['attendee1@dummy.test'], ['add-on-attendee@dummy.test']]
+        assert '/ticket/' in msg.body
+        assert '/order/' not in msg.body
+
+
+@pytest.mark.django_db
+def test_sendmail_attendee_and_two_addons_one_unp_filter(logged_in_client, sendmail_url, event, order, pos):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        p = pos
+        p.attendee_email = 'attendee1@dummy.test'
+        p.save()
+        addon = Item.objects.create(name='Test addon', event=event, default_price=12)
+        order.positions.create(
+            item=addon, price=0, attendee_email='add-on-attendee@dummy.test', addon_to=p
+        )
+        order.positions.create(
+            item=addon, price=0, addon_to=p
+        )
+
+        djmail.outbox = []
+        response = logged_in_client.post(sendmail_url + 'orders/',
+                                         {'sendto': 'na',
+                                          'action': 'send',
+                                          'recipients': 'attendees',
+                                          'items': {addon.pk, p.item_id},
+                                          'subject_0': 'Test subject',
+                                          'message_0': 'This is a test file for sending mails.',
+                                          },
+                                         follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 2
+    for msg in djmail.outbox:
+        assert msg.to in [['attendee1@dummy.test'], ['add-on-attendee@dummy.test']]
+        assert '/ticket/' in msg.body
+        assert '/order/' not in msg.body
+
+
+@pytest.mark.django_db
 def test_sendmail_attendee_subevent_filter(logged_in_client, sendmail_url, event, item, order, pos):
     event.settings.attendee_emails_asked = True
     event.has_subevents = True
