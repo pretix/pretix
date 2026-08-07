@@ -210,7 +210,7 @@ class ScheduledMail(models.Model):
                                     else:
                                         p = parent_op
                                 # with attendee-email but same as parent's and sent to parent
-                                elif parent_op.attendee_email and p.attendee_email == parent_op.attendee_email and parent_op in sent_to_positions:
+                                elif parent_op.attendee_email and p.attendee_email == parent_op.attendee_email and parent_op.pk in sent_to_positions:
                                     continue
 
                             if p.attendee_email and (p.attendee_email != o.email or not o_sent):
