@@ -25,6 +25,7 @@ import urllib.parse
 from collections import OrderedDict
 from datetime import datetime, timedelta
 from decimal import Decimal
+from pprint import pprint
 
 from django import forms
 from django.conf import settings
@@ -844,9 +845,16 @@ class PaypalMethod(BasePaymentProvider):
 
     @staticmethod
     def log_payment_duration(payment: OrderPayment):
-        if payment.info_data.get('update_time', False) and payment.info_data.get('create_time', False):
-            duration = datetime.fromisoformat(payment.info_data['update_time']) - datetime.fromisoformat(
-                payment.info_data['create_time'])
+        try:
+            capture = payment.info_data["purchase_units"][0]["payments"]["captures"][0]
+            create_time: str | None = capture["create_time"]
+            update_time: str | None = capture["update_time"]
+        except (KeyError, IndexError, TypeError):
+            create_time = None
+            update_time = None
+
+        if create_time is not None and update_time is not None:
+            duration = datetime.fromisoformat(update_time) - datetime.fromisoformat(create_time)
             logger.info('{}: {} - paypal payment processing time'.format(str(payment.global_id), str(duration)))
 
     def payment_pending_render(self, request, payment) -> str:
