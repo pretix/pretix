@@ -33,6 +33,7 @@ from pretix.base.models.customers import CustomerSSOGrant
 
 from ..models import CachedFile, CartPosition, InvoiceAddress
 from ..models.auth import UserKnownLoginSource
+from ..models.orders import CheckoutSession
 from ..signals import periodic_task
 
 
@@ -43,6 +44,10 @@ def clean_cart_positions(sender, **kwargs):
         cp.delete()
     for cp in CartPosition.objects.filter(expires__lt=now() - timedelta(days=14), addon_to__isnull=True):
         cp.delete()
+    for cs in CheckoutSession.objects.filter(created__lt=now() - timedelta(days=14)).exclude(
+        Exists(CartPosition.objects.filter(cart_id=OuterRef("cart_id")))
+    ):
+        cs.delete()
     for ia in InvoiceAddress.objects.filter(order__isnull=True, customer__isnull=True, last_modified__lt=now() - timedelta(days=14)):
         ia.delete()
 
