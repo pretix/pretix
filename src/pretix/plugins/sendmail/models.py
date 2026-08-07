@@ -207,11 +207,8 @@ class ScheduledMail(models.Model):
                                 if not p.attendee_email:
                                     if p.addon_to_id in sent_to_positions:
                                         continue
-                                    elif parent_op.attendee_email:
-                                        p = parent_op
                                     else:
-                                        # without parent-op-email it should have already been sent to the order-email when parent-op was handled
-                                        continue
+                                        p = parent_op
                                 # with attendee-email but same as parent's and sent to parent
                                 elif parent_op.attendee_email and p.attendee_email == parent_op.attendee_email and parent_op in sent_to_positions:
                                     continue
