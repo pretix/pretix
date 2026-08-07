@@ -611,6 +611,8 @@ class WidgetAPIProductList(EventListMixin, View):
                     cart_namespace=kwargs.get('cart_namespace'),
                     sales_channel=self.request.sales_channel,
                 )
+                if not any(ebd):
+                    data['empty_text'] = str(rich_text(request.event.settings.event_list_empty_text, safelinks=False))
             else:
                 timezones = set()
                 add_events_for_days(
@@ -642,8 +644,6 @@ class WidgetAPIProductList(EventListMixin, View):
                     sales_channel=self.request.sales_channel,
                 )
 
-            if not any(ebd):
-                data['empty_text'] = str(rich_text(request.event.settings.event_list_empty_text, safelinks=False))
             data['weeks'] = weeks_for_template(ebd, self.year, self.month)
             for w in data['weeks']:
                 for d in w:
@@ -680,6 +680,8 @@ class WidgetAPIProductList(EventListMixin, View):
                     cart_namespace=kwargs.get('cart_namespace'),
                     sales_channel=self.request.sales_channel,
                 )
+                if not any(ebd):
+                    data['empty_text'] = str(rich_text(request.event.settings.event_list_empty_text, safelinks=False))
             else:
                 timezones = set()
                 add_events_for_days(
@@ -702,8 +704,6 @@ class WidgetAPIProductList(EventListMixin, View):
                     sales_channel=self.request.sales_channel,
                 )
 
-            if not any(ebd):
-                data['empty_text'] = str(rich_text(request.event.settings.event_list_empty_text, safelinks=False))
             data['days'] = days_for_template(ebd, week)
             for d in data['days']:
                 d['events'] = self._serialize_events(d['events'] or [])
@@ -752,6 +752,8 @@ class WidgetAPIProductList(EventListMixin, View):
                         'subevent': ev.pk,
                     } for ev in evs
                 ]
+                if not data['events']:
+                    data['empty_text'] = str(rich_text(request.event.settings.event_list_empty_text, safelinks=False))
             else:
                 data['events'] = []
                 qs = self._get_event_list_queryset()
@@ -774,8 +776,6 @@ class WidgetAPIProductList(EventListMixin, View):
                         'event_url': eventreverse_absolute(event, 'presale:event.index'),
                     })
 
-            if not data['events']:
-                data['empty_text'] = str(rich_text(request.event.settings.event_list_empty_text, safelinks=False))
         cache.set(cache_key, data, 30)
         # These pages are cached for a really short duration – this should make them pretty accurate, while still
         # providing some protection against burst traffic.
