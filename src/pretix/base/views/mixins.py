@@ -27,7 +27,7 @@ from decimal import Decimal
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
 from django.db import IntegrityError
-from django.db.models import Prefetch, QuerySet
+from django.db.models import Prefetch, Q, QuerySet
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 
@@ -312,6 +312,9 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
             qqs = qqs.filter(type='PS')
         else:
             qqs = qqs.filter(type__startswith='P')
+        qqs = qqs.filter(
+            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.order.sales_channel.identifier)
+        )
         return list(self.order.positions.select_related(
             'item', 'variation'
         ).prefetch_related(

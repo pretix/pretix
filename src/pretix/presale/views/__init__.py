@@ -41,7 +41,7 @@ from itertools import groupby
 
 from django.conf import settings
 from django.contrib import messages
-from django.db.models import Exists, OuterRef, Prefetch, Sum
+from django.db.models import Exists, OuterRef, Prefetch, Q, Sum
 from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -399,7 +399,10 @@ def get_cart(request):
             request._cart_cache = CartPosition.objects.none()
         else:
             qqs = request.event.questionnaires.all()
-            qqs = qqs.filter(type='PS')
+            qqs = qqs.filter(
+                Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=request.sales_channel.identifier),
+                type='PS'
+            )
             request._cart_cache = CartPosition.objects.filter(
                 cart_id=cart_id, event=request.event
             ).annotate(
