@@ -86,7 +86,7 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                         list_id__in=checkin_lists or []
                     )
                 ),
-            ).order_by('pk').prefetch_related('addons', 'subevent'):
+            ).prefetch_related('addons', 'subevent'):
 
                 is_addon = p.addon_to_id is not None
 
