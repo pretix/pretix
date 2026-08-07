@@ -203,9 +203,10 @@ class ScheduledMail(models.Model):
                         if p.id in position_ids:
                             mail_to_parent = False
 
-                            # position is an add-on
-                            if p.addon_to_id is not None:
-                                # without attendee-email
+                            if p.addon_to_id:
+                                if not parent_op or parent_op.id != p.addon_to_id:
+                                    # something mixed up with this order as addons should always come after their parent-position
+                                    continue
                                 if not p.attendee_email:
                                     if p.addon_to_id in sent_to_positions:
                                         continue
