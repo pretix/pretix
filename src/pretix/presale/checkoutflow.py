@@ -87,7 +87,7 @@ from pretix.presale.forms.checkout import (
     ContactForm, InvoiceAddressForm, InvoiceNameForm, MembershipForm,
 )
 from pretix.presale.forms.customer import AuthenticationForm, RegistrationForm
-from pretix.presale.productlist import prepare_item_list_for_shop
+from pretix.base.storelogic.productlist import prepare_item_list_for_shop
 from pretix.presale.signals import (
     checkout_all_optional, checkout_confirm_messages, checkout_flow_steps,
     contact_form_fields, contact_form_fields_overrides,

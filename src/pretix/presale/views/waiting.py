@@ -33,6 +33,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views.generic import FormView, TemplateView
 
 from pretix.base.models import Quota, SubEvent
+from pretix.base.storelogic.productlist import prepare_item_list_for_shop
 from pretix.base.templatetags.urlreplace import url_replace
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin, iframe_entry_view_wrapper
@@ -40,7 +41,6 @@ from pretix.presale.views import EventViewMixin, iframe_entry_view_wrapper
 from ...base.i18n import get_language_without_region
 from ...base.models import Voucher, WaitingListEntry
 from ..forms.waitinglist import WaitingListForm
-from ..productlist import prepare_item_list_for_shop
 from . import allow_frame_if_namespaced
 
 

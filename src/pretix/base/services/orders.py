@@ -110,7 +110,7 @@ from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.models import modelcopy
 from pretix.helpers.periodic import minimum_interval
-from pretix.presale.productlist import prepare_item_list_for_shop
+from pretix.base.storelogic.productlist import prepare_item_list_for_shop
 from pretix.testutils.middleware import debugflags_var
 
 

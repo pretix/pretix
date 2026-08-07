@@ -67,7 +67,7 @@ from pretix.helpers.daterange import daterange
 from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.organizer import meta_filtersets
-from pretix.presale.productlist import (
+from pretix.base.storelogic.productlist import (
     item_group_by_category, prepare_item_list_for_shop,
 )
 from pretix.presale.style import get_theme_vars_css
