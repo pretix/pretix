@@ -34,8 +34,6 @@
 
 import logging
 import time
-from datetime import datetime
-from http.cookies import Morsel
 from urllib.parse import urlparse
 
 from django.conf import settings
@@ -53,12 +51,16 @@ from django.middleware.csrf import (
 from django.shortcuts import render
 from django.urls import set_urlconf
 from django.utils.cache import patch_vary_headers
+from django.utils.decorators import decorator_from_middleware
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.http import http_date
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, Organizer
-from pretix.helpers.cookies import set_cookie_without_samesite
+from pretix.helpers.cookies import (
+    get_all_values_of_cookie, set_cookie_without_samesite,
+    thoroughly_delete_cookie,
+)
 from pretix.multidomain.models import KnownDomain
 
 logger = logging.getLogger(__name__)
@@ -181,9 +183,23 @@ class SessionMiddleware(BaseSessionMiddleware):
             # The session should be deleted only if the session is entirely empty
             is_secure = request.scheme == 'https'
             if '__Host-' + settings.SESSION_COOKIE_NAME in request.COOKIES and empty:
-                response.delete_cookie('__Host-' + settings.SESSION_COOKIE_NAME)
+                # response.delete_cookie does not work as we might have set a partitioned cookie
+                thoroughly_delete_cookie(
+                    response,
+                    '__Host-' + settings.SESSION_COOKIE_NAME,
+                    path=settings.SESSION_COOKIE_PATH,
+                    secure=is_secure,
+                    httponly=settings.SESSION_COOKIE_HTTPONLY or None
+                )
             elif settings.SESSION_COOKIE_NAME in request.COOKIES and empty:
-                response.delete_cookie(settings.SESSION_COOKIE_NAME)
+                # response.delete_cookie does not work as we might have set a partitioned cookie
+                thoroughly_delete_cookie(
+                    response,
+                    settings.SESSION_COOKIE_NAME,
+                    path=settings.SESSION_COOKIE_PATH,
+                    secure=is_secure,
+                    httponly=settings.SESSION_COOKIE_HTTPONLY or None
+                )
             else:
                 if accessed:
                     patch_vary_headers(response, ('Cookie',))
@@ -200,15 +216,21 @@ class SessionMiddleware(BaseSessionMiddleware):
                     if response.status_code != 500:
                         request.session.save()
                         if is_secure and settings.SESSION_COOKIE_NAME in request.COOKIES:  # remove legacy cookie
-                            response.delete_cookie(settings.SESSION_COOKIE_NAME)
-                            response.delete_cookie(settings.SESSION_COOKIE_NAME, samesite="None")
+                            # response.delete_cookie does not work as we might have set a partitioned cookie
+                            thoroughly_delete_cookie(
+                                response,
+                                settings.SESSION_COOKIE_NAME,
+                                path=settings.SESSION_COOKIE_PATH,
+                                secure=is_secure,
+                                httponly=settings.SESSION_COOKIE_HTTPONLY or None
+                            )
                         set_cookie_without_samesite(
                             request, response,
                             '__Host-' + settings.SESSION_COOKIE_NAME if is_secure else settings.SESSION_COOKIE_NAME,
                             request.session.session_key, max_age=max_age,
                             expires=expires,
                             path=settings.SESSION_COOKIE_PATH,
-                            secure=request.scheme == 'https',
+                            secure=is_secure,
                             httponly=settings.SESSION_COOKIE_HTTPONLY or None
                         )
         return response
@@ -253,75 +275,74 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
             if request.session.get(CSRF_SESSION_KEY) != request.META["CSRF_COOKIE"]:
                 request.session[CSRF_SESSION_KEY] = request.META["CSRF_COOKIE"]
         else:
-            is_secure = request.scheme == 'https'
             # Set the CSRF cookie even if it's already set, so we renew
             # the expiry timer.
-            if is_secure and settings.CSRF_COOKIE_NAME in request.COOKIES:  # remove legacy cookie
-                response.delete_cookie(settings.CSRF_COOKIE_NAME)
-                response.delete_cookie(settings.CSRF_COOKIE_NAME, samesite="None")
+
+            # remove legacy cookie
+            if request.is_secure() and settings.CSRF_COOKIE_NAME in request.COOKIES:
+                thoroughly_delete_cookie(
+                    response,
+                    settings.CSRF_COOKIE_NAME,
+                    path=settings.CSRF_COOKIE_PATH,
+                    secure=request.is_secure(),
+                    httponly=settings.CSRF_COOKIE_HTTPONLY
+                )
 
             handle_duplicated_csrftoken(request, response)
 
             set_cookie_without_samesite(
                 request, response,
-                '__Host-' + settings.CSRF_COOKIE_NAME if is_secure else settings.CSRF_COOKIE_NAME,
+                '__Host-' + settings.CSRF_COOKIE_NAME if request.is_secure() else settings.CSRF_COOKIE_NAME,
                 request.META["CSRF_COOKIE"],
                 max_age=settings.CSRF_COOKIE_AGE,
                 path=settings.CSRF_COOKIE_PATH,
-                secure=is_secure,
+                secure=request.is_secure(),
                 httponly=settings.CSRF_COOKIE_HTTPONLY
             )
             # Content varies with the CSRF cookie, so set the Vary header.
             patch_vary_headers(response, ('Cookie',))
 
+    def process_response(self, request, response):
+        if (
+            not settings.CSRF_USE_SESSIONS
+            and request.is_secure()
+            and settings.CSRF_COOKIE_NAME in response.cookies
+            and response.cookies[settings.CSRF_COOKIE_NAME].value
+        ):
+            logger.warning("Usage of djangos CsrfViewMiddleware detected (legacy cookie found in response). "
+                           "This may be caused by using csrf_project or requires_csrf_token from django.views.decorators.csrf. "
+                           "Use the pretix.multidomain.middlewares equivalent instead.")
+
+        return super().process_response(request, response)
+
 
 def handle_duplicated_csrftoken(request, response):
-    # Due to a Safari bug, in some browser, two csrftoken cookies with different values
-    # exist: one unpartitioned, one partitioned. This function generates an additional
+    # Due to a Safari bug, in some browser, two csrftoken cookies can exist:
+    # one unpartitioned, one partitioned. This function generates an additional
     # Set-Cookie header to get rid of the unpartitioned one.
 
     cookie_name = '__Host-' + settings.CSRF_COOKIE_NAME
 
-    if request.scheme == 'https' and cookie_name in request.COOKIES:
+    if request.is_secure() and cookie_name in request.COOKIES:
         values = get_all_values_of_cookie(request.headers.get('Cookie'), cookie_name)
         if len(values) > 1:
             logger.info('Trying to remove duplicated %s cookies: %r', cookie_name, values)
-
-            # Make sure the set_cookie_without_samesite below will add a new item in the dictionary, placing
-            # it below our deletion header.
-            response.cookies.pop(cookie_name, None)
-
-            # Add the deletion Set-Cookie header to the cookie dict under a wrong name, so it doesn't get
-            # overwritten by the set_cookie_without_samesite call below.  This works because the code in
-            # django.core.handlers.wsgi/asgi, that generates the actual Set-Cookie headers, only iterates
-            # over cookie.values(), ignoring the keys.
-            response.cookies['___DELETECOOKIE___' + cookie_name] = make_delete_morsel(cookie_name)
+            thoroughly_delete_cookie(
+                response,
+                cookie_name,
+                secure=request.is_secure(),
+                path=settings.CSRF_COOKIE_PATH,
+                httponly=settings.CSRF_COOKIE_HTTPONLY
+            )
 
 
-def get_all_values_of_cookie(cookie_header, cookie_name):
-    # like django.http.cookie.parse_cookie, but returns all values of duplicated cookies instead of only the last
-    values = list()
-    if not cookie_header:
-        return values
-    for chunk in cookie_header.split(";"):
-        if "=" in chunk:
-            key, val = chunk.split("=", 1)
-        else:
-            # Assume an empty name per
-            # https://bugzilla.mozilla.org/show_bug.cgi?id=169091
-            key, val = "", chunk
-        key, val = key.strip(), val.strip()
-        if key == cookie_name:
-            values.append(val)
-    return values
+csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
 
 
-def make_delete_morsel(name):
-    m = Morsel()
-    m.set(name, '', '')
-    m['expires'] = datetime.utcfromtimestamp(0).strftime("%a, %d %b %Y %H:%M:%S GMT")
-    m['samesite'] = 'None'
-    m['secure'] = True
-    m['path'] = settings.CSRF_COOKIE_PATH
-    m['httponly'] = settings.CSRF_COOKIE_HTTPONLY
-    return m
+class _EnsureCsrfToken(CsrfViewMiddleware):
+    # Behave like CsrfViewMiddleware but don't reject requests or log warnings.
+    def _reject(self, request, reason):
+        return None
+
+
+requires_csrf_token = decorator_from_middleware(_EnsureCsrfToken)

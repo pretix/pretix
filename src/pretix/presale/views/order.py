@@ -79,7 +79,7 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _try_auto_refund, cancel_order,
-    change_payment_provider, error_messages,
+    change_payment_provider,
 )
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate, invalidate_cache
@@ -92,11 +92,11 @@ from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
 from pretix.presale.forms.order import OrderPositionChangeForm
+from pretix.presale.productlist import prepare_item_list_for_shop
 from pretix.presale.signals import question_form_fields_overrides
 from pretix.presale.views import (
     CartMixin, EventViewMixin, iframe_entry_view_wrapper,
 )
-from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 logger = logging.getLogger(__name__)
@@ -1452,7 +1452,7 @@ class OrderChangeMixin:
 
                     if ckey not in item_cache:
                         # Get all items to possibly show
-                        items, _btn = get_grouped_items(
+                        items, _btn = prepare_item_list_for_shop(
                             self.request.event,
                             subevent=p.subevent,
                             voucher=None,
@@ -1591,30 +1591,6 @@ class OrderChangeMixin:
                 price = self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}_price') or '0'
                 if val:
                     selected[i, None] = val, price
-
-        if sum(a[0] for a in selected.values()) > category['max_count']:
-            raise ValidationError(
-                error_messages['addon_max_count'] % {
-                    'base': str(form['pos'].item.name),
-                    'max': category['max_count'],
-                    'cat': str(category['category'].name),
-                }
-            )
-        elif sum(a[0] for a in selected.values()) < category['min_count']:
-            raise ValidationError(
-                error_messages['addon_min_count'] % {
-                    'base': str(form['pos'].item.name),
-                    'min': category['min_count'],
-                    'cat': str(category['category'].name),
-                }
-            )
-        elif any(sum(v[0] for k, v in selected.items() if k[0] == i) > 1 for i in category['items']) and not category['multi_allowed']:
-            raise ValidationError(
-                error_messages['addon_no_multi'] % {
-                    'base': str(form['pos'].item.name),
-                    'cat': str(category['category'].name),
-                }
-            )
 
         return selected
 

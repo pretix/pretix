@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-07 09:30+0000\n"
+"POT-Creation-Date: 2026-07-30 13:52+0000\n"
 "PO-Revision-Date: 2026-06-01 09:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
@@ -18,38 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2026.5\n"
-
-#: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/views/dashboards.py
-msgid "Shop disabled"
-msgstr ""
-
-#: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/index.html
-msgid "Presale over"
-msgstr "사전판매  끝남"
-
-#: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/index.html
-msgid "Presale not started"
-msgstr "사전판매 시작하지 않음"
-
-#: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/index.html
-#: pretix/control/views/dashboards.py
-msgid "On sale"
-msgstr "세일 중"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -1246,6 +1214,19 @@ msgstr "고객 계정"
 msgid "Download a spreadsheet of all currently registered customer accounts."
 msgstr "현재 등록된 모든 고객 계정의 스프레드시트를 다운로드합니다."
 
+#: pretix/base/exporters/customers.py pretix/base/permissions.py
+#: pretix/control/navigation.py
+#: pretix/control/templates/pretixcontrol/organizers/customers.html
+msgid "Customers"
+msgstr "고객"
+
+#: pretix/base/exporters/customers.py pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/organizers/customer.html
+#: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
+#: pretix/presale/views/customer.py
+msgid "Memberships"
+msgstr "멤버십"
+
 #: pretix/base/exporters/customers.py pretix/base/models/customers.py
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/customers.html
@@ -1377,6 +1358,72 @@ msgstr "예"
 #: pretix/control/views/vouchers.py pretix/plugins/checkinlists/exporters.py
 msgid "No"
 msgstr "아니오"
+
+#: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
+#: pretix/base/models/memberships.py pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/event/live.html
+msgid "Test mode"
+msgstr "테스트 모드"
+
+#: pretix/base/exporters/customers.py pretix/base/models/memberships.py
+#: pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html
+#: pretix/control/templates/pretixcontrol/orders/overview.html
+#: pretix/control/templates/pretixcontrol/organizers/customer_membership.html
+#: pretix/plugins/reports/exporters.py
+#: pretix/presale/templates/pretixpresale/event/fragment_order_status.html
+#: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
+#: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
+msgid "Canceled"
+msgstr "취소하다"
+
+#: pretix/base/exporters/customers.py pretix/base/models/memberships.py
+#: pretix/control/templates/pretixcontrol/organizers/customer.html
+#: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
+msgid "Membership type"
+msgstr "멤버쉽 형태"
+
+#: pretix/base/exporters/customers.py
+#, fuzzy
+#| msgid "Purchase time"
+msgid "Purchase ticket"
+msgstr "구매 시간"
+
+#: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
+#: pretix/base/exporters/waitinglist.py pretix/base/forms/questions.py
+#: pretix/base/models/memberships.py pretix/control/forms/rrule.py
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/control/templates/pretixcontrol/orders/refunds.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/search/payments.html
+#: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
+#: pretix/control/templates/pretixcontrol/user/staff_session_list.html
+#: pretix/plugins/checkinlists/exporters.py
+msgid "Start date"
+msgstr "시작 날짜"
+
+#: pretix/base/exporters/customers.py
+#, fuzzy
+#| msgid "Start time from"
+msgid "Start time"
+msgstr "시작 시간은 ~부터"
+
+#: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
+#: pretix/base/exporters/waitinglist.py pretix/base/models/memberships.py
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
+#: pretix/control/templates/pretixcontrol/user/staff_session_list.html
+#: pretix/plugins/checkinlists/exporters.py
+msgid "End date"
+msgstr "끝 날짜"
+
+#: pretix/base/exporters/customers.py
+#, fuzzy
+#| msgid "End date"
+msgid "End time"
+msgstr "끝 날짜"
 
 #: pretix/base/exporters/dekodi.py pretix/base/exporters/invoices.py
 msgctxt "export_category"
@@ -2230,30 +2277,6 @@ msgid "Position ID"
 msgstr "직책 아이디"
 
 #: pretix/base/exporters/orderlist.py pretix/base/exporters/waitinglist.py
-#: pretix/base/forms/questions.py pretix/base/models/memberships.py
-#: pretix/control/forms/rrule.py
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/templates/pretixcontrol/orders/refunds.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/search/payments.html
-#: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
-#: pretix/control/templates/pretixcontrol/user/staff_session_list.html
-#: pretix/plugins/checkinlists/exporters.py
-msgid "Start date"
-msgstr "시작 날짜"
-
-#: pretix/base/exporters/orderlist.py pretix/base/exporters/waitinglist.py
-#: pretix/base/models/memberships.py
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
-#: pretix/control/templates/pretixcontrol/user/staff_session_list.html
-#: pretix/plugins/checkinlists/exporters.py
-msgid "End date"
-msgstr "끝 날짜"
-
-#: pretix/base/exporters/orderlist.py pretix/base/exporters/waitinglist.py
 #: pretix/base/modelimport_orders.py pretix/base/modelimport_vouchers.py
 #: pretix/base/models/items.py pretix/base/models/vouchers.py
 #: pretix/base/models/waitinglist.py pretix/control/forms/filter.py
@@ -2652,12 +2675,6 @@ msgstr "모든 선물 카드의 스프레드시트를 다운로드 하세요"
 msgid "Gift card code"
 msgstr "선물 카드 코드"
 
-#: pretix/base/exporters/orderlist.py pretix/base/models/memberships.py
-#: pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/event/live.html
-msgid "Test mode"
-msgstr "테스트 모드"
-
 #: pretix/base/exporters/orderlist.py pretix/base/models/organizer.py
 #: pretix/control/forms/event.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/email_setup.html
@@ -2771,7 +2788,7 @@ msgstr "만료되고 가치있음"
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/reports/exporters.py pretix/plugins/sendmail/forms.py
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html
 msgid "Expired"
@@ -2941,7 +2958,7 @@ msgid "This combination of credentials is not known to our system."
 msgstr "이 자격 증명 조합은 우리 시스템에 알려져 있지 않습니다."
 
 #: pretix/base/forms/auth.py pretix/base/forms/user.py
-#: pretix/presale/forms/customer.py
+#: pretix/control/views/user.py pretix/presale/forms/customer.py
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr "보안상의 이유로 다시 시도하기 전에 5분만 기다려 주세요."
 
@@ -3905,6 +3922,7 @@ msgstr "할당량 우회를 허용합니다"
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 #: pretix/control/views/vouchers.py
 msgid "Price effect"
@@ -4581,9 +4599,13 @@ msgid "This event is remote or partially remote."
 msgstr "이 이벤트는 원격 또는 부분적으로 원격입니다."
 
 #: pretix/base/models/event.py
+#, fuzzy
+#| msgid ""
+#| "This will be used to let users know if the event is in a different "
+#| "timezone and let’s us calculate users’ local times."
 msgid ""
-"This will be used to let users know if the event is in a different timezone "
-"and let’s us calculate users’ local times."
+"This will be used to let users know if the event is in a different timezone, "
+"and to let us calculate the local time of a user."
 msgstr ""
 "이를 통해 이벤트가 다른 시간대에 있는지 사용자에게 알리고 사용자의 현지 시간"
 "을 계산해 보겠습니다."
@@ -6042,23 +6064,6 @@ msgstr ""
 msgid "Number of times this membership can be used in a purchase."
 msgstr "이 멤버쉽을 한 번의 구매에서 사용할 수 있는 횟수"
 
-#: pretix/base/models/memberships.py pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html
-#: pretix/control/templates/pretixcontrol/orders/overview.html
-#: pretix/control/templates/pretixcontrol/organizers/customer_membership.html
-#: pretix/plugins/reports/exporters.py
-#: pretix/presale/templates/pretixpresale/event/fragment_order_status.html
-#: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
-#: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
-msgid "Canceled"
-msgstr "취소하다"
-
-#: pretix/base/models/memberships.py
-#: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
-msgid "Membership type"
-msgstr "멤버쉽 형태"
-
 #: pretix/base/models/orders.py
 msgid "pending"
 msgstr "대기중"
@@ -6920,7 +6925,7 @@ msgstr "이 변형은 이 제품에 속하지 않습니다."
 msgid "It is currently not possible to create vouchers for add-on products."
 msgstr "현재 묶음 제품에 대한 바우처를 만드는 것은 불가능합니다."
 
-#: pretix/base/models/vouchers.py
+#: pretix/base/models/vouchers.py pretix/control/forms/vouchers.py
 msgid ""
 "You need to select a specific product or quota if this voucher should "
 "reserve tickets."
@@ -6941,7 +6946,7 @@ msgid ""
 "usages."
 msgstr "최대 사용 횟수는 최소 사용 횟수보다 적을 수 없습니다."
 
-#: pretix/base/models/vouchers.py
+#: pretix/base/models/vouchers.py pretix/control/forms/vouchers.py
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
 msgstr "이 바우처가 할당량을 차단하려면 특정 날짜를 선택해야 합니다."
@@ -7449,6 +7454,12 @@ msgstr "이 기프트 카드는 이벤트 주최자가 받지 않습니다."
 #: pretix/base/payment.py
 msgid "This gift card was used in the meantime. Please try again."
 msgstr "이 기프트 카드는 그동안 사용되었습니다. 다시 시도해 주세요."
+
+#: pretix/base/payment.py
+msgid ""
+"This payment provider exists for historical purposes only and is no longer "
+"usable."
+msgstr ""
 
 #: pretix/base/pdf.py
 msgid "Ticket code (barcode content)"
@@ -8050,11 +8061,6 @@ msgid ""
 "Includes the ability to give someone (including oneself) additional "
 "permissions."
 msgstr ""
-
-#: pretix/base/permissions.py pretix/control/navigation.py
-#: pretix/control/templates/pretixcontrol/organizers/customers.html
-msgid "Customers"
-msgstr "고객"
 
 #: pretix/base/permissions.py pretix/control/navigation.py
 msgid "Devices"
@@ -9338,6 +9344,16 @@ msgstr "선택한 국가는 귀하의 세금 규정에 의해 차단됩니다."
 msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
+msgstr "기프트 카드 발급에 사용된 포지션의 가격은 변경할 수 없습니다."
+
+#: pretix/base/services/orders.py
+#, fuzzy
+#| msgid ""
+#| "You cannot change the price of a position that has been used to issue a "
+#| "gift card."
+msgid ""
+"You cannot change the ticket secret of a position that has been used to "
+"issue a gift card."
 msgstr "기프트 카드 발급에 사용된 포지션의 가격은 변경할 수 없습니다."
 
 #: pretix/base/services/orders.py
@@ -11126,13 +11142,13 @@ msgstr "연락처 주소"
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr "참석자들이 연락할 수 있도록 공개적으로 보여드리겠습니다."
 
-#: pretix/base/settings.py pretix/control/forms/event.py
+#: pretix/base/settings.py
 #, fuzzy
 #| msgid "Contact:"
 msgid "Contact URL"
 msgstr "연락처:"
 
-#: pretix/base/settings.py pretix/control/forms/event.py
+#: pretix/base/settings.py
 msgid ""
 "If you set this, the footer contact link will point here instead of using "
 "the email address above. Please note that you still need to add a contact "
@@ -12950,6 +12966,7 @@ msgstr "{event}를 주문하셨기 때문에 이 이메일을 받게 되었습�
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html
 #: pretix/control/templates/pretixcontrol/organizers/customers.html
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html
@@ -14274,7 +14291,7 @@ msgstr "모든 주문"
 msgid "Valid orders"
 msgstr "유효한 주문"
 
-#: pretix/control/forms/filter.py
+#: pretix/control/forms/filter.py pretix/plugins/sendmail/forms.py
 msgid "Paid (or canceled with paid fee)"
 msgstr "유료(또는 유료 수수료로 취소)"
 
@@ -14298,7 +14315,7 @@ msgstr "보류중이거나 유료"
 msgid "Cancellations"
 msgstr "취소"
 
-#: pretix/control/forms/filter.py
+#: pretix/control/forms/filter.py pretix/plugins/sendmail/forms.py
 msgid "Canceled (fully)"
 msgstr "취소됨(완전히)"
 
@@ -14476,6 +14493,22 @@ msgid "Inactive"
 msgstr "비활성화된 상태"
 
 #: pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/index.html
+msgid "Presale not started"
+msgstr "사전판매 시작하지 않음"
+
+#: pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/index.html
+msgid "Presale over"
+msgstr "사전판매  끝남"
+
+#: pretix/control/forms/filter.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html
 msgid "Date from"
 msgstr "~부터 시작되는 날짜"
@@ -14511,13 +14544,6 @@ msgstr "활성화된"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 msgid "not yet activated"
 msgstr "아직 활성화 되지 않음"
-
-#: pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
-#: pretix/presale/views/customer.py
-msgid "Memberships"
-msgstr "멤버십"
 
 #: pretix/control/forms/filter.py
 msgid "Has no memberships"
@@ -14747,6 +14773,42 @@ msgstr "권한이 취소된 기기"
 #| msgid "Require email addresses per ticket"
 msgid "Search email address or subject"
 msgstr "티켓당 이메일 주소 필요"
+
+#: pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/control/templates/pretixcontrol/orders/refunds.html
+msgid "Source"
+msgstr ""
+
+#: pretix/control/forms/filter.py
+#, fuzzy
+#| msgid "All vouchers"
+msgid "All sources"
+msgstr "모든 바우처"
+
+#: pretix/control/forms/filter.py
+msgid "Team actions"
+msgstr "팀 작업"
+
+#: pretix/control/forms/filter.py
+msgid "Customer actions"
+msgstr "고객 작업"
+
+#: pretix/control/forms/filter.py
+#, fuzzy
+#| msgid "Device status"
+msgid "Device actions"
+msgstr "기기 상태"
+
+#: pretix/control/forms/filter.py
+#, fuzzy
+#| msgid "Order email"
+msgid "User email"
+msgstr "주문 이메일"
+
+#: pretix/control/forms/filter.py pretix/control/navigation.py
+msgid "All users"
+msgstr "모든 사용자"
 
 #: pretix/control/forms/global_settings.py
 msgid "Additional footer text"
@@ -16225,6 +16287,7 @@ msgstr "선택 사항"
 #: pretix/control/forms/renderers.py
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 msgctxt "form_bulk"
 msgid "change"
 msgstr "변경하다"
@@ -16344,6 +16407,65 @@ msgid ""
 msgstr ""
 "이 바우처는 숨겨진 제품에만 적용되며, 해당 제품을 표시하도록 선택하지 않았습"
 "니다"
+
+#: pretix/control/forms/vouchers.py
+#, python-format
+msgid ""
+"You cannot reduce the maximum number of redemptions to %(max_usages)s, "
+"because at least one of the selected vouchers has already been redeemed "
+"%(max_redeemed)s times."
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
+#, fuzzy
+#| msgid ""
+#| "You cannot create a voucher that blocks quota as the selected product or "
+#| "quota is currently sold out or completely reserved."
+msgid ""
+"You cannot create a voucher that allows selection of a quota but has no date "
+"selected."
+msgstr ""
+"선택한 제품이나 할당량이 현재 매진되었거나 완전히 예약되었기 때문에 할당량을 "
+"차단하는 바우처를 만들 수 없습니다."
+
+#: pretix/control/forms/vouchers.py
+#, fuzzy
+#| msgid "The selected product does not allow to select a seat."
+msgid "The selected quota does not match the selected subevent."
+msgstr "선택한 제품은 좌석을 선택할 수 없습니다."
+
+#: pretix/control/forms/vouchers.py
+#, fuzzy
+#| msgid ""
+#| "There is not enough quota available on quota \"{}\" to perform the "
+#| "operation."
+msgid "There is no sufficient quota available to perform this change."
+msgstr "할당량 \"{}\"에 작업을 수행할 수 있는 할당량이 충분하지 않습니다."
+
+#: pretix/control/forms/vouchers.py
+msgid ""
+"Changing the maximum number of usages in bulk is not supported if any of the "
+"selected vouchers is assigned a seat."
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
+msgctxt "subevent"
+msgid ""
+"Changing the date in bulk is not supported if any of the selected vouchers "
+"is assigned a seat."
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
+msgid ""
+"Changing the product to a quota is not supported if any of the selected "
+"vouchers is assigned a seat."
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
+msgid ""
+"This change cannot be completed because not all assigned seats of the "
+"vouchers are still available"
+msgstr ""
 
 #: pretix/control/forms/vouchers.py
 msgid "Codes"
@@ -18204,10 +18326,6 @@ msgid "Account history"
 msgstr "계정 기록"
 
 #: pretix/control/navigation.py
-msgid "All users"
-msgstr "모든 사용자"
-
-#: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html
 msgid "Admin sessions"
 msgstr "관리자 세션"
@@ -18495,6 +18613,7 @@ msgstr "새 비밀번호를 설정하세요"
 #: pretix/control/templates/pretixcontrol/users/create.html
 #: pretix/control/templates/pretixcontrol/users/form.html
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 #: pretix/control/templates/pretixcontrol/waitinglist/edit.html
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html
@@ -18938,8 +19057,8 @@ msgstr "삭제하기"
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
-#: pretix/control/templates/pretixcontrol/event/logs.html
 #: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/fragment_log_filter_form.html
 #: pretix/control/templates/pretixcontrol/items/question.html
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 #: pretix/control/templates/pretixcontrol/orders/index.html
@@ -18950,7 +19069,6 @@ msgstr "삭제하기"
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
 #: pretix/control/templates/pretixcontrol/organizers/index.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html
 #: pretix/control/templates/pretixcontrol/organizers/teams.html
@@ -19085,6 +19203,7 @@ msgstr "타임스탬프(특정 시점의 날짜와 시간을 기록한 값)"
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 #: pretix/control/templates/pretixcontrol/subevents/index.html
+#: pretix/control/templates/pretixcontrol/vouchers/index.html
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "Select all results on other pages as well"
 msgstr "다른 페이지에서도 모든 결과 선택"
@@ -19746,6 +19865,34 @@ msgstr ""
 "귀하의 도메인에서 이 시스템이 포함된 SPF 레코드를 발견했습니다. 좋아요!"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#, fuzzy
+#| msgid "Your new SPF record could look like this:"
+msgid "Your new DKIM record should be set up as a CNAME record like this:"
+msgstr "새 SPF 레코드는 다음과 같이 표시될 수 있습니다:"
+
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#, fuzzy
+#| msgid ""
+#| "We found an SPF record on your domain that includes this system. Great!"
+msgid "We found a DKIM record on your domain for this system. Great!"
+msgstr ""
+"귀하의 도메인에서 이 시스템이 포함된 SPF 레코드를 발견했습니다. 좋아요!"
+
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#, fuzzy
+#| msgid "Your new SPF record could look like this:"
+msgid "Your new DMARC record could look like this:"
+msgstr "새 SPF 레코드는 다음과 같이 표시될 수 있습니다:"
+
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#, fuzzy
+#| msgid ""
+#| "We found an SPF record on your domain that includes this system. Great!"
+msgid "We found a DMARC record on your domain for this system. Great!"
+msgstr ""
+"귀하의 도메인에서 이 시스템이 포함된 SPF 레코드를 발견했습니다. 좋아요!"
+
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
 msgid "Verification"
 msgstr "검증"
 
@@ -19939,6 +20086,105 @@ msgstr ""
 "테스트 모드에서 수행되지 않은 주문과 같이 삭제할 수 없는 데이터가 포함되지 않"
 "은 경우에만 이벤트를 완전히 삭제할 수 있습니다."
 
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_logs.html
+#: pretix/control/templates/pretixcontrol/event/logs.html
+#: pretix/control/templates/pretixcontrol/includes/logs.html
+#: pretix/control/templates/pretixcontrol/organizers/device_logs.html
+#: pretix/control/templates/pretixcontrol/organizers/logs.html
+msgid "Personal data was cleared from this log entry."
+msgstr "이 로그 기록에서 개인정보가 삭제되었습니다"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_logs.html
+#: pretix/control/templates/pretixcontrol/event/logs.html
+#: pretix/control/templates/pretixcontrol/includes/logs.html
+#: pretix/control/templates/pretixcontrol/organizers/logs.html
+msgid "This change was performed by a pretix administrator."
+msgstr "이 변경 작업은 pretix 관리자가 진행하였습니다"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_logs.html
+#: pretix/control/templates/pretixcontrol/event/logs.html
+#: pretix/control/templates/pretixcontrol/includes/logs.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/control/templates/pretixcontrol/organizers/device_logs.html
+#: pretix/control/templates/pretixcontrol/organizers/logs.html
+#: pretix/control/templates/pretixcontrol/search/payments.html
+msgid "Inspect"
+msgstr "점검하기"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+#, fuzzy
+msgid ""
+"This event contains <strong>overpaid orders</strong>, for example due to "
+"duplicate payment attempts. You should review the cases and consider "
+"refunding the overpaid amount to the user."
+msgstr ""
+"이 이벤트에는 중복 결제 시도로 인해 초과 결제된 주문이 포함되어 있습니다. 사"
+"례를 검토하고 초과 결제된 금액을 사용자에게 환불하는 것을 고려해야 합니다."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show overpaid orders"
+msgstr "초과 지불된 주문 표시입니다"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+#, fuzzy
+msgid ""
+"This event contains <strong>pending refunds</strong> that you should take "
+"care of."
+msgstr "이 이벤트에는 귀하가 처리해야 할 <강한> 환불이 포함되어 있습니다."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show pending refunds"
+msgstr "보류 중인 환불 표시입니다"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+#, fuzzy
+msgid ""
+"This event contains <strong>requested cancellations</strong> that you should "
+"take care of."
+msgstr "이 이벤트에는 요청하신 취소가 포함되어 있으며, 이를 처리해야 합니다."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show orders requesting cancellation"
+msgstr "취소를 요청하는 주문 표시합니다"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+#, fuzzy
+msgid ""
+"This event contains <strong>pending approvals</strong> that you should take "
+"care of."
+msgstr "이 이벤트에는 여러분이 처리해야 할 <강한> 승인이 보류 중입니다."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show orders pending approval"
+msgstr "승인 대기 중인 주문 표시입니다"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+#, fuzzy
+msgid ""
+"This event contains <strong>fully paid orders</strong> that are not marked "
+"as paid, probably because no quota was left at the time their payment "
+"arrived. You should review the cases and consider either refunding the "
+"customer or creating more space."
+msgstr ""
+"이 이벤트에는 결제가 완료된 상태로 표시되지 않은 <강력> 완납 주문</강력>이 포"
+"함되어 있습니다. 아마도 결제가 완료될 당시 할당량이 남아 있지 않았기 때문일 "
+"것입니다. 사례를 검토하고 고객에게 환불하거나 더 많은 공간을 제공하는 것을 고"
+"려해야 합니다."
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show affected orders"
+msgstr "영향을 받은 주문 표시입니다"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"Orders in this event could not be <strong>synced to an external system</"
+"strong> as configured."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show sync problems"
+msgstr ""
+
 #: pretix/control/templates/pretixcontrol/event/delete.html
 msgid ""
 "This operation will destroy your event including all configuration, "
@@ -20062,80 +20308,6 @@ msgstr "온라인 쇼핑몰이나 상점의 웹사이트 주소"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "Create QR code"
 msgstr "큐알코드를 생성합니다"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-#, fuzzy
-msgid ""
-"This event contains <strong>overpaid orders</strong>, for example due to "
-"duplicate payment attempts. You should review the cases and consider "
-"refunding the overpaid amount to the user."
-msgstr ""
-"이 이벤트에는 중복 결제 시도로 인해 초과 결제된 주문이 포함되어 있습니다. 사"
-"례를 검토하고 초과 결제된 금액을 사용자에게 환불하는 것을 고려해야 합니다."
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show overpaid orders"
-msgstr "초과 지불된 주문 표시입니다"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-#, fuzzy
-msgid ""
-"This event contains <strong>pending refunds</strong> that you should take "
-"care of."
-msgstr "이 이벤트에는 귀하가 처리해야 할 <강한> 환불이 포함되어 있습니다."
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show pending refunds"
-msgstr "보류 중인 환불 표시입니다"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-#, fuzzy
-msgid ""
-"This event contains <strong>requested cancellations</strong> that you should "
-"take care of."
-msgstr "이 이벤트에는 요청하신 취소가 포함되어 있으며, 이를 처리해야 합니다."
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show orders requesting cancellation"
-msgstr "취소를 요청하는 주문 표시합니다"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-#, fuzzy
-msgid ""
-"This event contains <strong>pending approvals</strong> that you should take "
-"care of."
-msgstr "이 이벤트에는 여러분이 처리해야 할 <강한> 승인이 보류 중입니다."
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show orders pending approval"
-msgstr "승인 대기 중인 주문 표시입니다"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-#, fuzzy
-msgid ""
-"This event contains <strong>fully paid orders</strong> that are not marked "
-"as paid, probably because no quota was left at the time their payment "
-"arrived. You should review the cases and consider either refunding the "
-"customer or creating more space."
-msgstr ""
-"이 이벤트에는 결제가 완료된 상태로 표시되지 않은 <강력> 완납 주문</강력>이 포"
-"함되어 있습니다. 아마도 결제가 완료될 당시 할당량이 남아 있지 않았기 때문일 "
-"것입니다. 사례를 검토하고 고객에게 환불하거나 더 많은 공간을 제공하는 것을 고"
-"려해야 합니다."
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show affected orders"
-msgstr "영향을 받은 주문 표시입니다"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"Orders in this event could not be <strong>synced to an external system</"
-"strong> as configured."
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show sync problems"
-msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/index.html
 #: pretix/control/templates/pretixcontrol/order/index.html
@@ -20337,44 +20509,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/live.html
 msgid "Enable test mode"
 msgstr "테스트 모드 시작"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
-msgid "All actions"
-msgstr "모든 작업"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-msgid "Team actions"
-msgstr "팀 작업"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-msgid "Customer actions"
-msgstr "고객 작업"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-#: pretix/control/templates/pretixcontrol/event/logs_embed.html
-#: pretix/control/templates/pretixcontrol/includes/logs.html
-#: pretix/control/templates/pretixcontrol/organizers/device_logs.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
-msgid "Personal data was cleared from this log entry."
-msgstr "이 로그 기록에서 개인정보가 삭제되었습니다"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-#: pretix/control/templates/pretixcontrol/event/logs_embed.html
-#: pretix/control/templates/pretixcontrol/includes/logs.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
-msgid "This change was performed by a pretix administrator."
-msgstr "이 변경 작업은 pretix 관리자가 진행하였습니다"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-#: pretix/control/templates/pretixcontrol/event/logs_embed.html
-#: pretix/control/templates/pretixcontrol/includes/logs.html
-#: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/templates/pretixcontrol/organizers/device_logs.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
-#: pretix/control/templates/pretixcontrol/search/payments.html
-msgid "Inspect"
-msgstr "점검하기"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html
@@ -21286,6 +21420,20 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/events/index.html
 #: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/views/dashboards.py
+msgid "Shop disabled"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/index.html
+#: pretix/control/views/dashboards.py
+msgid "On sale"
+msgstr "세일 중"
+
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
 msgid "Open event dashboard"
 msgstr ""
 
@@ -21293,6 +21441,12 @@ msgstr ""
 msgctxt "typography"
 msgid "The quick brown fox jumps over the lazy dog."
 msgstr ""
+
+#: pretix/control/templates/pretixcontrol/fragment_log_filter_form.html
+#, fuzzy
+#| msgid "Specific seat"
+msgid "Specific object selected"
+msgstr "특정 좌석"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html
@@ -22316,6 +22470,7 @@ msgstr "목록에서 여러 개 선택하기"
 #: pretix/control/templates/pretixcontrol/items/quota_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #, python-format
 msgid "%(number)s selected"
 msgstr ""
@@ -22403,6 +22558,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/subevents/index.html
+#: pretix/control/templates/pretixcontrol/vouchers/index.html
 msgid "Edit selected"
 msgstr ""
 
@@ -22697,6 +22853,13 @@ msgid ""
 "The sale of this position created a membership. Changing the validity of the "
 "ticket here will not affect the membership. Memberships can be managed in "
 "the customer account."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/order/change.html
+#: pretix/control/views/orders.py
+msgid ""
+"Ticket secrets of order positions that have been used to issue a gift card "
+"can not be changed. Only the link will be changed in this case."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/change.html
@@ -23126,11 +23289,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Create a refund"
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/templates/pretixcontrol/orders/refunds.html
-msgid "Source"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html
@@ -24218,6 +24376,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "Advanced settings"
 msgstr ""
@@ -26424,17 +26583,25 @@ msgid "Copy codes"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "Voucher details"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid ""
 "If you choose \"any product\" for a specific quota and choose to reserve "
 "quota for this voucher above, the product can still be unavailable to the "
 "voucher holder if another quota associated with the product is sold out!"
 msgstr ""
+
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
+#, fuzzy
+#| msgid "Choose multiple from a list"
+msgid "Change multiple vouchers"
+msgstr "목록에서 여러 개 선택하기"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
@@ -26777,7 +26944,8 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "You cannot accept the invitation for \"{}\" as you already are part of this "
-"team."
+"team. If you want to add a different user or create a new account, log out "
+"and click the invitation link again."
 msgstr ""
 
 #: pretix/control/views/auth.py
@@ -27392,6 +27560,30 @@ msgid ""
 "chance most of the emails will be rejected or marked as spam. You should "
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
+msgstr ""
+
+#: pretix/control/views/mailsetup.py
+msgid ""
+"We could not find a CNAME record pointing to our DKIM key for domain you are "
+"trying to use. This means that there is a very high change most of the "
+"emails will be rejected or marked as spam. We strongly recommend setting up "
+"DKIM through a CNAME record. You can do so through the DNS settings at the "
+"provider you registered your domain with."
+msgstr ""
+
+#: pretix/control/views/mailsetup.py
+msgid ""
+"We found a CNAME record for a DKIM key, but it is not pointing to the right "
+"location. This means that there is a very high chance most of the emails "
+"will be rejected or marked as spam. You should update the DNS settings of "
+"your domain."
+msgstr ""
+
+#: pretix/control/views/mailsetup.py
+msgid ""
+"We did not find DMARC record for your domain. This means that there is a "
+"very high chance most of the emails will be rejected or marked as spam. You "
+"should update the DNS settings of your domain."
 msgstr ""
 
 #: pretix/control/views/mailsetup.py
@@ -28485,6 +28677,7 @@ msgid "Macao"
 msgstr ""
 
 #: pretix/helpers/daterange.py
+#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html
 #: pretix/presale/templates/pretixpresale/organizers/index.html
@@ -29680,11 +29873,6 @@ msgid "PayPal account"
 msgstr ""
 
 #: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-#, python-brace-format
-msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
-msgstr ""
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
 msgid "Click here for a tutorial on how to obtain the required keys"
 msgstr ""
 
@@ -30318,8 +30506,13 @@ msgstr "기본 리다이렉션 URL"
 #: pretix/plugins/returnurl/views.py
 msgid ""
 "Redirection will only be allowed to URLs that start with one of these "
-"prefixes. Enter one or more allowed URL prefix per line. URL prefixes must "
-"include a slash after the hostname."
+"prefixes. Enter one allowed URL prefix per line. URL prefixes must include a "
+"slash after the hostname."
+msgstr ""
+
+#: pretix/plugins/returnurl/views.py
+msgid ""
+"All values must be URLs that include at last one slash after the hostname."
 msgstr ""
 
 #: pretix/plugins/sendmail/apps.py
@@ -34850,6 +35043,9 @@ msgstr ""
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr "코소보"
+
+#~ msgid "All actions"
+#~ msgstr "모든 작업"
 
 #~ msgid "Account invitation"
 #~ msgstr "계정 초대"

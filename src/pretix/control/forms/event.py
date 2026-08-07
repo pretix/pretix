@@ -197,10 +197,10 @@ class EventWizardBasicsForm(I18nModelForm):
             'presale_end': SplitDateTimeField,
         }
         widgets = {
-            'date_from': SplitDateTimePickerWidget(),
-            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-date_from_0'}),
-            'presale_start': SplitDateTimePickerWidget(),
-            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-presale_start_0'}),
+            'date_from': SplitDateTimePickerWidget(without_seconds=True),
+            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-date_from_0'}, without_seconds=True),
+            'presale_start': SplitDateTimePickerWidget(without_seconds=True),
+            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-presale_start_0'}, without_seconds=True),
             'slug': SlugWidget,
         }
 
@@ -521,11 +521,11 @@ class EventUpdateForm(I18nModelForm):
             'limit_sales_channels': SafeModelMultipleChoiceField,
         }
         widgets = {
-            'date_from': SplitDateTimePickerWidget(),
-            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}),
-            'date_admission': SplitDateTimePickerWidget(attrs={'data-date-default': '#id_date_from_0'}),
-            'presale_start': SplitDateTimePickerWidget(),
-            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
+            'date_from': SplitDateTimePickerWidget(without_seconds=True),
+            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}, without_seconds=True),
+            'date_admission': SplitDateTimePickerWidget(attrs={'data-date-default': '#id_date_from_0'}, without_seconds=True),
+            'presale_start': SplitDateTimePickerWidget(without_seconds=True),
+            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}, without_seconds=True),
         }
 
 
@@ -1904,12 +1904,6 @@ class QuickSetupForm(I18nForm):
         label=_("Contact address"),
         required=False,
         help_text=_("We'll show this publicly to allow attendees to contact you.")
-    )
-    contact_url = forms.URLField(
-        label=_("Contact URL"),
-        required=False,
-        help_text=_("If you set this, the footer contact link will point here instead of using the email address above. "
-                    "Please note that you still need to add a contact email address that will be shared with all emails you send.")
     )
     total_quota = forms.IntegerField(
         label=_("Total capacity"),

@@ -87,6 +87,7 @@ from pretix.base.timemachine import time_machine_now
 
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
+from ...helpers.models import NormalizedDecimalField
 from ...helpers.names import build_name
 from ...testutils.middleware import debugflags_var
 from ._transactions import (
@@ -224,8 +225,6 @@ class Order(LockModel, LoggedModel):
         "Organizer",
         related_name="orders",
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
     )
     event = models.ForeignKey(
         Event,
@@ -329,7 +328,7 @@ class Order(LockModel, LoggedModel):
         default="line",
     )
 
-    objects = ScopedManager(OrderQuerySet.as_manager().__class__, organizer='event__organizer')
+    objects = ScopedManager(OrderQuerySet.as_manager().__class__, organizer='organizer')
 
     class Meta:
         verbose_name = _("Order")
@@ -509,20 +508,20 @@ class Order(LockModel, LoggedModel):
 
     @classmethod
     def annotate_overpayments(cls, qs, results=True, refunds=True, sums=False):
-        payment_sum = OrderPayment.objects.filter(
+        payment_sum = OrderPayment.objects.with_scopes_disabled().filter(
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
             order=OuterRef('pk')
         ).order_by().values('order').annotate(s=Sum('amount')).values('s')
-        refund_sum = OrderRefund.objects.filter(
+        refund_sum = OrderRefund.objects.with_scopes_disabled().filter(
             state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
                        OrderRefund.REFUND_STATE_CREATED),
             order=OuterRef('pk')
         ).order_by().values('order').annotate(s=Sum('amount')).values('s')
-        external_refund = OrderRefund.objects.filter(
+        external_refund = OrderRefund.objects.with_scopes_disabled().filter(
             state=OrderRefund.REFUND_STATE_EXTERNAL,
             order=OuterRef('pk')
         )
-        pending_refund = OrderRefund.objects.filter(
+        pending_refund = OrderRefund.objects.with_scopes_disabled().filter(
             state__in=(OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT),
             order=OuterRef('pk')
         )
@@ -2073,6 +2072,17 @@ class OrderPayment(models.Model):
         """
         return '{}-P-{}'.format(self.order.code, self.local_id)
 
+    @property
+    def global_id(self):
+        """
+        The global ID of this payment, constructed by the organizer slug, event slug, and the full id.
+        """
+        return "{organizer}-{event}-{full_id}".format(
+            organizer=self.order.organizer.slug.upper(),
+            event=self.order.event.slug.upper(),
+            full_id=self.full_id,
+        )
+
     def save(self, *args, **kwargs):
         if not self.local_id:
             self.local_id = (self.order.payments.aggregate(m=Max('local_id'))['m'] or 0) + 1
@@ -2273,6 +2283,17 @@ class OrderRefund(models.Model):
         """
         return '{}-R-{}'.format(self.order.code, self.local_id)
 
+    @property
+    def global_id(self):
+        """
+        The global ID of this refund, constructed by the organizer slug, event slug, and the full id.
+        """
+        return "{organizer}-{event}-{full_id}".format(
+            organizer=self.order.organizer.slug.upper(),
+            event=self.order.event.slug.upper(),
+            full_id=self.full_id,
+        )
+
     def save(self, *args, **kwargs):
         if not self.local_id:
             self.local_id = (self.order.refunds.aggregate(m=Max('local_id'))['m'] or 0) + 1
@@ -2287,9 +2308,12 @@ class OrderRefund(models.Model):
         super().save(*args, **kwargs)
 
 
-class ActivePositionManager(ScopedManager(organizer='order__event__organizer').__class__):
-    def get_queryset(self):
-        return super().get_queryset().filter(canceled=False)
+def ActivePositionManager(**scope):
+    class InnerClass(ScopedManager(**scope).__class__):
+        def get_queryset(self):
+            return super().get_queryset().filter(canceled=False)
+
+    return InnerClass()
 
 
 class OrderFee(RoundingCorrectionMixin, models.Model):
@@ -2356,8 +2380,8 @@ class OrderFee(RoundingCorrectionMixin, models.Model):
     )
     description = models.CharField(max_length=190, blank=True)
     internal_type = models.CharField(max_length=255, blank=True)
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2,
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4,
         verbose_name=_('Tax rate')
     )
     tax_rule = models.ForeignKey(
@@ -2379,7 +2403,7 @@ class OrderFee(RoundingCorrectionMixin, models.Model):
     canceled = models.BooleanField(default=False)
 
     all = ScopedManager(organizer='order__event__organizer')
-    objects = ActivePositionManager()
+    objects = ActivePositionManager(organizer='order__event__organizer')
 
     @property
     def net_value(self):
@@ -2541,8 +2565,6 @@ class OrderPosition(AbstractPosition):
         "Organizer",
         related_name="order_positions",
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
     )
     order = models.ForeignKey(
         Order,
@@ -2555,8 +2577,8 @@ class OrderPosition(AbstractPosition):
         max_digits=13, decimal_places=2, null=True, blank=True,
     )
 
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2,
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4,
         verbose_name=_('Tax rate')
     )
     tax_rule = models.ForeignKey(
@@ -2599,8 +2621,8 @@ class OrderPosition(AbstractPosition):
         blank=True,
     )
 
-    all = ScopedManager(organizer='order__event__organizer')
-    objects = ActivePositionManager()
+    all = ScopedManager(organizer='organizer')
+    objects = ActivePositionManager(organizer='organizer')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -3074,8 +3096,8 @@ class Transaction(models.Model):
     price_includes_rounding_correction = models.DecimalField(
         max_digits=13, decimal_places=2, default=Decimal("0.00")
     )
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2,
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4,
         verbose_name=_('Tax rate')
     )
     tax_rule = models.ForeignKey(
@@ -3190,8 +3212,8 @@ class CartPosition(AbstractPosition):
         verbose_name=_("Limit for extending expiration date"),
         null=True
     )
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2, default=Decimal('0.00'),
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4, default=Decimal('0'),
         verbose_name=_('Tax rate')
     )
     tax_code = models.CharField(

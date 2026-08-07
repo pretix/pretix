@@ -864,6 +864,9 @@ Generating new secrets
 
    Triggers generation of new ``secret`` and ``web_secret`` attributes for both the order and all order positions.
 
+   Ticket secrets of order positions that have been used to issue a gift card can not
+   be changed. Only the link (``web_secret``) will be changed in this case.
+
    **Example request**:
 
    .. sourcecode:: http
@@ -894,6 +897,9 @@ Generating new secrets
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/regenerate_secrets/
 
    Triggers generation of a new ``secret`` and ``web_secret`` attribute for a single order position.
+
+   Ticket secrets of order positions that have been used to issue a gift card can not
+   be changed. Only the link (``web_secret``) will be changed in this case.
 
    **Example request**:
 
@@ -2032,7 +2038,7 @@ Manipulating individual positions
 
    * ``order`` (mandatory, specified as a string mapping to a ``code``)
 
-   * ``addon_to`` (optional, specified as an integer mapping to the ``positionid`` of the parent position)
+   * ``addon_to`` (optional, specified as an integer mapping to ``positionid`` - the number of the position within the order, see :ref:`_order-position-resource` - of the parent position)
 
    * ``item`` (mandatory)
 
@@ -2342,7 +2348,7 @@ otherwise, such as splitting an order or changing fees.
             "subevent": 562,
             "seat": "seat-guid-2",
             "price": "99.99",
-            "addon_to": 12374,
+            "addon_to": 1,
             "attendee_name": "Peter",
           }
         ],

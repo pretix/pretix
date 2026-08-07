@@ -179,6 +179,12 @@ class EventMixin:
             self.date_to.astimezone(tz), ("D" if short else "l")
         )
 
+    def is_same_day(self):
+        if not self.date_to:
+            return True
+        else:
+            return self.date_from.astimezone(self.timezone).date() == self.date_to.astimezone(self.timezone).date()
+
     def get_date_range_display(self, tz=None, force_show_end=False, as_html=False, try_to_show_times=False) -> str:
         """
         Returns a formatted string containing the start date and the end date
@@ -232,6 +238,9 @@ class EventMixin:
 
     @property
     def timezone(self):
+        # If we get rid of the shim, verify that
+        # https://github.com/py-vobject/vobject/issues/117#issuecomment-5045645314
+        # has been released and included
         return pytz_deprecation_shim.timezone(self.settings.timezone)
 
     @property
@@ -649,7 +658,7 @@ class Event(EventMixin, LoggedModel):
     is_remote = models.BooleanField(
         default=False,
         verbose_name=_("This event is remote or partially remote."),
-        help_text=_("This will be used to let users know if the event is in a different timezone and let’s us calculate users’ local times."),
+        help_text=_("This will be used to let users know if the event is in a different timezone, and to let us calculate the local time of a user."),
     )
     geo_lat = models.FloatField(
         verbose_name=_("Latitude"),
@@ -1403,15 +1412,12 @@ class Event(EventMixin, LoggedModel):
 
         for mp in self.organizer.meta_properties.all():
             if mp.required and not self.meta_data.get(mp.name):
-                issues.append(
-                    ('<a {a_attr}>' + gettext('You need to fill the meta parameter "{property}".') + '</a>').format(
-                        property=mp.name,
-                        a_attr='href="%s#id_prop-%d-value"' % (
-                            reverse('control:event.settings', kwargs={'organizer': self.organizer.slug, 'event': self.slug}),
-                            mp.pk
-                        )
-                    )
-                )
+                issues.append(format_html(
+                    '<a href="{href}{href_hash}">{text}</a>',
+                    text=gettext('You need to fill the meta parameter "{property}".').format(property=mp.name),
+                    href=reverse('control:event.settings', kwargs={'organizer': self.organizer.slug, 'event': self.slug}),
+                    href_hash=f'#id_prop-{mp.pk}-value',
+                ))
 
         responses = event_live_issues.send(self)
         for receiver, response in sorted(responses, key=lambda r: str(r[0])):
@@ -1854,6 +1860,7 @@ class EventMetaProperty(LoggedModel):
 
     class Meta:
         ordering = ("position", "name",)
+        unique_together = ('organizer', 'name')
 
     @property
     def choice_keys(self):

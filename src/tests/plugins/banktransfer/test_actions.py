@@ -50,6 +50,7 @@ def env():
         datetime=now(), expires=now() + timedelta(days=10),
         total=23,
         sales_channel=o.sales_channels.get(identifier="web"),
+        email='dummy@dummy.dummy'
     )
     o2 = Order.objects.create(
         code='6789Z', event=event,
@@ -129,7 +130,7 @@ def test_assign_order_unknown(env, client):
 
 
 @pytest.mark.django_db
-def test_assign_order_amount_incorrect(env, client):
+def test_assign_order_amount_incorrect(env, client, mailoutbox):
     job = BankImportJob.objects.create(event=env[0])
     trans = BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
                                            state=BankTransaction.STATE_NOMATCH,
@@ -141,6 +142,7 @@ def test_assign_order_amount_incorrect(env, client):
     assert r['status'] == 'ok'
     trans.refresh_from_db()
     assert trans.state == BankTransaction.STATE_VALID
+    assert len(mailoutbox) == 1
 
 
 @pytest.mark.django_db

@@ -67,11 +67,11 @@ from pretix.helpers.daterange import daterange
 from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.organizer import meta_filtersets
+from pretix.presale.productlist import (
+    item_group_by_category, prepare_item_list_for_shop,
+)
 from pretix.presale.style import get_theme_vars_css
 from pretix.presale.views.cart import get_or_create_cart_id
-from pretix.presale.views.event import (
-    get_grouped_items, item_group_by_category,
-)
 from pretix.presale.views.organizer import (
     EventListMixin, add_events_for_days, add_subevents_for_days,
     days_for_template, filter_qs_by_attr, filter_subevents_with_plugins,
@@ -164,7 +164,6 @@ def widget_css(request, version, **kwargs):
     css = f"/* v{version} */\n" + theme_css + widget_css
 
     resp = FileResponse(css, content_type='text/css')
-    resp._csp_ignore = True
     resp['Access-Control-Allow-Origin'] = '*'
     return resp
 
@@ -246,7 +245,6 @@ def widget_js(request, version, lang, **kwargs):
     cached_js = cache.get(cache_prefix)
     if cached_js and not settings.DEBUG:
         resp = HttpResponse(cached_js, content_type='text/javascript')
-        resp._csp_ignore = True
         resp['Access-Control-Allow-Origin'] = '*'
         return resp
 
@@ -278,7 +276,6 @@ def widget_js(request, version, lang, **kwargs):
             gs.settings.set(checksum_key, checksum)
             cache.set(cache_prefix, data, 3600 * 4)
         resp = HttpResponse(data, content_type='text/javascript')
-    resp._csp_ignore = True
     resp['Access-Control-Allow-Origin'] = '*'
     return resp
 
@@ -324,7 +321,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 ).values_list('item_id', flat=True)
             )
 
-        items, display_add_to_cart = get_grouped_items(
+        items, display_add_to_cart = prepare_item_list_for_shop(
             self.request.event,
             subevent=self.subevent,
             voucher=self.voucher,
@@ -414,7 +411,6 @@ class WidgetAPIProductList(EventListMixin, View):
         self.post_process(data)
         resp = JsonResponse(data)
         resp['Access-Control-Allow-Origin'] = '*'
-        resp._csp_ignore = True
         return resp
 
     def get(self, request, *args, **kwargs):
@@ -799,6 +795,7 @@ class WidgetAPIProductList(EventListMixin, View):
             'target_url': eventreverse_absolute(request.event, 'presale:event.index'),
             'subevent': self.subevent.pk if self.subevent else None,
             'currency': request.event.currency,
+            'currency_places': settings.CURRENCY_PLACES.get(request.event.currency, 2),
             'display_net_prices': request.event.settings.display_net_prices,
             'use_native_spinners': request.event.settings.widget_use_native_spinners,
             'show_variations_expanded': request.event.settings.show_variations_expanded,

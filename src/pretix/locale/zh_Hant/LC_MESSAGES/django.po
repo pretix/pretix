@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-07 09:30+0000\n"
+"POT-Creation-Date: 2026-07-30 13:52+0000\n"
 "PO-Revision-Date: 2026-06-01 09:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
@@ -18,38 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 2026.5\n"
-
-#: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/views/dashboards.py
-msgid "Shop disabled"
-msgstr "禁用商店"
-
-#: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/index.html
-msgid "Presale over"
-msgstr "預售結束"
-
-#: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/index.html
-msgid "Presale not started"
-msgstr "預售尚未開始"
-
-#: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/detail.html
-#: pretix/control/templates/pretixcontrol/subevents/index.html
-#: pretix/control/views/dashboards.py
-msgid "On sale"
-msgstr "在售"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -1256,6 +1224,19 @@ msgstr "客戶帳戶"
 msgid "Download a spreadsheet of all currently registered customer accounts."
 msgstr "下載所有當前註冊的客戶帳戶的活頁表格。"
 
+#: pretix/base/exporters/customers.py pretix/base/permissions.py
+#: pretix/control/navigation.py
+#: pretix/control/templates/pretixcontrol/organizers/customers.html
+msgid "Customers"
+msgstr "客戶"
+
+#: pretix/base/exporters/customers.py pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/organizers/customer.html
+#: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
+#: pretix/presale/views/customer.py
+msgid "Memberships"
+msgstr "會員資格"
+
 #: pretix/base/exporters/customers.py pretix/base/models/customers.py
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/customers.html
@@ -1387,6 +1368,72 @@ msgstr "是"
 #: pretix/control/views/vouchers.py pretix/plugins/checkinlists/exporters.py
 msgid "No"
 msgstr "否"
+
+#: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
+#: pretix/base/models/memberships.py pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/event/live.html
+msgid "Test mode"
+msgstr "測試模式"
+
+#: pretix/base/exporters/customers.py pretix/base/models/memberships.py
+#: pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html
+#: pretix/control/templates/pretixcontrol/orders/overview.html
+#: pretix/control/templates/pretixcontrol/organizers/customer_membership.html
+#: pretix/plugins/reports/exporters.py
+#: pretix/presale/templates/pretixpresale/event/fragment_order_status.html
+#: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
+#: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
+msgid "Canceled"
+msgstr "已取消"
+
+#: pretix/base/exporters/customers.py pretix/base/models/memberships.py
+#: pretix/control/templates/pretixcontrol/organizers/customer.html
+#: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
+msgid "Membership type"
+msgstr "會員資格類型"
+
+#: pretix/base/exporters/customers.py
+#, fuzzy
+#| msgid "Purchase time"
+msgid "Purchase ticket"
+msgstr "購買時間"
+
+#: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
+#: pretix/base/exporters/waitinglist.py pretix/base/forms/questions.py
+#: pretix/base/models/memberships.py pretix/control/forms/rrule.py
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/control/templates/pretixcontrol/orders/refunds.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/search/payments.html
+#: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
+#: pretix/control/templates/pretixcontrol/user/staff_session_list.html
+#: pretix/plugins/checkinlists/exporters.py
+msgid "Start date"
+msgstr "起始"
+
+#: pretix/base/exporters/customers.py
+#, fuzzy
+#| msgid "Start time from"
+msgid "Start time"
+msgstr "開始時間從"
+
+#: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
+#: pretix/base/exporters/waitinglist.py pretix/base/models/memberships.py
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
+#: pretix/control/templates/pretixcontrol/user/staff_session_list.html
+#: pretix/plugins/checkinlists/exporters.py
+msgid "End date"
+msgstr "終止日期"
+
+#: pretix/base/exporters/customers.py
+#, fuzzy
+#| msgid "End: %(time)s"
+msgid "End time"
+msgstr "結束: %(time)s"
 
 #: pretix/base/exporters/dekodi.py pretix/base/exporters/invoices.py
 msgctxt "export_category"
@@ -2225,30 +2272,6 @@ msgid "Position ID"
 msgstr "位置識別號"
 
 #: pretix/base/exporters/orderlist.py pretix/base/exporters/waitinglist.py
-#: pretix/base/forms/questions.py pretix/base/models/memberships.py
-#: pretix/control/forms/rrule.py
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/templates/pretixcontrol/orders/refunds.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/search/payments.html
-#: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
-#: pretix/control/templates/pretixcontrol/user/staff_session_list.html
-#: pretix/plugins/checkinlists/exporters.py
-msgid "Start date"
-msgstr "起始"
-
-#: pretix/base/exporters/orderlist.py pretix/base/exporters/waitinglist.py
-#: pretix/base/models/memberships.py
-#: pretix/control/templates/pretixcontrol/events/index.html
-#: pretix/control/templates/pretixcontrol/organizers/detail.html
-#: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
-#: pretix/control/templates/pretixcontrol/user/staff_session_list.html
-#: pretix/plugins/checkinlists/exporters.py
-msgid "End date"
-msgstr "終止日期"
-
-#: pretix/base/exporters/orderlist.py pretix/base/exporters/waitinglist.py
 #: pretix/base/modelimport_orders.py pretix/base/modelimport_vouchers.py
 #: pretix/base/models/items.py pretix/base/models/vouchers.py
 #: pretix/base/models/waitinglist.py pretix/control/forms/filter.py
@@ -2647,12 +2670,6 @@ msgstr "下載所有禮品卡交易的活頁表格。"
 msgid "Gift card code"
 msgstr "禮品卡代碼"
 
-#: pretix/base/exporters/orderlist.py pretix/base/models/memberships.py
-#: pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/event/live.html
-msgid "Test mode"
-msgstr "測試模式"
-
 #: pretix/base/exporters/orderlist.py pretix/base/models/organizer.py
 #: pretix/control/forms/event.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/email_setup.html
@@ -2766,7 +2783,7 @@ msgstr "已過期且有數值"
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/reports/exporters.py pretix/plugins/sendmail/forms.py
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html
 msgid "Expired"
@@ -2932,7 +2949,7 @@ msgid "This combination of credentials is not known to our system."
 msgstr "我們的系統不知道這種憑據組合。"
 
 #: pretix/base/forms/auth.py pretix/base/forms/user.py
-#: pretix/presale/forms/customer.py
+#: pretix/control/views/user.py pretix/presale/forms/customer.py
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr "出於安全原因，請等待 5 分鐘，然後再重試。"
 
@@ -3903,6 +3920,7 @@ msgstr "允許繞過額度"
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 #: pretix/control/views/vouchers.py
 msgid "Price effect"
@@ -4563,9 +4581,13 @@ msgid "This event is remote or partially remote."
 msgstr "此活動是遠程的或部分遠程的。"
 
 #: pretix/base/models/event.py
+#, fuzzy
+#| msgid ""
+#| "This will be used to let users know if the event is in a different "
+#| "timezone and let’s us calculate users’ local times."
 msgid ""
-"This will be used to let users know if the event is in a different timezone "
-"and let’s us calculate users’ local times."
+"This will be used to let users know if the event is in a different timezone, "
+"and to let us calculate the local time of a user."
 msgstr "這將用於讓使用者知道活動是否在不同的時區，讓我們計算使用者的當地時間。"
 
 #: pretix/base/models/event.py pretix/base/models/organizer.py
@@ -5982,23 +6004,6 @@ msgstr ""
 msgid "Number of times this membership can be used in a purchase."
 msgstr "此會員資格可用於購買的次數。"
 
-#: pretix/base/models/memberships.py pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html
-#: pretix/control/templates/pretixcontrol/orders/overview.html
-#: pretix/control/templates/pretixcontrol/organizers/customer_membership.html
-#: pretix/plugins/reports/exporters.py
-#: pretix/presale/templates/pretixpresale/event/fragment_order_status.html
-#: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
-#: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
-msgid "Canceled"
-msgstr "已取消"
-
-#: pretix/base/models/memberships.py
-#: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
-msgid "Membership type"
-msgstr "會員資格類型"
-
 #: pretix/base/models/orders.py
 msgid "pending"
 msgstr "等待"
@@ -6816,7 +6821,7 @@ msgstr "此類別不屬於此商品。"
 msgid "It is currently not possible to create vouchers for add-on products."
 msgstr "目前無法為附加商品建立優惠券。"
 
-#: pretix/base/models/vouchers.py
+#: pretix/base/models/vouchers.py pretix/control/forms/vouchers.py
 msgid ""
 "You need to select a specific product or quota if this voucher should "
 "reserve tickets."
@@ -6835,7 +6840,7 @@ msgid ""
 "usages."
 msgstr "最大使用次數，不得低於最小使用次數。"
 
-#: pretix/base/models/vouchers.py
+#: pretix/base/models/vouchers.py pretix/control/forms/vouchers.py
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
 msgstr "如果希望此憑證阻止額度，則需要選擇特定日期。"
@@ -7325,6 +7330,15 @@ msgstr "活動主辦方不接受此禮物卡。"
 #: pretix/base/payment.py
 msgid "This gift card was used in the meantime. Please try again."
 msgstr "此禮物卡是在用餐時間使用，請再試一次。"
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid ""
+#| "This payment provider does not exist or the respective plugin is disabled."
+msgid ""
+"This payment provider exists for historical purposes only and is no longer "
+"usable."
+msgstr "此支付供應商不存在或相應的外掛程式被禁用。"
 
 #: pretix/base/pdf.py
 msgid "Ticket code (barcode content)"
@@ -7931,11 +7945,6 @@ msgid ""
 "Includes the ability to give someone (including oneself) additional "
 "permissions."
 msgstr ""
-
-#: pretix/base/permissions.py pretix/control/navigation.py
-#: pretix/control/templates/pretixcontrol/organizers/customers.html
-msgid "Customers"
-msgstr "客戶"
 
 #: pretix/base/permissions.py pretix/control/navigation.py
 msgid "Devices"
@@ -9137,6 +9146,16 @@ msgstr "所選國家/地區被你的稅收規則封鎖。"
 msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
+msgstr "你無法更改已用於發行禮品卡的順序的價格。"
+
+#: pretix/base/services/orders.py
+#, fuzzy
+#| msgid ""
+#| "You cannot change the price of a position that has been used to issue a "
+#| "gift card."
+msgid ""
+"You cannot change the ticket secret of a position that has been used to "
+"issue a gift card."
 msgstr "你無法更改已用於發行禮品卡的順序的價格。"
 
 #: pretix/base/services/orders.py
@@ -10856,13 +10875,13 @@ msgstr "聯絡地址"
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr "我們將公開顯示此資訊，以便出席者與你聯繫。"
 
-#: pretix/base/settings.py pretix/control/forms/event.py
+#: pretix/base/settings.py
 #, fuzzy
 #| msgid "Contact:"
 msgid "Contact URL"
 msgstr "聯絡："
 
-#: pretix/base/settings.py pretix/control/forms/event.py
+#: pretix/base/settings.py
 msgid ""
 "If you set this, the footer contact link will point here instead of using "
 "the email address above. Please note that you still need to add a contact "
@@ -12757,6 +12776,7 @@ msgstr "您之所以收到這封電子郵件，是因為您訂購了<strong>%(ev
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html
 #: pretix/control/templates/pretixcontrol/organizers/customers.html
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html
@@ -14047,7 +14067,7 @@ msgstr "所有訂單"
 msgid "Valid orders"
 msgstr "有效訂單"
 
-#: pretix/control/forms/filter.py
+#: pretix/control/forms/filter.py pretix/plugins/sendmail/forms.py
 msgid "Paid (or canceled with paid fee)"
 msgstr "已付費（或已付費取消）"
 
@@ -14071,7 +14091,7 @@ msgstr "待處理或已付款"
 msgid "Cancellations"
 msgstr "取消"
 
-#: pretix/control/forms/filter.py
+#: pretix/control/forms/filter.py pretix/plugins/sendmail/forms.py
 msgid "Canceled (fully)"
 msgstr "取消（完全）"
 
@@ -14249,6 +14269,22 @@ msgid "Inactive"
 msgstr "非活躍"
 
 #: pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/index.html
+msgid "Presale not started"
+msgstr "預售尚未開始"
+
+#: pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/index.html
+msgid "Presale over"
+msgstr "預售結束"
+
+#: pretix/control/forms/filter.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html
 msgid "Date from"
 msgstr "從日期"
@@ -14284,13 +14320,6 @@ msgstr "活躍"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 msgid "not yet activated"
 msgstr "尚未啟動"
-
-#: pretix/control/forms/filter.py
-#: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
-#: pretix/presale/views/customer.py
-msgid "Memberships"
-msgstr "會員資格"
 
 #: pretix/control/forms/filter.py
 msgid "Has no memberships"
@@ -14520,6 +14549,42 @@ msgstr "撤銷設備"
 #| msgid "Require email addresses per ticket"
 msgid "Search email address or subject"
 msgstr "每張票都需要電子郵件位址"
+
+#: pretix/control/forms/filter.py
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/control/templates/pretixcontrol/orders/refunds.html
+msgid "Source"
+msgstr "來源"
+
+#: pretix/control/forms/filter.py
+#, fuzzy
+#| msgid "All vouchers"
+msgid "All sources"
+msgstr "所有優惠券"
+
+#: pretix/control/forms/filter.py
+msgid "Team actions"
+msgstr "團隊行動"
+
+#: pretix/control/forms/filter.py
+msgid "Customer actions"
+msgstr "客戶行動"
+
+#: pretix/control/forms/filter.py
+#, fuzzy
+#| msgid "Device status"
+msgid "Device actions"
+msgstr "設備狀態"
+
+#: pretix/control/forms/filter.py
+#, fuzzy
+#| msgid "Order details"
+msgid "User email"
+msgstr "訂單詳情"
+
+#: pretix/control/forms/filter.py pretix/control/navigation.py
+msgid "All users"
+msgstr "所有使用者"
 
 #: pretix/control/forms/global_settings.py
 msgid "Additional footer text"
@@ -15823,6 +15888,7 @@ msgstr "可選擇的"
 #: pretix/control/forms/renderers.py
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 msgctxt "form_bulk"
 msgid "change"
 msgstr "更改"
@@ -15935,6 +16001,64 @@ msgid ""
 "The voucher only matches hidden products but you have not selected that it "
 "should show them."
 msgstr "憑證僅符合隱藏的產品，但你尚未選擇，因此應該顯示。"
+
+#: pretix/control/forms/vouchers.py
+#, python-format
+msgid ""
+"You cannot reduce the maximum number of redemptions to %(max_usages)s, "
+"because at least one of the selected vouchers has already been redeemed "
+"%(max_redeemed)s times."
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
+#, fuzzy
+#| msgid ""
+#| "You cannot create a voucher that blocks quota as the selected product or "
+#| "quota is currently sold out or completely reserved."
+msgid ""
+"You cannot create a voucher that allows selection of a quota but has no date "
+"selected."
+msgstr ""
+"你無法建立阻擋額度的憑證，因為所選商品或額度在當前，已經售罄，或完全保留。"
+
+#: pretix/control/forms/vouchers.py
+#, fuzzy
+#| msgid "The selected product does not allow to select a seat."
+msgid "The selected quota does not match the selected subevent."
+msgstr "所選商品不允許選擇座位。"
+
+#: pretix/control/forms/vouchers.py
+#, fuzzy
+#| msgid ""
+#| "There is not enough quota available on quota \"{}\" to perform the "
+#| "operation."
+msgid "There is no sufficient quota available to perform this change."
+msgstr "配額“{}”上沒有足夠的可用配額來執行該操作。"
+
+#: pretix/control/forms/vouchers.py
+msgid ""
+"Changing the maximum number of usages in bulk is not supported if any of the "
+"selected vouchers is assigned a seat."
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
+msgctxt "subevent"
+msgid ""
+"Changing the date in bulk is not supported if any of the selected vouchers "
+"is assigned a seat."
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
+msgid ""
+"Changing the product to a quota is not supported if any of the selected "
+"vouchers is assigned a seat."
+msgstr ""
+
+#: pretix/control/forms/vouchers.py
+msgid ""
+"This change cannot be completed because not all assigned seats of the "
+"vouchers are still available"
+msgstr ""
 
 #: pretix/control/forms/vouchers.py
 msgid "Codes"
@@ -17716,10 +17840,6 @@ msgid "Account history"
 msgstr "帳戶歷史"
 
 #: pretix/control/navigation.py
-msgid "All users"
-msgstr "所有使用者"
-
-#: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html
 msgid "Admin sessions"
 msgstr "系統管理員時域"
@@ -17997,6 +18117,7 @@ msgstr "設定新密碼"
 #: pretix/control/templates/pretixcontrol/users/create.html
 #: pretix/control/templates/pretixcontrol/users/form.html
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 #: pretix/control/templates/pretixcontrol/waitinglist/edit.html
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html
@@ -18429,8 +18550,8 @@ msgstr "刪除"
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
-#: pretix/control/templates/pretixcontrol/event/logs.html
 #: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/fragment_log_filter_form.html
 #: pretix/control/templates/pretixcontrol/items/question.html
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 #: pretix/control/templates/pretixcontrol/orders/index.html
@@ -18441,7 +18562,6 @@ msgstr "刪除"
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
 #: pretix/control/templates/pretixcontrol/organizers/index.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html
 #: pretix/control/templates/pretixcontrol/organizers/teams.html
@@ -18576,6 +18696,7 @@ msgstr "時間標記"
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 #: pretix/control/templates/pretixcontrol/subevents/index.html
+#: pretix/control/templates/pretixcontrol/vouchers/index.html
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "Select all results on other pages as well"
 msgstr "同時選擇其他頁面上的所有結果"
@@ -19267,6 +19388,32 @@ msgid "We found an SPF record on your domain that includes this system. Great!"
 msgstr "我們在你的網域上發現了包含此系統的SPF記錄。太好了！"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#, fuzzy
+#| msgid "Your new SPF record could look like this:"
+msgid "Your new DKIM record should be set up as a CNAME record like this:"
+msgstr "你的新 SPF 記錄可能如下所示："
+
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#, fuzzy
+#| msgid ""
+#| "We found an SPF record on your domain that includes this system. Great!"
+msgid "We found a DKIM record on your domain for this system. Great!"
+msgstr "我們在你的網域上發現了包含此系統的SPF記錄。太好了！"
+
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#, fuzzy
+#| msgid "Your new SPF record could look like this:"
+msgid "Your new DMARC record could look like this:"
+msgstr "你的新 SPF 記錄可能如下所示："
+
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#, fuzzy
+#| msgid ""
+#| "We found an SPF record on your domain that includes this system. Great!"
+msgid "We found a DMARC record on your domain for this system. Great!"
+msgstr "我們在你的網域上發現了包含此系統的SPF記錄。太好了！"
+
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
 msgid "Verification"
 msgstr "驗證"
 
@@ -19447,6 +19594,98 @@ msgstr ""
 "只有當事件不包含任何不可刪除的數據（例如未在測試模式下執行的訂單）時，你才能"
 "完全刪除事件。"
 
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_logs.html
+#: pretix/control/templates/pretixcontrol/event/logs.html
+#: pretix/control/templates/pretixcontrol/includes/logs.html
+#: pretix/control/templates/pretixcontrol/organizers/device_logs.html
+#: pretix/control/templates/pretixcontrol/organizers/logs.html
+msgid "Personal data was cleared from this log entry."
+msgstr "個人數據已從此日誌條目中清除。"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_logs.html
+#: pretix/control/templates/pretixcontrol/event/logs.html
+#: pretix/control/templates/pretixcontrol/includes/logs.html
+#: pretix/control/templates/pretixcontrol/organizers/logs.html
+msgid "This change was performed by a pretix administrator."
+msgstr "此更改由 pretix 管理員執行。"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_logs.html
+#: pretix/control/templates/pretixcontrol/event/logs.html
+#: pretix/control/templates/pretixcontrol/includes/logs.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/control/templates/pretixcontrol/organizers/device_logs.html
+#: pretix/control/templates/pretixcontrol/organizers/logs.html
+#: pretix/control/templates/pretixcontrol/search/payments.html
+msgid "Inspect"
+msgstr "檢視"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"This event contains <strong>overpaid orders</strong>, for example due to "
+"duplicate payment attempts. You should review the cases and consider "
+"refunding the overpaid amount to the user."
+msgstr ""
+"此事件包含<strong>多付的訂單</strong>，例如由於重複付款嘗試。你應該查看這些案"
+"例，並考慮將多付的金額退還給使用者。"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show overpaid orders"
+msgstr "顯示超付的訂單"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"This event contains <strong>pending refunds</strong> that you should take "
+"care of."
+msgstr "此事件包含你應處理的<strong>待處理退款</strong>。"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show pending refunds"
+msgstr "顯示待處理的退款"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"This event contains <strong>requested cancellations</strong> that you should "
+"take care of."
+msgstr "此事件包含你應處理的請求<strong>取消</strong>。"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show orders requesting cancellation"
+msgstr "顯示要求取消的訂單"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"This event contains <strong>pending approvals</strong> that you should take "
+"care of."
+msgstr "此事件包含你應處理的<strong>待處理審批</strong>。"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show orders pending approval"
+msgstr "顯示待批准訂單"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"This event contains <strong>fully paid orders</strong> that are not marked "
+"as paid, probably because no quota was left at the time their payment "
+"arrived. You should review the cases and consider either refunding the "
+"customer or creating more space."
+msgstr ""
+"此事件包含未標記為已付款的<strong>已全額付款訂單</strong>，可能是因為在付款到"
+"達時沒有剩餘配額。你應該查看案例並考慮向客戶退款或創建更多空間。"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show affected orders"
+msgstr "顯示受影響的訂單"
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid ""
+"Orders in this event could not be <strong>synced to an external system</"
+"strong> as configured."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/event/dashboard_partial_warnings.html
+msgid "Show sync problems"
+msgstr ""
+
 #: pretix/control/templates/pretixcontrol/event/delete.html
 msgid ""
 "This operation will destroy your event including all configuration, "
@@ -19564,73 +19803,6 @@ msgstr "商店URL:"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "Create QR code"
 msgstr "建立二維碼"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"This event contains <strong>overpaid orders</strong>, for example due to "
-"duplicate payment attempts. You should review the cases and consider "
-"refunding the overpaid amount to the user."
-msgstr ""
-"此事件包含<strong>多付的訂單</strong>，例如由於重複付款嘗試。你應該查看這些案"
-"例，並考慮將多付的金額退還給使用者。"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show overpaid orders"
-msgstr "顯示超付的訂單"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"This event contains <strong>pending refunds</strong> that you should take "
-"care of."
-msgstr "此事件包含你應處理的<strong>待處理退款</strong>。"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show pending refunds"
-msgstr "顯示待處理的退款"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"This event contains <strong>requested cancellations</strong> that you should "
-"take care of."
-msgstr "此事件包含你應處理的請求<strong>取消</strong>。"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show orders requesting cancellation"
-msgstr "顯示要求取消的訂單"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"This event contains <strong>pending approvals</strong> that you should take "
-"care of."
-msgstr "此事件包含你應處理的<strong>待處理審批</strong>。"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show orders pending approval"
-msgstr "顯示待批准訂單"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"This event contains <strong>fully paid orders</strong> that are not marked "
-"as paid, probably because no quota was left at the time their payment "
-"arrived. You should review the cases and consider either refunding the "
-"customer or creating more space."
-msgstr ""
-"此事件包含未標記為已付款的<strong>已全額付款訂單</strong>，可能是因為在付款到"
-"達時沒有剩餘配額。你應該查看案例並考慮向客戶退款或創建更多空間。"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show affected orders"
-msgstr "顯示受影響的訂單"
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid ""
-"Orders in this event could not be <strong>synced to an external system</"
-"strong> as configured."
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/event/index.html
-msgid "Show sync problems"
-msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/index.html
 #: pretix/control/templates/pretixcontrol/order/index.html
@@ -19824,44 +19996,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/live.html
 msgid "Enable test mode"
 msgstr "啟用測試模式"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
-msgid "All actions"
-msgstr "所有行動"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-msgid "Team actions"
-msgstr "團隊行動"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-msgid "Customer actions"
-msgstr "客戶行動"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-#: pretix/control/templates/pretixcontrol/event/logs_embed.html
-#: pretix/control/templates/pretixcontrol/includes/logs.html
-#: pretix/control/templates/pretixcontrol/organizers/device_logs.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
-msgid "Personal data was cleared from this log entry."
-msgstr "個人數據已從此日誌條目中清除。"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-#: pretix/control/templates/pretixcontrol/event/logs_embed.html
-#: pretix/control/templates/pretixcontrol/includes/logs.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
-msgid "This change was performed by a pretix administrator."
-msgstr "此更改由 pretix 管理員執行。"
-
-#: pretix/control/templates/pretixcontrol/event/logs.html
-#: pretix/control/templates/pretixcontrol/event/logs_embed.html
-#: pretix/control/templates/pretixcontrol/includes/logs.html
-#: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/templates/pretixcontrol/organizers/device_logs.html
-#: pretix/control/templates/pretixcontrol/organizers/logs.html
-#: pretix/control/templates/pretixcontrol/search/payments.html
-msgid "Inspect"
-msgstr "檢視"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html
@@ -20839,6 +20973,20 @@ msgstr "更多額度"
 
 #: pretix/control/templates/pretixcontrol/events/index.html
 #: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/views/dashboards.py
+msgid "Shop disabled"
+msgstr "禁用商店"
+
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/detail.html
+#: pretix/control/templates/pretixcontrol/subevents/index.html
+#: pretix/control/views/dashboards.py
+msgid "On sale"
+msgstr "在售"
+
+#: pretix/control/templates/pretixcontrol/events/index.html
+#: pretix/control/templates/pretixcontrol/organizers/detail.html
 msgid "Open event dashboard"
 msgstr "開啟事件儀錶板"
 
@@ -20846,6 +20994,12 @@ msgstr "開啟事件儀錶板"
 msgctxt "typography"
 msgid "The quick brown fox jumps over the lazy dog."
 msgstr "敏捷的棕色狐狸從懶惰的狗身上跳過。"
+
+#: pretix/control/templates/pretixcontrol/fragment_log_filter_form.html
+#, fuzzy
+#| msgid "Specific seat"
+msgid "Specific object selected"
+msgstr "特定座位"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html
@@ -21940,6 +22094,7 @@ msgstr "更改多項日期"
 #: pretix/control/templates/pretixcontrol/items/quota_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #, python-format
 msgid "%(number)s selected"
 msgstr "所選%(number)s"
@@ -22034,6 +22189,7 @@ msgstr "刪除所選取內容"
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/subevents/index.html
+#: pretix/control/templates/pretixcontrol/vouchers/index.html
 msgid "Edit selected"
 msgstr "編輯所選"
 
@@ -22347,6 +22503,13 @@ msgid ""
 "The sale of this position created a membership. Changing the validity of the "
 "ticket here will not affect the membership. Memberships can be managed in "
 "the customer account."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/order/change.html
+#: pretix/control/views/orders.py
+msgid ""
+"Ticket secrets of order positions that have been used to issue a gift card "
+"can not be changed. Only the link will be changed in this case."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/change.html
@@ -22792,11 +22955,6 @@ msgstr "確認已付款"
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Create a refund"
 msgstr "建立退款"
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/templates/pretixcontrol/orders/refunds.html
-msgid "Source"
-msgstr "來源"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Cancel transfer"
@@ -23943,6 +24101,7 @@ msgstr "更改多項設備"
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "Advanced settings"
 msgstr "進階設定"
@@ -26293,11 +26452,13 @@ msgid "Copy codes"
 msgstr "複製代碼"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "Voucher details"
 msgstr "優惠券詳情"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid ""
 "If you choose \"any product\" for a specific quota and choose to reserve "
@@ -26306,6 +26467,12 @@ msgid ""
 msgstr ""
 "如果你為特定配額選擇「任何產品」並選擇為上述此優惠券保留配額，則如果與該產品"
 "關聯的其他配額售罄，優惠券持有人仍然可以使用該產品！"
+
+#: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
+#, fuzzy
+#| msgid "Create multiple vouchers"
+msgid "Change multiple vouchers"
+msgstr "創建多項優惠券"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
@@ -26677,8 +26844,9 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "You cannot accept the invitation for \"{}\" as you already are part of this "
-"team."
-msgstr "你不能接受“{}”的邀請，因為你已經是該團隊的一員。"
+"team. If you want to add a different user or create a new account, log out "
+"and click the invitation link again."
+msgstr ""
 
 #: pretix/control/views/auth.py
 #, python-brace-format
@@ -27339,6 +27507,60 @@ msgid ""
 "chance most of the emails will be rejected or marked as spam. You should "
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
+msgstr ""
+"我們為你嘗試使用的網域找到了一個 SPF 記錄集，但它不包括該系統的電子郵件服務"
+"器。 這意味著大多數電子郵件很可能會被拒絕或標記為垃圾郵件。 你應該更新網域的 "
+"DNS 設置以將此系統包含在 SPF 記錄中。"
+
+#: pretix/control/views/mailsetup.py
+#, fuzzy
+#| msgid ""
+#| "We could not find an SPF record set for the domain you are trying to use. "
+#| "This means that there is a very high change most of the emails will be "
+#| "rejected or marked as spam. We strongly recommend setting an SPF record "
+#| "on the domain. You can do so through the DNS settings at the provider you "
+#| "registered your domain with."
+msgid ""
+"We could not find a CNAME record pointing to our DKIM key for domain you are "
+"trying to use. This means that there is a very high change most of the "
+"emails will be rejected or marked as spam. We strongly recommend setting up "
+"DKIM through a CNAME record. You can do so through the DNS settings at the "
+"provider you registered your domain with."
+msgstr ""
+"我們找不到您嘗試使用的域名的SPF記錄集。 這意味著有很高的變化，大多數電子郵件"
+"將被拒絕或標記為垃圾郵件。 我們強烈建議在域上設定SPF記錄。 您可以透過您註冊域"
+"名的提供商的DNS設定來完成此操作。"
+
+#: pretix/control/views/mailsetup.py
+#, fuzzy
+#| msgid ""
+#| "We found an SPF record set for the domain you are trying to use, but it "
+#| "does not include this system's email server. This means that there is a "
+#| "very high chance most of the emails will be rejected or marked as spam. "
+#| "You should update the DNS settings of your domain to include this system "
+#| "in the SPF record."
+msgid ""
+"We found a CNAME record for a DKIM key, but it is not pointing to the right "
+"location. This means that there is a very high chance most of the emails "
+"will be rejected or marked as spam. You should update the DNS settings of "
+"your domain."
+msgstr ""
+"我們為你嘗試使用的網域找到了一個 SPF 記錄集，但它不包括該系統的電子郵件服務"
+"器。 這意味著大多數電子郵件很可能會被拒絕或標記為垃圾郵件。 你應該更新網域的 "
+"DNS 設置以將此系統包含在 SPF 記錄中。"
+
+#: pretix/control/views/mailsetup.py
+#, fuzzy
+#| msgid ""
+#| "We found an SPF record set for the domain you are trying to use, but it "
+#| "does not include this system's email server. This means that there is a "
+#| "very high chance most of the emails will be rejected or marked as spam. "
+#| "You should update the DNS settings of your domain to include this system "
+#| "in the SPF record."
+msgid ""
+"We did not find DMARC record for your domain. This means that there is a "
+"very high chance most of the emails will be rejected or marked as spam. You "
+"should update the DNS settings of your domain."
 msgstr ""
 "我們為你嘗試使用的網域找到了一個 SPF 記錄集，但它不包括該系統的電子郵件服務"
 "器。 這意味著大多數電子郵件很可能會被拒絕或標記為垃圾郵件。 你應該更新網域的 "
@@ -28486,6 +28708,7 @@ msgid "Macao"
 msgstr ""
 
 #: pretix/helpers/daterange.py
+#: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html
 #: pretix/presale/templates/pretixpresale/organizers/index.html
@@ -29790,11 +30013,6 @@ msgid "PayPal account"
 msgstr "PayPal帳戶"
 
 #: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-#, python-brace-format
-msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
-msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
 msgid "Click here for a tutorial on how to obtain the required keys"
 msgstr "按兩下此處獲取有關如何獲取所需金鑰的教程"
 
@@ -30482,13 +30700,23 @@ msgid "Base redirection URLs"
 msgstr "基本重定向網址"
 
 #: pretix/plugins/returnurl/views.py
+#, fuzzy
+#| msgid ""
+#| "Redirection will only be allowed to URLs that start with one of these "
+#| "prefixes. Enter one or more allowed URL prefix per line. URL prefixes "
+#| "must include a slash after the hostname."
 msgid ""
 "Redirection will only be allowed to URLs that start with one of these "
-"prefixes. Enter one or more allowed URL prefix per line. URL prefixes must "
-"include a slash after the hostname."
+"prefixes. Enter one allowed URL prefix per line. URL prefixes must include a "
+"slash after the hostname."
 msgstr ""
 "僅允許重新導向到以其中一個前綴開頭的 URL。每行輸入一個或多個允許的 URL 前"
 "綴。 URL 前綴必須在主機名稱後麵包含斜線。"
+
+#: pretix/plugins/returnurl/views.py
+msgid ""
+"All values must be URLs that include at last one slash after the hostname."
+msgstr ""
 
 #: pretix/plugins/sendmail/apps.py
 msgid "Send out emails to all your customers or specific groups of customers."
@@ -35298,6 +35526,20 @@ msgstr "寫入權限"
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr "柯索沃"
+
+#~ msgid "All actions"
+#~ msgstr "所有行動"
+
+#, python-brace-format
+#~ msgid ""
+#~ "You cannot accept the invitation for \"{}\" as you already are part of "
+#~ "this team."
+#~ msgstr "你不能接受“{}”的邀請，因為你已經是該團隊的一員。"
+
+#, python-brace-format
+#~ msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
+#~ msgstr ""
+#~ "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
 #~ msgid "Account invitation"
 #~ msgstr "帳戶邀請"

@@ -42,7 +42,9 @@ from django.utils.functional import cached_property, lazy
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from pretix.api.serializers import SalesChannelMigrationMixin
+from pretix.api.serializers import (
+    CompatDecimalField, SalesChannelMigrationMixin,
+)
 from pretix.api.serializers.event import MetaDataField
 from pretix.api.serializers.fields import UploadedFileField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
@@ -276,10 +278,10 @@ class ItemAddOnSerializer(serializers.ModelSerializer):
         return value
 
 
-class ItemTaxRateField(serializers.Field):
+class ItemTaxRateField(CompatDecimalField):
     def to_representation(self, i):
         if i.tax_rule:
-            return str(Decimal(i.tax_rule.rate))
+            return super().to_representation(Decimal(i.tax_rule.rate))
         else:
             return str(Decimal('0.00'))
 
@@ -289,7 +291,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     bundles = InlineItemBundleSerializer(many=True, required=False)
     variations = InlineItemVariationSerializer(many=True, required=False)
     program_times = InlineItemProgramTimeSerializer(many=True, required=False)
-    tax_rate = ItemTaxRateField(source='*', read_only=True)
+    tax_rate = ItemTaxRateField(source='*', read_only=True, max_digits=7, decimal_places=4)
     meta_data = MetaDataField(required=False, source='*')
     picture = UploadedFileField(required=False, allow_null=True, allowed_types=(
         'image/png', 'image/jpeg', 'image/gif'

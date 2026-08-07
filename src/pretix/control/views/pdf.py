@@ -70,7 +70,6 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         if 'placeholders' in request.GET:
             return self.get_placeholders_help(request)
         resp = super().get(request, *args, **kwargs)
-        resp._csp_ignore = True
         return resp
 
     def get_placeholders_help(self, request):

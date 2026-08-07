@@ -94,6 +94,8 @@ Checkout
 Chrome
 Client-ID
 Client-Secret
+CNAME
+CNAME-Eintrag
 CODE.txt
 Community-Übersetzungen
 CONFIRM
@@ -123,6 +125,11 @@ Debug-Modus
 dekodi
 Desktop-Apps
 Di
+DKIM
+DKIM-Eintrag
+DKIM-Schlüssel
+DMARC
+DMARC-Eintrag
 Do
 Downloadformat
 Dr

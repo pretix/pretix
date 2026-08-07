@@ -959,7 +959,7 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=required,
                     help_text=help_text,
                     initial=_initial,
-                    widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
+                    widget=TimePickerWidget(without_seconds=True),
                 )
             elif q.type == Question.TYPE_DATETIME:
                 if not help_text:
@@ -1115,6 +1115,13 @@ class BaseQuestionsForm(forms.Form):
             answer = d.get('question_%d' % q.pk)
             if q.dependency_question_id and not question_is_visible(q.dependency_question_id, q.dependency_values) and answer is not None:
                 d['question_%d' % q.pk] = None
+
+        # Strip False answers to required yes/no questions even if all_optional is set, as our data model assumes that
+        # required yes/no questions can only be answered with yes
+        for q in question_cache.values():
+            if q.required and q.type == Question.TYPE_BOOLEAN:
+                if 'question_%d' % q.pk in d and d['question_%d' % q.pk] is False:
+                    d['question_%d' % q.pk] = None
 
         return d
 

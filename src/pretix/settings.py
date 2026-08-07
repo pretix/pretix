@@ -262,6 +262,9 @@ MAIL_FROM_NOTIFICATIONS = config.get('mail', 'from_notifications', fallback=MAIL
 MAIL_FROM_ORGANIZERS = config.get('mail', 'from_organizers', fallback=MAIL_FROM)
 MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED = config.getboolean('mail', 'custom_sender_verification_required', fallback=True)
 MAIL_CUSTOM_SENDER_SPF_STRING = config.get('mail', 'custom_sender_spf_string', fallback='')
+MAIL_CUSTOM_SENDER_DKIM_SELECTOR = config.get('mail', 'custom_sender_dkim_selector', fallback='')
+MAIL_CUSTOM_SENDER_DKIM_CNAME = config.get('mail', 'custom_sender_dkim_cname', fallback='')
+MAIL_CUSTOM_SENDER_DMARC_REQUIRED = config.getboolean('mail', 'custom_sender_dmarc_required', fallback=False)
 MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = config.getboolean('mail', 'custom_smtp_allow_private_networks', fallback=DEBUG)
 EMAIL_HOST = config.get('mail', 'host', fallback='localhost')
 EMAIL_PORT = config.getint('mail', 'port', fallback=25)
@@ -509,6 +512,7 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'pretix.helpers.logs.RequestIdMiddleware',
+    'pretix.base.middleware.BaseLocaleMiddleware',
     'pretix.api.middleware.IdempotencyMiddleware',
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
     'django_querytagger.middleware.SetTagMiddleware',  # after MultiDomainMiddleware for correct url resolving

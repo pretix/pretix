@@ -25,9 +25,9 @@ const ariaLabelledby = computed(() => `${store.htmlId}-item-label-${props.itemId
 
 const displayPrice = computed(() => {
 	if (store.displayNetPrices) {
-		return floatformat(parseFloat(props.price.net), 2)
+		return floatformat(props.price.net, store.currency_places)
 	}
-	return floatformat(parseFloat(props.price.gross), 2)
+	return floatformat(props.price.gross, store.currency_places)
 })
 
 const displayPriceNonlocalized = computed(() => {
@@ -40,15 +40,15 @@ const displayPriceNonlocalized = computed(() => {
 const suggestedPriceNonlocalized = computed(() => {
 	const price = props.suggestedPrice ?? props.price
 	if (store.displayNetPrices) {
-		return parseFloat(price.net).toFixed(2)
+		return parseFloat(price.net).toFixed(store.currency_places)
 	}
-	return parseFloat(price.gross).toFixed(2)
+	return parseFloat(price.gross).toFixed(store.currency_places)
 })
 
 // TODO BAD
 const originalLine = computed(() => {
 	if (!props.originalPrice) return ''
-	return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${floatformat(parseFloat(props.originalPrice), 2)}`
+	return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${floatformat(props.originalPrice, store.currency_places)}`
 })
 
 // TODO BAD

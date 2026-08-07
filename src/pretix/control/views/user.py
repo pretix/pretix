@@ -46,6 +46,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import BadRequest, PermissionDenied
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -80,6 +81,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.views.auth import get_u2f_appid, get_webauthn_rp_id
 from pretix.helpers.http import redirect_to_url
+from pretix.helpers.ratelimit import rate_limit, rate_limit_reset
 from pretix.helpers.security import session_reauth
 from pretix.helpers.u2f import websafe_encode
 
@@ -94,6 +96,20 @@ class RecentAuthenticationRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
         tdelta = time.time() - request.session.get('pretix_auth_login_time', 0)
         if tdelta > self.max_time:
+
+            if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                # It's not useful to return a 302 redirect on a XMLHttpRequest request,  because
+                # the XMLHttpRequest is unable to detect redirects.
+                return HttpResponse(
+                    "Authentication required",
+                    status=401,
+                    headers={
+                        # Appending ?next= is handled by client, because it should be the top-level context url,
+                        # not the URL called in the background
+                        "X-Login-Url": reverse('control:user.reauth')
+                    }
+                )
+
             return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
         return super().dispatch(request, *args, **kwargs)
 
@@ -849,6 +865,7 @@ class UserPasswordChangeView(FormView):
             msgs = []
             msgs.append(_('Your password has been changed.'))
             self.request.user.send_security_notice(msgs)
+            rate_limit_reset("pwreset", self.request.user.pk)
 
             self.request.user.log_action('pretix.user.settings.changed', user=self.request.user, data={'new_pw': True})
 
@@ -879,6 +896,7 @@ class UserEmailChangeView(RecentAuthenticationRequiredMixin, FormView):
 
         return {
             **super().get_form_kwargs(),
+            "request": self.request,
             "user": self.request.user,
         }
 
@@ -906,6 +924,10 @@ class UserEmailVerifyView(View):
     def post(self, request, *args, **kwargs):
         if self.request.user.is_verified:
             messages.success(self.request, _('Your email address was already verified.'))
+            return redirect(reverse('control:user.settings', kwargs={}))
+
+        if rate_limit("emailverify", self.request.user.pk, max_num=2, expire_time=300):
+            messages.error(self.request, _("For security reasons, please wait 5 minutes before you try again."))
             return redirect(reverse('control:user.settings', kwargs={}))
 
         self.request.user.send_confirmation_code(
