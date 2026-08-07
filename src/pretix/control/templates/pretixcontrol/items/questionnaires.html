@@ -18,9 +18,12 @@
     </h1>
     <p>
         {% blocktrans trimmed %}
-            Questions allow your attendees to fill in additional data about their ticket. If you provide food, one
+            Questionaires allow your attendees to fill in additional data about their ticket. If you provide food, one
             example might be to ask your users about dietary requirements.
         {% endblocktrans %}
+    </p>
+    <p>
+        TODO: add more specific explanation of the questionnaire concept.
     </p>
 
     {{ request.event.settings.locales|json_script:"event_locales" }}

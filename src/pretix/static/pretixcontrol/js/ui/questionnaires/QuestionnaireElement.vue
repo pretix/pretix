@@ -66,12 +66,12 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 	<div class="question-edit-buttons"><div class="btn-group">
 		<DragHandle tag="button" class="btn btn-default"><i class="fa fa-arrows"></i></DragHandle>
 		<button class="btn btn-default" @click="dlgEditor.show()"><i class="fa fa-edit"></i></button>
-		<button class="btn btn-default" @click="toggleItem()" v-if="selected_product"><i :class="`fa fa-eye${isHidden ? '-slash':''}`"></i></button>
 	</div></div>
 
   <details class="panel panel-default " :open="!!isEditable"
-    :class="{ 'hidden-question': isHidden }">
+    :class="{ 'hidden-questionnaire': isHidden }">
     <summary class="panel-heading">
+			<input type="checkbox" @click="toggleItem()" v-if="selected_product" :checked="!isHidden">
 			{{ props.questionnaire.internal_name }}
     </summary>
     <div class="panel-body" v-if="!isHidden">

@@ -72,16 +72,20 @@ export default {
 </script>
 
 <style>
-.hidden-question { opacity: 0.3; }
-.hidden-question label { text-decoration: line-through; }
+.hidden-questionnaire { opacity: 0.3; }
 
-.question-editor { margin-right: 180px; }
+.questionnaires-list { margin-right: 180px; }
 .question-edit-buttons { float:right; }
 .question-edit-buttons div { position: absolute; margin-left: 10px; min-width: 100px; }
 .question-edit-buttons button {  }
 .form-group { margin-bottom: 30px }
 
-.filter-row { background: #fffee6; border: 1px solid #ecead5; padding: 10px; }
+.questionnaires-editor.product-selected .panel .panel-heading {}
+
+.questionnaires-editor.product-selected .panel { margin-bottom: 0; border: 0 none; border-bottom: 1px solid #ddd; box-shadow: none; border-radius: 0; }
+.questionnaires-editor.product-selected .panel .panel-heading { font-style: italic; background: white; border: 0 none; }
+
+.filter-row { background: #f8e6ff; border: 1px solid #e3cbed; padding: 10px; }
 
 .debuginfo { font-size: 70%; background: rgba(200, 200, 200, 0.5); }
 .dependency-info { position: absolute;  }
@@ -90,49 +94,53 @@ export default {
 .category-header { margin: 8px 0 -5px 0; font-weight: bold; color: #737373; }
 </style>
 <template>
-	<p class="filter-row">
-		Order questionnaires
-	</p>
-	<div class="question-editor">
-		<SlickList axis="y" v-model:list="order_questionnaires" useDragHandle appendTo="#orderQuestionnaireListParent" id="orderQuestionnaireListParent">
-			<SlickItem v-for="(questionnaire, index) in order_questionnaires" :key="questionnaire.id || questionnaire._new_id" :index="index">
-        <QuestionnaireElement
-          :questionnaire="questionnaire"
-          :datafields="datafields"
-          :grouped_items="null"
-          :selected_product="null" />
-			</SlickItem>
-		</SlickList>
+	<div class="questionnaires-editor">
+		<p class="filter-row">
+			Order questionnaires
+		</p>
+		<div class="questionnaires-list">
+			<SlickList axis="y" v-model:list="order_questionnaires" useDragHandle appendTo="#orderQuestionnaireListParent" id="orderQuestionnaireListParent">
+				<SlickItem v-for="(questionnaire, index) in order_questionnaires" :key="questionnaire.id || questionnaire._new_id" :index="index">
+					<QuestionnaireElement
+						:questionnaire="questionnaire"
+						:datafields="datafields"
+						:grouped_items="null"
+						:selected_product="null" />
+				</SlickItem>
+			</SlickList>
+		</div>
+		<p>
+			<button class="btn btn-default" @click="addOrderQuestionnaire()"><i class="fa fa-plus"></i> Neuen Fragebogen erstellen</button>
+			<button class="btn btn-default" @click="saveData()"><i class="fa fa-save"></i> Speichern</button>
+		</p>
 	</div>
-  <p>
-		<button class="btn btn-default" @click="addOrderQuestionnaire()"><i class="fa fa-plus"></i> Neuen Fragebogen erstellen</button>
-		<button class="btn btn-default" @click="saveData()"><i class="fa fa-save"></i> Speichern</button>
-  </p>
 
-	<p class="filter-row">
-		Questionnaires for product:
-		<select v-model="selected_product">
-			<option value="">(all)</option>
-			<optgroup v-for="[category, items] in grouped_items" :label="category.internal_name || i18n_any(category.name)">
-				<option v-for="item in items" :value="item.id">
-					{{ item.internal_name || i18n_any(item.name) }}
-				</option>
-			</optgroup>
-		</select>
-	</p>
-	<div class="question-editor">
-		<SlickList axis="y" v-model:list="position_questionnaires" useDragHandle appendTo="#questionnaireListParent" id="questionnaireListParent">
-			<SlickItem v-for="(questionnaire, index) in position_questionnaires" :key="questionnaire.id || questionnaire._new_id" :index="index">
-        <QuestionnaireElement
-          :questionnaire="questionnaire"
-          :datafields="datafields"
-          :grouped_items="grouped_items"
-          :selected_product="selected_product" />
-			</SlickItem>
-		</SlickList>
+	<div :class="`questionnaires-editor ${selected_product ? 'product-selected':''}`">
+		<p class="filter-row">
+			Questionnaires for product:
+			<select v-model="selected_product">
+				<option value="">(all)</option>
+				<optgroup v-for="[category, items] in grouped_items" :label="category.internal_name || i18n_any(category.name)">
+					<option v-for="item in items" :value="item.id">
+						{{ item.internal_name || i18n_any(item.name) }}
+					</option>
+				</optgroup>
+			</select>
+		</p>
+		<div class="questionnaires-list">
+			<SlickList axis="y" v-model:list="position_questionnaires" useDragHandle appendTo="#questionnaireListParent" id="questionnaireListParent">
+				<SlickItem v-for="(questionnaire, index) in position_questionnaires" :key="questionnaire.id || questionnaire._new_id" :index="index">
+					<QuestionnaireElement
+						:questionnaire="questionnaire"
+						:datafields="datafields"
+						:grouped_items="grouped_items"
+						:selected_product="selected_product" />
+				</SlickItem>
+			</SlickList>
+		</div>
+		<p>
+			<button class="btn btn-default" @click="addPositionQuestionnaire()"><i class="fa fa-plus"></i> Neuen Fragebogen erstellen</button>
+			<button class="btn btn-default" @click="saveData()"><i class="fa fa-save"></i> Speichern</button>
+		</p>
 	</div>
-  <p>
-		<button class="btn btn-default" @click="addPositionQuestionnaire()"><i class="fa fa-plus"></i> Neuen Fragebogen erstellen</button>
-		<button class="btn btn-default" @click="saveData()"><i class="fa fa-save"></i> Speichern</button>
-  </p>
 </template>

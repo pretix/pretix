@@ -57,6 +57,20 @@ class BaseQuestionsViewMixin:
         return {}
 
     @cached_property
+    def order_questions_form(self):
+        kwargs = {}  # self.question_form_kwargs(cr)
+        form = self.form_class(event=self.request.event,
+                               prefix='order',
+                               request=self.request,
+                               cartpos=None,
+                               orderpos=None,
+                               all_optional=self.all_optional,
+                               data=(self.request.POST if self.request.method == 'POST' else None),
+                               files=(self.request.FILES if self.request.method == 'POST' else None),
+                               **kwargs)
+        return form
+
+    @cached_property
     def forms(self):
         """
         A list of forms with one form for each cart position that has questions
