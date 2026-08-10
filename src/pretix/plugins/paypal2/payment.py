@@ -55,7 +55,7 @@ from pretix.base.forms import SecretKeySettingsField
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
-from pretix.base.settings import SettingsSandbox
+from pretix.base.settings import GlobalSettingsObject, SettingsSandbox
 from pretix.helpers import OF_SELF
 from pretix.helpers.urls import mainreverse_absolute
 from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
@@ -521,8 +521,10 @@ class PaypalMethod(BasePaymentProvider):
 
     def abort_pending_payment_allowed(self, payment):
         if payment.info_data.get('create_time', False):
+            gs = GlobalSettingsObject()
+            debounce_timeout = timedelta(minutes=gs.settings.payment_paypal_abort_pending_payment_allowed_timeout)
             create_time = datetime.fromisoformat(payment.info_data['create_time'])
-            if datetime.now(tz=timezone.utc) - create_time > timedelta(minutes=30):
+            if datetime.now(tz=timezone.utc) - create_time > debounce_timeout:
                 return True
 
         if payment.info_data.get('status', None) == "APPROVED":

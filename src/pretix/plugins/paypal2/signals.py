@@ -99,6 +99,10 @@ def register_global_settings(sender, **kwargs):
                 ('sandbox', 'Sandbox'),
             ),
         )),
+        ('payment_paypal_abort_pending_payment_allowed_timeout', forms.IntegerField(
+            label=_('Debounce timeout (minutes) after which it is possible to abort a PENDING_REVIEW payment.'),
+            initial=30,
+        )),
     ])
 
 
