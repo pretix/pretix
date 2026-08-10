@@ -645,7 +645,7 @@ class PaypalMethod(BasePaymentProvider):
     def _execute_payment(self, request: HttpRequest, payment: OrderPayment):
         payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
         if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
-            # payment is already confirmed; possible return-view/webhook race-condition
+            logger.warning('payment is already confirmed; possible return-view/webhook race-condition')
             return
 
         try:

@@ -839,6 +839,11 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             )
 
             if exchange_medium_identifier:  # other fields are filled, see CheckinRPCRedeemInputSerializer.validate
+                if simulate:
+                    raise CheckInError(
+                        gettext('You cannot simulate a medium exchange.'),
+                        'error'
+                    )
                 with transaction.atomic():
                     # Do exchange and check-in atomically, i.e. both succeed or both fail
                     medium = perform_media_exchange(
@@ -1066,6 +1071,7 @@ class CheckinRPCRedeemView(views.APIView):
             legacy_url_support=False,
             exchange_medium_type=s.validated_data.get('exchange_medium_type'),
             exchange_medium_identifier=s.validated_data.get('exchange_medium_identifier'),
+            simulate=s.validated_data.get('simulate'),
         )
 
 

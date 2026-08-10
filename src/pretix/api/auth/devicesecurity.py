@@ -115,7 +115,7 @@ class PretixScanSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:event.settings'),
         ('POST', 'api-v1:upload'),
         ('POST', 'api-v1:checkinrpc.redeem'),
-        ('POST', 'api-v1:checkinrpc.annull'),
+        ('POST', 'api-v1:checkinrpc.annul'),
         ('GET', 'api-v1:checkinrpc.search'),
         ('GET', 'api-v1:reusablemedium-list'),
         ('POST', 'api-v1:reusablemedium-lookup'),
@@ -154,7 +154,7 @@ class PretixScanNoSyncNoSearchSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:event.settings'),
         ('POST', 'api-v1:upload'),
         ('POST', 'api-v1:checkinrpc.redeem'),
-        ('POST', 'api-v1:checkinrpc.annull'),
+        ('POST', 'api-v1:checkinrpc.annul'),
         ('GET', 'api-v1:checkinrpc.search'),
     )
 
@@ -191,7 +191,7 @@ class PretixScanNoSyncSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:event.settings'),
         ('POST', 'api-v1:upload'),
         ('POST', 'api-v1:checkinrpc.redeem'),
-        ('POST', 'api-v1:checkinrpc.annull'),
+        ('POST', 'api-v1:checkinrpc.annul'),
         ('GET', 'api-v1:checkinrpc.search'),
     )
 

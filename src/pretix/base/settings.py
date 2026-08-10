@@ -2930,7 +2930,7 @@ Your {event} team"""))  # noqa: W291
     },
     'mail_days_download_reminder': {
         'type': int,
-        'default': None
+        'default': None  # when this default is changed, send_download_reminders needs to change
     },
     'mail_send_download_reminder_attendee': {
         'type': bool,

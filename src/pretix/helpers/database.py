@@ -288,6 +288,15 @@ def get_deterministic_ordering(model, ordering):
     return ordering
 
 
+@contextlib.contextmanager
+def conditional_atomic(do_atomic, **kwargs):
+    if do_atomic:
+        with transaction.atomic(**kwargs):
+            yield
+    else:
+        yield
+
+
 class IgnoreOnSQLiteMixin:
     # Mixin to allow defining PostgreSQL-specific indexes that will just not be created
     # on SQLite. SQLite is supported for testing only anyways!
