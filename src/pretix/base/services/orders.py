@@ -3438,7 +3438,7 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
             }
         )
 
-    new_invoice_created = False
+    new_invoice = None
     if recreate_invoices:
         # Lock to prevent duplicate invoice creation
         order = Order.objects.select_for_update(of=OF_SELF).get(pk=order.pk)
@@ -3449,13 +3449,16 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
         if has_active_invoice and order.total != oldtotal:
             try:
                 generate_cancellation(i)
-                generate_invoice(order)
+                new_invoice = generate_invoice(order)
             except Exception as e:
                 logger.exception("Could not generate invoice.")
                 order.log_action("pretix.event.order.invoice.failed", data={
                     "exception": str(e)
                 })
-            new_invoice_created = True
+            else:
+                order.log_action('pretix.event.order.invoice.generated', data={
+                    'invoice': new_invoice.pk
+                })
 
         elif (not has_active_invoice or order.invoice_dirty) and invoice_qualified(order):
             if order.event.settings.get('invoice_generate') == 'True' or (
@@ -3465,10 +3468,9 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
                 try:
                     if has_active_invoice:
                         generate_cancellation(i)
-                    i = generate_invoice(order)
-                    new_invoice_created = True
+                    new_invoice = generate_invoice(order)
                     order.log_action('pretix.event.order.invoice.generated', data={
-                        'invoice': i.pk
+                        'invoice': new_invoice.pk
                     })
                 except Exception as e:
                     logger.exception("Could not generate invoice.")
@@ -3476,8 +3478,11 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
                         "exception": str(e)
                     })
 
+    if new_invoice and invoice_transmission_separately(new_invoice):
+        transmit_invoice.apply_async(args=(order.event_id, new_invoice.pk, False))
+
     order.create_transactions()
-    return old_fee, new_fee, fee, new_payment, new_invoice_created
+    return old_fee, new_fee, fee, new_payment, bool(new_invoice)
 
 
 @receiver(order_paid, dispatch_uid="pretixbase_order_paid_giftcards")
