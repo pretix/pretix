@@ -352,7 +352,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
                 if lp.state == OrderPayment.PAYMENT_STATE_PENDING and not pp.abort_pending_allowed:
                     ctx['can_pay'] = False
 
-            ctx['can_pay'] = ctx['can_pay'] and self.order._can_be_paid()
+            ctx['can_pay'] = ctx['can_pay'] and self.order._can_be_paid() is True
 
         elif self.order.status == Order.STATUS_PAID:
             ctx['can_pay'] = False

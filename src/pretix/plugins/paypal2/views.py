@@ -344,8 +344,6 @@ def webhook(request, *args, **kwargs):
     event_body = request.body.decode('utf-8').strip()
     event_json = json.loads(event_body)
 
-    return HttpResponse(status=500)
-
     # V1/V2 Sorting -- Start
     if 'event_type' not in event_json:
         return HttpResponse("Invalid body, no event_type given", status=400)
