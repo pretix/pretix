@@ -57,7 +57,7 @@ dependencies = [
   "django-redis==7.0.*",
   "django-scopes==2.1.*",
   "django-statici18n==2.7.*",
-  "djangorestframework==3.17.*",
+  "djangorestframework==3.18.*",
   "dnspython==2.8.*",
   "drf_ujson2==1.7.*",
   "geoip2==5.*",
