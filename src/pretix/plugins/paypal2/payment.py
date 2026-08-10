@@ -519,22 +519,6 @@ class PaypalMethod(BasePaymentProvider):
     def abort_pending_allowed(self):
         return False
 
-    def abort_pending_payment_allowed(self, payment):
-        if payment.info_data.get('create_time', False):
-            gs = GlobalSettingsObject()
-            debounce_timeout = timedelta(minutes=gs.settings.payment_paypal_abort_pending_payment_allowed_timeout)
-            create_time = datetime.fromisoformat(payment.info_data['create_time'])
-            if datetime.now(tz=timezone.utc) - create_time > debounce_timeout:
-                return True
-
-        if payment.info_data.get('status', None) == "APPROVED":
-            # PayPal has recorded the customer approval. But not further processed it.
-            # The payment state will probably change with the next webhook we will receive,
-            # but in this time we cannot allow the customer to trigger a second payment.
-            return False
-
-        return False
-
     def _create_paypal_order(self, request, payment=None, cart_total=None):
         self.init_api()
         kwargs = {}

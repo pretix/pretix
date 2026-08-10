@@ -333,16 +333,6 @@ class BasePaymentProvider:
         """
         return False
 
-    def abort_pending_payment_allowed(self, payment: OrderPayment) -> bool:
-        """
-        Whether a user can abort this specific payment.
-        The result is OR'ed with the result of ``BasePaymentProvider.abort_pending_allowed``.
-        The same other caveats apply. It is sufficient to only implement either
-        ``abort_pending_payment_allowed`` or ``abort_pending_allowed``
-
-        """
-        return False
-
     @property
     def requires_invoice_immediately(self):
         """
@@ -1029,8 +1019,7 @@ class BasePaymentProvider:
         On success, you should set ``payment.state = OrderPayment.PAYMENT_STATE_CANCELED`` (or call the super method).
         On failure, you should raise a PaymentException.
         """
-        if payment.state == OrderPayment.PAYMENT_STATE_PENDING and not (
-                self.abort_pending_allowed or self.abort_pending_payment_allowed(payment)):
+        if payment.state == OrderPayment.PAYMENT_STATE_PENDING and not self.abort_pending_allowed:
             raise PaymentException(_(
                 "This payment is already being processed and can not be canceled any more."
             ))
