@@ -333,6 +333,15 @@ class BasePaymentProvider:
         """
         return False
 
+    def abort_pending_payment_allowed(self, payment) -> bool:
+        """
+        Whether this specific payment can be aborted in pending state or not.
+        If both ``abort_pending_allowed`` and ``abort_pending_payment_allowed`` are True,
+        then the frontend button will be shown to users.
+        This returns ``True`` by default, which makes implementing this method optional.
+        """
+        return True
+
     @property
     def requires_invoice_immediately(self):
         """
@@ -1019,10 +1028,12 @@ class BasePaymentProvider:
         On success, you should set ``payment.state = OrderPayment.PAYMENT_STATE_CANCELED`` (or call the super method).
         On failure, you should raise a PaymentException.
         """
-        if payment.state == OrderPayment.PAYMENT_STATE_PENDING and not self.abort_pending_allowed:
-            raise PaymentException(_(
-                "This payment is already being processed and can not be canceled any more."
-            ))
+
+        if payment.state == OrderPayment.PAYMENT_STATE_PENDING:
+            if self.abort_pending_allowed and self.abort_pending_payment_allowed(payment):
+                raise PaymentException(_(
+                    "This payment is already being processed and can not be canceled any more."
+                ))
 
         payment.state = OrderPayment.PAYMENT_STATE_CANCELED
         payment.save(update_fields=['state'])
