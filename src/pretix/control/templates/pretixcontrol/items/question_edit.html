@@ -24,7 +24,9 @@
                 <legend>{% trans "General" %}</legend>
                 {% bootstrap_field form.question layout="control" %}
                 {% bootstrap_field form.type layout="control" %}
-                {% bootstrap_field form.items layout="control" %}
+                {% if form.items %}
+                    {% bootstrap_field form.items layout="control" %}
+                {% endif %}
                 {% bootstrap_field form.required layout="control" %}
                 <div class="alert alert-info alert-required-boolean">
                     {% blocktrans trimmed %}

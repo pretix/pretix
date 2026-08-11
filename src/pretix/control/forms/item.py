@@ -153,11 +153,15 @@ class QuestionForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['items'].queryset = self.instance.event.items.all()
-        self.fields['items'].required = True
+        if self.instance.container_type == Question.CONTAINER_TYPE_ORDERPOSITION:
+            self.fields['items'].queryset = self.instance.event.items.all()
+            self.fields['items'].required = True
+        else:
+            del self.fields['items']
         self.fields['dependency_question'].queryset = self.instance.event.questions.filter(
             type__in=(Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE),
-            ask_during_checkin=False
+            ask_during_checkin=False,
+            container_type=self.instance.container_type,
         )
         if self.instance.pk:
             self.fields['dependency_question'].queryset = self.fields['dependency_question'].queryset.exclude(

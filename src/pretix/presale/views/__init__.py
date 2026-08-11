@@ -398,7 +398,7 @@ def get_cart(request):
             request._cart_cache = CartPosition.objects.none()
         else:
             qqs = request.event.questions.all()
-            qqs = qqs.filter(ask_during_checkin=False, hidden=False)
+            qqs = qqs.filter(ask_during_checkin=False, hidden=False, container_type=Question.CONTAINER_TYPE_ORDERPOSITION)
             request._cart_cache = CartPosition.objects.filter(
                 cart_id=cart_id, event=request.event
             ).annotate(
