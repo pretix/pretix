@@ -1,6 +1,5 @@
 import enum
-from typing import Any, TypedDict
-from black.nodes import is_vararg
+from typing import TypedDict
 from i18nfield.strings import LazyI18nString
 import jsonschema
 from django.core.exceptions import ValidationError
@@ -46,7 +45,7 @@ class FieldGroup:
         remaining_fields: list["FieldGroup"],
         context: LayoutContext,
     ) -> dict:
-        raise NotImplemented()
+        raise NotImplementedError()
 
     def asdict(self):
         return {
@@ -119,7 +118,7 @@ class PredefinedFieldGroup(FieldGroup):
         remaining_fields: list["FieldGroup"],
         context: LayoutContext,
     ):
-        return {"type": "object"}
+        return {"type": "object", "properties": {"active": {"type": "boolean"}}}
 
 
 class PlaceholderFieldGroup(FieldGroup):
@@ -165,7 +164,7 @@ class PlaceholderFieldGroup(FieldGroup):
             "display": self.display.value,
             "min_entries": self.min_entries,
             "max_entries": self.max_entries,
-            "context_args": list(sorted(self.context_args))
+            "context_args": list(sorted(self.context_args)),
         }
 
     def layout_schema(
@@ -257,8 +256,9 @@ class ImageFieldGroup(PlaceholderFieldGroup):
 class PassStyle:
     identifier: str  # unique within platform
     name: str
-    # order here limits in what order users can configure field "overspilling" (if too many fields are defined, where should the rest go) -> can only go down in the list
-    # we evaluate the fields in this order, so they overspill in this order as well (fields from primary are appended to the overspilling field before fields from secondary are etc)
+    # order here limits in what order users can configure field "overspilling" (if too many fields are defined, where should the rest go)
+    #   -> can only go down in the list
+    # we evaluate the fields in this order, so they overspill in this order as well
     fieldgroups: list[FieldGroup]
 
     @property
@@ -378,6 +378,9 @@ class PassStyle:
             else:
                 raise ValueError("Unknown field group")
         return fields
+
+    def group_is_active(self, identifier: str):
+        return self.layout['fieldgroups'].get(identifier, {}).get("active", False)
 
     def generate(self, op: OrderPosition):
         raise NotImplementedError()
