@@ -1651,6 +1651,7 @@ class Question(LoggedModel):
         max_length=5,
         choices=CONTAINER_TYPE_CHOICES,
         verbose_name=_("Asked on"),
+        default=CONTAINER_TYPE_ORDERPOSITION,
     )
     question = I18nTextField(
         verbose_name=_("Question")

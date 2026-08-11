@@ -15,7 +15,6 @@ class Migration(migrations.Migration):
             model_name='question',
             name='container_type',
             field=models.CharField(default='P', max_length=5),
-            preserve_default=False,
         ),
         migrations.AddField(
             model_name='questionanswer',
