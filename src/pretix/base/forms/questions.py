@@ -82,7 +82,7 @@ from pretix.base.i18n import (
 from pretix.base.invoicing.transmission import (
     get_transmission_types, transmission_types,
 )
-from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption
+from pretix.base.models import InvoiceAddress, Item, Question, QuestionAnswer, QuestionOption
 from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.services.tax import (
     VATIDFinalError, VATIDTemporaryError, normalize_vat_id, validate_vat_id,
@@ -667,11 +667,326 @@ def get_fake_questions(settings):
 
 class BaseQuestionsForm(forms.Form):
     """
+    This form class is responsible for asking order- and ticket-related questions.
+    """
+    address_validation = False
+
+    def build_user_question_field(self, request, event, answerlist, container, q):
+        # Do we already have an answer? Provide it as the initial value
+        answers = [a for a in answerlist if a.question_id == q.id]
+        if answers:
+            initial = answers[0]
+        else:
+            initial = None
+        tz = ZoneInfo(event.settings.timezone)
+        help_text = rich_text(q.help_text)
+        label = escape(q.question)  # django-bootstrap3 calls mark_safe
+        required = q.required and not self.all_optional
+        if q.type == Question.TYPE_BOOLEAN:
+            if required:
+                # For some reason, django-bootstrap3 does not set the required attribute
+                # itself.
+                widget = forms.CheckboxInput(attrs={'required': 'required'})
+            else:
+                widget = forms.CheckboxInput()
+
+            if initial:
+                initialbool = (initial.answer == "True")
+            else:
+                initialbool = False
+
+            field = forms.BooleanField(
+                label=label, required=required,
+                help_text=help_text,
+                initial=initialbool, widget=widget,
+            )
+        elif q.type == Question.TYPE_NUMBER:
+            field = forms.DecimalField(
+                label=label, required=required,
+                min_value=q.valid_number_min or Decimal('0.00'),
+                max_value=q.valid_number_max,
+                help_text=help_text,
+                initial=initial.answer if initial else None,
+            )
+        elif q.type == Question.TYPE_STRING:
+            field = forms.CharField(
+                label=label, required=required,
+                max_length=q.valid_string_length_max,
+                help_text=help_text,
+                initial=initial.answer if initial else None,
+            )
+        elif q.type == Question.TYPE_TEXT:
+            field = forms.CharField(
+                label=label, required=required,
+                max_length=q.valid_string_length_max,
+                help_text=help_text,
+                widget=forms.Textarea,
+                initial=initial.answer if initial else None,
+            )
+        elif q.type == Question.TYPE_COUNTRYCODE:
+            field = CountryField(
+                countries=CachedCountries,
+                blank=True, null=True, blank_label=' ',
+            ).formfield(
+                label=label, required=required,
+                help_text=help_text,
+                widget=forms.Select,
+                empty_label=' ',
+                initial=initial.answer if initial else (
+                    guess_country_from_request(request, event) if required else None),
+            )
+        elif q.type == Question.TYPE_CHOICE:
+            field = forms.ModelChoiceField(
+                queryset=q.options,
+                label=label, required=required,
+                help_text=help_text,
+                widget=forms.Select,
+                to_field_name='identifier',
+                empty_label='',
+                initial=initial.options.first() if initial else None,
+            )
+        elif q.type == Question.TYPE_CHOICE_MULTIPLE:
+            field = forms.ModelMultipleChoiceField(
+                queryset=q.options,
+                label=label, required=required,
+                help_text=help_text,
+                to_field_name='identifier',
+                widget=QuestionCheckboxSelectMultiple,
+                initial=initial.options.all() if initial else None,
+            )
+        elif q.type == Question.TYPE_FILE:
+            if q.valid_file_portrait:
+                field = PortraitImageField(
+                    label=label, required=required,
+                    help_text=help_text,
+                    initial=initial.file if initial else None,
+                    widget=PortraitImageWidget(container=container, event=event, answer=initial,
+                                               attrs={'data-portrait-photo': 'true'}),
+                )
+            else:
+                field = ExtFileField(
+                    label=label, required=required,
+                    help_text=help_text,
+                    initial=initial.file if initial else None,
+                    widget=UploadedFileWidget(container=container, event=event, answer=initial),
+                    ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_OTHER,
+                    max_size=settings.FILE_UPLOAD_MAX_SIZE_OTHER,
+                )
+        elif q.type == Question.TYPE_DATE:
+            attrs = {}
+            if q.valid_date_min:
+                attrs['data-min'] = q.valid_date_min.isoformat()
+            if q.valid_date_max:
+                attrs['data-max'] = q.valid_date_max.isoformat()
+            if not help_text:
+                if q.valid_date_min and q.valid_date_max:
+                    help_text = format_lazy(
+                        _('Please enter a date between {min} and {max}.'),
+                        min=date_format(q.valid_date_min, "SHORT_DATE_FORMAT"),
+                        max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
+                    )
+                elif q.valid_date_min:
+                    help_text = format_lazy(
+                        _('Please enter a date no earlier than {min}.'),
+                        min=date_format(q.valid_date_min, "SHORT_DATE_FORMAT"),
+                    )
+                elif q.valid_date_max:
+                    help_text = format_lazy(
+                        _('Please enter a date no later than {max}.'),
+                        max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
+                    )
+            if initial and initial.answer:
+                try:
+                    _initial = dateutil.parser.parse(initial.answer).date()
+                except dateutil.parser.ParserError:
+                    _initial = None
+            else:
+                _initial = None
+            field = forms.DateField(
+                label=label, required=required,
+                help_text=help_text,
+                initial=_initial,
+                widget=DatePickerWidget(attrs),
+            )
+            if q.valid_date_min:
+                field.validators.append(MinDateValidator(q.valid_date_min))
+            if q.valid_date_max:
+                field.validators.append(MaxDateValidator(q.valid_date_max))
+        elif q.type == Question.TYPE_TIME:
+            if initial and initial.answer:
+                try:
+                    _initial = dateutil.parser.parse(initial.answer).time()
+                except dateutil.parser.ParserError:
+                    _initial = None
+            else:
+                _initial = None
+            field = forms.TimeField(
+                label=label, required=required,
+                help_text=help_text,
+                initial=_initial,
+                widget=TimePickerWidget(without_seconds=True),
+            )
+        elif q.type == Question.TYPE_DATETIME:
+            if not help_text:
+                if q.valid_datetime_min and q.valid_datetime_max:
+                    help_text = format_lazy(
+                        _('Please enter a date and time between {min} and {max}.'),
+                        min=date_format(q.valid_datetime_min, "SHORT_DATETIME_FORMAT"),
+                        max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
+                    )
+                elif q.valid_datetime_min:
+                    help_text = format_lazy(
+                        _('Please enter a date and time no earlier than {min}.'),
+                        min=date_format(q.valid_datetime_min, "SHORT_DATETIME_FORMAT"),
+                    )
+                elif q.valid_datetime_max:
+                    help_text = format_lazy(
+                        _('Please enter a date and time no later than {max}.'),
+                        max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
+                    )
+
+            if initial and initial.answer:
+                try:
+                    _initial = dateutil.parser.parse(initial.answer).astimezone(tz)
+                except dateutil.parser.ParserError:
+                    _initial = None
+            else:
+                _initial = None
+
+            field = SplitDateTimeField(
+                label=label, required=required,
+                help_text=help_text,
+                initial=_initial,
+                widget=SplitDateTimePickerWidget(
+                    time_format=get_format_without_seconds('TIME_INPUT_FORMATS'),
+                    min_date=q.valid_datetime_min,
+                    max_date=q.valid_datetime_max
+                ),
+            )
+            if q.valid_datetime_min:
+                field.validators.append(MinDateTimeValidator(q.valid_datetime_min))
+            if q.valid_datetime_max:
+                field.validators.append(MaxDateTimeValidator(q.valid_datetime_max))
+        elif q.type == Question.TYPE_PHONENUMBER:
+            if initial:
+                try:
+                    initial = PhoneNumber().from_string(initial.answer)
+                except NumberParseException:
+                    initial = None
+
+            if not initial:
+                phone_prefix = guess_phone_prefix_from_request(request, event)
+                if phone_prefix:
+                    initial = "+{}.".format(phone_prefix)
+
+            field = PhoneNumberField(
+                label=label, required=required,
+                help_text=help_text,
+                # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
+                # a country code but no number as an initial value. It's a bit hacky, but should be stable for
+                # the future.
+                initial=initial,
+                widget=WrappedPhoneNumberPrefixWidget()
+            )
+        field.question = q
+        if answers:
+            # Cache the answer object for later use
+            field.answer = answers[0]
+
+        if q.dependency_question_id:
+            field.widget.attrs['data-question-dependency'] = q.dependency_question_id
+            field.widget.attrs['data-question-dependency-values'] = escapejson_attr(json.dumps(q.dependency_values))
+            if q.type != 'M':
+                field.widget.attrs['required'] = q.required and not self.all_optional
+                field._required = q.required and not self.all_optional
+            field.required = False
+        return field
+
+    def check_user_questions(self, d):
+        question_cache = {f.question.pk: f.question for f in self.fields.values() if getattr(f, 'question', None)}
+
+        def question_is_visible(parentid, qvals):
+            if parentid not in question_cache:
+                return False
+            parentq = question_cache[parentid]
+            if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_values):
+                return False
+            if 'question_%d' % parentid not in d:
+                return False
+            dval = d.get('question_%d' % parentid)
+            return (
+                ('True' in qvals and dval)
+                or ('False' in qvals and not dval)
+                or (isinstance(dval, QuestionOption) and dval.identifier in qvals)
+                or (isinstance(dval, (list, QuerySet)) and any(qval in [o.identifier for o in dval] for qval in qvals))
+            )
+
+        def question_is_required(q):
+            return (
+                q.required and
+                (not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_values))
+            )
+
+        if not self.all_optional:
+            for q in question_cache.values():
+                answer = d.get('question_%d' % q.pk)
+                field = self['question_%d' % q.pk]
+                if question_is_required(q) and not answer and answer != 0 and not field.errors:
+                    raise ValidationError({'question_%d' % q.pk: [_('This field is required.')]})
+
+        # Strip invisible question from cleaned_data so they don't end up in the database
+        for q in question_cache.values():
+            answer = d.get('question_%d' % q.pk)
+            if q.dependency_question_id and not question_is_visible(q.dependency_question_id, q.dependency_values) and answer is not None:
+                d['question_%d' % q.pk] = None
+
+        # Strip False answers to required yes/no questions even if all_optional is set, as our data model assumes that
+        # required yes/no questions can only be answered with yes
+        for q in question_cache.values():
+            if q.required and q.type == Question.TYPE_BOOLEAN:
+                if 'question_%d' % q.pk in d and d['question_%d' % q.pk] is False:
+                    d['question_%d' % q.pk] = None
+
+
+class OrderLevelQuestionsForm(BaseQuestionsForm):
+    def __init__(self, *args, **kwargs):
+        """
+        Takes two additional keyword arguments:
+
+        :param checkoutsession: The checkout session the form should be for
+        :param order: The order the form should be for
+        :param event: The event this belongs to
+        """
+        request = kwargs.pop('request', None)
+        checkoutsession = self.checkoutsession = kwargs.pop('checkoutsession', None)
+        order = self.order = kwargs.pop('order', None)
+        container = checkoutsession or order
+        event = kwargs.pop('event')
+        self.all_optional = kwargs.pop('all_optional', False)
+
+        super().__init__(*args, **kwargs)
+
+        questions = Question.objects.filter(
+            event=event, container_type=Question.CONTAINER_TYPE_ORDER,
+            ask_during_checkin=False, hidden=False,
+        ).order_by('position')
+        answerlist = container.answers.prefetch_related('options')
+
+        for q in questions:
+            self.fields['question_%s' % q.id] = self.build_user_question_field(request, event, answerlist, container, q)
+
+    def clean(self):
+        d = super().clean()
+        self.check_user_questions(d)
+        return d
+
+
+class TicketQuestionsForm(BaseQuestionsForm):
+    """
     This form class is responsible for asking ticket-related questions. This includes
     the attendee name for admission tickets, if the corresponding setting is enabled,
     as well as additional questions defined by the organizer.
     """
-    address_validation = False
 
     def __init__(self, *args, **kwargs):
         """
@@ -695,7 +1010,6 @@ class BaseQuestionsForm(forms.Form):
         if cartpos and item.validity_mode == Item.VALIDITY_MODE_DYNAMIC and item.validity_dynamic_start_choice:
             self.fields['requested_valid_from'] = self.build_requested_valid_from_field(event, pos, item)
 
-        add_fields = {}
         if item.ask_attendee_data:
             questions = questions + get_fake_questions(event.settings)
 
@@ -705,7 +1019,7 @@ class BaseQuestionsForm(forms.Form):
             if isinstance(q, FakeQuestion):
                 self.fields[q.system_question] = self.build_system_question_field(request, event, pos, q)
             else:
-                self.fields['question_%s' % q.id] = self.build_user_question_field(request, event, pos, q)
+                self.fields['question_%s' % q.id] = self.build_user_question_field(request, event, pos.answerlist, pos, q)
 
         responses = question_form_fields.send(sender=event, position=pos)
         data = pos.meta_info_data
@@ -882,237 +1196,6 @@ class BaseQuestionsForm(forms.Form):
             field.widget.is_required = True
             return field
 
-    def build_user_question_field(self, request, event, pos, q):
-        # Do we already have an answer? Provide it as the initial value
-        answers = [a for a in pos.answerlist if a.question_id == q.id]
-        if answers:
-            initial = answers[0]
-        else:
-            initial = None
-        tz = ZoneInfo(event.settings.timezone)
-        help_text = rich_text(q.help_text)
-        label = escape(q.question)  # django-bootstrap3 calls mark_safe
-        required = q.required and not self.all_optional
-        if q.type == Question.TYPE_BOOLEAN:
-            if required:
-                # For some reason, django-bootstrap3 does not set the required attribute
-                # itself.
-                widget = forms.CheckboxInput(attrs={'required': 'required'})
-            else:
-                widget = forms.CheckboxInput()
-
-            if initial:
-                initialbool = (initial.answer == "True")
-            else:
-                initialbool = False
-
-            field = forms.BooleanField(
-                label=label, required=required,
-                help_text=help_text,
-                initial=initialbool, widget=widget,
-            )
-        elif q.type == Question.TYPE_NUMBER:
-            field = forms.DecimalField(
-                label=label, required=required,
-                min_value=q.valid_number_min or Decimal('0.00'),
-                max_value=q.valid_number_max,
-                help_text=help_text,
-                initial=initial.answer if initial else None,
-            )
-        elif q.type == Question.TYPE_STRING:
-            field = forms.CharField(
-                label=label, required=required,
-                max_length=q.valid_string_length_max,
-                help_text=help_text,
-                initial=initial.answer if initial else None,
-            )
-        elif q.type == Question.TYPE_TEXT:
-            field = forms.CharField(
-                label=label, required=required,
-                max_length=q.valid_string_length_max,
-                help_text=help_text,
-                widget=forms.Textarea,
-                initial=initial.answer if initial else None,
-            )
-        elif q.type == Question.TYPE_COUNTRYCODE:
-            field = CountryField(
-                countries=CachedCountries,
-                blank=True, null=True, blank_label=' ',
-            ).formfield(
-                label=label, required=required,
-                help_text=help_text,
-                widget=forms.Select,
-                empty_label=' ',
-                initial=initial.answer if initial else (
-                    guess_country_from_request(request, event) if required else None),
-            )
-        elif q.type == Question.TYPE_CHOICE:
-            field = forms.ModelChoiceField(
-                queryset=q.options,
-                label=label, required=required,
-                help_text=help_text,
-                widget=forms.Select,
-                to_field_name='identifier',
-                empty_label='',
-                initial=initial.options.first() if initial else None,
-            )
-        elif q.type == Question.TYPE_CHOICE_MULTIPLE:
-            field = forms.ModelMultipleChoiceField(
-                queryset=q.options,
-                label=label, required=required,
-                help_text=help_text,
-                to_field_name='identifier',
-                widget=QuestionCheckboxSelectMultiple,
-                initial=initial.options.all() if initial else None,
-            )
-        elif q.type == Question.TYPE_FILE:
-            if q.valid_file_portrait:
-                field = PortraitImageField(
-                    label=label, required=required,
-                    help_text=help_text,
-                    initial=initial.file if initial else None,
-                    widget=PortraitImageWidget(position=pos, event=event, answer=initial,
-                                               attrs={'data-portrait-photo': 'true'}),
-                )
-            else:
-                field = ExtFileField(
-                    label=label, required=required,
-                    help_text=help_text,
-                    initial=initial.file if initial else None,
-                    widget=UploadedFileWidget(position=pos, event=event, answer=initial),
-                    ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_OTHER,
-                    max_size=settings.FILE_UPLOAD_MAX_SIZE_OTHER,
-                )
-        elif q.type == Question.TYPE_DATE:
-            attrs = {}
-            if q.valid_date_min:
-                attrs['data-min'] = q.valid_date_min.isoformat()
-            if q.valid_date_max:
-                attrs['data-max'] = q.valid_date_max.isoformat()
-            if not help_text:
-                if q.valid_date_min and q.valid_date_max:
-                    help_text = format_lazy(
-                        _('Please enter a date between {min} and {max}.'),
-                        min=date_format(q.valid_date_min, "SHORT_DATE_FORMAT"),
-                        max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
-                    )
-                elif q.valid_date_min:
-                    help_text = format_lazy(
-                        _('Please enter a date no earlier than {min}.'),
-                        min=date_format(q.valid_date_min, "SHORT_DATE_FORMAT"),
-                    )
-                elif q.valid_date_max:
-                    help_text = format_lazy(
-                        _('Please enter a date no later than {max}.'),
-                        max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
-                    )
-            if initial and initial.answer:
-                try:
-                    _initial = dateutil.parser.parse(initial.answer).date()
-                except dateutil.parser.ParserError:
-                    _initial = None
-            else:
-                _initial = None
-            field = forms.DateField(
-                label=label, required=required,
-                help_text=help_text,
-                initial=_initial,
-                widget=DatePickerWidget(attrs),
-            )
-            if q.valid_date_min:
-                field.validators.append(MinDateValidator(q.valid_date_min))
-            if q.valid_date_max:
-                field.validators.append(MaxDateValidator(q.valid_date_max))
-        elif q.type == Question.TYPE_TIME:
-            if initial and initial.answer:
-                try:
-                    _initial = dateutil.parser.parse(initial.answer).time()
-                except dateutil.parser.ParserError:
-                    _initial = None
-            else:
-                _initial = None
-            field = forms.TimeField(
-                label=label, required=required,
-                help_text=help_text,
-                initial=_initial,
-                widget=TimePickerWidget(without_seconds=True),
-            )
-        elif q.type == Question.TYPE_DATETIME:
-            if not help_text:
-                if q.valid_datetime_min and q.valid_datetime_max:
-                    help_text = format_lazy(
-                        _('Please enter a date and time between {min} and {max}.'),
-                        min=date_format(q.valid_datetime_min, "SHORT_DATETIME_FORMAT"),
-                        max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
-                    )
-                elif q.valid_datetime_min:
-                    help_text = format_lazy(
-                        _('Please enter a date and time no earlier than {min}.'),
-                        min=date_format(q.valid_datetime_min, "SHORT_DATETIME_FORMAT"),
-                    )
-                elif q.valid_datetime_max:
-                    help_text = format_lazy(
-                        _('Please enter a date and time no later than {max}.'),
-                        max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
-                    )
-
-            if initial and initial.answer:
-                try:
-                    _initial = dateutil.parser.parse(initial.answer).astimezone(tz)
-                except dateutil.parser.ParserError:
-                    _initial = None
-            else:
-                _initial = None
-
-            field = SplitDateTimeField(
-                label=label, required=required,
-                help_text=help_text,
-                initial=_initial,
-                widget=SplitDateTimePickerWidget(
-                    time_format=get_format_without_seconds('TIME_INPUT_FORMATS'),
-                    min_date=q.valid_datetime_min,
-                    max_date=q.valid_datetime_max
-                ),
-            )
-            if q.valid_datetime_min:
-                field.validators.append(MinDateTimeValidator(q.valid_datetime_min))
-            if q.valid_datetime_max:
-                field.validators.append(MaxDateTimeValidator(q.valid_datetime_max))
-        elif q.type == Question.TYPE_PHONENUMBER:
-            if initial:
-                try:
-                    initial = PhoneNumber().from_string(initial.answer)
-                except NumberParseException:
-                    initial = None
-
-            if not initial:
-                phone_prefix = guess_phone_prefix_from_request(request, event)
-                if phone_prefix:
-                    initial = "+{}.".format(phone_prefix)
-
-            field = PhoneNumberField(
-                label=label, required=required,
-                help_text=help_text,
-                # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
-                # a country code but no number as an initial value. It's a bit hacky, but should be stable for
-                # the future.
-                initial=initial,
-                widget=WrappedPhoneNumberPrefixWidget()
-            )
-        field.question = q
-        if answers:
-            # Cache the answer object for later use
-            field.answer = answers[0]
-
-        if q.dependency_question_id:
-            field.widget.attrs['data-question-dependency'] = q.dependency_question_id
-            field.widget.attrs['data-question-dependency-values'] = escapejson_attr(json.dumps(q.dependency_values))
-            if q.type != 'M':
-                field.widget.attrs['required'] = q.required and not self.all_optional
-                field._required = q.required and not self.all_optional
-            field.required = False
-        return field
-
     def clean(self):
         from pretix.base.addressvalidation import \
             validate_address  # local import to prevent impact on startup time
@@ -1126,49 +1209,7 @@ class BaseQuestionsForm(forms.Form):
             if not d.get('state'):
                 self.add_error('state', _('This field is required.'))
 
-        question_cache = {f.question.pk: f.question for f in self.fields.values() if getattr(f, 'question', None)}
-
-        def question_is_visible(parentid, qvals):
-            if parentid not in question_cache:
-                return False
-            parentq = question_cache[parentid]
-            if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_values):
-                return False
-            if 'question_%d' % parentid not in d:
-                return False
-            dval = d.get('question_%d' % parentid)
-            return (
-                ('True' in qvals and dval)
-                or ('False' in qvals and not dval)
-                or (isinstance(dval, QuestionOption) and dval.identifier in qvals)
-                or (isinstance(dval, (list, QuerySet)) and any(qval in [o.identifier for o in dval] for qval in qvals))
-            )
-
-        def question_is_required(q):
-            return (
-                q.required and
-                (not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_values))
-            )
-
-        if not self.all_optional:
-            for q in question_cache.values():
-                answer = d.get('question_%d' % q.pk)
-                field = self['question_%d' % q.pk]
-                if question_is_required(q) and not answer and answer != 0 and not field.errors:
-                    raise ValidationError({'question_%d' % q.pk: [_('This field is required.')]})
-
-        # Strip invisible question from cleaned_data so they don't end up in the database
-        for q in question_cache.values():
-            answer = d.get('question_%d' % q.pk)
-            if q.dependency_question_id and not question_is_visible(q.dependency_question_id, q.dependency_values) and answer is not None:
-                d['question_%d' % q.pk] = None
-
-        # Strip False answers to required yes/no questions even if all_optional is set, as our data model assumes that
-        # required yes/no questions can only be answered with yes
-        for q in question_cache.values():
-            if q.required and q.type == Question.TYPE_BOOLEAN:
-                if 'question_%d' % q.pk in d and d['question_%d' % q.pk] is False:
-                    d['question_%d' % q.pk] = None
+        self.check_user_questions(d)
 
         return d
 

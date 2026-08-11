@@ -40,8 +40,12 @@ from pretix.presale.views import get_cart
 
 
 class CartQuestionsViewMixin(BaseQuestionsViewMixin):
-    form_class = CustomerAwareQuestionsForm
+    orderposition_form_class = CustomerAwareQuestionsForm
     only_user_visible = True
+
+    @property
+    def order_question_container(self):
+        return self.checkout_session
 
     @cached_property
     def _positions_for_questions(self):

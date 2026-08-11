@@ -806,9 +806,13 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
 
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, TemplateView):
-    form_class = CustomerAwareQuestionsForm
+    orderposition_form_class = CustomerAwareQuestionsForm
     invoice_form_class = InvoiceAddressForm
     template_name = "pretixpresale/event/order_modify.html"
+
+    @property
+    def order_question_container(self):
+        return self.order
 
     @cached_property
     def positions(self):
@@ -940,12 +944,16 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
 
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderPositionModify(EventViewMixin, OrderPositionDetailMixin, OrderQuestionsViewMixin, TemplateView):
-    form_class = CustomerAwareQuestionsForm
+    orderposition_form_class = CustomerAwareQuestionsForm
     invoice_form_class = None
     template_name = "pretixpresale/event/position_modify.html"
 
     @cached_property
     def invoice_form(self):
+        return None
+
+    @property
+    def order_question_container(self):
         return None
 
     @cached_property

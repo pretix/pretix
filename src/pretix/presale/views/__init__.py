@@ -54,6 +54,7 @@ from pretix.base.models import (
     CartPosition, Customer, InvoiceAddress, ItemAddOn, OrderFee, Question,
     QuestionAnswer, QuestionOption, TaxRule,
 )
+from pretix.base.models.orders import CheckoutSession
 from pretix.base.services.cart import get_fees
 from pretix.base.services.pricing import apply_rounding
 from pretix.base.templatetags.money import money_filter
@@ -100,6 +101,15 @@ class CartMixin:
     def cart_session(self):
         from pretix.presale.views.cart import cart_session
         return cart_session(self.request)
+
+    @cached_property
+    def checkout_session(self):
+        from pretix.presale.views.cart import get_or_create_cart_id
+
+        return CheckoutSession.objects.filter(
+            event=self.request.event,
+            cart_id=get_or_create_cart_id(self.request, create=False),
+        ).first()
 
     @cached_property
     def cart_customer(self):

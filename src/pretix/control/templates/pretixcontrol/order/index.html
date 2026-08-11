@@ -427,6 +427,14 @@
                                 </form>
                             </dd>
                         {% endif %}
+
+                        {% if order.answers.all %}
+                            <hr>
+                        {% endif %}
+                        {% for ans in order.answers.all %}
+                            <dt>{{ ans.question.internal_name|default:ans.question.question }}</dt>
+                            <dd>{{ ans.answer }}</dd>
+                        {% endfor %}
                     </dl>
                 </div>
             </div>

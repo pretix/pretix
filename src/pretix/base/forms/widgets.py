@@ -163,9 +163,9 @@ class UploadedFileWidget(forms.ClearableFileInput):
         super().__init__(*args, **kwargs)
 
     class FakeFile:
-        def __init__(self, file, position, event, answer):
+        def __init__(self, file, container, event, answer):
             self.file = file
-            self.position = position
+            self.container = container
             self.event = event
             self.answer = answer
 
@@ -174,13 +174,19 @@ class UploadedFileWidget(forms.ClearableFileInput):
 
         @property
         def url(self):
-            from pretix.base.models import OrderPosition
+            from pretix.base.models import Order, OrderPosition
             from pretix.multidomain.urlreverse import eventreverse
 
-            if isinstance(self.position, OrderPosition):
+            order = None
+            if isinstance(self.container, OrderPosition):
+                order = self.container.order
+            elif isinstance(self.container, Order):
+                order = self.container
+
+            if order:
                 return eventreverse(self.event, 'presale:event.order.download.answer', kwargs={
-                    'order': self.position.order.code,
-                    'secret': self.position.order.secret,
+                    'order': order.code,
+                    'secret': order.secret,
                     'answer': self.answer.pk,
                 })
             else:

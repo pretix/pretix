@@ -2226,6 +2226,10 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
     only_user_visible = False
     all_optional = True
 
+    @property
+    def order_question_container(self):
+        return self.order
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['other_form'] = self.other_form
