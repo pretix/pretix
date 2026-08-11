@@ -3,7 +3,7 @@ import FieldgroupPreview from './fieldgroup-preview.vue';
 import FixedPreview from './fixed-preview.vue';
 
 const props = defineProps<{
-    config: Record<string, string>;
+    config: PreviewRow;
 }>();
 
 </script>
