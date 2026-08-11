@@ -22,7 +22,7 @@ watchEffect(() => {
         .panel-heading
             h3.panel-title.form-inline
                 .form-group
-                    Checkbox(:label="fieldgroup.name" v-model="fieldConfig.active")
+                    Checkbox(v-if="!!fieldConfig" :label="fieldgroup.name" v-model="fieldConfig.active")
         .panel-body(v-if="!!fieldgroup.description")
             .form-group
                 span.text-muted {{ fieldgroup.description }}

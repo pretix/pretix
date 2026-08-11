@@ -19,7 +19,7 @@ type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
 	display: FieldGroupDisplay;
 	min_entries: number | null;
 	max_entries: number | null;
-	context_args: string[]
+	context_args: string[];
 };
 
 type PredefinedFieldGroupDefinition = BaseFieldGroupDefinition & {
@@ -104,10 +104,32 @@ type WalletStore = {
 };
 
 type PreviewLayout = Array<PreviewRow>;
-type PreviewRow = { children: Array<PreviewRow> } | PreviewFieldgroup;
-type PreviewFieldgroup = {
-	fieldgroup: string;
+type PreviewRow =
+	| { children: Array<PreviewRow>; direction?: "row" | "column"; display?: Array<string>;}
+	| PreviewFieldgroup
+	| FixedPreview;
+
+type PreviewProps = {
 	relSize?: number;
-	direction?: 'row' | 'column',
-	display?: Array<string>
-};
+	direction?: "row" | "column";
+	display?: Array<string>;
+}
+
+type PreviewFieldgroup = PredefinedFieldgroupPreview | PlaceholderFieldGroupPreview;
+type FixedPreview = {
+	value: I18nString;
+} & PreviewProps
+
+type PlaceholderFieldGroupPreview = {
+	fieldgroup: string;
+} & PreviewProps;
+
+type PredefinedFieldgroupPreview = {
+	fieldgroup: string;
+	sample: PreviewSample[];
+} & PreviewProps;
+
+type PreviewSample = {
+	content: I18nString;
+	label: I18nString;
+}

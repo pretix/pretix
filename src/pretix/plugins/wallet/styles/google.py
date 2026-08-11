@@ -1,5 +1,3 @@
-from i18nfield.fields import LazyI18nString
-
 from pretix.base.models import Event, OrderPosition
 
 from .base import (
@@ -12,7 +10,6 @@ from .base import (
     WalletPlatform,
 )
 from django.utils.translation import gettext as _
-import json
 
 from walletobjects import ButtonJWT, EventTicketClass, EventTicketObject
 from walletobjects.comms import Comms
@@ -207,7 +204,12 @@ class GoogleWalletStyle(PassStyle):
             )
         )
 
-        return 'googlepaypass', 'text/uri-list', 'https://pay.google.com/gp/v/save/%s' % generated_jwt
+        return (
+            "googlepaypass",
+            "text/uri-list",
+            "https://pay.google.com/gp/v/save/%s" % generated_jwt,
+        )
+
 
 class GoogleWalletEventTicket(GoogleWalletStyle):
     identifier = "event"
@@ -266,7 +268,7 @@ class GoogleWalletEventTicket(GoogleWalletStyle):
                         {"value": str(self.event.name), "display": "large"},
                     ],
                     "direction": "column",
-                    "display": ["tight"]
+                    "display": ["tight"],
                 },
                 {
                     "fieldgroup": "date",
@@ -283,7 +285,15 @@ class GoogleWalletEventTicket(GoogleWalletStyle):
                     ],
                 },
                 {"fieldgroup": "code"},
-            ]
+            ],
+            [
+                {
+                    "fieldgroup": "venue",
+                    "sample": [
+                        {"content": self.venue()[1], "label": self.venue()[0]},
+                    ],
+                },
+            ],
         ]
 
     def venue(self):
@@ -291,17 +301,23 @@ class GoogleWalletEventTicket(GoogleWalletStyle):
             name = {}
             address = {}
 
-            for key, value in  self.event.location.data.items():
+            for key, value in self.event.location.data.items():
                 lines = value.splitlines()
                 name[key] = lines[0]
                 # We must provide at least one address line each for the name and address - no way around it.
                 if len(lines) > 1:
-                    address[key] = '\n'.join(value.splitlines()[1:])
+                    address[key] = "\n".join(value.splitlines()[1:])
                 else:
                     address[key] = lines[0]
 
             return name, address
-        return None, None
+        return "", ""
+
+    def _generate_class(self):
+        output_class = super()._generate_class()
+        if self.group_is_active("venue") and all(self.venue()):
+            output_class.venue(*self.venue())
+        return output_class
 
     def _generate_object(self, op: OrderPosition, class_id: str):
         output_object = super()._generate_object(op, class_id)
