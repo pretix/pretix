@@ -32,7 +32,8 @@ from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 
 from pretix.base.forms.questions import (
-    BaseInvoiceAddressForm, BaseInvoiceNameForm, BaseQuestionsForm, OrderLevelQuestionsForm, TicketQuestionsForm,
+    BaseInvoiceAddressForm, BaseInvoiceNameForm, OrderLevelQuestionsForm,
+    TicketQuestionsForm,
 )
 from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, Question, QuestionAnswer,

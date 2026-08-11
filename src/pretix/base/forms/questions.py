@@ -82,7 +82,7 @@ from pretix.base.i18n import (
 from pretix.base.invoicing.transmission import (
     get_transmission_types, transmission_types,
 )
-from pretix.base.models import InvoiceAddress, Item, Question, QuestionAnswer, QuestionOption
+from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption
 from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.services.tax import (
     VATIDFinalError, VATIDTemporaryError, normalize_vat_id, validate_vat_id,

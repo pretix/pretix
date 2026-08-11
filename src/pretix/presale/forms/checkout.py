@@ -41,8 +41,8 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
 from pretix.base.forms.questions import (
-    BaseInvoiceAddressForm, TicketQuestionsForm, WrappedPhoneNumberPrefixWidget,
-    guess_phone_prefix_from_request,
+    BaseInvoiceAddressForm, TicketQuestionsForm,
+    WrappedPhoneNumberPrefixWidget, guess_phone_prefix_from_request,
 )
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.base.validators import EmailBanlistValidator
