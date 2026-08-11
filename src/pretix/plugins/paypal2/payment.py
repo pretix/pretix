@@ -23,7 +23,7 @@ import json
 import logging
 import urllib.parse
 from collections import OrderedDict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
 from django import forms
@@ -55,7 +55,7 @@ from pretix.base.forms import SecretKeySettingsField
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
-from pretix.base.settings import SettingsSandbox
+from pretix.base.settings import SettingsSandbox, settings_hierarkey
 from pretix.helpers import OF_SELF
 from pretix.helpers.urls import mainreverse_absolute
 from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
@@ -190,6 +190,31 @@ class PaypalSettingsHolder(BasePaymentProvider):
                  widget=forms.CheckboxInput(
                      attrs={
                          'data-checkbox-dependency': '#id_payment_paypal_method_apm',
+                     }
+                 )
+             )),
+            ('allow_retries_during_compliance_hold',
+             forms.BooleanField(
+                 label=_('Allow further payments during compliance hold'),
+                 help_text=_(
+                     'PayPals fraud prevention might block processing of individual payments for a considerable amount '
+                     'of time. The payment is marked as "pending" during this time window. You can allow your customers to '
+                     'start another payment attempts during that window. This might result in overpayment of orders if the'
+                     'original payment is approved.'
+                 ),
+                 required=False
+             )),
+            ('timeout_payment_during_compliance_hold',
+             forms.IntegerField(
+                 label=_('Timeout further payment attempts'),
+                 help_text=_(
+                     'Time duration in minutes after which another payment attempt is possible, while the last payment is '
+                     'still under investigation.'
+                 ),
+                 required=False,
+                 widget=forms.NumberInput(
+                     attrs={
+                         'data-checkbox-dependency': '#id_payment_paypal_allow_retries_during_compliance_hold',
                      }
                  )
              )),
@@ -517,6 +542,18 @@ class PaypalMethod(BasePaymentProvider):
 
     @property
     def abort_pending_allowed(self):
+        return True
+
+    def abort_pending_payment_allowed(self, payment) -> bool:
+        if not self.settings.get('allow_retries_during_compliance_hold', as_type=bool, default=True):
+            return False
+
+        if payment.info_data.get('create_time', False):
+            create_time = datetime.fromisoformat(payment.info_data['create_time'])
+            duration = self.settings.get('timeout_payment_during_compliance_hold', as_type=int, default=0)
+            if datetime.now(tz=timezone.utc) - create_time > timedelta(minutes=duration):
+                return True
+
         return False
 
     def _create_paypal_order(self, request, payment=None, cart_total=None):
@@ -859,14 +896,25 @@ class PaypalMethod(BasePaymentProvider):
             logger.info('{}: {} - paypal payment processing time'.format(str(payment.global_id), str(duration)))
 
     def payment_pending_render(self, request, payment) -> str:
+        stuck_in_compliance = False
         retry = True
+
+        if payment.state == OrderPayment.PAYMENT_STATE_PENDING:
+            retry = self.abort_pending_payment_allowed(payment) and self.abort_pending_allowed
+
         try:
             if (
                     payment.info
                     and payment.info_data['purchase_units'][0]['payments']['captures'][0]['status'] == 'PENDING'
             ):
-                retry = False
+                stuck_in_compliance = True
         except (KeyError, IndexError):
+            pass
+
+        try:
+            if payment.info and payment.info_data['status'] == "APPROVED":
+                stuck_in_compliance = True
+        except (KeyError):
             pass
 
         error = payment.info_data.get("error", {})
@@ -874,7 +922,8 @@ class PaypalMethod(BasePaymentProvider):
 
         template = get_template('pretixplugins/paypal2/pending.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,
-               'retry': retry, 'order': payment.order, 'is_known_issue': is_known_issue}
+               'stuck_in_compliance': stuck_in_compliance, 'retry': retry, 'order': payment.order,
+               'is_known_issue': is_known_issue}
         return template.render(ctx)
 
     def matching_id(self, payment: OrderPayment):
@@ -1120,6 +1169,10 @@ class PaypalMethod(BasePaymentProvider):
                 return super().render_invoice_text(order, payment)
 
         return self.settings.get('_invoice_text', as_type=LazyI18nString, default='')
+
+
+settings_hierarkey.add_default('payment_paypal_allow_retries_during_compliance_hold', True, bool)
+settings_hierarkey.add_default('payment_paypal_timeout_payment_during_compliance_hold', 0, int)
 
 
 class PaypalWallet(PaypalMethod):
