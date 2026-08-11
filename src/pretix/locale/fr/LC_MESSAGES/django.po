@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-09 06:00+0000\n"
-"Last-Translator: Julien <julien@circusiloveyou.com>\n"
+"PO-Revision-Date: 2026-08-11 17:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
 "fr/>\n"
 "Language: fr\n"
@@ -20477,10 +20477,10 @@ msgstr ""
 "système. Super !"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid "Your new SPF record could look like this:"
 msgid "Your new DKIM record should be set up as a CNAME record like this:"
-msgstr "Votre nouvel enregistrement SPF pourrait ressembler à ceci :"
+msgstr ""
+"Votre nouvel enregistrement DKIM doit être configuré comme un enregistrement "
+"CNAME comme ceci :"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
 #, fuzzy
@@ -20492,10 +20492,8 @@ msgstr ""
 "système. Super !"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid "Your new SPF record could look like this:"
 msgid "Your new DMARC record could look like this:"
-msgstr "Votre nouvel enregistrement SPF pourrait ressembler à ceci :"
+msgstr "Votre nouvel enregistrement DMARC pourrait ressembler à ceci :"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
 #, fuzzy
