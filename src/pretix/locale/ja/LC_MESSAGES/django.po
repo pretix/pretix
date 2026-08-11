@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-10 06:37+0000\n"
+"PO-Revision-Date: 2026-08-11 17:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -1625,7 +1625,7 @@ msgstr "日付"
 #: pretix/control/templates/pretixcontrol/users/index.html
 #: pretix/control/views/waitinglist.py
 msgid "Email address"
-msgstr "メールアドレス"
+msgstr "電子メールアドレス"
 
 #: pretix/base/exporters/invoices.py
 msgid "Invoice type"
@@ -18045,7 +18045,7 @@ msgstr "ダッシュボード"
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html
 msgid "General"
-msgstr "一般"
+msgstr "総合"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html
