@@ -28,7 +28,7 @@ function openForm(url: string, data: Record<string, string>) {
 	document.body.removeChild(form);
 }
 
-function openPreview(e: SubmitEvent) {
+function openPreview(e: Event) {
 	e.preventDefault();
 	openForm("../../preview/", {
 		csrfmiddlewaretoken: store.csrfToken,
@@ -78,7 +78,7 @@ const preview_layout = computed(() => {
                         .panel-body
                             div(v-if="preview_layout")
                                 span.text-muted The preview below is only a rough representation of what the pass might look like. Please check the generated pass.
-                                div
+                                div(style="display: grid; gap: 1em; grid-template-columns: repeat(auto-fit, minmax(auto, 360px));")
                                     PassPreview(v-for="layout in preview_layout" :layout="layout")
                             div(v-else) Preview not supported
                             //- pre
@@ -98,6 +98,7 @@ const preview_layout = computed(() => {
 .walletsettings-panel .panel-heading {
   .checkbox {
     padding: 0;
+    margin: 0;
     display: inline-block;
     input[type=checkbox] {
       margin-top: 0;
@@ -105,6 +106,9 @@ const preview_layout = computed(() => {
       margin-left: 0px;
       position: relative;
       top: 1px;
+    }
+    label {
+        padding-left: 0;
     }
   }
 }
