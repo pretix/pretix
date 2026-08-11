@@ -125,7 +125,10 @@
     {% if request.event.settings.feature_flag_order_level_questions %}
         <h2>
             {% trans "Per-order questions" %}
-            <small><span class="label label-info">
+            <small><span class="label label-info" title="
+                {% trans "This functionality is in active development and expected to change significantly over the coming months." %}
+                {% trans "Per-order questions are currently not supported and will not be displayed in pretixPOS." %}
+            " data-toggle="tooltip">
                 <span class="fa fa-flask" aria-hidden="true"></span>
                 {% trans "Experimental feature" %}
             </span></small>
