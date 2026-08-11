@@ -450,7 +450,7 @@ class QuestionList(ListView):
                 question=_('Attendee name'),
                 position=sys_order.get('attendee_name_parts', 0),
                 required=self.request.event.settings.attendee_names_required,
-                container_type=Question.CONTAINER_TYPE_ORDERPOSITION,
+                container_type=Question.ContainerType.ORDERPOSITION,
             ))
 
         if self.request.event.settings.attendee_emails_asked:
@@ -459,7 +459,7 @@ class QuestionList(ListView):
                 question=_('Attendee email'),
                 position=sys_order.get('attendee_email', 0),
                 required=self.request.event.settings.attendee_emails_required,
-                container_type=Question.CONTAINER_TYPE_ORDERPOSITION,
+                container_type=Question.ContainerType.ORDERPOSITION,
             ))
 
         if self.request.event.settings.attendee_company_asked:
@@ -468,7 +468,7 @@ class QuestionList(ListView):
                 question=_('Company'),
                 position=sys_order.get('company', 0),
                 required=self.request.event.settings.attendee_company_required,
-                container_type=Question.CONTAINER_TYPE_ORDERPOSITION,
+                container_type=Question.ContainerType.ORDERPOSITION,
             ))
 
         if self.request.event.settings.attendee_addresses_asked:
@@ -477,28 +477,28 @@ class QuestionList(ListView):
                 question=_('Street'),
                 position=sys_order.get('street', 0),
                 required=self.request.event.settings.attendee_addresses_required,
-                container_type=Question.CONTAINER_TYPE_ORDERPOSITION,
+                container_type=Question.ContainerType.ORDERPOSITION,
             ))
             questions.append(FakeQuestion(
                 id='zipcode',
                 question=_('ZIP code'),
                 position=sys_order.get('zipcode', 0),
                 required=self.request.event.settings.attendee_addresses_required,
-                container_type=Question.CONTAINER_TYPE_ORDERPOSITION,
+                container_type=Question.ContainerType.ORDERPOSITION,
             ))
             questions.append(FakeQuestion(
                 id='city',
                 question=_('City'),
                 position=sys_order.get('city', 0),
                 required=self.request.event.settings.attendee_addresses_required,
-                container_type=Question.CONTAINER_TYPE_ORDERPOSITION,
+                container_type=Question.ContainerType.ORDERPOSITION,
             ))
             questions.append(FakeQuestion(
                 id='country',
                 question=_('Country'),
                 position=sys_order.get('country', 0),
                 required=self.request.event.settings.attendee_addresses_required,
-                container_type=Question.CONTAINER_TYPE_ORDERPOSITION,
+                container_type=Question.ContainerType.ORDERPOSITION,
             ))
 
         questions += list(ctx['questions'])
@@ -539,7 +539,7 @@ def reorder_questions(request, organizer, event):
                 }
             )
 
-    if request.GET['container_type'] == Question.CONTAINER_TYPE_ORDERPOSITION:
+    if request.GET['container_type'] == Question.ContainerType.ORDERPOSITION:
         system_question_order = {}
         for s in ('attendee_name_parts', 'attendee_email', 'company', 'street', 'zipcode', 'city', 'country'):
             if s in ids:
@@ -789,7 +789,9 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['instance'] = Question(event=self.request.event)
-        kwargs['instance'].container_type = self.request.GET.get('container_type', Question.CONTAINER_TYPE_ORDERPOSITION)
+        kwargs['instance'].container_type = self.request.GET.get('container_type', Question.ContainerType.ORDERPOSITION)
+        if kwargs['instance'].container_type not in Question.ContainerType.values:
+            raise PermissionDenied
         return kwargs
 
     def get_success_url(self) -> str:

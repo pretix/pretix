@@ -967,7 +967,7 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
         super().__init__(*args, **kwargs)
 
         questions = Question.objects.filter(
-            event=event, container_type=Question.CONTAINER_TYPE_ORDER,
+            event=event, container_type=Question.ContainerType.ORDER,
             ask_during_checkin=False, hidden=False,
         ).order_by('position')
         answerlist = container.answers.prefetch_related('options')

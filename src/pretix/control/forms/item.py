@@ -153,7 +153,7 @@ class QuestionForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance.container_type == Question.CONTAINER_TYPE_ORDERPOSITION:
+        if self.instance.container_type == Question.ContainerType.ORDERPOSITION:
             self.fields['items'].queryset = self.instance.event.items.all()
             self.fields['items'].required = True
         else:

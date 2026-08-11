@@ -1606,12 +1606,9 @@ class Question(LoggedModel):
     :param dependency_values: The values that `dependency_question` needs to be set to for this question to be applicable.
     :type dependency_values: list[str]
     """
-    CONTAINER_TYPE_ORDER = "O"
-    CONTAINER_TYPE_ORDERPOSITION = "P"
-    CONTAINER_TYPE_CHOICES = (
-        (CONTAINER_TYPE_ORDER, _("Order")),
-        (CONTAINER_TYPE_ORDERPOSITION, _("Order position")),
-    )
+    class ContainerType(models.TextChoices):
+        ORDER = "O", _("Order")
+        ORDERPOSITION  = "P", _("Order position")
     TYPE_NUMBER = "N"
     TYPE_STRING = "S"
     TYPE_TEXT = "T"
@@ -1649,9 +1646,9 @@ class Question(LoggedModel):
     )
     container_type = models.CharField(
         max_length=5,
-        choices=CONTAINER_TYPE_CHOICES,
+        choices=ContainerType.choices,
         verbose_name=_("Asked on"),
-        default=CONTAINER_TYPE_ORDERPOSITION,
+        default=ContainerType.ORDERPOSITION,
     )
     question = I18nTextField(
         verbose_name=_("Question")

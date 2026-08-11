@@ -619,7 +619,7 @@ class QuestionSerializer(I18nAwareModelSerializer):
         options_data = validated_data.pop('options') if 'options' in validated_data else []
         items = validated_data.pop('items', [])
 
-        question = Question.objects.create(**validated_data, container_type=Question.CONTAINER_TYPE_ORDERPOSITION)
+        question = Question.objects.create(**validated_data, container_type=Question.ContainerType.ORDERPOSITION)
         question.items.set(items)
         for opt_data in options_data:
             QuestionOption.objects.create(question=question, **opt_data)

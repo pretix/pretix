@@ -475,7 +475,7 @@ class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
     write_permission = 'event.items:write'
 
     def get_queryset(self):
-        return self.request.event.questions.filter(container_type=Question.CONTAINER_TYPE_ORDERPOSITION).prefetch_related('options').all()
+        return self.request.event.questions.filter(container_type=Question.ContainerType.ORDERPOSITION).prefetch_related('options').all()
 
     @transaction.atomic()
     def perform_create(self, serializer):
