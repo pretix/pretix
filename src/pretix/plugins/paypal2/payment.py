@@ -678,6 +678,8 @@ class PaypalMethod(BasePaymentProvider):
             else:
                 pp_captured_order = response.result
                 payment.info = json.dumps(pp_captured_order.dict())
+                if pp_captured_order.status == 'APPROVED':
+                    payment.state = OrderPayment.PAYMENT_STATE_PENDING
                 payment.save()
 
             try:
