@@ -1,9 +1,47 @@
+import { serialize } from "node:v8";
 import { i18nstringLocalize } from "./helpers.js";
 import { createStore } from "./lib/store.ts";
 import { toRaw, type InjectionKey } from "vue";
 
 export type WidgetStore = ReturnType<typeof createWalletStore>;
 export const StoreKey: InjectionKey<WidgetStore> = Symbol("WidgetStore");
+
+function getDefaultFieldgroupState(
+	fieldgroup: FieldGroupDefinition,
+): FieldGroupConfig {
+	if (fieldgroup.type == "predefined") {
+		return { active: fieldgroup.required };
+	} else if (fieldgroup.type == "placeholder") {
+		return {
+			overflow: null,
+			entries: JSON.parse(JSON.stringify(fieldgroup.default_entries)),
+		};
+	}
+}
+
+function parseExistingFieldgroupState(
+	fieldgroup: FieldGroupDefinition,
+	existing?: FieldGroupConfig,
+): FieldGroupConfig {
+	if (!existing) {
+		return getDefaultFieldgroupState(fieldgroup);
+	}
+	if (fieldgroup.type == "predefined") {
+		return {
+			active: "active" in existing ? existing.active : fieldgroup.required,
+		};
+	} else if (fieldgroup.type == "placeholder") {
+		return {
+			overflow: "overflow" in existing ? existing.overflow : null,
+			// TODO: check that placeholders are possible
+			entries: structuredClone(
+				toRaw(
+					"entries" in existing ? existing.entries : fieldgroup.default_entries,
+				),
+			),
+		};
+	}
+}
 
 export function createWalletStore(config: {
 	platforms: Platforms;
@@ -15,53 +53,51 @@ export function createWalletStore(config: {
 	return createStore({
 		state: () => ({
 			...config,
-			walletLayout: null as WalletLayout | null,
-			currentPlatform: config.platforms[0].identifier,
 			loaded: false,
-            files: {} as Record<string, File>
+			activePlatform: config.platforms[0].identifier,
+			name: null as string | null,
+			platformLayouts: {} as Record<string, NewPlatformLayout>,
 		}),
 		getters: {
-			currentPlatformStyles() {
-				for (const platform of this.platforms) {
-					if (platform.identifier === this.currentPlatform) {
-						return platform.styles;
+			platform() {
+				return this.getPlatform(this.activePlatform);
+			},
+			layout() {
+				if (!this.loaded) {
+					return;
+				}
+				return this.platformLayouts[this.activePlatform] || null;
+			},
+			style(): Style {
+				if (this.layout) {
+					return this.platform.styles[this.layout.style];
+				} else {
+					return null;
+				}
+			},
+			styles() {
+				return this.platform.styles;
+			},
+			settings() {
+				const settings = {};
+				for (const setting of this.style.settings) {
+					if (setting.type == "text") {
+						settings[setting.identifier] =
+							this.layout.settings[setting.identifier];
+					} else if (setting.type == "image") {
+						settings[setting.identifier] =
+							this.layout.file_settings[setting.identifier];
 					}
 				}
-				throw "Unknown platform";
+				return settings;
 			},
-			currentPlatformLayout(): PlatformLayout {
-				if (!this.walletLayout) {
-					throw "currentPlatformLayout access before store was loaded";
-				}
-				for (const layout of this.walletLayout.platform_layouts) {
-					if (layout.platform === this.currentPlatform) {
-						if (!("fieldgroups" in layout.layout)) {
-							layout.layout.fieldgroups = {};
-						}
-						if (!("settings" in layout.layout)) {
-							layout.layout.settings = {};
-						}
-						return layout;
-					}
-				}
-				const newLayout = {
-					platform: this.currentPlatform,
-					style: null,
-					layout: { fieldgroups: {}, settings: {} },
-				};
-				this.walletLayout.platform_layouts.push(newLayout);
-				return newLayout;
-			},
-
-			currentLayoutFieldContent() {
+			renderedFieldGroups() {
 				const content = {};
-				const group_defs =
-					this.currentPlatformStyles[this.currentPlatformLayout.style]
-						.fieldgroups;
+				const group_defs = this.style.fieldgroups;
 				for (const fieldgroup of group_defs) {
 					if (fieldgroup.type == "placeholder") {
 						content[fieldgroup.identifier] = [];
-						const layout_group = this.currentPlatformLayout.layout.fieldgroups[
+						const layout_group = this.layout.fieldgroups[
 							fieldgroup.identifier
 						] as any as PlaceholderFieldGroupConfig;
 						for (const entry of layout_group.entries) {
@@ -94,7 +130,7 @@ export function createWalletStore(config: {
 				for (const fieldgroup of group_defs) {
 					if (fieldgroup.type == "placeholder") {
 						const layout_group: PlaceholderFieldGroupConfig =
-							this.currentPlatformLayout.layout.fieldgroups[
+							this.layout.fieldgroups[
 								fieldgroup.identifier
 							];
 						if (
@@ -116,11 +152,15 @@ export function createWalletStore(config: {
 
 				return content;
 			},
-			currentLayoutSettings() {
-				return {...this.currentPlatformLayout.file_settings, ...this.currentPlatformLayout.layout.settings}
-			},
 		},
 		actions: {
+			getPlatform(identifier: string): Platform {
+				for (const platform of this.platforms) {
+					if (platform.identifier === identifier) {
+						return platform;
+					}
+				}
+			},
 			load() {
 				// TODO: error handling / proper api client
 				fetch(
@@ -128,44 +168,134 @@ export function createWalletStore(config: {
 				)
 					.then((x) => x.json())
 					.then((x) => {
-						this.walletLayout = x;
+						this.parseServerLayout(x);
 						this.loaded = true;
-					});
+					})
+					.catch(alert);
 			},
-			async uploadFile(file: File) {
+			parseServerLayout(serverLayout) {
+				this.name = serverLayout.name;
+				for (const layout of serverLayout.platform_layouts) {
+					const clientLayout = {
+						style: layout.style,
+						fieldgroups: {},
+						settings: layout.layout.settings,
+						file_settings: layout.file_settings,
+					};
+					const styleDefinition = this.getPlatform(layout.platform).styles[
+						layout.style
+					];
+					console.log(styleDefinition);
+					for (const fieldgroup of styleDefinition.fieldgroups) {
+						clientLayout.fieldgroups[fieldgroup.identifier] =
+							parseExistingFieldgroupState(
+								fieldgroup,
+								layout.layout.fieldgroups[fieldgroup.identifier],
+							);
+					}
+					this.platformLayouts[layout.platform] = clientLayout;
+				}
+			},
+			setPlatform(platform: string) {
+				this.activePlatform = platform;
+			},
+			setStyle(style: string | null) {
+				if (style === null) {
+					delete this.platformLayouts[this.activePlatform];
+				} else if (Object.keys(this.platform.styles).includes(style)) {
+					const newLayout = {
+						style,
+						fieldgroups: {},
+						settings: {},
+						file_settings: {},
+					};
+					for (const fieldgroup of this.platform.styles[style].fieldgroups) {
+						newLayout.fieldgroups[fieldgroup.identifier] =
+							getDefaultFieldgroupState(fieldgroup);
+					}
+					this.platformLayouts[this.activePlatform] = newLayout;
+					// TODO: keep old fieldgroups & settings if matching
+				}
+			},
+			getSetting(identifier: string): Setting {
+				for (const setting of this.style.settings) {
+					if (setting.identifier === identifier) {
+						return setting;
+					}
+				}
+			},
+			setSetting(identifier: string, value: string | File) {
+				const setting = this.getSetting(identifier);
+				if (!setting) return;
+
+				if (
+					setting.type === "image" &&
+					(value instanceof File || value === null)
+				) {
+					this.layout.file_settings[setting.identifier] = {
+						file: value as File | null,
+					};
+				} else if (setting.type == "text" && typeof value == "string") {
+					this.layout.settings[setting.identifier] = value;
+				}
+			},
+			async uploadFile(file: ClientSideFile) {
 				return await fetch("/api/v1/upload", {
 					method: "POST",
-					body: file,
+					body: file.file,
 					headers: {
-						"content-disposition": `attachment; filename="${encodeURI(file.name)}"`,
-						"content-type": file.type || "application/octet-stream",
+						"content-disposition": `attachment; filename="${encodeURI(file.file.name)}"`,
+						"content-type": file.file.type || "application/octet-stream",
 						"X-CSRFToken": this.csrfToken,
 					},
 				})
 					.then((x) => x.json())
-					.then((x) => x.id);
+					.then((x) => {
+						file.identifier = x.id;
+						return x.id;
+					})
+					.catch(alert);
 			},
-			async saveLayout() {
-                const layoutToSave = structuredClone(toRaw(this.walletLayout))
-                // TODO: error handling, parallelization
-				for (const platformLayout of layoutToSave.platform_layouts) {
-					const platformStyle = this.platforms.filter(
-						(x) => x.identifier == platformLayout.platform,
-					)[0].styles[platformLayout.style];
-					for (const setting of platformStyle.settings) {
-                        console.log(setting, platformLayout.layout?.settings[setting.identifier])
-						if (
-							setting.type === "image" &&
-							platformLayout.layout?.settings[setting.identifier] instanceof
-								File
-						) {
-							platformLayout.layout.settings[setting.identifier] = await
-								this.uploadFile(
-									platformLayout.layout.settings[setting.identifier],
-								);
-						}
-					}
-				}
+			async serializePlatformLayout(platform, layout: NewPlatformLayout) {
+				const uploadedFiles = Object.fromEntries(
+					(
+						await Promise.all(
+							Object.entries(layout.file_settings).map(async ([k, v]) => {
+								if ("url" in v) {
+									return;
+								} else if ("identifier" in v) {
+									return [k, v.identifier];
+								} else if ("file" in v && v.file instanceof File) {
+									return [k, await this.uploadFile(v)];
+								} else if ("file" in v && v.file == null) {
+									return [k, null];
+								}
+							}),
+						)
+					).filter((x) => !!x),
+				);
+				return {
+					platform,
+					style: layout.style,
+					file_settings: uploadedFiles,
+					layout: {
+						fieldgroups: layout.fieldgroups,
+						settings: layout.settings,
+					},
+				};
+			},
+			async serializeLayout() {
+				const layoutPromises = Object.entries(this.platformLayouts).map(
+					([platform, layout]) =>
+						this.serializePlatformLayout(platform, layout),
+				);
+				return {
+					name: this.name,
+					platform_layouts: await Promise.all(layoutPromises),
+				};
+			},
+			async save() {
+				const serializedLayout = await this.serializeLayout();
 				// TODO: error handling / proper api client
 				fetch(
 					`/api/v1/organizers/demo/events/wallet/walletlayouts/${this.layoutId}/`,
@@ -175,77 +305,14 @@ export function createWalletStore(config: {
 							"content-type": "application/json",
 							"X-CSRFToken": this.csrfToken,
 						},
-						body: JSON.stringify(layoutToSave),
+						body: JSON.stringify(serializedLayout),
 					},
 				)
 					.then((x) => x.json())
 					.catch((x) => alert(x))
 					.then((x) => {
-						this.walletLayout = x;
+						this.parseServerLayout(x);
 					});
-			},
-			setCurrentPlatformStyle(style: string | null) {
-				if (style === null) {
-					this.currentPlatformLayout.style = null;
-					this.currentPlatformLayout.layout.fieldgroups = {};
-				} else if (Object.keys(this.currentPlatformStyles).includes(style)) {
-					const oldStyle =
-						this.currentPlatformLayout.style !== null
-							? this.currentPlatformStyles[this.currentPlatformLayout.style]
-							: { fieldgroups: [] };
-					const newStyle = this.currentPlatformStyles[style];
-
-					const oldFieldGroups = Object.fromEntries(
-						oldStyle.fieldgroups.map((x) => [x.identifier, x]),
-					);
-					const newFieldGroups = Object.fromEntries(
-						newStyle.fieldgroups.map((x) => [x.identifier, x]),
-					);
-					const keysToKeep = new Set(
-						Object.keys(this.currentPlatformLayout.layout.fieldgroups).filter(
-							(x) =>
-								oldFieldGroups[x]?.type === "placeholder" &&
-								newFieldGroups[x]?.type === "placeholder" &&
-								oldFieldGroups[x]?.content_type ===
-									newFieldGroups[x]?.content_type,
-						),
-					);
-					const keysToDefault = new Set(Object.keys(newFieldGroups)).difference(
-						keysToKeep,
-					);
-					const keysToRemove = new Set(
-						Object.keys(this.currentPlatformLayout.layout.fieldgroups),
-					)
-						.difference(keysToKeep)
-						.difference(keysToDefault);
-
-					for (const key of keysToRemove) {
-						delete this.currentPlatformLayout.layout.fieldgroups[key];
-					}
-
-					for (const key of keysToDefault) {
-						if (newFieldGroups[key].type == "placeholder") {
-							this.currentPlatformLayout.layout.fieldgroups[key] = {
-								overflow: null,
-								entries: JSON.parse(
-									JSON.stringify(newFieldGroups[key].default_entries),
-								),
-								active:
-									newFieldGroups[key].required ||
-									newFieldGroups[key].default_entries.length > 0,
-							};
-						} else {
-							this.currentPlatformLayout.layout.fieldgroups[key] = {
-								active: newFieldGroups[key].required,
-							};
-						}
-					}
-
-					this.currentPlatformLayout.style = style;
-				}
-			},
-			setSetting(identifier: string, value: string | File | null) {
-				this.currentPlatformLayout.layout.settings[identifier] = value;
 			},
 		},
 	});

@@ -12,7 +12,7 @@ const props = defineProps<{
 
 const isActive = computed(
 	() =>
-		store.currentPlatformLayout.layout.fieldgroups[props.style_def.identifier]?.active,
+		store.layout.fieldgroups[props.style_def.identifier]?.active,
 );
 </script>
 

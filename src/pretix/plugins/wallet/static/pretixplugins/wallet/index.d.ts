@@ -1,3 +1,29 @@
+type Platform = {
+	identifier: string;
+	name: string;
+	styles: Styles;
+};
+
+type Style = {
+	identifier: string;
+	name: string;
+	fieldgroups: FieldGroupDefinition[];
+	settings: Setting[];
+};
+
+type Variable = {
+	label: string;
+	sample: string;
+	required_context: string[];
+};
+
+type Styles = Record<string, Style>;
+type Variables = Record<string, Variable>;
+type VariableConfig = Record<string, Variables>;
+type Platforms = Platform[];
+
+//
+
 type BaseFieldGroupDefinition = {
 	type: string;
 	identifier: string;
@@ -46,38 +72,15 @@ type FieldEntry = PlaceholderFieldEntry | CustomFieldEntry;
 
 type Setting = {
 	identifier: string;
-	label: I18nString;
+	label: string;
 	type: "text" | "image";
 	required: boolean;
+	help_text: string;
 };
-type Style = {
-	identifier: string;
-	name: string;
-	fieldgroups: FieldGroupDefinition[];
-	settings: Setting[]
-};
-
-type Variable = {
-	label: string;
-	sample: string;
-	required_context: string[];
-};
-
-type Platform = {
-	identifier: string;
-	name: string;
-	styles: Styles;
-};
-
-type Styles = Record<string, Style>;
-type Variables = Record<string, Variable>;
-type VariableConfig = Record<string, Variables>;
-type Platforms = Platform[];
 
 type PlaceholderFieldGroupConfig = {
 	entries: Array<FieldEntry>;
 	overflow: string | null;
-	active: boolean;
 };
 
 type PredefinedFieldGroupConfig = {
@@ -90,7 +93,7 @@ type FieldGroupConfig =
 
 type LayoutData = {
 	fieldgroups?: Record<string, FieldGroupConfig>;
-	settings?: Record<string, any>
+	settings?: Record<string, any>;
 };
 
 type PlatformLayout = {
@@ -113,7 +116,11 @@ type WalletStore = {
 
 type PreviewLayout = Array<PreviewRow>;
 type PreviewRow =
-	| { children: Array<PreviewRow>; direction?: "row" | "column"; display?: Array<string>;}
+	| {
+			children: Array<PreviewRow>;
+			direction?: "row" | "column";
+			display?: Array<string>;
+	  }
 	| PreviewFieldgroup
 	| FixedPreview
 	| SettingPreview;
@@ -122,13 +129,15 @@ type PreviewProps = {
 	relSize?: number;
 	direction?: "row" | "column";
 	display?: Array<string>;
-}
+};
 type SettingPreview = {
 	setting: string;
-} & PreviewProps
+} & PreviewProps;
 
-type PreviewFieldgroup = PredefinedFieldgroupPreview | PlaceholderFieldGroupPreview;
-type FixedPreview = {value: I18nString; label?: I18nString; } & PreviewProps
+type PreviewFieldgroup =
+	| PredefinedFieldgroupPreview
+	| PlaceholderFieldGroupPreview;
+type FixedPreview = { value: I18nString; label?: I18nString } & PreviewProps;
 
 type PlaceholderFieldGroupPreview = {
 	fieldgroup: string;
@@ -142,4 +151,14 @@ type PredefinedFieldgroupPreview = {
 type PreviewSample = {
 	content: I18nString;
 	label: I18nString;
-}
+};
+
+type NewPlatformLayout = {
+	style: string;
+	fieldgroups: {};
+	settings: {};
+	file_settings: Record<string, WalletFile>;
+};
+type ServerSideFile = { url: string; name: string };
+type ClientSideFile = { file: File | null; identifier?: string };
+type WalletFile = ServerSideFile | ClientSideFile;
