@@ -638,7 +638,7 @@ class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileFiel
 
 
 FakeQuestion = namedtuple(
-    'FakeQuestion', 'system_question label position required help_text'
+    'FakeQuestion', 'id question position required help_text container_type'
 )
 
 
@@ -647,19 +647,19 @@ def get_fake_attendee_questions(settings):
     sqo = settings.system_question_order
 
     if settings.attendee_names_asked:
-        fq.append(FakeQuestion('attendee_name_parts', _('Attendee name'), sqo.get('attendee_name_parts', 0), settings.attendee_names_required, ''))
+        fq.append(FakeQuestion('attendee_name_parts', _('Attendee name'), sqo.get('attendee_name_parts', 0), settings.attendee_names_required, '', Question.ContainerType.ORDERPOSITION))
 
     if settings.attendee_emails_asked:
-        fq.append(FakeQuestion('attendee_email', _('Attendee email'), sqo.get('attendee_email', 0), settings.attendee_emails_required, ''))
+        fq.append(FakeQuestion('attendee_email', _('Attendee email'), sqo.get('attendee_email', 0), settings.attendee_emails_required, '', Question.ContainerType.ORDERPOSITION))
 
     if settings.attendee_company_asked:
-        fq.append(FakeQuestion('company', _('Company'), sqo.get('company', 0), settings.attendee_company_required, ''))
+        fq.append(FakeQuestion('company', _('Company'), sqo.get('company', 0), settings.attendee_company_required, '', Question.ContainerType.ORDERPOSITION))
 
     if settings.attendee_addresses_asked:
-        fq.append(FakeQuestion('street', _('Street'), sqo.get('street', 0), settings.attendee_addresses_required, ''))
-        fq.append(FakeQuestion('zipcode', _('ZIP code'), sqo.get('zipcode', 0), settings.attendee_addresses_required, ''))
-        fq.append(FakeQuestion('city', _('City'), sqo.get('city', 0), settings.attendee_addresses_required, ''))
-        fq.append(FakeQuestion('country', _('Country'), sqo.get('country', 0), settings.attendee_addresses_required, ''))
+        fq.append(FakeQuestion('street', _('Street'), sqo.get('street', 0), settings.attendee_addresses_required, '', Question.ContainerType.ORDERPOSITION))
+        fq.append(FakeQuestion('zipcode', _('ZIP code'), sqo.get('zipcode', 0), settings.attendee_addresses_required, '', Question.ContainerType.ORDERPOSITION))
+        fq.append(FakeQuestion('city', _('City'), sqo.get('city', 0), settings.attendee_addresses_required, '', Question.ContainerType.ORDERPOSITION))
+        fq.append(FakeQuestion('country', _('Country'), sqo.get('country', 0), settings.attendee_addresses_required, '', Question.ContainerType.ORDERPOSITION))
     return fq
 
 
@@ -998,7 +998,6 @@ class TicketQuestionsForm(BaseQuestionsForm):
         orderpos = self.orderpos = kwargs.pop('orderpos', None)
         pos = cartpos or orderpos
         item = pos.item
-        questions = pos.item.questions_to_ask
         event = kwargs.pop('event')
         self.all_optional = kwargs.pop('all_optional', False)
         self.attendee_addresses_required = event.settings.attendee_addresses_required and not self.all_optional
@@ -1017,7 +1016,7 @@ class TicketQuestionsForm(BaseQuestionsForm):
 
         for q in questions:
             if isinstance(q, FakeQuestion):
-                self.fields[q.system_question] = self.build_system_question_field(request, event, pos, q)
+                self.fields[q.id] = self.build_system_question_field(request, event, pos, q)
             else:
                 self.fields['question_%s' % q.id] = self.build_user_question_field(request, event, pos.answerlist, pos, q)
 
@@ -1084,21 +1083,21 @@ class TicketQuestionsForm(BaseQuestionsForm):
             )
 
     def build_system_question_field(self, request, event, pos, qc):
-        field_name = qc.system_question
+        field_name = qc.id
         if field_name == 'attendee_name_parts':
             return NamePartsFormField(
                 max_length=255,
                 required=qc.required and not self.all_optional,
                 scheme=event.settings.name_scheme,
                 titles=event.settings.name_scheme_titles,
-                label=qc.label,
+                label=qc.question,
                 help_text=qc.help_text,
                 initial=pos.attendee_name_parts,
             )
         if field_name == 'attendee_email':
             return forms.EmailField(
                 required=qc.required and not self.all_optional,
-                label=qc.label,
+                label=qc.question,
                 help_text=qc.help_text,
                 initial=pos.attendee_email,
                 widget=forms.EmailInput(
@@ -1110,7 +1109,7 @@ class TicketQuestionsForm(BaseQuestionsForm):
         if field_name == 'company':
             return forms.CharField(
                 required=qc.required and not self.all_optional,
-                label=qc.label,
+                label=qc.question,
                 help_text=qc.help_text,
                 max_length=255,
                 initial=pos.company,
@@ -1119,7 +1118,7 @@ class TicketQuestionsForm(BaseQuestionsForm):
         if field_name == 'street':
             return forms.CharField(
                 required=qc.required and not self.all_optional,
-                label=qc.label,
+                label=qc.question,
                 help_text=qc.help_text,
                 widget=forms.Textarea(attrs={
                     'rows': 2,
@@ -1132,7 +1131,7 @@ class TicketQuestionsForm(BaseQuestionsForm):
             return forms.CharField(
                 required=False,
                 max_length=30,
-                label=qc.label,
+                label=qc.question,
                 help_text=qc.help_text,
                 initial=pos.zipcode,
                 widget=forms.TextInput(attrs={
@@ -1142,7 +1141,7 @@ class TicketQuestionsForm(BaseQuestionsForm):
         if field_name == 'city':
             return forms.CharField(
                 required=False,
-                label=qc.label,
+                label=qc.question,
                 help_text=qc.help_text,
                 max_length=255,
                 initial=pos.city,
@@ -1156,7 +1155,7 @@ class TicketQuestionsForm(BaseQuestionsForm):
                 countries=CachedCountries
             ).formfield(
                 required=qc.required and not self.all_optional,
-                label=qc.label,
+                label=qc.question,
                 help_text=qc.help_text,
                 initial=country,
                 widget=forms.Select(attrs={
@@ -1184,7 +1183,7 @@ class TicketQuestionsForm(BaseQuestionsForm):
                 del self.data[fprefix + 'state']
 
             field = forms.ChoiceField(
-                label=qc.label,
+                label=qc.question,
                 help_text=qc.help_text,
                 required=False,
                 choices=c,

@@ -65,6 +65,7 @@ from pretix.api.serializers.item import (
     ItemVariationSerializer,
 )
 from pretix.base.forms import I18nFormSet
+from pretix.base.forms.questions import get_fake_attendee_questions
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, LogEntry,
     OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
@@ -440,66 +441,8 @@ class QuestionList(ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        questions = []
 
-        sys_order = self.request.event.settings.system_question_order
-
-        if self.request.event.settings.attendee_names_asked:
-            questions.append(FakeQuestion(
-                id='attendee_name_parts',
-                question=_('Attendee name'),
-                position=sys_order.get('attendee_name_parts', 0),
-                required=self.request.event.settings.attendee_names_required,
-                container_type=Question.ContainerType.ORDERPOSITION,
-            ))
-
-        if self.request.event.settings.attendee_emails_asked:
-            questions.append(FakeQuestion(
-                id='attendee_email',
-                question=_('Attendee email'),
-                position=sys_order.get('attendee_email', 0),
-                required=self.request.event.settings.attendee_emails_required,
-                container_type=Question.ContainerType.ORDERPOSITION,
-            ))
-
-        if self.request.event.settings.attendee_company_asked:
-            questions.append(FakeQuestion(
-                id='company',
-                question=_('Company'),
-                position=sys_order.get('company', 0),
-                required=self.request.event.settings.attendee_company_required,
-                container_type=Question.ContainerType.ORDERPOSITION,
-            ))
-
-        if self.request.event.settings.attendee_addresses_asked:
-            questions.append(FakeQuestion(
-                id='street',
-                question=_('Street'),
-                position=sys_order.get('street', 0),
-                required=self.request.event.settings.attendee_addresses_required,
-                container_type=Question.ContainerType.ORDERPOSITION,
-            ))
-            questions.append(FakeQuestion(
-                id='zipcode',
-                question=_('ZIP code'),
-                position=sys_order.get('zipcode', 0),
-                required=self.request.event.settings.attendee_addresses_required,
-                container_type=Question.ContainerType.ORDERPOSITION,
-            ))
-            questions.append(FakeQuestion(
-                id='city',
-                question=_('City'),
-                position=sys_order.get('city', 0),
-                required=self.request.event.settings.attendee_addresses_required,
-                container_type=Question.ContainerType.ORDERPOSITION,
-            ))
-            questions.append(FakeQuestion(
-                id='country',
-                question=_('Country'),
-                position=sys_order.get('country', 0),
-                required=self.request.event.settings.attendee_addresses_required,
-                container_type=Question.ContainerType.ORDERPOSITION,
-            ))
+        questions = get_fake_attendee_questions(self.request.event.settings)
 
         questions += list(ctx['questions'])
         questions.sort(key=lambda q: q.position)
