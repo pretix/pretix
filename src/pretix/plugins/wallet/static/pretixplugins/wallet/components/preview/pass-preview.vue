@@ -59,6 +59,7 @@ const props = defineProps<{ layout: Array<PreviewLayout> }>();
     }
     .fieldgroup-item-image {
         max-height: 3lh;
+        object-fit: contain;
     }
     .fieldgroup-item-qrcode {
         font-weight: bold;

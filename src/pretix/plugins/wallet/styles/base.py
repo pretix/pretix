@@ -1,11 +1,13 @@
 import enum
-from typing import TypedDict
+from typing import Literal, OrderedDict, TypedDict
 from i18nfield.strings import LazyI18nString
 import jsonschema
 from django.core.exceptions import ValidationError
 from pretix.base.models import OrderPosition
 from ..placeholders import WalletPlaceholderContext, get_wallet_placeholders
-
+from django import forms
+from pretix.api.helpers import handle_file_upload
+from django.core.files import File
 
 class WalletPlatform:
     identifier: str
@@ -253,6 +255,37 @@ class ImageFieldGroup(PlaceholderFieldGroup):
         super().__init__(content_type=self.content_type, display=self.display, **kwargs)
 
 
+class SettingsField:
+    identifier: str
+    label: str
+    type: Literal["image", "text"]
+    help_text: str|None
+    required: bool
+
+    def __init__(
+        self,
+        identifier: str,
+        label: str,
+        type: Literal["image", "text"] = "text",
+        help_text = None,
+        required: bool = False,
+    ):
+        self.identifier = identifier
+        self.label = label
+        self.type = type
+        self.help_text = help_text
+        self.required = required
+
+    def asdict(self):
+        return {
+            "identifier": self.identifier,
+            "label": self.label,
+            "type": self.type,
+            "help_text": self.help_text,
+            "required": self.required,
+        }
+
+
 class PassStyle:
     identifier: str  # unique within platform
     name: str
@@ -260,6 +293,10 @@ class PassStyle:
     #   -> can only go down in the list
     # we evaluate the fields in this order, so they overspill in this order as well
     fieldgroups: list[FieldGroup]
+
+    @property
+    def settings(self) -> list[SettingsField]:
+        return []
 
     @property
     def preview_layout(self) -> list | None:
@@ -271,10 +308,12 @@ class PassStyle:
             "name": self.name,
             "fieldgroups": [x.asdict() for x in self.fieldgroups],
             "preview_layout": self.preview_layout,
+            "settings": [x.asdict() for x in self.settings],
         }
 
     def layout_schema(self):
         context = LayoutContext(placeholders=self.placeholders)
+        print(f"schema {self.settings=}")
         schema = {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
             # TODO: $id
@@ -293,6 +332,16 @@ class PassStyle:
                     "required": [
                         group.identifier for group in self.fieldgroups if group.required
                     ],
+                },
+                "settings": {
+                    "type": "object",
+                    "properties": {
+                        setting.identifier: {"type": ["string", "null"]}
+                        for setting in self.settings
+                    },
+                    "required": [
+                        setting.identifier for setting in self.settings if setting.required
+                    ],
                 }
             },
             "$defs": {
@@ -305,7 +354,11 @@ class PassStyle:
             },
         }
         if any(group.required for group in self.fieldgroups):
-            schema["required"] = ["fieldgroups"]
+            schema.setdefault("required", [])
+            schema["required"].append("fieldgroups")
+        # if any(setting.required for setting in self.settings):
+        #     schema.setdefault("required", [])
+        #     schema["required"].append("settings")
 
         return schema
 
@@ -318,10 +371,11 @@ class PassStyle:
 
         return None, None
 
-    def __init__(self, event, layout):
+    def __init__(self, event, layout = None, file_settings: dict[str, File] | None = None):
         self.event = event
         self.layout = layout
         self.placeholders = get_wallet_placeholders(self.event)
+        self.file_settings = file_settings
 
     def validate(self):
         schema = self.layout_schema()
@@ -329,6 +383,22 @@ class PassStyle:
             jsonschema.validate(self.layout, schema)
         except jsonschema.ValidationError as e:
             raise ValidationError("Invalid layout: {}".format(str(e)))
+
+    def extract_file_settings(self, request):
+        file_settings = {}
+        for setting in self.settings:
+            if setting.type == "image":
+                if self.layout.get("settings", {}).get(setting.identifier) == "file:keep":
+                    file_settings[setting.identifier] = "keep"
+                elif data := self.layout.get("settings", {}).get(setting.identifier):
+                    file_settings[setting.identifier] = handle_file_upload(data, request.user, request.auth, {"image/png", "image/jpeg"})
+                    del self.layout["settings"][setting.identifier]
+                    print(self.layout['settings'])
+                elif setting.identifier in self.layout.get("settings", {}):
+                    file_settings[setting.identifier] = None
+                    del self.layout["settings"][setting.identifier]
+
+        return file_settings
 
     def get_pass_fields(self, op: OrderPosition):
         context = WalletPlaceholderContext(
@@ -380,7 +450,7 @@ class PassStyle:
         return fields
 
     def group_is_active(self, identifier: str):
-        return self.layout['fieldgroups'].get(identifier, {}).get("active", False)
+        return self.layout["fieldgroups"].get(identifier, {}).get("active", False)
 
     def generate(self, op: OrderPosition):
         raise NotImplementedError()

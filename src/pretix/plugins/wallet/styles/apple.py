@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from typing import Any
 
 from .base import (
@@ -10,8 +11,9 @@ from .base import (
     WalletPlatform,
     PassStyle,
     PlaceholderFieldEntry,
+    SettingsField,
 )
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, gettext_lazy, override
 from i18nfield.strings import LazyI18nString
 import io
 import hashlib
@@ -23,6 +25,7 @@ import json
 from django.contrib.staticfiles import finders
 from pretix.base.models import OrderPosition
 from django.utils.encoding import force_bytes
+from django import forms
 
 
 class ApplePlatform(WalletPlatform):
@@ -37,6 +40,13 @@ class FormattedLazyI18nString:
 
     def localize(self, language):
         return self.base_str.localize(language).format(**self.format_args)
+
+def lazyi18nstring_from_gettext(text: str, locales: set[str]) -> LazyI18nString:
+    data = {}
+    for locale in locales:
+        with override(locale):
+            data[locale] = _(text)
+    return LazyI18nString(data)
 
 
 class StringResource:
@@ -131,6 +141,25 @@ class SignedZipFile:
 
 
 class AppleWalletStyle(PassStyle):
+    @property
+    def settings(self):
+        return [
+            SettingsField(
+                identifier="logo",
+                label=_("Logo"),
+                type="image",
+                required=False,
+                help_text="Will be displayed on the top left corner of the pass"
+            ),
+            SettingsField(
+                identifier="icon",
+                label=_("Icon"),
+                type="image",
+                required=False,
+                help_text="Will be displayed as the file icon"
+            ),
+        ]
+
     def pass_content(self, fields, strings):
         raise NotImplementedError()
 
@@ -180,6 +209,7 @@ class AppleWalletStyle(PassStyle):
 
         pass_json = self.generate_pass_json(fields, op, strings)
         print(pass_json)
+        breakpoint()
         if fields["logo"]:
             logo = fields["logo"][0]["value"]
         else:
@@ -204,32 +234,6 @@ class AppleWalletEventTicket(AppleWalletStyle):
     identifier = "event_1"
     name = _("Event Ticket Layout 1")
     fieldgroups = [
-        ImageFieldGroup(
-            identifier="icon",
-            name=_("Icon"),
-            min_entries=0,
-            max_entries=1,
-            default_entries=[
-                PlaceholderFieldEntry(
-                    content="poweredby",
-                )
-            ],
-            required=True,
-            context_args={"event", "order", "order_position"},
-        ),
-        ImageFieldGroup(
-            identifier="logo",
-            name=_("Logo"),
-            min_entries=0,
-            max_entries=1,
-            default_entries=[
-                PlaceholderFieldEntry(
-                    content="poweredby",
-                )
-            ],
-            required=True,
-            context_args={"event", "order", "order_position"},
-        ),
         TextFieldGroup(
             identifier="logo_text",
             name=_("Logo text"),
@@ -248,7 +252,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                     label=LazyI18nString({"de": "Tickettyp", "en": "Ticket type"}),
                     content="item",
                 )
-            ],  # TODO: support Lazyi18nproxy here
+            ],  # TODO: support Lazyi18nproxy here by using lazyi18nstring_from_gettext
             description=_("These fields appear prominently featured on the pass."),
             required=True,
             context_args={"event", "order", "order_position"},
@@ -293,7 +297,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
         [
             {
                 "children": [
-                    {"fieldgroup": "logo", "relSize": 1},
+                    {"setting": "logo"},
                     {
                         "fieldgroup": "logo_text",
                         "relSize": 3,
