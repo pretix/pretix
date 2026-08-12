@@ -70,7 +70,9 @@ class WalletPlatformLayout(LoggedModel):
 
         style = get_style(self.platform, self.style)
         if style:
-            return style(event=self.parent.event, layout=self.layout)
+            file_settings = dict(self.file_settings.values_list("key", "file"))
+            print(file_settings)
+            return style(event=self.parent.event, layout=self.layout, file_settings=file_settings)
         else:
             raise RuntimeError(f"Style {self.platform}.{self.style} not found")
 
@@ -82,6 +84,11 @@ class WalletLayoutItem(models.Model):
     def clean(self):
         if self.item.event != self.layout.event:
             raise ValidationError("cannot bind layout to item of different event")
+
+class WalletLayoutFileSetting(models.Model):
+    layout = models.ForeignKey(WalletPlatformLayout, on_delete=models.CASCADE, related_name="file_settings")
+    key = models.CharField()
+    file = models.FileField()
 
 # smth like this for apple, lets see what the best architecture for google will be
 # class AppleWalletPass(models.Model):

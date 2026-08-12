@@ -44,10 +44,17 @@ type CustomFieldEntry = {
 
 type FieldEntry = PlaceholderFieldEntry | CustomFieldEntry;
 
+type Setting = {
+	identifier: string;
+	label: I18nString;
+	type: "text" | "image";
+	required: boolean;
+};
 type Style = {
 	identifier: string;
 	name: string;
 	fieldgroups: FieldGroupDefinition[];
+	settings: Setting[]
 };
 
 type Variable = {
@@ -82,7 +89,8 @@ type FieldGroupConfig =
 	| PredefinedFieldGroupConfig;
 
 type LayoutData = {
-	fieldgroups: Record<string, FieldGroupConfig>;
+	fieldgroups?: Record<string, FieldGroupConfig>;
+	settings?: Record<string, any>
 };
 
 type PlatformLayout = {
@@ -107,18 +115,20 @@ type PreviewLayout = Array<PreviewRow>;
 type PreviewRow =
 	| { children: Array<PreviewRow>; direction?: "row" | "column"; display?: Array<string>;}
 	| PreviewFieldgroup
-	| FixedPreview;
+	| FixedPreview
+	| SettingPreview;
 
 type PreviewProps = {
 	relSize?: number;
 	direction?: "row" | "column";
 	display?: Array<string>;
 }
+type SettingPreview = {
+	setting: string;
+} & PreviewProps
 
 type PreviewFieldgroup = PredefinedFieldgroupPreview | PlaceholderFieldGroupPreview;
-type FixedPreview = {
-	value: I18nString;
-} & PreviewProps
+type FixedPreview = {value: I18nString; label?: I18nString; } & PreviewProps
 
 type PlaceholderFieldGroupPreview = {
 	fieldgroup: string;

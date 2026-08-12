@@ -63,7 +63,7 @@ from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, Checkin, CheckinList, Device, Event, Order, OrderPosition,
+    Checkin, CheckinList, Device, Event, Order, OrderPosition,
     Question, ReusableMedium, RevokedTicketSecret, TeamAPIToken,
 )
 from pretix.base.models.orders import PrintLog
@@ -75,6 +75,7 @@ from pretix.base.services.checkin import (
 from pretix.base.services.media import perform_media_exchange
 from pretix.base.signals import checkin_annulled
 from pretix.helpers import OF_SELF
+from pretix.api.helpers import handle_file_upload
 
 with scopes_disabled():
     class CheckinListFilter(FilterSet):
@@ -328,27 +329,6 @@ with scopes_disabled():
             )
 
 
-def _handle_file_upload(data, user, auth):
-    try:
-        cf = CachedFile.objects.get(
-            session_key=f'api-upload-{str(type(user or auth))}-{(user or auth).pk}',
-            file__isnull=False,
-            pk=data[len("file:"):],
-        )
-    except (ValidationError, BaseValidationError, IndexError):  # invalid uuid
-        raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
-    except CachedFile.DoesNotExist:
-        raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
-
-    allowed_types = (
-        'image/png', 'image/jpeg', 'image/gif', 'application/pdf'
-    )
-    if cf.type not in allowed_types:
-        raise ValidationError('The submitted file "{fid}" has a file type that is not allowed in this field.'.format(fid=data))
-    if cf.file.size > settings.FILE_UPLOAD_MAX_SIZE_OTHER:
-        raise ValidationError('The submitted file "{fid}" is too large to be used in this field.'.format(fid=data))
-
-    return cf.file
 
 
 def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_products=False, pdf_data=False, expand=None):
@@ -795,7 +775,12 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 try:
                     if q.type == Question.TYPE_FILE:
                         if answers_data[str(q.pk)]:
-                            given_answers[q] = _handle_file_upload(answers_data[str(q.pk)], user, auth)
+                            given_answers[q] = handle_file_upload(
+                                answers_data[str(q.pk)],
+                                user,
+                                auth,
+                                allowed_types=('image/png', 'image/jpeg', 'image/gif', 'application/pdf')
+                            )
                         else:
                             given_answers[q] = None
                     else:
