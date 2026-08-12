@@ -12,8 +12,8 @@ const props = defineProps<{
 
 const style_def = computed(() => {
 	return Object.fromEntries(
-		store.currentPlatformStyles[
-			store.currentPlatformLayout.style
+		store.styles[
+			store.layout.style
 		].fieldgroups.map((x) => [x.identifier, x]),
 	)[props.config.fieldgroup];
 });

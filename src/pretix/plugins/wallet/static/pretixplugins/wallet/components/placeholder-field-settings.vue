@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, reactive, watchEffect } from "vue";
+import { computed, inject, watchEffect } from "vue";
 import Select from "./input/select.vue";
 import Checkbox from "./input/checkbox.vue";
 import I18nInput from "./input/i18ninput.vue";
