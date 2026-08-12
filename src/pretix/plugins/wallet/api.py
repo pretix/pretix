@@ -1,22 +1,24 @@
-from rest_framework import viewsets, serializers
+from rest_framework import viewsets
 from django.db import transaction
 from .styles import AVAILABLE_STYLES_DICT, AVAILABLE_PLATFORMS
 from .models import WalletLayout, WalletPlatformLayout
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
-from pretix.api.serializers.fields import UploadedFileField
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
+import os
+
 
 class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
     platform = serializers.ChoiceField(
         choices=[p.identifier for p in AVAILABLE_PLATFORMS]
     )
     style = serializers.CharField(allow_null=True, required=False)
+    file_settings = serializers.JSONField(default=dict, required=False)
 
     class Meta:
         model = WalletPlatformLayout
-        fields = ("platform", "style", "layout")
+        fields = ("platform", "style", "layout", "file_settings")
 
     def validate_layout(self, value):
         if not isinstance(value, dict):
@@ -36,20 +38,25 @@ class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
 
             style = style(event=self.context["event"], layout=data["layout"])
             style.validate()
-            data['file_settings'] = style.extract_file_settings(self.context['request'])
+            data["file_settings"] = style.extract_file_settings(
+                self.context["request"], data.get("file_settings", {})
+            )
 
         return data
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        ret['file_settings'] = {}
+        ret["file_settings"] = {}
         for file_setting in instance.file_settings.all():
             try:
                 url = file_setting.file.url
             except AttributeError:
                 continue
-            request = self.context['request']
-            ret['file_settings'][file_setting.key] = request.build_absolute_uri(url)
+            request = self.context["request"]
+            ret["file_settings"][file_setting.key] = {
+                "url": request.build_absolute_uri(url),
+                "name": os.path.basename(file_setting.file.name).split('.', 1)[-1]
+            }
         return ret
 
 
@@ -71,7 +78,6 @@ class WalletLayoutSerializer(I18nAwareModelSerializer):
         platform_layouts = validated_data.pop("platform_layouts")
         for layout in platform_layouts:
             if layout["style"]:
-                # TODO: better handling here
                 file_settings = layout.pop("file_settings", {})
                 obj, _ = instance.platform_layouts.update_or_create(
                     platform=layout["platform"], defaults=layout
@@ -81,7 +87,10 @@ class WalletLayoutSerializer(I18nAwareModelSerializer):
                         obj.file_settings.filter(key=key).delete()
 
                     elif file != "keep":
-                        obj.file_settings.update_or_create(key=key, defaults={"file": file})
+                        obj, _ = obj.file_settings.get_or_create(
+                            key=key
+                        )
+                        obj.file.save(os.path.basename(file.name), file)
 
         instance.platform_layouts.exclude(
             platform__in={
