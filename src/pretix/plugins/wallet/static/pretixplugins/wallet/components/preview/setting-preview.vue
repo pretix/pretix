@@ -12,13 +12,13 @@ const { config } = defineProps<{
 
 const settingDef = computed(() => {
 	return Object.fromEntries(
-		store.currentPlatformStyles[store.currentPlatformLayout.style].settings.map(
+		store.styles[store.layout.style].settings.map(
 			(x) => [x.identifier, x],
 		),
 	)[config.setting];
 });
 const settingValue = computed(() => {
-	const val = store.currentLayoutSettings[config.setting];
+	const val = store.settings[config.setting];
 	if (settingDef.value.type == "image" && val instanceof File) {
 		return URL.createObjectURL(val);
 	} else {
