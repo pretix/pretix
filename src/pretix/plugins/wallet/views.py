@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, ListView, DeleteView, View
+from pretix_vrpayment_wero.payment import HttpRequest
 from pretix.base.i18n import language
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.tickets import get_preview_position
@@ -29,7 +30,7 @@ from django.contrib.staticfiles import finders
 from django.utils.functional import cached_property
 from django.templatetags.static import static
 from .placeholders import get_wallet_placeholders, WalletPlaceholderContext
-
+from pretix.base.middleware import add_to_response_csp
 
 def get_editor_placeholders(event):
     with (
@@ -76,7 +77,7 @@ class LayoutEditorView(LayoutDetailView):
                 "identifier": platform.identifier,
                 "name": platform.name,
                 "styles": {
-                    style.identifier: style(self.request.event, None).asdict()
+                    style.identifier: style(self.request.event).asdict()
                     for style in AVAILABLE_STYLES.get(platform.identifier)
                 },
             }
@@ -89,7 +90,12 @@ class LayoutEditorView(LayoutDetailView):
         }
 
         return context
-
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        response = super().dispatch(request, *args, **kwargs)
+        add_to_response_csp(response, {
+            'img-src': ['blob:'],
+        })
+        return response
 
 class WalletLayoutCreateForm(forms.ModelForm):
     class Meta:
@@ -171,7 +177,9 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
             language(request.event.settings.locale, request.event.settings.region),
         ):
             p = get_preview_position(request.event)
-            layout = style(event=event, layout=layout)
+            l = style(event=event, layout=layout) # TODO
+            file_settings = l.extract_file_settings(request)
+            layout = style(event, layout, file_settings)
             layout.validate()
 
             fname, mimet, data = layout.generate(p)
