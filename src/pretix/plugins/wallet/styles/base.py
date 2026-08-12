@@ -384,21 +384,18 @@ class PassStyle:
         except jsonschema.ValidationError as e:
             raise ValidationError("Invalid layout: {}".format(str(e)))
 
-    def extract_file_settings(self, request):
-        file_settings = {}
+    def extract_file_settings(self, request, file_settings):
+        res = {}
         for setting in self.settings:
             if setting.type == "image":
-                if self.layout.get("settings", {}).get(setting.identifier) == "file:keep":
-                    file_settings[setting.identifier] = "keep"
-                elif data := self.layout.get("settings", {}).get(setting.identifier):
-                    file_settings[setting.identifier] = handle_file_upload(data, request.user, request.auth, {"image/png", "image/jpeg"})
-                    del self.layout["settings"][setting.identifier]
-                    print(self.layout['settings'])
-                elif setting.identifier in self.layout.get("settings", {}):
-                    file_settings[setting.identifier] = None
-                    del self.layout["settings"][setting.identifier]
+                if file_settings.get(setting.identifier) == "file:keep":
+                    res[setting.identifier] = "keep"
+                elif data := file_settings.get(setting.identifier):
+                    res[setting.identifier] = handle_file_upload(data, request.user, request.auth, {"image/png", "image/jpeg"})
+                elif setting.identifier in file_settings:
+                    res[setting.identifier] = None
 
-        return file_settings
+        return res
 
     def get_pass_fields(self, op: OrderPosition):
         context = WalletPlaceholderContext(
