@@ -1120,10 +1120,7 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
         except CheckoutSession.DoesNotExist:
             pass
         else:
-            for answ in session.answers.all():
-                answ.order = order
-                answ.checkoutsession = None
-                answ.save()
+            session.answers.update(order=order, checkoutsession=None)
             session.delete()
 
     order_placed.send(event, order=order, bulk=False)
