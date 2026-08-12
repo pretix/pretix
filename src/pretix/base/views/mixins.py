@@ -33,7 +33,7 @@ from django.utils.timezone import make_aware
 
 from pretix.base.forms.questions import (
     BaseInvoiceAddressForm, BaseInvoiceNameForm, OrderLevelQuestionsForm,
-    TicketQuestionsForm,
+    TicketLevelQuestionsForm,
 )
 from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, Question, QuestionAnswer,
@@ -46,7 +46,7 @@ from pretix.presale.signals import contact_form_fields_overrides
 
 class BaseQuestionsViewMixin:
     order_form_class = OrderLevelQuestionsForm
-    orderposition_form_class = TicketQuestionsForm
+    orderposition_form_class = TicketLevelQuestionsForm
     all_optional = False
 
     @cached_property

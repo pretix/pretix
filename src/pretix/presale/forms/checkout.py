@@ -41,7 +41,7 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
 from pretix.base.forms.questions import (
-    BaseInvoiceAddressForm, TicketQuestionsForm,
+    BaseInvoiceAddressForm, TicketLevelQuestionsForm,
     WrappedPhoneNumberPrefixWidget, guess_phone_prefix_from_request,
 )
 from pretix.base.templatetags.rich_text import rich_text
@@ -139,7 +139,7 @@ class InvoiceNameForm(InvoiceAddressForm):
                 del self.fields[f]
 
 
-class CustomerAwareQuestionsForm(TicketQuestionsForm):
+class CustomerAwareQuestionsForm(TicketLevelQuestionsForm):
     """
     The base class is responsible for asking order-related questions. This includes
     the attendee name for admission tickets, if the corresponding setting is enabled,

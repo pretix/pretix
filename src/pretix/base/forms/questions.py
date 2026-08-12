@@ -956,9 +956,10 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
         :param event: The event this belongs to
         """
         request = kwargs.pop('request', None)
-        checkoutsession = self.checkoutsession = kwargs.pop('checkoutsession', None)
-        order = self.order = kwargs.pop('order', None)
+        checkoutsession = kwargs.pop('checkoutsession', None)
+        order = kwargs.pop('order', None)
         container = checkoutsession or order
+        assert container and not (checkoutsession and order)  # exactly one should be set
         event = kwargs.pop('event')
         self.all_optional = kwargs.pop('all_optional', False)
 
@@ -979,7 +980,7 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
         return d
 
 
-class TicketQuestionsForm(BaseQuestionsForm):
+class TicketLevelQuestionsForm(BaseQuestionsForm):
     """
     This form class is responsible for asking ticket-related questions. This includes
     the attendee name for admission tickets, if the corresponding setting is enabled,
