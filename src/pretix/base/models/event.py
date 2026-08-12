@@ -238,6 +238,9 @@ class EventMixin:
 
     @property
     def timezone(self):
+        # If we get rid of the shim, verify that
+        # https://github.com/py-vobject/vobject/issues/117#issuecomment-5045645314
+        # has been released and included
         return pytz_deprecation_shim.timezone(self.settings.timezone)
 
     @property

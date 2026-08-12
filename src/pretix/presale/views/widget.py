@@ -795,6 +795,7 @@ class WidgetAPIProductList(EventListMixin, View):
             'target_url': eventreverse_absolute(request.event, 'presale:event.index'),
             'subevent': self.subevent.pk if self.subevent else None,
             'currency': request.event.currency,
+            'currency_places': settings.CURRENCY_PLACES.get(request.event.currency, 2),
             'display_net_prices': request.event.settings.display_net_prices,
             'use_native_spinners': request.event.settings.widget_use_native_spinners,
             'show_variations_expanded': request.event.settings.show_variations_expanded,

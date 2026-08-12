@@ -801,11 +801,10 @@ def get_available_placeholders(event, base_parameters, rich=False):
     return params
 
 
-def get_sample_context(event, context_parameters, rich=True):
+def prepare_sample_context_for_preview(placeholder_to_sample):
     context_dict = {}
     lbl = _('This value will be replaced based on dynamic parameters.')
-    for k, v in get_available_placeholders(event, context_parameters, rich=rich).items():
-        sample = v.render_sample(event)
+    for k, sample in placeholder_to_sample.items():
         if isinstance(sample, PlainHtmlAlternativeString):
             context_dict[k] = PlainHtmlAlternativeString(
                 '<{el} class="placeholder" title="{title}">{plain}</{el}>'.format(
@@ -830,3 +829,12 @@ def get_sample_context(event, context_parameters, rich=True):
                 escape(sample)
             ))
     return context_dict
+
+
+def get_sample_context(event, context_parameters, rich=True):
+    return prepare_sample_context_for_preview(
+        {
+            k: v.render_sample(event)
+            for k, v in get_available_placeholders(event, context_parameters, rich=rich).items()
+        }
+    )

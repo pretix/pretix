@@ -81,7 +81,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, CachedTicket, Checkin, GiftCard, Invoice, InvoiceAddress, Item,
     ItemVariation, LogEntry, Order, QuestionAnswer, Quota,
-    ScheduledEventExport, generate_secret,
+    ScheduledEventExport, SeatCategoryMapping, generate_secret,
 )
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
@@ -382,7 +382,7 @@ class OrderOverpaidRefundBulkActionView(BaseOrderBulkActionView):
                         'provider': refund.provider,
                     }, user=self.request.user)
                     payment.payment_provider.execute_refund(refund)
-                    return True
+                return bool(proposals)
             except (ValueError, PaymentException):
                 return False
 
@@ -564,10 +564,11 @@ class OrderDetail(OrderView):
         })
         ctx['display_locale'] = dict(settings.LANGUAGES)[self.object.locale or self.request.event.settings.locale]
 
-        ctx['overpaid'] = self.order.pending_sum * -1
+        pending_sum = self.order.pending_sum
+        ctx['overpaid'] = pending_sum * -1
         ctx['download_buttons'] = self.download_buttons
         ctx['payment_refund_sum'] = self.order.payment_refund_sum
-        ctx['pending_sum'] = self.order.pending_sum
+        ctx['pending_sum'] = pending_sum
         ctx['uncancelled_invoice'] = self.order.invoices.exclude(
             Exists(self.order.invoices.filter(refers=OuterRef('pk'), is_cancellation=True))
         ).exclude(is_cancellation=True).first()
@@ -601,8 +602,9 @@ class OrderDetail(OrderView):
         ).prefetch_related(
             'item__questions', 'issued_gift_cards', 'owned_gift_cards', 'linked_media',
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
-            Prefetch('all_checkins', queryset=Checkin.all.select_related('list').order_by('datetime')),
+            Prefetch('all_checkins', queryset=Checkin.all.select_related('list', 'gate').order_by('datetime')),
             Prefetch('print_logs', queryset=PrintLog.objects.select_related('device').order_by('datetime')),
+            Prefetch('subevent', queryset=self.request.event.subevents.all()),
         ).order_by('positionid')
 
         positions = []
@@ -1985,20 +1987,37 @@ class OrderChange(OrderView):
     def fees(self):
         fees = list(self.order.fees.all())
         for f in fees:
-            f.form = OrderFeeChangeForm(prefix='of-{}'.format(f.pk), instance=f,
-                                        data=self.request.POST if self.request.method == "POST" else None)
+            f.form = OrderFeeChangeForm(
+                prefix='of-{}'.format(f.pk),
+                instance=f,
+                data=self.request.POST if self.request.method == "POST" else None
+            )
         return fees
 
     @cached_property
     def positions(self):
         positions = list(self.order.positions.select_related(
             'item', 'item__tax_rule', 'used_membership', 'used_membership__membership_type', 'tax_rule',
-            'seat', 'subevent',
-        ).prefetch_related('granted_memberships', 'issued_gift_cards'))
+            'seat',
+        ).prefetch_related(
+            Prefetch(
+                'subevent',
+                queryset=self.request.event.subevents.all(),
+            ),
+            'granted_memberships',
+            'issued_gift_cards',
+            'addons',
+        ).annotate(
+            _seat_allowed=Exists(SeatCategoryMapping.objects.filter(subevent=OuterRef("subevent"), product=OuterRef("item")))
+        ))
         for p in positions:
-            p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p, items=self.items,
-                                             initial={'seat': p.seat.seat_guid if p.seat else None},
-                                             data=self.request.POST if self.request.method == "POST" else None)
+            p.form = OrderPositionChangeForm(
+                prefix='op-{}'.format(p.pk),
+                instance=p,
+                items=self.items,
+                initial={'seat': p.seat.seat_guid if p.seat else None},
+                data=self.request.POST if self.request.method == "POST" else None
+            )
         return positions
 
     def get_context_data(self, **kwargs):

@@ -379,6 +379,42 @@ def event_index(request, organizer, event):
         'comment_form': CommentForm(initial={'comment': request.event.comment}, readonly=not can_change_event_settings),
     }
 
+    ctx['timeline'] = [
+        {
+            'date': t.datetime.astimezone(request.event.timezone).date(),
+            'entry': t,
+            'time': t.datetime.astimezone(request.event.timezone)
+        }
+        for t in timeline_for_event(request.event, subevent)
+    ]
+    ctx['today'] = now().astimezone(request.event.timezone).date()
+    ctx['nearly_now'] = now().astimezone(request.event.timezone) - timedelta(seconds=20)
+    resp = render(request, 'pretixcontrol/event/index.html', ctx)
+    return resp
+
+
+def event_index_widgets_lazy(request, organizer, event):
+    subevent = None
+    if request.GET.get("subevent", "") != "" and request.event.has_subevents:
+        i = request.GET.get("subevent", "")
+        try:
+            subevent = request.event.subevents.get(pk=i)
+        except SubEvent.DoesNotExist:
+            pass
+
+    widgets = []
+    for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=False):
+        widgets.extend(result)
+
+    return build_json_response(widgets)
+
+
+def event_index_warnings_lazy(request, organizer, event):
+    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'event.orders:read',
+                                                        request=request)
+    can_change_event_settings = request.user.has_event_permission(request.organizer, request.event,
+                                                                  'event.settings.general:write', request=request)
+    ctx = {}
     ctx['has_overpaid_orders'] = can_view_orders and Order.annotate_overpayments(request.event.orders).filter(
         Q(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=0))
         | Q(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=0))
@@ -402,35 +438,11 @@ def event_index(request, organizer, event):
         | Q(failed_attempts__gt=0)
     ).exists()
 
-    ctx['timeline'] = [
-        {
-            'date': t.datetime.astimezone(request.event.timezone).date(),
-            'entry': t,
-            'time': t.datetime.astimezone(request.event.timezone)
-        }
-        for t in timeline_for_event(request.event, subevent)
-    ]
-    ctx['today'] = now().astimezone(request.event.timezone).date()
-    ctx['nearly_now'] = now().astimezone(request.event.timezone) - timedelta(seconds=20)
-    resp = render(request, 'pretixcontrol/event/index.html', ctx)
-    # resp['Content-Security-Policy'] = "style-src 'unsafe-inline'"
-    return resp
-
-
-def event_index_widgets_lazy(request, organizer, event):
-    subevent = None
-    if request.GET.get("subevent", "") != "" and request.event.has_subevents:
-        i = request.GET.get("subevent", "")
-        try:
-            subevent = request.event.subevents.get(pk=i)
-        except SubEvent.DoesNotExist:
-            pass
-
-    widgets = []
-    for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=False):
-        widgets.extend(result)
-
-    return build_json_response(widgets)
+    return render(
+        request,
+        'pretixcontrol/event/dashboard_partial_warnings.html',
+        ctx
+    )
 
 
 def event_index_log_lazy(request, organizer, event):
@@ -465,7 +477,7 @@ def event_index_log_lazy(request, organizer, event):
 
     return render(
         request,
-        'pretixcontrol/event/logs_embed.html',
+        'pretixcontrol/event/dashboard_partial_logs.html',
         {
             'logs': qs[:5]
         }

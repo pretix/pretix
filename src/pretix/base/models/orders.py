@@ -508,20 +508,20 @@ class Order(LockModel, LoggedModel):
 
     @classmethod
     def annotate_overpayments(cls, qs, results=True, refunds=True, sums=False):
-        payment_sum = OrderPayment.objects.filter(
+        payment_sum = OrderPayment.objects.with_scopes_disabled().filter(
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
             order=OuterRef('pk')
         ).order_by().values('order').annotate(s=Sum('amount')).values('s')
-        refund_sum = OrderRefund.objects.filter(
+        refund_sum = OrderRefund.objects.with_scopes_disabled().filter(
             state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
                        OrderRefund.REFUND_STATE_CREATED),
             order=OuterRef('pk')
         ).order_by().values('order').annotate(s=Sum('amount')).values('s')
-        external_refund = OrderRefund.objects.filter(
+        external_refund = OrderRefund.objects.with_scopes_disabled().filter(
             state=OrderRefund.REFUND_STATE_EXTERNAL,
             order=OuterRef('pk')
         )
-        pending_refund = OrderRefund.objects.filter(
+        pending_refund = OrderRefund.objects.with_scopes_disabled().filter(
             state__in=(OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT),
             order=OuterRef('pk')
         )
@@ -2072,6 +2072,17 @@ class OrderPayment(models.Model):
         """
         return '{}-P-{}'.format(self.order.code, self.local_id)
 
+    @property
+    def global_id(self):
+        """
+        The global ID of this payment, constructed by the organizer slug, event slug, and the full id.
+        """
+        return "{organizer}-{event}-{full_id}".format(
+            organizer=self.order.organizer.slug.upper(),
+            event=self.order.event.slug.upper(),
+            full_id=self.full_id,
+        )
+
     def save(self, *args, **kwargs):
         if not self.local_id:
             self.local_id = (self.order.payments.aggregate(m=Max('local_id'))['m'] or 0) + 1
@@ -2272,6 +2283,17 @@ class OrderRefund(models.Model):
         """
         return '{}-R-{}'.format(self.order.code, self.local_id)
 
+    @property
+    def global_id(self):
+        """
+        The global ID of this refund, constructed by the organizer slug, event slug, and the full id.
+        """
+        return "{organizer}-{event}-{full_id}".format(
+            organizer=self.order.organizer.slug.upper(),
+            event=self.order.event.slug.upper(),
+            full_id=self.full_id,
+        )
+
     def save(self, *args, **kwargs):
         if not self.local_id:
             self.local_id = (self.order.refunds.aggregate(m=Max('local_id'))['m'] or 0) + 1
@@ -2286,9 +2308,12 @@ class OrderRefund(models.Model):
         super().save(*args, **kwargs)
 
 
-class ActivePositionManager(ScopedManager(organizer='order__event__organizer').__class__):
-    def get_queryset(self):
-        return super().get_queryset().filter(canceled=False)
+def ActivePositionManager(**scope):
+    class InnerClass(ScopedManager(**scope).__class__):
+        def get_queryset(self):
+            return super().get_queryset().filter(canceled=False)
+
+    return InnerClass()
 
 
 class OrderFee(RoundingCorrectionMixin, models.Model):
@@ -2378,7 +2403,7 @@ class OrderFee(RoundingCorrectionMixin, models.Model):
     canceled = models.BooleanField(default=False)
 
     all = ScopedManager(organizer='order__event__organizer')
-    objects = ActivePositionManager()
+    objects = ActivePositionManager(organizer='order__event__organizer')
 
     @property
     def net_value(self):
@@ -2597,7 +2622,7 @@ class OrderPosition(AbstractPosition):
     )
 
     all = ScopedManager(organizer='organizer')
-    objects = ActivePositionManager()
+    objects = ActivePositionManager(organizer='organizer')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

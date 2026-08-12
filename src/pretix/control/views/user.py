@@ -46,6 +46,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import BadRequest, PermissionDenied
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -95,6 +96,20 @@ class RecentAuthenticationRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
         tdelta = time.time() - request.session.get('pretix_auth_login_time', 0)
         if tdelta > self.max_time:
+
+            if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                # It's not useful to return a 302 redirect on a XMLHttpRequest request,  because
+                # the XMLHttpRequest is unable to detect redirects.
+                return HttpResponse(
+                    "Authentication required",
+                    status=401,
+                    headers={
+                        # Appending ?next= is handled by client, because it should be the top-level context url,
+                        # not the URL called in the background
+                        "X-Login-Url": reverse('control:user.reauth')
+                    }
+                )
+
             return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
         return super().dispatch(request, *args, **kwargs)
 

@@ -39,6 +39,7 @@ from urllib.parse import urlencode
 from django import forms
 from django.apps import apps
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import (
     Count, Exists, F, Max, Model, OrderBy, OuterRef, Q, QuerySet,
 )
@@ -59,7 +60,7 @@ from pretix.base.models import (
     Gate, Invoice, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
     OrderRefund, Organizer, OutgoingMail, Question, QuestionAnswer, Quota,
     SalesChannel, SubEvent, SubEventMetaValue, Team, TeamAPIToken, TeamInvite,
-    Voucher,
+    User, Voucher,
 )
 from pretix.base.signals import register_payment_providers
 from pretix.base.timeframes import (
@@ -3006,4 +3007,92 @@ class OutgoingMailFilterForm(FilterForm):
         else:
             qs = qs.order_by("-created", "-pk")
 
+        return qs
+
+
+class LogFilterForm(FilterForm):
+    source = forms.ChoiceField(
+        label=_('Source'),
+        choices=[
+            ('', _('All sources')),
+            ('team', _('Team actions')),
+            ('customer', _('Customer actions')),
+            ('device', _('Device actions')),
+        ],
+        required=False
+    )
+    device = SafeModelChoiceField(
+        label=_('Device'),
+        empty_label=_('All devices'),
+        queryset=Device.objects.none(),
+        required=False
+    )
+    user_email = forms.EmailField(
+        label=_('User email'),
+        widget=forms.EmailInput(
+            attrs={"placeholder": _('All users')}
+        ),
+        required=False
+    )
+    action_type = forms.CharField(
+        widget=forms.HiddenInput,
+        required=False,
+    )
+    content_type = forms.ModelChoiceField(
+        queryset=ContentType.objects.all(),
+        widget=forms.HiddenInput,
+        required=False,
+    )
+    object = forms.IntegerField(
+        widget=forms.HiddenInput,
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.organizer = kwargs.pop('organizer')
+        super().__init__(*args, **kwargs)
+
+        self.fields['device'].queryset = self.organizer.devices.all().order_by('device_id')
+        self.fields['device'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:organizer.devices.select2', kwargs={
+                    'organizer': self.organizer.slug,
+                }),
+                'data-placeholder': _('All devices'),
+            }
+        )
+        self.fields['device'].widget.choices = self.fields['device'].choices
+        self.fields['device'].label = _('Device')
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+        if fdata.get('source') == 'team':
+            qs = qs.filter(user__isnull=False)
+        elif fdata.get('source') == 'device':
+            qs = qs.filter(device__isnull=False)
+        elif fdata.get('source') == 'customer':
+            qs = qs.filter(user__isnull=True, device__isnull=True)
+
+        if fdata.get('device'):
+            qs = qs.filter(device_id=fdata['device'].pk)
+
+        if fdata.get('action_type'):
+            qs = qs.filter(action_type__in=fdata['action_type'].split(','))
+
+        if fdata.get('user_email'):
+            try:
+                user = User.objects.get(email=fdata['user_email'].lower())
+                qs = qs.filter(user=user)
+            except User.DoesNotExist:
+                # Do not actively leak info that this user does not exist. Yes, this will likely have a
+                # timing attack possibility, but with the magic that database query planners do,
+                # it's probably impossible to avoid that.
+                qs = qs.none()
+
+        if fdata.get('content_type'):
+            qs = qs.filter(content_type=fdata.get('content_type'))
+
+            if fdata.get('object'):
+                qs = qs.filter(object_id=fdata.get('object'))
         return qs

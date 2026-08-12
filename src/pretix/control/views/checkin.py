@@ -484,10 +484,17 @@ class CheckinListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
     def get_queryset(self):
         qs = Checkin.all.filter(
-            list__event=self.request.event,
-        ).select_related(
-            'position', 'position__order', 'position__item', 'position__variation', 'position__subevent'
+            list_id__in=self.request.event.checkin_lists.values_list('id', flat=True),
         ).prefetch_related(
+            # For events with huge numbers of check-ins, prefetch_related is a lot more efficient than
+            # select_related, since it just needs to query one page size of positions instead of joining
+            # multiple huge tables during result computation
+            Prefetch(
+                'position',
+                queryset=OrderPosition.all.select_related(
+                    'order', 'item', 'variation', 'subevent',
+                )
+            ),
             'list', 'gate', 'device'
         )
         if self.filter_form.is_valid():

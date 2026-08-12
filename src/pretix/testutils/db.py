@@ -19,4 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-__version__ = "2026.8.0.dev0"
+def readonly_db(execute, sql, params, many, context):
+    if not sql.lower().startswith("select"):
+        raise Exception(f"Should not write anything to the database, but detected query: {sql}")
+    return execute(sql, params, many, context)

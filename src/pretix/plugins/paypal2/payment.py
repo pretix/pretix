@@ -23,7 +23,7 @@ import json
 import logging
 import urllib.parse
 from collections import OrderedDict
-from datetime import timedelta
+from datetime import datetime, timedelta
 from decimal import Decimal
 
 from django import forms
@@ -645,7 +645,7 @@ class PaypalMethod(BasePaymentProvider):
     def _execute_payment(self, request: HttpRequest, payment: OrderPayment):
         payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
         if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
-            logger.warning('payment is already confirmed; possible return-view/webhook race-condition')
+            # payment is already confirmed; possible return-view/webhook race-condition
             return
 
         try:
@@ -677,6 +677,8 @@ class PaypalMethod(BasePaymentProvider):
                 raise PaymentException(_('We had trouble communicating with PayPal'))
             else:
                 pp_captured_order = response.result
+                payment.info = json.dumps(pp_captured_order.dict())
+                payment.save()
 
             try:
                 ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=pp_captured_order.id)
@@ -830,6 +832,7 @@ class PaypalMethod(BasePaymentProvider):
                     payment.info = json.dumps(pp_captured_order.dict())
                     payment.save(update_fields=['info'])
                     payment.confirm()
+                    self.log_payment_duration(payment)
                 except Quota.QuotaExceededException as e:
                     raise PaymentException(str(e))
             # Payment has not any captures yet - so it's probably in created status
@@ -838,6 +841,20 @@ class PaypalMethod(BasePaymentProvider):
         finally:
             if 'payment_paypal_oid' in request.session:
                 del request.session['payment_paypal_oid']
+
+    @staticmethod
+    def log_payment_duration(payment: OrderPayment):
+        try:
+            capture = payment.info_data["purchase_units"][0]["payments"]["captures"][0]
+            create_time: str | None = capture["create_time"]
+            update_time: str | None = capture["update_time"]
+        except (KeyError, IndexError, TypeError):
+            create_time = None
+            update_time = None
+
+        if create_time is not None and update_time is not None:
+            duration = datetime.fromisoformat(update_time) - datetime.fromisoformat(create_time)
+            logger.info('{}: {} - paypal payment processing time'.format(str(payment.global_id), str(duration)))
 
     def payment_pending_render(self, request, payment) -> str:
         retry = True

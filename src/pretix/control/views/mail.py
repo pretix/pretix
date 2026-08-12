@@ -35,7 +35,7 @@ from django.utils.translation import ngettext
 from django.views import View
 from django.views.generic import DetailView, ListView
 
-from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
+from pretix.base.middleware import add_to_response_csp
 from pretix.base.models import OutgoingMail
 from pretix.base.services.mail import mail_send_task
 from pretix.control.forms.filter import OutgoingMailFilterForm
@@ -108,18 +108,12 @@ class OutgoingMailDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequir
 
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
-        if 'Content-Security-Policy' in response:
-            h = _parse_csp(response['Content-Security-Policy'])
-        else:
-            h = {}
-        csps = {
+        add_to_response_csp(response, {
             'frame-src': ['data:'],
             # Unfortuantely, we can't avoid unsafe-inline for style here.
             # See outgoingmail.js for the protection measures we take.
             'style-src': ["'unsafe-inline'"],
-        }
-        _merge_csp(h, csps)
-        response['Content-Security-Policy'] = _render_csp(h)
+        })
         return response
 
     def get_context_data(self, **kwargs):

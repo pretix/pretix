@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import django_filters
+from django.db import transaction
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import viewsets
 
@@ -48,6 +49,7 @@ class WebHookViewSet(viewsets.ModelViewSet):
         ctx['organizer'] = self.request.organizer
         return ctx
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         inst = serializer.save(organizer=self.request.organizer)
         self.request.organizer.log_action(
@@ -57,6 +59,7 @@ class WebHookViewSet(viewsets.ModelViewSet):
             data=merge_dicts(self.request.data, {'id': inst.pk})
         )
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         inst = serializer.save(organizer=self.request.organizer)
         self.request.organizer.log_action(
@@ -67,6 +70,7 @@ class WebHookViewSet(viewsets.ModelViewSet):
         )
         return inst
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         self.request.organizer.log_action(
             'pretix.webhook.changed',

@@ -15,8 +15,12 @@ $(function () {
     if ($("#logs_target").length == 0) {
         return;
     }
-    $.get("logs/embed", function (data) {
-        $("#logs_target").html(data)
-        add_log_expand_handlers($("#logs_target"))
+	$.get("dashboard/partials/logs", function (data) {
+		$("#logs_target").html(data)
+		add_log_expand_handlers($("#logs_target"))
+	});
+    $.get("dashboard/partials/warnings", function (data) {
+				$("#warnings_loading").remove()
+        $("#warnings_target").html(data)
     });
 });
