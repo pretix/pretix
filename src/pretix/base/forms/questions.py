@@ -638,7 +638,7 @@ class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileFiel
 
 
 FakeQuestion = namedtuple(
-    'FakeQuestion', 'id question position required help_text container_type'
+    'FakeQuestion', 'id question position required help_text container_type', defaults=('', Question.ContainerType.ORDERPOSITION)
 )
 
 
@@ -647,19 +647,19 @@ def get_fake_attendee_questions(settings):
     sqo = settings.system_question_order
 
     if settings.attendee_names_asked:
-        fq.append(FakeQuestion('attendee_name_parts', _('Attendee name'), sqo.get('attendee_name_parts', 0), settings.attendee_names_required, '', Question.ContainerType.ORDERPOSITION))
+        fq.append(FakeQuestion('attendee_name_parts', _('Attendee name'), sqo.get('attendee_name_parts', 0), settings.attendee_names_required))
 
     if settings.attendee_emails_asked:
-        fq.append(FakeQuestion('attendee_email', _('Attendee email'), sqo.get('attendee_email', 0), settings.attendee_emails_required, '', Question.ContainerType.ORDERPOSITION))
+        fq.append(FakeQuestion('attendee_email', _('Attendee email'), sqo.get('attendee_email', 0), settings.attendee_emails_required))
 
     if settings.attendee_company_asked:
-        fq.append(FakeQuestion('company', _('Company'), sqo.get('company', 0), settings.attendee_company_required, '', Question.ContainerType.ORDERPOSITION))
+        fq.append(FakeQuestion('company', _('Company'), sqo.get('company', 0), settings.attendee_company_required))
 
     if settings.attendee_addresses_asked:
-        fq.append(FakeQuestion('street', _('Street'), sqo.get('street', 0), settings.attendee_addresses_required, '', Question.ContainerType.ORDERPOSITION))
-        fq.append(FakeQuestion('zipcode', _('ZIP code'), sqo.get('zipcode', 0), settings.attendee_addresses_required, '', Question.ContainerType.ORDERPOSITION))
-        fq.append(FakeQuestion('city', _('City'), sqo.get('city', 0), settings.attendee_addresses_required, '', Question.ContainerType.ORDERPOSITION))
-        fq.append(FakeQuestion('country', _('Country'), sqo.get('country', 0), settings.attendee_addresses_required, '', Question.ContainerType.ORDERPOSITION))
+        fq.append(FakeQuestion('street', _('Street'), sqo.get('street', 0), settings.attendee_addresses_required))
+        fq.append(FakeQuestion('zipcode', _('ZIP code'), sqo.get('zipcode', 0), settings.attendee_addresses_required))
+        fq.append(FakeQuestion('city', _('City'), sqo.get('city', 0), settings.attendee_addresses_required))
+        fq.append(FakeQuestion('country', _('Country'), sqo.get('country', 0), settings.attendee_addresses_required))
     return fq
 
 
@@ -669,7 +669,7 @@ class BaseQuestionsForm(forms.Form):
     """
     address_validation = False
 
-    def build_user_question_field(self, request, event, answerlist, container, q):
+    def build_user_question_field(self, request, event, answerlist, q):
         # Do we already have an answer? Provide it as the initial value
         answers = [a for a in answerlist if a.question_id == q.id]
         if answers:
@@ -947,7 +947,7 @@ class BaseQuestionsForm(forms.Form):
 
 
 class OrderLevelQuestionsForm(BaseQuestionsForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, container, *args, **kwargs):
         """
         Takes two additional keyword arguments:
 
@@ -956,10 +956,6 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
         :param event: The event this belongs to
         """
         request = kwargs.pop('request', None)
-        checkoutsession = kwargs.pop('checkoutsession', None)
-        order = kwargs.pop('order', None)
-        container = checkoutsession or order
-        assert container and not (checkoutsession and order)  # exactly one should be set
         event = kwargs.pop('event')
         self.all_optional = kwargs.pop('all_optional', False)
 
@@ -972,7 +968,7 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
         answerlist = container.answers.prefetch_related('options')
 
         for q in questions:
-            self.fields['question_%s' % q.id] = self.build_user_question_field(request, event, answerlist, container, q)
+            self.fields['question_%s' % q.id] = self.build_user_question_field(request, event, answerlist, q)
 
     def clean(self):
         d = super().clean()
@@ -1019,7 +1015,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
             if isinstance(q, FakeQuestion):
                 self.fields[q.id] = self.build_system_question_field(request, event, pos, q)
             else:
-                self.fields['question_%s' % q.id] = self.build_user_question_field(request, event, pos.answerlist, pos, q)
+                self.fields['question_%s' % q.id] = self.build_user_question_field(request, event, pos.answerlist, q)
 
         responses = question_form_fields.send(sender=event, position=pos)
         data = pos.meta_info_data

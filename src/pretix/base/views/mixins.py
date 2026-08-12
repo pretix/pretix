@@ -65,18 +65,15 @@ class BaseQuestionsViewMixin:
 
     @cached_property
     def order_questions_form(self):
-        c = self.order_question_container
-        if c is None:
+        container = self.order_question_container
+        if container is None:
             return None
-        checkoutsession = c if isinstance(c, CheckoutSession) else None
-        order = c if isinstance(c, Order) else None
         kwargs = {}  # self.question_form_kwargs(cr)
         form = self.order_form_class(
             event=self.request.event,
             prefix='order',
             request=self.request,
-            checkoutsession=checkoutsession,
-            order=order,
+            container=container,
             all_optional=self.all_optional,
             data=(self.request.POST if self.request.method == 'POST' else None),
             files=(self.request.FILES if self.request.method == 'POST' else None),
@@ -164,6 +161,8 @@ class BaseQuestionsViewMixin:
             if not self.order_questions_form.is_valid():
                 failed = True
             else:
+                checkoutsession = self.order_question_container if isinstance(self.order_question_container, CheckoutSession) else None
+                order = self.order_question_container if isinstance(self.order_question_container, Order) else None
                 for k, v in self.order_questions_form.cleaned_data.items():
                     if k.startswith('question_'):
                         field = self.order_questions_form.fields[k]
@@ -179,15 +178,17 @@ class BaseQuestionsViewMixin:
                                 self._save_to_answer(field, field.answer, v)
                                 field.answer.save()
                         elif v != '' and v is not None:
-                            answer = self._upsert_answer(
+                            self._upsert_answer(
                                 field, v,
-                                checkoutsession=self.order_questions_form.checkoutsession,
-                                order=self.order_questions_form.order,
+                                checkoutsession=checkoutsession,
+                                order=order,
                                 question=field.question,
                             )
 
         for form in self.forms:
             meta_info = form.pos.meta_info_data
+            cartposition = form.pos if isinstance(form.pos, CartPosition) else None
+            orderposition = form.pos if isinstance(form.pos, OrderPosition) else None
             # Every form represents a CartPosition or OrderPosition with questions attached
             if not form.is_valid():
                 failed = True
@@ -241,8 +242,8 @@ class BaseQuestionsViewMixin:
                         elif v != '' and v is not None:
                             answer = self._upsert_answer(
                                 field, v,
-                                cartposition=(form.pos if isinstance(form.pos, CartPosition) else None),
-                                orderposition=(form.pos if isinstance(form.pos, OrderPosition) else None),
+                                cartposition=cartposition,
+                                orderposition=orderposition,
                                 question=field.question,
                             )
 
