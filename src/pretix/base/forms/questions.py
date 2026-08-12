@@ -642,7 +642,7 @@ FakeQuestion = namedtuple(
 )
 
 
-def get_fake_questions(settings):
+def get_fake_attendee_questions(settings):
     fq = []
     sqo = settings.system_question_order
 
@@ -1008,8 +1008,10 @@ class TicketQuestionsForm(BaseQuestionsForm):
         if cartpos and item.validity_mode == Item.VALIDITY_MODE_DYNAMIC and item.validity_dynamic_start_choice:
             self.fields['requested_valid_from'] = self.build_requested_valid_from_field(event, pos, item)
 
+        questions = []
         if item.ask_attendee_data:
-            questions = questions + get_fake_questions(event.settings)
+            questions += get_fake_attendee_questions(event.settings)
+        questions += pos.item.questions_to_ask
 
         questions.sort(key=lambda q: q.position)
 
