@@ -677,8 +677,6 @@ class BaseQuestionsForm(forms.Form):
         else:
             initial = None
         tz = ZoneInfo(event.settings.timezone)
-        help_text = rich_text(q.help_text)
-        label = escape(q.question)  # django-bootstrap3 calls mark_safe
         required = q.required and not self.all_optional
         if q.type == Question.TYPE_BOOLEAN:
             if required:
@@ -694,30 +692,30 @@ class BaseQuestionsForm(forms.Form):
                 initialbool = False
 
             field = forms.BooleanField(
-                label=label, required=required,
-                help_text=help_text,
+                label=escape(q.question), required=required,
+                help_text=rich_text(q.help_text),
                 initial=initialbool, widget=widget,
             )
         elif q.type == Question.TYPE_NUMBER:
             field = forms.DecimalField(
-                label=label, required=required,
+                label=escape(q.question), required=required,
                 min_value=q.valid_number_min or Decimal('0.00'),
                 max_value=q.valid_number_max,
-                help_text=help_text,
+                help_text=rich_text(q.help_text),
                 initial=initial.answer if initial else None,
             )
         elif q.type == Question.TYPE_STRING:
             field = forms.CharField(
-                label=label, required=required,
+                label=escape(q.question), required=required,
                 max_length=q.valid_string_length_max,
-                help_text=help_text,
+                help_text=rich_text(q.help_text),
                 initial=initial.answer if initial else None,
             )
         elif q.type == Question.TYPE_TEXT:
             field = forms.CharField(
-                label=label, required=required,
+                label=escape(q.question), required=required,
                 max_length=q.valid_string_length_max,
-                help_text=help_text,
+                help_text=rich_text(q.help_text),
                 widget=forms.Textarea,
                 initial=initial.answer if initial else None,
             )
@@ -726,8 +724,8 @@ class BaseQuestionsForm(forms.Form):
                 countries=CachedCountries,
                 blank=True, null=True, blank_label=' ',
             ).formfield(
-                label=label, required=required,
-                help_text=help_text,
+                label=escape(q.question), required=required,
+                help_text=rich_text(q.help_text),
                 widget=forms.Select,
                 empty_label=' ',
                 initial=initial.answer if initial else (
@@ -736,8 +734,8 @@ class BaseQuestionsForm(forms.Form):
         elif q.type == Question.TYPE_CHOICE:
             field = forms.ModelChoiceField(
                 queryset=q.options,
-                label=label, required=required,
-                help_text=help_text,
+                label=escape(q.question), required=required,
+                help_text=rich_text(q.help_text),
                 widget=forms.Select,
                 to_field_name='identifier',
                 empty_label='',
@@ -746,8 +744,8 @@ class BaseQuestionsForm(forms.Form):
         elif q.type == Question.TYPE_CHOICE_MULTIPLE:
             field = forms.ModelMultipleChoiceField(
                 queryset=q.options,
-                label=label, required=required,
-                help_text=help_text,
+                label=escape(q.question), required=required,
+                help_text=rich_text(q.help_text),
                 to_field_name='identifier',
                 widget=QuestionCheckboxSelectMultiple,
                 initial=initial.options.all() if initial else None,
@@ -755,16 +753,16 @@ class BaseQuestionsForm(forms.Form):
         elif q.type == Question.TYPE_FILE:
             if q.valid_file_portrait:
                 field = PortraitImageField(
-                    label=label, required=required,
-                    help_text=help_text,
+                    label=escape(q.question), required=required,
+                    help_text=rich_text(q.help_text),
                     initial=initial.file if initial else None,
                     widget=PortraitImageWidget(answer=initial, request=request,
                                                attrs={'data-portrait-photo': 'true'}),
                 )
             else:
                 field = ExtFileField(
-                    label=label, required=required,
-                    help_text=help_text,
+                    label=escape(q.question), required=required,
+                    help_text=rich_text(q.help_text),
                     initial=initial.file if initial else None,
                     widget=UploadedFileWidget(answer=initial, request=request),
                     ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_OTHER,
@@ -776,6 +774,7 @@ class BaseQuestionsForm(forms.Form):
                 attrs['data-min'] = q.valid_date_min.isoformat()
             if q.valid_date_max:
                 attrs['data-max'] = q.valid_date_max.isoformat()
+            help_text = q.help_text
             if not help_text:
                 if q.valid_date_min and q.valid_date_max:
                     help_text = format_lazy(
@@ -801,8 +800,8 @@ class BaseQuestionsForm(forms.Form):
             else:
                 _initial = None
             field = forms.DateField(
-                label=label, required=required,
-                help_text=help_text,
+                label=escape(q.question), required=required,
+                help_text=rich_text(help_text),
                 initial=_initial,
                 widget=DatePickerWidget(attrs),
             )
@@ -819,12 +818,13 @@ class BaseQuestionsForm(forms.Form):
             else:
                 _initial = None
             field = forms.TimeField(
-                label=label, required=required,
-                help_text=help_text,
+                label=escape(q.question), required=required,
+                help_text=rich_text(q.help_text),
                 initial=_initial,
                 widget=TimePickerWidget(without_seconds=True),
             )
         elif q.type == Question.TYPE_DATETIME:
+            help_text = q.help_text
             if not help_text:
                 if q.valid_datetime_min and q.valid_datetime_max:
                     help_text = format_lazy(
@@ -852,8 +852,8 @@ class BaseQuestionsForm(forms.Form):
                 _initial = None
 
             field = SplitDateTimeField(
-                label=label, required=required,
-                help_text=help_text,
+                label=escape(q.question), required=required,
+                help_text=rich_text(help_text),
                 initial=_initial,
                 widget=SplitDateTimePickerWidget(
                     time_format=get_format_without_seconds('TIME_INPUT_FORMATS'),
@@ -878,8 +878,8 @@ class BaseQuestionsForm(forms.Form):
                     initial = "+{}.".format(phone_prefix)
 
             field = PhoneNumberField(
-                label=label, required=required,
-                help_text=help_text,
+                label=escape(q.question), required=required,
+                help_text=rich_text(q.help_text),
                 # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
                 # a country code but no number as an initial value. It's a bit hacky, but should be stable for
                 # the future.
@@ -1087,15 +1087,15 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                 required=qc.required and not self.all_optional,
                 scheme=event.settings.name_scheme,
                 titles=event.settings.name_scheme_titles,
-                label=qc.question,
-                help_text=qc.help_text,
+                label=escape(qc.question),
+                help_text=rich_text(qc.help_text),
                 initial=pos.attendee_name_parts,
             )
         if field_name == 'attendee_email':
             return forms.EmailField(
                 required=qc.required and not self.all_optional,
-                label=qc.question,
-                help_text=qc.help_text,
+                label=escape(qc.question),
+                help_text=rich_text(qc.help_text),
                 initial=pos.attendee_email,
                 widget=forms.EmailInput(
                     attrs={
@@ -1106,8 +1106,8 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
         if field_name == 'company':
             return forms.CharField(
                 required=qc.required and not self.all_optional,
-                label=qc.question,
-                help_text=qc.help_text,
+                label=escape(qc.question),
+                help_text=rich_text(qc.help_text),
                 max_length=255,
                 initial=pos.company,
             )
@@ -1115,8 +1115,8 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
         if field_name == 'street':
             return forms.CharField(
                 required=qc.required and not self.all_optional,
-                label=qc.question,
-                help_text=qc.help_text,
+                label=escape(qc.question),
+                help_text=rich_text(qc.help_text),
                 widget=forms.Textarea(attrs={
                     'rows': 2,
                     'placeholder': _('Street and Number'),
@@ -1128,8 +1128,8 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
             return forms.CharField(
                 required=False,
                 max_length=30,
-                label=qc.question,
-                help_text=qc.help_text,
+                label=escape(qc.question),
+                help_text=rich_text(qc.help_text),
                 initial=pos.zipcode,
                 widget=forms.TextInput(attrs={
                     'autocomplete': 'postal-code',
@@ -1138,8 +1138,8 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
         if field_name == 'city':
             return forms.CharField(
                 required=False,
-                label=qc.question,
-                help_text=qc.help_text,
+                label=escape(qc.question),
+                help_text=rich_text(qc.help_text),
                 max_length=255,
                 initial=pos.city,
                 widget=forms.TextInput(attrs={
@@ -1152,8 +1152,8 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                 countries=CachedCountries
             ).formfield(
                 required=qc.required and not self.all_optional,
-                label=qc.question,
-                help_text=qc.help_text,
+                label=escape(qc.question),
+                help_text=rich_text(qc.help_text),
                 initial=country,
                 widget=forms.Select(attrs={
                     'autocomplete': 'country',
@@ -1180,8 +1180,8 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                 del self.data[fprefix + 'state']
 
             field = forms.ChoiceField(
-                label=qc.question,
-                help_text=qc.help_text,
+                label=escape(qc.question),
+                help_text=rich_text(qc.help_text),
                 required=False,
                 choices=c,
                 initial=state,
@@ -1285,15 +1285,15 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         if not self.ask_vat_id:
             del self.fields['vat_id']
         elif self.validate_vat_id:
-            self.fields['vat_id'].help_text = '<br/>'.join([
-                str(_('Optional, but depending on the country you reside in we might need to charge you '
-                      'additional taxes if you do not enter it.')),
-            ])
+            self.fields['vat_id'].help_text = _(
+                'Optional, but depending on the country you reside in we might need to charge you '
+                'additional taxes if you do not enter it.'
+            )
         else:
-            self.fields['vat_id'].help_text = '<br/>'.join([
-                str(_('Optional, but it might be required for you to claim tax benefits on your invoice '
-                      'depending on your and the seller’s country of residence.')),
-            ])
+            self.fields['vat_id'].help_text = _(
+                'Optional, but it might be required for you to claim tax benefits on your invoice '
+                'depending on your and the seller’s country of residence.'
+            )
 
         transmission_type_choices = [
             (t.identifier, t.public_name) for t in get_transmission_types()
@@ -1379,8 +1379,8 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             del self.fields['beneficiary']
 
         if event.settings.invoice_address_custom_field:
-            self.fields['custom_field'].label = event.settings.invoice_address_custom_field
-            self.fields['custom_field'].help_text = event.settings.invoice_address_custom_field_helptext
+            self.fields['custom_field'].label = escape(event.settings.invoice_address_custom_field)
+            self.fields['custom_field'].help_text = rich_text(event.settings.invoice_address_custom_field_helptext)
         else:
             del self.fields['custom_field']
 
