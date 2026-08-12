@@ -13,5 +13,5 @@ const props = defineProps<{
 
 <template lang="pug">
     div.fieldgroup-container(:style="{'flex-grow': config.relSize, 'flex-direction': config.direction || 'row'}")
-        FieldgroupItemPreview(v-for="{ label, content } of store.currentLayoutFieldContent[config.fieldgroup]" :label="label" :content="content" :content_type="style_def.content_type" :display_class="config.display" :display="style_def.display")
+        FieldgroupItemPreview(v-for="{ label, content } of store.renderedFieldGroups[config.fieldgroup]" :label="label" :content="content" :content_type="style_def.content_type" :display_class="config.display" :display="style_def.display")
 </template>
