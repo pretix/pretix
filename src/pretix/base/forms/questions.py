@@ -665,7 +665,7 @@ def get_fake_attendee_questions(settings):
 
 class BaseQuestionsForm(forms.Form):
     """
-    This form class is responsible for asking order- and ticket-related questions.
+    This is the base form class responsible for asking order- or ticket-related questions.
     """
     address_validation = False
 
