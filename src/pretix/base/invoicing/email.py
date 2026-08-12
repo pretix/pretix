@@ -88,7 +88,7 @@ class EmailTransmissionType(TransmissionType):
             recipient = info["transmission_email_address"]
         else:
             recipient = invoice.order.email
-        return _("Via Email to {recipient}").format(recipient=recipient)
+        return _("Via email to {recipient}").format(recipient=recipient)
 
 
 @transmission_providers.new()
