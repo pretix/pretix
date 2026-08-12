@@ -33,23 +33,16 @@ function openPreview(e: Event) {
 	openForm("../../preview/", {
 		csrfmiddlewaretoken: store.csrfToken,
 		platform: store.currentPlatform,
-		style: store.currentPlatformLayout.style,
-		layout: JSON.stringify(store.currentPlatformLayout.layout),
+		style: store.layout.style,
+		layout: JSON.stringify(store.layout.layout),
 	});
 }
 
 const platformChoices = computed(() => {
 	return [
 		[null, "Do not generate pass"],
-		...Object.values(store.currentPlatformStyles).map((x) => [
-			x.identifier,
-			x.name,
-		]),
+		...Object.values(store.platform.styles).map((x) => [x.identifier, x.name]),
 	];
-});
-
-const preview_layout = computed(() => {
-	return store.currentPlatformStyles[store.currentPlatformLayout.style]?.preview_layout;
 });
 </script>
 
@@ -59,26 +52,26 @@ const preview_layout = computed(() => {
     // TODO: proper spinner
 
     template(v-if="!store.loaded") {{ gettext("Loading...") }}
-    form(v-else @submit.prevent="store.saveLayout")
+    form(v-else @submit.prevent="store.save")
         .form-group
-            Input(label="Name" v-model="store.walletLayout.name")
+            Input(label="Name" v-model="store.name")
         nav
             ul.nav.nav-tabs
-                li(v-for="platform in store.platforms" :class="{'active': store.currentPlatform === platform.identifier}")
-                    a(role="tab" @click="store.currentPlatform = platform.identifier") {{ platform.name }}
+                li(v-for="platform in store.platforms" :class="{'active': store.platform.identifier === platform.identifier}")
+                    a(role="tab" @click="store.setPlatform(platform.identifier)") {{ platform.name }}
         .tabbed-form.tab-content
             .tab-pane.active.row
                 .col-md-6.col-lg-8
-                    Select.form-group(label="Style" :modelValue="store.currentPlatformLayout.style" @update:modelValue="store.setCurrentPlatformStyle" :choices="platformChoices")
-                    StyleSettings(v-if="store.currentPlatformLayout.style" v-model="store.currentPlatformLayout.layout" :style="store.currentPlatformStyles[store.currentPlatformLayout.style]")
+                    Select.form-group(label="Style" :modelValue="store.style?.identifier || null" @update:modelValue="store.setStyle" :choices="platformChoices")
+                    StyleSettings(v-if="!!store.style")
                 .col-md-6.col-lg-4
                     .panel.panel-default
                         .panel-heading Preview
                         .panel-body
-                            div(v-if="preview_layout")
-                                span.text-muted The preview below is only a rough representation of what the pass might look like. Please check the generated pass.
+                            div(v-if="!!store.style?.preview_layout")
+                                span.text-muted {{ gettext("The preview below is only a rough representation of what the pass might look like. Please check the generated pass.") }}
                                 div(style="display: grid; gap: 1em; grid-template-columns: repeat(auto-fit, minmax(auto, 360px));")
-                                    PassPreview(v-for="layout in preview_layout" :layout="layout")
+                                    PassPreview(v-for="layout in store.style.preview_layout" :layout="layout")
                             div(v-else) Preview not supported
                             //- pre
                             //-     code {{ store.currentPlatformLayout }}
@@ -92,23 +85,22 @@ const preview_layout = computed(() => {
 
 </template>
 
-
 <style lang="css">
 .walletsettings-panel .panel-heading {
-  .checkbox {
-    padding: 0;
-    margin: 0;
-    display: inline-block;
-    input[type=checkbox] {
-      margin-top: 0;
-      margin-right: 5px;
-      margin-left: 0px;
-      position: relative;
-      top: 1px;
-    }
-    label {
-        padding-left: 0;
-    }
-  }
+	.checkbox {
+		padding: 0;
+		margin: 0;
+		display: inline-block;
+		input[type="checkbox"] {
+			margin-top: 0;
+			margin-right: 5px;
+			margin-left: 0px;
+			position: relative;
+			top: 1px;
+		}
+		label {
+			padding-left: 0;
+		}
+	}
 }
 </style>
