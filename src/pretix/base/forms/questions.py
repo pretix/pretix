@@ -643,25 +643,23 @@ FakeQuestion = namedtuple(
 
 
 def get_fake_questions(settings):
-    def b(s):
-        return s == 'True'
     fq = []
     sqo = settings.system_question_order
 
-    if b(settings.get('attendee_names_asked', 'True')):
-        fq.append(FakeQuestion('attendee_name_parts', _('Attendee name'), sqo.get('attendee_name_parts', 0), b(settings.get('attendee_names_required')), ''))
+    if settings.attendee_names_asked:
+        fq.append(FakeQuestion('attendee_name_parts', _('Attendee name'), sqo.get('attendee_name_parts', 0), settings.attendee_names_required, ''))
 
-    if b(settings.get('attendee_emails_asked')):
-        fq.append(FakeQuestion('attendee_email', _('Attendee email'), sqo.get('attendee_email', 0), b(settings.get('attendee_emails_required')), ''))
+    if settings.attendee_emails_asked:
+        fq.append(FakeQuestion('attendee_email', _('Attendee email'), sqo.get('attendee_email', 0), settings.attendee_emails_required, ''))
 
-    if b(settings.get('attendee_company_asked')):
-        fq.append(FakeQuestion('company', _('Company'), sqo.get('company', 0), b(settings.get('attendee_company_required')), ''))
+    if settings.attendee_company_asked:
+        fq.append(FakeQuestion('company', _('Company'), sqo.get('company', 0), settings.attendee_company_required, ''))
 
-    if b(settings.get('attendee_addresses_asked')):
-        fq.append(FakeQuestion('street', _('Street'), sqo.get('street', 0), b(settings.get('attendee_addresses_required')), ''))
-        fq.append(FakeQuestion('zipcode', _('ZIP code'), sqo.get('zipcode', 0), b(settings.get('attendee_addresses_required')), ''))
-        fq.append(FakeQuestion('city', _('City'), sqo.get('city', 0), b(settings.get('attendee_addresses_required')), ''))
-        fq.append(FakeQuestion('country', _('Country'), sqo.get('country', 0), b(settings.get('attendee_addresses_required')), ''))
+    if settings.attendee_addresses_asked:
+        fq.append(FakeQuestion('street', _('Street'), sqo.get('street', 0), settings.attendee_addresses_required, ''))
+        fq.append(FakeQuestion('zipcode', _('ZIP code'), sqo.get('zipcode', 0), settings.attendee_addresses_required, ''))
+        fq.append(FakeQuestion('city', _('City'), sqo.get('city', 0), settings.attendee_addresses_required, ''))
+        fq.append(FakeQuestion('country', _('Country'), sqo.get('country', 0), settings.attendee_addresses_required, ''))
     return fq
 
 
@@ -760,7 +758,7 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=required,
                     help_text=help_text,
                     initial=initial.file if initial else None,
-                    widget=PortraitImageWidget(container=container, event=event, answer=initial,
+                    widget=PortraitImageWidget(answer=initial,
                                                attrs={'data-portrait-photo': 'true'}),
                 )
             else:
@@ -768,7 +766,7 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=required,
                     help_text=help_text,
                     initial=initial.file if initial else None,
-                    widget=UploadedFileWidget(container=container, event=event, answer=initial),
+                    widget=UploadedFileWidget(answer=initial),
                     ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_OTHER,
                     max_size=settings.FILE_UPLOAD_MAX_SIZE_OTHER,
                 )
