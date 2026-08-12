@@ -47,6 +47,7 @@ from pretix.helpers.i18n import (
     get_format_without_seconds, get_javascript_format,
     get_javascript_format_without_seconds,
 )
+from pretix.helpers.safedownload import get_token
 
 
 def replace_arabic_numbers(inp):
@@ -158,19 +159,25 @@ class TimePickerWidget(forms.TimeInput):
 class UploadedFileWidget(forms.ClearableFileInput):
     def __init__(self, *args, **kwargs):
         self.answer = kwargs.pop('answer')
+        self.request = kwargs.pop('request')
         super().__init__(*args, **kwargs)
 
     class FakeFile:
-        def __init__(self, file, answer):
+        def __init__(self, file, answer, request):
             self.file = file
             self.answer = answer
+            self.request = request
 
         def __str__(self):
             return os.path.basename(self.file.name).split('.', 1)[-1]
 
         @property
         def url(self):
-            return self.answer.frontend_file_url
+            token = get_token(self.request, self.answer)
+            if self.request.resolver_match.namespace == 'control':
+                return self.answer.backend_file_url + '?token=' + token
+            else:
+                return self.answer.frontend_file_url + '?token=' + token
 
     def get_context(self, name, value, attrs):
         # Browsers can't recognize that the server already has a file uploaded
@@ -183,7 +190,7 @@ class UploadedFileWidget(forms.ClearableFileInput):
 
     def format_value(self, value):
         if self.is_initial(value):
-            return self.FakeFile(value, self.answer)
+            return self.FakeFile(value, self.answer, self.request)
 
 
 class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):

@@ -67,6 +67,7 @@ from pretix.base.services.cart import (
 from pretix.base.timemachine import time_machine_now
 from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.http import redirect_to_url
+from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.productlist import (
     item_group_by_category, prepare_item_list_for_shop,
@@ -848,6 +849,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
 class AnswerDownload(EventViewMixin, View):
     def get(self, request, *args, **kwargs):
         answid = kwargs.get('answer')
+        token = request.GET.get('token', '')
         cart_id = get_or_create_cart_id(self.request)
         answer = get_object_or_404(
             QuestionAnswer,
@@ -856,8 +858,10 @@ class AnswerDownload(EventViewMixin, View):
         )
         if not answer.file:
             return Http404()
+        if not check_token(request, answer, token):
+            raise Http404(_("This link is no longer valid. Please go back, refresh the page, and try again."))
 
-        ftype, _ = mimetypes.guess_type(answer.file.name)
+        ftype, _1 = mimetypes.guess_type(answer.file.name)
         filename = '{}-cart-{}'.format(
             self.request.event.slug.upper(),
             os.path.basename(answer.file.name).split('.', 1)[1]
@@ -865,6 +869,7 @@ class AnswerDownload(EventViewMixin, View):
         resp = FileResponse(
             answer.file,
             filename=filename,
+            as_attachment=True,
             content_type=ftype or 'application/binary'
         )
         return resp

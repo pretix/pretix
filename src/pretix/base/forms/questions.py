@@ -758,7 +758,7 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=required,
                     help_text=help_text,
                     initial=initial.file if initial else None,
-                    widget=PortraitImageWidget(answer=initial,
+                    widget=PortraitImageWidget(answer=initial, request=request,
                                                attrs={'data-portrait-photo': 'true'}),
                 )
             else:
@@ -766,7 +766,7 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=required,
                     help_text=help_text,
                     initial=initial.file if initial else None,
-                    widget=UploadedFileWidget(answer=initial),
+                    widget=UploadedFileWidget(answer=initial, request=request),
                     ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_OTHER,
                     max_size=settings.FILE_UPLOAD_MAX_SIZE_OTHER,
                 )
