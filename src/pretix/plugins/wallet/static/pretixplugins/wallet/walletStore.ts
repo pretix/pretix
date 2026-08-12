@@ -1,6 +1,6 @@
 import { i18nstringLocalize } from "./helpers.js";
 import { createStore } from "./lib/store.ts";
-import { nextTick, type InjectionKey } from "vue";
+import { toRaw, type InjectionKey } from "vue";
 
 export type WidgetStore = ReturnType<typeof createWalletStore>;
 export const StoreKey: InjectionKey<WidgetStore> = Symbol("WidgetStore");
@@ -11,7 +11,6 @@ export function createWalletStore(config: {
 	locales: Record<string, string>;
 	csrfToken: string;
 	layoutId: string;
-	// platform_layouts: Record<string, PlatformLayout>;
 }) {
 	return createStore({
 		state: () => ({
@@ -19,6 +18,7 @@ export function createWalletStore(config: {
 			walletLayout: null as WalletLayout | null,
 			currentPlatform: config.platforms[0].identifier,
 			loaded: false,
+            files: {} as Record<string, File>
 		}),
 		getters: {
 			currentPlatformStyles() {
@@ -35,13 +35,19 @@ export function createWalletStore(config: {
 				}
 				for (const layout of this.walletLayout.platform_layouts) {
 					if (layout.platform === this.currentPlatform) {
+						if (!("fieldgroups" in layout.layout)) {
+							layout.layout.fieldgroups = {};
+						}
+						if (!("settings" in layout.layout)) {
+							layout.layout.settings = {};
+						}
 						return layout;
 					}
 				}
 				const newLayout = {
 					platform: this.currentPlatform,
 					style: null,
-					layout: { fieldgroups: {} },
+					layout: { fieldgroups: {}, settings: {} },
 				};
 				this.walletLayout.platform_layouts.push(newLayout);
 				return newLayout;
@@ -55,13 +61,14 @@ export function createWalletStore(config: {
 				for (const fieldgroup of group_defs) {
 					if (fieldgroup.type == "placeholder") {
 						content[fieldgroup.identifier] = [];
-						const layout_group: PlaceholderFieldGroupConfig =
-							this.currentPlatformLayout.layout.fieldgroups[
-								fieldgroup.identifier
-							];
+						const layout_group = this.currentPlatformLayout.layout.fieldgroups[
+							fieldgroup.identifier
+						] as any as PlaceholderFieldGroupConfig;
 						for (const entry of layout_group.entries) {
 							const placeholder =
-								entry.type === "placeholder" ? this.variables[fieldgroup.content_type][entry.content] : null;
+								entry.type === "placeholder"
+									? this.variables[fieldgroup.content_type][entry.content]
+									: null;
 
 							let label = i18nstringLocalize(entry.label);
 							if (placeholder && !label) {
@@ -72,7 +79,9 @@ export function createWalletStore(config: {
 							if (entry.type == "custom") {
 								value = i18nstringLocalize(entry.content);
 							} else if (entry.type == "placeholder") {
-								value = placeholder?.sample || `(unknown placeholder: ${entry.content})`;
+								value =
+									placeholder?.sample ||
+									`(unknown placeholder: ${entry.content})`;
 							}
 							content[fieldgroup.identifier].push({
 								entry,
@@ -107,6 +116,9 @@ export function createWalletStore(config: {
 
 				return content;
 			},
+			currentLayoutSettings() {
+				return {...this.currentPlatformLayout.file_settings, ...this.currentPlatformLayout.layout.settings}
+			},
 		},
 		actions: {
 			load() {
@@ -120,7 +132,40 @@ export function createWalletStore(config: {
 						this.loaded = true;
 					});
 			},
-			saveLayout() {
+			async uploadFile(file: File) {
+				return await fetch("/api/v1/upload", {
+					method: "POST",
+					body: file,
+					headers: {
+						"content-disposition": `attachment; filename="${encodeURI(file.name)}"`,
+						"content-type": file.type || "application/octet-stream",
+						"X-CSRFToken": this.csrfToken,
+					},
+				})
+					.then((x) => x.json())
+					.then((x) => x.id);
+			},
+			async saveLayout() {
+                const layoutToSave = structuredClone(toRaw(this.walletLayout))
+                // TODO: error handling, parallelization
+				for (const platformLayout of layoutToSave.platform_layouts) {
+					const platformStyle = this.platforms.filter(
+						(x) => x.identifier == platformLayout.platform,
+					)[0].styles[platformLayout.style];
+					for (const setting of platformStyle.settings) {
+                        console.log(setting, platformLayout.layout?.settings[setting.identifier])
+						if (
+							setting.type === "image" &&
+							platformLayout.layout?.settings[setting.identifier] instanceof
+								File
+						) {
+							platformLayout.layout.settings[setting.identifier] = await
+								this.uploadFile(
+									platformLayout.layout.settings[setting.identifier],
+								);
+						}
+					}
+				}
 				// TODO: error handling / proper api client
 				fetch(
 					`/api/v1/organizers/demo/events/wallet/walletlayouts/${this.layoutId}/`,
@@ -130,7 +175,7 @@ export function createWalletStore(config: {
 							"content-type": "application/json",
 							"X-CSRFToken": this.csrfToken,
 						},
-						body: JSON.stringify(this.walletLayout),
+						body: JSON.stringify(layoutToSave),
 					},
 				)
 					.then((x) => x.json())
@@ -185,29 +230,22 @@ export function createWalletStore(config: {
 								entries: JSON.parse(
 									JSON.stringify(newFieldGroups[key].default_entries),
 								),
-								active: newFieldGroups[key].required || newFieldGroups[key].default_entries.length > 0
+								active:
+									newFieldGroups[key].required ||
+									newFieldGroups[key].default_entries.length > 0,
 							};
 						} else {
 							this.currentPlatformLayout.layout.fieldgroups[key] = {
-								active: newFieldGroups[key].required
+								active: newFieldGroups[key].required,
 							};
 						}
 					}
 
 					this.currentPlatformLayout.style = style;
 				}
-				// else if (this.currentPlatformLayout.style === null && Object.keys(this.currentPlatformStyles).includes(style)) {
-				// 	this.currentPlatformLayout.style = style;
-				// 	this.currentPlatformLayout.layout.fieldgroups = {}
-				// } else if (this.currentPlatformLayout.style !== null && Object.keys(this.currentPlatformStyles).includes(style)) {
-				// 	const oldStyle = this.currentPlatformStyles[this.currentPlatformLayout.style];
-				// 	const newStyle = this.currentPlatformStyles[style];
-				// 	this.currentPlatformLayout.style = style;
-				// 	console.log(oldStyle, newStyle)
-				// }
-				// 	this.currentPlatformLayout.style = style;
-				// }
-				// if (style == null) { }
+			},
+			setSetting(identifier: string, value: string | File | null) {
+				this.currentPlatformLayout.layout.settings[identifier] = value;
 			},
 		},
 	});

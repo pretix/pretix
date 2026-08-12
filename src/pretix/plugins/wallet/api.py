@@ -1,16 +1,17 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, serializers
 from django.db import transaction
 from .styles import AVAILABLE_STYLES_DICT, AVAILABLE_PLATFORMS
 from .models import WalletLayout, WalletPlatformLayout
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from pretix.api.serializers.fields import UploadedFileField
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from .views import get_editor_placeholders
 from rest_framework import serializers
 
-
 class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
-    platform = serializers.ChoiceField(choices=[p.identifier for p in AVAILABLE_PLATFORMS])
+    platform = serializers.ChoiceField(
+        choices=[p.identifier for p in AVAILABLE_PLATFORMS]
+    )
     style = serializers.CharField(allow_null=True, required=False)
 
     class Meta:
@@ -23,9 +24,9 @@ class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
         return value
 
     def validate(self, data):
-        platform = data.get('platform')
-        style = data.get('style')
-        layout = data.get('layout')
+        platform = data.get("platform")
+        style = data.get("style")
+        layout = data.get("layout")
         if platform and style and layout:
             platform_styles = AVAILABLE_STYLES_DICT[platform]
 
@@ -33,9 +34,23 @@ class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
                 raise ValidationError(_("Invalid style"))
             style = platform_styles[data["style"]]
 
-            style = style(event=self.context['event'], layout=data["layout"])
+            style = style(event=self.context["event"], layout=data["layout"])
             style.validate()
+            data['file_settings'] = style.extract_file_settings(self.context['request'])
+
         return data
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['file_settings'] = {}
+        for file_setting in instance.file_settings.all():
+            try:
+                url = file_setting.file.url
+            except AttributeError:
+                continue
+            request = self.context['request']
+            ret['file_settings'][file_setting.key] = request.build_absolute_uri(url)
+        return ret
 
 
 class WalletLayoutSerializer(I18nAwareModelSerializer):
@@ -53,11 +68,28 @@ class WalletLayoutSerializer(I18nAwareModelSerializer):
         super().save(*args, **kwargs, event=self.context["event"])
 
     def update(self, instance, validated_data):
-        platform_layouts = validated_data.pop('platform_layouts')
+        platform_layouts = validated_data.pop("platform_layouts")
         for layout in platform_layouts:
-            if layout['style']:
-                instance.platform_layouts.update_or_create(platform=layout['platform'], defaults=layout)
-        instance.platform_layouts.exclude(platform__in={layout['platform'] for layout in platform_layouts if layout['style'] is not None}).delete()
+            if layout["style"]:
+                # TODO: better handling here
+                file_settings = layout.pop("file_settings", {})
+                obj, _ = instance.platform_layouts.update_or_create(
+                    platform=layout["platform"], defaults=layout
+                )
+                for key, file in file_settings.items():
+                    if not file:
+                        obj.file_settings.filter(key=key).delete()
+
+                    elif file != "keep":
+                        obj.file_settings.update_or_create(key=key, defaults={"file": file})
+
+        instance.platform_layouts.exclude(
+            platform__in={
+                layout["platform"]
+                for layout in platform_layouts
+                if layout["style"] is not None
+            }
+        ).delete()
         return super().update(instance, validated_data)
 
 

@@ -70,7 +70,6 @@ const preview_layout = computed(() => {
             .tab-pane.active.row
                 .col-md-6.col-lg-8
                     Select.form-group(label="Style" :modelValue="store.currentPlatformLayout.style" @update:modelValue="store.setCurrentPlatformStyle" :choices="platformChoices")
-
                     StyleSettings(v-if="store.currentPlatformLayout.style" v-model="store.currentPlatformLayout.layout" :style="store.currentPlatformStyles[store.currentPlatformLayout.style]")
                 .col-md-6.col-lg-4
                     .panel.panel-default
