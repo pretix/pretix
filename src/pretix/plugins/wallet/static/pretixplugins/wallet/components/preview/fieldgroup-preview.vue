@@ -17,9 +17,16 @@ const style_def = computed(() => {
 		].fieldgroups.map((x) => [x.identifier, x]),
 	)[props.config.fieldgroup];
 });
+
+function focusGroup() {
+    // TODO: highlight group? or change ui concept completely
+    const elem = document.getElementById('fieldgroup-' + props.config.fieldgroup)
+    elem && elem.scrollIntoView()
+}
 </script>
 
 <template lang="pug">
+div(@click="focusGroup")
     PlaceholderFieldgroupPreview(v-if="style_def && style_def.type == 'placeholder'" :config="config" :style_def="style_def")
     PredefinedFieldgroupPreview(v-else-if="style_def && style_def.type == 'predefined'" :config="config" :style_def="style_def")
 </template>

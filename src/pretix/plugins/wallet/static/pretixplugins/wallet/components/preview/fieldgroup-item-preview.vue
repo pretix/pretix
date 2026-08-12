@@ -6,7 +6,7 @@ import { i18nstringLocalize } from "../../helpers";
 const store = inject(StoreKey)!;
 
 const props = defineProps<{
-	label: I18nString;
+	label?: I18nString;
 	content: I18nString;
     content_type: FieldContentType;
     display: FieldGroupDisplay;
