@@ -388,6 +388,7 @@ def get_or_create_cart_id(request, create=True):
             if 'carts' in request.session:
                 request.session['carts'][current_id] = {}
         else:
+            # We found a valid, existing cart.
             return current_id
 
     cart_data = {}
@@ -398,6 +399,7 @@ def get_or_create_cart_id(request, create=True):
             cart_data['widget_data'] = cached_widget_data
     else:
         if not create:
+            # There is no existing cart for this request and we're not supposed to create a new one.
             return None
         new_id = generate_cart_id(request, prefix=prefix)
 
@@ -846,9 +848,10 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
 class AnswerDownload(EventViewMixin, View):
     def get(self, request, *args, **kwargs):
         answid = kwargs.get('answer')
+        cart_id = get_or_create_cart_id(self.request)
         answer = get_object_or_404(
             QuestionAnswer,
-            cartposition__cart_id=get_or_create_cart_id(self.request),
+            Q(cartposition__cart_id=cart_id) | Q(checkoutsession__cart_id=cart_id),
             id=answid
         )
         if not answer.file:

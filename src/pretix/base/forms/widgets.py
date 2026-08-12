@@ -157,16 +157,12 @@ class TimePickerWidget(forms.TimeInput):
 
 class UploadedFileWidget(forms.ClearableFileInput):
     def __init__(self, *args, **kwargs):
-        self.position = kwargs.pop('position')
-        self.event = kwargs.pop('event')
         self.answer = kwargs.pop('answer')
         super().__init__(*args, **kwargs)
 
     class FakeFile:
-        def __init__(self, file, container, event, answer):
+        def __init__(self, file, answer):
             self.file = file
-            self.container = container
-            self.event = event
             self.answer = answer
 
         def __str__(self):
@@ -174,25 +170,7 @@ class UploadedFileWidget(forms.ClearableFileInput):
 
         @property
         def url(self):
-            from pretix.base.models import Order, OrderPosition
-            from pretix.multidomain.urlreverse import eventreverse
-
-            order = None
-            if isinstance(self.container, OrderPosition):
-                order = self.container.order
-            elif isinstance(self.container, Order):
-                order = self.container
-
-            if order:
-                return eventreverse(self.event, 'presale:event.order.download.answer', kwargs={
-                    'order': order.code,
-                    'secret': order.secret,
-                    'answer': self.answer.pk,
-                })
-            else:
-                return eventreverse(self.event, 'presale:event.cart.download.answer', kwargs={
-                    'answer': self.answer.pk,
-                })
+            return self.answer.frontend_file_url
 
     def get_context(self, name, value, attrs):
         # Browsers can't recognize that the server already has a file uploaded
@@ -205,7 +183,7 @@ class UploadedFileWidget(forms.ClearableFileInput):
 
     def format_value(self, value):
         if self.is_initial(value):
-            return self.FakeFile(value, self.position, self.event, self.answer)
+            return self.FakeFile(value, self.answer)
 
 
 class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):

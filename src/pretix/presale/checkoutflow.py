@@ -1564,6 +1564,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['addr'] = self.invoice_address
         ctx['confirm_messages'] = self.confirm_messages
         ctx['cart_session'] = self.cart_session
+        ctx['checkout_session'] = self.checkout_session
         ctx['invoice_address_asked'] = self.address_asked
         ctx['customer'] = self.cart_customer
 

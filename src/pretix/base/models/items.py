@@ -1608,7 +1608,7 @@ class Question(LoggedModel):
     """
     class ContainerType(models.TextChoices):
         ORDER = "O", _("Order")
-        ORDERPOSITION  = "P", _("Order position")
+        ORDERPOSITION = "P", _("Order position")
     TYPE_NUMBER = "N"
     TYPE_STRING = "S"
     TYPE_TEXT = "T"

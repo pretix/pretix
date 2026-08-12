@@ -433,7 +433,7 @@
                         {% endif %}
                         {% for ans in order.answers.all %}
                             <dt>{{ ans.question.internal_name|default:ans.question.question }}</dt>
-                            <dd>{{ ans.answer }}</dd>
+                            <dd>{% include "pretixcontrol/order/fragment_question_answer.html" with request=request question=ans.question answer=ans %}</dd>
                         {% endfor %}
                     </dl>
                 </div>
@@ -672,31 +672,7 @@
                                                 {% endif %}
                                             </dt>
                                             <dd>
-                                                {% if q.answer %}
-                                                    {% if q.answer.file %}
-                                                        <span class="fa fa-file"></span>
-                                                        <a href="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}">
-                                                            {{ q.answer.file_name }}
-                                                        </a>
-                                                        <span class="label label-danger" data-toggle="tooltip"
-                                                                title="{% trans "This file has been uploaded by a user and could contain viruses or other malicious content." %}">
-                                                            {% trans "UNSAFE" %}
-                                                        </span>
-                                                        {% if q.answer.is_image %}
-                                                            <br>
-                                                            <a href="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}" data-lightbox="order"
-                                                                class="answer-thumb">
-                                                                <img src="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}">
-                                                            </a>
-                                                        {% endif %}
-                                                    {% elif q.type == "M" %}
-                                                        {{ q.answer.to_string_i18n|rich_text_snippet }}
-                                                    {% else %}
-                                                        {{ q.answer.to_string_i18n|linebreaksbr }}
-                                                    {% endif %}
-                                                {% else %}
-                                                    <em>{% trans "not answered" %}</em>
-                                                {% endif %}
+                                                {% include "pretixcontrol/order/fragment_question_answer.html" with request=request question=q answer=q.answer %}
                                             </dd>
                                         {% endfor %}
                                         {% for q in line.additional_fields %}

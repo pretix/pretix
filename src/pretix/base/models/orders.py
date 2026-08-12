@@ -1304,10 +1304,9 @@ class Order(LockModel, LoggedModel):
 
 def answerfile_name(instance, filename: str) -> str:
     secret = get_random_string(length=32, allowed_chars=string.ascii_letters + string.digits)
-    event = (instance.cartposition if instance.cartposition else instance.orderposition.order).event
     return 'cachedfiles/answers/{org}/{ev}/{secret}.{filename}'.format(
-        org=event.organizer.slug,
-        ev=event.slug,
+        org=instance.event.organizer.slug,
+        ev=instance.event.slug,
         secret=secret,
         filename=escape_uri_path(filename),
     )
@@ -1369,11 +1368,11 @@ class QuestionAnswer(models.Model):
     @property
     def backend_file_url(self):
         if self.file:
-            if self.orderposition:
+            if self.associated_order:
                 return reverse('control:event.order.download.answer', kwargs={
-                    'code': self.orderposition.order.code,
-                    'event': self.orderposition.order.event.slug,
-                    'organizer': self.orderposition.order.event.organizer.slug,
+                    'code': self.associated_order.code,
+                    'event': self.associated_order.event.slug,
+                    'organizer': self.associated_order.event.organizer.slug,
                     'answer': self.pk,
                 })
         return ""
@@ -1383,14 +1382,14 @@ class QuestionAnswer(models.Model):
         from pretix.multidomain.urlreverse import eventreverse
 
         if self.file:
-            if self.orderposition:
-                url = eventreverse(self.orderposition.order.event, 'presale:event.order.download.answer', kwargs={
-                    'order': self.orderposition.order.code,
-                    'secret': self.orderposition.order.secret,
+            if self.associated_order:
+                url = eventreverse(self.associated_order.event, 'presale:event.order.download.answer', kwargs={
+                    'order': self.associated_order.code,
+                    'secret': self.associated_order.secret,
                     'answer': self.pk,
                 })
             else:
-                url = eventreverse(self.cartposition.event, 'presale:event.cart.download.answer', kwargs={
+                url = eventreverse(self.event, 'presale:event.cart.download.answer', kwargs={
                     'answer': self.pk,
                 })
 
@@ -1404,6 +1403,24 @@ class QuestionAnswer(models.Model):
     @property
     def file_name(self):
         return self.file.name.split('.', 1)[-1]
+
+    @property
+    def associated_order(self):
+        if self.orderposition:
+            return self.orderposition.order
+        elif self.order:
+            return self.order
+
+    @property
+    def event(self):
+        if self.orderposition:
+            return self.orderposition.order.event
+        elif self.cartposition:
+            return self.cartposition.event
+        elif self.order:
+            return self.order.event
+        elif self.checkoutsession:
+            return self.checkoutsession.event
 
     def __str__(self):
         return self.to_string(use_cached=True)
