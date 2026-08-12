@@ -892,6 +892,7 @@ def _save_answers(op, answers, given_answers):
             qa.answer = answer
             qa.save(update_fields=['answer'])
             qa.options.clear()
+            return qa
 
     written = False
     for q, a in given_answers.items():
