@@ -1594,7 +1594,7 @@ class Question(LoggedModel):
     :param required: Whether answering this question is required for submitting an order including
                      items associated with this question.
     :type required: bool
-    :param items: A set of ``Items`` objects that this question should be applied to
+    :param items: TO BE REMOVED
     :param ask_during_checkin: Whether to ask this question during check-in instead of during check-out.
     :type ask_during_checkin: bool
     :param show_during_checkin: Whether to show the answer to this question during check-in.
@@ -1652,7 +1652,8 @@ class Question(LoggedModel):
         verbose_name=_("Asked on"),
         default=ContainerType.ORDERPOSITION,
     )
-    question = I18nTextField(  # to be renamed to 'internal_name'
+    question = I18nTextField(
+        # TODO(questionnaires) : to be renamed to 'internal_name'
         verbose_name=_("Question")
     )
     identifier = models.CharField(
@@ -1667,7 +1668,8 @@ class Question(LoggedModel):
             ),
         ],
     )
-    help_text = I18nTextField(  # to be removed
+    help_text = I18nTextField(
+        # TODO(questionnaires) : to be removed
         verbose_name=_("Help text"),
         help_text=_("If the question needs to be explained or clarified, do it here!"),
         null=True, blank=True,
@@ -1677,22 +1679,22 @@ class Question(LoggedModel):
         choices=TYPE_CHOICES,
         verbose_name=_("Question type")
     )
-    required = models.BooleanField(  # to be removed, -> QuestionnaireChild
+    required = models.BooleanField(  # TODO(questionnaires) : to be removed, -> QuestionnaireChild
         default=False,
         verbose_name=_("Required question")
     )
-    items = models.ManyToManyField(  # to be removed, -> Questionnaire
+    items = models.ManyToManyField(  # TODO(questionnaires) : to be removed, -> Questionnaire
         Item,
         related_name='questions',
         verbose_name=_("Products"),
         blank=True,
         help_text=_('This question will be asked to buyers of the selected products')
     )
-    position = models.PositiveIntegerField(  # to be removed, -> Questionnaire + QuestionnaireChild
+    position = models.PositiveIntegerField(  # TODO(questionnaires) : to be removed, -> Questionnaire + QuestionnaireChild
         default=0,
         verbose_name=_("Position")
     )
-    ask_during_checkin = models.BooleanField(  # to be removed
+    ask_during_checkin = models.BooleanField(  # TODO(questionnaires) : to be removed
         verbose_name=_('Ask during check-in instead of in the ticket buying process'),
         help_text=_('Not supported by all check-in apps for all question types.'),
         default=False
@@ -1711,10 +1713,10 @@ class Question(LoggedModel):
         verbose_name=_('Print answer on invoices'),
         default=False
     )
-    dependency_question = models.ForeignKey(  # to be removed, -> QuestionnaireChild
+    dependency_question = models.ForeignKey(  # TODO(questionnaires) : to be removed, -> QuestionnaireChild
         'Question', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
     )
-    dependency_values = MultiStringField(default=[])  # to be removed, -> QuestionnaireChild
+    dependency_values = MultiStringField(default=[])  # TODO(questionnaires) : to be removed, -> QuestionnaireChild
     valid_number_min = models.DecimalField(decimal_places=6, max_digits=30, null=True, blank=True,
                                            verbose_name=_('Minimum value'),
                                            help_text=_('Currently not supported in our apps and during check-in'))
@@ -1896,7 +1898,7 @@ class Question(LoggedModel):
         return answer
 
     @staticmethod
-    def clean_items(event, items):
+    def clean_items(event, items):  # TODO(questionnaires) : remove method / move to qc
         for item in items:
             if event != item.event:
                 raise ValidationError(_('One or more items do not belong to this event.'))
