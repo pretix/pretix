@@ -349,8 +349,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
                 pp = lp.payment_provider
                 ctx['last_payment_info'] = pp.payment_pending_render(self.request, ctx['last_payment'])
 
-                abort_pending_payment_allowed = pp.abort_pending_allowed and pp.abort_pending_payment_allowed(lp)
-                if lp.state == OrderPayment.PAYMENT_STATE_PENDING and not abort_pending_payment_allowed:
+                if lp.state == OrderPayment.PAYMENT_STATE_PENDING and not pp.payment_abort_pending_allowed(lp):
                     ctx['can_pay'] = False
 
             ctx['can_pay'] = ctx['can_pay'] and self.order._can_be_paid() is True
@@ -612,9 +611,8 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
 
         if self.open_payment:
             pp = self.open_payment.payment_provider
-            abort_pending_payment_allowed = pp.abort_pending_allowed and pp.abort_pending_payment_allowed(
-                self.open_payment)
-            if self.open_payment.state == OrderPayment.PAYMENT_STATE_PENDING and not abort_pending_payment_allowed:
+            if self.open_payment.state == OrderPayment.PAYMENT_STATE_PENDING and not pp.payment_abort_pending_allowed(
+                    self.open_payment):
                 messages.error(request, _('A payment is currently pending for this order.'))
                 return redirect(self.get_order_url())
 
@@ -1721,9 +1719,7 @@ class OrderChangeMixin:
 
         if totaldiff > Decimal('0.00') and self.order.status == Order.STATUS_PENDING:
             for p in self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_PENDING):
-                abort_pending_payment_allowed = p.payment_provider.abort_pending_allowed and p.payment_provider.abort_pending_payment_allowed(
-                    p)
-                if not abort_pending_payment_allowed:
+                if not p.payment_provider.payment_abort_pending_allowed(p):
                     raise OrderError(_('You may not change your order in a way that requires additional payment while '
                                        'we are processing your current payment. Please check back after your current '
                                        'payment has been accepted.'))

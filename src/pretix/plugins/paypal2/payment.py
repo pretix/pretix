@@ -540,11 +540,7 @@ class PaypalMethod(BasePaymentProvider):
             'XPF': 0,
         }))
 
-    @property
-    def abort_pending_allowed(self):
-        return True
-
-    def abort_pending_payment_allowed(self, payment) -> bool:
+    def payment_abort_pending_allowed(self, payment) -> bool:
         if not self.settings.get('allow_retries_during_compliance_hold', as_type=bool, default=True):
             return False
 
