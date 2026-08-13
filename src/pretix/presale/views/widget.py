@@ -229,6 +229,60 @@ def generate_widget_js(version, lang, use_vite=False):
     return f"/* v{version} */\n" + code
 
 
+def get_widget_js(version, lang, use_vite, force_regenerate=False):
+    variant = 'vite' if use_vite else 'legacy'
+    cache_prefix = 'widget_js_data_v{}_{}_{}'.format(version, lang, variant)
+    settings_key = 'widget_file_v{}_{}_{}'.format(version, lang, variant)
+    checksum_key = 'widget_checksum_v{}_{}_{}'.format(version, lang, variant)
+    gs = GlobalSettingsObject()
+
+    if not force_regenerate:
+        cached_js = cache.get(cache_prefix)
+        if cached_js and not settings.DEBUG:
+            return cached_js
+
+        fname = gs.settings.get(settings_key)
+        if fname and not settings.DEBUG:
+            if isinstance(fname, File):
+                fname = fname.name
+            try:
+                data = default_storage.open(fname).read()
+                cache.set(cache_prefix, data, 3600 * 4)
+                return data
+            except:
+                logger.exception('Failed to open widget.js')
+    else:
+        fname = gs.settings.get(settings_key)
+
+    data = generate_widget_js(version, lang, use_vite=use_vite).encode()
+    checksum = hashlib.sha1(data).hexdigest()
+    should_save = (
+        not fname
+        or gs.settings.get(checksum_key, '') != checksum
+    )
+    if should_save and not settings.DEBUG:
+        newname = default_storage.save(
+            'widget/widget.{}.{}.{}.{}.js'.format(version, lang, variant, checksum),
+            ContentFile(data)
+        )
+        gs.settings.set(settings_key, 'file://' + newname)
+        gs.settings.set(checksum_key, checksum)
+        cache.set(cache_prefix, data, 3600 * 4)
+        if fname:
+            if isinstance(fname, File):
+                default_storage.delete(fname.name)
+            else:
+                default_storage.delete(fname)
+    return data
+
+
+def regenerate_all_widget_js():
+    for lc, ll in settings.LANGUAGES:
+        for version in range(version_min, version_max + 1):
+            for use_vite in [True, False]:
+                get_widget_js(version, lc, use_vite, force_regenerate=True)
+
+
 @gzip_page
 @condition(etag_func=widget_js_etag)
 def widget_js(request, version, lang, **kwargs):
@@ -239,43 +293,9 @@ def widget_js(request, version, lang, **kwargs):
         version = version_min
 
     use_vite = _use_vite(request)
-    variant = 'vite' if use_vite else 'legacy'
-    cache_prefix = 'widget_js_data_v{}_{}_{}'.format(version, lang, variant)
+    data = get_widget_js(version, lang, use_vite)
 
-    cached_js = cache.get(cache_prefix)
-    if cached_js and not settings.DEBUG:
-        resp = HttpResponse(cached_js, content_type='text/javascript')
-        resp['Access-Control-Allow-Origin'] = '*'
-        return resp
-
-    settings_key = 'widget_file_v{}_{}_{}'.format(version, lang, variant)
-    checksum_key = 'widget_checksum_v{}_{}_{}'.format(version, lang, variant)
-
-    gs = GlobalSettingsObject()
-    fname = gs.settings.get(settings_key)
-    resp = None
-    if fname and not settings.DEBUG:
-        if isinstance(fname, File):
-            fname = fname.name
-        try:
-            data = default_storage.open(fname).read()
-            resp = HttpResponse(data, content_type='text/javascript')
-            cache.set(cache_prefix, data, 3600 * 4)
-        except:
-            logger.exception('Failed to open widget.js')
-
-    if not resp:
-        data = generate_widget_js(version, lang, use_vite=use_vite).encode()
-        checksum = hashlib.sha1(data).hexdigest()
-        if not settings.DEBUG:
-            newname = default_storage.save(
-                'widget/widget.{}.{}.{}.{}.js'.format(version, lang, variant, checksum),
-                ContentFile(data)
-            )
-            gs.settings.set(settings_key, 'file://' + newname)
-            gs.settings.set(checksum_key, checksum)
-            cache.set(cache_prefix, data, 3600 * 4)
-        resp = HttpResponse(data, content_type='text/javascript')
+    resp = HttpResponse(data, content_type='text/javascript')
     resp['Access-Control-Allow-Origin'] = '*'
     return resp
 
