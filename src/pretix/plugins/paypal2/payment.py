@@ -895,12 +895,11 @@ class PaypalMethod(BasePaymentProvider):
         stuck_in_compliance = False
         retry = self.payment_abort_pending_allowed(payment)
         try:
-            if (
-                    payment.info
-                    and payment.info_data['purchase_units'][0]['payments']['captures'][0]['status'] == 'PENDING'
-            ):
-                stuck_in_compliance = True
-        except (KeyError, IndexError):
+            for purchase_unit in payment.info_data['purchase_units']:
+                for capture in purchase_unit['payments']['captures']:
+                    if capture['status'] == "PENDING":
+                        stuck_in_compliance = True
+        except KeyError:
             pass
 
         try:
