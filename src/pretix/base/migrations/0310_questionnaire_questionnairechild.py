@@ -97,17 +97,17 @@ def migrate_questions_forward(apps, schema_editor):
             ))
         }
 
-        # get all questions (user-defined and system provided), along with the products for which they're asked
-        questions = event.questions.all()
+        # get all ticket-level questions (user-defined and system provided), along with the products for which they're asked
+        questions = event.questions.filter(container_type='P')
         children = sorted(chain((
-            (item, q.position, q.id, q)
-            for q in questions.filter(hidden=False)
-            for item in q.items.values_list('id', 'internal_name', 'name')
-        ), (
             (item, q.position, 0, q)
             for q in get_fake_questions(settings)
             for item in event.items.filter(personalized=True).values_list('id', 'internal_name', 'name')
-        )), key=lambda t: (t[0], t[1], t[2]))
+        ), (
+            (item, q.position, q.id, q)
+            for q in questions.filter(hidden=False)
+            for item in q.items.values_list('id', 'internal_name', 'name')
+        )), key=lambda t: (t[0], t[1]))
 
         create_grouped_item_questionnaires(event, children, '', 'PS')
 
@@ -115,9 +115,30 @@ def migrate_questions_forward(apps, schema_editor):
             (item, q.position, q.id, q)
             for q in questions.filter(hidden=True)
             for item in q.items.values_list('id', 'internal_name', 'name')
-        )), key=lambda t: (t[0], t[1], t[2]))
+        )), key=lambda t: (t[0], t[1]))
 
         create_grouped_item_questionnaires(event, children, 'Hidden questions for ', 'PH')
+
+        # get all order-level questions
+        questions = list(event.questions.filter(container_type='O', hidden=False).order_by('position'))
+        if questions:
+            # create questionnaires and children
+            questionnaire = Questionnaire.objects.create(
+                event=event, type='OS', position=0, all_sales_channels=True,
+                internal_name='Per-order questions',
+            )
+            deps = {}
+            for position, child in enumerate(questions):
+                deps[child.id] = QuestionnaireChild.objects.create(
+                    questionnaire=questionnaire,
+                    position=position + 1,
+                    user_datafield=child,
+                    required=child.required,
+                    label=child.question,
+                    help_text=child.help_text,
+                    dependency_question=deps[child.dependency_question.id] if child.dependency_question else None,
+                    dependency_values=child.dependency_values,
+                )
 
 
 def migrate_questions_backward(apps, schema_editor):
@@ -127,7 +148,7 @@ def migrate_questions_backward(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0308_checkoutsession_invoiceaddress_checkout_session'),
+        ('pretixbase', '0309_alter_questionanswer_unique_together_and_more'),
     ]
 
     operations = [
