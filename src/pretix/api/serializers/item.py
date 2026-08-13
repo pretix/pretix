@@ -632,18 +632,18 @@ class QuestionRefField(serializers.PrimaryKeyRelatedField):
     def to_representation(self, qc):
         if not qc:
             return None
-        elif qc.system_question:
-            return qc.system_question
-        elif qc.user_question_id:
-            return qc.user_question_id
+        elif qc.system_datafield:
+            return qc.system_datafield
+        elif qc.user_datafield_id:
+            return qc.user_datafield_id
         else:
             return None
 
     def to_internal_value(self, data):
         if type(data) == int:
-            return {'user_question': super().to_internal_value(data), 'system_question': None}
+            return {'user_datafield': super().to_internal_value(data), 'system_datafield': None}
         elif type(data) == str or data is None:
-            return {'user_question': None, 'system_question': data}
+            return {'user_datafield': None, 'system_datafield': data}
         else:
             self.fail('incorrect_type', data_type=type(data).__name__)
 
@@ -737,13 +737,13 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
         prev_questions = {}
         for child in value:
             if child.get('dependency_question'):
-                if (child['dependency_question']['user_question'] or child['dependency_question']['system_question']) not in prev_questions:
+                if (child['dependency_question']['user_datafield'] or child['dependency_question']['system_datafield']) not in prev_questions:
                     raise ValidationError('A question can only depend on a previous question from the same questionnaire.')
 
-            if child['user_question']:
-                prev_questions[child['user_question']] = child
-            if child['system_question']:
-                prev_questions[child['system_question']] = child
+            if child['user_datafield']:
+                prev_questions[child['user_datafield']] = child
+            if child['system_datafield']:
+                prev_questions[child['system_datafield']] = child
         return value
 
     @transaction.atomic

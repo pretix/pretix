@@ -651,7 +651,7 @@
                                                 {% endif %}
                                                 #}
                                                 {% include "pretixcontrol/order/fragment_question_answer.html" with request=request question=q answer=q.answer %}
-                                                {% if q.system_question == "attendee_email" and not line.addon_to %}
+                                                {% if q.system_datafield == "attendee_email" and not line.addon_to %}
                                                     <form class="form-inline helper-display-inline" method="post"
                                                           action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}">
                                                         {% csrf_token %}

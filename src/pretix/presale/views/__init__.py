@@ -436,7 +436,7 @@ def get_cart_positions(request):
                 Prefetch('item__questionnaires',
                          qqs.prefetch_related(
                              Prefetch('children', QuestionnaireChild.objects.prefetch_related(
-                                 Prefetch('user_question', Question.objects.prefetch_related(
+                                 Prefetch('user_datafield', Question.objects.prefetch_related(
                                      Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
                                          # This prefetch statement is utter bullshit, but it actually prevents Django from doing
                                          # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
