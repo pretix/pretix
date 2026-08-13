@@ -643,7 +643,7 @@
                                                         {{ q.answer.to_string_i18n|rich_text_snippet }}
                                                     {% elif q.type %}
                                                         {{ q.answer.to_string_i18n|linebreaksbr }}
-                                                    {% else %}<!-- TODO: proper separation of QuestionAnswer objects and system answers......   -->
+                                                    {% else %}<!-- TODO(questionnaires): proper separation of QuestionAnswer objects and system answers......   -->
                                                         {{ q.answer|linebreaksbr }}
                                                     {% endif %}
                                                 {% else %}
