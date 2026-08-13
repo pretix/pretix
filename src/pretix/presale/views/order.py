@@ -90,7 +90,9 @@ from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.http import redirect_to_url
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
-from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
+from pretix.presale.forms.checkout import (
+    CustomerAwareQuestionsForm, InvoiceAddressForm,
+)
 from pretix.presale.forms.order import OrderPositionChangeForm
 from pretix.presale.productlist import prepare_item_list_for_shop
 from pretix.presale.signals import question_form_fields_overrides
@@ -806,9 +808,13 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
 
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, TemplateView):
-    form_class = QuestionsForm
+    orderposition_form_class = CustomerAwareQuestionsForm
     invoice_form_class = InvoiceAddressForm
     template_name = "pretixpresale/event/order_modify.html"
+
+    @property
+    def order_question_container(self):
+        return self.order
 
     @cached_property
     def positions(self):
@@ -940,12 +946,16 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
 
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderPositionModify(EventViewMixin, OrderPositionDetailMixin, OrderQuestionsViewMixin, TemplateView):
-    form_class = QuestionsForm
+    orderposition_form_class = CustomerAwareQuestionsForm
     invoice_form_class = None
     template_name = "pretixpresale/event/position_modify.html"
 
     @cached_property
     def invoice_form(self):
+        return None
+
+    @property
+    def order_question_container(self):
         return None
 
     @cached_property
@@ -1144,7 +1154,11 @@ class AnswerDownload(EventViewMixin, OrderDetailMixin, View):
         answid = kwargs.get('answer')
         token = request.GET.get('token', '')
 
-        answer = get_object_or_404(QuestionAnswer, orderposition__order=self.order, id=answid)
+        answer = get_object_or_404(
+            QuestionAnswer,
+            Q(orderposition__order=self.order) | Q(order=self.order),
+            id=answid,
+        )
         if not answer.file:
             raise Http404()
         if not check_token(request, answer, token):
@@ -1154,7 +1168,7 @@ class AnswerDownload(EventViewMixin, OrderDetailMixin, View):
         resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
         resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
             self.request.event.slug.upper(), self.order.code,
-            answer.orderposition.positionid,
+            answer.orderposition.positionid if answer.orderposition else '',
             os.path.basename(answer.file.name).split('.', 1)[1]
         )
         return resp

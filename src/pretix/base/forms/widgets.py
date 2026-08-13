@@ -47,6 +47,7 @@ from pretix.helpers.i18n import (
     get_format_without_seconds, get_javascript_format,
     get_javascript_format_without_seconds,
 )
+from pretix.helpers.safedownload import get_token
 
 
 def replace_arabic_numbers(inp):
@@ -157,36 +158,26 @@ class TimePickerWidget(forms.TimeInput):
 
 class UploadedFileWidget(forms.ClearableFileInput):
     def __init__(self, *args, **kwargs):
-        self.position = kwargs.pop('position')
-        self.event = kwargs.pop('event')
         self.answer = kwargs.pop('answer')
+        self.request = kwargs.pop('request')
         super().__init__(*args, **kwargs)
 
     class FakeFile:
-        def __init__(self, file, position, event, answer):
+        def __init__(self, file, answer, request):
             self.file = file
-            self.position = position
-            self.event = event
             self.answer = answer
+            self.request = request
 
         def __str__(self):
             return os.path.basename(self.file.name).split('.', 1)[-1]
 
         @property
         def url(self):
-            from pretix.base.models import OrderPosition
-            from pretix.multidomain.urlreverse import eventreverse
-
-            if isinstance(self.position, OrderPosition):
-                return eventreverse(self.event, 'presale:event.order.download.answer', kwargs={
-                    'order': self.position.order.code,
-                    'secret': self.position.order.secret,
-                    'answer': self.answer.pk,
-                })
+            token = get_token(self.request, self.answer)
+            if self.request.resolver_match.namespace == 'control':
+                return self.answer.backend_file_url + '?token=' + token
             else:
-                return eventreverse(self.event, 'presale:event.cart.download.answer', kwargs={
-                    'answer': self.answer.pk,
-                })
+                return self.answer.frontend_file_url + '?token=' + token
 
     def get_context(self, name, value, attrs):
         # Browsers can't recognize that the server already has a file uploaded
@@ -199,7 +190,7 @@ class UploadedFileWidget(forms.ClearableFileInput):
 
     def format_value(self, value):
         if self.is_initial(value):
-            return self.FakeFile(value, self.position, self.event, self.answer)
+            return self.FakeFile(value, self.answer, self.request)
 
 
 class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):

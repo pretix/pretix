@@ -56,7 +56,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.generic import FormView, ListView, View
+from django.views.generic import FormView, ListView, TemplateView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django_countries.fields import Country
 
@@ -426,7 +426,7 @@ def reorder_categories(request, organizer, event):
 
 
 FakeQuestion = namedtuple(
-    'FakeQuestion', 'id question position required'
+    'FakeQuestion', 'id question position required container_type'
 )
 
 
@@ -436,140 +436,7 @@ class QuestionList(ListView):
     template_name = 'pretixcontrol/items/questions.html'
 
     def get_queryset(self):
-        return self.request.event.questions.prefetch_related('items')
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        questions = []
-
-        if self.request.event.settings.attendee_names_asked:
-            questions.append(
-                FakeQuestion(
-                    id='attendee_name_parts',
-                    question=_('Attendee name'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'attendee_name_parts', 0
-                    ),
-                    required=self.request.event.settings.attendee_names_required,
-                )
-            )
-
-        if self.request.event.settings.attendee_emails_asked:
-            questions.append(
-                FakeQuestion(
-                    id='attendee_email',
-                    question=_('Attendee email'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'attendee_email', 0
-                    ),
-                    required=self.request.event.settings.attendee_emails_required,
-                )
-            )
-
-        if self.request.event.settings.attendee_company_asked:
-            questions.append(
-                FakeQuestion(
-                    id='company',
-                    question=_('Company'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'company', 0
-                    ),
-                    required=self.request.event.settings.attendee_company_required,
-                )
-            )
-
-        if self.request.event.settings.attendee_addresses_asked:
-            questions.append(
-                FakeQuestion(
-                    id='street',
-                    question=_('Street'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'street', 0
-                    ),
-                    required=self.request.event.settings.attendee_addresses_required,
-                )
-            )
-            questions.append(
-                FakeQuestion(
-                    id='zipcode',
-                    question=_('ZIP code'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'zipcode', 0
-                    ),
-                    required=self.request.event.settings.attendee_addresses_required,
-                )
-            )
-            questions.append(
-                FakeQuestion(
-                    id='city',
-                    question=_('City'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'city', 0
-                    ),
-                    required=self.request.event.settings.attendee_addresses_required,
-                )
-            )
-            questions.append(
-                FakeQuestion(
-                    id='country',
-                    question=_('Country'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'country', 0
-                    ),
-                    required=self.request.event.settings.attendee_addresses_required,
-                )
-            )
-
-        questions += list(ctx['questions'])
-        questions.sort(key=lambda q: q.position)
-        ctx['questions'] = questions
-        return ctx
-
-
-@transaction.atomic
-@event_permission_required("event.items:write")
-@require_http_methods(["POST"])
-def reorder_questions(request, organizer, event):
-    try:
-        ids = json.loads(request.body.decode('utf-8'))['ids']
-    except (JSONDecodeError, KeyError, ValueError):
-        return HttpResponseBadRequest("expected JSON: {ids:[]}")
-
-    # filter system_questions - normal questions are int/digit, system_questions strings
-    custom_question_ids = [i for i in ids if i.isdigit()]
-    input_questions = list(request.event.questions.filter(id__in=custom_question_ids))
-
-    if len(input_questions) != len(custom_question_ids):
-        raise Http404(_("Some of the provided object ids are invalid."))
-
-    if len(input_questions) != request.event.questions.count():
-        raise Http404(_("Not all objects have been selected."))
-
-    for q in input_questions:
-        pos = ids.index(str(q.pk))
-        if pos != q.position:  # Save unneccessary UPDATE queries
-            q.position = pos
-            q.save(update_fields=['position'])
-            q.log_action(
-                'pretix.event.question.reordered', user=request.user, data={
-                    'position': pos,
-                }
-            )
-
-    system_question_order = {}
-    for s in ('attendee_name_parts', 'attendee_email', 'company', 'street', 'zipcode', 'city', 'country'):
-        if s in ids:
-            system_question_order[s] = ids.index(s)
-        else:
-            system_question_order[s] = -1
-    request.event.settings.system_question_order = system_question_order
-    request.event.log_action(
-        'pretix.event.settings', user=request.user, data={
-            'system_question_order': system_question_order,
-        }
-    )
-
-    return HttpResponse()
+        return self.request.event.questions
 
 
 class QuestionDelete(EventPermissionRequiredMixin, CompatDeleteView):
@@ -805,6 +672,9 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['instance'] = Question(event=self.request.event)
+        kwargs['instance'].container_type = self.request.GET.get('container_type', Question.ContainerType.ORDERPOSITION)
+        if kwargs['instance'].container_type not in Question.ContainerType.values:
+            raise PermissionDenied
         return kwargs
 
     def get_success_url(self) -> str:
@@ -834,6 +704,11 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
             self.save_formset(form.instance)
 
         return ret
+
+
+class QuestionnairesEditor(EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_change_items'
+    template_name = 'pretixcontrol/items/questionnaires.html'
 
 
 class QuotaQueryMixin:

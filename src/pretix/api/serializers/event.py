@@ -702,7 +702,7 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
         return super().save(**kwargs)
 
     def validate_default(self, value):
-        if not value and self.instance.default:
+        if not value and (not self.instance or self.instance.default):
             raise ValidationError("You can't remove the default property, instead set it on another tax rule.")
         return value
 
@@ -975,7 +975,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'reusable_media_type_nfc_mf0aes',
         'reusable_media_type_nfc_mf0aes_random_uid',
         'reusable_media_usage_enforced',
-        'system_question_order',
+        'system_question_order',  # TODO(questionnaires) - remove or replace
         'tax_rule_payment',
         'tax_rule_cancellation',
     ]
