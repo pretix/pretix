@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2024-12-25 23:27+0000\n"
-"Last-Translator: Aarni Heinonen <vamoosev@gmail.com>\n"
+"PO-Revision-Date: 2026-08-13 10:00+0000\n"
+"Last-Translator: Xiaofan Wang <ogb91@126.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -57,7 +57,7 @@ msgstr "捷克语"
 
 #: pretix/_base_settings.py
 msgid "Croatian"
-msgstr ""
+msgstr "克罗地亚语"
 
 #: pretix/_base_settings.py
 msgid "Danish"
@@ -91,7 +91,7 @@ msgstr "希腊语"
 
 #: pretix/_base_settings.py
 msgid "Hebrew"
-msgstr ""
+msgstr "希伯来语"
 
 #: pretix/_base_settings.py
 msgid "Indonesian"
@@ -103,7 +103,7 @@ msgstr "意大利语"
 
 #: pretix/_base_settings.py
 msgid "Japanese"
-msgstr ""
+msgstr "日语"
 
 #: pretix/_base_settings.py
 msgid "Latvian"
@@ -147,11 +147,11 @@ msgstr "西班牙语"
 
 #: pretix/_base_settings.py
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "西班牙语（拉丁美洲）"
 
 #: pretix/_base_settings.py
 msgid "Thai"
-msgstr ""
+msgstr "泰语"
 
 #: pretix/_base_settings.py
 msgid "Turkish"
@@ -327,7 +327,7 @@ msgstr "不支持通过PATCH/PUT更新附加组件或变量。请使用专用nes
 
 #: pretix/api/serializers/item.py
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "目前只有门票产品可以个性化。"
 
 #: pretix/api/serializers/item.py
 msgid ""
@@ -412,7 +412,7 @@ msgstr "您或您的关联组织帐户中已经存在具有相同密码的礼品
 #: pretix/api/serializers/organizer.py pretix/control/views/organizer.py
 #, python-format
 msgid "You've been invited to join %(organizer)s"
-msgstr ""
+msgstr "你也被邀请加入%(organizer)s"
 
 #: pretix/api/serializers/organizer.py pretix/control/views/organizer.py
 msgid "This user already has been invited for this team."
@@ -433,7 +433,7 @@ msgstr "此优惠券号码已使用最大允许次数。"
 
 #: pretix/api/views/checkin.py
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "连接到其他活动的媒体"
 
 #: pretix/api/views/checkin.py
 #, fuzzy
