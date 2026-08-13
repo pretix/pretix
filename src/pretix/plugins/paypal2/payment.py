@@ -55,7 +55,7 @@ from pretix.base.forms import SecretKeySettingsField
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
-from pretix.base.settings import SettingsSandbox, settings_hierarkey
+from pretix.base.settings import SettingsSandbox
 from pretix.helpers import OF_SELF
 from pretix.helpers.urls import mainreverse_absolute
 from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute

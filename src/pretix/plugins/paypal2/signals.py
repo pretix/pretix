@@ -169,6 +169,7 @@ settings_hierarkey.add_default('payment_paypal_method_wallet', True, bool)
 settings_hierarkey.add_default('payment_paypal_allow_retries_during_compliance_hold', False, bool)
 settings_hierarkey.add_default('payment_paypal_timeout_payment_during_compliance_hold', 10, int)
 
+
 def _nonce(request):
     if not hasattr(request, "_paypal_nonce"):
         request._paypal_nonce = get_random_string(32)
