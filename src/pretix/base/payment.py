@@ -338,8 +338,9 @@ class BasePaymentProvider:
         """
         return False
 
-    def payment_abort_pending_allowed(self, payment: OrderPayment) -> bool:
+    def _payment_abort_pending_allowed(self, payment: OrderPayment) -> bool:
         """
+        Experimental: This might change during upcomming releases.
         Whether or not a user can abort a payment in pending state to switch to another
         payment method. This returns ``self.abort_pending_allowed`` by default which is
         no guarantee that aborting a pending payment can never happen, it just hides the
@@ -1035,7 +1036,7 @@ class BasePaymentProvider:
         """
 
         if payment.state == OrderPayment.PAYMENT_STATE_PENDING:
-            if not self.payment_abort_pending_allowed(payment):
+            if not self._payment_abort_pending_allowed(payment):
                 raise PaymentException(_(
                     "This payment is already being processed and cannot be canceled any more."
                 ))

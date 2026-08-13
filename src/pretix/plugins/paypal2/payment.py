@@ -540,13 +540,13 @@ class PaypalMethod(BasePaymentProvider):
             'XPF': 0,
         }))
 
-    def payment_abort_pending_allowed(self, payment) -> bool:
-        if not self.settings.get('allow_retries_during_compliance_hold', as_type=bool, default=True):
+    def _payment_abort_pending_allowed(self, payment) -> bool:
+        if not self.settings.get('allow_retries_during_compliance_hold', as_type=bool, default=False):
             return False
 
         if payment.info_data.get('create_time', False):
             create_time = datetime.fromisoformat(payment.info_data['create_time'])
-            duration = self.settings.get('timeout_payment_during_compliance_hold', as_type=int, default=0)
+            duration = self.settings.get('timeout_payment_during_compliance_hold', as_type=int, default=10)
             if datetime.now(tz=timezone.utc) - create_time > timedelta(minutes=duration):
                 return True
 
@@ -893,7 +893,7 @@ class PaypalMethod(BasePaymentProvider):
 
     def payment_pending_render(self, request, payment) -> str:
         stuck_in_compliance = False
-        retry = self.payment_abort_pending_allowed(payment)
+        retry = self._payment_abort_pending_allowed(payment)
         try:
             for purchase_unit in payment.info_data['purchase_units']:
                 for capture in purchase_unit['payments']['captures']:
@@ -1160,10 +1160,6 @@ class PaypalMethod(BasePaymentProvider):
                 return super().render_invoice_text(order, payment)
 
         return self.settings.get('_invoice_text', as_type=LazyI18nString, default='')
-
-
-settings_hierarkey.add_default('payment_paypal_allow_retries_during_compliance_hold', True, bool)
-settings_hierarkey.add_default('payment_paypal_timeout_payment_during_compliance_hold', 0, int)
 
 
 class PaypalWallet(PaypalMethod):
