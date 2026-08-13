@@ -346,7 +346,7 @@ class BasePaymentProvider:
         no guarantee that aborting a pending payment can never happen, it just hides the
         frontend button to avoid users accidentally committing double payments.
         """
-        return True and self.abort_pending_allowed
+        return self.abort_pending_allowed
 
     @property
     def requires_invoice_immediately(self):
