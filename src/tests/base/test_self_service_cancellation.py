@@ -1,12 +1,12 @@
 import contextlib
 from datetime import timedelta
 from decimal import Decimal
-from typing import cast
+from typing import List, Literal, cast
 
 import pytest
 from django.db.models import Prefetch
 from django.utils.timezone import now
-from django_scopes import scope, scopes_disabled
+from django_scopes import scope
 
 from pretix.base.models import (
     Checkin, Event, Order, OrderPosition, Organizer,
@@ -79,12 +79,17 @@ def make_rule_result(fee, *, possible: bool = True, fee_type: FeeType = FeeType.
     )
 
 
-def make_cancellation_check(id: str, type: CheckTypes, result: bool, prefetches=[],
-                            related_selects=[]) -> CancellationCheck:
-    def position_check_fn(order, keep, position):
+def make_cancellation_check(id: str, type: CheckTypes, result: bool, prefetches=None,
+                            related_selects=None) -> CancellationCheck:
+    if related_selects is None:
+        related_selects = []
+    if prefetches is None:
+        prefetches = []
+
+    def position_check_fn(_order, _keep, _position):
         return make_check_result(result, id=id)
 
-    def check_fn(order, keep):
+    def check_fn(_order, _keep):
         return make_check_result(result, id=id)
 
     if type == CheckTypes.POSITION:
@@ -100,7 +105,7 @@ def make_cancellation_check(id: str, type: CheckTypes, result: bool, prefetches=
     ([False, False], False),
     ([True, False], False),
 ])
-def test_rule_result_cancellation_possible(partial_results, expected):
+def test_rule_result_cancellation_possible(partial_results: List[bool], expected: bool):
     check_results = [make_check_result(state) for state in partial_results]
 
     result = RuleResult(id=1, partial_results=check_results, fee_type=FeeType.POSITION, fee=Decimal(0))
@@ -151,7 +156,8 @@ def test_lt_returns_expected(left, right, expected):
         "additional-absolute-equal-reference",
     ],
 )
-def test_from_process_fee(fee_type: FeeType, absolute: Decimal, reference: Decimal, result: Decimal):
+def test_from_process_fee(fee_type: Literal[FeeType.MINIMUM, FeeType.ADDITIONAL], absolute: Decimal, reference: Decimal,
+                          result: Decimal):
     res = RuleResult.from_process_fee(id=1, partial_results=[],
                                       fee_type=fee_type, absolute_fee=absolute, reference_price=reference)
     assert res.fee == result
@@ -267,28 +273,24 @@ def test_prefetch_incl_values_select_related(event, order):
 
 
 @pytest.mark.django_db
-def test_ticket_not_used(event, order, order_position, checkin_list, settings):
+def test_ticket_not_used(event, order, order_position, checkin_list):
     position_not_used_check = signal_listener_position_not_used(event)
     checks = Checks(position=[position_not_used_check], process=[])
     keep = set()
 
     with scope(organizer=event.organizer):
         prefetched_order = CancellationRule._prefetch_order(event, order, checks)
-
         with ensure_no_queries():
             result = position_not_used_check.evaluate(prefetched_order, keep, order_position)
-
         assert result.cancellation_possible is True
 
-    with scope(organizer=event.organizer):
         Checkin.objects.create(
             list=checkin_list,
             position=order_position,
             successful=True
         )
-
         prefetched_order = CancellationRule._prefetch_order(event, order, checks)
-    with scopes_disabled():
+
         with ensure_no_queries():
             result = position_not_used_check.evaluate(prefetched_order, keep, order_position)
 
