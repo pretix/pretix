@@ -493,9 +493,9 @@ def webhook(request, *args, **kwargs):
                     prov.log_payment_duration(payment)
                 except Quota.QuotaExceededException:
                     pass
-            if any_pending_review:
+            if any_pending_review and payment.state != OrderPayment.PAYMENT_STATE_PENDING:
                 payment.state = OrderPayment.PAYMENT_STATE_PENDING
-                payment.save()
+                payment.save(update_fields=['state'])
         elif sale['status'] == 'APPROVED':
             try:
                 request.session['payment_paypal_oid'] = payment.info_data['id']

@@ -1037,7 +1037,7 @@ class BasePaymentProvider:
         if payment.state == OrderPayment.PAYMENT_STATE_PENDING:
             if not self.payment_abort_pending_allowed(payment):
                 raise PaymentException(_(
-                    "This payment is already being processed and can not be canceled any more."
+                    "This payment is already being processed and cannot be canceled any more."
                 ))
 
         payment.state = OrderPayment.PAYMENT_STATE_CANCELED
