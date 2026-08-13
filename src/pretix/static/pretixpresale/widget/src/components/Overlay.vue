@@ -54,16 +54,16 @@ function lightboxLoaded () {
 	}
 }
 
-function errorClose (e: Event) {
-	const dialog = e.target as HTMLDialogElement
-	if (dialog.returnValue === 'continue' && store.overlay.errorUrlAfter) {
-		if (store.overlay.errorUrlAfterNewTab) {
-			window.open(store.overlay.errorUrlAfter)
-		} else {
-			store.overlay.frameSrc = store.overlay.errorUrlAfter
-			store.overlay.frameLoading = true
-		}
+function errorContinue() {
+	if (store.overlay.errorUrlAfterNewTab) {
+		window.open(store.overlay.errorUrlAfter)
+	} else {
+		store.overlay.frameSrc = store.overlay.errorUrlAfter
+		store.overlay.frameLoading = true
 	}
+}
+
+function errorClose () {
 	store.overlay.errorMessage = null
 	store.overlay.errorUrlAfter = null
 	store.overlay.errorUrlAfterNewTab = false
@@ -200,7 +200,7 @@ Teleport(to="body")
 			form.pretix-widget-alert-box(method="dialog")
 				p(:id="errorMessageId") {{ store.overlay.errorMessage }}
 				p
-					button(v-if="store.overlay.errorUrlAfter", value="continue", autofocus, :aria-describedby="errorMessageId")
+					button(v-if="store.overlay.errorUrlAfter", autofocus, :aria-describedby="errorMessageId", @click="errorContinue")
 						| {{ STRINGS.continue }}
 					button(v-else, autofocus, :aria-describedby="errorMessageId") {{ STRINGS.close }}
 			transition(name="bounce")
