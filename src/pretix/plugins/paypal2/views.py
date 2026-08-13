@@ -471,8 +471,8 @@ def webhook(request, *args, **kwargs):
     elif payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED,
                            OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED):
         if sale['status'] == 'COMPLETED':
-            any_captures = False
             all_captures_completed = True
+            any_pending_review = False
             for purchaseunit in sale['purchase_units']:
                 for capture in purchaseunit['payments']['captures']:
                     try:
@@ -483,9 +483,9 @@ def webhook(request, *args, **kwargs):
 
                     if capture['status'] not in ('COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'):
                         all_captures_completed = False
-                    else:
-                        any_captures = True
-            if any_captures and all_captures_completed:
+                        if capture['status_details']['reason'] == "PENDING_REVIEW":
+                            any_pending_review = True
+            if all_captures_completed:
                 try:
                     payment.info = json.dumps(sale.dict())
                     payment.save(update_fields=['info'])
@@ -493,6 +493,9 @@ def webhook(request, *args, **kwargs):
                     prov.log_payment_duration(payment)
                 except Quota.QuotaExceededException:
                     pass
+            if any_pending_review and payment.state != OrderPayment.PAYMENT_STATE_PENDING:
+                payment.state = OrderPayment.PAYMENT_STATE_PENDING
+                payment.save(update_fields=['state'])
         elif sale['status'] == 'APPROVED':
             try:
                 request.session['payment_paypal_oid'] = payment.info_data['id']
