@@ -1656,11 +1656,11 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
 
         self.questions = []
         for qc in children:
-            if qc.user_question_id and qc.user_question_id in self.answer_cache:
-                qc.answer = self.answer_cache[qc.user_question_id]
+            if qc.user_datafield_id and qc.user_datafield_id in self.answer_cache:
+                qc.answer = self.answer_cache[qc.user_datafield_id]
                 #qc.answer.question = qc  # cache object
-            elif qc.system_question:
-                qc.answer = self.get_system_answer(qc.system_question)
+            elif qc.system_datafield:
+                qc.answer = self.get_system_answer(qc.system_datafield)
                 #qc.answer.question = qc  # cache object
             else:
                 qc.answer = ""
@@ -1674,30 +1674,30 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
         }
 
     def get_dependency_answer_values(self, qc):
-        if qc.user_question_id:
-            if qc.user_question_id not in self.answer_cache:
+        if qc.user_datafield_id:
+            if qc.user_datafield_id not in self.answer_cache:
                 return None
-            answer = self.answer_cache[qc.user_question_id]
+            answer = self.answer_cache[qc.user_datafield_id]
             return answer.to_dependency_values()
-        elif qc.system_question:
-            return [self.get_system_answer(qc.system_question)]
+        elif qc.system_datafield:
+            return [self.get_system_answer(qc.system_datafield)]
         else:
-            raise ValueError('Questionnaire child without question has no answer')
+            raise ValueError('Questionnaire child without datafield has no answer')
 
-    def get_system_answer(self, system_question_name):
-        if system_question_name == 'attendee_name_parts':
+    def get_system_answer(self, system_datafield_name):
+        if system_datafield_name == 'attendee_name_parts':
             return self.attendee_name_parts
-        elif system_question_name == 'attendee_email':
+        elif system_datafield_name == 'attendee_email':
             return self.attendee_email
-        elif system_question_name == 'street':
+        elif system_datafield_name == 'street':
             return self.street
-        elif system_question_name == 'zipcode':
+        elif system_datafield_name == 'zipcode':
             return self.zipcode
-        elif system_question_name == 'city':
+        elif system_datafield_name == 'city':
             return self.city
-        elif system_question_name == 'state':
+        elif system_datafield_name == 'state':
             return self.state
-        elif system_question_name == 'country':
+        elif system_datafield_name == 'country':
             return self.country
         else:
             raise ValueError('Unknown system question name')

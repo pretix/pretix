@@ -980,11 +980,11 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
 
         for questionnaire in questionnaires:
             for child in getattr(questionnaire, 'childlist', questionnaire.children.all()):
-                if child.user_question:
-                    df = child.user_question
+                if child.user_datafield:
+                    df = child.user_datafield
                     self.fields['question_%s' % df.id] = self.build_user_question_field(request, event, pos.answerlist, child, df)
-                elif child.system_question:
-                    self.fields[child.system_question] = self.build_system_question_field(request, event, pos, child)
+                elif child.system_datafield:
+                    self.fields[child.system_datafield] = self.build_system_question_field(request, event, pos, child)
 
         responses = question_form_fields.send(sender=event, position=pos)
         data = pos.meta_info_data
@@ -1049,7 +1049,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
             )
 
     def build_system_question_field(self, request, event, pos, qc):
-        field_name = qc.system_question
+        field_name = qc.system_datafield
         if field_name == 'attendee_name_parts':
             return NamePartsFormField(
                 max_length=255,

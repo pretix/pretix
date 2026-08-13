@@ -72,7 +72,7 @@ def migrate_questions_forward(apps, schema_editor):
                     QuestionnaireChild.objects.create(
                         questionnaire=questionnaire,
                         position=position + 1,
-                        system_question=child.id,
+                        system_datafield=child.id,
                         required=child.required,
                         label=child.question,
                     )
@@ -80,7 +80,7 @@ def migrate_questions_forward(apps, schema_editor):
                     deps[child.id] = QuestionnaireChild.objects.create(
                         questionnaire=questionnaire,
                         position=position + 1,
-                        user_question=child,
+                        user_datafield=child,
                         required=child.required,
                         label=child.question,
                         help_text=child.help_text,
@@ -153,14 +153,14 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('position', models.PositiveIntegerField(default=0)),
-                ('system_question', models.CharField(max_length=25, null=True)),
+                ('system_datafield', models.CharField(max_length=25, null=True)),
                 ('required', models.BooleanField(default=False)),
                 ('label', i18nfield.fields.I18nTextField()),
                 ('help_text', i18nfield.fields.I18nTextField(null=True)),
                 ('dependency_values', pretix.base.models.fields.MultiStringField(default=[])),
                 ('dependency_question', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='dependent_questions', to='pretixbase.questionnairechild')),
                 ('questionnaire', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='children', to='pretixbase.questionnaire')),
-                ('user_question', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='references', to='pretixbase.question')),
+                ('user_datafield', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='references', to='pretixbase.question')),
             ],
             options={
                 'abstract': False,

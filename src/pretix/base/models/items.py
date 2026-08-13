@@ -2045,13 +2045,13 @@ class QuestionnaireChild(LoggedModel):
         default=0,
         verbose_name=_("Position")
     )
-    user_question = models.ForeignKey(
+    user_datafield = models.ForeignKey(
         Question,
         related_name="references",
         on_delete=models.CASCADE,
         null=True, blank=True,
     )
-    system_question = models.CharField(
+    system_datafield = models.CharField(
         max_length=25,
         choices=SYSTEM_QUESTION_CHOICES,
         null=True, blank=True,

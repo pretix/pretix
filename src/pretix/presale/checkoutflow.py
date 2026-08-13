@@ -1085,11 +1085,11 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
             if not self.all_optional:
                 for qq in cp.item.relevant_questionnaires:
                     for qc in qq.childlist:
-                        if qc.user_question_id and question_is_required(qc) and qc.user_question_id not in cp.answer_cache:
+                        if qc.user_datafield_id and question_is_required(qc) and qc.user_datafield_id not in cp.answer_cache:
                             if warn:
                                 messages.warning(request, _('Please fill in answers to all required questions.'))
                             return False
-                        if qc.system_question and question_is_required(qc) and not cp.get_system_answer(qc.system_question):
+                        if qc.system_datafield and question_is_required(qc) and not cp.get_system_answer(qc.system_datafield):
                             if warn:
                                 messages.warning(request, _('Please fill in answers to all required questions.'))
                             return False
