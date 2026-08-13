@@ -78,7 +78,6 @@
                         {% if q.pk and q.ask_during_checkin %}
                             <span class="fa fa-check-square text-muted" data-toggle="tooltip" title="{% trans "Ask during check-in" %}"></span>
                         {% endif %}
-
                     </td>
                     <td>
                         {% if q.pk and q.hidden %}
@@ -154,13 +153,7 @@
                     <tr data-dnd-id="{{ q.id }}">
                         <td>
                             <strong>
-                                {% if q.pk %}
-                                    <a href="{% url "control:event.items.questions.show" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}">
-                                {% endif %}
                                 {{ q.question }}
-                                {% if q.pk %}
-                                    </a>
-                                {% endif %}
                             </strong><br>
                             <small class="text-muted">{{ q.identifier }}</small>
                         </td>
@@ -180,7 +173,6 @@
                             {% if q.pk and q.ask_during_checkin %}
                                 <span class="fa fa-check-square text-muted" data-toggle="tooltip" title="{% trans "Ask during check-in" %}"></span>
                             {% endif %}
-
                         </td>
                         <td>
                             {% if q.pk and q.hidden %}
@@ -193,7 +185,6 @@
                         {% endif %}
                         <td class="text-right flip">
                             {% if q.pk %}
-                                <a href="{% url "control:event.items.questions.show" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-default btn-sm"><i class="fa fa-bar-chart"></i></a>
                                 {% if 'event.items:write' in request.eventpermset %}
                                     <a href="{% url "control:event.items.questions.edit" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                     <a href="{% url "control:event.items.questions.delete" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
