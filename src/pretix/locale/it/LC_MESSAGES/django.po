@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-13 10:00+0000\n"
+"PO-Revision-Date: 2026-08-14 01:00+0000\n"
 "Last-Translator: Translate pretix user 586 "
 "<stefanom@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -11424,13 +11424,10 @@ msgid "Refund method"
 msgstr "Metodo di rimborso"
 
 #: pretix/base/settings.py
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Terms of cancellation"
-msgstr "Cancellazione"
+msgstr "Condizioni di cancellazione"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "This text will be shown when cancellation is allowed for a paid order. Leave "
 "empty if you want pretix to automatically generate the terms of cancellation "
@@ -11441,7 +11438,6 @@ msgstr ""
 "termini di cancellazione in base alle tue impostazioni."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "This text will be shown when cancellation is allowed for an unpaid or free "
 "order. Leave empty if you want pretix to automatically generate the terms of "
@@ -11452,22 +11448,19 @@ msgstr ""
 "automaticamente i termini di cancellazione in base alle tue impostazioni."
 
 #: pretix/base/settings.py pretix/control/forms/event.py
-#, fuzzy
 msgid "Contact address"
 msgstr "Indirizzo di contatto"
 
 #: pretix/base/settings.py pretix/control/forms/event.py
-#, fuzzy
 msgid "We'll show this publicly to allow attendees to contact you."
-msgstr "La mostri pubblicamente per consentire ai partecipanti di contattarti."
+msgstr ""
+"La mostreremo pubblicamente per consentire ai partecipanti di contattarti."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Contact URL"
-msgstr "Continua"
+msgstr "URL di contatto"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "If you set this, the footer contact link will point here instead of using "
 "the email address above. Please note that you still need to add a contact "
@@ -11479,12 +11472,10 @@ msgstr ""
 "inviate."
 
 #: pretix/base/settings.py pretix/control/forms/event.py
-#, fuzzy
 msgid "Imprint URL"
 msgstr "URL del documento di imprint"
 
 #: pretix/base/settings.py pretix/control/forms/event.py
-#, fuzzy
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
@@ -11493,58 +11484,50 @@ msgstr ""
 "dati di contatto e le informazioni legali."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Privacy Policy URL"
-msgstr "URL della politica di privacy"
+msgstr "URL dell'informativa sulla privacy"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "This should point e.g. to a part of your website that explains how you use "
 "data gathered in your ticket shop."
 msgstr ""
-"Dovrebbe puntare ad esempio a una sezione del tuo sito che spiega come "
-"utilizzi i dati raccolti nel tuo negozio di biglietti."
+"Dovrebbe rimandare, ad esempio, a una sezione del tuo sito web che spiega "
+"come utilizzi i dati raccolti nel tuo negozio di biglietti."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Accessibility information URL"
-msgstr "Informazioni account modificate"
+msgstr "URL delle informazioni di accessibilità"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "This should point e.g. to a part of your website that explains how your "
 "ticket shop complies with accessibility regulation."
 msgstr ""
-"Dovrebbe puntare ad esempio a una sezione del tuo sito che spiega come il "
-"tuo negozio di biglietti rispetta le norme sull'accessibilità."
+"Dovrebbe puntare, ad esempio, a una sezione del tuo sito web che spiega come "
+"il tuo negozio di biglietti rispetta le norme sull'accessibilità."
 
 #: pretix/base/settings.py
 #: pretix/presale/templates/pretixpresale/event/base.html
 #: pretix/presale/templates/pretixpresale/organizers/accessibility.html
 #: pretix/presale/templates/pretixpresale/organizers/base.html
-#, fuzzy
 msgid "Accessibility information"
-msgstr "Informazioni account modificate"
+msgstr "Informazioni sull'accessibilità"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Accessibility information title"
-msgstr "Informazioni account modificate"
+msgstr "Titolo delle informazioni sull'accessibilità"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Accessibility information text"
-msgstr "Informazioni account modificate"
+msgstr "Testo delle informazioni sull'accessibilità"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Attach ticket files"
-msgstr "Vai al negozio"
+msgstr "Allega i file del ticket"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Tickets will never be attached if they're larger than {size} to avoid email "
 "delivery problems."
@@ -11555,12 +11538,10 @@ msgstr ""
 #: pretix/base/settings.py pretix/plugins/sendmail/forms.py
 #: pretix/plugins/sendmail/models.py
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html
-#, fuzzy
 msgid "Attach calendar files"
 msgstr "Allega i file di calendario"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
@@ -11573,7 +11554,6 @@ msgid "Attach calendar files only after order has been paid"
 msgstr "Allega i file di calendario solo dopo che l'ordine è stato pagato"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "Use this if you e.g. put a private access link into the calendar file to "
 "make sure people only receive it after their payment was confirmed."
@@ -11583,12 +11563,10 @@ msgstr ""
 "l'accesso solo dopo aver ricevuto la conferma del pagamento."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Event description"
-msgstr "Descrizione"
+msgstr "Descrizione evento"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "You can use this to share information with your attendees, such as travel "
 "information or the link to a digital event. If you keep it empty, we will "
@@ -11605,12 +11583,10 @@ msgstr ""
 "con un numero non specificato di persone."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Subject prefix"
-msgstr "Prefisso oggetto"
+msgstr "Prefisso del soggetto"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "This will be prepended to the subject of all outgoing emails, formatted as "
 "[prefix]. Choose, for example, a short form of your event name."
@@ -11622,28 +11598,24 @@ msgstr ""
 #: pretix/base/settings.py pretix/control/forms/mailsetup.py
 #: pretix/control/templates/pretixcontrol/event/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
-#, fuzzy
 msgid "Sender address"
-msgstr "Indirizzo mittente"
+msgstr "Indirizzo del mittente"
 
 #: pretix/base/settings.py pretix/control/forms/mailsetup.py
-#, fuzzy
 msgid "Sender address for outgoing emails"
-msgstr "Indirizzo mittente per le email in uscita"
+msgstr "Indirizzo del mittente per le email in uscita"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Sender name"
-msgstr "Nome mittente"
+msgstr "Nome del mittente"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "Sender name used in conjunction with the sender address for outgoing emails. "
 "Defaults to your event name."
 msgstr ""
-"Nome del mittente utilizzato in combinazione con l'indirizzo di posta per le "
-"email in uscita; predefinito al nome dell'evento."
+"Il nome del mittente viene utilizzato insieme all'indirizzo del mittente per "
+"le email in uscita. Il valore predefinito è il nome del tuo evento."
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11681,7 +11653,7 @@ msgstr ""
 " Il team di {event}"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your orders for {event}"
 msgstr "I tuoi ordini per {event}"
 
@@ -11818,12 +11790,11 @@ msgstr ""
 "{event}"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Attachment for new orders"
 msgstr "Allegato per nuovi ordini"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "This file will be attached to the first email that we send for every new "
 "order. Therefore it will be combined with the \"Placed order\", \"Free "
@@ -11866,9 +11837,9 @@ msgstr ""
 "{event}"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your order has been changed: {code}"
-msgstr "Il tuo ordine è in attesa di pagamento: {code}"
+msgstr "Il tuo ordine è stato modificato: {code}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11926,9 +11897,9 @@ msgstr ""
 "il team di {event}"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Event registration confirmed: {code}"
-msgstr "Il tuo evento: {code}"
+msgstr "Registrazione evento confermata: {code}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11955,23 +11926,21 @@ msgstr ""
 
 #: pretix/base/settings.py pretix/control/forms/event.py
 #: pretix/plugins/sendmail/models.py
-#, fuzzy
 msgid "Number of days"
 msgstr "Numero di giorni"
 
 #: pretix/base/settings.py pretix/control/forms/event.py
-#, fuzzy
 msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
 msgstr ""
-"Questo messaggio verrà inviato tanti giorni prima che scada l'ordine. Se il "
-"valore è 0, l'e-mail non verrà mai inviata."
+"Questa email verrà inviata con questo numero di giorni di anticipo rispetto "
+"alla scadenza dell'ordine. Se il valore è 0, l'email non verrà mai inviata."
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your order is about to expire: {code}"
-msgstr "Il tuo ordine è in attesa di pagamento: {code}"
+msgstr "Il tuo ordine sta per scadere: {code}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -12007,7 +11976,7 @@ msgid "Your order is pending payment: {code}"
 msgstr "Il tuo ordine è in attesa di pagamento: {code}"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -12107,12 +12076,12 @@ msgstr ""
 "Il tuo {event} team"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You have been selected from the waitinglist for {event}"
 msgstr "Sei stato selezionato dalla lista d'attesa per {event}"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -12201,9 +12170,9 @@ msgstr ""
 "{event}"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Order approved and awaiting payment: {code}"
-msgstr "Ordine approvato e confermato: {code}"
+msgstr "Ordine approvato, in attesa del pagamento: {code}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -12375,7 +12344,7 @@ msgid "Your ticket is ready for download: {code}"
 msgstr "Il tuo biglietto è pronto per il download: {code}"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -12395,7 +12364,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "Un saluto,  \n"
-"{event}"
+"Il tuo team {event}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -12421,7 +12390,7 @@ msgstr ""
 "{event}"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Activate your account at {organizer}"
 msgstr "Attiva il tuo account a {organizer}"
 
@@ -12461,7 +12430,7 @@ msgstr ""
 "Il tuo team {organizer}"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Confirm email address for your account at {organizer}"
 msgstr "Conferma l'indirizzo email del tuo account a {organizer}"
 
@@ -12501,12 +12470,12 @@ msgstr ""
 "Il tuo team {organizer}"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Set a new password for your account at {organizer}"
 msgstr "Imposta una nuova password per il tuo account a {organizer}"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {name},\n"
 "\n"
@@ -12526,7 +12495,7 @@ msgid ""
 msgstr ""
 "Salve {name},\n"
 "\n"
-"ti abbiamo inviato un nuovo codice per il tuo account presso {organizer}!\n"
+"hai richiesto una nuova password per il tuo account presso {organizer}!\n"
 "\n"
 "Per impostare una nuova password, clicca qui:\n"
 "\n"
@@ -12534,7 +12503,7 @@ msgstr ""
 "\n"
 "Il link è valido per 24 ore.\n"
 "\n"
-"Se non hai richiesto un nuovo codice, puoi ignorare questa email.\n"
+"Se non hai richiesto una nuova password, puoi ignorare questa email.\n"
 "\n"
 "Saluti,\n"
 "\n"
@@ -12546,7 +12515,7 @@ msgid "Changes to your account at {organizer}"
 msgstr "Modifiche al tuo account presso {organizer}"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {name},\n"
 "\n"
@@ -12583,56 +12552,46 @@ msgstr ""
 "Il team di {organizer}"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Please enter the hexadecimal code of a color, e.g. #990000."
 msgstr "Inserisci il codice esadecimale di un colore, ad esempio #990000."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Primary color"
 msgstr "Colore principale"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Accent color for success"
-msgstr "Colore accento per successo"
+msgstr "Colore d'accento per il successo"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "We strongly suggest to use a shade of green."
-msgstr "Ti siamo particolarmente consigliati di usare un tonalità di verde."
+msgstr "Consigliamo fortemente di usare un tonalità di verde."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Accent color for errors"
-msgstr "Colore accento per errori"
+msgstr "Colore d'accento per errori"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "We strongly suggest to use a shade of red."
-msgstr "Ti siamo particolarmente consigliati di usare un tono di rosso."
+msgstr "Consigliamo fortemente di usare un tono di rosso."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Page background color"
 msgstr "Colore dello sfondo della pagina"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Use round edges"
 msgstr "Usa bordi arrotondati"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "Use native spinners in the widget instead of custom ones for numeric inputs "
 "such as quantity."
 msgstr ""
-"Usa i spinner nativi nel widget invece di quelli personalizzati per gli "
-"input numerici come la quantità."
+"Per i campi di input numerici, come ad esempio la quantità, utilizzare i "
+"controlli di selezione predefiniti del widget anziché quelli personalizzati."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Only respected by modern browsers."
 msgstr "Supportato solo dai browser moderni."
 
@@ -12641,7 +12600,6 @@ msgid "Header image"
 msgstr "immagine dell'header"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "If you provide a logo image, we will by default not show your event name and "
 "date in the page header. If you use a white background, we show your logo "
@@ -12658,25 +12616,20 @@ msgstr ""
 "con schermo più piccolo."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Use header image in its full size"
 msgstr "Usa l'immagine di intestazione a dimensione intera"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "We recommend to upload a picture at least 1170 pixels wide."
 msgstr ""
-"Ti siamo consigliati di caricare un'immagine con larghezza minima di 1170 "
-"pixel."
+"Ti consigliamo di caricare un'immagine con larghezza minima di 1170 pixel."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Show event title even if a header image is present"
 msgstr ""
 "Mostra il titolo dell'evento anche se è presente un'immagine di intestazione"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "The title will only be shown on the event front page. If no header image is "
 "uploaded for the event, but the header image from the organizer profile is "
@@ -12688,7 +12641,6 @@ msgstr ""
 "ignorata e il titolo dell'evento sarà sempre visualizzato."
 
 #: pretix/base/settings.py pretix/control/forms/organizer.py
-#, fuzzy
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. If you use a white background, we show your logo "
@@ -12705,14 +12657,12 @@ msgstr ""
 "con schermo più piccolo."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Use header image also for events without an individually uploaded logo"
 msgstr ""
 "Utilizza l'immagine del header anche per gli eventi che non hanno un logo "
 "caricato separatamente"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Favicon"
 msgstr "Favicon"
 
@@ -12726,12 +12676,10 @@ msgstr ""
 "compatibile con la maggior parte dei dispositivi."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Social media image"
 msgstr "Immagine per i social media"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "This picture will be used as a preview if you post links to your ticket shop "
 "on social media. Facebook advises to use a picture size of 1200 x 630 "
@@ -12747,7 +12695,6 @@ msgstr ""
 "un'immagine, verrà utilizzato il logo indicato sopra."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Logo image"
 msgstr "Immagine del logo"
 
@@ -12757,7 +12704,6 @@ msgstr ""
 "Il tuo logo verrà visualizzato con altezza e larghezza massime di 2,5 cm."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Info text"
 msgstr "Testo informativo"
 
@@ -12770,7 +12716,6 @@ msgstr ""
 "modelli dei biglietti."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Banner text (top)"
 msgstr "Testo banner (in alto)"
 
@@ -12783,7 +12728,6 @@ msgstr ""
 "messaggi estremamente importanti."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Banner text (bottom)"
 msgstr "Testo banner (in basso)"
 
@@ -12796,9 +12740,8 @@ msgstr ""
 "messaggi estremamente importanti."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Voucher explanation"
-msgstr "Spiegazione voucher"
+msgstr "Spiegazione del voucher"
 
 #: pretix/base/settings.py
 msgid ""
@@ -12809,9 +12752,8 @@ msgstr ""
 "esempio per spiegare come ottenere un codice voucher."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Attendee data explanation"
-msgstr "Indirizzo di contatto dell'ordine modificato"
+msgstr "Spiegazione dei dati dei partecipanti"
 
 #: pretix/base/settings.py
 msgid ""
@@ -12823,7 +12765,6 @@ msgstr ""
 "raccogliere informazioni da loro."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Additional success message"
 msgstr "Messaggio di successo aggiuntivo"
 
@@ -12836,7 +12777,6 @@ msgstr ""
 "in aggiunta al testo predefinito."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Help text of the phone number field"
 msgstr "Testo di aiuto del campo numero di telefono"
 
@@ -12850,12 +12790,10 @@ msgstr ""
 "ordine."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Help text of the email field"
 msgstr "Testo di aiuto del campo email"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Allow creating a new team during event creation"
 msgstr "Permetti di creare un nuovo team durante la creazione di un evento"
 
@@ -12872,23 +12810,19 @@ msgstr ""
 "reale, anche senza il permesso \"Può modificare team e autorizzazioni\"."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Event start time (descending)"
 msgstr "Ora di inizio evento (discendente)"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Name (descending)"
 msgstr "Nome (discendente)"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "subevent"
 msgid "Date ordering"
 msgstr "Ordinamento delle date"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Link back to organizer overview on all event pages"
 msgstr ""
 "Link di ritorno alla panoramica dell'organizzatore su tutte le pagine "
@@ -12903,12 +12837,11 @@ msgid "This will be displayed on the organizer homepage."
 msgstr "Questo viene visualizzato sulla homepage dell'organizzatore."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Length of gift card codes"
 msgstr "Lunghezza dei codici della carta regalo"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The system generates by default {}-character long gift card codes. However, "
 "if a different length is required, it can be set here."
@@ -12918,12 +12851,10 @@ msgstr ""
 "impostata qui."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Validity of gift card codes in years"
 msgstr "Validità dei codici della carta regalo in anni"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "If you set a number here, gift cards will by default expire at the end of "
 "the year after this many years. If you keep it empty, gift cards do not have "
@@ -12934,12 +12865,10 @@ msgstr ""
 "data di scadenza specifica."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Enable cookie consent management features"
 msgstr "Abilita la gestione del consenso ai cookie"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "By clicking \"Accept all cookies\", you agree to the storing of cookies and "
 "use of similar technologies on your device."
@@ -12948,12 +12877,10 @@ msgstr ""
 "cookie e l'uso di tecnologie simili sul tuo dispositivo."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Dialog text"
-msgstr "Testo footer aggiuntivo"
+msgstr "Testo del dialogo"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "We use cookies and similar technologies to gather data that allows us to "
 "improve this website and our offerings. If you do not agree, we will only "
@@ -12965,47 +12892,38 @@ msgstr ""
 "verranno utilizzati soltanto per funzioni essenziali."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Secondary dialog text"
 msgstr "Testo del dialogo secondario"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Privacy settings"
-msgstr "Impostazioni account"
+msgstr "Impostazioni privacy"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Dialog title"
 msgstr "Titolo del dialogo"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Accept all cookies"
 msgstr "Accetta tutti i cookie"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "\"Accept\" button description"
-msgstr "Varianti prodotto"
+msgstr "Descrizione del pulsante \"Accetta\""
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Required cookies only"
-msgstr "Rimborso o pagamento esterno"
+msgstr "Solo cookie necessari"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "\"Reject\" button description"
-msgstr "Varianti prodotto"
+msgstr "Descrizione del pulsante \"Rifiuta\""
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Customers can choose their own seats"
-msgstr "I clienti non possono più modificare i loro ordini"
+msgstr "I clienti possono scegliere i propri posti"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "If disabled, you will need to manually assign seats in the backend. Note "
 "that this can mean people will not know their seat after their purchase and "
@@ -13016,71 +12934,59 @@ msgstr ""
 "non sarà indicato sul biglietto."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Show button to copy user input from other products"
 msgstr "Mostra un pulsante per copiare l'input utente da altri prodotti"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Most common English titles"
 msgstr "Titoli in inglese più frequenti"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Most common German titles"
 msgstr "Titoli in tedesco più frequenti"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "person_name_salutation"
 msgid "Ms"
 msgstr "Sig.ra"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "person_name_salutation"
 msgid "Mr"
 msgstr "Sig."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "person_name_salutation"
 msgid "Mx"
 msgstr "Mx"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "person_name_sample"
 msgid "John"
 msgstr "John"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "person_name_sample"
 msgid "Doe"
 msgstr "Doe"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "person_name"
 msgid "Title"
 msgstr "Titolo"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "person_name_sample"
 msgid "Dr"
 msgstr "Dr"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "First name"
 msgstr "Nome"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Middle name"
-msgstr "Cognome"
+msgstr "Secondo nome"
 
 #: pretix/base/settings.py pretix/control/forms/organizer.py
 msgctxt "person_name_sample"
@@ -13088,54 +12994,44 @@ msgid "John Doe"
 msgstr "Luca Rossi"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Calling name"
-msgstr "Nome di richiamo"
+msgstr "Nome di chiamata"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "Latin transcription"
 msgstr "Trascrizione latina"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "person_name"
 msgid "Salutation"
-msgstr "Cancellazione"
+msgstr "Saluto"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "person_name_sample"
 msgid "Mr"
 msgstr "Sig."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "person_name"
 msgid "Degree (after name)"
-msgstr "Titolo (dopo il nome)"
+msgstr "Titolo di studio (dopo il nome)"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "person_name_sample"
 msgid "MA"
 msgstr "MA"
 
 #: pretix/base/settings.py
-#, fuzzy
-#| msgid "Provider name"
 msgctxt "address"
 msgid "Province"
-msgstr "Nome del provider"
+msgstr "Provincia"
 
 #: pretix/base/settings.py
-#, fuzzy
 msgctxt "address"
 msgid "Prefecture"
-msgstr "Pagamento rimborsato"
+msgstr "Prefettura"
 
 #: pretix/base/settings.py pretix/control/forms/event.py
-#, fuzzy
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
@@ -13143,38 +13039,35 @@ msgstr ""
 "(vedi riquadro sopra)."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
-msgstr "Non puoi richiedere i nomi dei partecipanti se non li chiedi."
+msgstr ""
+"Non è possibile richiedere la specificazione dei nomi dei partecipanti se "
+"non li si richiede esplicitamente."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "You have to ask for attendee emails if you want to make them required."
 msgstr ""
-"Devi chiedere gli indirizzi e-mail dei partecipanti se vuoi farli "
+"Devi chiedere gli indirizzi e-mail dei partecipanti se vuoi renderli "
 "obbligatori."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid ""
 "You have to ask for invoice addresses if you want to make them required."
-msgstr "Devi chiedere gli indirizzi della fattura se vuoi farli obbligatori."
+msgstr "Devi chiedere gli indirizzi della fattura se vuoi renderli obbligatori."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "You have to require invoice addresses to require for company names."
 msgstr ""
-"È necessario richiedere gli indirizzi della fattura per richiedere i nomi "
-"delle società."
+"È necessario richiedere gli indirizzi di fatturazione per i nomi delle "
+"aziende."
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "VAT-ID is not supported for \"{}\"."
 msgstr "L'ID IVA non è supportato per \"{}\"."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "The last payment date cannot be before the end of presale."
 msgstr ""
 "La data del pagamento più recente non può essere antecedente alla fine della "
@@ -13186,34 +13079,28 @@ msgid "The value \"{identifier}\" is not a valid sales channel."
 msgstr "Il valore \"{identifier}\" non è un canale di vendita valido."
 
 #: pretix/base/settings.py
-#, fuzzy
 msgid "This needs to be disabled if other NFC-based types are active."
 msgstr ""
 "Questo deve essere disabilitato se sono attivi altri tipi basati su NFC."
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid "Your event needs to be over to use this feature."
-msgstr "Bisogna impostare una variante per questo elemento."
+msgstr ""
+"Il tuo evento deve essere terminato per poter utilizzare questa funzione."
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid "Your ticket shop needs to be offline to use this feature."
-msgstr "Il tuo biglietteria deve essere offline per utilizzare questa funzione."
+msgstr "La tua biglietteria deve essere offline per utilizzare questa funzione."
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid "Phone numbers"
-msgstr "Numero di telefono"
+msgstr "Numeri di telefono"
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid "This will remove all phone numbers from orders."
 msgstr "Questo eliminerà tutti i numeri di telefono dagli ordini."
 
 #: pretix/base/shredder.py
-#, fuzzy
-#| msgid "Email"
 msgid "Emails"
 msgstr "Email"
 
@@ -13228,7 +13115,6 @@ msgstr ""
 "l'associazione agli account cliente."
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid ""
 "This will remove all names, email addresses, and phone numbers from the "
 "waiting list."
@@ -13241,7 +13127,6 @@ msgid "Attendee info"
 msgstr "Info partecipante"
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid ""
 "This will remove all attendee names and postal addresses from order "
 "positions, as well as logged changes to them."
@@ -13250,12 +13135,10 @@ msgstr ""
 "posizioni d'ordine, nonché le modifiche registrate ad essi."
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid "Invoice addresses"
 msgstr "Indirizzi delle fatture"
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid ""
 "This will remove all invoice addresses from orders, as well as logged "
 "changes to them."
@@ -13264,12 +13147,10 @@ msgstr ""
 "le modifiche registrate ad essi."
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid "Question answers"
 msgstr "Risposte alle domande"
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid ""
 "This will remove all answers to questions, as well as logged changes to them."
 msgstr ""
@@ -13277,7 +13158,6 @@ msgstr ""
 "registrate a loro."
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid ""
 "This will remove all invoice PDFs, as well as any of their text content that "
 "might contain personal data from the database. Invoice numbers and totals "
@@ -13288,12 +13168,10 @@ msgstr ""
 "fatture e i totali saranno conservati."
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid "Cached ticket files"
-msgstr "File dei biglietti memorizzati temporaneamente"
+msgstr "File dei biglietti memorizzati nella cache"
 
 #: pretix/base/shredder.py
-#, fuzzy
 msgid "This will remove all cached ticket files. No download will be offered."
 msgstr ""
 "Questa operazione eliminerà tutti i file dei biglietti memorizzati nella "
