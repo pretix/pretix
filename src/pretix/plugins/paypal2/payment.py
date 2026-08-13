@@ -541,7 +541,7 @@ class PaypalMethod(BasePaymentProvider):
         }))
 
     def _payment_abort_pending_allowed(self, payment) -> bool:
-        if not self.settings.get('allow_retries_during_compliance_hold', as_type=bool, default=False):
+        if not self.settings.get('allow_retries_during_compliance_hold', as_type=bool, default=True):
             return False
 
         if payment.info_data.get('create_time', False):
