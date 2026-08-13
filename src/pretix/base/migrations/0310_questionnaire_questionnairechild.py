@@ -192,5 +192,5 @@ class Migration(migrations.Migration):
             migrate_questions_forward,
             migrate_questions_backward,
         ),
-        # TODO remove old columns from Question model
+        # TODO(questionnaires) remove old columns from Question model
     ]
