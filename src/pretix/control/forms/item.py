@@ -158,6 +158,9 @@ class QuestionForm(I18nModelForm):
             self.fields['items'].required = True
         else:
             del self.fields['items']
+            del self.fields['ask_during_checkin']
+            del self.fields['show_during_checkin']
+            del self.fields['print_on_invoice']
         self.fields['dependency_question'].widget.attrs['data-container-type'] = self.instance.container_type
         self.fields['dependency_question'].queryset = self.instance.event.questions.filter(
             type__in=(Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE),
