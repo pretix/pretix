@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import ipaddress
 import logging
 import smtplib
 import socket
@@ -43,6 +42,7 @@ from pretix.base.templatetags.rich_text import (
     markdown_compile_email, truelink_callback,
 )
 from pretix.helpers.format import FormattedString, SafeFormatter, format_map
+from pretix.helpers.ssrf import should_block_access
 
 from pretix.base.services.placeholders import (  # noqa
     get_available_placeholders, PlaceholderContext
@@ -56,8 +56,6 @@ from pretix.base.settings import get_name_parts_localized # noqa
 logger = logging.getLogger('pretix.base.email')
 
 T = TypeVar("T", bound=EmailBackend)
-
-_cgnat_net = ipaddress.ip_network('100.64.0.0/10')
 
 
 def test_custom_smtp_backend(backend: T, from_addr: str) -> None:
@@ -254,16 +252,9 @@ def create_connection(address, timeout=socket.getdefaulttimeout(),
         af, socktype, proto, canonname, sa = res
 
         if not getattr(settings, "MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS", False):
-            ip_addr = ipaddress.ip_address(sa[0])
-            check_ip4 = ip_addr.ipv4_mapped if getattr(ip_addr, "ipv4_mapped", None) else ip_addr
-            if ip_addr.is_multicast:
-                raise socket.error(f"Request to multicast address {sa[0]} blocked")
-            if ip_addr.is_loopback or ip_addr.is_link_local:
-                raise socket.error(f"Request to local address {sa[0]} blocked")
-            if ip_addr.is_private:
-                raise socket.error(f"Request to private address {sa[0]} blocked")
-            if check_ip4 in _cgnat_net:
-                raise socket.error(f"Request to RFC 6598 address {sa[0]} blocked")
+            is_private, msg = should_block_access(sa)
+            if is_private:
+                raise socket.error(msg)
 
         sock = None
         try:

@@ -189,7 +189,7 @@ def control_order_position_info(sender: Event, position, request, order, **kwarg
         'position': position,
         'layouts': layouts,
     }
-    return template.render(ctx, request=request).strip()
+    return template.render(ctx, request=request)
 
 
 override_layout = EventPluginSignal()

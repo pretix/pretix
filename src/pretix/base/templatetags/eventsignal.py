@@ -22,6 +22,7 @@
 import importlib
 
 from django import template
+from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 
 from pretix.base.models import Event
@@ -44,7 +45,7 @@ def eventsignal(event: Event, signame: str, **kwargs):
     _html = []
     for receiver, response in signal.send(event, **kwargs):
         if response:
-            _html.append(response)
+            _html.append(conditional_escape(response))
     return mark_safe("".join(_html))
 
 
@@ -63,5 +64,5 @@ def signal(signame: str, request, **kwargs):
     _html = []
     for receiver, response in signal.send(request, **kwargs):
         if response:
-            _html.append(response)
+            _html.append(conditional_escape(response))
     return mark_safe("".join(_html))

@@ -162,7 +162,6 @@ class XHRView(View):
 
         paypal_order = prov._create_paypal_order(request, None, cart_total)
         r = JsonResponse(paypal_order.dict() if paypal_order else {})
-        r._csp_ignore = True
         return r
 
 
@@ -358,14 +357,13 @@ def webhook(request, *args, **kwargs):
     if 'resource_type' not in event_json:
         return HttpResponse("Invalid body, no resource_type given", status=400)
 
-    if event_json['resource_type'] not in ["checkout-order", "refund", "capture"]:
-        return HttpResponse("Not interested in this resource type", status=200)
-
     # Retrieve the Charge ID of the refunded payment
-    if event_json['resource_type'] == 'refund':
+    if event_json['resource_type'] == 'checkout-order':
+        payloadid = event_json['resource']['id']
+    elif event_json['resource_type'] == 'refund' or event_json['resource_type'] == 'capture':
         payloadid = get_link(event_json['resource']['links'], 'up')['href'].split('/')[-1]
     else:
-        payloadid = event_json['resource']['id']
+        return HttpResponse("Not interested in this resource type", status=200)
 
     refs = [payloadid]
     if event_json['resource'].get('supplementary_data', {}).get('related_ids', {}).get('order_id'):
@@ -425,6 +423,8 @@ def webhook(request, *args, **kwargs):
         **event_json,
         '_order_state': sale.dict(),
     })
+    payment.info = json.dumps(sale.dict())
+    payment.save()
 
     if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED and sale['status'] in ('PARTIALLY_REFUNDED', 'REFUNDED', 'COMPLETED'):
         if event_json['resource_type'] == 'refund':
@@ -471,8 +471,8 @@ def webhook(request, *args, **kwargs):
     elif payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED,
                            OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED):
         if sale['status'] == 'COMPLETED':
-            any_captures = False
             all_captures_completed = True
+            any_pending_review = False
             for purchaseunit in sale['purchase_units']:
                 for capture in purchaseunit['payments']['captures']:
                     try:
@@ -483,15 +483,19 @@ def webhook(request, *args, **kwargs):
 
                     if capture['status'] not in ('COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'):
                         all_captures_completed = False
-                    else:
-                        any_captures = True
-            if any_captures and all_captures_completed:
+                        if capture['status_details']['reason'] == "PENDING_REVIEW":
+                            any_pending_review = True
+            if all_captures_completed:
                 try:
                     payment.info = json.dumps(sale.dict())
                     payment.save(update_fields=['info'])
                     payment.confirm()
+                    prov.log_payment_duration(payment)
                 except Quota.QuotaExceededException:
                     pass
+            if any_pending_review and payment.state != OrderPayment.PAYMENT_STATE_PENDING:
+                payment.state = OrderPayment.PAYMENT_STATE_PENDING
+                payment.save(update_fields=['state'])
         elif sale['status'] == 'APPROVED':
             try:
                 request.session['payment_paypal_oid'] = payment.info_data['id']

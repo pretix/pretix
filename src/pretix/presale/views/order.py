@@ -79,7 +79,7 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _try_auto_refund, cancel_order,
-    change_payment_provider, error_messages,
+    change_payment_provider,
 )
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate, invalidate_cache
@@ -92,11 +92,11 @@ from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
 from pretix.presale.forms.order import OrderPositionChangeForm
+from pretix.presale.productlist import prepare_item_list_for_shop
 from pretix.presale.signals import question_form_fields_overrides
 from pretix.presale.views import (
     CartMixin, EventViewMixin, iframe_entry_view_wrapper,
 )
-from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 logger = logging.getLogger(__name__)
@@ -349,7 +349,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
                 pp = lp.payment_provider
                 ctx['last_payment_info'] = pp.payment_pending_render(self.request, ctx['last_payment'])
 
-                if lp.state == OrderPayment.PAYMENT_STATE_PENDING and not pp.abort_pending_allowed:
+                if lp.state == OrderPayment.PAYMENT_STATE_PENDING and not pp._payment_abort_pending_allowed(lp):
                     ctx['can_pay'] = False
 
             ctx['can_pay'] = ctx['can_pay'] and self.order._can_be_paid() is True
@@ -611,7 +611,8 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
 
         if self.open_payment:
             pp = self.open_payment.payment_provider
-            if self.open_payment.state == OrderPayment.PAYMENT_STATE_PENDING and not pp.abort_pending_allowed:
+            if self.open_payment.state == OrderPayment.PAYMENT_STATE_PENDING and not pp._payment_abort_pending_allowed(
+                    self.open_payment):
                 messages.error(request, _('A payment is currently pending for this order.'))
                 return redirect(self.get_order_url())
 
@@ -1452,7 +1453,7 @@ class OrderChangeMixin:
 
                     if ckey not in item_cache:
                         # Get all items to possibly show
-                        items, _btn = get_grouped_items(
+                        items, _btn = prepare_item_list_for_shop(
                             self.request.event,
                             subevent=p.subevent,
                             voucher=None,
@@ -1592,30 +1593,6 @@ class OrderChangeMixin:
                 if val:
                     selected[i, None] = val, price
 
-        if sum(a[0] for a in selected.values()) > category['max_count']:
-            raise ValidationError(
-                error_messages['addon_max_count'] % {
-                    'base': str(form['pos'].item.name),
-                    'max': category['max_count'],
-                    'cat': str(category['category'].name),
-                }
-            )
-        elif sum(a[0] for a in selected.values()) < category['min_count']:
-            raise ValidationError(
-                error_messages['addon_min_count'] % {
-                    'base': str(form['pos'].item.name),
-                    'min': category['min_count'],
-                    'cat': str(category['category'].name),
-                }
-            )
-        elif any(sum(v[0] for k, v in selected.items() if k[0] == i) > 1 for i in category['items']) and not category['multi_allowed']:
-            raise ValidationError(
-                error_messages['addon_no_multi'] % {
-                    'base': str(form['pos'].item.name),
-                    'cat': str(category['category'].name),
-                }
-            )
-
         return selected
 
     def post(self, request, *args, **kwargs):
@@ -1742,7 +1719,7 @@ class OrderChangeMixin:
 
         if totaldiff > Decimal('0.00') and self.order.status == Order.STATUS_PENDING:
             for p in self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_PENDING):
-                if not p.payment_provider.abort_pending_allowed:
+                if not p.payment_provider._payment_abort_pending_allowed(p):
                     raise OrderError(_('You may not change your order in a way that requires additional payment while '
                                        'we are processing your current payment. Please check back after your current '
                                        'payment has been accepted.'))

@@ -24,6 +24,7 @@ import logging
 import os
 
 from django.conf import settings
+from django.contrib.postgres.indexes import BrinIndex
 from django.core.exceptions import FieldDoesNotExist, ImproperlyConfigured
 from django.db import connection, transaction
 from django.db.models import (
@@ -306,3 +307,30 @@ def ensure_no_queries():
 
     with connection.execute_wrapper(blocker):
         yield
+
+
+@contextlib.contextmanager
+def conditional_atomic(do_atomic, **kwargs):
+    if do_atomic:
+        with transaction.atomic(**kwargs):
+            yield
+    else:
+        yield
+
+
+class IgnoreOnSQLiteMixin:
+    # Mixin to allow defining PostgreSQL-specific indexes that will just not be created
+    # on SQLite. SQLite is supported for testing only anyways!
+    def create_sql(self, model, schema_editor, *args, **kwargs):
+        if "sqlite" in settings.DATABASES["default"]["ENGINE"]:
+            return ""
+        return super().create_sql(model, schema_editor, *args, **kwargs)
+
+    def remove_sql(self, model, schema_editor, **kwargs):
+        if "sqlite" in settings.DATABASES["default"]["ENGINE"]:
+            return ""
+        return super().remove_sql(model, schema_editor, **kwargs)
+
+
+class BrinIndexIgnoredOnSQLite(IgnoreOnSQLiteMixin, BrinIndex):
+    pass

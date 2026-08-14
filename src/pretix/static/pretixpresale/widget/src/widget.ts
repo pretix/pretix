@@ -56,8 +56,18 @@ export function createWidgetInstance (element: Element, htmlId?: string): App {
 	app.config.errorHandler = (error, _vm, info) => {
 		console.error('[pretix-widget]', info, error)
 	}
-	app.mount(element)
-	observer.observe(element, { attributes: true })
+	// Instead of mounting to the element directly, replicate vue2.7 behaviour, where
+	// the HTML-element gets replaced instead of vue3’s behaviour to replace innerHTML.
+	// The latter can cause issues with custom CSS as HTML structure would change.
+	// app.mount(element)
+	// observer.observe(element, { attributes: true })
+	const fragment = document.createDocumentFragment()
+	app.mount(fragment)
+	for (const attr of element.attributes) {
+		fragment.firstChild.setAttribute(attr.name, attr.value)
+	}
+	observer.observe(fragment.firstChild, { attributes: true })
+	element.parentNode.replaceChild(fragment, element)
 
 	return app
 }

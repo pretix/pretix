@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import ipaddress
 import socket
 import sys
 import types
@@ -42,8 +41,7 @@ from urllib3.util.connection import (
 from urllib3.util.timeout import _DEFAULT_TIMEOUT
 
 from pretix.helpers.reportlab import ThumbnailingImageReader
-
-_cgnat_net = ipaddress.ip_network('100.64.0.0/10')
+from pretix.helpers.ssrf import should_block_access
 
 
 def monkeypatch_vobject_performance():
@@ -150,16 +148,9 @@ def monkeypatch_urllib3_ssrf_protection():
             af, socktype, proto, canonname, sa = res
 
             if not getattr(settings, "ALLOW_HTTP_TO_PRIVATE_NETWORKS", False):
-                ip_addr = ipaddress.ip_address(sa[0])
-                check_ip4 = ip_addr.ipv4_mapped if getattr(ip_addr, "ipv4_mapped", None) else ip_addr
-                if ip_addr.is_multicast:
-                    raise HTTPError(f"Request to multicast address {sa[0]} blocked")
-                if ip_addr.is_loopback or ip_addr.is_link_local:
-                    raise HTTPError(f"Request to local address {sa[0]} blocked")
-                if ip_addr.is_private:
-                    raise HTTPError(f"Request to private address {sa[0]} blocked")
-                if check_ip4 in _cgnat_net:
-                    raise HTTPError(f"Request to RFC 6598 address {sa[0]} blocked")
+                is_private, msg = should_block_access(sa)
+                if is_private:
+                    raise HTTPError(msg)
 
             sock = None
             try:

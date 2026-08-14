@@ -11,7 +11,7 @@ var form_handlers = function (el) {
 
     el.find(".datetimepicker").each(function () {
         $(this).datetimepicker({
-            format: $("body").attr("data-datetimeformat"),
+            format: $(this).attr("data-format") ? $(this).attr("data-format") : $("body").attr("data-datetimeformat"),
             locale: $("body").attr("data-datetimelocale"),
             useCurrent: false,
             showClear: !$(this).prop("required"),
@@ -34,7 +34,7 @@ var form_handlers = function (el) {
 
     el.find(".datepickerfield").each(function () {
         var opts = {
-            format: $("body").attr("data-dateformat"),
+            format: $(this).attr("data-format") ? $(this).attr("data-format") : $("body").attr("data-dateformat"),
             locale: $("body").attr("data-datetimelocale"),
             useCurrent: false,
             showClear: !$(this).prop("required"),
@@ -91,7 +91,7 @@ var form_handlers = function (el) {
 
     el.find(".timepickerfield").each(function () {
         var opts = {
-            format: $("body").attr("data-timeformat"),
+            format: $(this).attr("data-format") ? $(this).attr("data-format") : $("body").attr("data-timeformat"),
             locale: $("body").attr("data-datetimelocale"),
             useCurrent: false,
             showClear: !$(this).prop("required"),

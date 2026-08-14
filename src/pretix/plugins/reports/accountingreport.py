@@ -28,7 +28,7 @@ from decimal import Decimal
 from django import forms
 from django.db.models import F, Sum
 from django.db.models.functions import Coalesce
-from django.utils.formats import date_format, localize
+from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.timezone import now
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
@@ -43,7 +43,7 @@ from pretix.base.exporter import BaseExporter
 from pretix.base.models import (
     GiftCardTransaction, OrderFee, OrderPayment, OrderRefund, Transaction,
 )
-from pretix.base.templatetags.money import money_filter
+from pretix.base.templatetags.money import money_filter, tax_rate_format
 from pretix.base.timeframes import (
     DateFrameField,
     resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
@@ -382,7 +382,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                         else "",
                         tstyle_right,
                     ),
-                    PlainTextParagraph(localize(r["tax_rate"].normalize()) + " %", tstyle_right),
+                    PlainTextParagraph(tax_rate_format(r["tax_rate"]) + " %", tstyle_right),
                     PlainTextParagraph(str(r["sum_cont"]), tstyle_right),
                     PlainTextParagraph(
                         money_filter(r["sum_price"] - r["sum_tax"], currency), tstyle_right
@@ -408,7 +408,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                     [
                         PlainTextParagraph(_("Sum"), tstyle),
                         PlainTextParagraph("", tstyle_right),
-                        PlainTextParagraph(localize(tax_rate.normalize()) + " %", tstyle_right),
+                        PlainTextParagraph(tax_rate_format(tax_rate) + " %", tstyle_right),
                         PlainTextParagraph("", tstyle_right),
                         PlainTextParagraph(
                             money_filter(

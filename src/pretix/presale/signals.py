@@ -161,7 +161,8 @@ voucher_redeem_info = EventPluginSignal()
 """
 Arguments: ``voucher``
 
-This signal is sent out to display additional information on the "redeem a voucher" page
+This signal is sent out to display additional information on the "redeem a voucher" page.
+You are expected to return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -194,6 +195,7 @@ Arguments: ``request``
 
 This signals allows you to add HTML content to the confirmation page that is presented at the
 end of the checkout process, just before the order is being created.
+You are expected to return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event. A ``request``
 argument will contain the request object.
@@ -276,7 +278,8 @@ order_info = EventPluginSignal()
 """
 Arguments: ``order``, ``request``
 
-This signal is sent out to display additional information on the order detail page
+This signal is sent out to display additional information on the order detail page.
+Return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -285,7 +288,8 @@ position_info = EventPluginSignal()
 """
 Arguments: ``order``, ``position``, ``request``
 
-This signal is sent out to display additional information on the position detail page
+This signal is sent out to display additional information on the position detail page.
+Return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -294,7 +298,8 @@ order_info_top = EventPluginSignal()
 """
 Arguments: ``order``, ``request``
 
-This signal is sent out to display additional information on top of the order detail page
+This signal is sent out to display additional information on top of the order detail page.
+Return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -303,7 +308,8 @@ position_info_top = EventPluginSignal()
 """
 Arguments: ``order``, ``position``, ``request``
 
-This signal is sent out to display additional information on top of the position detail page
+This signal is sent out to display additional information on top of the position detail page.
+Return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -349,7 +355,7 @@ This signal is sent out to display additional information on the frontpage above
 of products and but below a custom frontpage text.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event. The
-receivers are expected to return HTML.
+receivers are expected to return a SafeString containing HTML, or a string that will be HTML-escaped.
 """
 
 render_seating_plan = EventPluginSignal()
@@ -361,7 +367,7 @@ You will be passed the ``request`` as a keyword argument. If applicable, a ``sub
 ``voucher`` argument might be given.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event. The
-receivers are expected to return HTML.
+receivers are expected to return a SafeString containing HTML, or a string that will be HTML-escaped.
 """
 
 front_page_bottom = EventPluginSignal()
@@ -372,7 +378,7 @@ This signal is sent out to display additional information on the frontpage below
 of products.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event. The
-receivers are expected to return HTML.
+receivers are expected to return a SafeString containing HTML, or a string that will be HTML-escaped.
 """
 
 front_page_bottom_widget = EventPluginSignal()
@@ -383,7 +389,7 @@ This signal is sent out to display additional information on the frontpage below
 of products if the front page is shown in the widget.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event. The
-receivers are expected to return HTML.
+receivers are expected to return a SafeString containing HTML, or a string that will be HTML-escaped.
 """
 
 checkout_all_optional = EventPluginSignal()
@@ -403,7 +409,7 @@ Arguments: ``item``, ``variation``, ``subevent``
 
 This signal is sent out when the description of an item or variation is rendered and allows you to append
 additional text to the description. You are passed the ``item``, ``variation`` and ``subevent``. You are
-expected to return HTML.
+expected to return markdown.
 """
 
 register_cookie_providers = EventPluginSignal()

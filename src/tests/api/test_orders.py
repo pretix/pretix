@@ -731,6 +731,35 @@ def test_payment_create_confirmed(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_payment_create_confirmed_after_expiry(token_client, organizer, event, order):
+    djmail.outbox = []
+    order.expires = now() - datetime.timedelta(days=2)
+    order.save()
+    event.settings.payment_term_last = (now() - datetime.timedelta(days=2)).strftime('%Y-%m-%d')
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={
+        'provider': 'banktransfer',
+        'state': 'confirmed',
+        'amount': order.total,
+        'send_email': False,
+        'info': {
+            'foo': 'bar'
+        },
+        "force": True
+    })
+    with scopes_disabled():
+        p = order.payments.last()
+    assert resp.status_code == 201
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    assert p.info_data == {'foo': 'bar'}
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+    assert len(djmail.outbox) == 0
+
+
+@pytest.mark.django_db
 def test_payment_create_pending(token_client, organizer, event, order):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/'.format(
         organizer.slug, event.slug, order.code
@@ -1058,7 +1087,7 @@ def test_orderposition_list_limited_read(
         ('/api/v1/organizers/{}/orderpositions/', "organizer")
     ],
 )
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_orderposition_list(
         endpoint_template,
         endpoint_type,
@@ -1166,10 +1195,10 @@ def test_orderposition_list(
         'type': 'entry'
     }]
     if '/events/' in endpoint:
-        with django_assert_num_queries(18):
+        with django_assert_num_queries(16):
             resp = token_client.get(endpoint + '?has_checkin=true')
     else:
-        with django_assert_num_queries(17):
+        with django_assert_num_queries(15):
             resp = token_client.get(endpoint + '?has_checkin=true')
     assert [res] == resp.data['results']
 
@@ -2036,7 +2065,7 @@ def test_blocked_secret_list(token_client, organizer, event):
     assert [res] == resp.data['results']
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_queries):
     # order detail
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?pdf_data=true'.format(

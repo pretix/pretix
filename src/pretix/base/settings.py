@@ -2284,6 +2284,17 @@ DEFAULTS = {
             help_text=_("We'll show this publicly to allow attendees to contact you.")
         )
     },
+    'contact_url': {
+        'default': None,
+        'type': str,
+        'serializer_class': serializers.URLField,
+        'form_class': forms.URLField,
+        'form_kwargs': dict(
+            label=_("Contact URL"),
+            help_text=_("If you set this, the footer contact link will point here instead of using the email address above. "
+                        "Please note that you still need to add a contact email address that will be shared with all emails you send.")
+        )
+    },
     'imprint_url': {
         'default': None,
         'type': str,
@@ -2919,7 +2930,7 @@ Your {event} team"""))  # noqa: W291
     },
     'mail_days_download_reminder': {
         'type': int,
-        'default': None
+        'default': None  # when this default is changed, send_download_reminders needs to change
     },
     'mail_send_download_reminder_attendee': {
         'type': bool,

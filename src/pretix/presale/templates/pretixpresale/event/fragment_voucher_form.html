@@ -1,9 +1,9 @@
 {% load i18n %}
 {% load eventurl %}
 {% load rich_text %}
-{% if event.settings.voucher_explanation_text %}
+{% if event_texts.voucher_explanation_text %}
     <div>
-        {{ event.settings.voucher_explanation_text|rich_text }}
+        {{ event_texts.voucher_explanation_text|rich_text }}
     </div>
 {% endif %}
 <form method="get" action="{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}">

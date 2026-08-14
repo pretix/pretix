@@ -27,11 +27,11 @@ from django.template import TemplateDoesNotExist, loader
 from django.template.loader import get_template
 from django.utils.functional import Promise
 from django.utils.translation import gettext as _
-from django.views.decorators.csrf import requires_csrf_token
 from sentry_sdk import last_event_id
 
 from pretix.base.i18n import language
 from pretix.base.middleware import get_language_from_request
+from pretix.multidomain.middlewares import requires_csrf_token
 
 
 def csrf_failure(request, reason=""):

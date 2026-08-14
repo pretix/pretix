@@ -41,7 +41,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
-from pretix.api.serializers import CompatibleJSONField
+from pretix.api.serializers import CompatDecimalField, CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
@@ -52,6 +52,7 @@ from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.invoicing.transmission import get_transmission_types
+from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
     CachedFile, Checkin, Customer, Device, GiftCard, Invoice, InvoiceAddress,
     InvoiceLine, Item, ItemVariation, Order, OrderPosition, Question,
@@ -381,6 +382,7 @@ class PrintLogSerializer(serializers.ModelSerializer):
 class FailedCheckinSerializer(I18nAwareModelSerializer):
     error_reason = serializers.ChoiceField(choices=Checkin.REASONS, required=True, allow_null=False)
     raw_barcode = serializers.CharField(required=True, allow_null=False)
+    raw_source_type = serializers.ChoiceField(choices=[(k, v) for k, v in MEDIA_TYPES.items()], default='barcode')
     position = serializers.PrimaryKeyRelatedField(queryset=OrderPosition.all.none(), required=False, allow_null=True)
     raw_item = serializers.PrimaryKeyRelatedField(queryset=Item.objects.none(), required=False, allow_null=True)
     raw_variation = serializers.PrimaryKeyRelatedField(queryset=ItemVariation.objects.none(), required=False, allow_null=True)
@@ -390,7 +392,7 @@ class FailedCheckinSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Checkin
         fields = ('error_reason', 'error_explanation', 'raw_barcode', 'raw_item', 'raw_variation',
-                  'raw_subevent', 'nonce', 'datetime', 'type', 'position')
+                  'raw_subevent', 'raw_source_type', 'nonce', 'datetime', 'type', 'position')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -591,6 +593,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     country = CompatibleCountryField(source='*')
     attendee_name = serializers.CharField(required=False)
     plugin_data = OrderPositionPluginDataField(source='*', allow_null=True, read_only=True)
+    tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
 
     class Meta:
         list_serializer_class = OrderPositionListSerializer
@@ -747,6 +750,8 @@ class OrderPaymentDateField(serializers.DateField):
 
 
 class OrderFeeSerializer(I18nAwareModelSerializer):
+    tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
+
     class Meta:
         model = OrderFee
         fields = ('id', 'fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule',
@@ -1911,6 +1916,7 @@ class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
     position = LinePositionField(read_only=True)
     event_date_from = serializers.DateTimeField(read_only=True, source="period_start")
     event_date_to = serializers.DateTimeField(read_only=True, source="period_end")
+    tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
 
     class Meta:
         model = InvoiceLine
@@ -1994,6 +2000,7 @@ class BlockedTicketSecretSerializer(I18nAwareModelSerializer):
 
 class TransactionSerializer(I18nAwareModelSerializer):
     order = serializers.SlugRelatedField(slug_field="code", read_only=True)
+    tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
 
     class Meta:
         model = Transaction

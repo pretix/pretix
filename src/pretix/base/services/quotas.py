@@ -193,7 +193,7 @@ class QuotaAvailability:
         lock_name = '_'.join([str(p) for p in sorted([q.pk for q in quotas])])
         if rc.exists(f'quotas:availabilitycachewrite:{lock_name}{self._cache_key_suffix}'):
             return
-        rc.setex(f'quotas:availabilitycachewrite:{lock_name}{self._cache_key_suffix}', '1', 10)
+        rc.set(f'quotas:availabilitycachewrite:{lock_name}{self._cache_key_suffix}', '1', ex=10)
 
         update = defaultdict(list)
         for q in quotas:

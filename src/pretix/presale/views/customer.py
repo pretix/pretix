@@ -36,13 +36,14 @@ from django.db.models import (
 )
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.template.loader import render_to_string
 from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, ListView, View
 
@@ -99,7 +100,6 @@ class LoginView(RedirectBackMixin, FormView):
     redirect_authenticated_user = True
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -211,7 +211,6 @@ class RegistrationView(RedirectBackMixin, FormView):
     redirect_authenticated_user = True
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -255,7 +254,6 @@ class SetPasswordView(FormView):
     template_name = 'pretixpresale/organizers/customer_setpassword.html'
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -299,7 +297,6 @@ class ResetPasswordView(FormView):
     template_name = 'pretixpresale/organizers/customer_resetpw.html'
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -525,7 +522,6 @@ class ChangePasswordView(CustomerAccountBaseMixin, FormView):
     form_class = ChangePasswordForm
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -559,7 +555,6 @@ class ChangeInformationView(CustomerAccountBaseMixin, FormView):
     form_class = ChangeInfoForm
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -667,7 +662,6 @@ class SSOLoginView(RedirectBackMixin, View):
     redirect_authenticated_user = True
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -730,7 +724,6 @@ class SSOLoginReturnView(RedirectBackMixin, View):
     redirect_authenticated_user = True
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -774,9 +767,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
 
             if nonce != request.session.get(f'pretix_customerauth_{self.provider.pk}_nonce'):
                 return self._fail(
-                    _('Login was not successful. Error message: "{error}".').format(
-                        error='invalid one-time token',
-                    ),
+                    mark_safe(render_to_string("pretixpresale/organizers/customer_login_interrupted_message.html")),
                     popup_origin,
                 )
             redirect_uri = eventreverse_absolute(

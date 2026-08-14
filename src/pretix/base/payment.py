@@ -330,8 +330,23 @@ class BasePaymentProvider:
         payment method. This returns ``False`` by default which is no guarantee that
         aborting a pending payment can never happen, it just hides the frontend button
         to avoid users accidentally committing double payments.
+        If the decision doesn't depend on the specific payment, then only implementing
+        ``abort_pending_allowed`` is enough, ``payment_abort_pending_allowed(payment: OrderPayment)``
+        is expected to take this into account.
+        As a consumer only evaluate ``payment_abort_pending_allowed(payment: OrderPayment)``
+        to check if aborting this pending payment is possible.
         """
         return False
+
+    def _payment_abort_pending_allowed(self, payment: OrderPayment) -> bool:
+        """
+        Experimental: This might change during upcomming releases.
+        Whether or not a user can abort a payment in pending state to switch to another
+        payment method. This returns ``self.abort_pending_allowed`` by default which is
+        no guarantee that aborting a pending payment can never happen, it just hides the
+        frontend button to avoid users accidentally committing double payments.
+        """
+        return self.abort_pending_allowed
 
     @property
     def requires_invoice_immediately(self):
@@ -936,7 +951,7 @@ class BasePaymentProvider:
         """
         Will be called if the *event administrator* views the details of a payment.
 
-        It should return HTML code containing information regarding the current payment
+        It should return a SafeString containing HTML code, with information regarding the current payment
         status and, if applicable, next steps.
 
         The default implementation returns an empty string.
@@ -961,7 +976,7 @@ class BasePaymentProvider:
         """
         Will be called if the *event administrator* views the details of a refund.
 
-        It should return HTML code containing information regarding the current refund
+        It should return a SafeString containing HTML code, with information regarding the current refund
         status and, if applicable, next steps.
 
         The default implementation returns an empty string.
@@ -1019,10 +1034,12 @@ class BasePaymentProvider:
         On success, you should set ``payment.state = OrderPayment.PAYMENT_STATE_CANCELED`` (or call the super method).
         On failure, you should raise a PaymentException.
         """
-        if payment.state == OrderPayment.PAYMENT_STATE_PENDING and not self.abort_pending_allowed:
-            raise PaymentException(_(
-                "This payment is already being processed and can not be canceled any more."
-            ))
+
+        if payment.state == OrderPayment.PAYMENT_STATE_PENDING:
+            if not self._payment_abort_pending_allowed(payment):
+                raise PaymentException(_(
+                    "This payment is already being processed and cannot be canceled any more."
+                ))
 
         payment.state = OrderPayment.PAYMENT_STATE_CANCELED
         payment.save(update_fields=['state'])
@@ -1704,6 +1721,58 @@ class GiftCardPayment(BasePaymentProvider):
                 'text': refund.comment,
             }
         )
+
+
+class BaseHistoricalPaymentProvider(BasePaymentProvider):
+    """
+    Base class for payment providers that no longer exist but can't be deleted to make sure historical
+    payments are shown correctly.
+
+    Subclasses are recommended to only implement:
+        - identifier
+        - verbose_name
+        - public_name
+    - payment_control_render
+    - payment_control_render_short
+    - refund_control_render
+    - refund_control_render_short
+    - render_invoice_text
+    - render_invoice_stamp
+    - api_payment_details
+    - api_refund_details
+    - shred_payment_info
+    - matching_id
+    - refund_matching_id
+    """
+
+    @property
+    def is_enabled(self) -> bool:
+        return False
+
+    @property
+    def settings_form_fields(self) -> dict:
+        return {}
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        return False
+
+    def payment_is_valid_session(self, request: HttpRequest, payment: OrderPayment):
+        return False
+
+    def order_change_allowed(self, order: Order, request: HttpRequest=None) -> bool:
+        return False
+
+    def payment_refund_supported(self, payment: OrderPayment) -> bool:
+        return False
+
+    def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
+        return False
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        raise PaymentException(_("This payment provider exists for historical purposes only and is no longer usable."))
+
+    def execute_refund(self, refund: OrderRefund):
+        raise PaymentException(_("This payment provider exists for historical purposes only and is no longer usable."))
 
 
 @receiver(register_payment_providers, dispatch_uid="payment_free")

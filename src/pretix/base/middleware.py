@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import base64
+import hashlib
 import logging
 import re
 from collections import OrderedDict
@@ -69,11 +71,44 @@ def get_supported_language(requested_language, allowed_languages, default_langua
     return language
 
 
-class LocaleMiddleware(MiddlewareMixin):
-
+class BaseLocaleMiddleware(MiddlewareMixin):
     """
-    This middleware sets the correct locale and timezone
-    for a request.
+    This is a reduced LocaleMiddleware that uses only information contained in the WSGI request data
+    to figure out the language (cookie and browser settings). We need it to have a consistent language
+    for error pages that are generated from the middleware stack before we know e.g. which user is logged
+    in or which event is selected.
+    """
+
+    def process_request(self, request: HttpRequest):
+        language = get_language_from_early_request(request)
+        translation.activate(language)
+        set_region(None)
+        request.LANGUAGE_CODE = language
+        timezone.deactivate()
+
+    def process_response(self, request: HttpRequest, response: HttpResponse):
+        language = translation.get_language()
+        patch_vary_headers(response, ('Accept-Language',))
+        if 'Content-Language' not in response:
+            response['Content-Language'] = language
+        return response
+
+
+class LocaleMiddleware(MiddlewareMixin):
+    """
+    This is the full LocaleMiddleware that uses all available information to figure out the correct
+    language for the request using all available sources, in this order of priority:
+
+    - Backend: User settings
+    - Language cookie
+    - Frontend: Customer account settings
+    - Browser settings
+    - Frontend: Event/Organizer settings
+    - System default
+
+    It needs to run late in the middleware stack to have all information available for these steps.
+    For some cases, it is even ran a second time since the event is sometimes only figured out after the
+    middleware stack (can happen for plugin views).
     """
 
     def process_request(self, request: HttpRequest):
@@ -188,6 +223,24 @@ def get_default_language():
         return settings.LANGUAGE_CODE
 
 
+def get_language_from_early_request(request: HttpRequest) -> str:
+    """
+    Analyzes the request to find what language the user wants the system to
+    show using only WSGI-available information. Only languages listed in
+    settings.LANGUAGES are taken into account. If the user requests a sublanguage
+    where we have a main language, we send out the main language.
+    """
+    global _supported
+    if _supported is None:
+        _supported = OrderedDict(settings.LANGUAGES)
+
+    return (
+        get_language_from_cookie(request)
+        or get_language_from_browser(request)
+        or get_default_language()
+    )
+
+
 def get_language_from_request(request: HttpRequest) -> str:
     """
     Analyzes the request to find what language the user wants the system to
@@ -202,7 +255,6 @@ def get_language_from_request(request: HttpRequest) -> str:
     if request.path.startswith(get_script_prefix() + 'control'):
         return (
             get_language_from_user_settings(request)
-            or get_language_from_customer_settings(request)
             or get_language_from_cookie(request)
             or get_language_from_browser(request)
             or get_language_from_event(request)
@@ -262,10 +314,50 @@ def _merge_csp(a, b):
     for k, v in a.items():
         if "'unsafe-inline'" in v:
             # If we need unsafe-inline, drop any hashes or nonce as they will be ignored otherwise
-            a[k] = [i for i in v if not i.startswith("'nonce-") and not i.startswith("'sha-")]
+            a[k] = [i for i in v if not i.startswith("'nonce-") and not i.startswith("'sha256-")]
+
+
+def add_to_response_csp(response, csp_to_merge):
+    if "Content-Security-Policy" in response:
+        csp = _parse_csp(response["Content-Security-Policy"])
+    else:
+        csp = {}
+
+    _merge_csp(csp, csp_to_merge)
+
+    if csp:
+        response["Content-Security-Policy"] = _render_csp(csp)
+
+
+def add_to_response_csp_via_request(request, csp_to_merge):
+    _merge_csp(request._csp_to_merge, csp_to_merge)
+
+
+def calculate_csp_hash(data):
+    hash_str = base64.b64encode(hashlib.sha256(data.encode("utf-8")).digest()).decode("ascii")
+    return f"'sha256-{hash_str}'"
 
 
 class SecurityMiddleware(MiddlewareMixin):
+    SAFE_TYPES = (
+        # CSP policies are only used for:
+        # - HTML and SVG in top-level contexts
+        # - SVG or JS Workers delivered in embedded contexts
+        # See: https://www.w3.org/TR/CSP2/#which-policy-applies
+        # Therefore, we can save bandwidth on not including our (sometimes huge) policy
+        # on API responses or CSS. We do however include it with other types as a precaution
+        # (whitelist instead of blacklist) and we also do not whitelist JavaScript in
+        # we ever add service workers to not break the protection of this feature:
+        # https://www.w3.org/TR/CSP2/#sandboxing-and-workers
+        'application/json',
+        'text/css',
+        # We used to skip CSP for PDF since it was necessary for inline previews in Safari,
+        # but at the moment it does not seem to be an issue to just send it.
+    )
+
+    def process_request(self, request):
+        request._csp_to_merge = {}
+
     def process_response(self, request, resp):
         if settings.DEBUG and resp.status_code >= 400:
             # Don't use CSP on debug error page as it breaks of Django's fancy error
@@ -277,12 +369,21 @@ class SecurityMiddleware(MiddlewareMixin):
         # https://github.com/pretix/pretix/issues/765
         resp['P3P'] = 'CP=\"ALL DSP COR CUR ADM TAI OUR IND COM NAV INT\"'
 
-        if not getattr(resp, '_csp_ignore', False):
+        if self._needs_csp(request, resp):
             resp['Content-Security-Policy'] = _render_csp(self._build_csp(request, resp))
         elif 'Content-Security-Policy' in resp:
             del resp['Content-Security-Policy']
 
         return resp
+
+    def _needs_csp(self, request, resp):
+        if "Content-Type" in resp and resp["Content-Type"].split(";")[0] in self.SAFE_TYPES:
+            return False
+
+        if getattr(resp, '_csp_ignore', False):
+            return False
+
+        return True
 
     def _build_csp(self, request, resp):
         url = resolve(request.path_info)
@@ -293,7 +394,7 @@ class SecurityMiddleware(MiddlewareMixin):
             'object-src': ["'none'"],
             'frame-src': ['{static}'],
             'style-src': ["{static}", "{media}"],
-            'connect-src': ["{dynamic}", "{media}"],
+            'connect-src': ["{static}", "{dynamic}", "{media}"],
             'img-src': ["{static}", "{media}", "data:"],
             'font-src': ["{static}"],
             'media-src': ["{static}", "data:"],
@@ -316,13 +417,6 @@ class SecurityMiddleware(MiddlewareMixin):
             h['style-src'] += ["'unsafe-inline'"]
             h['connect-src'] += ["http://localhost:5173", "ws://localhost:5173"]
 
-        if hasattr(request, 'csp_nonce'):
-            nonce = f"'nonce-{request.csp_nonce}'"
-            h['script-src'].append(nonce)
-            if not settings.VITE_DEV_MODE:
-                # can't have 'unsafe-inline' and nonce at the same time
-                h['style-src'].append(nonce)
-
         # Only include pay.google.com for wallet detection purposes on the Payment selection page
         if (
                 url.url_name == "event.order.pay.change" or
@@ -334,6 +428,9 @@ class SecurityMiddleware(MiddlewareMixin):
 
         if settings.LOG_CSP:
             h['report-uri'] = ["/csp_report/"]
+
+        if request._csp_to_merge:
+            _merge_csp(h, request._csp_to_merge)
 
         if 'Content-Security-Policy' in resp:
             _merge_csp(h, _parse_csp(resp['Content-Security-Policy']))
@@ -400,8 +497,16 @@ class RejectInvalidInputMiddleware(MiddlewareMixin):
         if "\x00" in request.META['QUERY_STRING'] or "%00" in request.META['QUERY_STRING']:
             raise BadRequest("Invalid characters in input.")
         if request.method in ('POST', 'PUT', 'PATCH') and request.content_type == "application/x-www-form-urlencoded":
-            if any("\x00" in value for key, value_list in request.POST.lists() for value in value_list):
-                raise BadRequest("Invalid characters in input.")
+            try:
+                post_data = request.POST.lists()
+            except BadRequest:
+                # Reading request.POST wasn't possible, probably an invalid charset. Django will crash once we actually
+                # use request.POST, but if we don't, let's not crash it (required for some weird payment provider
+                # webhooks, e.g. computop).
+                pass
+            else:
+                if any("\x00" in value for key, value_list in post_data for value in value_list):
+                    raise BadRequest("Invalid characters in input.")
 
 
 class CustomCommonMiddleware(CommonMiddleware):

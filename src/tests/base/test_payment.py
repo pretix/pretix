@@ -133,7 +133,7 @@ def test_availability_date_relative(event):
     event.save()
     prov = DummyPaymentProvider(event)
     prov.settings.set('_availability_date', RelativeDateWrapper(
-        RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
+        RelativeDate(days=2, time=None, base_date_name='event__date_from', minutes=None)
     ))
 
     utc = datetime.timezone.utc
@@ -150,7 +150,7 @@ def test_availability_start_relative(event):
     event.save()
     prov = DummyPaymentProvider(event)
     prov.settings.set('_availability_start', RelativeDateWrapper(
-        RelativeDate(days=2, time=datetime.time(12, 0), base_date_name='date_from', minutes=None)
+        RelativeDate(days=2, time=datetime.time(12, 0), base_date_name='event__date_from', minutes=None)
     ))
 
     utc = datetime.timezone.utc
@@ -193,12 +193,12 @@ def test_availability_date_cart_relative_subevents(event):
 
     prov = DummyPaymentProvider(event)
     prov.settings.set('_availability_date', RelativeDateWrapper(
-        RelativeDate(days=3, time=None, base_date_name='date_from', minutes=None)
+        RelativeDate(days=3, time=None, base_date_name='event__date_from', minutes=None)
     ))
     assert prov._is_available_by_time(cart_id="123")
 
     prov.settings.set('_availability_date', RelativeDateWrapper(
-        RelativeDate(days=4, time=None, base_date_name='date_from', minutes=None)
+        RelativeDate(days=4, time=None, base_date_name='event__date_from', minutes=None)
     ))
     assert not prov._is_available_by_time(cart_id="123")
 
@@ -233,11 +233,11 @@ def test_availability_date_order_relative_subevents(event):
 
     prov = DummyPaymentProvider(event)
     prov.settings.set('_availability_date', RelativeDateWrapper(
-        RelativeDate(days=3, time=None, base_date_name='date_from', minutes=None)
+        RelativeDate(days=3, time=None, base_date_name='event__date_from', minutes=None)
     ))
     assert prov._is_available_by_time(order=order)
 
     prov.settings.set('_availability_date', RelativeDateWrapper(
-        RelativeDate(days=4, time=None, base_date_name='date_from', minutes=None)
+        RelativeDate(days=4, time=None, base_date_name='event__date_from', minutes=None)
     ))
     assert not prov._is_available_by_time(order=order)

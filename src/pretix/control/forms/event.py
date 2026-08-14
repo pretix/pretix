@@ -197,10 +197,10 @@ class EventWizardBasicsForm(I18nModelForm):
             'presale_end': SplitDateTimeField,
         }
         widgets = {
-            'date_from': SplitDateTimePickerWidget(),
-            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-date_from_0'}),
-            'presale_start': SplitDateTimePickerWidget(),
-            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-presale_start_0'}),
+            'date_from': SplitDateTimePickerWidget(without_seconds=True),
+            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-date_from_0'}, without_seconds=True),
+            'presale_start': SplitDateTimePickerWidget(without_seconds=True),
+            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_basics-presale_start_0'}, without_seconds=True),
             'slug': SlugWidget,
         }
 
@@ -521,11 +521,11 @@ class EventUpdateForm(I18nModelForm):
             'limit_sales_channels': SafeModelMultipleChoiceField,
         }
         widgets = {
-            'date_from': SplitDateTimePickerWidget(),
-            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}),
-            'date_admission': SplitDateTimePickerWidget(attrs={'data-date-default': '#id_date_from_0'}),
-            'presale_start': SplitDateTimePickerWidget(),
-            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
+            'date_from': SplitDateTimePickerWidget(without_seconds=True),
+            'date_to': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_from_0'}, without_seconds=True),
+            'date_admission': SplitDateTimePickerWidget(attrs={'data-date-default': '#id_date_from_0'}, without_seconds=True),
+            'presale_start': SplitDateTimePickerWidget(without_seconds=True),
+            'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}, without_seconds=True),
         }
 
 
@@ -625,6 +625,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
         'max_items_per_order',
         'reservation_time',
         'contact_mail',
+        'contact_url',
         'show_variations_expanded',
         'hide_sold_out',
         'meta_noindex',
@@ -671,6 +672,11 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
 
     base_context = {
         'frontpage_text': ['event'],
+        'presale_has_ended_text': ['event'],
+        'voucher_explanation_text': ['event'],
+        'banner_text': ['event'],
+        'banner_text_bottom': ['event'],
+        'event_info_text': ['event'],
     }
 
     def _resolve_virtual_keys_input(self, data, prefix=''):
@@ -1673,7 +1679,7 @@ class CountriesAndEUAndStates(CountriesAndEU):
 
 class TaxRuleLineForm(I18nForm):
     country = LazyTypedChoiceField(
-        choices=CountriesAndEUAndStates(),
+        choices=lazy(lambda: CountriesAndEUAndStates(), CountriesAndEUAndStates),
         required=False
     )
     address_type = forms.ChoiceField(
