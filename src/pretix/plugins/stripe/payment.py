@@ -1975,8 +1975,3 @@ class StripeWero(StripeRedirectMethod):
         'This payment method is available to European online banking users, whose banking institutions support WERO '
         'either through their native banking apps or through the WERO wallet app. Please have you app ready.'
     )
-
-    # Apparently, Stripe cannot process payment_method_data["type"] = "wero" for connect accounts.
-    # Removing it here (while they figure it out), since it doesn't seem to be doing much anyways.
-    def _payment_intent_kwargs(self, request, payment):
-        return {}
