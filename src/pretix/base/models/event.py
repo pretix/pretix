@@ -736,7 +736,7 @@ class Event(EventMixin, LoggedModel):
         self.settings.mail_send_order_paid_attendee = True
         self.settings.mail_send_order_approved_attendee = True
         self.settings.mail_send_order_approved_free_attendee = True
-        self.settings.mail_text_download_reminder_attendee = True
+        self.settings.mail_send_download_reminder_attendee = True
 
     @property
     def social_image(self):
