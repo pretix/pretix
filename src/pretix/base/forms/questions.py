@@ -659,6 +659,7 @@ def get_fake_attendee_questions(settings):
         fq.append(FakeQuestion('street', _('Street'), sqo.get('street', 0), settings.attendee_addresses_required))
         fq.append(FakeQuestion('zipcode', _('ZIP code'), sqo.get('zipcode', 0), settings.attendee_addresses_required))
         fq.append(FakeQuestion('city', _('City'), sqo.get('city', 0), settings.attendee_addresses_required))
+        fq.append(FakeQuestion('state', _('State'), sqo.get('country', 0), settings.attendee_addresses_required))
         fq.append(FakeQuestion('country', _('Country'), sqo.get('country', 0), settings.attendee_addresses_required))
     return fq
 
