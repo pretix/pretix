@@ -1304,10 +1304,9 @@ class Order(LockModel, LoggedModel):
 
 def answerfile_name(instance, filename: str) -> str:
     secret = get_random_string(length=32, allowed_chars=string.ascii_letters + string.digits)
-    event = (instance.cartposition if instance.cartposition else instance.orderposition.order).event
     return 'cachedfiles/answers/{org}/{ev}/{secret}.{filename}'.format(
-        org=event.organizer.slug,
-        ev=event.slug,
+        org=instance.event.organizer.slug,
+        ev=instance.event.slug,
         secret=secret,
         filename=escape_uri_path(filename),
     )
@@ -1336,6 +1335,14 @@ class QuestionAnswer(models.Model):
         'CartPosition', null=True, blank=True,
         related_name='answers', on_delete=models.CASCADE
     )
+    order = models.ForeignKey(
+        'Order', null=True, blank=True,
+        related_name='answers', on_delete=models.CASCADE
+    )
+    checkoutsession = models.ForeignKey(
+        'CheckoutSession', null=True, blank=True,
+        related_name='answers', on_delete=models.CASCADE
+    )
     question = models.ForeignKey(
         Question, related_name='answers', on_delete=models.CASCADE
     )
@@ -1351,16 +1358,21 @@ class QuestionAnswer(models.Model):
     objects = ScopedManager(organizer='question__event__organizer')
 
     class Meta:
-        unique_together = [['orderposition', 'question'], ['cartposition', 'question']]
+        unique_together = [
+            ['orderposition', 'question'],
+            ['cartposition', 'question'],
+            ['order', 'question'],
+            ['checkoutsession', 'question'],
+        ]
 
     @property
     def backend_file_url(self):
         if self.file:
-            if self.orderposition:
+            if self.associated_order:
                 return reverse('control:event.order.download.answer', kwargs={
-                    'code': self.orderposition.order.code,
-                    'event': self.orderposition.order.event.slug,
-                    'organizer': self.orderposition.order.event.organizer.slug,
+                    'code': self.associated_order.code,
+                    'event': self.associated_order.event.slug,
+                    'organizer': self.associated_order.event.organizer.slug,
                     'answer': self.pk,
                 })
         return ""
@@ -1370,14 +1382,14 @@ class QuestionAnswer(models.Model):
         from pretix.multidomain.urlreverse import eventreverse
 
         if self.file:
-            if self.orderposition:
-                url = eventreverse(self.orderposition.order.event, 'presale:event.order.download.answer', kwargs={
-                    'order': self.orderposition.order.code,
-                    'secret': self.orderposition.order.secret,
+            if self.associated_order:
+                url = eventreverse(self.associated_order.event, 'presale:event.order.download.answer', kwargs={
+                    'order': self.associated_order.code,
+                    'secret': self.associated_order.secret,
                     'answer': self.pk,
                 })
             else:
-                url = eventreverse(self.cartposition.event, 'presale:event.cart.download.answer', kwargs={
+                url = eventreverse(self.event, 'presale:event.cart.download.answer', kwargs={
                     'answer': self.pk,
                 })
 
@@ -1391,6 +1403,24 @@ class QuestionAnswer(models.Model):
     @property
     def file_name(self):
         return self.file.name.split('.', 1)[-1]
+
+    @property
+    def associated_order(self):
+        if self.orderposition:
+            return self.orderposition.order
+        elif self.order:
+            return self.order
+
+    @property
+    def event(self):
+        if self.orderposition:
+            return self.orderposition.order.event
+        elif self.cartposition:
+            return self.cartposition.event
+        elif self.order:
+            return self.order.event
+        elif self.checkoutsession:
+            return self.checkoutsession.event
 
     def __str__(self):
         return self.to_string(use_cached=True)
@@ -3177,6 +3207,39 @@ class Transaction(models.Model):
         return self.tax_value_includes_rounding_correction * self.count
 
 
+class CheckoutSession(models.Model):
+    """
+    A checkout session optionally bundles cart positions with additional information. This is historically
+    not required in pretix and currently only used in the Storefront API.
+    """
+    event = models.ForeignKey(
+        Event,
+        verbose_name=_("Event"),
+        related_name="checkout_sessions",
+        on_delete=models.CASCADE,
+    )
+    cart_id = models.CharField(
+        max_length=255, unique=True,
+        verbose_name=_("Cart ID (e.g. session key)"),
+    )
+    created = models.DateTimeField(
+        verbose_name=_("Date"),
+        auto_now_add=True,
+    )
+    customer = models.ForeignKey(
+        Customer,
+        related_name='checkout_sessions',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+    )
+    sales_channel = models.ForeignKey(
+        "SalesChannel",
+        on_delete=models.CASCADE,
+    )
+    testmode = models.BooleanField(default=False)
+    session_data = models.JSONField(default=dict)
+
+
 class CartPosition(AbstractPosition):
     """
     A cart position is similar to an order line, except that it is not
@@ -3381,6 +3444,13 @@ class CartPosition(AbstractPosition):
 
 class InvoiceAddress(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
+    checkout_session = models.OneToOneField(
+        CheckoutSession,
+        null=True,
+        blank=True,
+        related_name='invoice_address',
+        on_delete=models.CASCADE
+    )
     order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address', on_delete=models.CASCADE)
     customer = models.ForeignKey(
         Customer,

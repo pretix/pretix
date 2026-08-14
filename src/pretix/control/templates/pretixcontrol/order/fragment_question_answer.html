@@ -1,0 +1,28 @@
+{% load safelink %}
+{% load i18n %}
+{% load rich_text %}
+{% if answer %}
+    {% if answer.file %}
+        <span class="fa fa-file"></span>
+        <a href="{{ answer.backend_file_url }}?token={% answer_token request answer %}">
+            {{ answer.file_name }}
+        </a>
+        <span class="label label-danger" data-toggle="tooltip"
+                title="{% trans "This file has been uploaded by a user and could contain viruses or other malicious content." %}">
+            {% trans "UNSAFE" %}
+        </span>
+        {% if answer.is_image %}
+            <br>
+            <a href="{{ answer.backend_file_url }}?token={% answer_token request answer %}" data-lightbox="order"
+                class="answer-thumb">
+                <img src="{{ answer.backend_file_url }}?token={% answer_token request answer %}">
+            </a>
+        {% endif %}
+    {% elif question.type == "M" %}
+        {{ answer.to_string_i18n|rich_text_snippet }}
+    {% else %}
+        {{ answer.to_string_i18n|linebreaksbr }}
+    {% endif %}
+{% else %}
+    <em>{% trans "not answered" %}</em>
+{% endif %}

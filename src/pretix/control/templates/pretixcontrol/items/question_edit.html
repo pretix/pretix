@@ -24,7 +24,9 @@
                 <legend>{% trans "General" %}</legend>
                 {% bootstrap_field form.question layout="control" %}
                 {% bootstrap_field form.type layout="control" %}
-                {% bootstrap_field form.items layout="control" %}
+                {% if form.items %}
+                    {% bootstrap_field form.items layout="control" %}
+                {% endif %}
                 {% bootstrap_field form.required layout="control" %}
                 <div class="alert alert-info alert-required-boolean">
                     {% blocktrans trimmed %}
@@ -128,10 +130,16 @@
                 <legend>{% trans "Advanced" %}</legend>
                 {% bootstrap_field form.help_text layout="control" %}
                 {% bootstrap_field form.identifier layout="control" %}
-                {% bootstrap_field form.ask_during_checkin layout="control" %}
-                {% bootstrap_field form.show_during_checkin layout="control" %}
+                {% if form.ask_during_checkin %}
+                    {% bootstrap_field form.ask_during_checkin layout="control" %}
+                {% endif %}
+                {% if form.show_during_checkin %}
+                    {% bootstrap_field form.show_during_checkin layout="control" %}
+                {% endif %}
                 {% bootstrap_field form.hidden layout="control" %}
-                {% bootstrap_field form.print_on_invoice layout="control" %}
+                {% if form.print_on_invoice %}
+                    {% bootstrap_field form.print_on_invoice layout="control" %}
+                {% endif %}
 
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="id_dependency_question">

@@ -131,7 +131,8 @@ $(function () {
         $val.parent().append("<div class=\"help-block loading-indicator\"><span class=\"fa" +
             " fa-cog fa-spin\"></span></div>");
 
-        apiGET('/api/v1/organizers/' + $("body").attr("data-organizer") + '/events/' + $("body").attr("data-event") + '/questions/' + val + '/', function (data) {
+				// the container_type parameter is undocumented. this API is going to change in a later release.
+        apiGET('/api/v1/organizers/' + $("body").attr("data-organizer") + '/events/' + $("body").attr("data-event") + '/questions/' + val + '/?container_type=' + encodeURIComponent($dq.data('container-type')), function (data) {
             if (data.type === "B") {
                 $val.append($("<option>").attr("value", "True").text(gettext("Yes")));
                 $val.append($("<option>").attr("value", "False").text(gettext("No")));

@@ -100,7 +100,7 @@ from pretix.presale.views.cart import (
     _items_from_post_data, cart_session, create_empty_cart_id,
     get_or_create_cart_id,
 )
-from pretix.presale.views.questions import QuestionsViewMixin
+from pretix.presale.views.questions import CartQuestionsViewMixin
 
 
 class BaseCheckoutFlowStep:
@@ -772,7 +772,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                        sales_channel=request.sales_channel.identifier, override_now_dt=time_machine_now(default=None))
 
 
-class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
+class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
     priority = 50
     identifier = "questions"
     template_name = "pretixpresale/event/checkout_questions.html"
@@ -1125,6 +1125,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        ctx['order_questions_form'] = self.order_questions_form
         ctx['formgroups'] = self.formdict.items()
         ctx['contact_form'] = self.contact_form
         ctx['invoice_form'] = self.invoice_form
@@ -1563,6 +1564,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['addr'] = self.invoice_address
         ctx['confirm_messages'] = self.confirm_messages
         ctx['cart_session'] = self.cart_session
+        ctx['checkout_session'] = self.checkout_session
         ctx['invoice_address_asked'] = self.address_asked
         ctx['customer'] = self.cart_customer
 
@@ -1660,6 +1662,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             customer=self.cart_session.get('customer'),
             override_now_dt=time_machine_now(default=None),
             api_meta=api_meta,
+            cart_id=get_or_create_cart_id(request),
         )
 
     def get_success_message(self, value):
