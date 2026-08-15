@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 15:52+0000\n"
-"PO-Revision-Date: 2026-08-02 22:00+0000\n"
-"Last-Translator: \"Luca Sorace \\\"Stranck\\\"\" <strdjn@gmail.com>\n"
+"PO-Revision-Date: 2026-08-15 15:00+0000\n"
+"Last-Translator: Translate pretix user 586 "
+"<stefanom@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/it/>\n"
 "Language: it\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.1\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js
 msgid "Marked as paid"
@@ -496,12 +497,12 @@ msgstr "Duplicato"
 #: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
 msgctxt "entry_status"
 msgid "present"
-msgstr "Presente"
+msgstr "presente"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
 msgctxt "entry_status"
 msgid "absent"
-msgstr "Assente"
+msgstr "assente"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
 msgid "is one of"
