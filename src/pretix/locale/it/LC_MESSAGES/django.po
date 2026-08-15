@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-15 05:00+0000\n"
+"PO-Revision-Date: 2026-08-15 15:00+0000\n"
 "Last-Translator: Translate pretix user 586 "
 "<stefanom@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -14540,85 +14540,70 @@ msgstr ""
 "d'ordine. Se il campo è vuoto, la email non verrà mai inviata."
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Subject for received order"
-msgstr "Oggetto dell'ordine ricevuto"
+msgstr "Oggetto per l'ordine ricevuto"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Text for received order"
 msgstr "Testo per l'ordine ricevuto"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Subject for approved order"
 msgstr "Oggetto per l'ordine approvato"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Text for approved order"
-msgstr "Non pagati o ordini gratuiti"
+msgstr "Testo per l'ordine approvato"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from below instead."
 msgstr ""
 "Questo verrà inviato solo per gli ordini non gratuiti. Gli ordini gratuiti "
-"riceveranno invece il modello di ordine gratuito dal basso."
+"riceveranno invece il modello di ordine gratuito qui sotto."
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Subject for approved free order"
-msgstr "Non pagati o ordini gratuiti"
+msgstr "Oggetto per l'ordine gratuito approvato"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Text for approved free order"
-msgstr "Non pagati o ordini gratuiti"
+msgstr "Testo per l'ordine gratuito approvato"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid ""
 "This will only be sent out for free orders. Non-free orders will receive the "
 "non-free order template from above instead."
 msgstr ""
 "Questo verrà inviato solo per gli ordini gratuiti. Gli ordini non gratuiti "
-"riceveranno invece il modello di ordine non libero dall'alto."
+"riceveranno invece il modello di ordine non libero qui sopra."
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Subject for denied order"
 msgstr "Oggetto per l'ordine rifiutato"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Text for denied order"
-msgstr "Non pagati o ordini gratuiti"
+msgstr "Testo per l'ordine rifiutato"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Ticket code generator"
-msgstr "Codice biglietto"
+msgstr "Generatore di codici per biglietti"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "For advanced users, usually does not need to be changed."
 msgstr "Per gli utenti avanzati, di solito non ha bisogno di essere cambiato."
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Any country"
-msgstr "Nessun paese"
+msgstr "Qualsiasi paese"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "European Union"
-msgstr "Unione europea"
+msgstr "Unione Europea"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Any customer"
 msgstr "Qualsiasi cliente"
 
@@ -14631,68 +14616,55 @@ msgid "Business"
 msgstr "Affari"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Business with valid VAT ID"
 msgstr "Impresa con partita IVA valida"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Charge VAT"
 msgstr "Applica l'IVA"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "No VAT"
-msgstr "N. IVA"
+msgstr "Nessuna IVA"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Sale not allowed"
-msgstr "Prevendita non ancora attiva"
+msgstr "Vendita non consentita"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Order requires approval"
-msgstr "Il nuovo ordine richiede l'approvazione"
+msgstr "L'ordine richiede approvazione"
 
 #: pretix/control/forms/event.py
-#, fuzzy
-#| msgid "Default price"
 msgid "Default tax code"
-msgstr "Prezzo predefinito"
+msgstr "Aliquota IVA di default"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Deviating tax rate"
 msgstr "Aliquota fiscale diversa"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Text on invoice"
-msgstr "Fattura fiscale"
+msgstr "Testo sulla fattura"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid ""
 "A combination of this calculation mode with a non-zero tax rate does not "
 "make sense."
 msgstr ""
-"Una combinazione di questa modalità di calcolo con un'aliquota non zero non "
-"ha senso."
+"Una combinazione di questa modalità di calcolo con un'aliquota diversa da "
+"zero non ha senso."
 
 #: pretix/control/forms/event.py
-#, fuzzy
-#| msgid "This combination of credentials is not known to our system."
 msgid "This combination of calculation mode and tax code does not make sense."
-msgstr "Combinazione di credenziali non riconosciute."
+msgstr ""
+"Questa combinazione di modalità di calcolo e aliquota fiscale non ha senso."
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Pre-selected voucher"
-msgstr "Voucher selezionato"
+msgstr "Voucher pre-selezionato"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid ""
 "If set, the widget will show products as if this voucher has been entered "
 "and when a product is bought via the widget, this voucher will be used. This "
@@ -14705,12 +14677,10 @@ msgstr ""
 "sbloccare prodotti nascosti."
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Compatibility mode"
-msgstr "Modalità compatibilità"
+msgstr "Modalità di compatibilità"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
@@ -14719,54 +14689,47 @@ msgstr ""
 "web. In caso di problemi, prova la modalità di compatibilità."
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "The given voucher code does not exist."
-msgstr "Il codice del voucher non esiste."
+msgstr "Questo codice del voucher non esiste."
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 #: pretix/control/views/shredder.py
-#, fuzzy
 msgid "The slug you entered was not correct."
-msgstr "Il slug inserito non è corretto."
+msgstr "Lo slug inserito non è corretto."
 
 #: pretix/control/forms/event.py
 msgid "Ticket downloads"
 msgstr "Scaricamento biglietti"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Your customers will be able to download their tickets in PDF format."
 msgstr "I vostri clienti possono scaricare i biglietti in formato PDF."
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Require all attendees to fill in their names"
-msgstr "Richiedi ai partecipanti di inserire i propri nomi"
+msgstr "Richiedi a tutti i partecipanti di inserire i propri nomi"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
 msgstr ""
-"Per impostazione predefinita, chiedi i nomi ma non li obbligatori. Puoi "
-"disattivare completamente questa opzione nelle impostazioni."
+"Per impostazione predefinita, chiedi i nomi ma non renderli obbligatori. "
+"Puoi disattivare completamente questa opzione nelle impostazioni."
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Payment via Stripe"
 msgstr "Pagamento tramite Stripe"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid ""
 "Stripe is an online payments processor supporting credit cards and lots of "
 "other payment options. To accept payments via Stripe, you will need to set "
 "up an account with them, which takes less than five minutes using their "
 "simple interface."
 msgstr ""
-"Stripe è un processore di pagamenti online che supporta le carte di credito "
-"e molte altre opzioni di pagamento. Per accettare pagamenti tramite Stripe, "
+"Stripe è un sistema di pagamenti online che supporta le carte di credito e "
+"molte altre opzioni di pagamento. Per accettare pagamenti tramite Stripe, "
 "devi creare un account con loro, un processo che richiede meno di cinque "
 "minuti attraverso l'interfaccia semplice."
 
@@ -14775,19 +14738,17 @@ msgid "Payment by bank transfer"
 msgstr "Pagamento tramite bonifico bancario"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid ""
 "Your customers will be instructed to wire the money to your account. You can "
 "then import your bank statements to process the payments within pretix, or "
 "mark them as paid manually."
 msgstr ""
-"I clienti verranno indicati a trasferire il denaro sul vostro conto. Puoi "
-"poi importare gli estratti conto per elaborare i pagamenti in pretix, oppure "
-"contrassegnarli come pagati manualmente."
+"Ai tuoi clienti verrà richiesto di effettuare un bonifico sul tuo conto. "
+"Potrai quindi importare gli estratti conto bancari per elaborare i pagamenti "
+"all'interno di Pretix, oppure contrassegnarli manualmente come pagati."
 
 #: pretix/control/forms/event.py
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html
-#, fuzzy
 msgid "Price (optional)"
 msgstr "Prezzo (opzionale)"
 
@@ -14796,7 +14757,6 @@ msgid "Free"
 msgstr "Gratuito"
 
 #: pretix/control/forms/event.py
-#, fuzzy
 msgid "Quantity available"
 msgstr "Quantità disponibile"
 
@@ -14805,35 +14765,30 @@ msgid "Please enter less than 25 recipients."
 msgstr "Per favore, inserisci meno di 25 destinatari."
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Search for…"
 msgstr "Cerca…"
 
 #: pretix/control/forms/filter.py pretix/control/navigation.py
-#, fuzzy
 msgid "All orders"
 msgstr "Tutti gli ordini"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Valid orders"
-msgstr "Ordini pagati"
+msgstr "Ordini validi"
 
 #: pretix/control/forms/filter.py pretix/plugins/sendmail/forms.py
 msgid "Paid (or canceled with paid fee)"
 msgstr "Pagato (o cancellato con commissioni sul pagamento)"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Paid or confirmed"
-msgstr "Ordine confermato"
+msgstr "Pagato o confermato"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 #: pretix/plugins/reports/exporters.py
-#, fuzzy
 msgid "Pending"
 msgstr "In attesa"
 
@@ -14842,84 +14797,68 @@ msgid "Pending or paid"
 msgstr "In attesa o pagati"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Cancellations"
-msgstr "Cancellazione"
+msgstr "Annullamenti"
 
 #: pretix/control/forms/filter.py pretix/plugins/sendmail/forms.py
-#, fuzzy
 msgid "Canceled (fully)"
-msgstr "Eliminato"
+msgstr "Annullato (completamente)"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Canceled (fully or with paid fee)"
-msgstr "Pagato (o cancellato con commissioni sul pagamento)"
+msgstr "Annullato (completamente o con commissioni pgate)"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Canceled (at least one position)"
-msgstr "Solo ordini pagati"
+msgstr "Annullato (almeno una posizione)"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Cancellation requested"
-msgstr "Cancellazione"
+msgstr "Richiesto annullamento"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Fully canceled but invoice not canceled"
-msgstr "Annullato ma fattura non annullata"
+msgstr "Annullato completamente ma fattura non annullata"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Payment process"
-msgstr "Sistemi di pagamento"
+msgstr "Processo di pagamento"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Pending or expired"
 msgstr "In attesa o scaduto"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Pending (overdue)"
-msgstr "In attesa (oltre)"
+msgstr "In sospeso (in ritardo)"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Overpaid"
 msgstr "Sovrapagato"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Partially paid"
-msgstr "Parzialmente pagato"
+msgstr "Pagato parzialmente"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Underpaid (but confirmed)"
-msgstr "Ordine confermato"
+msgstr "Pagato solo in parte (ma confermato)"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Pending (but fully paid)"
-msgstr "In attesa (ma interamente pagato)"
+msgstr "In sospeso (ma interamente pagato)"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Pending (but no current payment)"
-msgstr "In attesa (ma nessun pagamento corrente)"
+msgstr "In sospeso (ma nessun pagamento in corso)"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Approval process"
 msgstr "Procedura di approvazione"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Approved, payment pending"
-msgstr "Pagamento in attesa"
+msgstr "Approvato, in attesa del pagamento"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html
@@ -14930,89 +14869,74 @@ msgid "Approval pending"
 msgstr "In attesa di approvazione"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Follow-up configured"
-msgstr "Il seguimento è configurato"
+msgstr "Configurazione del follow-up"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Follow-up due"
 msgstr "Follow-up in scadenza"
 
 #: pretix/control/forms/filter.py pretix/control/forms/vouchers.py
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 #: pretix/plugins/sendmail/models.py
-#, fuzzy
 msgid "All products"
 msgstr "Tutti i prodotti"
 
 #: pretix/control/forms/filter.py pretix/control/forms/vouchers.py
 #: pretix/control/views/typeahead.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{product} – Any variation"
 msgstr "{product} – Qualsiasi variazione"
 
 #: pretix/control/forms/filter.py pretix/control/forms/orders.py
-#, fuzzy
 msgctxt "subevent"
 msgid "All dates starting at or after"
 msgstr "Tutte le date a partire da un dato giorno"
 
 #: pretix/control/forms/filter.py pretix/control/forms/orders.py
-#, fuzzy
 msgctxt "subevent"
 msgid "All dates starting before"
 msgstr "Tutte le date che iniziano prima di un dato giorno"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Order placed at or after"
 msgstr "Ordine effettuato a partire da un dato giorno"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Order placed before"
-msgstr "Nuovo ordine inviato"
+msgstr "Ordine effettuato prima di un dato giorno"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Minimal sum of payments and refunds"
-msgstr "Ordina pagamenti e rimborsi"
+msgstr "Somma minima dei pagamenti e dei rimborsi"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Maximal sum of payments and refunds"
-msgstr "Ordina pagamenti e rimborsi"
+msgstr "Somma massima dei pagamenti e dei rimborsi"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "At least one ticket with check-in"
 msgstr "Almeno un biglietto con check-in"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Affected quota"
 msgstr "Quota interessata"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Exact matches only"
 msgstr "Solo corrispondenze esatte"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "All organizers"
 msgstr "Tutti gli organizzatori"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "All events"
 msgstr "Tutti gli eventi"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "All payments"
-msgstr "Tutti i servizi di pagamento"
+msgstr "Tutti i pagamenti"
 
 #: pretix/control/forms/filter.py
 msgid "Payment created from"
@@ -15023,9 +14947,8 @@ msgid "Payment created until"
 msgstr "Pagamento creato fino a"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Paid from"
-msgstr "Ordini pagati"
+msgstr "Pagato da"
 
 #: pretix/control/forms/filter.py
 msgid "Paid until"
@@ -15045,12 +14968,10 @@ msgid "Date doesn't start in selected date range."
 msgstr "La data non inizia nell'intervallo selezionato."
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Shop live and presale running"
 msgstr "Negozio attivo e prevendita in corso"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Inactive"
 msgstr "Inattivo"
 
@@ -15080,14 +15001,12 @@ msgid "Date until"
 msgstr "Data fino al"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Start time from"
-msgstr "Data da"
+msgstr "Ora di inizio da"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Start time until"
-msgstr "Data fino a"
+msgstr "Ora di inizio fino a"
 
 #: pretix/control/forms/filter.py pretix/control/forms/rrule.py
 msgid "Weekday"
@@ -15106,57 +15025,46 @@ msgstr "attivo"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
-#, fuzzy
 msgid "not yet activated"
-msgstr "Ordine riattivato"
+msgstr "Non ancora attivato"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Has no memberships"
-msgstr "Crea un nuovo organizzatore"
+msgstr "Non ha membri"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Has any membership"
-msgstr "Crea un nuovo organizzatore"
+msgstr "Ha almeno un membro"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Has valid membership"
-msgstr "Ha un abbonamento valido"
+msgstr "Ha un membro valido"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Shop live"
 msgstr "Negozio attivo"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Shop not live"
 msgstr "Negozio non attivo"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Single event running or in the future"
 msgstr "Evento singolo in corso o in futuro"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Single event in the past"
 msgstr "Evento singolo in passato"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Search attendee…"
 msgstr "Cerca partecipante…"
 
 #: pretix/control/forms/filter.py pretix/plugins/checkinlists/exporters.py
-#, fuzzy
 msgid "Check-in status"
 msgstr "Stato del check-in"
 
 #: pretix/control/forms/filter.py pretix/plugins/checkinlists/exporters.py
-#, fuzzy
 msgid "All attendees"
 msgstr "Tutti i partecipanti"
 
@@ -15165,18 +15073,15 @@ msgstr "Tutti i partecipanti"
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 #: pretix/plugins/checkinlists/exporters.py
-#, fuzzy
 msgid "Checked in"
-msgstr "Check-in"
+msgstr "Check-in effettuato"
 
 #: pretix/control/forms/filter.py pretix/plugins/checkinlists/exporters.py
-#, fuzzy
 msgctxt "checkin state"
 msgid "Present"
 msgstr "Presente"
 
 #: pretix/control/forms/filter.py pretix/plugins/checkinlists/exporters.py
-#, fuzzy
 msgctxt "checkin state"
 msgid "Checked in but left"
 msgstr "Check-in effettuato, poi uscito"
@@ -15184,30 +15089,25 @@ msgstr "Check-in effettuato, poi uscito"
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/plugins/checkinlists/exporters.py
-#, fuzzy
 msgid "Not checked in"
-msgstr "Non registrato"
+msgstr "Check-in non effettuato"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgctxt "subevent"
 msgid "Date start from"
-msgstr "Data da"
+msgstr "Data di inizio a partire da"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgctxt "subevent"
 msgid "Date start until"
-msgstr "Data fino a"
+msgstr "Data di inizio fino a"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/users/index.html
-#, fuzzy
 msgid "Administrator"
 msgstr "Amministratore"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "No administrator"
 msgstr "Nessun amministratore"
 
@@ -15217,36 +15117,30 @@ msgid "Valid"
 msgstr "Valido"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Unredeemed"
-msgstr "Non redento"
+msgstr "Non riscattato"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Redeemed at least once"
-msgstr "Redento almeno una volta"
+msgstr "Riscattato almeno una volta"
 
 #: pretix/control/forms/filter.py
 msgid "Fully redeemed"
 msgstr "Voucher esauriti"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Redeemed and checked in with ticket"
 msgstr "Riscattato e registrato al check-in con il biglietto"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Quota handling"
 msgstr "Gestione delle quote"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Allow to ignore quota"
 msgstr "Permetti di ignorare la quota"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Filter by tag"
 msgstr "Filtra per etichetta"
 
@@ -15256,7 +15150,7 @@ msgstr "Cerca voucher"
 
 #: pretix/control/forms/filter.py pretix/control/forms/vouchers.py
 #: pretix/control/views/typeahead.py pretix/control/views/vouchers.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Any product in quota \"{quota}\""
 msgstr "Qualsiasi prodotto della quota \"{quota}\""
 
@@ -15273,7 +15167,6 @@ msgid "All refunds"
 msgstr "Tutti i rimborsi"
 
 #: pretix/control/forms/filter.py pretix/plugins/reports/exporters.py
-#, fuzzy
 msgid "Date filter"
 msgstr "Filtro data"
 
@@ -15282,24 +15175,20 @@ msgid "Filter by…"
 msgstr "Filtra per…"
 
 #: pretix/control/forms/filter.py pretix/plugins/reports/exporters.py
-#, fuzzy
 msgid "Date of last successful payment"
-msgstr "Data dell'ultimo pagamento"
+msgstr "Data dell'ultimo pagamento andato a buon fine"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "All check-ins"
-msgstr "Filtra per stato"
+msgstr "Tutti i check-in"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Successful check-ins"
-msgstr "Solo pagamenti con successo"
+msgstr "Check-in effettuati con successo"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Unsuccessful check-ins"
-msgstr "Solo pagamenti con successo"
+msgstr "Check-in effettuati senza successo"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
@@ -15319,26 +15208,22 @@ msgid "Device"
 msgstr "Dispositivo"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "All devices"
-msgstr "Tutte le fatture"
+msgstr "Tutti i dispositivi"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgctxt "filter"
 msgid "Start date"
 msgstr "Data di Inizio"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgctxt "filter"
 msgid "End date"
-msgstr "Data di Fine"
+msgstr "Data di fine"
 
 #: pretix/control/forms/filter.py pretix/plugins/checkinlists/exporters.py
-#, fuzzy
 msgid "All check-in lists"
-msgstr "Filtra per stato"
+msgstr "Tutte le liste dei check-in"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
@@ -15351,67 +15236,52 @@ msgstr "Lista di check-in"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
-#, fuzzy
 msgid "Software"
 msgstr "Software"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Device status"
-msgstr "Nome dispositivo"
+msgstr "Stato del dispositivo"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Active devices"
-msgstr "Tutte le fatture"
+msgstr "Dispositivi attivi"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Revoked devices"
-msgstr "Tutte le fatture"
+msgstr "Dispositivi revocati"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Require email addresses per ticket"
 msgid "Search email address or subject"
-msgstr "Richiedi un indirizzo email per ogni biglietto"
+msgstr "Cerca indirizzo email o oggetto"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/refunds.html
-#, fuzzy
 msgid "Source"
 msgstr "Fonte"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "All invoices"
 msgid "All sources"
-msgstr "Tutte le fatture"
+msgstr "Tutte le fonti"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Team actions"
-msgstr "Azioni del gruppo"
+msgstr "Azioni del team"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Customer actions"
 msgstr "Azioni dei clienti"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
 msgid "Device actions"
-msgstr "Nome dispositivo"
+msgstr "Azioni del dispositivo"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Order email"
 msgid "User email"
-msgstr "Indirizzo email dell'ordine"
+msgstr "Indirizzo email dell'utente"
 
 #: pretix/control/forms/filter.py pretix/control/navigation.py
-#, fuzzy
 msgid "All users"
 msgstr "Tutti gli utenti"
 
@@ -15436,42 +15306,36 @@ msgid "Global message banner"
 msgstr "Messaggio generale banner"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "Global message banner detail text"
-msgstr "Testo globale del banner del messaggio"
+msgstr "Testo dettagliato del banner del messaggio globale"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "OpenCage API key for geocoding"
 msgstr "Chiave API OpenCage per la geocodifica"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "MapQuest API key for geocoding"
 msgstr "Chiave API MapQuest per la geocodifica"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "Leaflet tiles URL pattern"
-msgstr "Schema URL piastrelle foglio"
+msgstr "Modello URL delle tessere Leaflet"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "e.g. {sample}"
 msgstr "ad esempio {sample}"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "Leaflet tiles attribution"
-msgstr "Attribuzione dei tile del foglio"
+msgstr "Attribuzione delle tessere del volantino"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "ApplePay MerchantID Domain Association"
-msgstr "Associazione del dominio all'ID commerciante Apple Pay"
+msgstr "Associazione del dominio ApplePay MerchantID"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Will be served at {domain}/.well-known/apple-developer-merchantid-domain-"
 "association"
@@ -15480,12 +15344,10 @@ msgstr ""
 "association"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "Perform update checks"
 msgstr "Esegui i controlli di aggiornamento"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "During the update check, pretix will report an anonymous, unique "
 "installation ID, the current version of pretix and your installed plugins "
@@ -15502,12 +15364,10 @@ msgstr ""
 "istanza. Puoi disabilitare questo comportamento qui in qualsiasi momento."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "Email notifications"
 msgstr "Notifiche via e-mail"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "We will notify you at this address if we detect that a new update is "
 "available. This address will not be transmitted to pretix.eu, the emails "
@@ -15518,12 +15378,10 @@ msgstr ""
 "saranno inviate da questo server localmente."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "Changes to pretix"
-msgstr "Modifica dettagli"
+msgstr "Modifiche a pretix"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "This installation of pretix is running without any custom modifications or "
 "extensions (except for installed plugins)."
@@ -15532,7 +15390,6 @@ msgstr ""
 "personalizzate (ad eccezione dei plugin installati)."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
@@ -15541,12 +15398,10 @@ msgstr ""
 "codice sorgente."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "Usage of pretix"
 msgstr "Uso di pretix"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "I only use pretix to organize events which are executed by my own company or "
 "its affiliated companies, or to sell products sold by my own company."
@@ -15555,7 +15410,6 @@ msgstr ""
 "affiliate, o per vendere prodotti della tua azienda."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "I use pretix to sell tickets of other event organizers (e.g. a ticketing "
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
@@ -15566,17 +15420,14 @@ msgstr ""
 "esempio una società di Software-as-a-Service)."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "I'm not sure which option applies."
 msgstr "Non so quale opzione è corretta."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "License choice"
 msgstr "Scelta della licenza"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "I want to use pretix under the additional permission granted to everyone by "
 "the copyright holders which allows me to not share modifications if I only "
@@ -15587,7 +15438,6 @@ msgstr ""
 "software esclusivamente internamente."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "I want to use pretix under the terms of the AGPLv3 license without "
 "restriction on the scope of usage and therefore without making use of any "
@@ -15598,14 +15448,12 @@ msgstr ""
 "permesso aggiuntivo."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "I have obtained a paid pretix Enterprise license which is currently valid."
 msgstr ""
 "Ho ottenuto una licenza Enterprise di pretix pagata che è attualmente valida."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a non-copyleft license (Apache License, MIT License, BSD license, …)."
@@ -15614,7 +15462,6 @@ msgstr ""
 "sotto licenza non copyleft (Apache License, MIT License, BSD License, ...)."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a license with strong copyleft (GPL, AGPL, …)."
@@ -15623,7 +15470,6 @@ msgstr ""
 "sotto licenza a copyleft forte (GPL, AGPL, ...)."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "This installation of pretix has installed plugins which have been created "
 "internally or obtained under a proprietary license by a third party."
@@ -15632,7 +15478,6 @@ msgstr ""
 "ottenuti sotto licenza proprietaria da terzi."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "This installation of pretix has installed pretix Enterprise plugins with a "
 "valid license."
@@ -15654,12 +15499,10 @@ msgstr ""
 "pretix), imposta qui il nome."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "Link for powered by name"
 msgstr "Collegamento associato al nome «Powered by»"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "If you used the previous option, you can set an URL to link to in the footer."
 msgstr ""
@@ -15667,12 +15510,10 @@ msgstr ""
 "footer."
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid "Source code instructions"
 msgstr "Istruzioni relative al codice sorgente"
 
 #: pretix/control/forms/global_settings.py
-#, fuzzy
 msgid ""
 "If you use pretix under AGPLv3 terms, describe exactly how to download the "
 "current source code of the site including all modifications and installed "
@@ -15684,7 +15525,6 @@ msgstr ""
 "accessibile. Assicurati di mantenerlo aggiornato!"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid ""
 "Products in this category are regular products displayed on the front page."
 msgstr ""
@@ -15692,13 +15532,10 @@ msgstr ""
 "pagina principale."
 
 #: pretix/control/forms/item.py
-#, fuzzy
-#| msgid "Product category"
 msgid "Add-on product category"
-msgstr "Categoria prodotto"
+msgstr "Categoria di prodotti aggiuntivi"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid ""
 "Products in this category are add-on products and can only be bought as add-"
 "ons."
@@ -15707,7 +15544,6 @@ msgstr ""
 "acquistati solo come componenti aggiuntivi."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid ""
 "Products in this category are regular products, but are only shown in the "
 "cross-selling step, according to the configuration below."
@@ -15717,7 +15553,6 @@ msgstr ""
 "sotto."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid ""
 "Products in this category are regular products displayed on the front page, "
 "but are additionally shown in the cross-selling step, according to the "
@@ -15725,21 +15560,19 @@ msgid ""
 msgstr ""
 "I prodotti di questa categoria sono prodotti standard visualizzati sulla "
 "pagina principale, ma vengono anche mostrati nella fase di cross-selling "
-"secondo la configurazione indicata."
+"secondo la configurazione indicata qui sotto."
 
 #: pretix/control/forms/item.py
 msgid "This field is required"
 msgstr "Questo campo è obbligatorio"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Dependencies between questions are not supported during check-in."
 msgstr "Le dipendenze tra le domande non sono supportate durante il check-in."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "No products"
-msgstr "Prodotto"
+msgstr "nessun prodotto"
 
 #: pretix/control/forms/item.py
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html
@@ -15747,12 +15580,10 @@ msgid "Unlimited"
 msgstr "Illimitato"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "The product should exist in multiple variations"
-msgstr "Il prodotto deve essere disponibile in diverse varianti"
+msgstr "Il prodotto dovrebbe essere disponibile in diverse varianti"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid ""
 "Select this option e.g. for t-shirts that come in multiple sizes. You can "
 "select the variations in the next step."
@@ -15761,47 +15592,38 @@ msgstr ""
 "dimensioni. Le variazioni possono essere definite nel passo successivo."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "No category"
 msgstr "Nessuna categoria"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Copy product information"
 msgstr "Copia le informazioni sul prodotto"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "No taxation"
-msgstr "Nessuna imposizione"
+msgstr "Nessuna tassazione"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Do not add to a quota now"
-msgstr "Non aggiungere ora a una quota"
+msgstr "Non aggiungere a una quota adesso"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Add product to an existing quota"
-msgstr "Aggiungi prodotto a una quota esistente"
+msgstr "Aggiungi il prodotto a una quota esistente"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Create a new quota for this product"
 msgstr "Crea una nuova quota per questo prodotto"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Quota options"
 msgstr "Opzioni della quota"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Add to existing quota"
 msgstr "Aggiungi alla quota esistente"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "New quota name"
 msgstr "Nuovo nome della quota"
 
@@ -15814,12 +15636,10 @@ msgid "Number of tickets"
 msgstr "Numero di biglietti"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Quota name is required."
 msgstr "È richiesto il nome della quota."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Please select a quota."
 msgstr "Selezionare una quota."
 
@@ -15829,17 +15649,14 @@ msgid "(Event default)"
 msgstr "(Default per l'evento)"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Choose automatically depending on event settings"
 msgstr "Scegli automaticamente secondo le impostazioni dell'evento"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Yes, if ticket generation is enabled in general"
 msgstr "Sì, se la generazione dei biglietti è abilitata in generale"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid ""
 "e.g. This reduced price is available for full-time students, jobless and "
 "people over 65. This ticket includes access to all parts of the event, "
@@ -15850,32 +15667,26 @@ msgstr ""
 "l'accesso a tutte le aree dell'evento, eccetto l'area VIP."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid ""
 "This option is deprecated. For new products, use the newer option below that "
 "refers to another product instead of a quota."
 msgstr ""
 "Questa opzione è deprecata. Per i nuovi prodotti, usa l'opzione più recente "
-"di seguito che riferisce a un altro prodotto invece che a una quota."
+"qui sotto che si riferisce a un altro prodotto invece che a una quota."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Shown independently of other products"
 msgstr "Mostrato indipendentemente dagli altri prodotti"
 
 #: pretix/control/forms/item.py
-#, fuzzy
-#| msgid "Canceled by customer"
 msgid "Date chosen by customer"
-msgstr "Cancellato dal cliente"
+msgstr "Data scelta dal cliente"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "No membership granted"
-msgstr "Nessuna adesione concessa"
+msgstr "Nessuna iscrizione concessa"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid ""
 "Gift card products should use a tax rule with a rate of 0 percent since "
 "sales tax will be applied when the gift card is redeemed."
@@ -15885,7 +15696,6 @@ msgstr ""
 "del riscatto della Gift card."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid ""
 "Do not set a specific validity for gift card products as it will not "
 "restrict the validity of the gift card. A validity of gift cards can be set "
@@ -15896,7 +15706,6 @@ msgstr ""
 "impostata nelle impostazioni dell'organizzatore."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid ""
 "If a valid membership is required, at least one valid membership type needs "
 "to be selected."
@@ -15905,7 +15714,6 @@ msgstr ""
 "iscrizione valido."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid ""
 "Your product grants a non-transferable membership and should therefore be a "
 "personalized admission ticket. Otherwise customers might not be able to use "
@@ -15919,18 +15727,18 @@ msgstr ""
 "trasferibile."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "The start of validity must be before the end of validity."
-msgstr "Il sotto-evento non appartiene a questo evento."
+msgstr ""
+"L'inizio del periodo di validità deve precedere la fine del periodo di "
+"validità."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid ""
 "You have selected dynamic validity but have not entered a time period. This "
 "would render the tickets unusable."
 msgstr ""
-"Hai selezionato una validità dinamica ma non hai specificato un periodo. I "
-"biglietti diventerebbero inutilizzabili."
+"Hai selezionato una validità dinamica ma non hai specificato un periodo. "
+"Questo renderebbe i biglietti inutilizzabili."
 
 #: pretix/control/forms/item.py
 #, python-format
@@ -15944,17 +15752,14 @@ msgstr ""
 "variazione come \"inattiva\"."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Use value from product"
 msgstr "Usa il valore del prodotto"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Add-ons"
 msgstr "Aggiunte"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "You added the same add-on category twice"
 msgstr "Hai aggiunto la stessa categoria aggiuntiva due volte"
 
@@ -15968,7 +15773,6 @@ msgstr ""
 "esauriti."
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Bundled products"
 msgstr "Prodotti in bundle"
 
@@ -15978,7 +15782,6 @@ msgstr "Hai aggiunto lo stesso prodotto in bundle due volte."
 
 #: pretix/control/forms/item.py
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html
-#, fuzzy
 msgid "Bundled product"
 msgstr "Prodotto in bundle"
 
@@ -15987,21 +15790,18 @@ msgid "inactive"
 msgstr "inattivo"
 
 #: pretix/control/forms/item.py
-#, fuzzy
 msgid "Sample Conference Center, Heidelberg, Germany"
-msgstr "Sample Conference Center, Heidelberg, Germany"
+msgstr "Centro Prove Conferenza, Roma, Italia"
 
 #: pretix/control/forms/mailsetup.py
 msgid "Hostname"
 msgstr "nome host"
 
 #: pretix/control/forms/mailsetup.py
-#, fuzzy
 msgid "Port"
 msgstr "Porta"
 
 #: pretix/control/forms/mailsetup.py
-#, fuzzy
 msgid "Username"
 msgstr "Nome utente"
 
