@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-11 17:00+0000\n"
+"PO-Revision-Date: 2026-08-16 22:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -26803,7 +26803,7 @@ msgstr "代わりに、WebAuthnデバイスを使用することもできます�
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html
 msgid "Log in as someone else"
-msgstr "他人としてログイン"
+msgstr "別の人としてログイン"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html
 msgid "Account settings"
