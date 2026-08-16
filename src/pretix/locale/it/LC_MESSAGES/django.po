@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-15 15:00+0000\n"
+"PO-Revision-Date: 2026-08-16 22:00+0000\n"
 "Last-Translator: Translate pretix user 586 "
 "<stefanom@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -15806,7 +15806,7 @@ msgid "Username"
 msgstr "Nome utente"
 
 #: pretix/control/forms/mailsetup.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The password contains characters not supported by our email system. Please "
 "only use characters A-Z, a-z, 0-9, and common special characters "
@@ -15817,27 +15817,22 @@ msgstr ""
 "({characters})."
 
 #: pretix/control/forms/mailsetup.py
-#, fuzzy
 msgid "Use STARTTLS"
 msgstr "Usa STARTTLS"
 
 #: pretix/control/forms/mailsetup.py
-#, fuzzy
 msgid "Commonly enabled on port 587."
 msgstr "Comunemente abilitato sulla porta 587."
 
 #: pretix/control/forms/mailsetup.py
-#, fuzzy
 msgid "Use SSL"
-msgstr "Use SSL"
+msgstr "Usa SSL"
 
 #: pretix/control/forms/mailsetup.py
-#, fuzzy
 msgid "Commonly enabled on port 465."
 msgstr "Comunemente abilitato sulla porta 465."
 
 #: pretix/control/forms/mailsetup.py
-#, fuzzy
 msgid ""
 "You can activate either SSL or STARTTLS security, but not both at the same "
 "time."
@@ -15846,7 +15841,6 @@ msgstr ""
 "contemporaneamente."
 
 #: pretix/control/forms/mailsetup.py
-#, fuzzy
 msgid ""
 "You are not allowed to use this mail server, please choose one with a public "
 "IP address instead."
@@ -15855,38 +15849,31 @@ msgstr ""
 "pubblico."
 
 #: pretix/control/forms/mailsetup.py
-#, fuzzy
 msgid "We were unable to resolve this hostname."
 msgstr "Non è stato possibile risolvere questo nome host."
 
 #: pretix/control/forms/mapping.py
-#, fuzzy
 msgid "Overwrite"
 msgstr "Sovrascrivi"
 
 #: pretix/control/forms/mapping.py
-#, fuzzy
 msgid "Fill if new"
 msgstr "Compila se nuovo"
 
 #: pretix/control/forms/mapping.py
-#, fuzzy
 msgid "Fill if empty"
 msgstr "Compila se vuoto"
 
 #: pretix/control/forms/mapping.py
-#, fuzzy
-#| msgid "Add to cart"
 msgid "Add to list"
-msgstr "Aggiungi al carrello"
+msgstr "Aggiungi alla lista"
 
 #: pretix/control/forms/mapping.py
-#, fuzzy
 msgid "pretix field"
-msgstr "Tutte le fatture"
+msgstr "campo pretix"
 
 #: pretix/control/forms/modelimport.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "CSV column: \"{name}\""
 msgstr "Colonna CSV: \"{name}\""
 
@@ -15895,17 +15882,14 @@ msgid "Import mode"
 msgstr "Modo di importazione"
 
 #: pretix/control/forms/modelimport.py
-#, fuzzy
 msgid "Create a separate order for each line"
 msgstr "Crea un ordine separato per ogni riga"
 
 #: pretix/control/forms/modelimport.py
-#, fuzzy
 msgid "Create one order with one position per line"
-msgstr "Crea un solo ordine con una posizione per ogni riga"
+msgstr "Crea un solo ordine con una posizione per riga"
 
 #: pretix/control/forms/modelimport.py
-#, fuzzy
 msgid ""
 "Group multiple lines together into the same order based on a grouping column"
 msgstr ""
@@ -15913,46 +15897,40 @@ msgstr ""
 "raggruppamento"
 
 #: pretix/control/forms/modelimport.py
-#, fuzzy
 msgid "Create orders as fully paid"
-msgstr "Crea ordini come pagati in tutto"
+msgstr "Crea ordini come completamente pagati"
 
 #: pretix/control/forms/modelimport.py
-#, fuzzy
 msgid "Create orders as pending and still require payment"
 msgstr "Crea ordini come pendenti e ancora da pagare"
 
 #: pretix/control/forms/modelimport.py
-#, fuzzy
 msgid "Create orders as test mode orders"
 msgstr "Crea ordini in modalità test"
 
 #: pretix/control/forms/modelimport.py
-#, fuzzy
 msgid "Orders not created in test mode cannot be deleted again after import."
 msgstr ""
 "Gli ordini non creati in modalità test non possono essere cancellati dopo "
 "l'importazione."
 
 #: pretix/control/forms/modelimport.py
-#, fuzzy
-#| msgid "You cannot generate an invoice for this order."
 msgid "A grouping cannot be specified for this import mode."
-msgstr "Non puoi creare una fattura per questo ordine."
+msgstr ""
+"Non è possibile specificare un raggruppamento per questa modalità di "
+"importazione."
 
 #: pretix/control/forms/modelimport.py
-#, fuzzy
-#| msgid "A variation needs to be set for this item."
 msgid "A grouping needs to be specified for this import mode."
-msgstr "Bisogna impostare una variante per questo prodotto."
+msgstr ""
+"Per questa modalità di importazione è necessario specificare un "
+"raggruppamento."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Confirm order regardless of payment"
-msgstr "Conferma pagamento"
+msgstr "Conferma l'ordine indipendentemente dal pagamento"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "If you check this box, this order will behave like a paid order for most "
 "purposes, even though it is not yet paid. This means that the customer can "
@@ -15971,7 +15949,6 @@ msgstr ""
 "raccogliere l'importo e non annullarlo automaticamente."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Overbook quota"
 msgstr "Quota di overbooking"
 
@@ -15984,12 +15961,10 @@ msgstr ""
 "un'eccessiva vendita di biglietti e superi la tua quota di vendite prevista!"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Overbook quota and ignore late payment"
 msgstr "Quota di overbook e ignorare i ritardi di pagamento"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "If you check this box, this operation will be performed even if it leads to "
 "an overbooked quota and you having sold more tickets than you planned! The "
@@ -16002,17 +15977,14 @@ msgstr ""
 "tardivi."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Notify customer by email"
-msgstr "Notifica il cliente per e-mail"
+msgstr "Notifica il cliente per email"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Keep a cancellation fee of"
 msgstr "Mantieni una tariffa di annullamento di"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "If you keep a fee, all positions within this order will be canceled and the "
 "order will be reduced to a cancellation fee. Payment and shipping fees will "
@@ -16025,26 +15997,22 @@ msgstr ""
 "tariffa di annullamento se vuoi che siano mantenute."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Generate cancellation for invoice"
-msgstr "Prevendita non ancora attiva"
+msgstr "Genera l'annullamento della fattura"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Comment (will be sent to the user)"
 msgstr "Commento (viene inviato all'utente)"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Will be included in the notification email when the respective placeholder "
 "is present in the configured email text."
 msgstr ""
-"È incluso nell'email di notifica quando il segnaposto è presente nel testo "
-"dell'email configurato."
+"È incluso nell'email di notifica quando il rispettivo segnaposto è presente "
+"nel testo dell'email configurato."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Please enter a gross amount. As per your event settings, the taxes will be "
 "split the same way as the order positions."
@@ -16053,7 +16021,6 @@ msgstr ""
 "verranno distribuite come le posizioni dell'ordine."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Please enter a gross amount. As per your event settings, the default tax "
 "rate will be charged."
@@ -16062,19 +16029,16 @@ msgstr ""
 "applicata l'aliquota d'imposta predefinita."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "As per your event settings, no tax will be charged."
 msgstr "Secondo le impostazioni dell'evento, nessuna tassa verrà applicata."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "A mail will only be sent if the order is fully paid after this."
 msgstr ""
-"Una mail verrà inviata solo se l'ordine viene pagato integralmente dopo "
+"Una mail verrà inviata solo se l'ordine risulta pagato integralmente dopo "
 "questo punto."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Payment amount"
 msgstr "Importo del pagamento"
 
@@ -16085,22 +16049,18 @@ msgid "Payment date"
 msgstr "Data pagamento"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Please select some events."
-msgstr "Scegli un metodo di pagamento."
+msgstr "Scegli qualche evento."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Re-calculate taxes"
 msgstr "Ricalcola le tasse"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Do not re-calculate taxes"
 msgstr "Non ricalcolare le tasse"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Re-calculate taxes based on address and product settings, keep gross amount "
 "the same."
@@ -16109,7 +16069,6 @@ msgstr ""
 "mantenendo lo stesso importo lordo."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Re-calculate taxes based on address and product settings, keep net amount "
 "the same."
@@ -16118,12 +16077,10 @@ msgstr ""
 "mantenendo lo stesso importo netto."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Issue a new invoice if required"
 msgstr "Emetti una nuova fattura se necessario"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "If an invoice exists for this order and this operation would change its "
 "contents, the old invoice will be canceled and a new invoice will be issued."
@@ -16132,31 +16089,25 @@ msgstr ""
 "contenuto, la vecchia fattura verrà annullata e ne verrà emessa una nuova."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Notify user"
-msgstr "Notifica utente"
+msgstr "Notifica l'utente"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Send an email to the customer notifying that their order has been changed."
 msgstr ""
 "Invia un'email al cliente per avvisarlo che il suo ordine è stato modificato."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Allow to overbook quotas when performing this operation"
 msgstr ""
 "Permetti di sovraprenotare le quote durante l'esecuzione di questa operazione"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
-#| msgid "number of entries today"
 msgid "Number of products to add"
-msgstr "numero di voci oggi"
+msgstr "Numero di prodotti da aggiungere"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Add-on to"
 msgstr "Aggiunta a"
 
@@ -16174,84 +16125,70 @@ msgstr "Posto"
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html
 #: pretix/presale/forms/checkout.py
-#, fuzzy
 msgid "Membership"
-msgstr "Composizione"
+msgstr "Iscrizione"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Including taxes, if any. Keep empty for the product's default price"
 msgstr ""
 "Tasse incluse, se presenti. Lasciare vuoto per il prezzo predefinito del "
 "prodotto"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
-#| msgid "You can not select the same seat multiple times."
 msgid "You can not choose a seat when adding multiple products at once."
-msgstr "Non è possibile selezionare lo stesso posto più volte."
+msgstr ""
+"Non è possibile scegliere un posto quando si aggiungono più prodotti "
+"contemporaneamente."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "(Unchanged)"
 msgstr "(Invariato)"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "New price (gross)"
 msgstr "Nuovo prezzo (lordo)"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Ticket is blocked"
-msgstr "Biglietto segreto"
+msgstr "Il biglietto è bloccato"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Validity start"
-msgstr "Inizio validità"
+msgstr "Inizio periodo di validità"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Validity end"
-msgstr "Fine validità"
+msgstr "Fine periodo di validità"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Generate a new secret"
 msgstr "Genera un nuovo segreto"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "This affects both the ticket secret (often used as a QR code) as well as the "
 "link used to individually access the ticket."
 msgstr ""
-"Questo riguarda sia il segreto del biglietto (spesso utilizzato come codice "
-"QR) sia il link utilizzato per accedere individualmente al biglietto."
+"Questo incide sia sul segreto del biglietto (spesso utilizzato come codice "
+"QR) sia sul link utilizzato per accedere individualmente al biglietto."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Cancel this position"
-msgstr "Solo ordini pagati"
+msgstr "Annulla questa posizione"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Split into new order"
 msgstr "Dividi in un nuovo ordine"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "(No membership)"
 msgstr "(Nessuna adesione)"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Remove this fee"
 msgstr "Elimina questo costo"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Note that payment fees have a special semantic and might automatically be "
 "changed if the payment method of the order is changed."
@@ -16262,17 +16199,14 @@ msgstr ""
 
 #: pretix/control/forms/orders.py
 #: pretix/control/templates/pretixcontrol/order/change.html
-#, fuzzy
 msgid "including all taxes"
 msgstr "comprese tutte le tasse"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Invalidate secrets"
 msgstr "Annulla i segreti"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Regenerates the order and ticket secrets. You will need to re-send the link "
 "to the order page to the user and the user will need to download his tickets "
@@ -16283,12 +16217,10 @@ msgstr ""
 "suoi biglietti. Le vecchie versioni non saranno valide."
 
 #: pretix/control/forms/orders.py pretix/plugins/sendmail/forms.py
-#, fuzzy
 msgid "Attach tickets"
-msgstr "Vai al negozio"
+msgstr "Allega i biglietti"
 
 #: pretix/control/forms/orders.py pretix/plugins/sendmail/forms.py
-#, fuzzy
 msgid ""
 "Will be ignored if tickets exceed a given size limit to ensure email "
 "deliverability."
@@ -16297,14 +16229,12 @@ msgstr ""
 "per garantire la consegna delle email."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Attach invoices"
-msgstr "Tutte le fatture"
+msgstr "Allega le fatture"
 
 #: pretix/control/forms/orders.py
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
-#, fuzzy
 msgid "Recipient"
 msgstr "Destinatario"
 
@@ -16314,7 +16244,6 @@ msgid "Attach {file}"
 msgstr "Allega {file}"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
 msgstr ""
@@ -16322,41 +16251,35 @@ msgstr ""
 "essere ripristinato."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Mark the order as pending and allow the user to pay the open amount with "
 "another payment method."
 msgstr ""
-"Contrassegna l'ordine come in sospeso e consentire all'utente di pagare "
+"Contrassegna l'ordine come in sospeso e consente all'utente di pagare "
 "l'importo aperto con un altro metodo di pagamento."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Do nothing and keep the order as it is."
-msgstr "Fai nulla e lascia l'ordine inalterato."
+msgstr "Non fare nulla e lascia l'ordine inalterato."
 
 #: pretix/control/forms/orders.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The refund amount needs to be positive and less than {}."
 msgstr "L'importo del rimborso deve essere positivo e minore di {}."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "You need to specify an amount for a partial refund."
 msgstr "Devi specificare un importo per un rimborso parziale."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Cancel all dates"
-msgstr "Solo ordini pagati"
+msgstr "Annulla tutte le date"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Automatically refund money if possible"
-msgstr "Rimborba automaticamente l'importo se possibile"
+msgstr "Rimborsa automaticamente l'importo se possibile"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Only available for payment method that support automatic refunds. Tickets "
 "that have been blocked (manually or by a plugin) are not auto-canceled and "
@@ -16367,12 +16290,10 @@ msgstr ""
 "annullati automaticamente e devono essere gestiti manualmente."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Create refund in the manual refund to-do list"
-msgstr "Crea il rimborso nell'elenco delle attività da eseguire manualmente"
+msgstr "Crea il rimborso nell'elenco dei rimborsi da eseguire manualmente"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Manual refunds will be created which will be listed in the manual refund to-"
 "do list. When combined with the automatic refund functionally, only payments "
@@ -16380,14 +16301,13 @@ msgid ""
 "manual refund to-do list. Do not check if you want to refund some of the "
 "orders by offsetting with different orders or issuing gift cards."
 msgstr ""
-"I rimborsi manuali verranno creati e visualizzati nella lista delle cose da "
-"fare per i rimborsi manuale. Se combinati con il rimborso automatico, "
-"soltanto i pagamenti con metodi di pagamento che non supportano i rimborsi "
-"automatici appariranno nella lista. Non verificare se vuoi rimborsare alcuni "
-"ordini compensandoli con altri ordini o emettendo carte regalo."
+"I rimborsi manuali verranno creati e visualizzati nella lista dei rimborsi "
+"manuali. Se combinati con il rimborso automatico, soltanto i pagamenti con "
+"metodi di pagamento che non supportano i rimborsi automatici appariranno "
+"nella lista. Non verificare se vuoi rimborsare alcuni ordini compensandoli "
+"con altri ordini o emettendo carte regalo."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "Refund order value to a gift card instead instead of the original payment "
 "method"
@@ -16396,27 +16316,22 @@ msgstr ""
 "pagamento originale"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Gift card validity"
 msgstr "Validità della carta regalo"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Keep a fixed cancellation fee per ticket"
 msgstr "Imposta una tassa di annullamento fissa per biglietto"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Free tickets and add-on products are not counted"
 msgstr "I biglietti gratuiti e i prodotti aggiuntivi non vengono conteggiati"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Keep fees"
-msgstr "Tariffe dell'ordine"
+msgstr "Commissioni di conservazione"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "The selected types of fees will not be refunded but instead added to the "
 "cancellation fee. Fees are never refunded in when an order in an event "
@@ -16429,17 +16344,15 @@ msgstr ""
 "biglietti per diverse date."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Send information via email"
-msgstr "Informazioni dell'ordine modificate"
+msgstr "Invia l'informazione via email"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Send information to waiting list"
-msgstr "Informazioni dell'ordine modificate"
+msgstr "Invia l'informazione alla lista di attesa"
 
 #: pretix/control/forms/orders.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Canceled: {event}"
 msgstr "Annullato: {event}"
 
@@ -16499,54 +16412,45 @@ msgstr ""
 "Il team di {event}"
 
 #: pretix/control/forms/orders.py pretix/plugins/sendmail/forms.py
-#, fuzzy
 msgctxt "subevent"
 msgid "Please either select a specific date or a date range, not both."
 msgstr ""
 "Seleziona una data specifica oppure un intervallo di date, non entrambi."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgctxt "subevent"
 msgid "Please either select all dates or a date range, not both."
 msgstr "Seleziona tutte le date o un intervallo di date, non entrambi."
 
 #: pretix/control/forms/orders.py pretix/plugins/sendmail/forms.py
-#, fuzzy
 msgctxt "subevent"
 msgid "If you set a date range, please set both a start and an end."
 msgstr "Se si definisce un intervallo, specifica sia l'inizio che la fine."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "Please confirm that you want to cancel ALL dates in this event series."
 msgstr "Conferma di voler annullare TUTTE le date di questa serie di eventi."
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid "I understand that this is not reversible and want to continue"
 msgstr "Capisco che questa operazione non è reversibile e voglio procedere"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
 msgid ""
 "We have just emailed you a confirmation code to enter to confirm this action"
 msgstr ""
-"Abbiamo appena inviato un codice di conferma da inserire per validare questa "
-"azione"
+"Ti abbiamo appena inviato un codice di conferma da inserire per convalidare "
+"questa azione"
 
 #: pretix/control/forms/orders.py
-#, fuzzy
-#| msgid "The confirm code you entered was incorrect."
 msgid "The confirmation code is incorrect."
-msgstr "Il codice di conferma inserito non è corretto."
+msgstr "Il codice di conferma non è corretto."
 
 #: pretix/control/forms/organizer.py
 msgid "This slug is already in use. Please choose a different one."
 msgstr "Questo nome è già stato utilizzato. Scegli un nome differente."
 
 #: pretix/control/forms/organizer.py
-#, fuzzy
 msgid "You cannot choose the base domain of this installation."
 msgstr "Non è possibile scegliere il dominio di base di questa installazione."
 
