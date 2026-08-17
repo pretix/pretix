@@ -473,6 +473,7 @@ def webhook(request, *args, **kwargs):
         if sale['status'] == 'COMPLETED':
             all_captures_completed = True
             any_pending_review = False
+            any_failed = None
             for purchaseunit in sale['purchase_units']:
                 for capture in purchaseunit['payments']['captures']:
                     try:
@@ -481,14 +482,19 @@ def webhook(request, *args, **kwargs):
                     except ReferencedPayPalObject.MultipleObjectsReturned:
                         pass
 
-                    if capture['status'] not in ('COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'):
+                    if capture['status'] in ('COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'):
+                        pass
+                    elif capture['status'] in ("DECLINED", "FAILED"):
                         all_captures_completed = False
-                        if capture['status_details']['reason'] == "PENDING_REVIEW":
+                        any_failed = True
+                    elif capture['status'] in ('PENDING'):
+                        all_captures_completed = False
+                        if capture.get('status_details', {}).get('reason', "") == "PENDING_REVIEW":
                             any_pending_review = True
+                    else:
+                        raise ValueError("Unknown paypal capture state: {}".format(capture['status']))
             if all_captures_completed:
                 try:
-                    payment.info = json.dumps(sale.dict())
-                    payment.save(update_fields=['info'])
                     payment.confirm()
                     prov.log_payment_duration(payment)
                 except Quota.QuotaExceededException:
@@ -496,6 +502,8 @@ def webhook(request, *args, **kwargs):
             if any_pending_review and payment.state != OrderPayment.PAYMENT_STATE_PENDING:
                 payment.state = OrderPayment.PAYMENT_STATE_PENDING
                 payment.save(update_fields=['state'])
+            if any_failed:
+                payment.fail()
         elif sale['status'] == 'APPROVED':
             try:
                 request.session['payment_paypal_oid'] = payment.info_data['id']
