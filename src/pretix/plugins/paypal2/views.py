@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 import json
 import logging
+import re
 from decimal import Decimal
 
 from django.contrib import messages
@@ -361,7 +362,13 @@ def webhook(request, *args, **kwargs):
     if event_json['resource_type'] == 'checkout-order':
         payloadid = event_json['resource']['id']
     elif event_json['resource_type'] == 'refund' or event_json['resource_type'] == 'capture':
-        payloadid = get_link(event_json['resource']['links'], 'up')['href'].split('/')[-1]
+        payloadid = get_order_id(event_json.get('resource', {}).get('links', []))
+        if payloadid is None:
+            # if we get a PAYMENT.CAPTURE.DECLINED webhook because a capture wasn't created due to
+            # violated validations, then it is labeled as a `capture` ressource_type but is in fact
+            # an `order` ressource_type as there is no `capture`. So we have to fall back
+            # See test_webhook_capture_declined for a redacted payload we've received
+            payloadid = event_json['resource']['id']
     else:
         return HttpResponse("Not interested in this resource type", status=200)
 
@@ -553,9 +560,12 @@ def isu_disconnect(request, **kwargs):
     }))
 
 
-def get_link(links, rel):
-    for link in links:
-        if link['rel'] == rel:
-            return link
+ORDER_ID_RE = re.compile(r"/checkout/orders/([^/?]+)")
 
+
+def get_order_id(links):
+    for link in links:
+        match = ORDER_ID_RE.search(link.get("href", ""))
+        if match:
+            return match.group(1)
     return None
