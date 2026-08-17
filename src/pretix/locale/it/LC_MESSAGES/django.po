@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-17 21:00+0000\n"
+"PO-Revision-Date: 2026-08-18 08:00+0000\n"
 "Last-Translator: Translate pretix user 586 "
 "<stefanom@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -18302,47 +18302,38 @@ msgid "An answer option has been added to the question."
 msgstr "È stata aggiunta un'opzione di risposta alla domanda."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "An answer option has been removed from the question."
 msgstr "Un'opzione di risposta è stata eliminata dalla domanda."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "An answer option has been changed."
 msgstr "Un'opzione di risposta è stata modificata."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "A user has been added to the event team."
 msgstr "Un utente è stato aggiunto al team dell'evento."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "A user has been invited to the event team."
 msgstr "Un utente è stato invitato al team dell'evento."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "A user's permissions have been changed."
 msgstr "I permessi dell'utente sono stati aggiornati."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "A user has been removed from the event team."
 msgstr "Un utente è stato rimosso dal team dell'evento."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The check-in list has been added."
 msgstr "È stata aggiunta la lista di check-in."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The check-in list has been deleted."
-msgstr "La lista di check-in è stata cancellata."
+msgstr "La lista di check-in è stata eliminata."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The check-in list has been changed."
 msgstr "La lista di check-in è stata aggiornata."
 
@@ -18352,12 +18343,10 @@ msgid "Check-in list {val}"
 msgstr "Lista di check-in {val}"
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The product has been created."
 msgstr "Il prodotto è stato creato."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The product has been changed."
 msgstr "Il prodotto è stato modificato."
 
