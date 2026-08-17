@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-13 10:00+0000\n"
+"PO-Revision-Date: 2026-08-17 10:00+0000\n"
 "Last-Translator: Xiaofan Wang <ogb91@126.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hans/>\n"
@@ -1318,7 +1318,7 @@ msgstr "日期"
 #: pretix/plugins/sendmail/forms.py
 msgctxt "subevent"
 msgid "All dates"
-msgstr "所有日期"
+msgstr "所有的日期"
 
 #: pretix/base/exporters/customers.py pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
@@ -2497,10 +2497,8 @@ msgstr "门票密钥："
 
 #: pretix/base/exporters/orderlist.py pretix/base/modelimport_orders.py
 #: pretix/base/modelimport_vouchers.py pretix/plugins/checkinlists/exporters.py
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat ID"
-msgstr "客户端 ID"
+msgstr "座位ID"
 
 #: pretix/base/exporters/orderlist.py pretix/plugins/checkinlists/exporters.py
 #, fuzzy
@@ -16514,7 +16512,7 @@ msgstr "添加到"
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html
 msgid "Seat"
-msgstr ""
+msgstr "座位"
 
 #: pretix/control/forms/orders.py
 #: pretix/control/templates/pretixcontrol/order/change.html
@@ -32901,7 +32899,7 @@ msgstr "页面%d"
 #: pretix/plugins/reports/exporters.py
 #, python-format
 msgid "Created: %s"
-msgstr "已创建：%s"
+msgstr "已创建: %s"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Order overview (PDF)"
