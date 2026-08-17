@@ -426,6 +426,22 @@ def webhook(request, *args, **kwargs):
     payment.info = json.dumps(sale.dict())
     payment.save()
 
+    # the captures[] of the sales object only is populated if the capture request isn't rejected.
+    # the capture request might be rejected if certain validations aren't met OR if the payment is
+    # DECLINED, nevertheless we will get a webhook informing us about "PAYMENT.CAPTURE.DECLINED".
+    # With no trace of it in `sale`.
+    # So now we have to leave our current pattern of making only decisions based upon the
+    # complete payment object (and checking whenever we receive a webhook), and instead need to fail
+    # payment directly.
+    # Otherwise we are caught in a loop:
+    # 1. We get a webhook and get `sale`
+    # 2. We see no proof of a capture attempt in `sale`
+    # 3. We call execute_payment and trigger a new "PAYMENT.CAPTURE.DECLINED" webhook, GOTO 1
+    if event_json['event_type'] == "PAYMENT.CAPTURE.DECLINED":
+        payment.fail(log_data={'status': event_json['event_type']})
+        logger.exception('PayPal Webhook PAYMENT.CAPTURE.DECLINED: {}'.format(event_json))
+        return HttpResponse(status=200)
+
     if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED and sale['status'] in ('PARTIALLY_REFUNDED', 'REFUNDED', 'COMPLETED'):
         if event_json['resource_type'] == 'refund':
             try:
