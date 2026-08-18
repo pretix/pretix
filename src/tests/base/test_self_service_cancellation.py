@@ -1,5 +1,5 @@
 import contextlib
-from datetime import timedelta
+from datetime import UTC, timedelta, datetime
 from decimal import Decimal
 from typing import List, Literal, cast
 
@@ -13,10 +13,12 @@ from pretix.base.models import (
 )
 from pretix.base.models.cancellation import (
     CancellationCheck, CancellationRule, CheckResult, Checks, CheckTypes,
-    FeeType, PositionResult, ProcessResult, RuleResult,
+    FeeType, PositionResult, ProcessCancellationRule, ProcessResult, RuleResult,
 )
+from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.orders import signal_listener_position_not_used
 from pretix.helpers import ensure_no_queries
+
 
 
 @pytest.fixture
@@ -295,3 +297,129 @@ def test_ticket_not_used(event, order, order_position, checkin_list):
             result = position_not_used_check.evaluate(prefetched_order, keep, order_position)
 
         assert result.cancellation_possible is False
+
+
+REFERENCE_DT = datetime(2017, 12, 27, 4, 0, 0, tzinfo=UTC)
+
+
+@pytest.fixture(params=["date", "datetime", "order", "event"])
+def rdt_reldate_variants(request):
+    return request.param
+
+
+@pytest.fixture
+def rdt_reldate(rdt_reldate_variants) -> RelativeDateWrapper:
+    if rdt_reldate_variants == 'date' or rdt_reldate_variants == 'datetime':
+        return RelativeDateWrapper.from_string(REFERENCE_DT.isoformat())
+    elif rdt_reldate_variants == 'order':
+        return RelativeDateWrapper(
+            RelativeDate(days=1, time=None, base_date_name='order__datetime', minutes=None, is_after=True))
+    elif rdt_reldate_variants == 'event':
+        return RelativeDateWrapper(
+            RelativeDate(days=1, time=None, base_date_name='event__date_from', minutes=None, is_after=True))
+    else:
+        raise ValueError()
+
+
+@pytest.fixture(params=["single_event", "subevents"])
+def rdt_event_variants(request):
+    return request.param
+
+
+@pytest.fixture
+def rdt_events(rdt_event_variants, event):
+    if rdt_event_variants == "single_event":
+        event.date_from = REFERENCE_DT
+        event.save()
+    else:
+        event.has_subevents = True
+        event.subevents.create(
+            name='1',
+            date_from=REFERENCE_DT,
+        )
+        event.subevents.create(
+            name='2',
+            date_from=REFERENCE_DT + timedelta(days=1),
+        )
+        event.subevents.create(
+            name='3',
+            date_from=REFERENCE_DT + timedelta(days=2),
+        )
+    return event
+
+
+@pytest.fixture
+def rdt_item(rdt_events):
+    return rdt_events.items.create(
+        name='Ticket',
+        category=None, default_price=23,
+        admission=True
+    )
+
+
+@pytest.fixture(params=["EARLIEST", "LATEST"])
+def rdt_mode_variants(request):
+    return request.param
+
+
+@pytest.fixture
+def rdt_order(rdt_events):
+    o = Order.objects.create(
+        code='123456', event=rdt_events, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=REFERENCE_DT + timedelta(hours=6),  # 6 hours offset mark orders
+        sales_channel=rdt_events.organizer.sales_channels.get(identifier="web"),
+        total=14, locale='en'
+    )
+    return o
+
+
+@pytest.fixture
+def rdt_order_positions(rdt_event_variants, rdt_events, rdt_item, rdt_order):
+    if rdt_event_variants == "single_event":
+        op = OrderPosition.objects.create(
+            order=rdt_order,
+            item=rdt_item,
+            variation=None,
+            price=Decimal("14"),
+        )
+    else:
+        op = []
+        for i in range(0, 3):
+            op.append(OrderPosition.objects.create(
+                subevent=rdt_events.subevents.all()[i],
+                order=rdt_order,
+                item=rdt_item,
+                variation=None,
+                price=Decimal("14"),
+            ))
+    return op
+
+
+@pytest.mark.django_db
+def test_resolve_date_field(rdt_reldate, rdt_reldate_variants, rdt_events, rdt_event_variants, rdt_mode_variants,
+                            rdt_order,
+                            rdt_order_positions):
+    with scope(organizer=rdt_events.organizer):
+        date = ProcessCancellationRule._resolve_date_field(rdt_reldate, rdt_order, rdt_mode_variants)
+        match rdt_reldate_variants:
+            case "date":
+                assert date == REFERENCE_DT
+            case "datetime":
+                assert date == REFERENCE_DT
+            case "order":
+                assert date == REFERENCE_DT + timedelta(days=1) + timedelta(hours=6)
+            case "event":
+                if rdt_event_variants == "single_event":
+                    assert date == REFERENCE_DT + timedelta(days=1)
+                elif rdt_event_variants == "subevents":
+                    if rdt_mode_variants == "EARLIEST":
+                        assert date == REFERENCE_DT + timedelta(days=1)
+                    elif rdt_mode_variants == "LATEST":
+                        assert date == REFERENCE_DT + timedelta(days=1) + timedelta(days=2)
+                    else:
+                        raise ValueError("Variant not known")
+                else:
+                    raise ValueError("Variant not known")
+            case _:
+                raise ValueError("Variant not known")

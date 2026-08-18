@@ -1,10 +1,13 @@
+import datetime
+import operator
 from dataclasses import dataclass, field
 from decimal import Decimal
 from itertools import chain
 from typing import (
-    Any, Callable, Dict, List, Literal, Optional, Protocol, Set,
-    Tuple, TypeAlias,
+    Any, Callable, ClassVar, Dict, Final, List, Literal, Optional, Protocol, Set,
+    TYPE_CHECKING, Tuple, TypeAlias,
 )
+from django_stubs_ext import StrOrPromise
 
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -14,7 +17,7 @@ from django.utils.translation import gettext_lazy as _
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, Item, ItemVariation, Order, OrderPosition
-from pretix.base.reldate import ModelRelativeDateTimeField
+from pretix.base.reldate import ModelRelativeDateTimeField, RelativeDateWrapper
 from pretix.base.signals import self_service_cancellation_checks
 
 """
@@ -75,7 +78,7 @@ class CheckResult:
     `cancellation_possible`
     """
     id: str
-    reason: str
+    reason: StrOrPromise
     cancellation_possible: bool
     type: Literal['check'] = field(default="check")
 
@@ -272,6 +275,15 @@ def _send_self_service_cancellation_checks(event: Event) -> List[Tuple[Any, Any]
 
 
 class CancellationRule(models.Model):
+    EARLIEST: Final = "EARLIEST"
+    LATEST: Final = "LATEST"
+
+    SUBEVENT_VARIANT_CHOICES = (
+        (EARLIEST, _("Earliest")),
+        (LATEST, _("Latest")),
+    )
+
+
     event = models.ForeignKey(
         Event,
         verbose_name=_("Event"),
@@ -286,8 +298,11 @@ class CancellationRule(models.Model):
         max_length=15,
     )
 
-    allowed_until = ModelRelativeDateTimeField(null=True, blank=True)
-    except_after = ModelRelativeDateTimeField(null=True, blank=True)
+    allowed_until = ModelRelativeDateTimeField(null=True, blank=True, verbose_name=_("Allowed until"))
+    except_after = ModelRelativeDateTimeField(null=True, blank=True, verbose_name=_("Except after"))
+    if TYPE_CHECKING:
+        allowed_until: Optional[RelativeDateWrapper]
+        except_after: Optional[RelativeDateWrapper]
 
     # --- position-only fields ---
     fee_percentage_per_position = models.DecimalField(
@@ -314,6 +329,19 @@ class CancellationRule(models.Model):
     )
 
     # --- process-only fields ---
+    subevent_variant = models.CharField(
+        max_length=8,
+        choices=SUBEVENT_VARIANT_CHOICES,
+        default=EARLIEST,
+        verbose_name=_("Subevent variant"),
+        help_text=_("An order can contain tickets for multiple different events if the event has "
+                    "subevents enabled. This choice controls if the order position for the earliest "
+                    "or the latest point in time in the order is used to determine the allowed until and "
+                    "except after dates.")
+    )
+
+
+
     fee_cancellation_process = models.DecimalField(
         max_digits=13,
         decimal_places=2,
@@ -331,9 +359,8 @@ class CancellationRule(models.Model):
         max_length=15,
     )
 
-    prefetches: List[Callable[[], Prefetch]] = []
-    related_selects: List[str] = []
-
+    prefetches: ClassVar[List[Callable[[], Prefetch]]] = []
+    related_selects: ClassVar[List[str]] = []
 
     @staticmethod
     def _collect_checks(event: Event, send_fn: Callable[
@@ -472,6 +499,9 @@ class PositionCancellationRule(CancellationRule):
     """
     objects = PositionCancellationRuleManager()
 
+    prefetches: ClassVar[List[Callable[[], Prefetch]]] = []
+    related_selects: ClassVar[List[str]] = []
+
     class Meta:
         proxy = True
 
@@ -524,6 +554,9 @@ class ProcessCancellationRule(CancellationRule):
 
     objects = ProcessCancellationRuleManager()
 
+    prefetches: ClassVar[List[Callable[[], Prefetch]]] = []
+    related_selects: ClassVar[List[str]] = []
+
     class Meta:
         proxy = True
 
@@ -532,20 +565,90 @@ class ProcessCancellationRule(CancellationRule):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    @staticmethod
+    def _resolve_date_field(date_field: RelativeDateWrapper, order: Order,
+                            mode: Literal["EARLIEST", "LATEST"] | str) -> datetime.date | datetime.datetime:
+        reldate_type = date_field.choice
+
+        if mode not in ('EARLIEST', 'LATEST'):
+            raise ValidationError('Mode is invalid')
+
+        if reldate_type == "date":
+            return date_field.date(order.event)
+        elif reldate_type == "datetime":
+            return date_field.datetime(order.event)
+
+        if reldate_type.base == "order":
+            return date_field.datetime(order)
+
+        if not order.event.has_subevents:
+            return date_field.datetime(order.event)
+
+        comparators = {
+            "EARLIEST": operator.lt,
+            "LATEST": operator.gt,
+        }
+
+        compare = comparators[mode]
+        base_event = order.event
+        base_value: None | datetime.date | datetime.date = None
+
+        for pos in order.positions.all():
+            e = pos.subevent if pos.subevent else pos.event
+            value = getattr(e, reldate_type.attribute)
+
+            if value is None:
+                continue  # skip when there is no value
+
+            if base_value is None or compare(value, base_value):
+                base_event = e
+                base_value = value
+
+        return date_field.datetime(base_event)
+
 
     def evaluate_process_rule(self, order: Order, keep: Set[OrderPosition], position_fees: Decimal) -> \
             Optional[RuleResult]:
+        fee_mode = self.fee_mode
+        if fee_mode not in (FeeType.MINIMUM, FeeType.ADDITIONAL):
+            raise ValueError(f"Unexpected fee_mode: {fee_mode!r}")
 
-        rule_results = []  # TODO really evaluate rules
+        check_results: List[CheckResult] = []
 
-        fee_type = self.fee_mode
-        if fee_type not in (FeeType.MINIMUM, FeeType.ADDITIONAL):
-            raise ValueError(f"Unexpected fee_mode: {fee_type!r}")
+        now = datetime.datetime.now(tz=datetime.timezone.utc)
 
-        return RuleResult.from_process_fee(
-            id=self.id,
-            partial_results=rule_results,
-            fee_type=fee_type,
-            absolute_fee=self.fee_cancellation_process,
-            reference_price=position_fees,
-        )
+        for param in ('allowed_until', 'except_after'):
+            value: RelativeDateWrapper | None = getattr(self, param, None)
+            if value is not None:
+                if now <= self._resolve_date_field(value, order, self.subevent_variant):
+                    check_results.append(
+                        CheckResult(
+                            id=f"process_rule_{self.id}",
+                            reason=_("{} is earlier than {} cutoff {}".format(now, param, value)),
+                            cancellation_possible=True
+                        )
+                    )
+                else:
+                    check_results.append(
+                        CheckResult(
+                            id=f"process_rule_{self.id}",
+                            reason=_("{} is later than {} cutoff {}".format(now, param, value)),
+                            cancellation_possible=False
+                        )
+                    )
+            else:
+                check_results.append(
+                    CheckResult(
+                        id=f"process_rule_{self.id}",
+                        reason=_("No {} limit defined".format(param)),
+                        cancellation_possible=True
+                    )
+                )
+
+            return RuleResult.from_process_fee(
+                id=self.id,
+                partial_results=check_results,
+                fee_type=fee_mode,
+                absolute_fee=self.fee_cancellation_process,
+                reference_price=position_fees,
+            )
