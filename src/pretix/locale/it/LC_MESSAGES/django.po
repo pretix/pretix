@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-18 08:00+0000\n"
+"PO-Revision-Date: 2026-08-19 02:00+0000\n"
 "Last-Translator: Translate pretix user 586 "
 "<stefanom@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -18351,177 +18351,160 @@ msgid "The product has been changed."
 msgstr "Il prodotto è stato modificato."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The product has been reordered."
-msgstr "La data dell'evento ès tata creata."
+msgstr "Il prodotto è stato riordinato."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The product has been deleted."
 msgstr "Il prodotto è stato rimosso."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "An add-on has been added to this product."
 msgstr "Un componente aggiuntivo è stato aggiunto a questo prodotto."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "An add-on has been removed from this product."
 msgstr "Un componente aggiuntivo è stato eliminato dal prodotto."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "An add-on has been changed on this product."
 msgstr "Un componente aggiuntivo è stato modificato per questo prodotto."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "A bundled item has been added to this product."
-msgstr "Un prodotto in bundle è stato aggiunto a questo articolo."
+msgstr "Un elemento in bundle è stato aggiunto a questo prodotto."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "A bundled item has been removed from this product."
-msgstr "Un prodotto in bundle ha perso un elemento."
+msgstr "Un elemento in bundle è stato rimosso da questo prodotto."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "A bundled item has been changed on this product."
-msgstr "Un prodotto in bundle ha subito una modifica."
+msgstr "Un elemento in bundle è stato modificato su questo prodotto."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "A program time has been added to this product."
-msgstr "Una quota è stata aggiunta alla data dall'evento."
+msgstr ""
+"Un intervallo di tempo di programmazione è stato aggiunto a questo prodotto."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "A program time has been changed on this product."
-msgstr "Una quota è stata modificata alla data dell'evento."
+msgstr ""
+"Un intervallo di tempo di programmazione è stato modificato su questo "
+"prodotto."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "A program time has been removed from this product."
-msgstr "Una quota è stata rimossa dalla data dell'evento."
+msgstr ""
+"Un intervallo di tempo di programmazione è stato rimosso da questo prodotto."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The variation \"{value}\" has been created."
 msgstr "È stata creata una variante \"{value}\"."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The variation \"{value}\" has been deleted."
 msgstr "La variante \"{value}\" è stata eliminata."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The variation \"{value}\" has been changed."
 msgstr "La variante \"{value}\" è stata modificata."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payment {local_id} has been confirmed."
 msgstr "Il pagamento {local_id} è stato confermato."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payment {local_id} has been canceled."
 msgstr "Il pagamento {local_id} è stato annullato."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Canceling payment {local_id} has failed."
 msgstr "L'annullamento del pagamento {local_id} non è riuscito."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payment {local_id} has been started."
-msgstr "Il pagamento {local_id} sta avvenendo."
+msgstr "Il pagamento {local_id} ha avuto inizio."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payment {local_id} has failed."
 msgstr "Il pagamento {local_id} non è riuscito."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The order could not be marked as paid: {message}"
 msgstr "L'ordine non può essere contrassegnato come pagato: {message}"
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The order has been overpaid."
 msgstr "L'ordine è stato pagato in eccesso."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Refund {local_id} has been created."
 msgstr "Il rimborso {local_id} è stato creato."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Refund {local_id} has been created by an external entity."
 msgstr "Il rimborso {local_id} è stato creato da un'entità esterna."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The customer requested you to issue a refund."
 msgstr "L'utente ha richiesto un rimborso."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Refund {local_id} has been completed."
-msgstr "Il rimborso {local_id} è stato effettuato."
+msgstr "Il rimborso {local_id} è stato completato."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Refund {local_id} has been canceled."
 msgstr "Il rimborso {local_id} è stato annullato."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Refund {local_id} has failed."
 msgstr "Il rimborso {local_id} non è riuscito."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The quota has been added."
 msgstr "È stata aggiunta la quota."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The quota has been deleted."
 msgstr "La quota è stata eliminata."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The quota has been changed."
 msgstr "La quota è stata aggiornata."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The quota has closed."
 msgstr "La quota è esaurita."
 
 #: pretix/control/logdisplay.py pretix/control/views/item.py
-#, fuzzy
 msgid "The quota has been re-opened."
 msgstr "La quota è stata riaperta."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The question has been added."
 msgstr "La domanda è stata aggiunta."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The question has been deleted."
 msgstr "La domanda è stata eliminata."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The question has been changed."
 msgstr "La domanda è stata modificata."
 
@@ -18530,22 +18513,19 @@ msgid "The question has been reordered."
 msgstr "La domanda è stata riorganizzata."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The discount has been added."
-msgstr "La data dell'evento ès tata creata."
+msgstr "Lo sconto è stato applicato."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The discount has been deleted."
-msgstr "La data dell'evento ès tata creata."
+msgstr "Lo sconto è stato eliminato."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "The discount has been changed."
-msgstr "La data dell'evento è stata modificata."
+msgstr "Lo sconto è stato modificato."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list \"{list}"
 "\"."
@@ -18554,7 +18534,7 @@ msgstr ""
 "lista \"{list}\"."
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
@@ -18562,29 +18542,24 @@ msgstr ""
 "{list}\"."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "An entry has been removed from the waiting list."
 msgstr "Un elemento è stato rimosso dalla lista d'attesa."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "An entry has been changed on the waiting list."
 msgstr "Un elemento è stato modificato nella lista d'attesa."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
 msgid "An entry has been added to the waiting list."
 msgstr "Un elemento è stato aggiunto alla lista d'attesa."
 
 #: pretix/control/middleware.py
-#, fuzzy
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
 msgstr "L'evento selezionato non esiste o non hai i permessi per amministrarlo."
 
 #: pretix/control/middleware.py
-#, fuzzy
 msgid ""
 "The selected organizer was not found or you have no permission to "
 "administrate it."
@@ -18594,7 +18569,6 @@ msgstr ""
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/dashboard.html
-#, fuzzy
 msgid "Dashboard"
 msgstr "Pannello di controllo"
 
@@ -18609,7 +18583,6 @@ msgstr "Pannello di controllo"
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html
-#, fuzzy
 msgid "General"
 msgstr "Generale"
 
@@ -18643,12 +18616,10 @@ msgid "Taxes"
 msgstr "Tasse"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgid "Invoicing"
 msgstr "Fatturazione"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgctxt "action"
 msgid "Cancellation"
 msgstr "Annullamento"
@@ -18659,17 +18630,14 @@ msgid "Widget"
 msgstr "Widget"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgid "Categories"
 msgstr "Categorie"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgid "Discounts"
-msgstr "Totale"
+msgstr "Sconti"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgid "Overview"
 msgstr "Panoramica"
 
@@ -18678,17 +18646,14 @@ msgstr "Panoramica"
 #: pretix/control/templates/pretixcontrol/orders/refunds.html
 #: pretix/plugins/reports/accountingreport.py
 #: pretix/presale/templates/pretixpresale/event/order.html
-#, fuzzy
 msgid "Refunds"
 msgstr "Rimborsi"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgid "Import"
 msgstr "Importa"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgid "All vouchers"
 msgstr "Tutti i voucher"
 
@@ -18697,25 +18662,22 @@ msgid "Tags"
 msgstr "Tags"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgctxt "navigation"
 msgid "Check-in"
 msgstr "Check-in"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
-#, fuzzy
 msgid "Check-in history"
-msgstr "Modifica dettagli"
+msgstr "Cronologia dei check-in"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/event/plugins.html
 #: pretix/control/templates/pretixcontrol/orders/search.html
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
-#, fuzzy
 msgid "Search"
-msgstr "Chiave di ricerca"
+msgstr "Ricerca"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/order/index.html
@@ -18737,49 +18699,40 @@ msgid "2FA"
 msgstr "2FA"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgid "Authorized apps"
 msgstr "App autorizzate"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/user/history.html
 #: pretix/control/templates/pretixcontrol/user/settings.html
-#, fuzzy
 msgid "Account history"
 msgstr "Cronologia account"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html
-#, fuzzy
 msgid "Admin sessions"
 msgstr "Sessioni di amministrazione"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/global_settings_base.html
-#, fuzzy
 msgid "Global settings"
 msgstr "Impostazioni globali"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgid "Update check"
 msgstr "Verifica aggiornamento"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgid "License check"
-msgstr "Check-in del biglietto effettuato"
+msgstr "Controllo della licenza"
 
 #: pretix/control/navigation.py
-#, fuzzy
-#| msgid "{system} User"
 msgid "System report"
-msgstr "{system} Utente"
+msgstr "Report di Sistema"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgid "Data sync problems"
-msgstr "Problemi di sincronizzazione"
+msgstr "Problemi di sincronizzazione dati"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/organizers/properties.html
@@ -18788,60 +18741,52 @@ msgstr "metadata dell'evento"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html
-#, fuzzy
 msgid "Webhooks"
 msgstr "Webhooks"
 
 #: pretix/control/navigation.py
-#, fuzzy
 msgid "Acceptance"
 msgstr "Accettazione"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
-#, fuzzy
 msgid "SSO clients"
 msgstr "Clienti SSO"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
-#, fuzzy
 msgid "SSO providers"
-msgstr "Sistemi di pagamento"
+msgstr "Fornitori di SSO"
 
 #: pretix/control/permissions.py
-#, fuzzy
 msgid "You do not have permission to view this content."
 msgstr "Non hai il permesso di visualizzare questo contenuto."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy, python-format
+#, python-format
 msgid "You are currently working on behalf of %(user)s."
 msgstr "Attualmente stai lavorando per conto di %(user)s."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid "Stop impersonating"
-msgstr "Smettila di fingere"
+msgstr "Smettila di impersonare"
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html
 msgid "Password recovery"
 msgstr "Recupero password"
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html
-#, fuzzy
 msgid "Send recovery information"
 msgstr "Invia informazioni di recupero"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html
-#, fuzzy
 msgid "Accept an invitation"
 msgstr "Accetta l'invito"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "If you already have an account on this site with a different email address, "
 "you can <a %(login_href)s>log in</a> first and then click this link again to "
@@ -18853,27 +18798,24 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html
 #: pretix/control/templates/pretixcontrol/auth/register.html
-#, fuzzy
 msgid "Login"
-msgstr "Accedi"
+msgstr "Login"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html
 #: pretix/control/templates/pretixcontrol/auth/login.html
 #: pretix/control/templates/pretixcontrol/auth/register.html
-#, fuzzy
 msgid "Register"
-msgstr "Registra"
+msgstr "Registro"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html
-#, fuzzy
 msgid ""
 "It looks like your browser is not accepting our cookie and you need to log "
 "in repeatedly. Please check if your browser is set to block cookies, or "
 "delete all existing cookies and retry."
 msgstr ""
 "Sembra che il tuo browser non accetti i nostri cookie e devi effettuare il "
-"login ripetutamente. Verifica che il browser non blocchi i cookie o cancella "
-"tutti i cookie esistenti e riprova."
+"login ripetutamente. Verifica che il browser non blocchi i cookie oppure "
+"cancella tutti i cookie esistenti e riprova."
 
 #: pretix/control/templates/pretixcontrol/auth/login.html
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html
@@ -18883,18 +18825,15 @@ msgid "Log in"
 msgstr "Accedi"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html
-#, fuzzy
 msgid "Lost password?"
 msgstr "Password dimenticata?"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html
 #: pretix/control/templates/pretixcontrol/user/reauth.html
-#, fuzzy
 msgid "Welcome back!"
-msgstr "Benvenuto di nuovo!"
+msgstr "Bentornato!"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html
-#, fuzzy
 msgid ""
 "You configured your account to require authentication with a second medium, "
 "e.g. your phone. Please enter your verification code here:"
@@ -18903,22 +18842,19 @@ msgstr ""
 "mezzo, ad esempio il tuo telefono. Inserisci qui il codice di verifica:"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html
-#, fuzzy
 msgid "Token"
 msgstr "Token"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html
 #: pretix/control/templates/pretixcontrol/user/reauth.html
-#, fuzzy
 msgid ""
 "WebAuthn failed. Check that the correct authentication device is correctly "
 "plugged in."
 msgstr ""
-"WebAuthn non è riuscito. Controlla che il dispositivo di autenticazione "
-"corretto sia collegato correttamente."
+"WebAuthn non riuscito. Controlla che il giusto dispositivo di autenticazione "
+"sia collegato correttamente."
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html
-#, fuzzy
 msgid ""
 "Alternatively, connect your WebAuthn device. If it has a button, touch it "
 "now. You might have to unplug the device and plug it back in again."
@@ -18953,12 +18889,11 @@ msgid "Continue"
 msgstr "Continua"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-#, fuzzy
 msgid "Authorize an application"
 msgstr "Autorizza un'applicazione"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
 "access to your pretix account?"
@@ -18967,25 +18902,22 @@ msgstr ""
 "accesso al tuo account pretix?"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-#, fuzzy, python-format
+#, python-format
 msgid "You are currently logged in as <strong>%(user)s</strong>."
-msgstr "Sei attualmente loggato come <strong>%(user)s</strong>."
+msgstr "Sei attualmente collegato come <strong>%(user)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-#, fuzzy
 msgid "The application requires the following permissions:"
 msgstr "L'applicazione richiede i seguenti permessi:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-#, fuzzy
 msgid ""
 "Please select the organizer accounts this application should get access to:"
 msgstr ""
 "Seleziona gli account dell'organizzatore a cui questa applicazione dovrebbe "
-"accedere:"
+"poter accedere:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-#, fuzzy
 msgid ""
 "This application has <strong>not</strong> been reviewed by the pretix team. "
 "Granting access to your pretix account happens at your own risk."
@@ -18994,14 +18926,12 @@ msgstr ""
 "Concederle accesso al tuo account pretix è a tuo rischio."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-#, fuzzy
 msgid "Error:"
 msgstr "Errore:"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html
-#, fuzzy
 msgid "Set new password"
-msgstr "Imposta nuova password"
+msgstr "Imposta una nuova password"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
@@ -19081,38 +19011,31 @@ msgid "Save"
 msgstr "Salva"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html
-#, fuzzy
 msgid "Create a new account"
 msgstr "Crea un nuovo account"
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid "Toggle navigation"
 msgstr "Commuta navigazione"
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid "Go to shop"
 msgstr "Vai al negozio"
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid "Public profile"
 msgstr "Profilo pubblico"
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid "End admin session"
 msgstr "Termina sessione di amministrazione"
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid "Account Settings"
 msgstr "Impostazioni account"
 
 #: pretix/control/templates/pretixcontrol/base.html
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html
-#, fuzzy
 msgid "Log out"
 msgstr "Esci"
 
@@ -25709,7 +25632,7 @@ msgstr "Metti il negozio Live"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid "Go to the ticket shop"
-msgstr "Vai al negozio"
+msgstr "Vai alla biglietteria"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid "Search query:"
