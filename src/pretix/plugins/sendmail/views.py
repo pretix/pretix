@@ -657,7 +657,7 @@ class UpdateRule(EventPermissionRequiredMixin, UpdateView):
 
         for lang in self.request.event.settings.locales:
             with language(lang, self.request.event.settings.region):
-                placeholders = get_sample_context(self.request.event, ['event', 'order', 'position_or_address'])
+                placeholders = get_sample_context(self.request.event, ['event', 'order', 'event_or_subevent', 'position_or_address'])
                 subject = bleach.clean(self.object.subject.localize(lang), tags=set())
                 preview_subject = prefix_subject(self.request.event, format_map(subject, placeholders), highlight=True)
                 template = self.object.template.localize(lang)
