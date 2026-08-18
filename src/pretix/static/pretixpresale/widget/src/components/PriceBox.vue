@@ -86,7 +86,7 @@ const taxline = computed(() => {
 	}
 })
 
-const showTaxline = computed(() => props.price.rate !== '0.00' && props.price.gross !== '0.00')
+const showTaxline = computed(() => props.price.rate !== '0' && props.price.gross !== '0.00')
 </script>
 <template lang="pug">
 .pretix-widget-pricebox
