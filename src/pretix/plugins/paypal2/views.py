@@ -565,7 +565,12 @@ ORDER_ID_RE = re.compile(r"/checkout/orders/([^/?]+)")
 
 def get_order_id(links):
     for link in links:
+        if link.get('rel', "") == "up" and link.get('href', None) is not None:
+            return link['href'].split('/')[-1]
+
+    for link in links:
         match = ORDER_ID_RE.search(link.get("href", ""))
         if match:
             return match.group(1)
+
     return None
