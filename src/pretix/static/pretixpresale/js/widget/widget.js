@@ -534,7 +534,7 @@ Vue.component('item', {
         + '<div :id="item_price_id" class="pretix-widget-item-price-col">'
         + '<pricebox :price="item.price" :free_price="item.free_price" v-if="!item.has_variations && $root.showPrices"'
         + '          :mandatory_priced_addons="item.mandatory_priced_addons" :suggested_price="item.suggested_price"'
-        + '          :field_name="\'price_\' + item.id" :original_price="item.original_price">'
+        + '          :field_name="\'price_\' + item.id" :original_price="item.original_price" :item_id="item.id">'
         + '</pricebox>'
         + '<div class="pretix-widget-pricebox" v-if="item.has_variations && $root.showPrices" v-html="pricerange"></div>'
         + '<span v-if="!$root.showPrices">&nbsp;</span>'
