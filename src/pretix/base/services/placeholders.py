@@ -562,6 +562,22 @@ def base_placeholders(sender, **kwargs):
             lambda event: str(event.location or ''),
         ),
         SimpleFunctionalTextPlaceholder(
+            'event_begin_time', ['event_or_subevent'],
+            lambda event_or_subevent:
+                date_format(event_or_subevent.date_from.astimezone(event_or_subevent.timezone), 'TIME_FORMAT')
+                if event_or_subevent.date_from
+                else '',
+            lambda event: date_format(event.date_from.astimezone(event.timezone), 'TIME_FORMAT') if event.date_from else '',
+        ),
+        SimpleFunctionalTextPlaceholder(
+            'event_end_time', ['event_or_subevent'],
+            lambda event_or_subevent:
+                date_format(event_or_subevent.date_to.astimezone(event_or_subevent.timezone), 'TIME_FORMAT')
+                if event_or_subevent.date_to
+                else '',
+            lambda event: date_format(event.date_to.astimezone(event.timezone), 'TIME_FORMAT') if event.date_to else '',
+        ),
+        SimpleFunctionalTextPlaceholder(
             'event_admission_time', ['event_or_subevent'],
             lambda event_or_subevent:
                 date_format(event_or_subevent.date_admission.astimezone(event_or_subevent.timezone), 'TIME_FORMAT')
