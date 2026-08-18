@@ -12,7 +12,7 @@ from django_stubs_ext import StrOrPromise
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.db.models import Prefetch
+from django.db.models import Prefetch, QuerySet
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.decimal import round_decimal
@@ -385,11 +385,15 @@ class CancellationRule(models.Model):
         return Checks(position=position_checks, process=process_checks)
 
     @staticmethod
-    def evaluate(event: Event, order: Order, keep: Set[OrderPosition]) -> "CancellationResult":
+    def evaluate(event: Event, order: Order, keep: Set[OrderPosition],
+                 check_ts: datetime.datetime) -> "CancellationResult":
+
         # collect all checks, position_rules and process_rules that are applicable
         checks = CancellationRule._collect_checks(event=event)
-        position_rules = PositionCancellationRule.objects.filter(event=event, type=CheckTypes.POSITION)
-        process_rules = ProcessCancellationRule.objects.filter(event=event, type=CheckTypes.PROCESS)
+        position_rules: QuerySet[PositionCancellationRule] = PositionCancellationRule.objects.filter(event=event,
+                                                                                                     type=CheckTypes.POSITION)
+        process_rules: QuerySet[ProcessCancellationRule] = ProcessCancellationRule.objects.filter(event=event,
+                                                                                                  type=CheckTypes.PROCESS)
 
         order = CancellationRule._prefetch_order(event, order, checks)
 
@@ -412,7 +416,7 @@ class CancellationRule(models.Model):
 
             # evaluate all customer specified rules for this position
             for rule in position_rules:
-                result = rule.evaluate_position_rule(order=order, keep=keep, position=position)
+                result = rule.evaluate_position_rule(order, keep, position, check_ts)
                 if result is not None:
                     position_rule_results[position.id].append(result)
 
@@ -432,7 +436,7 @@ class CancellationRule(models.Model):
 
         # evaluate all customer specified rules for the cancellation process
         for rule in process_rules:
-            result = rule.evaluate_process_rule(order=order, keep=keep, position_fees=temp_position_fees)
+            result = rule.evaluate_process_rule(order, keep, temp_position_fees, check_ts)
             if result is not None:
                 process_rule_results.append(result)
 
@@ -510,16 +514,90 @@ class PositionCancellationRule(CancellationRule):
         self.full_clean()
         super().save(*args, **kwargs)
 
-    def evaluate_position_rule(self, order: Order, keep: Set[OrderPosition], position: OrderPosition) -> Optional[
-        RuleResult
-    ]:
+    def _position_matches_rule(self, position: OrderPosition) -> bool:
         if not self.all_products and position.item_id not in self.limit_products.values_list('pk', flat=True):
-            return None
+            return False
 
         if not self.all_products and position.variation_id not in self.limit_variations.values_list('pk', flat=True):
-            return None
+            return False
 
-        rule_results = []  # TODO really evaluate rules
+        return True
+
+    @staticmethod
+    def _resolve_date_field(date_field: RelativeDateWrapper, order: Order,
+                            position: OrderPosition) -> datetime.date | datetime.datetime:
+        reldate_type = date_field.choice
+
+        if reldate_type == "date":
+            return date_field.date(order.event)
+        elif reldate_type == "datetime":
+            return date_field.datetime(order.event)
+
+        if reldate_type.base == "order":
+            return date_field.datetime(order)
+
+        if not order.event.has_subevents:
+            return date_field.datetime(order.event)
+
+        return date_field.datetime(position.subevent)
+
+    def _evaluate_cancellation_moment(self, position: OrderPosition, check_ts: datetime.datetime) -> List[
+        CheckResult]:
+        check_results = []
+
+        order = position.order
+
+        for param in ('allowed_until', 'except_after'):
+            value: RelativeDateWrapper | None = getattr(self, param, None)
+            if value is not None:
+                if check_ts <= self._resolve_date_field(value, order, position):
+                    check_results.append(
+                        CheckResult(
+                            id=f"position_rule_{self.id}",
+                            reason=_("{} is earlier than {} cutoff {}".format(check_ts, param, value)),
+                            cancellation_possible=True
+                        )
+                    )
+                else:
+                    check_results.append(
+                        CheckResult(
+                            id=f"position_rule_{self.id}",
+                            reason=_("{} is later than {} cutoff {}".format(check_ts, param, value)),
+                            cancellation_possible=False
+                        )
+                    )
+            else:
+                check_results.append(
+                    CheckResult(
+                        id=f"position_rule_{self.id}",
+                        reason=_("No {} limit defined".format(param)),
+                        cancellation_possible=True
+                    )
+                )
+
+            return check_results
+
+    def evaluate_position_rule(self, order: Order, _keep: Set[OrderPosition], position: OrderPosition,
+                               check_ts: datetime.datetime) -> Optional[
+        RuleResult
+    ]:
+        rule_check_results = []
+
+        if not self._position_matches_rule(position):
+            rule_check_results.append(
+                CheckResult(
+                    id=f"position_rule_{self.id}",
+                    reason=_("Rule does not apply to this product"),
+                    cancellation_possible=False
+                )
+            )
+        else:
+            rule_check_results.append(CheckResult(
+                id=f"position_rule_{self.id}",
+                reason=_("Rule matches this product"),
+                cancellation_possible=True
+            ))
+            rule_check_results.extend(self._evaluate_cancellation_moment(position, check_ts))
 
         if self.fee_percentage_per_position and self.fee_absolute_per_position:
             raise NotImplementedError(
@@ -527,14 +605,14 @@ class PositionCancellationRule(CancellationRule):
         elif self.fee_absolute_per_position != Decimal(0.00):
             return RuleResult.from_absolute_fee(
                 id=self.id,
-                partial_results=rule_results,
+                partial_results=rule_check_results,
                 fee_type=FeeType.POSITION,
                 absolute_fee=self.fee_absolute_per_position
             )
         else:
             return RuleResult.from_relative_fee(
                 id=self.id,
-                partial_results=rule_results,
+                partial_results=rule_check_results,
                 fee_type=FeeType.POSITION,
                 position_price=position.price,
                 percentage=self.fee_absolute_per_position,
@@ -606,8 +684,8 @@ class ProcessCancellationRule(CancellationRule):
 
         return date_field.datetime(base_event)
 
-
-    def evaluate_process_rule(self, order: Order, keep: Set[OrderPosition], position_fees: Decimal) -> \
+    def evaluate_process_rule(self, order: Order, _keep: Set[OrderPosition], position_fees: Decimal,
+                              check_ts: datetime.datetime) -> \
             Optional[RuleResult]:
         fee_mode = self.fee_mode
         if fee_mode not in (FeeType.MINIMUM, FeeType.ADDITIONAL):
@@ -615,16 +693,14 @@ class ProcessCancellationRule(CancellationRule):
 
         check_results: List[CheckResult] = []
 
-        now = datetime.datetime.now(tz=datetime.timezone.utc)
-
         for param in ('allowed_until', 'except_after'):
             value: RelativeDateWrapper | None = getattr(self, param, None)
             if value is not None:
-                if now <= self._resolve_date_field(value, order, self.subevent_variant):
+                if check_ts <= self._resolve_date_field(value, order, self.subevent_variant):
                     check_results.append(
                         CheckResult(
                             id=f"process_rule_{self.id}",
-                            reason=_("{} is earlier than {} cutoff {}".format(now, param, value)),
+                            reason=_("{} is earlier than {} cutoff {}".format(check_ts, param, value)),
                             cancellation_possible=True
                         )
                     )
@@ -632,7 +708,7 @@ class ProcessCancellationRule(CancellationRule):
                     check_results.append(
                         CheckResult(
                             id=f"process_rule_{self.id}",
-                            reason=_("{} is later than {} cutoff {}".format(now, param, value)),
+                            reason=_("{} is later than {} cutoff {}".format(check_ts, param, value)),
                             cancellation_possible=False
                         )
                     )
