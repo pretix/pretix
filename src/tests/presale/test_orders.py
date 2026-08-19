@@ -37,18 +37,20 @@ import re
 from decimal import Decimal
 
 from bs4 import BeautifulSoup
+from django.core import mail as djmail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    Event, Item, ItemCategory, ItemVariation, Order, OrderPosition, Organizer,
-    Question, Quota,
+    Event, Invoice, InvoiceAddress, Item, ItemCategory, ItemVariation, Order,
+    OrderPosition, Organizer, Question, Quota,
 )
 from pretix.base.models.orders import OrderFee, OrderPayment
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
+from pretix.testutils.scope import classscope
 
 
 class BaseOrdersTest(TestCase):
@@ -1701,6 +1703,37 @@ class OrdersTest(BaseOrdersTest):
         )
         assert 'Gift card' in response.content.decode()
         assert '1 available' in response.content.decode()
+
+    @classscope("orga")
+    def test_change_paymentmethod_invoice_separately(self):
+        self.event.settings.payment_banktransfer__enabled = True
+        self.event.settings.payment_banktransfer_invoice_immediately = True
+        self.event.settings.invoice_generate = "paid"
+        InvoiceAddress.objects.create(
+            order=self.order,
+            transmission_type="email",
+            transmission_info={
+                "transmission_email_other": True,
+                "transmission_email_address": "invoice@example.org",
+            }
+        )
+
+        assert self.order.invoices.count() == 0
+
+        with self.captureOnCommitCallbacks(execute=True):
+            self.client.post(
+                '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+                {
+                    'payment': 'banktransfer'
+                }
+            )
+
+        assert self.order.payments.last().provider == 'banktransfer'
+        assert self.order.invoices.count() == 1
+        i = self.order.invoices.last()
+        assert i.transmission_status == Invoice.TRANSMISSION_STATUS_COMPLETED
+        assert ["invoice@example.org"] == djmail.outbox[0].to
+        assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
 
     def test_answer_download_token(self):
         with scopes_disabled():
