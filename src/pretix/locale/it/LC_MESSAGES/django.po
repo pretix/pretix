@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-19 02:00+0000\n"
+"PO-Revision-Date: 2026-08-19 06:41+0000\n"
 "Last-Translator: Translate pretix user 586 "
 "<stefanom@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -19040,18 +19040,15 @@ msgid "Log out"
 msgstr "Esci"
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid "Organizer account"
 msgstr "Account organizzatore"
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid "Search for events"
 msgstr "Cerca eventi"
 
 #: pretix/control/templates/pretixcontrol/base.html
 #: pretix/presale/templates/pretixpresale/base.html
-#, fuzzy
 msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
 "strong>."
@@ -19061,7 +19058,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/base.html
 #: pretix/presale/templates/pretixpresale/base.html
-#, fuzzy
 msgid ""
 "Internet Explorer is an old browser that does not support lots of recent web-"
 "based technologies and is no longer supported by this website."
@@ -19071,7 +19067,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/base.html
 #: pretix/presale/templates/pretixpresale/base.html
-#, fuzzy
 msgid ""
 "We kindly ask you to move to one of our supported browsers, such as "
 "Microsoft Edge, Mozilla Firefox, Google Chrome, or Safari."
@@ -19080,7 +19075,6 @@ msgstr ""
 "Google Chrome o Safari."
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr ""
@@ -19088,12 +19082,10 @@ msgstr ""
 "sessioni di amministrazione:"
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid "Read more"
 msgstr "Leggi di più"
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid ""
 "Your event contains <strong>test mode orders</strong> even though "
 "<strong>test mode has been disabled</strong>. You should delete those orders "
@@ -19106,12 +19098,10 @@ msgstr ""
 "impedire ai partecipanti di acquistare biglietti."
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid "Show all test mode orders"
 msgstr "Mostra tutti gli ordini in modalità test"
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid ""
 "Starting with version 1.2.0, pretix automatically checks for updates in the "
 "background. During this check, anonymous data is transmitted to servers "
@@ -19120,14 +19110,13 @@ msgid ""
 "if a new update arrives. This message will disappear once you clicked it."
 msgstr ""
 "A partire dalla versione 1.2.0, pretix controlla automaticamente gli "
-"aggiornamenti in background. Durante questo controllo, i dati anonimi "
+"aggiornamenti in background. Durante questo controllo, alcuni dati anonimi "
 "vengono trasmessi ai server gestiti dagli sviluppatori di pretix. Clicca qui "
 "per saperne di più, disabilitare questa funzione o inserire il tuo indirizzo "
 "e-mail per ricevere una notifica via e-mail in caso di nuovi aggiornamenti. "
-"Il messaggio scompare dopo il primo clic."
+"Questo messaggio scompare dopo il primo clic."
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid ""
 "Click here to do a license compliance check to make sure your usage of "
 "pretix is in line with pretix' license."
@@ -19136,7 +19125,6 @@ msgstr ""
 "verificare che l'uso di pretix sia in linea con la licenza prevista."
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid ""
 "The cronjob component of pretix was not executed in the last hours. Please "
 "check that you have completed all installation steps and your cronjob is "
@@ -19144,35 +19132,32 @@ msgid ""
 msgstr ""
 "Il componente cronjob di pretix non è stato eseguito nelle ultime ore. "
 "Verifica che tutti i passaggi di installazione siano completati e che il "
-"cronjob sia configurato correttamente."
+"cronjob venga eseguito correttamente."
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid ""
 "pretix is running in debug mode. For security reasons, please never run "
 "debug mode on a production instance."
 msgstr ""
 "pretix è in modalità debug. Per motivi di sicurezza, non attivare mai la "
-"modalità debug in un'istanza produttiva."
+"modalità debug in un'istanza di produzione."
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid ""
 "For security reasons, please change your password before you continue. "
 "Afterwards you will be redirected to your original destination."
 msgstr ""
-"Per motivi di sicurezza, modifica la password prima di continuare. "
-"Successivamente sarai reindirizzato alla pagina originale."
+"Per motivi di sicurezza, modifica la password prima di continuare. Sarai "
+"reindirizzato alla destinazione originale subito dopo."
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy, python-format
+#, python-format
 msgid "Times displayed in %(tz)s"
 msgstr "Gli orari visualizzati in %(tz)s"
 
 #: pretix/control/templates/pretixcontrol/base.html
-#, fuzzy
 msgid "running in development mode"
-msgstr "in modalità di sviluppo"
+msgstr "in esecuaione in modalità di sviluppo"
 
 #: pretix/control/templates/pretixcontrol/base.html
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
@@ -19183,37 +19168,31 @@ msgstr "Se questa operazione richiede alcuni minuti, si prega di contattarci."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
-#, fuzzy
 msgid "Device ID"
 msgstr "ID dispositivo"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Receipt ID"
-msgstr "ID ricevimento"
+msgstr "ID ricevuta"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
-#, fuzzy
 msgid "ID"
 msgstr "ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "ZVT Terminal"
 msgstr "Terminale ZVT"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Confirmation mode"
-msgstr "Conferme"
+msgstr "Modalità di conferma"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Trace number"
-msgstr "Numero linea"
+msgstr "Numero di traccia"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgctxt "terminal_zvt"
@@ -19221,52 +19200,43 @@ msgid "Payment type"
 msgstr "Tipo di pagamento"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Additional text"
-msgstr "Testo footer aggiuntivo"
+msgstr "Testo aggiuntivo"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Turnover number"
-msgstr "Numero linea"
+msgstr "Numero di fatturato"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Receipt number"
-msgstr "Posto {number}"
+msgstr "Numero di ricevuta"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Card type"
-msgstr "Tipo del dispositivo"
+msgstr "Tipo di carta"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Unknown"
-msgstr "Biglietto sconosciuto"
+msgstr "Sconosciuto"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgctxt "terminal_zvt"
 msgid "Card expiration"
-msgstr "Carrello scaduto"
+msgstr "Scadenza della carta"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Transaction Code"
 msgstr "Codice transazione"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Merchant Code"
-msgstr "Codice commerciale"
+msgstr "Codice Commerciante"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Card Entry Mode"
 msgstr "Modalità inserimento carta"
 
@@ -19274,76 +19244,63 @@ msgstr "Modalità inserimento carta"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html
-#, fuzzy
 msgid "Card number"
 msgstr "Numero carta"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Client Transaction Code"
-msgstr "Codice transazione cliente"
+msgstr "Codice Transazione Cliente"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Server Transaction Code"
-msgstr "Codice transazione server"
+msgstr "Codice Transazione Server"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Payment reference"
 msgstr "Riferimento di pagamento"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Payment Application"
-msgstr "Informazioni sul pagamento"
+msgstr "Applicazione di pagamento"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Authorization Code"
-msgstr "Domande"
+msgstr "Codice di Autorizzazione"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Transaction ID"
-msgstr "Modifica dettagli"
+msgstr "ID transazione"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 #: pretix/plugins/banktransfer/payment.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html
-#, fuzzy
 msgid "Reference"
 msgstr "Riferimento"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Terminal ID"
-msgstr "ID terminale"
+msgstr "ID del terminale"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Card holder"
-msgstr "Conferma l'ordine"
+msgstr "Titolare della carta"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Card expiration"
-msgstr "Carrello scaduto"
+msgstr "Scadenza della carta"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Result Code"
-msgstr "Risultato"
+msgstr "Codice Risultato"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
-#, fuzzy
 msgid "Cash"
 msgstr "Contanti"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
-#, fuzzy
 msgid "Delete check-ins"
-msgstr "Filtra per stato"
+msgstr "Elimina i check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #, python-format
@@ -19514,19 +19471,16 @@ msgid "Filter"
 msgstr "Filtro"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
-#, fuzzy
 msgid "Your search did not match any check-ins."
-msgstr "La tua ricerca non ha restituito risultati."
+msgstr "La tua ricerca non ha prodotto alcun risultato."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
-#, fuzzy
 msgid "You haven't scanned any tickets yet."
-msgstr "Non hai ancora scannerizzato i biglietti."
+msgstr "Non hai ancora scansionato alcun biglietto."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
-#, fuzzy
 msgid "Time of scan"
-msgstr "Zona"
+msgstr "Orario della scansione"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
@@ -19537,13 +19491,13 @@ msgstr "Risultato"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/order/index.html
-#, fuzzy, python-format
+#, python-format
 msgid "Automatically marked not present: %(date)s"
-msgstr "Contrassegnato automaticamente non presente: %(date)s"
+msgstr "Contrassegnato automaticamente come non presente: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/order/index.html
-#, fuzzy, python-format
+#, python-format
 msgid "Additional entry scan: %(date)s"
 msgstr "Scansione di entrata supplementare: %(date)s"
 
@@ -19554,23 +19508,20 @@ msgstr "Scansione offline. Tempo di caricamento: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/order/index.html
-#, fuzzy, python-format
+#, python-format
 msgid "Automatically checked in: %(date)s"
-msgstr "Check in automatico: %(date)s"
+msgstr "Check in automatico effettuato: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
-#, fuzzy
 msgid "Failed in offline mode"
-msgstr "In modalità fuori rete non riuscita"
+msgstr "Impossibile in modalità offline"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
-#, fuzzy
 msgctxt "checkin_result"
 msgid "Successful"
-msgstr "Solo pagamenti con successo"
+msgstr "Successo"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
-#, fuzzy
 msgctxt "checkin_result"
 msgid "Denied"
 msgstr "Negato"
@@ -19579,16 +19530,15 @@ msgstr "Negato"
 #: pretix/control/templates/pretixcontrol/event/index.html
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html
-#, fuzzy
 msgid "Copy to clipboard"
 msgstr "Copia negli appunti"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
-#, fuzzy, python-format
+#, python-format
 msgid "Check-in list: %(name)s"
-msgstr "Check-in: %(name)s"
+msgstr "Lista Check-in: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
