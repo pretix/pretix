@@ -253,6 +253,7 @@ def get_widget_js(version, lang, use_vite, force_regenerate=False):
                 cache.set(cache_prefix, data, 3600 * 4)
                 return data
             except:
+                fname = None
                 logger.exception('Failed to open widget.js')
     else:
         fname = gs.settings.get(settings_key)
