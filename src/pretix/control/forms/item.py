@@ -251,6 +251,7 @@ class QuestionForm(I18nModelForm):
             'valid_date_min',
             'valid_date_max',
             'valid_file_portrait',
+            'valid_string_length_min',
             'valid_string_length_max',
         ]
         widgets = {
