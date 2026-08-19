@@ -38,6 +38,7 @@ export interface ProductListResponse {
 	events?: EventEntry[]
 	has_more_events?: boolean
 	meta_filter_fields?: MetaFilterField[]
+	empty_text?: string
 	weeks?: DayEntry[][]
 	date?: string
 	days?: DayEntry[]

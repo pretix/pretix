@@ -356,6 +356,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 after,
                 future_only=self.request.event.settings.event_calendar_future_only
             )
+            context['any_events'] = any(ebd)
         elif context['list_type'] == "week":
             self._set_week_year()
             tz = self.request.event.timezone
@@ -430,6 +431,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 after,
                 future_only=self.request.event.settings.event_calendar_future_only
             )
+            context['any_events'] = any(ebd)
         else:
             subevents = self.request.event.subevents_sorted(
                 filter_qs_by_attr(

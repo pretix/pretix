@@ -95,6 +95,7 @@ export function createWidgetStore (config: {
 			offset: 0,
 			appendEvents: false,
 			metaFilterFields: [] as MetaFilterField[],
+			emptyText: null as string | null,
 
 			// UI state
 			mobile: false,
@@ -270,6 +271,7 @@ export function createWidgetStore (config: {
 						this.name = data.name ?? null
 						this.frontpageText = data.frontpage_text ?? null
 						this.metaFilterFields = data.meta_filter_fields ?? []
+						this.emptyText = data.empty_text ?? null
 					} else if (data.days !== undefined) {
 						this.days = data.days
 						this.date = null
@@ -279,6 +281,7 @@ export function createWidgetStore (config: {
 						this.name = data.name ?? null
 						this.frontpageText = data.frontpage_text ?? null
 						this.metaFilterFields = data.meta_filter_fields ?? []
+						this.emptyText = data.empty_text ?? null
 					} else if (data.events !== undefined) {
 						this.events = this.appendEvents && this.events
 							? this.events.concat(data.events)
@@ -290,6 +293,7 @@ export function createWidgetStore (config: {
 						this.frontpageText = data.frontpage_text ?? null
 						this.hasMoreEvents = data.has_more_events ?? false
 						this.metaFilterFields = data.meta_filter_fields ?? []
+						this.emptyText = data.empty_text ?? null
 					} else {
 						this.view = 'event'
 						this.targetUrl = data.target_url ?? this.targetUrl

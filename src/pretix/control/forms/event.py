@@ -600,6 +600,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
         'imprint_url',
         'checkout_email_helptext',
         'presale_has_ended_text',
+        'event_list_empty_text',
         'voucher_explanation_text',
         'checkout_success_text',
         'show_dates_on_frontpage',
@@ -734,6 +735,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
             del self.fields['event_list_available_only']
             del self.fields['event_list_filters']
             del self.fields['event_calendar_future_only']
+            del self.fields['event_list_empty_text']
         self.fields['primary_font'].choices = [('Open Sans', 'Open Sans')] + sorted([
             (a, FontSelect.FontOption(title=a, data=v)) for a, v in get_fonts(self.event, pdf_support_required=False).items()
         ], key=lambda a: a[0])
