@@ -3563,7 +3563,8 @@ def signal_listener_issue_media(sender: Event, order: Order, **kwargs):
                 )
 
 
-def position_not_used_cancellation_check(order: Order, keep: PositionSet, position: OrderPosition):
+def position_not_used_cancellation_check(order: Order, keep: PositionSet, position: OrderPosition,
+                                         check_ts: datetime):
     for pos in order.all_positions.all():
         if pos == position and position not in keep:
             for checkin in pos.all_checkins.all():

@@ -179,12 +179,13 @@ PositionSet: TypeAlias = Set[OrderPosition]
 
 
 class PositionCheckFn(Protocol):
-    def __call__(self, order: Order, keep: PositionSet, position: OrderPosition, /) -> CheckResult:
+    def __call__(self, order: Order, keep: PositionSet, position: OrderPosition, check_ts: datetime.datetime,
+                 /) -> CheckResult:
         ...
 
 
 class ProcessCheckFn(Protocol):
-    def __call__(self, order: Order, keep: PositionSet, /) -> CheckResult:
+    def __call__(self, order: Order, keep: PositionSet, check_ts: datetime.datetime, /) -> CheckResult:
         ...
 
 
@@ -197,11 +198,11 @@ class CancellationCheck:
     related_selects: List[str] = field(default_factory=list)
 
     def evaluate(self, order: Order, keep: PositionSet,
-                 position: OrderPosition | None) -> CheckResult:
+                 position: OrderPosition | None, check_ts: datetime.datetime) -> CheckResult:
         if position and self.type == CheckTypes.POSITION:
-            return self.check_fn(order, keep, position)
+            return self.check_fn(order, keep, position, check_ts)
         elif position is None and self.type == CheckTypes.PROCESS:
-            return self.check_fn(order, keep)
+            return self.check_fn(order, keep, check_ts)
         else:
             raise ValidationError("Type of the rule doesn't match the check_fn")
 
@@ -256,6 +257,7 @@ class ProcessResult:
 class CancellationResult:
     position_result: PositionResult
     process_result: ProcessResult
+    check_ts: datetime.datetime
 
     @property
     def cancellation_possible(self) -> bool:
@@ -443,7 +445,7 @@ class CancellationRule(models.Model):
         process_result = ProcessResult(process_check_results=process_check_results,
                                        process_rule_results=process_rule_results)
 
-        return CancellationResult(position_result=position_results, process_result=process_result)
+        return CancellationResult(position_result=position_results, process_result=process_result, check_ts=check_ts)
 
     @staticmethod
     def _prefetch_order(event: Event, order: Order, checks: Checks) -> Order:
