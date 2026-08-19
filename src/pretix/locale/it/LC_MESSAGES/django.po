@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-19 07:14+0000\n"
+"PO-Revision-Date: 2026-08-19 12:12+0000\n"
 "Last-Translator: Translate pretix user 586 "
 "<stefanom@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -19791,61 +19791,53 @@ msgid "This cannot be reverted!"
 msgstr "Questa operazione non può essere stornata!"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
-#, fuzzy
 msgid ""
 "The deleted entries will still show up in the \"Order history\" section, but "
 "for all other purposes the system will behave as if they never existed."
 msgstr ""
 "Le voci eliminate rimarranno visibili nella sezione \"Cronologia ordini\", "
-"ma per tutti gli altri scopi il sistema si comporterà come se non "
-"esistessero."
+"ma per tutti gli altri scopi il sistema si comporterà come se non fossero "
+"mai esistite."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
-#, fuzzy
-#| msgid "Proceed with checkout"
 msgid "Proceed with reset"
-msgstr "Procedi al checkout"
+msgstr "Procedi con il reset"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
-#, fuzzy
 msgid ""
 "This tool allows you to validate your check-in configuration. You can enter "
 "a barcode plus some optional parameters and we will show you the response of "
 "the check-in list. No actual check-in will be performed and no modification "
 "to the system state is made."
 msgstr ""
-"Questo strumento consente di verificare la configurazione di check-in. Puoi "
-"inserire un codice a barre e alcuni parametri opzionali, e il sistema "
+"Questo strumento consente di convalidare la configurazione del check-in. "
+"Puoi inserire un codice a barre e alcuni parametri opzionali, e il sistema "
 "mostrerà la risposta dell'elenco di check-in. Nessun check-in verrà eseguito "
 "e non avverrà alcuna modifica allo stato del sistema."
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
-#, fuzzy
 msgid "Simulate"
 msgstr "Simula"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
-#, fuzzy
 msgid "Valid check-in"
-msgstr "Filtra per stato"
+msgstr "check-in valido"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 msgid "Additional information required"
 msgstr "Informazione aggiuntiva richiesta"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
-#, fuzzy
 msgid ""
 "The following questions must be answered before check-in can be completed:"
 msgstr "Prima di completare il check-in devi rispondere a queste domande:"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
-#, fuzzy
 msgid "Media exchange required"
-msgstr "Richiede particolare attenzione"
+msgstr "È richiesto lo scambio di media"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "This ticket needs to be exchanged into a <strong>%(media_type)s</strong> "
 "reusable medium. <strong>%(media_policy)s</strong>."
@@ -19854,12 +19846,10 @@ msgstr ""
 "strong> supporto riutilizzabile. <strong>%(media_policy)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
-#, fuzzy
 msgid "Special attention required"
 msgstr "Richiede particolare attenzione"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html
-#, fuzzy
 msgid "Go to event"
 msgstr "Vai all'evento"
 
