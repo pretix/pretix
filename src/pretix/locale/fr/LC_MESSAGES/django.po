@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-07-08 16:00+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
-"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
-">\n"
+"PO-Revision-Date: 2026-08-11 17:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
+"fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.6.1\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -1392,10 +1392,8 @@ msgid "Membership type"
 msgstr "Type d’adhésion"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "Purchase time"
 msgid "Purchase ticket"
-msgstr "Heure d'achat"
+msgstr "Achat de billet"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
 #: pretix/base/exporters/waitinglist.py pretix/base/forms/questions.py
@@ -1412,10 +1410,8 @@ msgid "Start date"
 msgstr "Date de début"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "Start time from"
 msgid "Start time"
-msgstr "Heure de début à partir de"
+msgstr "Heure de début"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
 #: pretix/base/exporters/waitinglist.py pretix/base/models/memberships.py
@@ -1428,10 +1424,8 @@ msgid "End date"
 msgstr "Date de fin"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "End: %(time)s"
 msgid "End time"
-msgstr "Fin : %(time)s"
+msgstr "Heure de fin"
 
 #: pretix/base/exporters/dekodi.py pretix/base/exporters/invoices.py
 msgctxt "export_category"
@@ -4686,15 +4680,11 @@ msgid "This event is remote or partially remote."
 msgstr "Cet événement est éloigné ou partiellement éloigné."
 
 #: pretix/base/models/event.py
-#, fuzzy
-#| msgid ""
-#| "This will be used to let users know if the event is in a different "
-#| "timezone and let’s us calculate users’ local times."
 msgid ""
 "This will be used to let users know if the event is in a different timezone, "
 "and to let us calculate the local time of a user."
 msgstr ""
-"Elle sera utilisée pour indiquer aux utilisateurs si l'événement se déroule "
+"Ce sera utilisée pour indiquer aux utilisateurs si l'événement se déroule "
 "dans un autre fuseau horaire et nous permettra de calculer l'heure locale "
 "des utilisateurs."
 
@@ -5346,7 +5336,7 @@ msgstr ""
 "Si cette option est définie, le produit ne sera vendu que dans le cadre de "
 "produits groupés. <strong>Ne cochez pas</strong> cette option si vous "
 "souhaitez utiliser ce produit pour des offres groupées, pas en tant que "
-"produit complémentaire."
+"produit complémentaire !"
 
 #: pretix/base/models/items.py
 msgid ""
@@ -7680,14 +7670,12 @@ msgid "This gift card was used in the meantime. Please try again."
 msgstr "Cette carte-cadeau a été utilisée entre-temps. Veuillez réessayer."
 
 #: pretix/base/payment.py
-#, fuzzy
-#| msgid ""
-#| "This payment provider does not exist or the respective plugin is disabled."
 msgid ""
 "This payment provider exists for historical purposes only and is no longer "
 "usable."
 msgstr ""
-"Ce fournisseur de paiement n’existe pas ou le plugin respectif est désactivé."
+"Ce fournisseur de paiement n’existe que pour des raisons d'archivage et ne "
+"peut plus être utilisé."
 
 #: pretix/base/pdf.py
 msgid "Ticket code (barcode content)"
@@ -9606,16 +9594,12 @@ msgstr ""
 "émettre une carte-cadeau."
 
 #: pretix/base/services/orders.py
-#, fuzzy
-#| msgid ""
-#| "You cannot change the price of a position that has been used to issue a "
-#| "gift card."
 msgid ""
 "You cannot change the ticket secret of a position that has been used to "
 "issue a gift card."
 msgstr ""
-"Vous ne pouvez pas modifier le prix d’une position qui a été utilisée pour "
-"émettre une carte-cadeau."
+"Vous ne pouvez pas modifier la clé secrète d'un billet pour une position qui "
+"a été utilisée pour émettre une carte-cadeau."
 
 #: pretix/base/services/orders.py
 #, python-brace-format
@@ -15433,10 +15417,8 @@ msgid "Source"
 msgstr "Source"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "All vouchers"
 msgid "All sources"
-msgstr "Tous les bons de réduction"
+msgstr "Toutes les sources"
 
 #: pretix/control/forms/filter.py
 msgid "Team actions"
@@ -15447,16 +15429,12 @@ msgid "Customer actions"
 msgstr "Actions des clients"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Device status"
 msgid "Device actions"
-msgstr "Statut de l'appareil"
+msgstr "Actions de l'appareil"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Order email"
 msgid "User email"
-msgstr "E-mail de la commande"
+msgstr "E-mail de l'utilisateur"
 
 #: pretix/control/forms/filter.py pretix/control/navigation.py
 msgid "All users"
@@ -17005,40 +16983,32 @@ msgid ""
 "because at least one of the selected vouchers has already been redeemed "
 "%(max_redeemed)s times."
 msgstr ""
+"Vous ne pouvez pas réduire le maximum d'utilisation à %(max_usages)s, car au "
+"moins un des bon sélectionnés à déjà été utilisé %(max_redeemed)s fois."
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid ""
-#| "You cannot create a voucher that blocks quota as the selected product or "
-#| "quota is currently sold out or completely reserved."
 msgid ""
 "You cannot create a voucher that allows selection of a quota but has no date "
 "selected."
 msgstr ""
-"Vous ne pouvez pas créer de bon qui bloque le quota car le produit ou le "
-"quota sélectionné est actuellement épuisé ou entièrement réservé."
+"Vous ne pouvez pas créer de bon qui autorise la selection d'un quota mais "
+"qui n'a pas de date seélectionnée."
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid "The selected product does not allow to select a seat."
 msgid "The selected quota does not match the selected subevent."
-msgstr "Le produit sélectionné ne permet pas de sélectionner un siège."
+msgstr "Le quota sélectionné ne concorde pas avec l'évènement sélectionné."
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid ""
-#| "There is not enough quota available on quota \"{}\" to perform the "
-#| "operation."
 msgid "There is no sufficient quota available to perform this change."
-msgstr ""
-"Il n'y a pas assez de quota disponible sur le quota \"{}\" pour effectuer "
-"l'opération."
+msgstr "Il n'y a pas assez de quota disponible pour effectuer le changement."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "Changing the maximum number of usages in bulk is not supported if any of the "
 "selected vouchers is assigned a seat."
 msgstr ""
+"Changer le nombre maximum d'utilisation en série n'est pas supporté si un "
+"des bon sélectionnés à déjà une place attitrée."
 
 #: pretix/control/forms/vouchers.py
 msgctxt "subevent"
@@ -17046,18 +17016,24 @@ msgid ""
 "Changing the date in bulk is not supported if any of the selected vouchers "
 "is assigned a seat."
 msgstr ""
+"Changer la date en série n'est pas supporté si un des bon sélectionnés à "
+"déjà une place attitrée."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "Changing the product to a quota is not supported if any of the selected "
 "vouchers is assigned a seat."
 msgstr ""
+"Changer le produit d'un quota n'est pas supporté si un des bon sélectionnés "
+"à déjà une place attitrée."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "This change cannot be completed because not all assigned seats of the "
 "vouchers are still available"
 msgstr ""
+"Ce changement ne peut pas être effectué car certaines places de ce bon ne "
+"sont plus disponibles"
 
 #: pretix/control/forms/vouchers.py
 msgid "Codes"
@@ -20501,10 +20477,10 @@ msgstr ""
 "système. Super !"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid "Your new SPF record could look like this:"
 msgid "Your new DKIM record should be set up as a CNAME record like this:"
-msgstr "Votre nouvel enregistrement SPF pourrait ressembler à ceci :"
+msgstr ""
+"Votre nouvel enregistrement DKIM doit être configuré comme un enregistrement "
+"CNAME comme ceci :"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
 #, fuzzy
@@ -20516,10 +20492,8 @@ msgstr ""
 "système. Super !"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid "Your new SPF record could look like this:"
 msgid "Your new DMARC record could look like this:"
-msgstr "Votre nouvel enregistrement SPF pourrait ressembler à ceci :"
+msgstr "Votre nouvel enregistrement DMARC pourrait ressembler à ceci :"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
 #, fuzzy
@@ -22251,10 +22225,8 @@ msgid "The quick brown fox jumps over the lazy dog."
 msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ex."
 
 #: pretix/control/templates/pretixcontrol/fragment_log_filter_form.html
-#, fuzzy
-#| msgid "Specific seat"
 msgid "Specific object selected"
-msgstr "Siège spécifique"
+msgstr "Objet spécifique sélectionné"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html
@@ -23887,6 +23859,9 @@ msgid ""
 "Ticket secrets of order positions that have been used to issue a gift card "
 "can not be changed. Only the link will be changed in this case."
 msgstr ""
+"La clé secrète de la position d'un commande qui a été utilisée pour "
+"distribuer une carte cadeau ne peut pas être changée. Seul le lien sera "
+"changé dans ce cas."
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
@@ -28039,10 +28014,8 @@ msgstr ""
 "associé au produit est épuisé !"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
-#, fuzzy
-#| msgid "Create multiple vouchers"
 msgid "Change multiple vouchers"
-msgstr "Créer plusieurs bons"
+msgstr "Changer plusieurs bons"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
@@ -28452,6 +28425,10 @@ msgid ""
 "team. If you want to add a different user or create a new account, log out "
 "and click the invitation link again."
 msgstr ""
+"Vous ne pouvez pas accepter l'invitation pour \"{}\" car vous faites déjà "
+"parti de cette équipe. Si vous voulez ajouter un utilisateur différent ou "
+"créer un nouveau compte, déconnectez-vous puis cliquez une fois de plus sur "
+"le lien d'invitation."
 
 #: pretix/control/views/auth.py
 #, python-brace-format
@@ -32517,24 +32494,21 @@ msgid "Base redirection URLs"
 msgstr "URLs de redirection de base"
 
 #: pretix/plugins/returnurl/views.py
-#, fuzzy
-#| msgid ""
-#| "Redirection will only be allowed to URLs that start with one of these "
-#| "prefixes. Enter one or more allowed URL prefix per line. URL prefixes "
-#| "must include a slash after the hostname."
 msgid ""
 "Redirection will only be allowed to URLs that start with one of these "
 "prefixes. Enter one allowed URL prefix per line. URL prefixes must include a "
 "slash after the hostname."
 msgstr ""
 "La redirection ne sera autorisée que vers les URL qui commencent par l'un de "
-"ces préfixes. Saisissez un ou plusieurs préfixes d'URL autorisés par ligne. "
-"Les préfixes d'URL doivent inclure une barre oblique après le nom d'hôte."
+"ces préfixes. Saisissez un préfixes d'URL autorisés par ligne. Les préfixes "
+"d'URL doivent inclure une barre oblique après le nom d'hôte."
 
 #: pretix/plugins/returnurl/views.py
 msgid ""
 "All values must be URLs that include at last one slash after the hostname."
 msgstr ""
+"Toutes les valeurs doivent être des URL qui incluent un slash après un nom "
+"d'hôte."
 
 #: pretix/plugins/sendmail/apps.py
 msgid "Send out emails to all your customers or specific groups of customers."
@@ -34943,7 +34917,7 @@ msgstr "Passer une commande"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 msgid "Submit registration"
-msgstr "Valider"
+msgstr "Effectuer la réservation"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html
 msgid "Log in with a customer account"
@@ -35502,7 +35476,7 @@ msgstr "Vider le panier"
 #: pretix/presale/templates/pretixpresale/event/index.html
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html
 msgid "Redeem a voucher"
-msgstr "Échanger un bon"
+msgstr "Valider un code promotionnel"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html
 msgid "We're applying this voucher to your cart..."
