@@ -946,7 +946,7 @@ DEFAULTS = {
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=pgettext_lazy("subevents", "This text will be shown if the calendar or list of dates is empty, "
                                                  "e.g. because a month does not contain any dates or a filter chosen by the user does "
-                                                 "find any results. You can use this to advertise ways to get in touch with you to "
+                                                 "not find any results. You can use this to advertise ways to get in touch with you to "
                                                  "arrange further dates. We do not recommend more than one or two sentences.")
         )
     },
