@@ -301,192 +301,163 @@ class TestCancellationRule:
         for pos in position_checks:
             assert received[pos] in checks.position
 
-    @pytest.mark.django_db
-    def test_prefetch_no_checks_collected(self, event, order):
-        checks = Checks(position=[], process=[])
-        with scope(organizer=event.organizer):
-            prefetched_order = CancellationRule._prefetch_order(event, order, checks)
-            assert prefetched_order.id == order.id
+    class TestPrefetching:
 
-    @pytest.mark.django_db
-    def test_prefetch_incl_values_select_related(self, event, order):
-        checks = Checks(
-            position=[
-                make_cancellation_check('pos_1', CheckTypes.POSITION, True,
-                                        prefetches=[lambda: Prefetch('all_positions')],
-                                        related_selects=['organizer'])],
-            process=[
-                make_cancellation_check('proc_1', CheckTypes.PROCESS, True,
-                                        prefetches=[lambda: Prefetch('all_positions')],
-                                        related_selects=['organizer'])]
-        )
+        @pytest.mark.django_db
+        def test_prefetch_no_checks_collected(self, event, order):
+            checks = Checks(position=[], process=[])
+            with scope(organizer=event.organizer):
+                prefetched_order = CancellationRule._prefetch_order(event, order, checks)
+                assert prefetched_order.id == order.id
 
-        with scope(organizer=event.organizer):
-            prefetched_order = CancellationRule._prefetch_order(event, order, checks)
-            assert prefetched_order.id == order.id
-
-    @pytest.mark.django_db
-    def test_ticket_not_used(self, event, order, order_position, checkin_list):
-        position_not_used_check = signal_listener_position_not_used(event)
-        checks = Checks(position=[position_not_used_check], process=[])
-        keep = set()
-
-        with scope(organizer=event.organizer):
-            prefetched_order = CancellationRule._prefetch_order(event, order, checks)
-            with ensure_no_queries():
-                result = position_not_used_check.evaluate(prefetched_order, keep, order_position, datetime.now(tz=UTC))
-            assert result.cancellation_possible is True
-
-            Checkin.objects.create(
-                list=checkin_list,
-                position=order_position,
-                successful=True
+        @pytest.mark.django_db
+        def test_prefetch_incl_values_select_related(self, event, order):
+            checks = Checks(
+                position=[
+                    make_cancellation_check('pos_1', CheckTypes.POSITION, True,
+                                            prefetches=[lambda: Prefetch('all_positions')],
+                                            related_selects=['organizer'])],
+                process=[
+                    make_cancellation_check('proc_1', CheckTypes.PROCESS, True,
+                                            prefetches=[lambda: Prefetch('all_positions')],
+                                            related_selects=['organizer'])]
             )
-            prefetched_order = CancellationRule._prefetch_order(event, order, checks)
 
-            with ensure_no_queries():
-                result = position_not_used_check.evaluate(prefetched_order, keep, order_position, datetime.now(tz=UTC))
+            with scope(organizer=event.organizer):
+                prefetched_order = CancellationRule._prefetch_order(event, order, checks)
+                assert prefetched_order.id == order.id
 
-            assert result.cancellation_possible is False
+    class TestChecks:
 
+        @pytest.mark.django_db
+        def test_ticket_not_used(self, event, order, order_position, checkin_list):
+            position_not_used_check = signal_listener_position_not_used(event)
+            checks = Checks(position=[position_not_used_check], process=[])
+            keep = set()
 
-class TestResolveDateFields:
-    REFERENCE_DT = datetime(2017, 12, 27, 4, 0, 0, tzinfo=UTC)
+            with scope(organizer=event.organizer):
+                prefetched_order = CancellationRule._prefetch_order(event, order, checks)
+                with ensure_no_queries():
+                    result = position_not_used_check.evaluate(prefetched_order, keep, order_position,
+                                                              datetime.now(tz=UTC))
+                assert result.cancellation_possible is True
 
-    @pytest.fixture(params=["date", "datetime", "order", "event"])
-    def rdt_reldate_variants(self, request):
-        return request.param
+                Checkin.objects.create(
+                    list=checkin_list,
+                    position=order_position,
+                    successful=True
+                )
+                prefetched_order = CancellationRule._prefetch_order(event, order, checks)
 
-    @pytest.fixture
-    def rdt_reldate(self, rdt_reldate_variants) -> RelativeDateWrapper:
-        if rdt_reldate_variants == 'date' or rdt_reldate_variants == 'datetime':
-            return RelativeDateWrapper.from_string(self.REFERENCE_DT.isoformat())
-        elif rdt_reldate_variants == 'order':
-            return RelativeDateWrapper(
-                RelativeDate(days=1, time=None, base_date_name='order__datetime', minutes=None, is_after=True))
-        elif rdt_reldate_variants == 'event':
-            return RelativeDateWrapper(
-                RelativeDate(days=1, time=None, base_date_name='event__date_from', minutes=None, is_after=True))
-        else:
-            raise ValueError()
+                with ensure_no_queries():
+                    result = position_not_used_check.evaluate(prefetched_order, keep, order_position,
+                                                              datetime.now(tz=UTC))
 
-    @pytest.fixture(params=["single_event", "subevents"])
-    def rdt_event_variants(self, request):
-        return request.param
+                assert result.cancellation_possible is False
 
-    @pytest.fixture
-    def rdt_events(self, rdt_event_variants, event):
-        if rdt_event_variants == "single_event":
-            event.date_from = self.REFERENCE_DT
-            event.save()
-        else:
-            event.has_subevents = True
-            event.subevents.create(
-                name='1',
-                date_from=self.REFERENCE_DT,
+    class TestResolveDateFields:
+
+        REFERENCE_DT = datetime(2017, 12, 27, 4, 0, 0, tzinfo=UTC)
+
+        @pytest.fixture(params=["date", "datetime", "order", "event"])
+        def rdt_reldate_variants(self, request):
+            return request.param
+
+        @pytest.fixture
+        def rdt_reldate(self, rdt_reldate_variants) -> RelativeDateWrapper:
+            if rdt_reldate_variants == 'date' or rdt_reldate_variants == 'datetime':
+                return RelativeDateWrapper.from_string(self.REFERENCE_DT.isoformat())
+            elif rdt_reldate_variants == 'order':
+                return RelativeDateWrapper(
+                    RelativeDate(days=1, time=None, base_date_name='order__datetime', minutes=None, is_after=True))
+            elif rdt_reldate_variants == 'event':
+                return RelativeDateWrapper(
+                    RelativeDate(days=1, time=None, base_date_name='event__date_from', minutes=None, is_after=True))
+            else:
+                raise ValueError()
+
+        @pytest.fixture(params=["single_event", "subevents"])
+        def rdt_event_variants(self, request):
+            return request.param
+
+        @pytest.fixture
+        def rdt_events(self, rdt_event_variants, event):
+            if rdt_event_variants == "single_event":
+                event.date_from = self.REFERENCE_DT
+                event.save()
+            else:
+                event.has_subevents = True
+                event.subevents.create(
+                    name='1',
+                    date_from=self.REFERENCE_DT,
+                )
+                event.subevents.create(
+                    name='2',
+                    date_from=self.REFERENCE_DT + timedelta(days=1),
+                )
+                event.subevents.create(
+                    name='3',
+                    date_from=self.REFERENCE_DT + timedelta(days=2),
+                )
+            return event
+
+        @pytest.fixture
+        def rdt_item(self, rdt_events):
+            return rdt_events.items.create(
+                name='Ticket',
+                category=None, default_price=23,
+                admission=True
             )
-            event.subevents.create(
-                name='2',
-                date_from=self.REFERENCE_DT + timedelta(days=1),
+
+        @pytest.fixture(params=["EARLIEST", "LATEST"])
+        def rdt_mode_variants(self, request):
+            return request.param
+
+        @pytest.fixture
+        def rdt_order(self, rdt_events):
+            o = Order.objects.create(
+                code='123456', event=rdt_events, email='dummy@dummy.test',
+                status=Order.STATUS_PENDING,
+                datetime=self.REFERENCE_DT + timedelta(hours=6),  # 6 hours offset mark orders
+                sales_channel=rdt_events.organizer.sales_channels.get(identifier="web"),
+                total=14, locale='en'
             )
-            event.subevents.create(
-                name='3',
-                date_from=self.REFERENCE_DT + timedelta(days=2),
-            )
-        return event
+            return o
 
-    @pytest.fixture
-    def rdt_item(self, rdt_events):
-        return rdt_events.items.create(
-            name='Ticket',
-            category=None, default_price=23,
-            admission=True
-        )
-
-    @pytest.fixture(params=["EARLIEST", "LATEST"])
-    def rdt_mode_variants(self, request):
-        return request.param
-
-    @pytest.fixture
-    def rdt_order(self, rdt_events):
-        o = Order.objects.create(
-            code='123456', event=rdt_events, email='dummy@dummy.test',
-            status=Order.STATUS_PENDING,
-            datetime=self.REFERENCE_DT + timedelta(hours=6),  # 6 hours offset mark orders
-            sales_channel=rdt_events.organizer.sales_channels.get(identifier="web"),
-            total=14, locale='en'
-        )
-        return o
-
-    @pytest.fixture
-    def rdt_order_positions(self, rdt_event_variants, rdt_events, rdt_item, rdt_order):
-        if rdt_event_variants == "single_event":
-            op = [OrderPosition.objects.create(
-                order=rdt_order,
-                item=rdt_item,
-                variation=None,
-                price=Decimal("14"),
-            )]
-        else:
-            op = []
-            for i in range(0, 3):
-                op.append(OrderPosition.objects.create(
-                    subevent=rdt_events.subevents.all()[i],
+        @pytest.fixture
+        def rdt_order_positions(self, rdt_event_variants, rdt_events, rdt_item, rdt_order):
+            if rdt_event_variants == "single_event":
+                op = [OrderPosition.objects.create(
                     order=rdt_order,
                     item=rdt_item,
                     variation=None,
                     price=Decimal("14"),
-                ))
-        return op
+                )]
+            else:
+                op = []
+                for i in range(0, 3):
+                    op.append(OrderPosition.objects.create(
+                        subevent=rdt_events.subevents.all()[i],
+                        order=rdt_order,
+                        item=rdt_item,
+                        variation=None,
+                        price=Decimal("14"),
+                    ))
+            return op
 
-    @pytest.mark.django_db
-    def test_process_rule_resolve_date_field(
-            self,
-            rdt_reldate,
-            rdt_reldate_variants,
-            rdt_events,
-            rdt_event_variants,
-            rdt_mode_variants,
-            rdt_order,
-            rdt_order_positions
-    ):
-        with scope(organizer=rdt_events.organizer):
-            date = ProcessCancellationRule._resolve_date_field(rdt_reldate, rdt_order, rdt_mode_variants)
-            match rdt_reldate_variants:
-                case "date":
-                    assert date == self.REFERENCE_DT
-                case "datetime":
-                    assert date == self.REFERENCE_DT
-                case "order":
-                    assert date == self.REFERENCE_DT + timedelta(days=1) + timedelta(hours=6)
-                case "event":
-                    if rdt_event_variants == "single_event":
-                        assert date == self.REFERENCE_DT + timedelta(days=1)
-                    elif rdt_event_variants == "subevents":
-                        if rdt_mode_variants == "EARLIEST":
-                            assert date == self.REFERENCE_DT + timedelta(days=1)
-                        elif rdt_mode_variants == "LATEST":
-                            assert date == self.REFERENCE_DT + timedelta(days=1) + timedelta(days=2)
-                        else:
-                            raise ValueError("Variant not known")
-                    else:
-                        raise ValueError("Variant not known")
-                case _:
-                    raise ValueError("Variant not known")
-
-    @pytest.mark.django_db
-    def test_position_rule_resolve_date_field(
-            self,
-            rdt_reldate,
-            rdt_reldate_variants,
-            rdt_events,
-            rdt_event_variants,
-            rdt_order,
-            rdt_order_positions
-    ):
-        with scope(organizer=rdt_events.organizer):
-            for pos in rdt_order_positions:
-                date = PositionCancellationRule._resolve_date_field(rdt_reldate, rdt_order, pos)
+        @pytest.mark.django_db
+        def test_process_rule_resolve_date_field(
+                self,
+                rdt_reldate,
+                rdt_reldate_variants,
+                rdt_events,
+                rdt_event_variants,
+                rdt_mode_variants,
+                rdt_order,
+                rdt_order_positions
+        ):
+            with scope(organizer=rdt_events.organizer):
+                date = ProcessCancellationRule._resolve_date_field(rdt_reldate, rdt_order, rdt_mode_variants)
                 match rdt_reldate_variants:
                     case "date":
                         assert date == self.REFERENCE_DT
@@ -498,8 +469,161 @@ class TestResolveDateFields:
                         if rdt_event_variants == "single_event":
                             assert date == self.REFERENCE_DT + timedelta(days=1)
                         elif rdt_event_variants == "subevents":
-                            assert date == pos.subevent.date_from + timedelta(days=1)
+                            if rdt_mode_variants == "EARLIEST":
+                                assert date == self.REFERENCE_DT + timedelta(days=1)
+                            elif rdt_mode_variants == "LATEST":
+                                assert date == self.REFERENCE_DT + timedelta(days=1) + timedelta(days=2)
+                            else:
+                                raise ValueError("Variant not known")
                         else:
                             raise ValueError("Variant not known")
                     case _:
                         raise ValueError("Variant not known")
+
+        @pytest.mark.django_db
+        def test_position_rule_resolve_date_field(
+                self,
+                rdt_reldate,
+                rdt_reldate_variants,
+                rdt_events,
+                rdt_event_variants,
+                rdt_order,
+                rdt_order_positions
+        ):
+            with scope(organizer=rdt_events.organizer):
+                for pos in rdt_order_positions:
+                    date = PositionCancellationRule._resolve_date_field(rdt_reldate, rdt_order, pos)
+                    match rdt_reldate_variants:
+                        case "date":
+                            assert date == self.REFERENCE_DT
+                        case "datetime":
+                            assert date == self.REFERENCE_DT
+                        case "order":
+                            assert date == self.REFERENCE_DT + timedelta(days=1) + timedelta(hours=6)
+                        case "event":
+                            if rdt_event_variants == "single_event":
+                                assert date == self.REFERENCE_DT + timedelta(days=1)
+                            elif rdt_event_variants == "subevents":
+                                assert date == pos.subevent.date_from + timedelta(days=1)
+                            else:
+                                raise ValueError("Variant not known")
+                        case _:
+                            raise ValueError("Variant not known")
+
+    class TestPositionCancellationRule:
+        @pytest.fixture
+        def items(self, event):
+            return [event.items.create(
+                name='Product 1',
+                category=None, default_price=23,
+                admission=True
+            ), event.items.create(
+                name='Product 2',
+                category=None, default_price=23,
+                admission=True
+            )]
+
+        @pytest.fixture
+        def variations(self, event, items):
+            item = items[0]
+            return [
+                item.variations.create(
+                    value="Variation 1"
+                ),
+                item.variations.create(
+                    value="Variation 2"
+                ),
+
+            ]
+
+        @pytest.mark.django_db
+        @pytest.mark.parametrize(
+            ("item_idx", "variation_idx", "all_products", "limit_products", "limit_variations", "matches"),
+            [
+                (0, None, True, [], [], True),
+                (0, 0, True, [], [], True),
+                (0, 1, True, [], [], True),
+                (1, None, True, [], [], True),
+                (0, None, False, [], [], False),
+                (0, 0, False, [], [], False),
+                (0, 1, False, [], [], False),
+                (1, None, False, [], [], False),
+                (0, None, False, [0], [], True),
+                (1, None, False, [0], [], False),
+                (0, None, False, [1], [], False),
+                (0, 0, False, [0], [0], True),
+                (1, None, False, [0], [0], False),
+                (0, 1, False, [1], [], False),
+                (0, 0, False, [0], [0, 1], True),
+            ],
+            ids=[
+                "all_products::item-0",
+                "all_products::item-0-variation-0",
+                "all_products::item-0-variation-1",
+                "all_products::item-1",
+                "no-product::item-0",
+                "no-product::item-0-variation-0",
+                "no-product::item-0-variation-1",
+                "no-product::item-1",
+                "item-0::item-0",
+                "item-0::item-1",
+                "item-1::item-0",
+                "item-0-variation-0::item-0-variation-0",
+                "item-0-variation-0::item-1",
+                "item-1::item-0-variation-1",
+                "item-0-variation-0-variation-1::item-0-variation-0",
+
+            ]
+
+        )
+        def test_position_matches_rule(self, event, order, items, variations, item_idx,
+                                       variation_idx, all_products, limit_products, limit_variations,
+                                       matches):
+            with scope(organizer=event.organizer):
+                op = OrderPosition.objects.create(
+                    order=order,
+                    item=items[item_idx],
+                    variation=variations[variation_idx] if variation_idx is not None else None,
+                    price=Decimal("14"),
+                )
+                r = PositionCancellationRule.objects.create(event=event, all_products=all_products)
+                for lp in limit_products:
+                    r.limit_products.add(items[lp])
+                for lv in limit_variations:
+                    r.limit_variations.add(variations[lv])
+
+                rule = PositionCancellationRule.objects.get(id=r.id)
+                with ensure_no_queries():
+                    res = rule._position_matches_rule(op)
+                assert matches == res.cancellation_possible
+
+        @pytest.mark.django_db
+        @pytest.mark.parametrize(
+            ('attr', "delta", "allowed"),
+            [
+                ('allowed_until', timedelta(hours=-1), True),
+                ('allowed_until', timedelta(hours=0), True),
+                ('allowed_until', timedelta(hours=+1), False),
+                ('except_after', timedelta(hours=-1), True),
+                ('except_after', timedelta(hours=0), True),
+                ('except_after', timedelta(hours=+1), False)
+
+            ]
+        )
+        def test_evaluate_cancellation_moment(self, event, order_position, attr, delta, allowed):
+            reference_ts = datetime(2020, 10, 1, hour=0, minute=0, second=0, microsecond=0, tzinfo=UTC)
+
+            with scope(organizer=event.organizer):
+
+                r = PositionCancellationRule.objects.create(event=event, all_products=True)
+                setattr(r, attr, RelativeDateWrapper(reference_ts))
+                r.save()
+                rule = PositionCancellationRule.objects.get(id=r.id)
+
+                with ensure_no_queries():
+                    res = rule._evaluate_cancellation_moment(position=order_position,
+                                                             check_ts=reference_ts + delta)
+                assert len(res) == 2
+                for r in res:
+                    if attr in r.id:
+                        assert r.cancellation_possible == allowed

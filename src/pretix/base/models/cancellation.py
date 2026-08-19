@@ -19,6 +19,7 @@ from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, Item, ItemVariation, Order, OrderPosition
 from pretix.base.reldate import ModelRelativeDateTimeField, RelativeDateWrapper
 from pretix.base.signals import self_service_cancellation_checks
+from pretix.helpers import ensure_no_queries
 
 """
 Supporting self-service cancellation requires us to do two main things:
@@ -310,7 +311,7 @@ class CancellationRule(models.Model):
     fee_percentage_per_position = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator("0.00"), MaxValueValidator("100.00")],
+        validators=[MinValueValidator(Decimal("0.00")), MaxValueValidator(Decimal("100.00"))],
         verbose_name=_("Fee Percentage per OrderPosition"),
         default=Decimal("0.00"),
     )
@@ -353,11 +354,12 @@ class CancellationRule(models.Model):
 
     fee_mode = models.CharField(
         verbose_name=_("Restrict to check-in status"),
-        default=FeeType.MINIMUM,
         choices=[
             (FeeType.MINIMUM, FeeType.MINIMUM.label),
             (FeeType.ADDITIONAL, FeeType.ADDITIONAL.label),
         ],
+        blank=True,
+        null=True,
         max_length=15,
     )
 
@@ -392,8 +394,12 @@ class CancellationRule(models.Model):
 
         # collect all checks, position_rules and process_rules that are applicable
         checks = CancellationRule._collect_checks(event=event)
-        position_rules: QuerySet[PositionCancellationRule] = PositionCancellationRule.objects.filter(event=event,
-                                                                                                     type=CheckTypes.POSITION)
+        position_rules: QuerySet[PositionCancellationRule] = (
+            PositionCancellationRule.objects
+            .filter(event=event, type=CheckTypes.POSITION)
+            .prefetch_related(
+                *[p() for p in PositionCancellationRule.rule_prefetches])
+        )
         process_rules: QuerySet[ProcessCancellationRule] = ProcessCancellationRule.objects.filter(event=event,
                                                                                                   type=CheckTypes.PROCESS)
 
@@ -414,7 +420,8 @@ class CancellationRule(models.Model):
 
             # evaluate the system/plugin checks for the position
             for check in checks.position:
-                position_check_results[position.id].append(check.evaluate(order=order, keep=keep, position=position))
+                position_check_results[position.id].append(
+                    check.evaluate(order=order, keep=keep, position=position, check_ts=check_ts))
 
             # evaluate all customer specified rules for this position
             for rule in position_rules:
@@ -434,7 +441,7 @@ class CancellationRule(models.Model):
 
         # evaluate all system/plugin provided checks for the cancellation process
         for check in checks.process:
-            process_check_results.append(check.evaluate(order=order, keep=keep, position=None))
+            process_check_results.append(check.evaluate(order=order, keep=keep, position=None, check_ts=check_ts))
 
         # evaluate all customer specified rules for the cancellation process
         for rule in process_rules:
@@ -450,8 +457,8 @@ class CancellationRule(models.Model):
     @staticmethod
     def _prefetch_order(event: Event, order: Order, checks: Checks) -> Order:
         prefetches = [pref() for pref in [*chain(*checks.prefetches),
-                                          *chain(*PositionCancellationRule.prefetches),
-                                          *chain(*ProcessCancellationRule.prefetches)]]
+                                          *PositionCancellationRule.prefetches,
+                                          *ProcessCancellationRule.prefetches]]
 
         related_selects = {*chain(*checks.related_selects),
                            *chain(*PositionCancellationRule.related_selects),
@@ -494,7 +501,10 @@ class CancellationRule(models.Model):
 
 class PositionCancellationRuleManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(type=CheckTypes.POSITION)
+        return (super().get_queryset()
+                .filter(type=CheckTypes.POSITION)
+                .prefetch_related(*[p() for p in PositionCancellationRule.rule_prefetches])
+                .select_related(*PositionCancellationRule.rule_related_selects))
 
 
 class PositionCancellationRule(CancellationRule):
@@ -505,7 +515,15 @@ class PositionCancellationRule(CancellationRule):
     """
     objects = PositionCancellationRuleManager()
 
-    prefetches: ClassVar[List[Callable[[], Prefetch]]] = []
+    rule_prefetches: ClassVar[List[Callable[[], Prefetch]]] = [
+        lambda: Prefetch('limit_products'),
+        lambda: Prefetch('limit_variations'),
+    ]
+    rule_related_selects: ClassVar[List[str]] = []
+
+    prefetches: ClassVar[List[Callable[[], Prefetch]]] = [
+        lambda: Prefetch('all_positions__item'),
+    ]
     related_selects: ClassVar[List[str]] = []
 
     class Meta:
@@ -516,14 +534,30 @@ class PositionCancellationRule(CancellationRule):
         self.full_clean()
         super().save(*args, **kwargs)
 
-    def _position_matches_rule(self, position: OrderPosition) -> bool:
-        if not self.all_products and position.item_id not in self.limit_products.values_list('pk', flat=True):
-            return False
+    def _position_matches_rule(self, position: OrderPosition) -> CheckResult:
+        with ensure_no_queries():
+            res = CheckResult(
+                id=f"position_rule_{self.id}",
+                reason=_("Rule matches this product"),
+                cancellation_possible=True
+            )
 
-        if not self.all_products and position.variation_id not in self.limit_variations.values_list('pk', flat=True):
-            return False
+            if self.all_products:
+                return res
 
-        return True
+            item_pks = {item.pk for item in self.limit_products.all()}
+            if position.item_id in item_pks:
+                return res
+
+            variation_pks = {variation.pk for variation in self.limit_variations.all()}
+            if position.variation_id in variation_pks:
+                return res
+
+            return CheckResult(
+                id=f"position_rule_{self.id}",
+                reason=_("Rule does not apply to this product"),
+                cancellation_possible=False
+            )
 
     @staticmethod
     def _resolve_date_field(date_field: RelativeDateWrapper, order: Order,
@@ -543,64 +577,46 @@ class PositionCancellationRule(CancellationRule):
 
         return date_field.datetime(position.subevent)
 
-    def _evaluate_cancellation_moment(self, position: OrderPosition, check_ts: datetime.datetime) -> List[
-        CheckResult]:
-        check_results = []
+    def _evaluate_cancellation_moment(self, position: OrderPosition, check_ts: datetime.datetime) -> List[CheckResult]:
+        with ensure_no_queries():
+            check_results = []
 
-        order = position.order
+            order = position.order
 
-        for param in ('allowed_until', 'except_after'):
-            value: RelativeDateWrapper | None = getattr(self, param, None)
-            if value is not None:
-                if check_ts <= self._resolve_date_field(value, order, position):
-                    check_results.append(
-                        CheckResult(
-                            id=f"position_rule_{self.id}",
-                            reason=_("{} is earlier than {} cutoff {}".format(check_ts, param, value)),
-                            cancellation_possible=True
+            for param in ('allowed_until', 'except_after'):
+                value: RelativeDateWrapper | None = getattr(self, param, None)
+                if value is not None:
+                    if check_ts <= self._resolve_date_field(value, order, position):
+                        check_results.append(
+                            CheckResult(
+                                id=f"position_rule_{self.id}_{param}",
+                                reason=_("{} is earlier than {} cutoff {}".format(check_ts, param, value)),
+                                cancellation_possible=True
+                            )
                         )
-                    )
+                    else:
+                        check_results.append(
+                            CheckResult(
+                                id=f"position_rule_{self.id}_{param}",
+                                reason=_("{} is later than {} cutoff {}".format(check_ts, param, value)),
+                                cancellation_possible=False
+                            )
+                        )
                 else:
                     check_results.append(
                         CheckResult(
-                            id=f"position_rule_{self.id}",
-                            reason=_("{} is later than {} cutoff {}".format(check_ts, param, value)),
-                            cancellation_possible=False
+                            id=f"position_rule_{self.id}_{param}",
+                            reason=_("No {} limit defined".format(param)),
+                            cancellation_possible=True
                         )
                     )
-            else:
-                check_results.append(
-                    CheckResult(
-                        id=f"position_rule_{self.id}",
-                        reason=_("No {} limit defined".format(param)),
-                        cancellation_possible=True
-                    )
-                )
 
             return check_results
 
     def evaluate_position_rule(self, order: Order, _keep: Set[OrderPosition], position: OrderPosition,
-                               check_ts: datetime.datetime) -> Optional[
-        RuleResult
-    ]:
-        rule_check_results = []
-
-        if not self._position_matches_rule(position):
-            rule_check_results.append(
-                CheckResult(
-                    id=f"position_rule_{self.id}",
-                    reason=_("Rule does not apply to this product"),
-                    cancellation_possible=False
-                )
-            )
-        else:
-            rule_check_results.append(CheckResult(
-                id=f"position_rule_{self.id}",
-                reason=_("Rule matches this product"),
-                cancellation_possible=True
-            ))
-            rule_check_results.extend(self._evaluate_cancellation_moment(position, check_ts))
-
+                               check_ts: datetime.datetime) -> Optional[RuleResult]:
+        rule_check_results = [self._position_matches_rule(position),
+                              *self._evaluate_cancellation_moment(position, check_ts)]
         if self.fee_percentage_per_position and self.fee_absolute_per_position:
             raise NotImplementedError(
                 "Combination of fee_percentage_per position and fee_absolute_per_position is not valid")
@@ -624,7 +640,10 @@ class PositionCancellationRule(CancellationRule):
 
 class ProcessCancellationRuleManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(type=CheckTypes.PROCESS)
+        return (super().get_queryset()
+                .filter(type=CheckTypes.PROCESS)
+                .prefetch_related(*[p() for p in ProcessCancellationRule.rule_prefetches])
+                .select_related(*ProcessCancellationRule.rule_related_selects))
 
 class ProcessCancellationRule(CancellationRule):
     """
@@ -633,6 +652,9 @@ class ProcessCancellationRule(CancellationRule):
     """
 
     objects = ProcessCancellationRuleManager()
+
+    rule_prefetches: ClassVar[List[Callable[[], Prefetch]]] = []
+    rule_related_selects: ClassVar[List[str]] = []
 
     prefetches: ClassVar[List[Callable[[], Prefetch]]] = []
     related_selects: ClassVar[List[str]] = []
