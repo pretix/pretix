@@ -61,7 +61,7 @@
     </ul>
 </nav>
 <div class="calendar-container">
-    {% include "pretixpresale/fragment_week_calendar.html" with show_avail=event.settings.event_list_availability days=subevent_list.days show_names=subevent_list.show_names %}
+    {% include "pretixpresale/fragment_week_calendar.html" with show_avail=event.settings.event_list_availability days=subevent_list.days show_names=subevent_list.show_names any_events=subevent_list.any_events %}
     {% if subevent_list.any_events is False %}
         <div class="calendar-empty">
             <span class="fa fa-calendar-times-o fa-4x text-muted"></span>

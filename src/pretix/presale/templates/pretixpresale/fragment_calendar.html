@@ -3,7 +3,7 @@
 {% load date_fast %}
 {% load calendarhead %}
 <div class="table-responsive">
-    <table class="table table-calendar" role="grid">
+    <table class="table table-calendar" role="grid"{% if any_events is False %} aria-hidden="true"{% endif %}>
         <caption class="sr-only">{% trans "Calendar" %}</caption>
         <thead>
         <tr>
