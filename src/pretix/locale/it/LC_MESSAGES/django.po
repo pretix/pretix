@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-08-19 06:41+0000\n"
+"PO-Revision-Date: 2026-08-19 07:14+0000\n"
 "Last-Translator: Translate pretix user 586 "
 "<stefanom@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -19542,32 +19542,27 @@ msgstr "Lista Check-in: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
-#, fuzzy
 msgid "Edit list configuration"
-msgstr "Modifica la configurazione dell'elenco"
+msgstr "Modifica la configurazione della lista"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
-#, fuzzy
 msgid "Check-in simulator"
-msgstr "Modifica dettagli"
+msgstr "Simulatore di check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py
-#, fuzzy
 msgid "PDF"
 msgstr "PDF"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
-#, fuzzy
 msgid "CSV"
 msgstr "CSV"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
-#, fuzzy
 msgid "No attendee record was found."
 msgstr "Nessun partecipante trovato."
 
@@ -19580,15 +19575,13 @@ msgstr "Nessun partecipante trovato."
 #: pretix/control/templates/pretixcontrol/subevents/index.html
 #: pretix/control/templates/pretixcontrol/vouchers/index.html
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
-#, fuzzy
 msgid "select all rows for batch-operation"
-msgstr "Seleziona tutte le righe per l'operazione di batch"
+msgstr "selezionare tutte le righe per l'operazione batch"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
-#, fuzzy
 msgid "Timestamp"
-msgstr "Orario"
+msgstr "Timestamp"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/items/quotas.html
@@ -19598,22 +19591,18 @@ msgstr "Orario"
 #: pretix/control/templates/pretixcontrol/subevents/index.html
 #: pretix/control/templates/pretixcontrol/vouchers/index.html
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
-#, fuzzy
 msgid "Select all results on other pages as well"
-msgstr "Seleziona tutti i risultati anche su altre pagine"
+msgstr "Seleziona tutti i risultati anche sulle altre pagine"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
-#, fuzzy
 msgid "unpaid"
 msgstr "non pagati"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
-#, fuzzy
 msgid "Checked in but left"
 msgstr "Check-in effettuato, poi uscito"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
-#, fuzzy
 msgid "Checked in automatically"
 msgstr "Check-in automatico"
 
@@ -19623,87 +19612,76 @@ msgid "Exit: %(date)s"
 msgstr "Uscita: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
-#, fuzzy
 msgid "Check-In selected attendees"
-msgstr "Ordine dei partecipanti selezionati"
+msgstr "Effettua il check-in dei partecipanti selezionati"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
-#, fuzzy
 msgid "Check-Out selected attendees"
-msgstr "Check-out dei partecipanti selezionati"
+msgstr "Effettua il check-out dei partecipanti selezionati"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
-#, fuzzy
 msgid "Delete all check-ins of selected attendees"
 msgstr "Elimina tutti i check-in dei partecipanti selezionati"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
-#, fuzzy
 msgid "Delete check-in list"
-msgstr "Elimina lista di check-in"
+msgstr "Elimina la lista di check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Are you sure you want to delete the check-in list <strong>%(name)s</strong>?"
 msgstr ""
-"Sei sicuro di voler eliminare l'elenco di check-in <strong>%(name)s</strong>?"
+"Sei sicuro di voler eliminare la lista di check-in <strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "This will delete the information of <strong>%(num)s</strong> check-ins as "
 "well."
 msgstr "Questo cancellerà i dati di <strong>%(num)s</strong> check-in."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
-#, fuzzy
 msgid "Delete list and all check-ins"
-msgstr "Elimina elenco e tutti i check-in"
+msgstr "Elimina la lista e tutti i check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
 #: pretix/control/templates/pretixcontrol/event/payment.html
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
-#, fuzzy
 msgid "Advanced"
 msgstr "Avanzato"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
-#, fuzzy
 msgid ""
 "These settings on this page are intended for professional users with very "
 "specific check-in situations. Please reach out to support if you have "
 "questions about setting this up."
 msgstr ""
-"Queste impostazioni sono rivolte a utenti professionisti con situazioni di "
+"Queste impostazioni sono rivolte a utenti professionali con situazioni di "
 "check-in particolari. Per qualsiasi dubbio, contatta il supporto."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
-#, fuzzy
 msgid ""
 "Make sure to always use the latest version of our scanning apps for these "
 "options to work."
 msgstr ""
-"Assicurati di usare sempre l'ultima versione delle applicazioni di scansione "
-"per far funzionare queste opzioni."
+"Assicurati di usare sempre l'ultima versione delle nostre app di scansione "
+"per garantire il funzionamento di queste opzioni."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
-#, fuzzy
 msgid ""
 "If you make use of these advanced options, we recommend using our Android "
 "and Desktop apps."
 msgstr ""
-"Per utilizzare queste opzioni avanzate, si consiglia di usare le "
-"applicazioni Android e desktop."
+"Per utilizzare queste opzioni avanzate, si consiglia di usare le nostre app "
+"Android e Desktop."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
-#, fuzzy
 msgid "Custom check-in rule"
 msgstr "Regola di check-in personalizzata"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
-#, fuzzy
 msgid ""
 "You can create check-in lists that you can use e.g. at the entrance of your "
 "event to track who is coming and if they actually bought a ticket. You can "
@@ -19713,11 +19691,10 @@ msgstr ""
 "Puoi creare liste di check-in che utilizzare ad esempio all'ingresso "
 "dell'evento per tracciare chi arriva e se ha effettivamente acquistato un "
 "biglietto. Il processo lo puoi fare stampando la lista su carta, usando "
-"questa interfaccia web o con una delle nostre applicazioni mobili o desktop "
-"per la scansione automatica dei biglietti."
+"questa interfaccia web o con una delle nostre app mobili o desktop per la "
+"scansione automatica dei biglietti."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
-#, fuzzy
 msgid ""
 "You can create multiple check-in lists to separate multiple parts of your "
 "event, for example if you have separate entries for multiple ticket types. "
@@ -19734,7 +19711,6 @@ msgstr ""
 "performance, oltre a biglietti validi solo per singole performance."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
-#, fuzzy
 msgid ""
 "If you have the appropriate organizer-level permissions, you can connect new "
 "devices to your account and use them to validate tickets. Since the devices "
@@ -19747,31 +19723,26 @@ msgstr ""
 "puoi riutilizzarli in modo continuo."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
-#, fuzzy
 msgid "Your search did not match any check-in lists."
-msgstr "La ricerca non ha trovato nessuna lista di check-in."
+msgstr "La ricerca non ha trovato alcuna lista di check-in."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
-#, fuzzy
 msgid "You haven't created any check-in lists yet."
-msgstr "Non hai ancora creato liste di check-in."
+msgstr "Non hai ancora creato alcuna lista di check-in."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
-#, fuzzy
 msgid "Create a new check-in list"
 msgstr "Crea una nuova lista di check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
-#, fuzzy
 msgid "Connected devices"
 msgstr "Dispositivi collegati"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
-#, fuzzy
 msgid "Reset check-in"
-msgstr "Filtra per stato"
+msgstr "Reimposta il check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 #: pretix/control/templates/pretixcontrol/items/categories.html
@@ -19782,12 +19753,10 @@ msgstr "Filtra per stato"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html
-#, fuzzy
 msgid "Clone"
 msgstr "Clona"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
-#, fuzzy
 msgid ""
 "With this feature, you can reset the entire check-in state of the event. "
 "This will delete all check-in records as well as all records of printed "
@@ -19802,20 +19771,20 @@ msgstr ""
 "badge o biglietti reali."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
-#, fuzzy, python-format
+#, python-format
 msgid "This will permanently delete <strong>1 check-in</strong>."
 msgid_plural ""
 "This will permanently delete <strong>%(count)s check-ins</strong>."
-msgstr[0] "Questo elimina definitivamente <strong>1 check-in</strong>."
+msgstr[0] "Questo eliminerà definitivamente <strong>1 check-in</strong>."
 msgstr[1] "Questo eliminerà definitivamente <strong>%(count)s check-in</strong>."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
-#, fuzzy, python-format
+#, python-format
 msgid "Additionally, <strong>1 print log</strong> will be deleted."
 msgid_plural ""
 "Additionally, <strong>%(count)s print logs</strong> will be deleted."
 msgstr[0] "Inoltre, <strong>1 log di stampa</strong> verrà eliminato."
-msgstr[1] "Inoltre, <strong>%(count)s log di stampa</strong> saranno eliminati."
+msgstr[1] "Inoltre, <strong>%(count)s log di stampa</strong> verranno eliminati."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
 msgid "This cannot be reverted!"
