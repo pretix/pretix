@@ -2971,7 +2971,7 @@ class SeatingTestCase(TestCase):
 @pytest.mark.django_db
 @pytest.mark.parametrize("qtype,answer,expected", [
     (Question.TYPE_STRING, "aaa", "aaa"),
-    (Question.TYPE_STRING, "a", "a", ValidationError),
+    (Question.TYPE_STRING, "a", ValidationError),
     (Question.TYPE_TEXT, "vvv", "vvv"),
     (Question.TYPE_TEXT, "waaaaay tooooo long", ValidationError),
     (Question.TYPE_NUMBER, "0.9", ValidationError),
