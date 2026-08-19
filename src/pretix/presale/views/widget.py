@@ -230,6 +230,9 @@ def generate_widget_js(version, lang, use_vite=False):
 
 
 def get_widget_js(version, lang, use_vite, force_regenerate=False):
+    if settings.DEBUG:
+        return generate_widget_js(version, lang, use_vite=use_vite).encode()
+
     variant = 'vite' if use_vite else 'legacy'
     cache_prefix = 'widget_js_data_v{}_{}_{}'.format(version, lang, variant)
     settings_key = 'widget_file_v{}_{}_{}'.format(version, lang, variant)
@@ -238,11 +241,11 @@ def get_widget_js(version, lang, use_vite, force_regenerate=False):
 
     if not force_regenerate:
         cached_js = cache.get(cache_prefix)
-        if cached_js and not settings.DEBUG:
+        if cached_js:
             return cached_js
 
         fname = gs.settings.get(settings_key)
-        if fname and not settings.DEBUG:
+        if fname:
             if isinstance(fname, File):
                 fname = fname.name
             try:
@@ -260,7 +263,7 @@ def get_widget_js(version, lang, use_vite, force_regenerate=False):
         not fname
         or gs.settings.get(checksum_key, '') != checksum
     )
-    if should_save and not settings.DEBUG:
+    if should_save:
         newname = default_storage.save(
             'widget/widget.{}.{}.{}.{}.js'.format(version, lang, variant, checksum),
             ContentFile(data)
