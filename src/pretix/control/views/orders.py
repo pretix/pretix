@@ -2008,7 +2008,10 @@ class OrderChange(OrderView):
             'issued_gift_cards',
             'addons',
         ).annotate(
-            _seat_allowed=Exists(SeatCategoryMapping.objects.filter(subevent=OuterRef("subevent"), product=OuterRef("item")))
+            _seat_allowed=Exists(SeatCategoryMapping.objects.filter(
+                subevent=OuterRef("subevent") if self.request.event.has_subevents else None,
+                product=OuterRef("item"))
+            )
         ))
         for p in positions:
             p.form = OrderPositionChangeForm(
