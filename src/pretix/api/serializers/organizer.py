@@ -426,6 +426,8 @@ class TeamSerializer(serializers.ModelSerializer):
                 for k, v in OLD_TO_NEW_ORGANIZER_MIGRATION.items():
                     if full_data.get(k) is True:
                         data["limit_organizer_permissions"].update({kk: True for kk in v})
+            for key in list(k for k in data if k.startswith("can_")):
+                del data[key]
 
         if full_data.get('limit_events') and full_data.get('all_events'):
             raise ValidationError('Do not set both limit_events and all_events.')
