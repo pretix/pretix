@@ -378,8 +378,15 @@ class Cancellation(models.Model):
     def evaluate(event: Event, order: Order, keep: Set[OrderPosition],
                  check_ts: datetime.datetime) -> "Cancellation":
 
-        # TODO check that all keep entries belong to order
-        # TODO exclude cancelled positions
+        # validate that all keep order positions are part of the order
+        for p in keep:
+            if p.order_id != order.id:
+                raise ValidationError("OrderPosition {} does not belong to order {}".format(p.code, order.code))
+
+        # exclude canceled positions
+        for p in order.positions.all():
+            if p.canceled:
+                keep.add(p)
 
         # collect all checks, position_rules and process_rules that are applicable
         checks = CancellationRule.collect_checks(event=event)
