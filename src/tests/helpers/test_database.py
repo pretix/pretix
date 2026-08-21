@@ -7,6 +7,7 @@ No mocking is used: every test runs against a real database connection via the
 """
 
 import logging
+import os
 
 import pytest
 from django_scopes import scopes_disabled
@@ -28,6 +29,7 @@ def test_raises_runtime_error_in_debug(settings):
 @pytest.mark.django_db
 def test_logs_error_when_not_debug(settings, caplog):
     settings.DEBUG = False
+    os.environ.setdefault("ENSURE_NO_QUERIES_OVERRIDE", "true")
 
     with caplog.at_level(logging.ERROR):
         with scopes_disabled():

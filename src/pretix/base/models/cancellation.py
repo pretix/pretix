@@ -349,7 +349,7 @@ class Cancellation(models.Model):
     )
 
     cancellation_state = models.CharField(
-        max_length=8,
+        max_length=16,
         choices=CANCELLATION_STATE,
         default=CREATED,
         verbose_name=_("State of the cancellation"),
