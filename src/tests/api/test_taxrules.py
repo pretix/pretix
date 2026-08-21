@@ -61,17 +61,21 @@ def test_rule_detail(token_client, organizer, event, taxrule):
 
 @pytest.mark.django_db
 def test_rule_create(token_client, organizer, event):
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/taxrules/'.format(organizer.slug, event.slug),
-        {
-            "name": {"en": "VAT", "de": "MwSt"},
-            "rate": "19.00",
-            "price_includes_tax": True,
-            "eu_reverse_charge": False,
-            "home_country": "DE"
-        },
-        format='json'
-    )
+    url = '/api/v1/organizers/{}/events/{}/taxrules/'.format(organizer.slug, event.slug)
+    payload = {
+        "name": {"en": "VAT", "de": "MwSt"},
+        "rate": "19.00",
+        "price_includes_tax": True,
+        "eu_reverse_charge": False,
+        "home_country": "DE",
+        "default": False,
+    }
+    # fail as only one rule exists and must be default
+    resp = token_client.post(url, payload, format='json')
+    assert resp.status_code == 400
+
+    del payload["default"]
+    resp = token_client.post(url, payload, format='json')
     assert resp.status_code == 201
     rule = TaxRule.objects.get(pk=resp.data['id'])
     assert rule.name.data == {"en": "VAT", "de": "MwSt"}
@@ -79,6 +83,7 @@ def test_rule_create(token_client, organizer, event):
     assert rule.price_includes_tax is True
     assert rule.eu_reverse_charge is False
     assert str(rule.home_country) == "DE"
+    assert rule.default is True
 
 
 @pytest.mark.django_db
