@@ -2,21 +2,20 @@ import datetime
 import operator
 from dataclasses import asdict, dataclass, field
 from decimal import Decimal
-
-from django.core.serializers.json import DjangoJSONEncoder
-from django.utils.timezone import make_aware
 from itertools import chain
 from typing import (
-    Any, Callable, ClassVar, Dict, Final, List, Literal, Optional, Protocol, Set,
-    TYPE_CHECKING, Tuple, TypeAlias,
+    TYPE_CHECKING, Any, Callable, ClassVar, Dict, Final, List, Literal,
+    Optional, Protocol, Set, Tuple, TypeAlias,
 )
-from django_stubs_ext import StrOrPromise
 
 from django.core.exceptions import ValidationError
+from django.core.serializers.json import DjangoJSONEncoder
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Prefetch, QuerySet
+from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
+from django_stubs_ext import StrOrPromise
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, Item, ItemVariation, Order, OrderPosition

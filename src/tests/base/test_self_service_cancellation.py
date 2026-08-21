@@ -1,5 +1,5 @@
 import contextlib
-from datetime import UTC, timedelta, datetime
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 from typing import List, Literal, cast
 
@@ -8,17 +8,15 @@ from django.db.models import Prefetch
 from django.utils.timezone import now
 from django_scopes import scope
 
-from pretix.base.models import (
-    Checkin, Event, Order, OrderPosition, Organizer,
-)
+from pretix.base.models import Checkin, Event, Order, OrderPosition, Organizer
 from pretix.base.models.cancellation import (
-    Cancellation, CancellationCheck, CancellationRule, CheckResult, Checks, CheckTypes,
-    FeeType, PositionCancellationRule, PositionResult, ProcessCancellationRule, ProcessResult, RuleResult,
+    Cancellation, CancellationCheck, CancellationRule, CheckResult, Checks,
+    CheckTypes, FeeType, PositionCancellationRule, PositionResult,
+    ProcessCancellationRule, ProcessResult, RuleResult,
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.orders import signal_listener_position_not_used
 from pretix.helpers import ensure_no_queries
-
 
 
 @pytest.fixture
