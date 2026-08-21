@@ -41,7 +41,6 @@ from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
 from functools import reduce
-
 from time import sleep
 from typing import List, Optional
 
@@ -52,7 +51,7 @@ from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import (
     Count, Exists, F, IntegerField, Max, Min, OuterRef, Prefetch, Q, QuerySet,
-    Sum, Value,
+    Subquery, Sum, Value,
 )
 from django.db.models.functions import Cast, Greatest
 from django.db.transaction import get_connection
@@ -68,14 +67,14 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import get_language_without_region, language
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
-    CartPosition, Device, Event, GiftCard, Item, ItemVariation,
-    Membership, Order, OrderPayment, OrderPosition, Quota, Seat,
-    SeatCategoryMapping, User, Voucher,
+    CartPosition, Device, Event, GiftCard, Item, ItemVariation, Membership,
+    Order, OrderPayment, OrderPosition, Quota, Seat, SeatCategoryMapping, User,
+    Voucher,
 )
-from pretix.base.models.event import Event_SettingsStore, SubEvent
 from pretix.base.models.cancellation import (
     CancellationCheck, CheckResult, CheckTypes, PositionSet,
 )
+from pretix.base.models.event import Event_SettingsStore, SubEvent
 from pretix.base.models.orders import (
     BlockedTicketSecret, CheckoutSession, InvoiceAddress, OrderFee,
     OrderRefund, generate_secret,

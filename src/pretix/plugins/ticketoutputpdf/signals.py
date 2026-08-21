@@ -28,10 +28,9 @@ from django.utils.translation import gettext_lazy as _
 
 from pretix.base.logentrytypes import EventLogEntryType, log_entry_types
 from pretix.base.models import Event, SalesChannel
-from pretix.base.signals import EventPluginSignal  # NOQA: legacy import
-from pretix.base.signals import (
-    event_copy_data, item_copy_data, layout_text_variables, logentry_display,
-    logentry_object_link, register_data_exporters,
+from pretix.base.signals import (  # NOQA: legacy import
+    EventPluginSignal, event_copy_data, item_copy_data, layout_text_variables,
+    logentry_display, logentry_object_link, register_data_exporters,
     register_multievent_data_exporters, register_ticket_outputs,
 )
 from pretix.control.signals import item_forms, order_position_buttons
@@ -39,8 +38,9 @@ from pretix.plugins.ticketoutputpdf.forms import TicketLayoutItemForm
 from pretix.plugins.ticketoutputpdf.models import (
     TicketLayout, TicketLayoutItem,
 )
-from pretix.presale.style import get_fonts  # NOQA: legacy import
-from pretix.presale.style import register_event_fonts, register_fonts
+from pretix.presale.style import (  # NOQA: legacy import
+    get_fonts, register_event_fonts, register_fonts,
+)
 
 
 @receiver(register_ticket_outputs, dispatch_uid="output_pdf")
