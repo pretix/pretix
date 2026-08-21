@@ -2,6 +2,8 @@ import datetime
 import operator
 from dataclasses import dataclass, field
 from decimal import Decimal
+
+from django.utils.timezone import make_aware
 from itertools import chain
 from typing import (
     Any, Callable, ClassVar, Dict, Final, List, Literal, Optional, Protocol, Set,
@@ -169,11 +171,15 @@ class Checks:
 
     @property
     def prefetches(self) -> List[Callable[[], Prefetch]]:
-        return list(chain([check.prefetches for check in [*self.position, *self.process]]))
+        return list(chain.from_iterable(
+            check.prefetches for check in [*self.position, *self.process]
+        ))
 
     @property
     def related_selects(self) -> List[str]:
-        return list(chain([check.related_selects for check in [*self.position, *self.process]]))
+        return list(chain.from_iterable(
+            check.related_selects for check in [*self.position, *self.process]
+        ))
 
 
 PositionSet: TypeAlias = Set[OrderPosition]
@@ -221,7 +227,8 @@ class PositionResult:
         return all(
             ok(results)
             for d in
-            (self.position_check_results, {key: [min(pos_res)] for key, pos_res in self.position_rule_results.items()})
+            (self.position_check_results,
+             {key: [min(pos_res)] for key, pos_res in self.position_rule_results.items() if pos_res})
             for results in d.values()
         )
 
@@ -243,11 +250,15 @@ class ProcessResult:
 
     @property
     def cancellation_possible(self) -> bool:
-        best_option = min(self.process_rule_results)
-        return all([res.cancellation_possible for res in [*self.process_check_results, best_option]])
+        results: List[CheckResult | RuleResult] = [*self.process_check_results]
+        if self.process_rule_results:
+            results.append(min(self.process_rule_results))
+        return all(res.cancellation_possible for res in results)
 
     @property
     def fee_value(self) -> Decimal:
+        if not self.process_rule_results:
+            return Decimal("0.00")
         best_option = min(self.process_rule_results)
         if best_option.cancellation_possible:
             return best_option.fee
@@ -258,23 +269,31 @@ class ProcessResult:
 class CancellationResult:
     position_result: PositionResult
     process_result: ProcessResult
+
+    order: Order
+    keep: Set[OrderPosition]
     check_ts: datetime.datetime
+
+    # TODO add state choice
+    # TODO make this a model
+
 
     @property
     def cancellation_possible(self) -> bool:
         return self.position_result.cancellation_possible and self.process_result.cancellation_possible
 
-    def remember_cancellation(self):
-        # TODO: store the cancellation verdict in the session storage for X Minutes
+    def prepare(self):
+        # TODO: store the cancellation id in the session storage
         pass
 
-    def perform_cancellation(self, order: Order, keep: Set[int]):
-        # TODO load the cancellation verdict from the session and perform the actions
+    def execute(self):
+        # TODO load the cancellation verdict from the id  and perform the actions
         pass
 
 
 def _send_self_service_cancellation_checks(event: Event) -> List[Tuple[Any, Any]]:
     return self_service_cancellation_checks.send(sender=event)
+
 
 
 class CancellationRule(models.Model):
@@ -286,11 +305,10 @@ class CancellationRule(models.Model):
         (LATEST, _("Latest")),
     )
 
-
     event = models.ForeignKey(
         Event,
         verbose_name=_("Event"),
-        related_name="cancellation_rule",
+        related_name="cancellation_rules",
         on_delete=models.CASCADE
     )
 
@@ -320,6 +338,7 @@ class CancellationRule(models.Model):
         decimal_places=2,
         verbose_name=_("Absolute fee per OrderPosition"),
         default=Decimal("0.00"),
+        validators=[MinValueValidator(Decimal("0.00"))],
     )
 
     all_products = models.BooleanField(
@@ -343,17 +362,16 @@ class CancellationRule(models.Model):
                     "except after dates.")
     )
 
-
-
     fee_cancellation_process = models.DecimalField(
         max_digits=13,
         decimal_places=2,
         verbose_name=_("Absolute fee per Cancellation"),
         default=Decimal("0.00"),
+        validators=[MinValueValidator(Decimal("0.00"))],
     )
 
     fee_mode = models.CharField(
-        verbose_name=_("Restrict to check-in status"),
+        verbose_name=_("The method with which process and position fees are combined."),
         choices=[
             (FeeType.MINIMUM, FeeType.MINIMUM.label),
             (FeeType.ADDITIONAL, FeeType.ADDITIONAL.label),
@@ -363,18 +381,26 @@ class CancellationRule(models.Model):
         max_length=15,
     )
 
-    prefetches: ClassVar[List[Callable[[], Prefetch]]] = []
-    related_selects: ClassVar[List[str]] = []
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(type__in=[CheckTypes.POSITION, CheckTypes.PROCESS]),
+                name="cancellation_rule_type_valid",
+            ),
+        ]
+
 
     @staticmethod
     def _collect_checks(event: Event, send_fn: Callable[
-        [Event], List[Tuple[Any, Any]]
-    ] = _send_self_service_cancellation_checks) -> Checks:
+        [Event], List[Tuple[Any, Any]]] = _send_self_service_cancellation_checks) -> Checks:
         position_checks: List[CancellationCheck] = []
         process_checks: List[CancellationCheck] = []
 
         seen = set()
         for recv, resp in send_fn(event):
+            if resp is None:
+                continue
+
             if not isinstance(resp, CancellationCheck):
                 raise ValueError('self_service_cancellation_checks received response of wrong type')
             if resp.id in seen:
@@ -389,21 +415,37 @@ class CancellationRule(models.Model):
         return Checks(position=position_checks, process=process_checks)
 
     @staticmethod
+    def _prefetch_order(event: Event, order: Order, checks: Checks) -> Order:
+        prefetches = [pref() for pref in [*checks.prefetches,
+                                          *PositionCancellationRule.prefetches,
+                                          *ProcessCancellationRule.prefetches]]
+
+        related_selects = {*checks.related_selects,
+                           *PositionCancellationRule.related_selects,
+                           *ProcessCancellationRule.related_selects}
+
+        qs = Order.objects.prefetch_related(*prefetches)
+        if related_selects:
+            qs = qs.select_related(*related_selects)
+
+        return qs.get(event=event, id=order.id)
+
+    @staticmethod
     def evaluate(event: Event, order: Order, keep: Set[OrderPosition],
                  check_ts: datetime.datetime) -> "CancellationResult":
 
+        # TODO check that all keep entries belong to order
+        # TODO exclude cancelled positions
+
         # collect all checks, position_rules and process_rules that are applicable
         checks = CancellationRule._collect_checks(event=event)
-        position_rules: QuerySet[PositionCancellationRule] = (
-            PositionCancellationRule.objects
-            .filter(event=event, type=CheckTypes.POSITION)
-            .prefetch_related(
-                *[p() for p in PositionCancellationRule.rule_prefetches])
-        )
-        process_rules: QuerySet[ProcessCancellationRule] = ProcessCancellationRule.objects.filter(event=event,
-                                                                                                  type=CheckTypes.PROCESS)
+        position_rules: QuerySet[PositionCancellationRule] = PositionCancellationRule.objects.filter(
+            event=event).with_rule_data().all()
+        process_rules: QuerySet[ProcessCancellationRule] = ProcessCancellationRule.objects.filter(
+            event=event).with_rule_data().all()
 
         order = CancellationRule._prefetch_order(event, order, checks)
+
 
         # keep track of all decisions so we can explain them in the logs
         position_check_results: Dict[int, List[CheckResult]] = {}
@@ -415,7 +457,7 @@ class CancellationRule(models.Model):
             position_rule_results[position.id] = []
 
             # skip this position if customer doesn't want to cancel
-            if position.id in keep:
+            if position in keep:
                 continue
 
             # evaluate the system/plugin checks for the position
@@ -452,27 +494,20 @@ class CancellationRule(models.Model):
         process_result = ProcessResult(process_check_results=process_check_results,
                                        process_rule_results=process_rule_results)
 
-        return CancellationResult(position_result=position_results, process_result=process_result, check_ts=check_ts)
+        return CancellationResult(position_result=position_results, process_result=process_result,
+                                  check_ts=check_ts, order=order, keep=keep)
 
-    @staticmethod
-    def _prefetch_order(event: Event, order: Order, checks: Checks) -> Order:
-        prefetches = [pref() for pref in [*chain(*checks.prefetches),
-                                          *PositionCancellationRule.prefetches,
-                                          *ProcessCancellationRule.prefetches]]
 
-        related_selects = {*chain(*checks.related_selects),
-                           *chain(*PositionCancellationRule.related_selects),
-                           *chain(*ProcessCancellationRule.related_selects)}
-
-        order = Order.objects.prefetch_related(*prefetches).select_related(*related_selects).get(event=event,
-                                                                                                 id=order.id)
-        return order
 
     def clean(self):
         super().clean()
         errors = {}
 
         if self.type == CheckTypes.PROCESS:
+            if self.fee_mode not in (FeeType.MINIMUM, FeeType.ADDITIONAL):
+                errors["fee_mode"] = _(
+                    "Fee mode is not valid on a process rule."
+                )
             if self.fee_percentage_per_position or self.fee_absolute_per_position:
                 errors["fee_percentage_per_position"] = _(
                     "Position fees must be unset on a process rule."
@@ -495,16 +530,18 @@ class CancellationRule(models.Model):
         if errors:
             raise ValidationError(errors)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+
+class PositionCancellationRuleQuerySet(models.QuerySet):
+    def with_rule_data(self):
+        qs = self.prefetch_related(*[p() for p in PositionCancellationRule.rule_prefetches])
+        if PositionCancellationRule.rule_related_selects:
+            qs = qs.select_related(*PositionCancellationRule.rule_related_selects)
+        return qs
 
 
-class PositionCancellationRuleManager(models.Manager):
+class PositionCancellationRuleManager(models.Manager.from_queryset(PositionCancellationRuleQuerySet)):
     def get_queryset(self):
-        return (super().get_queryset()
-                .filter(type=CheckTypes.POSITION)
-                .prefetch_related(*[p() for p in PositionCancellationRule.rule_prefetches])
-                .select_related(*PositionCancellationRule.rule_related_selects))
+        return super().get_queryset().filter(type=CheckTypes.POSITION).order_by("pk")
 
 
 class PositionCancellationRule(CancellationRule):
@@ -523,6 +560,7 @@ class PositionCancellationRule(CancellationRule):
 
     prefetches: ClassVar[List[Callable[[], Prefetch]]] = [
         lambda: Prefetch('all_positions__item'),
+        lambda: Prefetch('event'),
     ]
     related_selects: ClassVar[List[str]] = []
 
@@ -534,7 +572,7 @@ class PositionCancellationRule(CancellationRule):
         self.full_clean()
         super().save(*args, **kwargs)
 
-    def _position_matches_rule(self, position: OrderPosition) -> CheckResult:
+    def _position_matches_rule(self, position: OrderPosition) -> Optional[CheckResult]:
         with ensure_no_queries():
             res = CheckResult(
                 id=f"position_rule_{self.id}",
@@ -553,11 +591,7 @@ class PositionCancellationRule(CancellationRule):
             if position.variation_id in variation_pks:
                 return res
 
-            return CheckResult(
-                id=f"position_rule_{self.id}",
-                reason=_("Rule does not apply to this product"),
-                cancellation_possible=False
-            )
+            return None
 
     @staticmethod
     def _resolve_date_field(date_field: RelativeDateWrapper, order: Order,
@@ -565,7 +599,10 @@ class PositionCancellationRule(CancellationRule):
         reldate_type = date_field.choice
 
         if reldate_type == "date":
-            return date_field.date(order.event)
+            return make_aware(
+                datetime.datetime.combine(date_field.date(order.event), datetime.time(hour=23, minute=59, second=59)),
+                order.event.timezone,
+            )
         elif reldate_type == "datetime":
             return date_field.datetime(order.event)
 
@@ -615,8 +652,12 @@ class PositionCancellationRule(CancellationRule):
 
     def evaluate_position_rule(self, order: Order, _keep: Set[OrderPosition], position: OrderPosition,
                                check_ts: datetime.datetime) -> Optional[RuleResult]:
-        rule_check_results = [self._position_matches_rule(position),
-                              *self._evaluate_cancellation_moment(position, check_ts)]
+        rule_check_results = []
+        match = self._position_matches_rule(position)
+        if match:
+            rule_check_results.append(match)
+        rule_check_results.extend(self._evaluate_cancellation_moment(position, check_ts))
+
         if self.fee_percentage_per_position and self.fee_absolute_per_position:
             raise NotImplementedError(
                 "Combination of fee_percentage_per position and fee_absolute_per_position is not valid")
@@ -633,17 +674,23 @@ class PositionCancellationRule(CancellationRule):
                 partial_results=rule_check_results,
                 fee_type=FeeType.POSITION,
                 position_price=position.price,
-                percentage=self.fee_absolute_per_position,
+                percentage=self.fee_percentage_per_position,
                 currency=order.event.currency
             )
 
 
-class ProcessCancellationRuleManager(models.Manager):
+class ProcessCancellationRuleQuerySet(models.QuerySet):
+    def with_rule_data(self):
+        qs = self.prefetch_related(*[p() for p in ProcessCancellationRule.rule_prefetches])
+        if ProcessCancellationRule.rule_related_selects:
+            qs = qs.select_related(*ProcessCancellationRule.rule_related_selects)
+        return qs
+
+
+class ProcessCancellationRuleManager(models.Manager.from_queryset(ProcessCancellationRuleQuerySet)):
     def get_queryset(self):
-        return (super().get_queryset()
-                .filter(type=CheckTypes.PROCESS)
-                .prefetch_related(*[p() for p in ProcessCancellationRule.rule_prefetches])
-                .select_related(*ProcessCancellationRule.rule_related_selects))
+        return super().get_queryset().filter(type=CheckTypes.PROCESS).order_by("pk")
+
 
 class ProcessCancellationRule(CancellationRule):
     """
@@ -656,7 +703,9 @@ class ProcessCancellationRule(CancellationRule):
     rule_prefetches: ClassVar[List[Callable[[], Prefetch]]] = []
     rule_related_selects: ClassVar[List[str]] = []
 
-    prefetches: ClassVar[List[Callable[[], Prefetch]]] = []
+    prefetches: ClassVar[List[Callable[[], Prefetch]]] = [
+        lambda: Prefetch('event'),
+    ]
     related_selects: ClassVar[List[str]] = []
 
     class Meta:
@@ -676,7 +725,10 @@ class ProcessCancellationRule(CancellationRule):
             raise ValidationError('Mode is invalid')
 
         if reldate_type == "date":
-            return date_field.date(order.event)
+            return make_aware(
+                datetime.datetime.combine(date_field.date(order.event), datetime.time(hour=23, minute=59, second=59)),
+                order.event.timezone,
+            )
         elif reldate_type == "datetime":
             return date_field.datetime(order.event)
 
@@ -708,47 +760,51 @@ class ProcessCancellationRule(CancellationRule):
 
         return date_field.datetime(base_event)
 
+    def _evaluate_cancellation_moment(self, order: Order, check_ts: datetime.datetime) -> List[CheckResult]:
+        with ensure_no_queries():
+            check_results: List[CheckResult] = []
+
+            for param in ('allowed_until', 'except_after'):
+                value: RelativeDateWrapper | None = getattr(self, param, None)
+                if value is not None:
+                    if check_ts <= self._resolve_date_field(value, order, self.subevent_variant):
+                        check_results.append(
+                            CheckResult(
+                                id=f"process_rule_{self.id}_{param}",
+                                reason=_("{} is earlier than {} cutoff {}".format(check_ts, param, value)),
+                                cancellation_possible=True
+                            )
+                        )
+                    else:
+                        check_results.append(
+                            CheckResult(
+                                id=f"process_rule_{self.id}_{param}",
+                                reason=_("{} is later than {} cutoff {}".format(check_ts, param, value)),
+                                cancellation_possible=False
+                            )
+                        )
+                else:
+                    check_results.append(
+                        CheckResult(
+                            id=f"process_rule_{self.id}_{param}",
+                            reason=_("No {} limit defined".format(param)),
+                            cancellation_possible=True
+                        )
+                    )
+            return check_results
+
     def evaluate_process_rule(self, order: Order, _keep: Set[OrderPosition], position_fees: Decimal,
-                              check_ts: datetime.datetime) -> \
-            Optional[RuleResult]:
+                              check_ts: datetime.datetime) -> Optional[RuleResult]:
         fee_mode = self.fee_mode
         if fee_mode not in (FeeType.MINIMUM, FeeType.ADDITIONAL):
             raise ValueError(f"Unexpected fee_mode: {fee_mode!r}")
 
-        check_results: List[CheckResult] = []
+        check_results: List[CheckResult] = self._evaluate_cancellation_moment(order, check_ts)
 
-        for param in ('allowed_until', 'except_after'):
-            value: RelativeDateWrapper | None = getattr(self, param, None)
-            if value is not None:
-                if check_ts <= self._resolve_date_field(value, order, self.subevent_variant):
-                    check_results.append(
-                        CheckResult(
-                            id=f"process_rule_{self.id}",
-                            reason=_("{} is earlier than {} cutoff {}".format(check_ts, param, value)),
-                            cancellation_possible=True
-                        )
-                    )
-                else:
-                    check_results.append(
-                        CheckResult(
-                            id=f"process_rule_{self.id}",
-                            reason=_("{} is later than {} cutoff {}".format(check_ts, param, value)),
-                            cancellation_possible=False
-                        )
-                    )
-            else:
-                check_results.append(
-                    CheckResult(
-                        id=f"process_rule_{self.id}",
-                        reason=_("No {} limit defined".format(param)),
-                        cancellation_possible=True
-                    )
-                )
-
-            return RuleResult.from_process_fee(
-                id=self.id,
-                partial_results=check_results,
-                fee_type=fee_mode,
-                absolute_fee=self.fee_cancellation_process,
-                reference_price=position_fees,
-            )
+        return RuleResult.from_process_fee(
+            id=self.id,
+            partial_results=check_results,
+            fee_type=fee_mode,
+            absolute_fee=self.fee_cancellation_process,
+            reference_price=position_fees,
+        )

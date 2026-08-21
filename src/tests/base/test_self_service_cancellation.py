@@ -210,6 +210,27 @@ class TestPositionResult:
         assert pos_res.cancellation_possible == cancellation_possible
         assert pos_res.fee_value == fee
 
+    def test_position_with_no_rule_results_does_not_raise(self):
+        # A position that has check results but no matching rule results at all
+        # must not blow up min() on [].
+        check_results = {1: [make_check_result(True)]}
+        rule_results = {1: []}
+
+        pos_res = PositionResult(position_check_results=check_results, position_rule_results=rule_results)
+
+        assert pos_res.cancellation_possible is True
+        assert pos_res.fee_value == Decimal(0)
+
+    def test_mixed_positions_one_without_rule_results(self):
+        # One position has rules, another has none.
+        # The empty one shouldn't crash the overall evaluation or affect the other.
+        check_results = {1: [make_check_result(True)], 2: []}
+        rule_results = {1: [make_rule_result(Decimal(10), possible=True)], 2: []}
+
+        pos_res = PositionResult(position_check_results=check_results, position_rule_results=rule_results)
+
+        assert pos_res.cancellation_possible is True
+        assert pos_res.fee_value == Decimal(10)
 
 class TestProcessResults:
     @pytest.mark.parametrize(
@@ -233,6 +254,27 @@ class TestProcessResults:
         pos_res = ProcessResult(process_check_results=check_results, process_rule_results=rule_results, )
         assert pos_res.cancellation_possible == cancellation_possible
         assert pos_res.fee_value == fee
+
+    def test_process_with_no_rules_configured_does_not_raise(self):
+        # No ProcessCancellationRule configured for the event at all: process_rule_results == [].
+        # Should be treated as "no process fee, doesn't block cancellation", not crash.
+        check_results = [make_check_result(True)]
+        rule_results = []
+
+        proc_res = ProcessResult(process_check_results=check_results, process_rule_results=rule_results)
+
+        assert proc_res.cancellation_possible is True
+        assert proc_res.fee_value == Decimal("0.00")
+
+    def test_process_with_no_rules_but_failing_check(self):
+        # Empty rule_results shouldn't mask a failing check-based result.
+        check_results = [make_check_result(False)]
+        rule_results = []
+
+        proc_res = ProcessResult(process_check_results=check_results, process_rule_results=rule_results)
+
+        assert proc_res.cancellation_possible is False
+        assert proc_res.fee_value == Decimal("0.00")
 
 
 class TestCancellationRule:
@@ -280,13 +322,7 @@ class TestCancellationRule:
             ),
         ]
     )
-    def test_cancellation_rule_collect_checks(
-            self,
-            received,
-            position_checks,
-            process_checks,
-            raises
-    ):
+    def test_cancellation_rule_collect_checks(self, received, position_checks, process_checks, raises):
         event = cast(Event, cast(object, {}))
 
         def send_fn(_event):
@@ -510,7 +546,7 @@ class TestCancellationRule:
                         case _:
                             raise ValueError("Variant not known")
 
-    class TestPositionCancellationRule:
+    class TestPositionMatchesRule:
         @pytest.fixture
         def items(self, event):
             return [event.items.create(
@@ -592,10 +628,18 @@ class TestCancellationRule:
                 for lv in limit_variations:
                     r.limit_variations.add(variations[lv])
 
-                rule = PositionCancellationRule.objects.get(id=r.id)
+                rule = PositionCancellationRule.objects.with_rule_data().get(id=r.id)
                 with ensure_no_queries():
                     res = rule._position_matches_rule(op)
-                assert matches == res.cancellation_possible
+                if not matches:
+                    assert res is None
+                else:
+                    assert matches == res.cancellation_possible
+
+    class TestEvaluateCancellationMoment:
+        @pytest.fixture(params=["position", "process"])
+        def rule_type_variants(self, request):
+            return request.param
 
         @pytest.mark.django_db
         @pytest.mark.parametrize(
@@ -610,20 +654,72 @@ class TestCancellationRule:
 
             ]
         )
-        def test_evaluate_cancellation_moment(self, event, order_position, attr, delta, allowed):
+        def test_evaluate_cancellation_moment(self, event, order, order_position, rule_type_variants, attr, delta,
+                                              allowed):
             reference_ts = datetime(2020, 10, 1, hour=0, minute=0, second=0, microsecond=0, tzinfo=UTC)
 
             with scope(organizer=event.organizer):
+                if rule_type_variants == 'position':
+                    rule_object = PositionCancellationRule
+                    r = rule_object.objects.create(event=event, all_products=True)
+                elif rule_type_variants == "process":
+                    rule_object = ProcessCancellationRule
+                    r = rule_object.objects.create(event=event, all_products=True, fee_mode=FeeType.MINIMUM)
+                else:
+                    raise ValueError("Unknown cancellation rule type: {}".format(rule_type_variants))
 
-                r = PositionCancellationRule.objects.create(event=event, all_products=True)
+
                 setattr(r, attr, RelativeDateWrapper(reference_ts))
                 r.save()
-                rule = PositionCancellationRule.objects.get(id=r.id)
+                rule = rule_object.objects.get(id=r.id)
 
                 with ensure_no_queries():
-                    res = rule._evaluate_cancellation_moment(position=order_position,
-                                                             check_ts=reference_ts + delta)
-                assert len(res) == 2
-                for r in res:
-                    if attr in r.id:
-                        assert r.cancellation_possible == allowed
+                    if rule_type_variants == 'position':
+                        res = rule._evaluate_cancellation_moment(position=order_position, check_ts=reference_ts + delta)
+                    elif rule_type_variants == "process":
+                        res = rule._evaluate_cancellation_moment(order=order,
+                                                                 check_ts=reference_ts + delta)
+                    else:
+                        raise ValueError("Unknown cancellation rule type: {}".format(rule_type_variants))
+
+            assert len(res) == 2
+            for r in res:
+                if attr in r.id:
+                    assert r.cancellation_possible == allowed
+
+    class TestEvaluate:
+        # TODO add more elaborate test cases
+
+        @pytest.mark.django_db
+        def test_evaluate_simple_e2e(self, event, order, order_position):
+            reference_ts = datetime(2020, 10, 1, hour=0, minute=0, second=0, microsecond=0, tzinfo=UTC)
+
+            check_ts = reference_ts - timedelta(hours=1)
+
+            PositionCancellationRule.objects.create(event=event, all_products=True,
+                                                    fee_absolute_per_position=Decimal("10.00"),
+                                                    allowed_until=RelativeDateWrapper(reference_ts))
+            PositionCancellationRule.objects.create(event=event, all_products=True,
+                                                    fee_absolute_per_position=Decimal("10.00"),
+                                                    allowed_until=RelativeDateWrapper(reference_ts - timedelta(days=1)))
+            ProcessCancellationRule.objects.create(event=event, fee_cancellation_process=Decimal("10.00"),
+                                                   fee_mode=FeeType.ADDITIONAL,
+                                                   allowed_until=RelativeDateWrapper(reference_ts))
+            ProcessCancellationRule.objects.create(event=event, fee_cancellation_process=Decimal("10.00"),
+                                                   fee_mode=FeeType.ADDITIONAL,
+                                                   allowed_until=RelativeDateWrapper(reference_ts - timedelta(days=1)))
+
+            with scope(organizer=event.organizer):
+                res = CancellationRule.evaluate(event, order, keep=set(), check_ts=check_ts)
+
+            assert res.cancellation_possible == True
+
+            position_rule_results = res.position_result.position_rule_results[1]
+            assert len(position_rule_results) == 2
+            assert position_rule_results[0].cancellation_possible == True
+            assert position_rule_results[1].cancellation_possible == False
+
+            process_rule_results = res.process_result.process_rule_results
+            assert len(process_rule_results) == 2
+            assert process_rule_results[0].cancellation_possible == True
+            assert process_rule_results[1].cancellation_possible == False
