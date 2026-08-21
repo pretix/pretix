@@ -35,6 +35,8 @@ def event():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), live=True,
         plugins='pretix.plugins.sendmail,tests.testdummy',
+        location='Foo City',
+        date_admission=now().replace(hour=11, minute=30),
     )
     return event
 
@@ -81,7 +83,12 @@ def event_series(event):
 
 @pytest.fixture
 def subevent1(event_series):
-    se1 = event_series.subevents.create(name='Meow', date_from=now() + datetime.timedelta(days=1))
+    se1 = event_series.subevents.create(
+        name='Meow',
+        date_from=now() + datetime.timedelta(days=1),
+        location='Meow Town',
+        date_admission=now().replace(hour=10, minute=0),
+    )
     return se1
 
 

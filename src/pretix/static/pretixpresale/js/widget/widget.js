@@ -262,7 +262,7 @@ Vue.component('availbox', {
     },
     mounted: function() {
         if (!this.$root.cart_exists && this.$root.itemnum === 1 && (!this.$root.categories[0].items[0].has_variations || this.$root.categories[0].items[0].variations.length < 2) && !this.$root.has_seating_plan ? 1 : 0) {
-            this.$refs.quantity.value = 1;    
+            this.$refs.quantity.value = 1;
             if (this.order_max === 1) {
                 this.$refs.quantity.checked = true;
             }
@@ -310,7 +310,7 @@ Vue.component('availbox', {
             return this.avail[0] < 100 && this.$root.waiting_list_enabled && this.item.allow_waitinglist;
         },
         waiting_list_url: function () {
-            var u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?locale=' + lang + '&item=' + this.item.id 
+            var u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?locale=' + lang + '&item=' + this.item.id
             if (this.item.has_variations) {
                 u += '&var=' + this.variation.id
             }
@@ -345,7 +345,7 @@ Vue.component('pricebox', {
         + '       :min="display_price_nonlocalized" :value="suggested_price_nonlocalized" :name="field_name"'
         + '       step="any" v-bind:aria-labelledby="aria_labelledby" v-bind:aria-describedby="price_desc_id">'
         + '</div>'
-        + '<small class="pretix-widget-pricebox-tax" :id="price_desc_id" v-if="price.rate != \'0.00\' && price.gross != \'0.00\'">'
+        + '<small class="pretix-widget-pricebox-tax" :id="price_desc_id" v-if="price.rate != \'0\' && price.gross != \'0.00\'">'
         + '{{ taxline }}'
         + '</small>'
         + '</div>'),
@@ -534,7 +534,7 @@ Vue.component('item', {
         + '<div :id="item_price_id" class="pretix-widget-item-price-col">'
         + '<pricebox :price="item.price" :free_price="item.free_price" v-if="!item.has_variations && $root.showPrices"'
         + '          :mandatory_priced_addons="item.mandatory_priced_addons" :suggested_price="item.suggested_price"'
-        + '          :field_name="\'price_\' + item.id" :original_price="item.original_price">'
+        + '          :field_name="\'price_\' + item.id" :original_price="item.original_price" :item_id="item.id">'
         + '</pricebox>'
         + '<div class="pretix-widget-pricebox" v-if="item.has_variations && $root.showPrices" v-html="pricerange"></div>'
         + '<span v-if="!$root.showPrices">&nbsp;</span>'
@@ -863,7 +863,7 @@ var shared_alert_fragment = (
     '<dialog :class="alertClasses" role="alertdialog" v-bind:aria-labelledby="$root.parent.html_id + \'-error-message\'" @close="errorClose">'
     + '<form class="pretix-widget-alert-box" method="dialog">'
     + '<p :id="$root.parent.html_id + \'-error-message\'">{{ $root.error_message }}</p>'
-    + '<p><button v-if="$root.error_url_after" value="continue" autofocus v-bind:aria-describedby="$root.parent.html_id + \'-error-message\'">' + strings.continue + '</button>'
+    + '<p><button v-if="$root.error_url_after" @click="errorContinue" autofocus v-bind:aria-describedby="$root.parent.html_id + \'-error-message\'">' + strings.continue + '</button>'
     + '<button v-else autofocus v-bind:aria-describedby="$root.parent.html_id + \'-error-message\'">' + strings.close + '</button></p>'
     + '</form>'
     + '<transition name="bounce">'
@@ -952,7 +952,7 @@ Vue.component('pretix-overlay', {
         cancelBlockedClasses: function () {
             return {
                 'pretix-widget-visibility-hidden': !this.cancelBlocked,
-            }  
+            }
         },
     },
     mounted () {
@@ -974,18 +974,17 @@ Vue.component('pretix-overlay', {
             this.$root.lightbox.loading = false;
         },
         errorClose: function (e) {
-            var dialog = e.target;
-            if (dialog.returnValue == "continue" && this.$root.error_url_after) {
-                if (this.$root.error_url_after_new_tab) {
-                    window.open(this.$root.error_url_after);
-                } else if (this.$root.overlay) {
-                    this.$root.overlay.frame_src = this.$root.error_url_after;
-                    this.$root.frame_loading = true;
-                }
-            }
             this.$root.error_message = null;
             this.$root.error_url_after = null;
             this.$root.error_url_after_new_tab = false;
+        },
+        errorContinue: function () {
+            if (this.$root.error_url_after_new_tab) {
+                window.open(this.$root.error_url_after);
+            } else if (this.$root.overlay) {
+                this.$root.overlay.frame_src = this.$root.error_url_after;
+                this.$root.frame_loading = true;
+            }
         },
         close: function (e) {
             if (this.$root.frame_loading) {

@@ -2008,7 +2008,10 @@ class OrderChange(OrderView):
             'issued_gift_cards',
             'addons',
         ).annotate(
-            _seat_allowed=Exists(SeatCategoryMapping.objects.filter(subevent=OuterRef("subevent"), product=OuterRef("item")))
+            _seat_allowed=Exists(SeatCategoryMapping.objects.filter(
+                subevent=OuterRef("subevent") if self.request.event.has_subevents else None,
+                product=OuterRef("item"))
+            )
         ))
         for p in positions:
             p.form = OrderPositionChangeForm(
@@ -2225,6 +2228,10 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
     template_name = 'pretixcontrol/order/change_questions.html'
     only_user_visible = False
     all_optional = True
+
+    @property
+    def order_question_container(self):
+        return self.order
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -2587,7 +2594,11 @@ class AnswerDownload(EventPermissionRequiredMixin, OrderViewMixin, ListView):
         answid = kwargs.get('answer')
         token = request.GET.get('token', '')
 
-        answer = get_object_or_404(QuestionAnswer, orderposition__order=self.order, id=answid)
+        answer = get_object_or_404(
+            QuestionAnswer,
+            Q(orderposition__order=self.order) | Q(order=self.order),
+            id=answid
+        )
         if not answer.file:
             raise Http404()
         if not check_token(request, answer, token):
@@ -2597,7 +2608,7 @@ class AnswerDownload(EventPermissionRequiredMixin, OrderViewMixin, ListView):
         resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
         resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
             self.request.event.slug.upper(), self.order.code,
-            answer.orderposition.positionid,
+            answer.orderposition.positionid if answer.orderposition else '',
             os.path.basename(answer.file.name).split('.', 1)[1]
         )
         return resp

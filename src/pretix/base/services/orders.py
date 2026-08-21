@@ -77,8 +77,8 @@ from pretix.base.models.cancellation import (
     CancellationCheck, CheckResult, CheckTypes, PositionSet,
 )
 from pretix.base.models.orders import (
-    BlockedTicketSecret, InvoiceAddress, OrderFee, OrderRefund,
-    generate_secret,
+    BlockedTicketSecret, CheckoutSession, InvoiceAddress, OrderFee,
+    OrderRefund, generate_secret,
 )
 from pretix.base.models.organizer import SalesChannel, TeamAPIToken
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
@@ -1034,7 +1034,8 @@ def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: Li
 def _create_order(event: Event, *, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_requests: List[dict], sales_channel: SalesChannel, locale: str=None,
                   address: InvoiceAddress=None, meta_info: dict=None, shown_total=None,
-                  customer=None, valid_if_pending=False, api_meta: dict=None, tax_rounding_mode=None):
+                  customer=None, valid_if_pending=False, api_meta: dict=None, tax_rounding_mode=None,
+                  cart_id: str=None):
     payments = []
 
     try:
@@ -1117,6 +1118,14 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
     if meta_info:
         for msg in meta_info.get('confirm_messages', []):
             order.log_action('pretix.event.order.consent', data={'msg': msg})
+    if cart_id:
+        try:
+            session = CheckoutSession.objects.get(event=event, cart_id=cart_id)
+        except CheckoutSession.DoesNotExist:
+            pass
+        else:
+            session.answers.update(order=order, checkoutsession=None)
+            session.delete()
 
     order_placed.send(event, order=order, bulk=False)
     return order, payments
@@ -1164,7 +1173,7 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
 
 def _perform_order(event: Event, payment_requests: List[dict], position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None, sales_channel: str='web',
-                   shown_total=None, customer=None, api_meta: dict=None, tax_rounding_mode=None):
+                   shown_total=None, customer=None, api_meta: dict=None, tax_rounding_mode=None, cart_id: str=None):
     for p in payment_requests:
         p['pprov'] = event.get_payment_providers(cached=True)[p['provider']]
         if not p['pprov']:
@@ -1271,6 +1280,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
                 valid_if_pending=valid_if_pending,
                 api_meta=api_meta,
                 tax_rounding_mode=tax_rounding_mode,
+                cart_id=cart_id,
             )
 
             try:
@@ -3175,12 +3185,12 @@ class OrderChangeManager:
 def perform_order(self, event: Event, payments: List[dict], positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
                   sales_channel: str='web', shown_total=None, customer=None, override_now_dt: datetime=None,
-                  api_meta: dict=None):
+                  api_meta: dict=None, cart_id: str=None):
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
             try:
                 return _perform_order(event, payments, positions, email, locale, address, meta_info,
-                                      sales_channel, shown_total, customer, api_meta)
+                                      sales_channel, shown_total, customer, api_meta, cart_id=cart_id)
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):

@@ -837,3 +837,62 @@ def test_webhook_pending_payment(env, client, monkeypatch):
     order.refresh_from_db()
     with scopes_disabled():
         assert order.payments.first().state == OrderPayment.PAYMENT_STATE_PENDING
+
+
+@pytest.mark.django_db
+def test_webhook_capture_declined(env, client, monkeypatch):
+    order = env[1]
+    order.status = Order.STATUS_PENDING
+    order.save()
+    with scopes_disabled():
+        order.payments.update(state=OrderPayment.PAYMENT_STATE_CREATED)
+
+    pp_order = Result(get_test_order_review_pending())
+    mock_orders_get_request = MagicMock(return_value=pp_order)
+    monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", mock_orders_get_request)
+    monkeypatch.setattr("pretix.plugins.paypal2.payment.PaypalMethod.init_api", init_api)
+    with scopes_disabled():
+        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
+                                              reference="806440346Y391300T")
+
+        assert order.payments.first().state == OrderPayment.PAYMENT_STATE_CREATED
+
+        client.post('/_paypal/webhook/', json.dumps(
+            {
+                "create_time": "2026-08-17T12:23:30.687Z",
+                "event_type": "PAYMENT.CAPTURE.DECLINED",
+                "event_version": "1.0",
+                "id": "WH-XXXXXXXXXXXX-XXXXXXXXX",
+                "links": [
+                    {
+                        "href": "https://api.paypal.com/v1/notifications/webhooks-events/WH-XXXXXXXXXXXX-XXXXXXXXX",
+                        "method": "GET",
+                        "rel": "self"
+                    },
+                    {
+                        "href": "https://api.paypal.com/v1/notifications/webhooks-events/WH-XXXXXXXXXXXX-XXXXXXXXX/resend",
+                        "method": "POST",
+                        "rel": "resend"
+                    }
+                ],
+                "resource": {
+                    "amount": {},
+                    "custom_id": "Order ABC-12345",
+                    "disbursement_mode": "INSTANT",
+                    "final_capture": True,
+                    "id": "806440346Y391300T",
+                    "payee": {},
+                    "seller_protection": {},
+                    "seller_receivable_breakdown": {},
+                    "status": "DECLINED",
+                    "supplementary_data": {}
+                },
+                "resource_type": "capture",
+                "resource_version": "2.0",
+                "summary": "A payment capture for € 30.0 EUR was declined."
+            }), content_type='application_json')
+
+        order = env[1]
+        order.refresh_from_db()
+        with scopes_disabled():
+            assert order.payments.first().state == OrderPayment.PAYMENT_STATE_FAILED

@@ -65,6 +65,7 @@ from pretix.api.serializers.item import (
     ItemVariationSerializer,
 )
 from pretix.base.forms import I18nFormSet
+from pretix.base.forms.questions import get_fake_attendee_questions
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, LogEntry,
     OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
@@ -426,7 +427,7 @@ def reorder_categories(request, organizer, event):
 
 
 FakeQuestion = namedtuple(
-    'FakeQuestion', 'id question position required'
+    'FakeQuestion', 'id question position required container_type'
 )
 
 
@@ -440,85 +441,8 @@ class QuestionList(ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        questions = []
 
-        if self.request.event.settings.attendee_names_asked:
-            questions.append(
-                FakeQuestion(
-                    id='attendee_name_parts',
-                    question=_('Attendee name'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'attendee_name_parts', 0
-                    ),
-                    required=self.request.event.settings.attendee_names_required,
-                )
-            )
-
-        if self.request.event.settings.attendee_emails_asked:
-            questions.append(
-                FakeQuestion(
-                    id='attendee_email',
-                    question=_('Attendee email'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'attendee_email', 0
-                    ),
-                    required=self.request.event.settings.attendee_emails_required,
-                )
-            )
-
-        if self.request.event.settings.attendee_company_asked:
-            questions.append(
-                FakeQuestion(
-                    id='company',
-                    question=_('Company'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'company', 0
-                    ),
-                    required=self.request.event.settings.attendee_company_required,
-                )
-            )
-
-        if self.request.event.settings.attendee_addresses_asked:
-            questions.append(
-                FakeQuestion(
-                    id='street',
-                    question=_('Street'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'street', 0
-                    ),
-                    required=self.request.event.settings.attendee_addresses_required,
-                )
-            )
-            questions.append(
-                FakeQuestion(
-                    id='zipcode',
-                    question=_('ZIP code'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'zipcode', 0
-                    ),
-                    required=self.request.event.settings.attendee_addresses_required,
-                )
-            )
-            questions.append(
-                FakeQuestion(
-                    id='city',
-                    question=_('City'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'city', 0
-                    ),
-                    required=self.request.event.settings.attendee_addresses_required,
-                )
-            )
-            questions.append(
-                FakeQuestion(
-                    id='country',
-                    question=_('Country'),
-                    position=self.request.event.settings.system_question_order.get(
-                        'country', 0
-                    ),
-                    required=self.request.event.settings.attendee_addresses_required,
-                )
-            )
+        questions = get_fake_attendee_questions(self.request.event.settings)
 
         questions += list(ctx['questions'])
         questions.sort(key=lambda q: q.position)
@@ -535,14 +459,16 @@ def reorder_questions(request, organizer, event):
     except (JSONDecodeError, KeyError, ValueError):
         return HttpResponseBadRequest("expected JSON: {ids:[]}")
 
+    qs = request.event.questions.filter(container_type=request.GET['container_type'])
+
     # filter system_questions - normal questions are int/digit, system_questions strings
     custom_question_ids = [i for i in ids if i.isdigit()]
-    input_questions = list(request.event.questions.filter(id__in=custom_question_ids))
+    input_questions = list(qs.filter(id__in=custom_question_ids))
 
     if len(input_questions) != len(custom_question_ids):
         raise Http404(_("Some of the provided object ids are invalid."))
 
-    if len(input_questions) != request.event.questions.count():
+    if len(input_questions) != qs.count():
         raise Http404(_("Not all objects have been selected."))
 
     for q in input_questions:
@@ -556,18 +482,19 @@ def reorder_questions(request, organizer, event):
                 }
             )
 
-    system_question_order = {}
-    for s in ('attendee_name_parts', 'attendee_email', 'company', 'street', 'zipcode', 'city', 'country'):
-        if s in ids:
-            system_question_order[s] = ids.index(s)
-        else:
-            system_question_order[s] = -1
-    request.event.settings.system_question_order = system_question_order
-    request.event.log_action(
-        'pretix.event.settings', user=request.user, data={
-            'system_question_order': system_question_order,
-        }
-    )
+    if request.GET['container_type'] == Question.ContainerType.ORDERPOSITION:
+        system_question_order = {}
+        for s in ('attendee_name_parts', 'attendee_email', 'company', 'street', 'zipcode', 'city', 'country'):
+            if s in ids:
+                system_question_order[s] = ids.index(s)
+            else:
+                system_question_order[s] = -1
+        request.event.settings.system_question_order = system_question_order
+        request.event.log_action(
+            'pretix.event.settings', user=request.user, data={
+                'system_question_order': system_question_order,
+            }
+        )
 
     return HttpResponse()
 
@@ -805,6 +732,9 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['instance'] = Question(event=self.request.event)
+        kwargs['instance'].container_type = self.request.GET.get('container_type', Question.ContainerType.ORDERPOSITION)
+        if kwargs['instance'].container_type not in Question.ContainerType.values:
+            raise PermissionDenied
         return kwargs
 
     def get_success_url(self) -> str:

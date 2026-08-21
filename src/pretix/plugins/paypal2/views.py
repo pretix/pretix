@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 import json
 import logging
+import re
 from decimal import Decimal
 
 from django.contrib import messages
@@ -361,7 +362,13 @@ def webhook(request, *args, **kwargs):
     if event_json['resource_type'] == 'checkout-order':
         payloadid = event_json['resource']['id']
     elif event_json['resource_type'] == 'refund' or event_json['resource_type'] == 'capture':
-        payloadid = get_link(event_json['resource']['links'], 'up')['href'].split('/')[-1]
+        payloadid = get_order_id(event_json.get('resource', {}).get('links', []))
+        if payloadid is None:
+            # if we get a PAYMENT.CAPTURE.DECLINED webhook because a capture wasn't created due to
+            # violated validations, then it is labeled as a `capture` ressource_type but is in fact
+            # an `order` ressource_type as there is no `capture`. So we have to fall back
+            # See test_webhook_capture_declined for a redacted payload we've received
+            payloadid = event_json['resource']['id']
     else:
         return HttpResponse("Not interested in this resource type", status=200)
 
@@ -426,6 +433,22 @@ def webhook(request, *args, **kwargs):
     payment.info = json.dumps(sale.dict())
     payment.save()
 
+    # the captures[] of the sales object only is populated if the capture request isn't rejected.
+    # the capture request might be rejected if certain validations aren't met OR if the payment is
+    # DECLINED, nevertheless we will get a webhook informing us about "PAYMENT.CAPTURE.DECLINED".
+    # With no trace of it in `sale`.
+    # So now we have to leave our current pattern of making only decisions based upon the
+    # complete payment object (and checking whenever we receive a webhook), and instead need to fail
+    # payment directly.
+    # Otherwise we are caught in a loop:
+    # 1. We get a webhook and get `sale`
+    # 2. We see no proof of a capture attempt in `sale`
+    # 3. We call execute_payment and trigger a new "PAYMENT.CAPTURE.DECLINED" webhook, GOTO 1
+    if event_json['event_type'] == "PAYMENT.CAPTURE.DECLINED":
+        payment.fail(log_data={'status': event_json['event_type']})
+        logger.exception('PayPal Webhook PAYMENT.CAPTURE.DECLINED: {}'.format(event_json))
+        return HttpResponse(status=200)
+
     if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED and sale['status'] in ('PARTIALLY_REFUNDED', 'REFUNDED', 'COMPLETED'):
         if event_json['resource_type'] == 'refund':
             try:
@@ -473,6 +496,7 @@ def webhook(request, *args, **kwargs):
         if sale['status'] == 'COMPLETED':
             all_captures_completed = True
             any_pending_review = False
+            any_failed = None
             for purchaseunit in sale['purchase_units']:
                 for capture in purchaseunit['payments']['captures']:
                     try:
@@ -481,14 +505,19 @@ def webhook(request, *args, **kwargs):
                     except ReferencedPayPalObject.MultipleObjectsReturned:
                         pass
 
-                    if capture['status'] not in ('COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'):
+                    if capture['status'] in ('COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'):
+                        pass
+                    elif capture['status'] in ("DECLINED", "FAILED"):
                         all_captures_completed = False
-                        if capture['status_details']['reason'] == "PENDING_REVIEW":
+                        any_failed = True
+                    elif capture['status'] in ('PENDING'):
+                        all_captures_completed = False
+                        if capture.get('status_details', {}).get('reason', "") == "PENDING_REVIEW":
                             any_pending_review = True
+                    else:
+                        raise ValueError("Unknown paypal capture state: {}".format(capture['status']))
             if all_captures_completed:
                 try:
-                    payment.info = json.dumps(sale.dict())
-                    payment.save(update_fields=['info'])
                     payment.confirm()
                     prov.log_payment_duration(payment)
                 except Quota.QuotaExceededException:
@@ -496,6 +525,8 @@ def webhook(request, *args, **kwargs):
             if any_pending_review and payment.state != OrderPayment.PAYMENT_STATE_PENDING:
                 payment.state = OrderPayment.PAYMENT_STATE_PENDING
                 payment.save(update_fields=['state'])
+            if any_failed:
+                payment.fail()
         elif sale['status'] == 'APPROVED':
             try:
                 request.session['payment_paypal_oid'] = payment.info_data['id']
@@ -529,9 +560,17 @@ def isu_disconnect(request, **kwargs):
     }))
 
 
-def get_link(links, rel):
+ORDER_ID_RE = re.compile(r"/checkout/orders/([^/?]+)")
+
+
+def get_order_id(links):
     for link in links:
-        if link['rel'] == rel:
-            return link
+        if link.get('rel', "") == "up" and link.get('href', None) is not None:
+            return link['href'].split('/')[-1]
+
+    for link in links:
+        match = ORDER_ID_RE.search(link.get("href", ""))
+        if match:
+            return match.group(1)
 
     return None
