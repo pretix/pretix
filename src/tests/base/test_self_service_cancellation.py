@@ -12,7 +12,7 @@ from pretix.base.models import (
     Checkin, Event, Order, OrderPosition, Organizer,
 )
 from pretix.base.models.cancellation import (
-    CancellationCheck, CancellationRule, CheckResult, Checks, CheckTypes,
+    Cancellation, CancellationCheck, CancellationRule, CheckResult, Checks, CheckTypes,
     FeeType, PositionCancellationRule, PositionResult, ProcessCancellationRule, ProcessResult, RuleResult,
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
@@ -329,7 +329,7 @@ class TestCancellationRule:
             return [("", res) for res in received]
 
         with raises:
-            checks = CancellationRule._collect_checks(event=event, send_fn=send_fn)
+            checks = CancellationRule.collect_checks(event=event, send_fn=send_fn)
 
         for pos in process_checks:
             assert received[pos] in checks.process
@@ -343,7 +343,7 @@ class TestCancellationRule:
         def test_prefetch_no_checks_collected(self, event, order):
             checks = Checks(position=[], process=[])
             with scope(organizer=event.organizer):
-                prefetched_order = CancellationRule._prefetch_order(event, order, checks)
+                prefetched_order = CancellationRule.prefetch_order(event, order, checks)
                 assert prefetched_order.id == order.id
 
         @pytest.mark.django_db
@@ -360,7 +360,7 @@ class TestCancellationRule:
             )
 
             with scope(organizer=event.organizer):
-                prefetched_order = CancellationRule._prefetch_order(event, order, checks)
+                prefetched_order = CancellationRule.prefetch_order(event, order, checks)
                 assert prefetched_order.id == order.id
 
     class TestChecks:
@@ -372,7 +372,7 @@ class TestCancellationRule:
             keep = set()
 
             with scope(organizer=event.organizer):
-                prefetched_order = CancellationRule._prefetch_order(event, order, checks)
+                prefetched_order = CancellationRule.prefetch_order(event, order, checks)
                 with ensure_no_queries():
                     result = position_not_used_check.evaluate(prefetched_order, keep, order_position,
                                                               datetime.now(tz=UTC))
@@ -383,7 +383,7 @@ class TestCancellationRule:
                     position=order_position,
                     successful=True
                 )
-                prefetched_order = CancellationRule._prefetch_order(event, order, checks)
+                prefetched_order = CancellationRule.prefetch_order(event, order, checks)
 
                 with ensure_no_queries():
                     result = position_not_used_check.evaluate(prefetched_order, keep, order_position,
@@ -710,16 +710,16 @@ class TestCancellationRule:
                                                    allowed_until=RelativeDateWrapper(reference_ts - timedelta(days=1)))
 
             with scope(organizer=event.organizer):
-                res = CancellationRule.evaluate(event, order, keep=set(), check_ts=check_ts)
+                cancellation = Cancellation.evaluate(event, order, keep=set(), check_ts=check_ts)
 
-            assert res.cancellation_possible == True
+            assert cancellation.possible == True
 
-            position_rule_results = res.position_result.position_rule_results[1]
+            position_rule_results = cancellation.result.position_result.position_rule_results[1]
             assert len(position_rule_results) == 2
             assert position_rule_results[0].cancellation_possible == True
             assert position_rule_results[1].cancellation_possible == False
 
-            process_rule_results = res.process_result.process_rule_results
+            process_rule_results = cancellation.result.process_result.process_rule_results
             assert len(process_rule_results) == 2
             assert process_rule_results[0].cancellation_possible == True
             assert process_rule_results[1].cancellation_possible == False

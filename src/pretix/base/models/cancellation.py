@@ -1,8 +1,9 @@
 import datetime
 import operator
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from decimal import Decimal
 
+from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.timezone import make_aware
 from itertools import chain
 from typing import (
@@ -85,6 +86,11 @@ class CheckResult:
     cancellation_possible: bool
     type: Literal['check'] = field(default="check")
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "CheckResult":
+        return cls(**data)
+
+
 
 @dataclass(frozen=True)
 class RuleResult:
@@ -105,6 +111,15 @@ class RuleResult:
     fee: Decimal
 
     type: Literal['rule'] = field(default="rule")
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "RuleResult":
+        return cls(
+            id=data["id"],
+            partial_results=[CheckResult.from_dict(r) for r in data["partial_results"]],
+            fee_type=FeeType(data["fee_type"]),
+            fee=Decimal(data["fee"]),
+        )
 
     @property
     def cancellation_possible(self) -> bool:
@@ -219,6 +234,19 @@ class PositionResult:
     position_check_results: Dict[int, List[CheckResult]]
     position_rule_results: Dict[int, List[RuleResult]]
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "PositionResult":
+        return cls(
+            position_check_results={
+                int(pos_id): [CheckResult.from_dict(r) for r in results]
+                for pos_id, results in data["position_check_results"].items()
+            },
+            position_rule_results={
+                int(pos_id): [RuleResult.from_dict(r) for r in results]
+                for pos_id, results in data["position_rule_results"].items()
+            },
+        )
+
     @property
     def cancellation_possible(self) -> bool:
         def ok(results: List[CheckResult] | List[RuleResult]) -> bool:
@@ -248,6 +276,13 @@ class ProcessResult:
     process_check_results: List[CheckResult]
     process_rule_results: List[RuleResult]
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "ProcessResult":
+        return cls(
+            process_check_results=[CheckResult.from_dict(r) for r in data["process_check_results"]],
+            process_rule_results=[RuleResult.from_dict(r) for r in data["process_rule_results"]],
+        )
+
     @property
     def cancellation_possible(self) -> bool:
         results: List[CheckResult | RuleResult] = [*self.process_check_results]
@@ -270,17 +305,144 @@ class CancellationResult:
     position_result: PositionResult
     process_result: ProcessResult
 
-    order: Order
-    keep: Set[OrderPosition]
-    check_ts: datetime.datetime
-
-    # TODO add state choice
-    # TODO make this a model
-
+    @classmethod
+    def from_dict(cls, data: dict) -> "CancellationResult":
+        return cls(
+            position_result=PositionResult.from_dict(data["position_result"]),
+            process_result=ProcessResult.from_dict(data["process_result"]),
+        )
 
     @property
     def cancellation_possible(self) -> bool:
         return self.position_result.cancellation_possible and self.process_result.cancellation_possible
+
+
+class Cancellation(models.Model):
+    REQUESTED: Final = "REQUESTED"
+    PERFORMED: Final = "PERFORMED"
+
+    CANCELLATION_STATE = (
+        (REQUESTED, _("Requested")),
+        (PERFORMED, _("Performed")),
+    )
+
+    event = models.ForeignKey(
+        Event,
+        verbose_name=_("Event"),
+        related_name="cancellations",
+        on_delete=models.CASCADE
+    )
+    order = models.ForeignKey(
+        Order,
+        verbose_name=_("Order"),
+        related_name="cancellations",
+        on_delete=models.CASCADE
+    )
+    keep = models.ManyToManyField(
+        to=OrderPosition,
+        verbose_name=_("Positions to keep"),
+    )
+    evaluation_ts = models.DateTimeField(
+        verbose_name=_("Cancellation datetime"),
+        auto_now_add=True,
+    )
+
+    cancellation_state = models.CharField(
+        max_length=8,
+        choices=CANCELLATION_STATE,
+        default=REQUESTED,
+        verbose_name=_("State of the cancellation"),
+    )
+
+    _result = models.JSONField(default=dict, db_column="result", encoder=DjangoJSONEncoder)
+
+    @property
+    def result(self) -> CancellationResult:
+        return CancellationResult.from_dict(self._result)
+
+    @result.setter
+    def result(self, value: CancellationResult):
+        if not isinstance(value, CancellationResult):
+            raise TypeError("result must be a CancellationResult instance")
+        if self._result:
+            raise ValueError("result is write-once and has already been set")
+        self._result = asdict(value)
+
+    @property
+    def possible(self) -> bool:
+        return self.result.cancellation_possible
+
+    @staticmethod
+    def evaluate(event: Event, order: Order, keep: Set[OrderPosition],
+                 check_ts: datetime.datetime) -> "Cancellation":
+
+        # TODO check that all keep entries belong to order
+        # TODO exclude cancelled positions
+
+        # collect all checks, position_rules and process_rules that are applicable
+        checks = CancellationRule.collect_checks(event=event)
+        position_rules: QuerySet[PositionCancellationRule] = PositionCancellationRule.objects.filter(
+            event=event).with_rule_data().all()
+        process_rules: QuerySet[ProcessCancellationRule] = ProcessCancellationRule.objects.filter(
+            event=event).with_rule_data().all()
+
+        order = CancellationRule.prefetch_order(event, order, checks)
+
+        # keep track of all decisions so we can explain them in the logs
+        position_check_results: Dict[int, List[CheckResult]] = {}
+        position_rule_results: Dict[int, List[RuleResult]] = {}
+
+        # perform all position checks and position rules
+        for position in order.positions.all():
+            position_check_results[position.id] = []
+            position_rule_results[position.id] = []
+
+            # skip this position if customer doesn't want to cancel
+            if position in keep:
+                continue
+
+            # evaluate the system/plugin checks for the position
+            for check in checks.position:
+                position_check_results[position.id].append(
+                    check.evaluate(order=order, keep=keep, position=position, check_ts=check_ts))
+
+            # evaluate all customer specified rules for this position
+            for rule in position_rules:
+                result = rule.evaluate_position_rule(order, keep, position, check_ts)
+                if result is not None:
+                    position_rule_results[position.id].append(result)
+
+        position_results = PositionResult(position_check_results=position_check_results,
+                                          position_rule_results=position_rule_results)
+
+        # we need the current fee_value to select the cheapest process rule
+        temp_position_fees = position_results.fee_value
+
+        # again keep track of all decisions so we can explain them in the logs
+        process_check_results: List[CheckResult] = []
+        process_rule_results: List[RuleResult] = []
+
+        # evaluate all system/plugin provided checks for the cancellation process
+        for check in checks.process:
+            process_check_results.append(check.evaluate(order=order, keep=keep, position=None, check_ts=check_ts))
+
+        # evaluate all customer specified rules for the cancellation process
+        for rule in process_rules:
+            result = rule.evaluate_process_rule(order, keep, temp_position_fees, check_ts)
+            if result is not None:
+                process_rule_results.append(result)
+
+        process_result = ProcessResult(process_check_results=process_check_results,
+                                       process_rule_results=process_rule_results)
+
+        res = CancellationResult(position_result=position_results, process_result=process_result)
+
+        c = Cancellation(event=event, order=order, result=res, evaluation_ts=check_ts)
+        c.save()
+        c.keep.add(*keep)
+
+        return c
+
 
     def prepare(self):
         # TODO: store the cancellation id in the session storage
@@ -295,6 +457,20 @@ def _send_self_service_cancellation_checks(event: Event) -> List[Tuple[Any, Any]
     return self_service_cancellation_checks.send(sender=event)
 
 
+class CancellationRuleQuerySet(models.QuerySet):
+    def with_rule_data(self):
+        model = self.model
+        qs = self.prefetch_related(*[p() for p in model.rule_prefetches])
+        if model.rule_related_selects:
+            qs = qs.select_related(*model.rule_related_selects)
+        return qs
+
+
+class CancellationRuleManager(models.Manager.from_queryset(CancellationRuleQuerySet)):
+    check_type: ClassVar[CheckTypes]
+
+    def get_queryset(self):
+        return super().get_queryset().filter(type=self.check_type).order_by("pk")
 
 class CancellationRule(models.Model):
     EARLIEST: Final = "EARLIEST"
@@ -391,7 +567,7 @@ class CancellationRule(models.Model):
 
 
     @staticmethod
-    def _collect_checks(event: Event, send_fn: Callable[
+    def collect_checks(event: Event, send_fn: Callable[
         [Event], List[Tuple[Any, Any]]] = _send_self_service_cancellation_checks) -> Checks:
         position_checks: List[CancellationCheck] = []
         process_checks: List[CancellationCheck] = []
@@ -415,7 +591,7 @@ class CancellationRule(models.Model):
         return Checks(position=position_checks, process=process_checks)
 
     @staticmethod
-    def _prefetch_order(event: Event, order: Order, checks: Checks) -> Order:
+    def prefetch_order(event: Event, order: Order, checks: Checks) -> Order:
         prefetches = [pref() for pref in [*checks.prefetches,
                                           *PositionCancellationRule.prefetches,
                                           *ProcessCancellationRule.prefetches]]
@@ -431,72 +607,28 @@ class CancellationRule(models.Model):
         return qs.get(event=event, id=order.id)
 
     @staticmethod
-    def evaluate(event: Event, order: Order, keep: Set[OrderPosition],
-                 check_ts: datetime.datetime) -> "CancellationResult":
+    def _resolve_date_field_common(
+            date_field: RelativeDateWrapper,
+            order: Order,
+            resolve_subevent: Callable[[Any], Any],
+    ) -> datetime.date | datetime.datetime:
+        reldate_type = date_field.choice
 
-        # TODO check that all keep entries belong to order
-        # TODO exclude cancelled positions
+        if reldate_type == "date":
+            return make_aware(
+                datetime.datetime.combine(date_field.date(order.event), datetime.time(hour=23, minute=59, second=59)),
+                order.event.timezone,
+            )
+        elif reldate_type == "datetime":
+            return date_field.datetime(order.event)
 
-        # collect all checks, position_rules and process_rules that are applicable
-        checks = CancellationRule._collect_checks(event=event)
-        position_rules: QuerySet[PositionCancellationRule] = PositionCancellationRule.objects.filter(
-            event=event).with_rule_data().all()
-        process_rules: QuerySet[ProcessCancellationRule] = ProcessCancellationRule.objects.filter(
-            event=event).with_rule_data().all()
+        if reldate_type.base == "order":
+            return date_field.datetime(order)
 
-        order = CancellationRule._prefetch_order(event, order, checks)
+        if not order.event.has_subevents:
+            return date_field.datetime(order.event)
 
-
-        # keep track of all decisions so we can explain them in the logs
-        position_check_results: Dict[int, List[CheckResult]] = {}
-        position_rule_results: Dict[int, List[RuleResult]] = {}
-
-        # perform all position checks and position rules
-        for position in order.positions.all():
-            position_check_results[position.id] = []
-            position_rule_results[position.id] = []
-
-            # skip this position if customer doesn't want to cancel
-            if position in keep:
-                continue
-
-            # evaluate the system/plugin checks for the position
-            for check in checks.position:
-                position_check_results[position.id].append(
-                    check.evaluate(order=order, keep=keep, position=position, check_ts=check_ts))
-
-            # evaluate all customer specified rules for this position
-            for rule in position_rules:
-                result = rule.evaluate_position_rule(order, keep, position, check_ts)
-                if result is not None:
-                    position_rule_results[position.id].append(result)
-
-        position_results = PositionResult(position_check_results=position_check_results,
-                                          position_rule_results=position_rule_results)
-
-        # we need the current fee_value to select the cheapest process rule
-        temp_position_fees = position_results.fee_value
-
-        # again keep track of all decisions so we can explain them in the logs
-        process_check_results: List[CheckResult] = []
-        process_rule_results: List[RuleResult] = []
-
-        # evaluate all system/plugin provided checks for the cancellation process
-        for check in checks.process:
-            process_check_results.append(check.evaluate(order=order, keep=keep, position=None, check_ts=check_ts))
-
-        # evaluate all customer specified rules for the cancellation process
-        for rule in process_rules:
-            result = rule.evaluate_process_rule(order, keep, temp_position_fees, check_ts)
-            if result is not None:
-                process_rule_results.append(result)
-
-        process_result = ProcessResult(process_check_results=process_check_results,
-                                       process_rule_results=process_rule_results)
-
-        return CancellationResult(position_result=position_results, process_result=process_result,
-                                  check_ts=check_ts, order=order, keep=keep)
-
+        return date_field.datetime(resolve_subevent(reldate_type))
 
 
     def clean(self):
@@ -531,17 +663,10 @@ class CancellationRule(models.Model):
             raise ValidationError(errors)
 
 
-class PositionCancellationRuleQuerySet(models.QuerySet):
-    def with_rule_data(self):
-        qs = self.prefetch_related(*[p() for p in PositionCancellationRule.rule_prefetches])
-        if PositionCancellationRule.rule_related_selects:
-            qs = qs.select_related(*PositionCancellationRule.rule_related_selects)
-        return qs
+class PositionCancellationRuleManager(CancellationRuleManager):
+    check_type = CheckTypes.POSITION
 
 
-class PositionCancellationRuleManager(models.Manager.from_queryset(PositionCancellationRuleQuerySet)):
-    def get_queryset(self):
-        return super().get_queryset().filter(type=CheckTypes.POSITION).order_by("pk")
 
 
 class PositionCancellationRule(CancellationRule):
@@ -596,23 +721,9 @@ class PositionCancellationRule(CancellationRule):
     @staticmethod
     def _resolve_date_field(date_field: RelativeDateWrapper, order: Order,
                             position: OrderPosition) -> datetime.date | datetime.datetime:
-        reldate_type = date_field.choice
-
-        if reldate_type == "date":
-            return make_aware(
-                datetime.datetime.combine(date_field.date(order.event), datetime.time(hour=23, minute=59, second=59)),
-                order.event.timezone,
-            )
-        elif reldate_type == "datetime":
-            return date_field.datetime(order.event)
-
-        if reldate_type.base == "order":
-            return date_field.datetime(order)
-
-        if not order.event.has_subevents:
-            return date_field.datetime(order.event)
-
-        return date_field.datetime(position.subevent)
+        return CancellationRule._resolve_date_field_common(
+            date_field, order, resolve_subevent=lambda _reldate_type: position.subevent
+        )
 
     def _evaluate_cancellation_moment(self, position: OrderPosition, check_ts: datetime.datetime) -> List[CheckResult]:
         with ensure_no_queries():
@@ -679,17 +790,8 @@ class PositionCancellationRule(CancellationRule):
             )
 
 
-class ProcessCancellationRuleQuerySet(models.QuerySet):
-    def with_rule_data(self):
-        qs = self.prefetch_related(*[p() for p in ProcessCancellationRule.rule_prefetches])
-        if ProcessCancellationRule.rule_related_selects:
-            qs = qs.select_related(*ProcessCancellationRule.rule_related_selects)
-        return qs
-
-
-class ProcessCancellationRuleManager(models.Manager.from_queryset(ProcessCancellationRuleQuerySet)):
-    def get_queryset(self):
-        return super().get_queryset().filter(type=CheckTypes.PROCESS).order_by("pk")
+class ProcessCancellationRuleManager(CancellationRuleManager):
+    check_type = CheckTypes.PROCESS
 
 
 class ProcessCancellationRule(CancellationRule):
@@ -719,46 +821,29 @@ class ProcessCancellationRule(CancellationRule):
     @staticmethod
     def _resolve_date_field(date_field: RelativeDateWrapper, order: Order,
                             mode: Literal["EARLIEST", "LATEST"] | str) -> datetime.date | datetime.datetime:
-        reldate_type = date_field.choice
-
         if mode not in ('EARLIEST', 'LATEST'):
             raise ValidationError('Mode is invalid')
-
-        if reldate_type == "date":
-            return make_aware(
-                datetime.datetime.combine(date_field.date(order.event), datetime.time(hour=23, minute=59, second=59)),
-                order.event.timezone,
-            )
-        elif reldate_type == "datetime":
-            return date_field.datetime(order.event)
-
-        if reldate_type.base == "order":
-            return date_field.datetime(order)
-
-        if not order.event.has_subevents:
-            return date_field.datetime(order.event)
 
         comparators = {
             "EARLIEST": operator.lt,
             "LATEST": operator.gt,
         }
-
         compare = comparators[mode]
-        base_event = order.event
-        base_value: None | datetime.date | datetime.date = None
 
-        for pos in order.positions.all():
-            e = pos.subevent if pos.subevent else pos.event
-            value = getattr(e, reldate_type.attribute)
+        def resolve_subevent(reldate_type):
+            base_event = order.event
+            base_value: None | datetime.date = None
+            for pos in order.positions.all():
+                e = pos.subevent if pos.subevent else pos.event
+                value = getattr(e, reldate_type.attribute)
+                if value is None:
+                    continue  # skip when there is no value
+                if base_value is None or compare(value, base_value):
+                    base_event = e
+                    base_value = value
+            return base_event
 
-            if value is None:
-                continue  # skip when there is no value
-
-            if base_value is None or compare(value, base_value):
-                base_event = e
-                base_value = value
-
-        return date_field.datetime(base_event)
+        return CancellationRule._resolve_date_field_common(date_field, order, resolve_subevent)
 
     def _evaluate_cancellation_moment(self, order: Order, check_ts: datetime.datetime) -> List[CheckResult]:
         with ensure_no_queries():
