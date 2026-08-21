@@ -83,7 +83,7 @@ def test_rule_create(token_client, organizer, event):
     assert rule.price_includes_tax is True
     assert rule.eu_reverse_charge is False
     assert str(rule.home_country) == "DE"
-    assert rule.default == True
+    assert rule.default is True
 
 
 @pytest.mark.django_db
