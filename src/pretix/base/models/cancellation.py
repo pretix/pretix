@@ -318,11 +318,13 @@ class CancellationResult:
 
 
 class Cancellation(models.Model):
-    REQUESTED: Final = "REQUESTED"
+    CREATED: Final = "CREATED"
+    APPROVAL_PENDING: Final = "APPROVAL_PENDING"
     PERFORMED: Final = "PERFORMED"
 
     CANCELLATION_STATE = (
-        (REQUESTED, _("Requested")),
+        (CREATED, _("Created")),
+        (APPROVAL_PENDING, _("Approval pending")),
         (PERFORMED, _("Performed")),
     )
 
@@ -350,7 +352,7 @@ class Cancellation(models.Model):
     cancellation_state = models.CharField(
         max_length=8,
         choices=CANCELLATION_STATE,
-        default=REQUESTED,
+        default=CREATED,
         verbose_name=_("State of the cancellation"),
     )
 
