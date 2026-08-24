@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-30 13:52+0000\n"
+"POT-Creation-Date: 2026-08-24 14:39+0000\n"
 "PO-Revision-Date: 2025-02-13 22:00+0000\n"
 "Last-Translator: Andrias Magnussen <andrias.magnussen@om.org>\n"
 "Language-Team: Faroese <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -89,6 +89,10 @@ msgstr "Grikst"
 
 #: pretix/_base_settings.py
 msgid "Hebrew"
+msgstr ""
+
+#: pretix/_base_settings.py
+msgid "Hungarian"
 msgstr ""
 
 #: pretix/_base_settings.py
@@ -431,6 +435,10 @@ msgstr "Media er knýtt at øðrum tiltaki"
 
 #: pretix/api/views/checkin.py
 msgid "You cannot exchange a medium for a medium."
+msgstr ""
+
+#: pretix/api/views/checkin.py
+msgid "You cannot simulate a medium exchange."
 msgstr ""
 
 #: pretix/api/views/oauth.py pretix/control/logdisplay.py
@@ -873,8 +881,7 @@ msgstr "Bíleggingar upplýsingar broyttir"
 #: pretix/control/forms/organizer.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/control/views/item.py pretix/plugins/badges/exporters.py
-#: pretix/plugins/checkinlists/exporters.py
+#: pretix/plugins/badges/exporters.py pretix/plugins/checkinlists/exporters.py
 #: pretix/plugins/ticketoutputpdf/exporters.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/event/fragment_change_form.html
@@ -891,7 +898,6 @@ msgstr ""
 #: pretix/base/forms/questions.py pretix/base/models/customers.py
 #: pretix/base/models/orders.py pretix/base/pdf.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Attendee email"
 msgstr ""
@@ -1636,9 +1642,8 @@ msgid "Invoice sender:"
 msgstr ""
 
 #: pretix/base/exporters/invoices.py pretix/base/exporters/orderlist.py
-#: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
-#: pretix/base/models/customers.py pretix/base/models/orders.py
-#: pretix/control/forms/filter.py
+#: pretix/base/modelimport_orders.py pretix/base/models/customers.py
+#: pretix/base/models/orders.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
@@ -1650,8 +1655,7 @@ msgstr ""
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "ZIP code"
 msgstr ""
 
@@ -1659,8 +1663,7 @@ msgstr ""
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "City"
 msgstr ""
 
@@ -1683,8 +1686,7 @@ msgstr ""
 #: pretix/base/settings.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Country"
@@ -1712,8 +1714,7 @@ msgstr ""
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Company"
@@ -2504,7 +2505,8 @@ msgstr ""
 msgid "Refund states"
 msgstr ""
 
-#: pretix/base/exporters/orderlist.py pretix/base/models/orders.py
+#: pretix/base/exporters/orderlist.py pretix/base/models/items.py
+#: pretix/base/models/orders.py
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
@@ -3009,13 +3011,11 @@ msgid ""
 msgstr ""
 
 #: pretix/base/forms/questions.py
-msgid ""
-"If you keep this empty, the ticket will be valid starting at the time of "
-"purchase."
+msgid "Street"
 msgstr ""
 
 #: pretix/base/forms/questions.py
-msgid "Street and Number"
+msgid "State"
 msgstr ""
 
 #: pretix/base/forms/questions.py
@@ -3046,6 +3046,16 @@ msgstr ""
 #: pretix/base/forms/questions.py
 #, python-brace-format
 msgid "Please enter a date and time no later than {max}."
+msgstr ""
+
+#: pretix/base/forms/questions.py
+msgid ""
+"If you keep this empty, the ticket will be valid starting at the time of "
+"purchase."
+msgstr ""
+
+#: pretix/base/forms/questions.py
+msgid "Street and Number"
 msgstr ""
 
 #: pretix/base/forms/questions.py
@@ -5378,6 +5388,10 @@ msgstr ""
 msgid "The count needs to be equal to or greater than zero."
 msgstr ""
 
+#: pretix/base/models/items.py pretix/base/models/orders.py
+msgid "Order position"
+msgstr ""
+
 #: pretix/base/models/items.py
 msgid "Number"
 msgstr ""
@@ -5413,6 +5427,10 @@ msgstr ""
 
 #: pretix/base/models/items.py
 msgid "Country code (ISO 3166-1 alpha-2)"
+msgstr ""
+
+#: pretix/base/models/items.py
+msgid "Asked on"
 msgstr ""
 
 #: pretix/base/models/items.py pretix/base/models/organizer.py
@@ -6012,10 +6030,6 @@ msgstr ""
 #: pretix/control/views/vouchers.py
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html
 msgid "Value"
-msgstr ""
-
-#: pretix/base/models/orders.py
-msgid "Order position"
 msgstr ""
 
 #: pretix/base/models/orders.py
@@ -6926,7 +6940,7 @@ msgstr ""
 
 #: pretix/base/payment.py
 msgid ""
-"This payment is already being processed and can not be canceled any more."
+"This payment is already being processed and cannot be canceled any more."
 msgstr ""
 
 #: pretix/base/payment.py
@@ -7663,6 +7677,18 @@ msgid "Presale end"
 msgstr ""
 
 #: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order denied"
+msgid "Order creation"
+msgstr "Bílegging avvíst"
+
+#: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order expired"
+msgid "Order expiry"
+msgstr "Bílegging útgingin"
+
+#: pretix/base/reldate.py
 msgid "before"
 msgstr ""
 
@@ -7684,6 +7710,36 @@ msgstr ""
 
 #: pretix/base/reldate.py
 msgid "Not set"
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"after\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"after\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as 'before' for '{}'"
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as 'after' for '{}'"
 msgstr ""
 
 #: pretix/base/secrets.py
@@ -8773,7 +8829,7 @@ msgstr ""
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr ""
 
-#: pretix/base/services/placeholders.py pretix/control/views/organizer.py
+#: pretix/base/services/placeholders.py
 msgid "This value will be replaced based on dynamic parameters."
 msgstr ""
 
@@ -9352,6 +9408,25 @@ msgid ""
 "This text will be shown above the ticket shop once the designated sales "
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
+msgstr ""
+
+#: pretix/base/settings.py
+msgid "No dates match your criteria."
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid "Text for empty date results"
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid ""
+"This text will be shown if the calendar or list of dates is empty, e.g. "
+"because a month does not contain any dates or a filter chosen by the user "
+"does not find any results. You can use this to advertise ways to get in "
+"touch with you to arrange further dates. We do not recommend more than one "
+"or two sentences."
 msgstr ""
 
 #: pretix/base/settings.py
@@ -12495,6 +12570,24 @@ msgstr ""
 msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
+msgstr ""
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment confirmed"
+msgid "Payment term"
+msgstr "Gjald váttað"
+
+#: pretix/control/forms/event.py
+msgid "same as above"
+msgstr ""
+
+#: pretix/control/forms/event.py
+msgid "different payment term in days"
+msgstr ""
+
+#: pretix/control/forms/event.py
+msgid "different payment term in minutes"
 msgstr ""
 
 #: pretix/control/forms/event.py
@@ -18676,6 +18769,7 @@ msgid "Top recommendation"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html
+#: pretix/control/templates/pretixcontrol/items/questions.html
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid "Experimental feature"
 msgstr ""
@@ -20328,6 +20422,24 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
+msgid "Create a new per-ticket question"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid "Create a new order-level question"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid "Per-ticket questions"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"These questions are asked for every ticket, so possibly multiple times in "
+"the same order."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new question"
 msgstr ""
 
@@ -20341,6 +20453,26 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "All personalized products"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid "Per-order questions"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"This functionality is in active development and expected to change "
+"significantly over the coming months."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"Per-order questions are currently not supported and will not be displayed in "
+"pretixPOS."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid "These questions are asked once per order."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
@@ -20865,6 +20997,15 @@ msgstr ""
 msgid "(optional)"
 msgstr ""
 
+#: pretix/control/templates/pretixcontrol/order/change_questions.html
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html
+#: pretix/presale/templates/pretixpresale/event/order_modify.html
+#, fuzzy
+#| msgid "Order information changed"
+msgid "Additional order information"
+msgstr "Bíleggingar upplýsingar broyttir"
+
 #: pretix/control/templates/pretixcontrol/order/delete.html
 msgid "Delete order"
 msgstr ""
@@ -20890,6 +21031,23 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/extend.html
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Extend payment term"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid ""
+"This file has been uploaded by a user and could contain viruses or other "
+"malicious content."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid "UNSAFE"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "not answered"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html
@@ -21148,22 +21306,7 @@ msgid "Ticket page"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "not answered"
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/order/index.html
 msgid "This question will be asked during check-in."
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid ""
-"This file has been uploaded by a user and could contain viruses or other "
-"malicious content."
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid "UNSAFE"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html
@@ -22401,6 +22544,15 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Hardware model"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+#, python-format
+msgid "Last seen: %(time)s"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+msgid "No recent contact"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
@@ -25285,10 +25437,6 @@ msgid "Not all objects have been selected."
 msgstr ""
 
 #: pretix/control/views/item.py
-msgid "Street"
-msgstr ""
-
-#: pretix/control/views/item.py
 msgid "The requested question does not exist."
 msgstr ""
 
@@ -25433,7 +25581,7 @@ msgstr ""
 
 #: pretix/control/views/mailsetup.py
 msgid ""
-"We did not find DMARC record for your domain. This means that there is a "
+"We did not find a DMARC record for your domain. This means that there is a "
 "very high chance most of the emails will be rejected or marked as spam. You "
 "should update the DNS settings of your domain."
 msgstr ""
@@ -25825,7 +25973,8 @@ msgstr ""
 msgid "Your message has been queued and will be sent to {}."
 msgstr ""
 
-#: pretix/control/views/orders.py pretix/presale/views/order.py
+#: pretix/control/views/orders.py pretix/presale/views/cart.py
+#: pretix/presale/views/order.py
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -27878,6 +28027,29 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/paypal2/payment.py
+msgid "Allow further payments during compliance hold"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"PayPals fraud prevention might block processing of individual payments for a "
+"considerable amount of time. The payment is marked as \"pending\" during "
+"this time window. You can allow your customers to start another payment "
+"attempts during that window. This might result in them being charged twice "
+"if theoriginal payment is approved."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Timeout further payment attempts"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"Time duration in minutes after which another payment attempt is possible, "
+"while the last payment is still under investigation."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
 msgid "-- Automatic --"
 msgstr ""
 
@@ -28102,8 +28274,11 @@ msgstr ""
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
 msgid ""
-"Our attempt to execute your payment via PayPal has failed. Please try again "
-"or contact us."
+"Your payment is being processed by PayPal. This takes longer than usual. You "
+"can wait until PayPal acknowledges the payment or you can try paying again "
+"with this or another payment method. This might result in you being charged "
+"twice in case PayPal allows your initial payment attempt. Please contact us "
+"to resolve this case."
 msgstr ""
 
 #: pretix/plugins/paypal2/views.py
@@ -30839,10 +31014,6 @@ msgid "No attendee name provided"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "The image you previously uploaded"
-msgstr ""
-
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "The price of this product was reduced because of an automatic discount."
 msgstr ""
 
@@ -31237,6 +31408,10 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
 msgid "Set price in %(currency)s for %(item)s"
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "The image you previously uploaded"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html

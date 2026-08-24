@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-30 13:52+0000\n"
+"POT-Creation-Date: 2026-08-24 14:39+0000\n"
 "PO-Revision-Date: 2026-07-20 08:01+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
@@ -91,6 +91,10 @@ msgstr "اليونانية"
 #: pretix/_base_settings.py
 msgid "Hebrew"
 msgstr "العبرية"
+
+#: pretix/_base_settings.py
+msgid "Hungarian"
+msgstr ""
 
 #: pretix/_base_settings.py
 msgid "Indonesian"
@@ -420,6 +424,12 @@ msgstr "الوسيط متصل بحدث آخر"
 #: pretix/api/views/checkin.py
 msgid "You cannot exchange a medium for a medium."
 msgstr "لا يمكنك استبدال هذا الطلب (مقاس متوسط بمقاس متوسط)."
+
+#: pretix/api/views/checkin.py
+#, fuzzy
+#| msgid "Product does not support medium exchange."
+msgid "You cannot simulate a medium exchange."
+msgstr "هذا المنتج لا يدعم استبدال الحجم المتوسط."
 
 #: pretix/api/views/oauth.py pretix/control/logdisplay.py
 #, python-brace-format
@@ -866,8 +876,7 @@ msgstr "معلومات عن الحدث أو التاريخ"
 #: pretix/control/forms/organizer.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/control/views/item.py pretix/plugins/badges/exporters.py
-#: pretix/plugins/checkinlists/exporters.py
+#: pretix/plugins/badges/exporters.py pretix/plugins/checkinlists/exporters.py
 #: pretix/plugins/ticketoutputpdf/exporters.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/event/fragment_change_form.html
@@ -884,7 +893,6 @@ msgstr "المشارك"
 #: pretix/base/forms/questions.py pretix/base/models/customers.py
 #: pretix/base/models/orders.py pretix/base/pdf.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Attendee email"
 msgstr "البريد الإلكتروني للمشارك"
@@ -1635,9 +1643,8 @@ msgid "Invoice sender:"
 msgstr "مرسل الفاتورة:"
 
 #: pretix/base/exporters/invoices.py pretix/base/exporters/orderlist.py
-#: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
-#: pretix/base/models/customers.py pretix/base/models/orders.py
-#: pretix/control/forms/filter.py
+#: pretix/base/modelimport_orders.py pretix/base/models/customers.py
+#: pretix/base/models/orders.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
@@ -1649,8 +1656,7 @@ msgstr "العنوان"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "ZIP code"
 msgstr "الرمز البريدي"
 
@@ -1658,8 +1664,7 @@ msgstr "الرمز البريدي"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "City"
 msgstr "المدينة"
 
@@ -1682,8 +1687,7 @@ msgstr "الولاية"
 #: pretix/base/settings.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Country"
@@ -1711,8 +1715,7 @@ msgstr "مستلم الفاتورة:"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Company"
@@ -2521,7 +2524,8 @@ msgstr "‪حالات الدفع"
 msgid "Refund states"
 msgstr "حالات استعادة المبلغ"
 
-#: pretix/base/exporters/orderlist.py pretix/base/models/orders.py
+#: pretix/base/exporters/orderlist.py pretix/base/models/items.py
+#: pretix/base/models/orders.py
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
@@ -3039,14 +3043,12 @@ msgstr ""
 "قم بتحميل صورة صالحة. الملف الذي قمت بتحميله ليس صورة أو هو صورة تالفة."
 
 #: pretix/base/forms/questions.py
-msgid ""
-"If you keep this empty, the ticket will be valid starting at the time of "
-"purchase."
-msgstr "إذا تركت هذا الحقل فارغًا، فستكون التذكرة صالحة اعتبارًا من وقت الشراء."
+msgid "Street"
+msgstr "الشارع"
 
 #: pretix/base/forms/questions.py
-msgid "Street and Number"
-msgstr "الشارع والرقم"
+msgid "State"
+msgstr "ولاية"
 
 #: pretix/base/forms/questions.py
 #, python-brace-format
@@ -3077,6 +3079,16 @@ msgstr "يرجى إدخال تاريخ ووقت لا يسبقان {min}."
 #, python-brace-format
 msgid "Please enter a date and time no later than {max}."
 msgstr "يرجى إدخال تاريخ ووقت لا يتجاوزان {max}."
+
+#: pretix/base/forms/questions.py
+msgid ""
+"If you keep this empty, the ticket will be valid starting at the time of "
+"purchase."
+msgstr "إذا تركت هذا الحقل فارغًا، فستكون التذكرة صالحة اعتبارًا من وقت الشراء."
+
+#: pretix/base/forms/questions.py
+msgid "Street and Number"
+msgstr "الشارع والرقم"
 
 #: pretix/base/forms/questions.py
 msgid ""
@@ -5620,6 +5632,10 @@ msgstr "النوع الذي تم اختياره لا ينتمي إلى هذا ا
 msgid "The count needs to be equal to or greater than zero."
 msgstr "يجب أن يكون العدد مساويا للصفر أو أكبر منه."
 
+#: pretix/base/models/items.py pretix/base/models/orders.py
+msgid "Order position"
+msgstr "حالة الطلب"
+
 #: pretix/base/models/items.py
 msgid "Number"
 msgstr "رقم"
@@ -5656,6 +5672,10 @@ msgstr "التاريخ والوقت"
 #: pretix/base/models/items.py
 msgid "Country code (ISO 3166-1 alpha-2)"
 msgstr "رمز البلد (ISO 3166-1 alpha-2)"
+
+#: pretix/base/models/items.py
+msgid "Asked on"
+msgstr ""
 
 #: pretix/base/models/items.py pretix/base/models/organizer.py
 msgid ""
@@ -6298,10 +6318,6 @@ msgstr "بطاقة هدايا"
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html
 msgid "Value"
 msgstr "القيمة"
-
-#: pretix/base/models/orders.py
-msgid "Order position"
-msgstr "حالة الطلب"
 
 #: pretix/base/models/orders.py
 msgid "Cart ID (e.g. session key)"
@@ -7297,8 +7313,11 @@ msgid "The payment for this invoice has already been received."
 msgstr "تم استلام دفعة هذه الفاتورة سابقا."
 
 #: pretix/base/payment.py
+#, fuzzy
+#| msgid ""
+#| "This payment is already being processed and can not be canceled any more."
 msgid ""
-"This payment is already being processed and can not be canceled any more."
+"This payment is already being processed and cannot be canceled any more."
 msgstr "يجري حالياً معالجة عملية الدفع هذه، ولا يمكن إلغاؤها في الوقت الحالي."
 
 #: pretix/base/payment.py
@@ -8061,6 +8080,18 @@ msgid "Presale end"
 msgstr "نهاية إعلان ما قبل البيع"
 
 #: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order email"
+msgid "Order creation"
+msgstr "البريد الإلكتروني الخاص بالطلب"
+
+#: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order expired"
+msgid "Order expiry"
+msgstr "الطلب منتهي الصلاحية"
+
+#: pretix/base/reldate.py
 msgid "before"
 msgstr "قبل"
 
@@ -8083,6 +8114,36 @@ msgstr "وقت نسبي:"
 #: pretix/base/reldate.py
 msgid "Not set"
 msgstr "غير محدد"
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"after\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"after\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as 'before' for '{}'"
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as 'after' for '{}'"
+msgstr ""
 
 #: pretix/base/secrets.py
 msgid "Random (default, works with all pretix apps)"
@@ -9446,7 +9507,7 @@ msgstr "تم خصم المبلغ من بطاقتك."
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr "يرجى تحويل المبلغ إلى هذا الحساب المصرفي: 9999-9999-9999-9999"
 
-#: pretix/base/services/placeholders.py pretix/control/views/organizer.py
+#: pretix/base/services/placeholders.py
 msgid "This value will be replaced based on dynamic parameters."
 msgstr "سيتم استبدال هذه القيمة بناءً على معلمات ديناميكية."
 
@@ -10141,6 +10202,25 @@ msgstr ""
 "سيظهر هذا النص أعلى متجر التذاكر بمجرد انتهاء الإطار الزمني المحدد للمبيعات "
 "لهذه الفعالية. يمكنك استخدامه لوصف الخيارات الأخرى للحصول على تذكرة ، على "
 "سبيل المثال شباك التذاكر."
+
+#: pretix/base/settings.py
+msgid "No dates match your criteria."
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid "Text for empty date results"
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid ""
+"This text will be shown if the calendar or list of dates is empty, e.g. "
+"because a month does not contain any dates or a filter chosen by the user "
+"does not find any results. You can use this to advertise ways to get in "
+"touch with you to arrange further dates. We do not recommend more than one "
+"or two sentences."
+msgstr ""
 
 #: pretix/base/settings.py
 msgid "Guidance text"
@@ -13965,6 +14045,30 @@ msgid ""
 msgstr ""
 "لقد قمت بتعيين صلاحية بطاقات الهدايا لتكون صالحة لمدة {} سنوات بالإضافة إلى "
 "السنة التي تم إصدار البطاقة فيها."
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment date"
+msgid "Payment term"
+msgstr "يوم الدفع او الاستحقاق"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "(Same as above)"
+msgid "same as above"
+msgstr "(كما ورد أعلاه)"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment term in days"
+msgid "different payment term in days"
+msgstr "مدة السداد بالأيام"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment term in minutes"
+msgid "different payment term in minutes"
+msgstr "مدة السداد بالدقائق"
 
 #: pretix/control/forms/event.py
 msgid "Prices including tax"
@@ -20716,6 +20820,7 @@ msgid "Top recommendation"
 msgstr "التوصية الأولى"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html
+#: pretix/control/templates/pretixcontrol/items/questions.html
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid "Experimental feature"
 msgstr "ميزة تجريبية"
@@ -22577,6 +22682,30 @@ msgstr ""
 "يكون مثال واحد أن يسأل المستخدمين حول المتطلبات الغذائية."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Create a new question"
+msgid "Create a new per-ticket question"
+msgstr "إنشاء سؤال جديد"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Create a new question"
+msgid "Create a new order-level question"
+msgstr "إنشاء سؤال جديد"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Delete question"
+msgid "Per-ticket questions"
+msgstr "مسألة الحذف"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"These questions are asked for every ticket, so possibly multiple times in "
+"the same order."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new question"
 msgstr "إنشاء سؤال جديد"
 
@@ -22591,6 +22720,30 @@ msgstr "طرح خلال التسجيل في مكتب الاستقبال"
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "All personalized products"
 msgstr "جميع المنتجات المخصصة"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Include questions"
+msgid "Per-order questions"
+msgstr "تضمين الأسئلة"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"This functionality is in active development and expected to change "
+"significantly over the coming months."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"Per-order questions are currently not supported and will not be displayed in "
+"pretixPOS."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "The question has been reordered."
+msgid "These questions are asked once per order."
+msgstr "تمت إعادة ترتيب السؤال."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
@@ -23178,6 +23331,15 @@ msgstr "معلومات الفاتورة"
 msgid "(optional)"
 msgstr "(اختياري)"
 
+#: pretix/control/templates/pretixcontrol/order/change_questions.html
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html
+#: pretix/presale/templates/pretixpresale/event/order_modify.html
+#, fuzzy
+#| msgid "Additional information"
+msgid "Additional order information"
+msgstr "معلومة اضافية"
+
 #: pretix/control/templates/pretixcontrol/order/delete.html
 msgid "Delete order"
 msgstr "أجل حذف"
@@ -23206,6 +23368,25 @@ msgstr "نعم، وتنكر ترتيب"
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Extend payment term"
 msgstr "تمديد فترة السداد"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid ""
+"This file has been uploaded by a user and could contain viruses or other "
+"malicious content."
+msgstr ""
+"وقد تم تحميل هذا الملف من قبل المستخدم، ويمكن أن تحتوي على فيروسات أو غيرها "
+"من المحتويات الضارة."
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid "UNSAFE"
+msgstr "UNSAFE"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "not answered"
+msgstr "بلا جواب"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
@@ -23480,25 +23661,8 @@ msgid "Ticket page"
 msgstr "صفحة التذاكر"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "not answered"
-msgstr "بلا جواب"
-
-#: pretix/control/templates/pretixcontrol/order/index.html
 msgid "This question will be asked during check-in."
 msgstr "سوف يتم طرح هذا السؤال أثناء التسجيل في مكتب الاستقبال."
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid ""
-"This file has been uploaded by a user and could contain viruses or other "
-"malicious content."
-msgstr ""
-"وقد تم تحميل هذا الملف من قبل المستخدم، ويمكن أن تحتوي على فيروسات أو غيرها "
-"من المحتويات الضارة."
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid "UNSAFE"
-msgstr "UNSAFE"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/overview.html
@@ -24851,6 +25015,16 @@ msgstr "توصيل جهاز"
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Hardware model"
 msgstr "نموذج الأجهزة"
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+#, fuzzy, python-format
+#| msgid "Begin: %(time)s"
+msgid "Last seen: %(time)s"
+msgstr "البداية: %(time)s"
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+msgid "No recent contact"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Not yet initialized"
@@ -28046,10 +28220,6 @@ msgid "Not all objects have been selected."
 msgstr "لم يتم تحديد جميع العناصر."
 
 #: pretix/control/views/item.py
-msgid "Street"
-msgstr "الشارع"
-
-#: pretix/control/views/item.py
 msgid "The requested question does not exist."
 msgstr "عدم وجود مسألة المطلوبة."
 
@@ -28265,7 +28435,7 @@ msgstr ""
 #| "You should update the DNS settings of your domain to include this system "
 #| "in the SPF record."
 msgid ""
-"We did not find DMARC record for your domain. This means that there is a "
+"We did not find a DMARC record for your domain. This means that there is a "
 "very high chance most of the emails will be rejected or marked as spam. You "
 "should update the DNS settings of your domain."
 msgstr ""
@@ -28706,7 +28876,8 @@ msgstr "الموضوع: {subject}"
 msgid "Your message has been queued and will be sent to {}."
 msgstr "وقد اصطف رسالتك وسوف يتم ارسالهم الى {}."
 
-#: pretix/control/views/orders.py pretix/presale/views/order.py
+#: pretix/control/views/orders.py pretix/presale/views/cart.py
+#: pretix/presale/views/order.py
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -30935,6 +31106,29 @@ msgstr ""
 "غضون 30 يومًا. وأنت، بصفتك التاجر، ستحصل على أموالك على الفور."
 
 #: pretix/plugins/paypal2/payment.py
+msgid "Allow further payments during compliance hold"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"PayPals fraud prevention might block processing of individual payments for a "
+"considerable amount of time. The payment is marked as \"pending\" during "
+"this time window. You can allow your customers to start another payment "
+"attempts during that window. This might result in them being charged twice "
+"if theoriginal payment is approved."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Timeout further payment attempts"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"Time duration in minutes after which another payment attempt is possible, "
+"while the last payment is still under investigation."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
 msgid "-- Automatic --"
 msgstr "-- تلقائي --"
 
@@ -31184,11 +31378,12 @@ msgstr "يرجى اختيار طريقة الدفع."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
 msgid ""
-"Our attempt to execute your payment via PayPal has failed. Please try again "
-"or contact us."
+"Your payment is being processed by PayPal. This takes longer than usual. You "
+"can wait until PayPal acknowledges the payment or you can try paying again "
+"with this or another payment method. This might result in you being charged "
+"twice in case PayPal allows your initial payment attempt. Please contact us "
+"to resolve this case."
 msgstr ""
-"لقد فشلت محاولتنا لتنفيذ عملية الدفع الخاصة بك عبر PayPal. يرجى المحاولة مرة "
-"أخرى أو الاتصال بنا."
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
@@ -34215,10 +34410,6 @@ msgid "No attendee name provided"
 msgstr "لم يتم تقديم اسم الحضور"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "The image you previously uploaded"
-msgstr "الصورة التي قمت بتحميلها سابقًا"
-
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "The price of this product was reduced because of an automatic discount."
 msgstr "تم تخفيض سعر هذا المنتج بسبب خصم تلقائي."
 
@@ -34650,6 +34841,10 @@ msgstr "%(value)sبدون ضرائب"
 #, python-format
 msgid "Set price in %(currency)s for %(item)s"
 msgstr "تحديد السعر بـ %(currency)s لـ %(item)s"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "The image you previously uploaded"
+msgstr "الصورة التي قمت بتحميلها سابقًا"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html
 #, python-format
@@ -36381,6 +36576,13 @@ msgstr "الوصول إلى الكتابة"
 msgid "Kosovo"
 msgstr "كوسوفو"
 
+#~ msgid ""
+#~ "Our attempt to execute your payment via PayPal has failed. Please try "
+#~ "again or contact us."
+#~ msgstr ""
+#~ "لقد فشلت محاولتنا لتنفيذ عملية الدفع الخاصة بك عبر PayPal. يرجى المحاولة "
+#~ "مرة أخرى أو الاتصال بنا."
+
 #~ msgid "All actions"
 #~ msgstr "جميع الإجراءات"
 
@@ -36503,9 +36705,6 @@ msgstr "كوسوفو"
 #~| msgid "Please enter a shorter name."
 #~ msgid "Please do not use special characters in names."
 #~ msgstr "الرجاء إدخال اسم أقصر."
-
-#~ msgid "State"
-#~ msgstr "ولاية"
 
 #, fuzzy
 #~| msgid "Printing date and time"
@@ -37096,9 +37295,6 @@ msgstr "كوسوفو"
 
 #~ msgid "Badge design"
 #~ msgstr "تصميم شارة"
-
-#~ msgid "(Same as above)"
-#~ msgstr "(كما ورد أعلاه)"
 
 #~ msgid "Translation in development"
 #~ msgstr "الترجمة في التنمية"

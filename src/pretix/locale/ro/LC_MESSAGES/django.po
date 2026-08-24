@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-30 13:52+0000\n"
+"POT-Creation-Date: 2026-08-24 14:39+0000\n"
 "PO-Revision-Date: 2025-10-09 16:00+0000\n"
 "Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -90,6 +90,10 @@ msgstr "Greek"
 
 #: pretix/_base_settings.py
 msgid "Hebrew"
+msgstr ""
+
+#: pretix/_base_settings.py
+msgid "Hungarian"
 msgstr ""
 
 #: pretix/_base_settings.py
@@ -461,6 +465,12 @@ msgstr ""
 #, fuzzy
 #| msgid "You cannot change this order."
 msgid "You cannot exchange a medium for a medium."
+msgstr "Nu puteți modifica această comandă."
+
+#: pretix/api/views/checkin.py
+#, fuzzy
+#| msgid "You cannot change this order."
+msgid "You cannot simulate a medium exchange."
 msgstr "Nu puteți modifica această comandă."
 
 #: pretix/api/views/oauth.py pretix/control/logdisplay.py
@@ -958,8 +968,7 @@ msgstr "Trimiteți informațiile de recuperare"
 #: pretix/control/forms/organizer.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/control/views/item.py pretix/plugins/badges/exporters.py
-#: pretix/plugins/checkinlists/exporters.py
+#: pretix/plugins/badges/exporters.py pretix/plugins/checkinlists/exporters.py
 #: pretix/plugins/ticketoutputpdf/exporters.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/event/fragment_change_form.html
@@ -978,7 +987,6 @@ msgstr "Numele participantului"
 #: pretix/base/forms/questions.py pretix/base/models/customers.py
 #: pretix/base/models/orders.py pretix/base/pdf.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Attendee email"
 msgstr "E-mailul participantului"
@@ -1779,9 +1787,8 @@ msgid "Invoice sender:"
 msgstr "Emitent factură:"
 
 #: pretix/base/exporters/invoices.py pretix/base/exporters/orderlist.py
-#: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
-#: pretix/base/models/customers.py pretix/base/models/orders.py
-#: pretix/control/forms/filter.py
+#: pretix/base/modelimport_orders.py pretix/base/models/customers.py
+#: pretix/base/models/orders.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
@@ -1793,8 +1800,7 @@ msgstr "Adresă"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "ZIP code"
 msgstr "Cod poștal"
 
@@ -1802,8 +1808,7 @@ msgstr "Cod poștal"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "City"
 msgstr "Oraș"
 
@@ -1826,8 +1831,7 @@ msgstr "Județ"
 #: pretix/base/settings.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Country"
@@ -1855,8 +1859,7 @@ msgstr "Destinatar factură:"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Company"
@@ -2702,7 +2705,8 @@ msgstr "Rapoarte de plată"
 msgid "Refund states"
 msgstr "Rapoarte de rambursare"
 
-#: pretix/base/exporters/orderlist.py pretix/base/models/orders.py
+#: pretix/base/exporters/orderlist.py pretix/base/models/items.py
+#: pretix/base/models/orders.py
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
@@ -3241,14 +3245,12 @@ msgstr ""
 "imagine, fie este o imagine coruptă."
 
 #: pretix/base/forms/questions.py
-msgid ""
-"If you keep this empty, the ticket will be valid starting at the time of "
-"purchase."
-msgstr ""
+msgid "Street"
+msgstr "Strada"
 
 #: pretix/base/forms/questions.py
-msgid "Street and Number"
-msgstr "Strada și numărul"
+msgid "State"
+msgstr "Stat"
 
 #: pretix/base/forms/questions.py
 #, fuzzy, python-brace-format
@@ -3284,6 +3286,16 @@ msgstr "Vă rugăm să introduceți un canal de vânzare valid."
 #| msgid "Please enter the correct result."
 msgid "Please enter a date and time no later than {max}."
 msgstr "Vă rugăm să introduceți rezultatul corect."
+
+#: pretix/base/forms/questions.py
+msgid ""
+"If you keep this empty, the ticket will be valid starting at the time of "
+"purchase."
+msgstr ""
+
+#: pretix/base/forms/questions.py
+msgid "Street and Number"
+msgstr "Strada și numărul"
 
 #: pretix/base/forms/questions.py
 msgid ""
@@ -5997,6 +6009,10 @@ msgstr "Variația aleasă nu aparține acestui articol."
 msgid "The count needs to be equal to or greater than zero."
 msgstr "Numărul trebuie să fie egal sau mai mare decât zero."
 
+#: pretix/base/models/items.py pretix/base/models/orders.py
+msgid "Order position"
+msgstr "Poziția comenzii"
+
 #: pretix/base/models/items.py
 msgid "Number"
 msgstr "Număr"
@@ -6033,6 +6049,10 @@ msgstr "Data și ora"
 #: pretix/base/models/items.py
 msgid "Country code (ISO 3166-1 alpha-2)"
 msgstr "Codul țării (ISO 3166-1 alpha-2)"
+
+#: pretix/base/models/items.py
+msgid "Asked on"
+msgstr ""
 
 #: pretix/base/models/items.py pretix/base/models/organizer.py
 #, fuzzy
@@ -6732,10 +6752,6 @@ msgstr "Card cadou"
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html
 msgid "Value"
 msgstr "Valoare"
-
-#: pretix/base/models/orders.py
-msgid "Order position"
-msgstr "Poziția comenzii"
 
 #: pretix/base/models/orders.py
 msgid "Cart ID (e.g. session key)"
@@ -7779,7 +7795,7 @@ msgstr "Plata pentru această factură a fost deja primită."
 #, fuzzy
 #| msgid "This payment can not be canceled at the moment."
 msgid ""
-"This payment is already being processed and can not be canceled any more."
+"This payment is already being processed and cannot be canceled any more."
 msgstr "Această plată nu poate fi anulată în acest moment."
 
 #: pretix/base/payment.py
@@ -8619,6 +8635,18 @@ msgstr "Sfârșit pre-sale"
 
 #: pretix/base/reldate.py
 #, fuzzy
+#| msgid "Order details"
+msgid "Order creation"
+msgstr "Detalii comandă"
+
+#: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order expired"
+msgid "Order expiry"
+msgstr "Comandă expirată"
+
+#: pretix/base/reldate.py
+#, fuzzy
 #| msgid "days before"
 msgid "before"
 msgstr "zile înainte de"
@@ -8642,6 +8670,36 @@ msgstr "Timp relativ:"
 #: pretix/base/reldate.py
 msgid "Not set"
 msgstr "Nesetat"
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"after\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"after\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as 'before' for '{}'"
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as 'after' for '{}'"
+msgstr ""
 
 #: pretix/base/secrets.py
 msgid "Random (default, works with all pretix apps)"
@@ -10049,7 +10107,7 @@ msgstr "Suma a fost debitată de pe cardul dumneavoastră."
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr "Vă rugăm să transferați bani în acest cont bancar: 9999-9999-9999-9999"
 
-#: pretix/base/services/placeholders.py pretix/control/views/organizer.py
+#: pretix/base/services/placeholders.py
 msgid "This value will be replaced based on dynamic parameters."
 msgstr "Această valoare va fi înlocuită pe baza parametrilor dinamici."
 
@@ -10787,6 +10845,25 @@ msgstr ""
 "Acest text va fi afișat deasupra magazinului de bilete odată ce perioada de "
 "vânzare desemnată pentru acest eveniment se va încheia. Îl puteți utiliza "
 "pentru a descrie alte opțiuni pentru a obține un bilet, cum ar fi o casierie."
+
+#: pretix/base/settings.py
+msgid "No dates match your criteria."
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid "Text for empty date results"
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid ""
+"This text will be shown if the calendar or list of dates is empty, e.g. "
+"because a month does not contain any dates or a filter chosen by the user "
+"does not find any results. You can use this to advertise ways to get in "
+"touch with you to arrange further dates. We do not recommend more than one "
+"or two sentences."
+msgstr ""
 
 #: pretix/base/settings.py
 msgid "Guidance text"
@@ -14938,6 +15015,30 @@ msgid ""
 msgstr ""
 "Ați configurat cardurile cadou pentru a fi valabile {} ani plus anul în care "
 "a fost emis cardul cadou."
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment date"
+msgid "Payment term"
+msgstr "Data plății"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "(Same as above)"
+msgid "same as above"
+msgstr "(La fel ca mai sus)"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment term in days"
+msgid "different payment term in days"
+msgstr "Termenul de plată în zile"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment term in minutes"
+msgid "different payment term in minutes"
+msgstr "Termen de plată în minute"
 
 #: pretix/control/forms/event.py
 #, fuzzy
@@ -22179,6 +22280,7 @@ msgid "Top recommendation"
 msgstr "Recomandări de top"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html
+#: pretix/control/templates/pretixcontrol/items/questions.html
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid "Experimental feature"
 msgstr "Caracteristică experimentală"
@@ -24154,6 +24256,30 @@ msgstr ""
 "utilizatorii despre cerințele dietetice."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Create a new question"
+msgid "Create a new per-ticket question"
+msgstr "Creați o nouă întrebare"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Create a new question"
+msgid "Create a new order-level question"
+msgstr "Creați o nouă întrebare"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Delete question"
+msgid "Per-ticket questions"
+msgstr "Ștergere întrebare"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"These questions are asked for every ticket, so possibly multiple times in "
+"the same order."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new question"
 msgstr "Creați o nouă întrebare"
 
@@ -24170,6 +24296,30 @@ msgstr "Întrebați la check-in"
 #| msgid "All admission products"
 msgid "All personalized products"
 msgstr "Toate produsele de acces"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Include questions"
+msgid "Per-order questions"
+msgstr "Includeți întrebări"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"This functionality is in active development and expected to change "
+"significantly over the coming months."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"Per-order questions are currently not supported and will not be displayed in "
+"pretixPOS."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "The question has been deleted."
+msgid "These questions are asked once per order."
+msgstr "Întrebarea a fost ștearsă."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
@@ -24781,6 +24931,15 @@ msgstr "Informații despre factură"
 msgid "(optional)"
 msgstr "(opțional)"
 
+#: pretix/control/templates/pretixcontrol/order/change_questions.html
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html
+#: pretix/presale/templates/pretixpresale/event/order_modify.html
+#, fuzzy
+#| msgid "Additional information"
+msgid "Additional order information"
+msgstr "Informații suplimentare"
+
 #: pretix/control/templates/pretixcontrol/order/delete.html
 msgid "Delete order"
 msgstr "Șterge comanda"
@@ -24809,6 +24968,25 @@ msgstr "Da, respingeți comanda"
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Extend payment term"
 msgstr "Prelungiți termenul de plată"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid ""
+"This file has been uploaded by a user and could contain viruses or other "
+"malicious content."
+msgstr ""
+"Acest fișier a fost încărcat de un utilizator și ar putea conține viruși sau "
+"alt conținut malițios."
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid "UNSAFE"
+msgstr "NESIGUR"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "not answered"
+msgstr "fără răspuns"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
@@ -25097,25 +25275,8 @@ msgid "Ticket page"
 msgstr "Pagina de bilete"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "not answered"
-msgstr "fără răspuns"
-
-#: pretix/control/templates/pretixcontrol/order/index.html
 msgid "This question will be asked during check-in."
 msgstr "Această întrebare va fi adresată în timpul check-in-ului."
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid ""
-"This file has been uploaded by a user and could contain viruses or other "
-"malicious content."
-msgstr ""
-"Acest fișier a fost încărcat de un utilizator și ar putea conține viruși sau "
-"alt conținut malițios."
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid "UNSAFE"
-msgstr "NESIGUR"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/overview.html
@@ -26545,6 +26706,16 @@ msgstr "Conectați un dispozitiv"
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Hardware model"
 msgstr "Model hardware"
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+#, fuzzy, python-format
+#| msgid "Begin: %(time)s"
+msgid "Last seen: %(time)s"
+msgstr "Deschidere: %(time)s"
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+msgid "No recent contact"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Not yet initialized"
@@ -29930,10 +30101,6 @@ msgid "Not all objects have been selected."
 msgstr "Nu au fost selectate toate articolele."
 
 #: pretix/control/views/item.py
-msgid "Street"
-msgstr "Strada"
-
-#: pretix/control/views/item.py
 msgid "The requested question does not exist."
 msgstr "Întrebarea solicitată nu există."
 
@@ -30144,7 +30311,7 @@ msgstr ""
 #| "You should update the DNS settings of your domain to include this system "
 #| "in the SPF record."
 msgid ""
-"We did not find DMARC record for your domain. This means that there is a "
+"We did not find a DMARC record for your domain. This means that there is a "
 "very high chance most of the emails will be rejected or marked as spam. You "
 "should update the DNS settings of your domain."
 msgstr ""
@@ -30602,7 +30769,8 @@ msgstr "Subiect: {subject}"
 msgid "Your message has been queued and will be sent to {}."
 msgstr "Mesajul dvs. a fost pus în coadă și va fi trimis la {}."
 
-#: pretix/control/views/orders.py pretix/presale/views/order.py
+#: pretix/control/views/orders.py pretix/presale/views/cart.py
+#: pretix/presale/views/order.py
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -32995,6 +33163,29 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/paypal2/payment.py
+msgid "Allow further payments during compliance hold"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"PayPals fraud prevention might block processing of individual payments for a "
+"considerable amount of time. The payment is marked as \"pending\" during "
+"this time window. You can allow your customers to start another payment "
+"attempts during that window. This might result in them being charged twice "
+"if theoriginal payment is approved."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Timeout further payment attempts"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"Time duration in minutes after which another payment attempt is possible, "
+"while the last payment is still under investigation."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
 #, fuzzy
 msgid "-- Automatic --"
 msgstr "Cont client"
@@ -33269,16 +33460,13 @@ msgid "Please select how you want to pay."
 msgstr "Vă rugăm să selectați cum doriți să plătiți."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
-#, fuzzy
-#| msgid ""
-#| "Our attempt to execute your Payment via PayPal has failed. Please try "
-#| "again or contact us."
 msgid ""
-"Our attempt to execute your payment via PayPal has failed. Please try again "
-"or contact us."
+"Your payment is being processed by PayPal. This takes longer than usual. You "
+"can wait until PayPal acknowledges the payment or you can try paying again "
+"with this or another payment method. This might result in you being charged "
+"twice in case PayPal allows your initial payment attempt. Please contact us "
+"to resolve this case."
 msgstr ""
-"Încercarea noastră de a executa plata prin PayPal a eșuat. Vă rugăm să "
-"încercați din nou sau să ne contactați."
 
 #: pretix/plugins/paypal2/views.py
 #, fuzzy
@@ -36518,10 +36706,6 @@ msgid "No attendee name provided"
 msgstr "Nu a fost furnizat numele participantului"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "The image you previously uploaded"
-msgstr "Imaginea pe care ați încărcat-o anterior"
-
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "The price of this product was reduced because of an automatic discount."
 msgstr ""
 
@@ -36969,6 +37153,10 @@ msgstr "Valoarea totală (fără taxe)"
 #, python-format
 msgid "Set price in %(currency)s for %(item)s"
 msgstr "Setați prețul în %(currency)s pentru %(item)s"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "The image you previously uploaded"
+msgstr "Imaginea pe care ați încărcat-o anterior"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html
 #, python-format
@@ -38835,6 +39023,17 @@ msgstr "Acces la scriere"
 msgid "Kosovo"
 msgstr "Kosovo"
 
+#, fuzzy
+#~| msgid ""
+#~| "Our attempt to execute your Payment via PayPal has failed. Please try "
+#~| "again or contact us."
+#~ msgid ""
+#~ "Our attempt to execute your payment via PayPal has failed. Please try "
+#~ "again or contact us."
+#~ msgstr ""
+#~ "Încercarea noastră de a executa plata prin PayPal a eșuat. Vă rugăm să "
+#~ "încercați din nou sau să ne contactați."
+
 #~ msgid "All actions"
 #~ msgstr "Toate acțiunile"
 
@@ -38962,9 +39161,6 @@ msgstr "Kosovo"
 
 #~ msgid "Please do not use special characters in names."
 #~ msgstr "Vă rugăm să nu folosiți caractere speciale în nume."
-
-#~ msgid "State"
-#~ msgstr "Stat"
 
 #, fuzzy
 #~| msgid "Printing date and time"
@@ -39631,9 +39827,6 @@ msgstr "Kosovo"
 
 #~ msgid "Badge design"
 #~ msgstr "Designul insignei"
-
-#~ msgid "(Same as above)"
-#~ msgstr "(La fel ca mai sus)"
 
 #~ msgid "Translation in development"
 #~ msgstr "Traducere în curs de dezvoltare"
