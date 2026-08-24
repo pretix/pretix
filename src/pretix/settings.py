@@ -752,6 +752,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
                 level=logging.INFO,
                 event_level=logging.CRITICAL,
                 sentry_logs_level=logging.INFO,
+                capture_sentry_logs=SENTRY_ENABLE_LOGS,
             )
         ],
         traces_sampler=traces_sampler,
@@ -759,7 +760,6 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
         release=__version__,
         event_scrubber=EventScrubber(denylist=pretix_denylist, recursive=True),
         send_default_pii=False,
-        enable_logs=SENTRY_ENABLE_LOGS,
         propagate_traces=False,  # see https://github.com/getsentry/sentry-python/issues/1717
     )
     ignore_logger('pretix.base.tasks')
