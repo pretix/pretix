@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-08-11 17:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
-"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
-">\n"
+"PO-Revision-Date: 2026-08-25 00:00+0000\n"
+"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
+"fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -89,7 +89,7 @@ msgstr "Hébreu"
 
 #: pretix/_base_settings.py
 msgid "Hungarian"
-msgstr ""
+msgstr "Hongrois"
 
 #: pretix/_base_settings.py
 msgid "Indonesian"
@@ -438,10 +438,8 @@ msgid "You cannot exchange a medium for a medium."
 msgstr "Il n'est pas possible d'échanger un support contre un autre support."
 
 #: pretix/api/views/checkin.py
-#, fuzzy
-#| msgid "Product does not support medium exchange."
 msgid "You cannot simulate a medium exchange."
-msgstr "Ce produit ne permet pas de changer de support."
+msgstr "l n'est pas possible de simuler un échange de support."
 
 #: pretix/api/views/oauth.py pretix/control/logdisplay.py
 #, python-brace-format
@@ -5833,7 +5831,7 @@ msgstr "Code pays (ISO 3166-1 alpha-2)"
 
 #: pretix/base/models/items.py
 msgid "Asked on"
-msgstr ""
+msgstr "Question posée le"
 
 #: pretix/base/models/items.py pretix/base/models/organizer.py
 msgid ""
@@ -7555,9 +7553,6 @@ msgid "The payment for this invoice has already been received."
 msgstr "Le paiement de cette facture a déjà été reçu."
 
 #: pretix/base/payment.py
-#, fuzzy
-#| msgid ""
-#| "This payment is already being processed and can not be canceled any more."
 msgid ""
 "This payment is already being processed and cannot be canceled any more."
 msgstr ""
@@ -8340,16 +8335,12 @@ msgid "Presale end"
 msgstr "Fin de la prévente"
 
 #: pretix/base/reldate.py
-#, fuzzy
-#| msgid "Order email"
 msgid "Order creation"
-msgstr "E-mail de la commande"
+msgstr "Création d'une commande"
 
 #: pretix/base/reldate.py
-#, fuzzy
-#| msgid "Order expired"
 msgid "Order expiry"
-msgstr "Commande expirée"
+msgstr "Expiration de la commande"
 
 #: pretix/base/reldate.py
 msgid "before"
@@ -8378,22 +8369,22 @@ msgstr "Non réglé"
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative date cannot be expressed as \"before\" for \"{}\""
-msgstr ""
+msgstr "Une date relative ne peut pas être exprimée par « avant » pour « {} »"
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative date cannot be expressed as \"after\" for \"{}\""
-msgstr ""
+msgstr "Une date relative ne peut pas être exprimée par « après » pour « {} »"
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative time cannot be expressed as \"before\" for \"{}\""
-msgstr ""
+msgstr "Une durée relative ne peut pas être exprimée par « avant » pour « {} »"
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative time cannot be expressed as \"after\" for \"{}\""
-msgstr ""
+msgstr "Un temps relatif ne peut pas être exprimé par « après » pour « {} »"
 
 #: pretix/base/secrets.py
 msgid "Random (default, works with all pretix apps)"
@@ -10430,12 +10421,12 @@ msgstr ""
 
 #: pretix/base/settings.py
 msgid "No dates match your criteria."
-msgstr ""
+msgstr "Aucune date ne correspond à vos critères."
 
 #: pretix/base/settings.py
 msgctxt "subevents"
 msgid "Text for empty date results"
-msgstr ""
+msgstr "Texte à afficher lorsque les résultats ne contiennent aucune date"
 
 #: pretix/base/settings.py
 msgctxt "subevents"
@@ -10446,6 +10437,11 @@ msgid ""
 "touch with you to arrange further dates. We do not recommend more than one "
 "or two sentences."
 msgstr ""
+"Ce texte s'affichera si le calendrier ou la liste des dates est vide, par "
+"exemple parce qu'un mois ne comporte aucune date ou qu'un filtre sélectionné "
+"par l'utilisateur ne donne aucun résultat. Vous pouvez en profiter pour "
+"indiquer comment vous contacter afin de convenir d'autres dates. Nous vous "
+"recommandons de ne pas dépasser une ou deux phrases."
 
 #: pretix/base/settings.py
 msgid "Guidance text"
@@ -14479,28 +14475,20 @@ msgstr ""
 "plus l’année d’émission de la carte-cadeau."
 
 #: pretix/control/forms/event.py
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment term"
-msgstr "Date de paiement"
+msgstr "Conditions de paiement"
 
 #: pretix/control/forms/event.py
-#, fuzzy
-#| msgid "(Same as above)"
 msgid "same as above"
-msgstr "(identique à ce qui précède)"
+msgstr "idem que ci-dessus"
 
 #: pretix/control/forms/event.py
-#, fuzzy
-#| msgid "Payment term in days"
 msgid "different payment term in days"
-msgstr "Délai de paiement en jours"
+msgstr "délai de paiement différent en jours"
 
 #: pretix/control/forms/event.py
-#, fuzzy
-#| msgid "Payment term in minutes"
 msgid "different payment term in minutes"
-msgstr "Délai de paiement en minutes"
+msgstr "durée de paiement différente en minutes"
 
 #: pretix/control/forms/event.py
 msgid "Prices including tax"
@@ -20577,26 +20565,20 @@ msgstr ""
 "CNAME comme ceci :"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid ""
-#| "We found an SPF record on your domain that includes this system. Great!"
 msgid "We found a DKIM record on your domain for this system. Great!"
 msgstr ""
-"Nous avons trouvé un enregistrement SPF sur votre domaine qui inclut ce "
-"système. Super !"
+"Nous avons trouvé un enregistrement DKIM sur votre domaine pour ce système. "
+"Parfait !"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
 msgid "Your new DMARC record could look like this:"
 msgstr "Votre nouvel enregistrement DMARC pourrait ressembler à ceci :"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid ""
-#| "We found an SPF record on your domain that includes this system. Great!"
 msgid "We found a DMARC record on your domain for this system. Great!"
 msgstr ""
-"Nous avons trouvé un enregistrement SPF sur votre domaine qui inclut ce "
-"système. Super !"
+"Nous avons trouvé un enregistrement DMARC sur votre domaine pour ce système. "
+"Parfait !"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
 msgid "Verification"
@@ -23407,28 +23389,24 @@ msgstr ""
 "besoins alimentaires."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
-#, fuzzy
-#| msgid "Create a new question"
 msgid "Create a new per-ticket question"
-msgstr "Créer une nouvelle question"
+msgstr "Créer une nouvelle question spécifique à chaque ticket"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
-#, fuzzy
-#| msgid "Create a new question"
 msgid "Create a new order-level question"
-msgstr "Créer une nouvelle question"
+msgstr "Créer une nouvelle question au niveau de la commande"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
-#, fuzzy
-#| msgid "Delete question"
 msgid "Per-ticket questions"
-msgstr "Supprimer la question"
+msgstr "Questions relatives à chaque billet"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid ""
 "These questions are asked for every ticket, so possibly multiple times in "
 "the same order."
 msgstr ""
+"Ces questions sont posées pour chaque billet, et peuvent donc être posées "
+"plusieurs fois au cours d'une même commande."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new question"
@@ -23447,28 +23425,28 @@ msgid "All personalized products"
 msgstr "Tous les produits personnalisés"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
-#, fuzzy
-#| msgid "Include questions"
 msgid "Per-order questions"
-msgstr "Inclure des questions"
+msgstr "Questions relatives à chaque commande"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid ""
 "This functionality is in active development and expected to change "
 "significantly over the coming months."
 msgstr ""
+"Cette fonctionnalité est en cours de développement et devrait évoluer "
+"considérablement au cours des prochains mois."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid ""
 "Per-order questions are currently not supported and will not be displayed in "
 "pretixPOS."
 msgstr ""
+"Les questions spécifiques à chaque commande ne sont actuellement pas prises "
+"en charge et n'apparaîtront pas dans pretixPOS."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
-#, fuzzy
-#| msgid "The question has been reordered."
 msgid "These questions are asked once per order."
-msgstr "La question a été réordonnée."
+msgstr "Ces questions sont posées une fois par commande."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
@@ -24080,10 +24058,8 @@ msgstr "(optionnel)"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html
 #: pretix/presale/templates/pretixpresale/event/order_modify.html
-#, fuzzy
-#| msgid "Additional information"
 msgid "Additional order information"
-msgstr "Informations complémentaires"
+msgstr "Informations complémentaires sur la commande"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html
 msgid "Delete order"
@@ -25799,14 +25775,13 @@ msgid "Hardware model"
 msgstr "Modèle de matériel"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
-#, fuzzy, python-format
-#| msgid "Begin: %(time)s"
+#, python-format
 msgid "Last seen: %(time)s"
-msgstr "Début : %(time)s"
+msgstr "Dernière connexion : %(time)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "No recent contact"
-msgstr ""
+msgstr "Aucun contact récent"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Not yet initialized"
@@ -29286,13 +29261,6 @@ msgstr ""
 "l'enregistrement SPF."
 
 #: pretix/control/views/mailsetup.py
-#, fuzzy
-#| msgid ""
-#| "We could not find an SPF record set for the domain you are trying to use. "
-#| "This means that there is a very high change most of the emails will be "
-#| "rejected or marked as spam. We strongly recommend setting an SPF record "
-#| "on the domain. You can do so through the DNS settings at the provider you "
-#| "registered your domain with."
 msgid ""
 "We could not find a CNAME record pointing to our DKIM key for domain you are "
 "trying to use. This means that there is a very high change most of the "
@@ -29300,53 +29268,35 @@ msgid ""
 "DKIM through a CNAME record. You can do so through the DNS settings at the "
 "provider you registered your domain with."
 msgstr ""
-"Nous n'avons pas trouvé d'enregistrement SPF pour le domaine que vous "
-"essayez d'utiliser. Cela signifie qu'il y a de fortes chances que la plupart "
-"des e-mails soient rejetés ou marqués comme spam. Nous vous recommandons "
-"vivement de configurer un enregistrement SPF sur le domaine. Vous pouvez le "
-"faire via les paramètres DNS chez le fournisseur auprès duquel vous avez "
-"enregistré votre domaine."
+"Nous n'avons pas trouvé d'enregistrement CNAME pointant vers notre clé DKIM "
+"pour le domaine que vous essayez d'utiliser. Cela signifie qu'il y a de très "
+"fortes chances que la plupart des e-mails soient rejetés ou marqués comme "
+"spam. Nous vous recommandons vivement de configurer DKIM à l'aide d'un "
+"enregistrement CNAME. Vous pouvez le faire via les paramètres DNS chez le "
+"fournisseur auprès duquel vous avez enregistré votre domaine."
 
 #: pretix/control/views/mailsetup.py
-#, fuzzy
-#| msgid ""
-#| "We found an SPF record set for the domain you are trying to use, but it "
-#| "does not include this system's email server. This means that there is a "
-#| "very high chance most of the emails will be rejected or marked as spam. "
-#| "You should update the DNS settings of your domain to include this system "
-#| "in the SPF record."
 msgid ""
 "We found a CNAME record for a DKIM key, but it is not pointing to the right "
 "location. This means that there is a very high chance most of the emails "
 "will be rejected or marked as spam. You should update the DNS settings of "
 "your domain."
 msgstr ""
-"Nous avons trouvé un enregistrement SPF défini pour le domaine que vous "
-"essayez d'utiliser, mais il n'inclut pas le serveur de messagerie de ce "
-"système. Cela signifie qu'il y a de fortes chances que la plupart des e-"
-"mails soient rejetés ou marqués comme spam. Vous devez mettre à jour les "
-"paramètres DNS de votre domaine afin d'inclure ce système dans "
-"l'enregistrement SPF."
+"Nous avons détecté un enregistrement CNAME associé à une clé DKIM, mais "
+"celui-ci ne pointe pas vers la bonne adresse. Cela signifie qu'il y a de "
+"très fortes chances que la plupart de vos e-mails soient rejetés ou classés "
+"comme spam. Vous devez mettre à jour les paramètres DNS de votre domaine."
 
 #: pretix/control/views/mailsetup.py
-#, fuzzy
-#| msgid ""
-#| "We found an SPF record set for the domain you are trying to use, but it "
-#| "does not include this system's email server. This means that there is a "
-#| "very high chance most of the emails will be rejected or marked as spam. "
-#| "You should update the DNS settings of your domain to include this system "
-#| "in the SPF record."
 msgid ""
 "We did not find a DMARC record for your domain. This means that there is a "
 "very high chance most of the emails will be rejected or marked as spam. You "
 "should update the DNS settings of your domain."
 msgstr ""
-"Nous avons trouvé un enregistrement SPF défini pour le domaine que vous "
-"essayez d'utiliser, mais il n'inclut pas le serveur de messagerie de ce "
-"système. Cela signifie qu'il y a de fortes chances que la plupart des e-"
-"mails soient rejetés ou marqués comme spam. Vous devez mettre à jour les "
-"paramètres DNS de votre domaine afin d'inclure ce système dans "
-"l'enregistrement SPF."
+"Nous n'avons pas trouvé d'enregistrement DMARC pour votre domaine. Cela "
+"signifie qu'il y a de très fortes chances que la plupart de vos e-mails "
+"soient rejetés ou marqués comme spam. Vous devriez mettre à jour les "
+"paramètres DNS de votre domaine."
 
 #: pretix/control/views/mailsetup.py
 msgid "The verification code was incorrect, please try again."
@@ -32032,8 +31982,8 @@ msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
-"Nous attendons une réponse de PayPal concernant votre paiement. Veuillez "
-"nous contacter, si cela prend plus de quelques heures."
+"Nous attendons une réponse de PayPal concernant votre paiement. N'hésitez "
+"pas à nous contacter si cela prend plus de quelques heures."
 
 #: pretix/plugins/paypal/views.py pretix/plugins/paypal2/views.py
 msgid "Invalid response from PayPal received."
@@ -32131,6 +32081,8 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py
 msgid "Allow further payments during compliance hold"
 msgstr ""
+"Autoriser la poursuite des paiements pendant la période de suspension pour "
+"non-conformité"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -32140,16 +32092,25 @@ msgid ""
 "attempts during that window. This might result in them being charged twice "
 "if the original payment is approved."
 msgstr ""
+"Le système de prévention des fraudes de PayPal peut bloquer le traitement de "
+"certains paiements pendant une durée considérable. Pendant cette période, le "
+"paiement est marqué comme « en attente ». Vous pouvez autoriser vos clients "
+"à effectuer de nouvelles tentatives de paiement pendant cette période. Cela "
+"peut entraîner un double prélèvement si le paiement initial est finalement "
+"approuvé."
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Timeout further payment attempts"
-msgstr ""
+msgstr "Délai d'expiration des tentatives de paiement supplémentaires"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "Time duration in minutes after which another payment attempt is possible, "
 "while the last payment is still under investigation."
 msgstr ""
+"Durée en minutes à l'issue de laquelle une nouvelle tentative de paiement "
+"est possible, alors que le dernier paiement fait toujours l'objet d'une "
+"enquête."
 
 #: pretix/plugins/paypal2/payment.py
 msgid "-- Automatic --"
@@ -32427,6 +32388,12 @@ msgid ""
 "twice in case PayPal allows your initial payment attempt. Please contact us "
 "to resolve this case."
 msgstr ""
+"Votre paiement est en cours de traitement par PayPal. Cette opération prend "
+"plus de temps que d'habitude. Vous pouvez attendre que PayPal valide le "
+"paiement ou essayer de payer à nouveau en utilisant ce moyen de paiement ou "
+"un autre. Cela pourrait entraîner un double prélèvement si PayPal autorise "
+"votre première tentative de paiement. Veuillez nous contacter pour résoudre "
+"ce problème."
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
