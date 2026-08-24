@@ -287,6 +287,30 @@ def test_expiry_dst(event):
 
 
 @pytest.mark.django_db
+def test_expiry_per_channel(event):
+    today = now()
+    event.settings.set('payment_term_mode', 'minutes')
+    event.settings.set('payment_term_minutes', 30)
+    event.settings.set('payment_term_mode_baz', 'minutes')
+    event.settings.set('payment_term_minutes_baz', 15)
+    order = _create_order(event, email='dummy@example.org', positions=[],
+                          now_dt=today,
+                          sales_channel=event.organizer.sales_channels.get(identifier="baz"),
+                          payment_requests=[{
+                              "id": "test0",
+                              "provider": "free",
+                              "max_value": None,
+                              "min_value": None,
+                              "multi_use_supported": False,
+                              "info_data": {},
+                              "pprov": FreeOrderProvider(event),
+                          }],
+                          locale='de')[0]
+    assert (order.expires - today).days == 0
+    assert (order.expires - today).seconds == 15 * 60
+
+
+@pytest.mark.django_db
 def test_expiring(event):
     o1 = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',

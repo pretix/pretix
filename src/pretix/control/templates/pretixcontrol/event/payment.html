@@ -2,9 +2,10 @@
 {% load i18n %}
 {% load static %}
 {% load bootstrap3 %}
+{% load getitem %}
 {% block inside %}
     <h1>{% trans "Payment settings" %}</h1>
-    <form action="" method="post" class="form-horizontal form-plugins">
+    <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         <div class="tabbed-form">
             <fieldset>
@@ -71,14 +72,37 @@
                 {% bootstrap_form_errors form layout="control" %}
                 {% bootstrap_field form.payment_term_mode layout="control" %}
                 {% bootstrap_field form.payment_term_days layout="control" %}
-                {% bootstrap_field form.payment_term_weekdays layout="control" %}
                 {% bootstrap_field form.payment_term_minutes layout="control" %}
+                {% bootstrap_field form.payment_term_weekdays layout="control" %}
                 {% bootstrap_field form.payment_term_last layout="control" %}
                 {% bootstrap_field form.payment_term_expire_automatically layout="control" %}
                 {% trans "days" context "unit" as days %}
                 {% bootstrap_field form.payment_term_expire_delay_days layout="control" addon_after=days %}
                 {% bootstrap_field form.payment_term_accept_late layout="control" %}
                 {% bootstrap_field form.payment_pending_hidden layout="control" %}
+
+                {% for c, fields in form.term_channel_fields.items %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                {% if "." in c.icon %}
+                                    <img src="{% static c.icon %}" class="fa-like-image"
+                                         data-toggle="tooltip" title="{{ c.type_instance.verbose_name }}">
+                                {% else %}
+                                    <span class="fa fa-fw fa-{{ c.icon }} text-muted"
+                                          data-toggle="tooltip" title="{{ c.type_instance.verbose_name }}"></span>
+                                {% endif %}
+                                {{ c.label }}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            {% for f in fields %}
+                                {% bootstrap_field form|getitem:f layout="control" %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+
             </fieldset>
             <fieldset>
                 <legend>{% trans "Advanced" %}</legend>
