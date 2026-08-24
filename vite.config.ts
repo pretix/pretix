@@ -12,8 +12,12 @@ import { parse as parseToml } from 'smol-toml'
 // makes it available in the import map.
 const SHARED_DEPS = ['vue']
 
-const { entries: pretixPluginEntries } = discoverPretixPlugins()
+const { entries: pretixPluginEntries, outDirs: pluginOutDirs } = discoverPretixPlugins()
 const pluginDirs = [...new Set(Object.values(pretixPluginEntries).map(p => path.dirname(p)))]
+// Per-plugin source alias, e.g. ~pretix_reports → …/static/pretix_reports.
+const pluginAliases = Object.fromEntries(
+	Object.entries(pretixPluginEntries).map(([name, file]) => [`~${name.split('/')[0]}`, path.dirname(file)])
+)
 
 export default defineConfig({
 	plugins: [
@@ -22,6 +26,7 @@ export default defineConfig({
 		pretixPluginDevEntries(),
 	],
 	resolve: {
+		alias: pluginAliases,
 		// Pin shared deps to pretix's node_modules to prevent duplicate instances
 		// across plugins whose node_modules live in sibling directories
 		dedupe: [...SHARED_DEPS, '@vue/runtime-core', '@vue/reactivity', '@vue/shared'],
@@ -33,6 +38,10 @@ export default defineConfig({
 		},
 		cors: {
 			origin: /^https?:\/\/(?:(?:[^:]+\.)?localhost|127\.0\.0\.1|\[::1\]|[^:]+\.pretix\.(dev|work))(?::\d+)?$/
+		},
+		watch: {
+			// pluginDirs are watched so we need to ignore their build output
+			ignored: pluginOutDirs.map(dir => `${dir}/**`),
 		},
 	},
 	build: {
@@ -92,7 +101,7 @@ function sharedDepsPlugin (): Plugin {
 }
 
 // TODO move to separate file?
-function discoverPretixPlugins (): { entries: Record<string, string> } {
+function discoverPretixPlugins (): { entries: Record<string, string>, outDirs: string[] } {
 	let manifestFiles: string[] = []
 	try {
 		const raw = execSync(`python -c "
@@ -120,16 +129,19 @@ print(json.dumps(result))
 		console.error('Failed to discover pretix plugins, skipping plugin entries:', error)
 	}
 	const entries: Record<string, string> = {}
+	const outDirs: string[] = []
 	for (const manifestFile of manifestFiles) {
 		const packageRoot = manifestFile.replace(/[/\\]pretixplugin\.toml$/, '')
 		const parsed = parseToml(readFileSync(manifestFile, 'utf8')) as {
-			vite: { entries: Record<string, string> }
+			vite: { entries: Record<string, string>, outDir?: string }
 		}
 		for (const [name, rel] of Object.entries(parsed.vite.entries)) {
 			entries[name] = path.join(packageRoot, rel)
 		}
+		if (parsed.vite.outDir)
+			outDirs.push(path.join(packageRoot, parsed.vite.outDir))
 	}
-	return { entries }
+	return { entries, outDirs }
 }
 
 // In dev mode, the browser requests /{entryName} from the Vite dev server.
@@ -139,6 +151,7 @@ function pretixPluginDevEntries (): Plugin {
 	return {
 		name: 'pretix-plugin-dev-entries',
 		configureServer (server) {
+			server.watcher.add(pluginDirs)
 			server.middlewares.use((req, _res, next) => {
 				const urlPath = req.url?.split('?')[0]
 				if (urlPath) {
