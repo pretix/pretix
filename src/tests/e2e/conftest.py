@@ -155,10 +155,6 @@ def live_server_url(live_server, settings):
 
     settings.SITE_URL = live_server.url
 
-    # Enable Vite widget if requested via env var
-    if os.environ.get("PRETIX_WIDGET_VITE") or os.environ.get("PRETIX_WIDGET_VITE_DEV"):
-        settings.PRETIX_WIDGET_VITE = True
-
     return live_server.url
 
 
