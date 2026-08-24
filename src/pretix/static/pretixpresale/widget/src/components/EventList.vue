@@ -62,6 +62,8 @@ console.log(store)
 		:event="event"
 	)
 
+	.pretix-widget-event-list-empty(v-if="!store.events.length && store.emptyText", v-html="store.emptyText")
+
 	p.pretix-widget-event-list-load-more(v-if="store.hasMoreEvents")
 		button(@click.prevent.stop="loadMore") {{ STRINGS.load_more }}
 </template>
