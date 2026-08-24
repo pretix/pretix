@@ -935,7 +935,7 @@ DEFAULTS = {
     },
     'event_list_empty_text': {
         'default': LazyI18nString.from_gettext(
-            gettext_noop('No dates are currently available for sale that match your criteria.'),
+            gettext_noop('No dates match your criteria.'),
         ),
         'type': LazyI18nString,
         'form_class': I18nFormField,
