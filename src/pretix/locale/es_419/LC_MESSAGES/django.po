@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-24 14:39+0000\n"
+"POT-Creation-Date: 2026-08-24 15:35+0000\n"
 "PO-Revision-Date: 2025-07-18 01:00+0000\n"
 "Last-Translator: Zona Vip <contacto@zonavip.mx>\n"
 "Language-Team: Spanish (Latin America) <https://translate.pretix.eu/projects/"
@@ -7852,16 +7852,6 @@ msgstr ""
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative time cannot be expressed as \"after\" for \"{}\""
-msgstr ""
-
-#: pretix/base/reldate.py
-#, python-brace-format
-msgid "A relative date cannot be expressed as 'before' for '{}'"
-msgstr ""
-
-#: pretix/base/reldate.py
-#, python-brace-format
-msgid "A relative date cannot be expressed as 'after' for '{}'"
 msgstr ""
 
 #: pretix/base/secrets.py
@@ -28210,7 +28200,7 @@ msgid ""
 "considerable amount of time. The payment is marked as \"pending\" during "
 "this time window. You can allow your customers to start another payment "
 "attempts during that window. This might result in them being charged twice "
-"if theoriginal payment is approved."
+"if the original payment is approved."
 msgstr ""
 
 #: pretix/plugins/paypal2/payment.py
