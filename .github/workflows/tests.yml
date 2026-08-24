@@ -126,4 +126,21 @@ jobs:
         run: playwright install
       - name: Run E2E tests
         working-directory: ./src
-        run: PRETIX_CONFIG_FILE=tests/ci_postgres.cfg py.test tests/e2e/ -v --maxfail=10
+        run: PRETIX_CONFIG_FILE=tests/ci_postgres.cfg py.test tests/e2e/ -v --maxfail=10 --tracing=retain-on-failure
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-traces
+          path: test-results/
+      - name: Log trace instructions
+        if: steps.check-traces.outputs.found == 'true'
+        run: |
+          {
+            echo "## 🎭 Playwright traces available"
+            echo ""
+            echo "Some tests failed or retried and produced traces."
+            echo ""
+            echo "1. Download the **playwright-traces-${{ github.run_id }}** artifact from this run (link in the **Summary** tab, under Artifacts)."
+            echo "2. Unzip it."
+            echo "3. Go to https://trace.playwright.dev and drag \`trace.zip\` into the page — or run \`npx playwright show-trace trace.zip\` locally."
+          } >> "$GITHUB_STEP_SUMMARY"
