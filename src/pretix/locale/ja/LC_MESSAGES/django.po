@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-08-16 22:00+0000\n"
+"PO-Revision-Date: 2026-08-25 21:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -93,7 +93,7 @@ msgstr "ヘブライ語"
 
 #: pretix/_base_settings.py
 msgid "Hungarian"
-msgstr ""
+msgstr "ハンガリー語"
 
 #: pretix/_base_settings.py
 msgid "Indonesian"
@@ -428,10 +428,8 @@ msgid "You cannot exchange a medium for a medium."
 msgstr "メディアを別のメディアに変更することはできません。"
 
 #: pretix/api/views/checkin.py
-#, fuzzy
-#| msgid "Product does not support medium exchange."
 msgid "You cannot simulate a medium exchange."
-msgstr "本製品は中程度の交換に対応していません。"
+msgstr "メディアの交換をシミュレートすることはできません。"
 
 #: pretix/api/views/oauth.py pretix/control/logdisplay.py
 #, python-brace-format
@@ -5691,7 +5689,7 @@ msgstr "国コード（ISO 3166-1 alpha-2）"
 
 #: pretix/base/models/items.py
 msgid "Asked on"
-msgstr ""
+msgstr "質問日"
 
 #: pretix/base/models/items.py pretix/base/models/organizer.py
 msgid ""
@@ -7340,12 +7338,9 @@ msgid "The payment for this invoice has already been received."
 msgstr "この請求書の支払いはすでに受領済みです。"
 
 #: pretix/base/payment.py
-#, fuzzy
-#| msgid ""
-#| "This payment is already being processed and can not be canceled any more."
 msgid ""
 "This payment is already being processed and cannot be canceled any more."
-msgstr "この支払いは処理中のため、キャンセルできません。"
+msgstr "この支払いはすでに処理中のため、キャンセルできません。"
 
 #: pretix/base/payment.py
 msgid "Automatic refunds are not supported by this payment provider."
@@ -8105,16 +8100,12 @@ msgid "Presale end"
 msgstr "前売り終了"
 
 #: pretix/base/reldate.py
-#, fuzzy
-#| msgid "Order email"
 msgid "Order creation"
-msgstr "注文者メール"
+msgstr "注文の作成"
 
 #: pretix/base/reldate.py
-#, fuzzy
-#| msgid "Order expired"
 msgid "Order expiry"
-msgstr "注文の有効期限が切れました"
+msgstr "注文の失効"
 
 #: pretix/base/reldate.py
 msgid "before"
@@ -8143,22 +8134,22 @@ msgstr "未設定"
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative date cannot be expressed as \"before\" for \"{}\""
-msgstr ""
+msgstr "相対的な日付は、「{}」に対して「before」で表すことはできません"
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative date cannot be expressed as \"after\" for \"{}\""
-msgstr ""
+msgstr "相対的な日付は「{}」に対して「after」として表すことはできません"
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative time cannot be expressed as \"before\" for \"{}\""
-msgstr ""
+msgstr "相対時間は「{}」に対して「before」で表すことはできません"
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative time cannot be expressed as \"after\" for \"{}\""
-msgstr ""
+msgstr "相対時間は「{}」に対して「after」で表すことはできません"
 
 #: pretix/base/secrets.py
 msgid "Random (default, works with all pretix apps)"
@@ -10067,12 +10058,12 @@ msgstr ""
 
 #: pretix/base/settings.py
 msgid "No dates match your criteria."
-msgstr ""
+msgstr "条件に合致する日付はありません。"
 
 #: pretix/base/settings.py
 msgctxt "subevents"
 msgid "Text for empty date results"
-msgstr ""
+msgstr "空の日付結果のテキスト"
 
 #: pretix/base/settings.py
 msgctxt "subevents"
@@ -10083,6 +10074,10 @@ msgid ""
 "touch with you to arrange further dates. We do not recommend more than one "
 "or two sentences."
 msgstr ""
+"このテキストは、カレンダーまたは日付リストが空の場合に表示されます。たとえば"
+"、月に日付が含まれていない場合や、ユーザーが選択したフィルターに結果が見つか"
+"らない場合です。これをご利用いただくことで、今後の日程調整のために連絡する方"
+"法を宣伝できます。1文または2文以上は推奨いたしません。"
 
 #: pretix/base/settings.py
 msgid "Guidance text"
@@ -13902,26 +13897,20 @@ msgid ""
 msgstr "ギフトカードの有効期限を発行年を含めた{}年に設定しました。"
 
 #: pretix/control/forms/event.py
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment term"
-msgstr "支払い日"
+msgstr "支払条件"
 
 #: pretix/control/forms/event.py
 msgid "same as above"
-msgstr ""
+msgstr "上記と同じ"
 
 #: pretix/control/forms/event.py
-#, fuzzy
-#| msgid "Payment term in days"
 msgid "different payment term in days"
-msgstr "支払い条件（日数）"
+msgstr "日数で表す異なる支払条件"
 
 #: pretix/control/forms/event.py
-#, fuzzy
-#| msgid "Payment term in minutes"
 msgid "different payment term in minutes"
-msgstr "支払い期限（分単位）"
+msgstr "分で表す異なる支払条件"
 
 #: pretix/control/forms/event.py
 msgid "Prices including tax"
@@ -22533,28 +22522,24 @@ msgstr ""
 "食事を提供する場合、ユーザーに食事制限について尋ねることができる一例です。"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
-#, fuzzy
-#| msgid "Create a new question"
 msgid "Create a new per-ticket question"
-msgstr "新しい質問を作成"
+msgstr "チケットごとに新しい質問を作成"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
-#, fuzzy
-#| msgid "Create a new question"
 msgid "Create a new order-level question"
-msgstr "新しい質問を作成"
+msgstr "注文ごとに新しい質問を作成"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
-#, fuzzy
-#| msgid "Delete question"
 msgid "Per-ticket questions"
-msgstr "質問を削除"
+msgstr "チケットごとの質問"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid ""
 "These questions are asked for every ticket, so possibly multiple times in "
 "the same order."
 msgstr ""
+"これらの質問はすべてのチケットに対して尋ねられるため、同じ順序で複数回になる"
+"可能性があります。"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new question"
@@ -22573,28 +22558,24 @@ msgid "All personalized products"
 msgstr "すべてのパーソナライズされた製品"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
-#, fuzzy
-#| msgid "Include questions"
 msgid "Per-order questions"
-msgstr "質問を含む"
+msgstr "注文ごとの質問"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid ""
 "This functionality is in active development and expected to change "
 "significantly over the coming months."
-msgstr ""
+msgstr "この機能は現在開発が活発で、今後数か月で大幅に変化すると予想されています。"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid ""
 "Per-order questions are currently not supported and will not be displayed in "
 "pretixPOS."
-msgstr ""
+msgstr "注文ごとの質問は現在サポートされておらず、pretixPOSでは表示されません。"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
-#, fuzzy
-#| msgid "The question has been reordered."
 msgid "These questions are asked once per order."
-msgstr "質問の並び順が変更されました。"
+msgstr "これらの質問は、注文ごとに1回ずつ尋ねられます。"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
@@ -23186,10 +23167,8 @@ msgstr "(任意)"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html
 #: pretix/presale/templates/pretixpresale/event/order_modify.html
-#, fuzzy
-#| msgid "Additional information"
 msgid "Additional order information"
-msgstr "追加情報"
+msgstr "追加の注文情報"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html
 msgid "Delete order"
@@ -24856,14 +24835,13 @@ msgid "Hardware model"
 msgstr "ハードウェアの機種"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
-#, fuzzy, python-format
-#| msgid "Begin: %(time)s"
+#, python-format
 msgid "Last seen: %(time)s"
-msgstr "開始: %(time)s"
+msgstr "最後の閲覧: %(time)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "No recent contact"
-msgstr ""
+msgstr "最近の連絡なし"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Not yet initialized"
@@ -28220,19 +28198,14 @@ msgstr ""
 "に高いことを意味します。ドメインのDNS設定を更新すべきです。"
 
 #: pretix/control/views/mailsetup.py
-#, fuzzy
-#| msgid ""
-#| "We did not find DMARC record for your domain. This means that there is a "
-#| "very high chance most of the emails will be rejected or marked as spam. "
-#| "You should update the DNS settings of your domain."
 msgid ""
 "We did not find a DMARC record for your domain. This means that there is a "
 "very high chance most of the emails will be rejected or marked as spam. You "
 "should update the DNS settings of your domain."
 msgstr ""
-"お客様のドメインのDMARCレコードが見つかりませんでした。これは、ほとんどのメー"
-"ルが拒否されたりスパムとしてマークされたりする可能性が非常に高いことを意味し"
-"ます。ドメインのDNS設定を更新すべきです。"
+"あなたのドメインのDMARCレコードが見つかりませんでした。これは、ほとんどの"
+"メールが拒否されたかスパムとしてマークされた可能性が非常に高いことを意味しま"
+"す。ドメインのDNS設定を更新すべきです。"
 
 #: pretix/control/views/mailsetup.py
 msgid "The verification code was incorrect, please try again."
@@ -30906,7 +30879,7 @@ msgstr ""
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Allow further payments during compliance hold"
-msgstr ""
+msgstr "コンプライアンス保留の間、追加の支払いを許可する"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -30916,16 +30889,20 @@ msgid ""
 "attempts during that window. This might result in them being charged twice "
 "if the original payment is approved."
 msgstr ""
+"PayPalの不正防止は、個々の支払いの処理をかなりの期間ブロックする可能性があり"
+"ます。この期間中、支払いは「保留中」とマークされています。顧客がその期間中に"
+"別の支払い試行を開始できるように許可することができます。元の支払いが承認され"
+"た場合、二重に請求される可能性があります。"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Timeout further payment attempts"
-msgstr ""
+msgstr "追加の支払い試行がタイムアウト"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "Time duration in minutes after which another payment attempt is possible, "
 "while the last payment is still under investigation."
-msgstr ""
+msgstr "最後の支払いがまだ調査中である間、別の支払い試行が可能となる時間（分）。"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "-- Automatic --"
@@ -31190,6 +31167,10 @@ msgid ""
 "twice in case PayPal allows your initial payment attempt. Please contact us "
 "to resolve this case."
 msgstr ""
+"支払いはPayPalで処理されています。通常より時間がかかります。PayPalが支払いを"
+"確認するまでお待ちいただくか、こちらまたは別の支払い方法で再度お支払いをお試"
+"しください。PayPalが最初の支払い試行を許可した場合、二重に請求される可能性が"
+"あります。この件を解決するために、弊社までご連絡ください。"
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
