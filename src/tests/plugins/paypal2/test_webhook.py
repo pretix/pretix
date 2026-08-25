@@ -322,6 +322,7 @@ def get_test_empty_captures():
                        'rel': 'self',
                        'method': 'GET'}]}
 
+
 class Object():
     pass
 
@@ -571,6 +572,7 @@ def test_webhook_empty_captures(env, client, monkeypatch):
     order = env[1]
     order.refresh_from_db()
     assert order.status == Order.STATUS_PENDING
+
 
 @pytest.mark.django_db
 def test_webhook_mark_paid(env, client, monkeypatch):
