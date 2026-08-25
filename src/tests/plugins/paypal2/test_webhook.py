@@ -299,6 +299,29 @@ def get_test_order_review_pending():
                        'method': 'GET'}]}
 
 
+def get_test_empty_captures():
+    return {'id': '806440346Y391300T',
+            'intent': 'CAPTURE',
+            'status': 'COMPLETED',
+            'purchase_units': [{'reference_id': 'default',
+                                'amount': {'currency_code': 'EUR', 'value': '43.59'},
+                                'payee': {'email_address': 'dummy-facilitator@dummy.dummy',
+                                          'merchant_id': 'G6R2B9YXADKWW'},
+                                'description': 'Order JWJGC for PayPal v2',
+                                'custom_id': 'Order PAYPALV2-JWJGC',
+                                'soft_descriptor': 'MARTINFACIL',
+                                'payments': {'captures': []}
+                                }],
+            'payer': {'name': {'given_name': 'test', 'surname': 'buyer'},
+                      'email_address': 'dummy@dummy.dummy',
+                      'payer_id': 'Q739JNKWH67HE',
+                      'address': {'country_code': 'DE'}},
+            'create_time': '2022-04-28T11:59:59Z',
+            'update_time': '2022-04-28T12:00:22Z',
+            'links': [{'href': 'https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T',
+                       'rel': 'self',
+                       'method': 'GET'}]}
+
 class Object():
     pass
 
@@ -455,6 +478,99 @@ def test_webhook_all_good(env, client, monkeypatch):
     order.refresh_from_db()
     assert order.status == Order.STATUS_PAID
 
+
+@pytest.mark.django_db
+def test_webhook_empty_captures(env, client, monkeypatch):
+    order = env[1]
+    with scopes_disabled():
+        p = order.payments.first()
+        p.state = OrderPayment.PAYMENT_STATE_PENDING
+        p.save()
+        order.status = Order.STATUS_PENDING
+        order.save()
+
+    pp_order = Result(get_test_empty_captures())
+    monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
+    monkeypatch.setattr("pretix.plugins.paypal2.payment.PaypalMethod.init_api", init_api)
+
+    with scopes_disabled():
+        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
+                                              reference="806440346Y391300T")
+
+    client.post('/_paypal/webhook/', json.dumps(
+        {
+            "id": "WH-4T867178D0574904F-7TT11736YU643990P",
+            "create_time": "2022-04-28T12:00:37.077Z",
+            "resource_type": "checkout-order",
+            "event_type": "CHECKOUT.ORDER.COMPLETED",
+            "summary": "Checkout Order Completed",
+            "resource": {
+                "update_time": "2022-04-28T12:00:22Z",
+                "create_time": "2022-04-28T11:59:59Z",
+                "purchase_units": [
+                    {
+                        "reference_id": "default",
+                        "amount": {
+                            "currency_code": "EUR",
+                            "value": "43.59"
+                        },
+                        "payee": {
+                            "email_address": "dummy-facilitator@dummy.dummy",
+                            "merchant_id": "G6R2B9YXADKWW"
+                        },
+                        "description": "Order JWJGC for PayPal v2",
+                        "custom_id": "Order PAYPALV2-JWJGC",
+                        "soft_descriptor": "MARTINFACIL",
+                        "payments": {
+                            "captures": []
+                        }
+                    }
+                ],
+                "links": [
+                    {
+                        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T",
+                        "rel": "self",
+                        "method": "GET"
+                    }
+                ],
+                "id": "806440346Y391300T",
+                "intent": "CAPTURE",
+                "payer": {
+                    "name": {
+                        "given_name": "test",
+                        "surname": "buyer"
+                    },
+                    "email_address": "dummy@dummy.dummy",
+                    "payer_id": "Q739JNKWH67HE",
+                    "address": {
+                        "country_code": "DE"
+                    }
+                },
+                "status": "COMPLETED"
+            },
+            "status": "SUCCESS",
+            "links": [
+                {
+                    "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-4T867178D0574904F-7TT11736YU643990P",
+                    "rel": "self",
+                    "method": "GET",
+                    "encType": "application/json"
+                },
+                {
+                    "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-4T867178D0574904F-7TT11736YU643990P/resend",
+                    "rel": "resend",
+                    "method": "POST",
+                    "encType": "application/json"
+                }
+            ],
+            "event_version": "1.0",
+            "resource_version": "2.0"
+        }
+    ), content_type='application_json')
+
+    order = env[1]
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PENDING
 
 @pytest.mark.django_db
 def test_webhook_mark_paid(env, client, monkeypatch):

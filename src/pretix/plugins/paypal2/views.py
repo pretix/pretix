@@ -494,6 +494,7 @@ def webhook(request, *args, **kwargs):
     elif payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED,
                            OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED):
         if sale['status'] == 'COMPLETED':
+            any_captures = False
             all_captures_completed = True
             any_pending_review = False
             any_failed = None
@@ -505,6 +506,7 @@ def webhook(request, *args, **kwargs):
                     except ReferencedPayPalObject.MultipleObjectsReturned:
                         pass
 
+                    any_captures = True
                     if capture['status'] in ('COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'):
                         pass
                     elif capture['status'] in ("DECLINED", "FAILED"):
@@ -516,7 +518,7 @@ def webhook(request, *args, **kwargs):
                             any_pending_review = True
                     else:
                         raise ValueError("Unknown paypal capture state: {}".format(capture['status']))
-            if all_captures_completed:
+            if any_captures and all_captures_completed:
                 try:
                     payment.confirm()
                     prov.log_payment_duration(payment)
