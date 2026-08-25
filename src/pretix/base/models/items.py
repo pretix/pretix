@@ -50,7 +50,7 @@ from dateutil.tz import datetime_exists
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import (
-    MaxLengthValidator, MinValueValidator, RegexValidator,
+    MaxLengthValidator, MinLengthValidator, MinValueValidator, RegexValidator,
 )
 from django.db import models
 from django.db.models import Q
@@ -1731,6 +1731,11 @@ class Question(LoggedModel):
     valid_datetime_max = models.DateTimeField(null=True, blank=True,
                                               verbose_name=_('Maximum value'),
                                               help_text=_('Currently not supported in our apps and during check-in'))
+    valid_string_length_min = models.PositiveIntegerField(null=True, blank=True,
+                                                          verbose_name=_('Minimum length'),
+                                                          help_text=_(
+                                                              'Currently not supported in our apps and during check-in'
+                                                          ))
     valid_string_length_max = models.PositiveIntegerField(null=True, blank=True,
                                                           verbose_name=_('Maximum length'),
                                                           help_text=_(
@@ -1885,6 +1890,11 @@ class Question(LoggedModel):
             else:
                 raise ValidationError(_('Unknown country code.'))
         elif self.type in (Question.TYPE_STRING, Question.TYPE_TEXT):
+            if self.valid_string_length_min is not None and len(answer) < self.valid_string_length_min:
+                raise ValidationError(MinLengthValidator.message % {
+                    'limit_value': self.valid_string_length_min,
+                    'show_value': len(answer)
+                })
             if self.valid_string_length_max is not None and len(answer) > self.valid_string_length_max:
                 raise ValidationError(MaxLengthValidator.message % {
                     'limit_value': self.valid_string_length_max,
@@ -1906,6 +1916,8 @@ class Question(LoggedModel):
             raise ValidationError(_("The maximum date must not be before the minimum value."))
         if self.valid_number_max and self.valid_number_min and self.valid_number_min > self.valid_number_max:
             raise ValidationError(_("The maximum value must not be lower than the minimum value."))
+        if self.valid_string_length_max and self.valid_string_length_min and self.valid_string_length_min > self.valid_string_length_max:
+            raise ValidationError(_("The maximum length must not be shorter than the minimum length."))
         super().clean()
 
     def clean_type_change(self, old_type, new_type):
