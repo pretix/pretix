@@ -345,7 +345,7 @@ Vue.component('pricebox', {
         + '       :min="display_price_nonlocalized" :value="suggested_price_nonlocalized" :name="field_name"'
         + '       step="any" v-bind:aria-labelledby="aria_labelledby" v-bind:aria-describedby="price_desc_id">'
         + '</div>'
-        + '<small class="pretix-widget-pricebox-tax" :id="price_desc_id" v-if="price.rate != \'0\' && price.gross != \'0.00\'">'
+        + '<small class="pretix-widget-pricebox-tax" :id="price_desc_id" v-if="show_taxline">'
         + '{{ taxline }}'
         + '</small>'
         + '</div>'),
@@ -421,6 +421,10 @@ Vue.component('pricebox', {
             } else {
                 return '<span class="pretix-widget-pricebox-currency">' + this.$root.currency + "</span> " + this.display_price;
             }
+        },
+        show_taxline: function () {
+            // rate can either be "0.00" or "0" => parseFloat to check
+            return Number.parseFloat(this.price.rate) && Number.parseFloat(this.price.gross);
         },
         taxline: function () {
             if (this.$root.display_net_prices) {
