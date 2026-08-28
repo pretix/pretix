@@ -840,6 +840,8 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
                     f.fields[fname].disabled = val['disabled']
                 if 'validators' in val and fname in f.fields:
                     f.fields[fname].validators += val['validators']
+                if 'label' in val and fname in f.fields:
+                    f.fields[fname].label = val['label']
 
         return f
 
@@ -944,6 +946,8 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
                     f.fields[fname].disabled = val['disabled']
                 if 'validators' in val and fname in f.fields:
                     f.fields[fname].validators += val['validators']
+                if 'label' in val and fname in f.fields:
+                    f.fields[fname].label = val['label']
 
         return f
 

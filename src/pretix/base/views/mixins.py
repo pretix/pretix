@@ -135,6 +135,8 @@ class BaseQuestionsViewMixin:
                             question_field.initial = getattr(question_field, 'initial', None) or src['initial']
                     if 'validators' in src:
                         question_field.validators += src['validators']
+                    if 'label' in src:
+                        question_field.label = src['label']
 
             if len(form.fields) > 0:
                 formlist.append(form)
