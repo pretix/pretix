@@ -26,7 +26,6 @@ import pytest
 from django.core.files.base import ContentFile
 from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
-
 from tests.const import SAMPLE_PNG
 
 TEST_ORGANIZER_RES = {
