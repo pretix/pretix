@@ -566,7 +566,7 @@ organizer level.
       Content-Type: application/json
 
       {
-        "imprint_url": "https://pretix.eu",
+        "region": "DE",
         …
       }
 
@@ -579,12 +579,14 @@ organizer level.
       Content-Type: application/json
 
       {
-        "imprint_url":
+        "locale":
           {
-            "value": "https://pretix.eu",
-            "label": "Imprint URL",
+            "value": "DE",
+            "label": "Region",
             "readonly": false,
-            "help_text": "This should point e.g. to a part of your website that has your contact details and legal information."
+            "help_text": "Will be used to determine date and time formatting as well as default country for customer
+                          addresses and phone numbers. For formatting, this takes less priority than the language and
+                          is therefore mostly relevant for languages used in different regions globally (like English)."
           }
         },
         …
@@ -620,7 +622,7 @@ organizer level.
       Content-Type: application/json
 
       {
-        "imprint_url": "https://example.org/imprint/"
+        "region": "DE"
       }
 
    **Example response**:
@@ -632,7 +634,7 @@ organizer level.
       Content-Type: application/json
 
       {
-        "imprint_url": "https://example.org/imprint/",
+        "region": "DE",
         …
       }
 
