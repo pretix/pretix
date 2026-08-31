@@ -343,6 +343,66 @@ def _validate_vat_id_EU(vat_id, country_code):
         return vat_id
 
 
+def _validate_vat_id_EU_fallback_germany(vat_id, country_code, requester_id):
+    # We can skip most static validation checks because _validate_vat_id_EU always runs before
+    vat_id = normalize_vat_id(vat_id, country_code)
+
+    # The VIES service of the European commission is overused and down due to rate limits A LOT. There is another
+    # API by German BZSt, but it only works if the requester is German and the requested is not.
+    # https://www.bzst.de/DE/Unternehmen/Identifikationsnummern/Umsatzsteuer-Identifikationsnummer/AuslaendischeUSt-IdNr/auslaendische_ust_idnr_node.html
+    try:
+        r = requests.post(
+            "https://api.evatr.vies.bzst.de/app/v1/abfrage",
+            json={
+                "anfragendeUstid": requester_id,
+                "angefragteUstid": vat_id,
+            },
+            timeout=10,
+        )
+        d = r.json()
+        if r.status_code == 200:
+            if d['status'] in ('evatr-0000', 'evatr-2008'):
+                # evatr-0000: Die angefragte Ust-IdNr. ist zum Anfragezeitpunkt gültig.
+                # evatr-2002: Die angefragte USt-IdNr. ist zum Anfragezeitpunkt nicht gültig.
+                #             Sie ist erst gültig ab dem Datum im Feld gueltigAb.
+                return vat_id
+            # evatr-2006: Die angefragte Ust-IdNr. ist zum Anfragezeitpunkt nicht gültig.
+            #             Sie war gültig im Zeitraum, der durch die Werte in den Feldern gueltigAb und gueltigBis beschrieben ist.
+            # evatr-2008: Die angefragte Ust-IdNr. ist zum Anfragezeitpunkt gültig.
+            #             Für die qualifizierte Bestätigungsanfrage liegt einer Besonderheit vor.
+            #             Für Rückfragen wenden Sie sich an das BZSt.
+            raise VATIDFinalError(error_messages['invalid'])
+        elif r.status_code == 400:
+            if d['status'] in ('evatr-0002', 'evatr-0004', 'evatr-0008'):
+                # evatr-0002: Mindestens eins der Pflichtfelder ist nicht besetzt.
+                # evatr-0004: Die anfragende DE Ust-IdNr. ist syntaktisch falsch. Sie passt nicht in das deutsche Erzeugungsschema.
+                # evatr-0008: Die maximale Anzahl von qualifizierten Bestätigungsabfragen für diese Session wurde erreicht.
+                #             Bitte starten Sie erneut mit einer einfachen Bestätigungsabfrage.
+                raise VATIDTemporaryError(error_messages['unavailable'])
+            # evatr-0005: Die angegebene angefragte Ust-IdNr. ist syntaktisch falsch.
+            # evatr-0012: Die angefrage USt-IdNr. ist syntaktisch falsch. Sie passt nicht in das Erzeugungsschema.
+            # evatr-2003: Das angegebene Länderkennzeichen der angefragten USt-IdNr. ist nicht gültig.
+            raise VATIDFinalError(error_messages['invalid'])
+        elif r.status_code == 403:
+            # evatr-0006: Die anfragende DE USt-IdNr. ist nicht berechtigt eine DE Ust-IdNr. anzufragen.
+            # evatr-0007: Fehlerhafter Aufruf.
+            raise VATIDTemporaryError(error_messages['unavailable'])
+        elif r.status_code == 404:
+            if d['status'] in ('evatr-2005'):
+                # evatr-2005: Die angegebene eigene DE Ust-IdNr. ist zum Anfragezeitpunkt nicht gültig.
+                raise VATIDTemporaryError(error_messages['unavailable'])
+            # evatr-2001: Die angefragte USt-IdNr. ist zum Anfragezeitpunkt nicht vergeben.
+            raise VATIDFinalError(error_messages['invalid'])
+        else:  # 500, 503
+            raise VATIDTemporaryError(error_messages['unavailable'])
+    except requests.RequestException:
+        logger.exception('VAT ID checking failed for country {}'.format(country_code))
+        raise VATIDTemporaryError(error_messages['unavailable'])
+    except ValueError:  # JSON parsing failed
+        logger.exception('VAT ID checking failed for country {}'.format(country_code))
+        raise VATIDTemporaryError(error_messages['unavailable'])
+
+
 def _validate_vat_id_CH(vat_id, country_code):
     if vat_id[:3] != 'CHE':
         raise VATIDFinalError(error_messages['country_mismatch'])
@@ -394,12 +454,19 @@ def _validate_vat_id_CH(vat_id, country_code):
         return vat_id
 
 
-def validate_vat_id(vat_id, country_code):
+def validate_vat_id(vat_id, country_code, requester_id=None):
     if not vat_id:
         return vat_id
     country_code = str(country_code)
     if is_eu_country(country_code):
-        return _validate_vat_id_EU(vat_id, country_code)
+        try:
+            return _validate_vat_id_EU(vat_id, country_code)
+        except VATIDTemporaryError:
+            print(vat_id, requester_id)
+            if requester_id and requester_id.startswith("DE") and not vat_id.startswith("DE"):
+                return _validate_vat_id_EU_fallback_germany(vat_id, country_code, requester_id)
+            else:
+                raise
     elif country_code == 'CH':
         return _validate_vat_id_CH(vat_id, country_code)
     elif country_code == 'NO':

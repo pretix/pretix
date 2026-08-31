@@ -1646,7 +1646,8 @@ class OrderCheckVATID(OrderView):
                 return redirect(self.get_order_url())
 
             try:
-                normalized_id = validate_vat_id(ia.vat_id, str(ia.country))
+                requester_id = self.request.event.settings.invoice_address_from_vat_id
+                normalized_id = validate_vat_id(ia.vat_id, str(ia.country), requester_id)
                 with transaction.atomic():
                     ia.vat_id_validated = True
                     ia.vat_id = normalized_id
