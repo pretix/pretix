@@ -2303,25 +2303,27 @@ DEFAULTS = {
     },
     'contact_url': {
         'default': None,
-        'type': str,
-        'serializer_class': serializers.URLField,
-        'form_class': forms.URLField,
+        'type': LazyI18nString,
+        'form_class': I18nURLFormField,
         'form_kwargs': dict(
             label=_("Contact URL"),
             help_text=_("If you set this, the footer contact link will point here instead of using the email address above. "
-                        "Please note that you still need to add a contact email address that will be shared with all emails you send.")
-        )
+                        "Please note that you still need to add a contact email address that will be shared with all emails you send."),
+            widget=I18nTextInput,
+        ),
+        'serializer_class': I18nURLField,
     },
     'imprint_url': {
         'default': None,
-        'type': str,
-        'form_class': forms.URLField,
+        'type': LazyI18nString,
+        'form_class': I18nURLFormField,
         'form_kwargs': dict(
             label=_("Imprint URL"),
             help_text=_("This should point e.g. to a part of your website that has your contact details and legal "
                         "information."),
+            widget=I18nTextInput,
         ),
-        'serializer_class': serializers.URLField,
+        'serializer_class': I18nURLField,
     },
     'privacy_url': {
         'default': None,
