@@ -462,7 +462,6 @@ def validate_vat_id(vat_id, country_code, requester_id=None):
         try:
             return _validate_vat_id_EU(vat_id, country_code)
         except VATIDTemporaryError:
-            print(vat_id, requester_id)
             if requester_id and requester_id.startswith("DE") and not vat_id.startswith("DE"):
                 return _validate_vat_id_EU_fallback_germany(vat_id, country_code, requester_id)
             else:
