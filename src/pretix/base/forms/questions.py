@@ -708,6 +708,7 @@ class BaseQuestionsForm(forms.Form):
         elif q.type == Question.TYPE_STRING:
             field = forms.CharField(
                 label=escape(q.question), required=required,
+                min_length=q.valid_string_length_min,
                 max_length=q.valid_string_length_max,
                 help_text=rich_text(q.help_text),
                 initial=initial.answer if initial else None,
@@ -715,6 +716,7 @@ class BaseQuestionsForm(forms.Form):
         elif q.type == Question.TYPE_TEXT:
             field = forms.CharField(
                 label=escape(q.question), required=required,
+                min_length=q.valid_string_length_min,
                 max_length=q.valid_string_length_max,
                 help_text=rich_text(q.help_text),
                 widget=forms.Textarea,

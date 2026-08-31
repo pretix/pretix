@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-06-01 09:00+0000\n"
+"POT-Creation-Date: 2026-08-24 15:35+0000\n"
+"PO-Revision-Date: 2026-08-10 06:37+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.5\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -92,6 +92,10 @@ msgid "Hebrew"
 msgstr "希伯來語"
 
 #: pretix/_base_settings.py
+msgid "Hungarian"
+msgstr ""
+
+#: pretix/_base_settings.py
 msgid "Indonesian"
 msgstr "印尼語"
 
@@ -149,7 +153,7 @@ msgstr "西班牙語（拉丁美洲）"
 
 #: pretix/_base_settings.py
 msgid "Thai"
-msgstr ""
+msgstr "泰語"
 
 #: pretix/_base_settings.py
 msgid "Turkish"
@@ -414,6 +418,12 @@ msgstr "媒介資源已連接到另一個活動"
 #, fuzzy
 #| msgid "You cannot change this order."
 msgid "You cannot exchange a medium for a medium."
+msgstr "您無法更改此訂單。"
+
+#: pretix/api/views/checkin.py
+#, fuzzy
+#| msgid "You cannot change this order."
+msgid "You cannot simulate a medium exchange."
 msgstr "您無法更改此訂單。"
 
 #: pretix/api/views/oauth.py pretix/control/logdisplay.py
@@ -855,8 +865,7 @@ msgstr "傳送恢復資訊"
 #: pretix/control/forms/organizer.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/control/views/item.py pretix/plugins/badges/exporters.py
-#: pretix/plugins/checkinlists/exporters.py
+#: pretix/plugins/badges/exporters.py pretix/plugins/checkinlists/exporters.py
 #: pretix/plugins/ticketoutputpdf/exporters.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/event/fragment_change_form.html
@@ -875,7 +884,6 @@ msgstr "與會者名字"
 #: pretix/base/forms/questions.py pretix/base/models/customers.py
 #: pretix/base/models/orders.py pretix/base/pdf.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Attendee email"
 msgstr "與會者電子郵件"
@@ -1654,9 +1662,8 @@ msgid "Invoice sender:"
 msgstr "發票寄信者："
 
 #: pretix/base/exporters/invoices.py pretix/base/exporters/orderlist.py
-#: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
-#: pretix/base/models/customers.py pretix/base/models/orders.py
-#: pretix/control/forms/filter.py
+#: pretix/base/modelimport_orders.py pretix/base/models/customers.py
+#: pretix/base/models/orders.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
@@ -1668,8 +1675,7 @@ msgstr "地址"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "ZIP code"
 msgstr "郵遞區號"
 
@@ -1677,8 +1683,7 @@ msgstr "郵遞區號"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "City"
 msgstr "城市"
 
@@ -1701,8 +1706,7 @@ msgstr "州"
 #: pretix/base/settings.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Country"
@@ -1730,8 +1734,7 @@ msgstr "發票收件人:"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Company"
@@ -2529,7 +2532,8 @@ msgstr "付款狀態"
 msgid "Refund states"
 msgstr "退款狀態"
 
-#: pretix/base/exporters/orderlist.py pretix/base/models/orders.py
+#: pretix/base/exporters/orderlist.py pretix/base/models/items.py
+#: pretix/base/models/orders.py
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
@@ -3038,14 +3042,12 @@ msgid ""
 msgstr "上傳有效圖片。您上傳的檔案不是圖像或損壞的圖像。"
 
 #: pretix/base/forms/questions.py
-msgid ""
-"If you keep this empty, the ticket will be valid starting at the time of "
-"purchase."
-msgstr "如果您將其保留為空白，票將從購買時開始有效。"
+msgid "Street"
+msgstr "街道"
 
 #: pretix/base/forms/questions.py
-msgid "Street and Number"
-msgstr "街道以及號碼"
+msgid "State"
+msgstr "州"
 
 #: pretix/base/forms/questions.py
 #, fuzzy, python-brace-format
@@ -3081,6 +3083,16 @@ msgstr "請輸入有效的銷售管道."
 #| msgid "Please enter the correct result."
 msgid "Please enter a date and time no later than {max}."
 msgstr "請輸入正確的結果。"
+
+#: pretix/base/forms/questions.py
+msgid ""
+"If you keep this empty, the ticket will be valid starting at the time of "
+"purchase."
+msgstr "如果您將其保留為空白，票將從購買時開始有效。"
+
+#: pretix/base/forms/questions.py
+msgid "Street and Number"
+msgstr "街道以及號碼"
 
 #: pretix/base/forms/questions.py
 msgid ""
@@ -5589,6 +5601,10 @@ msgstr "所選類別不屬於此專案。"
 msgid "The count needs to be equal to or greater than zero."
 msgstr "計數需要等於或大於零。"
 
+#: pretix/base/models/items.py pretix/base/models/orders.py
+msgid "Order position"
+msgstr "訂單倉位"
+
 #: pretix/base/models/items.py
 msgid "Number"
 msgstr "號碼"
@@ -5625,6 +5641,10 @@ msgstr "日期和時間"
 #: pretix/base/models/items.py
 msgid "Country code (ISO 3166-1 alpha-2)"
 msgstr "國家代碼 （ISO 3166-1 alpha-2）"
+
+#: pretix/base/models/items.py
+msgid "Asked on"
+msgstr ""
 
 #: pretix/base/models/items.py pretix/base/models/organizer.py
 msgid ""
@@ -6256,10 +6276,6 @@ msgstr "禮品卡"
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html
 msgid "Value"
 msgstr "數值"
-
-#: pretix/base/models/orders.py
-msgid "Order position"
-msgstr "訂單倉位"
 
 #: pretix/base/models/orders.py
 msgid "Cart ID (e.g. session key)"
@@ -7217,8 +7233,11 @@ msgid "The payment for this invoice has already been received."
 msgstr "此發票的付款已收到。"
 
 #: pretix/base/payment.py
+#, fuzzy
+#| msgid ""
+#| "This payment is already being processed and can not be canceled any more."
 msgid ""
-"This payment is already being processed and can not be canceled any more."
+"This payment is already being processed and cannot be canceled any more."
 msgstr "此付款已在處理中，無法取消。"
 
 #: pretix/base/payment.py
@@ -8011,6 +8030,18 @@ msgid "Presale end"
 msgstr "預購結束"
 
 #: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order details"
+msgid "Order creation"
+msgstr "訂單詳情"
+
+#: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order expired"
+msgid "Order expiry"
+msgstr "訂單過期"
+
+#: pretix/base/reldate.py
 msgid "before"
 msgstr "前"
 
@@ -8033,6 +8064,26 @@ msgstr "相關時間："
 #: pretix/base/reldate.py
 msgid "Not set"
 msgstr "還沒有確定"
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"after\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"after\" for \"{}\""
+msgstr ""
 
 #: pretix/base/secrets.py
 msgid "Random (default, works with all pretix apps)"
@@ -9196,7 +9247,7 @@ msgstr "該金額已從你的卡中扣除。"
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr "請將錢轉入此銀行帳戶：9999-9999-9999-9999"
 
-#: pretix/base/services/placeholders.py pretix/control/views/organizer.py
+#: pretix/base/services/placeholders.py
 msgid "This value will be replaced based on dynamic parameters."
 msgstr "此值將根據動態參數進行替換。"
 
@@ -9857,6 +9908,25 @@ msgid ""
 msgstr ""
 "此活動的指定銷售時間範圍結束後，此文本將顯示在售票處上方。你可以使用它來描述"
 "獲取門票的其他選項，例如：票房。"
+
+#: pretix/base/settings.py
+msgid "No dates match your criteria."
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid "Text for empty date results"
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid ""
+"This text will be shown if the calendar or list of dates is empty, e.g. "
+"because a month does not contain any dates or a filter chosen by the user "
+"does not find any results. You can use this to advertise ways to get in "
+"touch with you to arrange further dates. We do not recommend more than one "
+"or two sentences."
+msgstr ""
 
 #: pretix/base/settings.py
 msgid "Guidance text"
@@ -13593,6 +13663,30 @@ msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
 msgstr "你已將禮品卡配置為有效期 {} 年加上禮品卡的發行年份。"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment date"
+msgid "Payment term"
+msgstr "付款日期"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "(Same as above)"
+msgid "same as above"
+msgstr "（同上）"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment term in days"
+msgid "different payment term in days"
+msgstr "付款期限（天）"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment term in minutes"
+msgid "different payment term in minutes"
+msgstr "付款期限（分鐘）"
 
 #: pretix/control/forms/event.py
 #, fuzzy
@@ -20208,6 +20302,7 @@ msgid "Top recommendation"
 msgstr "熱門推薦"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html
+#: pretix/control/templates/pretixcontrol/items/questions.html
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid "Experimental feature"
 msgstr "實驗性功能"
@@ -22002,6 +22097,30 @@ msgstr ""
 "您的用戶飲食要求。"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Create a new question"
+msgid "Create a new per-ticket question"
+msgstr "建立新問題"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Create a new question"
+msgid "Create a new order-level question"
+msgstr "建立新問題"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Delete question"
+msgid "Per-ticket questions"
+msgstr "刪除問題"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"These questions are asked for every ticket, so possibly multiple times in "
+"the same order."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new question"
 msgstr "建立新問題"
 
@@ -22016,6 +22135,30 @@ msgstr "簽到時詢問"
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "All personalized products"
 msgstr "所有個人化商品"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Include questions"
+msgid "Per-order questions"
+msgstr "包括問題"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"This functionality is in active development and expected to change "
+"significantly over the coming months."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"Per-order questions are currently not supported and will not be displayed in "
+"pretixPOS."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "The question has been reordered."
+msgid "These questions are asked once per order."
+msgstr "該問題已重新排序。"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
@@ -22584,6 +22727,15 @@ msgstr "發票資訊"
 msgid "(optional)"
 msgstr "(可選擇的)"
 
+#: pretix/control/templates/pretixcontrol/order/change_questions.html
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html
+#: pretix/presale/templates/pretixpresale/event/order_modify.html
+#, fuzzy
+#| msgid "Additional information"
+msgid "Additional order information"
+msgstr "額外資訊"
+
 #: pretix/control/templates/pretixcontrol/order/delete.html
 msgid "Delete order"
 msgstr "刪除訂單"
@@ -22611,6 +22763,23 @@ msgstr "是，拒絕訂單"
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Extend payment term"
 msgstr "延長付款期限"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid ""
+"This file has been uploaded by a user and could contain viruses or other "
+"malicious content."
+msgstr "此檔已由用戶上傳，可能包含病毒或其他惡意內容。"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid "UNSAFE"
+msgstr "不安全"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "not answered"
+msgstr "無回應"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
@@ -22890,23 +23059,8 @@ msgid "Ticket page"
 msgstr "門票頁"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "not answered"
-msgstr "無回應"
-
-#: pretix/control/templates/pretixcontrol/order/index.html
 msgid "This question will be asked during check-in."
 msgstr "這個問題將在辦理check-in手續時提出。"
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid ""
-"This file has been uploaded by a user and could contain viruses or other "
-"malicious content."
-msgstr "此檔已由用戶上傳，可能包含病毒或其他惡意內容。"
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid "UNSAFE"
-msgstr "不安全"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/overview.html
@@ -24218,6 +24372,16 @@ msgstr "連接一項設備"
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Hardware model"
 msgstr "硬體型號"
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+#, fuzzy, python-format
+#| msgid "Begin: %(time)s"
+msgid "Last seen: %(time)s"
+msgstr "開始 %(time)s"
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+msgid "No recent contact"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Not yet initialized"
@@ -27370,10 +27534,6 @@ msgid "Not all objects have been selected."
 msgstr "並非所有物件都已選中。"
 
 #: pretix/control/views/item.py
-msgid "Street"
-msgstr "街道"
-
-#: pretix/control/views/item.py
 msgid "The requested question does not exist."
 msgstr "請求的問題不存在。"
 
@@ -27558,7 +27718,7 @@ msgstr ""
 #| "You should update the DNS settings of your domain to include this system "
 #| "in the SPF record."
 msgid ""
-"We did not find DMARC record for your domain. This means that there is a "
+"We did not find a DMARC record for your domain. This means that there is a "
 "very high chance most of the emails will be rejected or marked as spam. You "
 "should update the DNS settings of your domain."
 msgstr ""
@@ -27979,7 +28139,8 @@ msgstr "主題{subject}"
 msgid "Your message has been queued and will be sent to {}."
 msgstr "你的消息已排序，將發送到 {}。"
 
-#: pretix/control/views/orders.py pretix/presale/views/order.py
+#: pretix/control/views/orders.py pretix/presale/views/cart.py
+#: pretix/presale/views/order.py
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -30226,6 +30387,29 @@ msgstr ""
 "作為商家，你馬上就能拿到錢。"
 
 #: pretix/plugins/paypal2/payment.py
+msgid "Allow further payments during compliance hold"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"PayPals fraud prevention might block processing of individual payments for a "
+"considerable amount of time. The payment is marked as \"pending\" during "
+"this time window. You can allow your customers to start another payment "
+"attempts during that window. This might result in them being charged twice "
+"if the original payment is approved."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Timeout further payment attempts"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"Time duration in minutes after which another payment attempt is possible, "
+"while the last payment is still under investigation."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
 msgid "-- Automatic --"
 msgstr "--自動--"
 
@@ -30464,9 +30648,12 @@ msgstr "請選擇你要的付款方式。"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
 msgid ""
-"Our attempt to execute your payment via PayPal has failed. Please try again "
-"or contact us."
-msgstr "我們嘗試透過PayPal執行您的付款失敗。 請重試或聯絡我們。"
+"Your payment is being processed by PayPal. This takes longer than usual. You "
+"can wait until PayPal acknowledges the payment or you can try paying again "
+"with this or another payment method. This might result in you being charged "
+"twice in case PayPal allows your initial payment attempt. Please contact us "
+"to resolve this case."
+msgstr ""
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
@@ -33402,10 +33589,6 @@ msgid "No attendee name provided"
 msgstr "不提供與會者姓名"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "The image you previously uploaded"
-msgstr "你先前上傳的圖片"
-
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "The price of this product was reduced because of an automatic discount."
 msgstr "由於自動折扣，該商品的價格降低。"
 
@@ -33814,6 +33997,10 @@ msgstr "%(value)s不含稅"
 #, python-format
 msgid "Set price in %(currency)s for %(item)s"
 msgstr "為 %(item)s設定價格 %(currency)s 為單位）"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "The image you previously uploaded"
+msgstr "你先前上傳的圖片"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html
 #, python-format
@@ -35527,6 +35714,11 @@ msgstr "寫入權限"
 msgid "Kosovo"
 msgstr "柯索沃"
 
+#~ msgid ""
+#~ "Our attempt to execute your payment via PayPal has failed. Please try "
+#~ "again or contact us."
+#~ msgstr "我們嘗試透過PayPal執行您的付款失敗。 請重試或聯絡我們。"
+
 #~ msgid "All actions"
 #~ msgstr "所有行動"
 
@@ -35667,9 +35859,6 @@ msgstr "柯索沃"
 
 #~ msgid "Please do not use special characters in names."
 #~ msgstr "請不要在名稱中使用特殊字元。"
-
-#~ msgid "State"
-#~ msgstr "州"
 
 #, fuzzy
 #~| msgid "Printing date and time"
@@ -36290,9 +36479,6 @@ msgstr "柯索沃"
 
 #~ msgid "Badge design"
 #~ msgstr "徽章設計"
-
-#~ msgid "(Same as above)"
-#~ msgstr "（同上）"
 
 #~ msgid "Translation in development"
 #~ msgstr "翻譯中的翻譯"

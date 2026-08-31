@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-03-27 09:03+0000\n"
-"Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
+"POT-Creation-Date: 2026-08-24 15:35+0000\n"
+"PO-Revision-Date: 2026-08-09 06:00+0000\n"
+"Last-Translator: Julien <julien@circusiloveyou.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
 "Language: sv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -89,6 +89,10 @@ msgstr "Grekiska"
 
 #: pretix/_base_settings.py
 msgid "Hebrew"
+msgstr ""
+
+#: pretix/_base_settings.py
+msgid "Hungarian"
 msgstr ""
 
 #: pretix/_base_settings.py
@@ -443,6 +447,12 @@ msgstr "Medium ansluten till andra event"
 msgid "You cannot exchange a medium for a medium."
 msgstr "Du kan inte ändra denna order."
 
+#: pretix/api/views/checkin.py
+#, fuzzy
+#| msgid "You cannot change this order."
+msgid "You cannot simulate a medium exchange."
+msgstr "Du kan inte ändra denna order."
+
 #: pretix/api/views/oauth.py pretix/control/logdisplay.py
 #, python-brace-format
 msgid ""
@@ -592,16 +602,12 @@ msgid "Product changed"
 msgstr "Produkt namn"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid ""
-#| "Product changed (including product added or deleted and including changes "
-#| "to nested objects like variations or bundles)"
 msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
 msgstr ""
 "Produkt ändrad (inklusive produkt som lagts till eller tagits bort och "
-"inklusive ändringar av kapslade objekt som varianter eller paket)"
+"inklusive ändringar av kapslade objekt som varianter eller paket)."
 
 #: pretix/api/webhooks.py
 #, fuzzy
@@ -912,8 +918,7 @@ msgstr "Skicka återställningsinformation"
 #: pretix/control/forms/organizer.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/control/views/item.py pretix/plugins/badges/exporters.py
-#: pretix/plugins/checkinlists/exporters.py
+#: pretix/plugins/badges/exporters.py pretix/plugins/checkinlists/exporters.py
 #: pretix/plugins/ticketoutputpdf/exporters.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/event/fragment_change_form.html
@@ -923,16 +928,13 @@ msgid "Attendee name"
 msgstr "Namn på deltagare"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee"
-msgstr "Namn på deltagare"
+msgstr "Deltagare"
 
 #: pretix/base/datasync/sourcefields.py pretix/base/exporters/orderlist.py
 #: pretix/base/forms/questions.py pretix/base/models/customers.py
 #: pretix/base/models/orders.py pretix/base/pdf.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Attendee email"
 msgstr "E-post till deltagare"
@@ -949,7 +951,7 @@ msgstr "E-post till deltagare"
 #: pretix/plugins/ticketoutputpdf/exporters.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Attendee company"
-msgstr "Företag för deltagaren"
+msgstr "Deltagarens företag"
 
 #: pretix/base/datasync/sourcefields.py
 #, fuzzy
@@ -1707,7 +1709,6 @@ msgstr "Datum"
 #: pretix/base/models/waitinglist.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/users/index.html
 #: pretix/control/views/waitinglist.py
-#, fuzzy
 msgid "Email address"
 msgstr "E-postadress"
 
@@ -1724,9 +1725,8 @@ msgid "Invoice sender:"
 msgstr "Fakturasändare:"
 
 #: pretix/base/exporters/invoices.py pretix/base/exporters/orderlist.py
-#: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
-#: pretix/base/models/customers.py pretix/base/models/orders.py
-#: pretix/control/forms/filter.py
+#: pretix/base/modelimport_orders.py pretix/base/models/customers.py
+#: pretix/base/models/orders.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
@@ -1738,8 +1738,7 @@ msgstr "Adress"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "ZIP code"
 msgstr "Postnummer"
 
@@ -1747,8 +1746,7 @@ msgstr "Postnummer"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "City"
 msgstr "Stad"
 
@@ -1771,8 +1769,7 @@ msgstr "Region"
 #: pretix/base/settings.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Country"
@@ -1800,8 +1797,7 @@ msgstr "Fakturamottagare:"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Company"
@@ -2618,7 +2614,8 @@ msgstr "Betalningstillstånd"
 msgid "Refund states"
 msgstr "Återbetalningstillstånd"
 
-#: pretix/base/exporters/orderlist.py pretix/base/models/orders.py
+#: pretix/base/exporters/orderlist.py pretix/base/models/items.py
+#: pretix/base/models/orders.py
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
@@ -3082,11 +3079,9 @@ msgid "Confirmation code"
 msgstr "Bekräftelsekod"
 
 #: pretix/base/forms/questions.py
-#, fuzzy
-#| msgid "No country specified."
 msgctxt "name_salutation"
 msgid "not specified"
-msgstr "Inget land angivet."
+msgstr "inte specificerad"
 
 #: pretix/base/forms/questions.py
 msgid "Please enter a shorter name."
@@ -3143,15 +3138,12 @@ msgstr ""
 "eller en felaktig bild."
 
 #: pretix/base/forms/questions.py
-msgid ""
-"If you keep this empty, the ticket will be valid starting at the time of "
-"purchase."
-msgstr ""
-"Om du lämnar detta tomt kommer biljetten att vara giltig från köptillfället."
+msgid "Street"
+msgstr "Gata"
 
 #: pretix/base/forms/questions.py
-msgid "Street and Number"
-msgstr "Gata och gatunummer"
+msgid "State"
+msgstr "Region"
 
 #: pretix/base/forms/questions.py
 #, fuzzy, python-brace-format
@@ -3187,6 +3179,17 @@ msgstr "Ange en giltig säljkanal."
 #| msgid "Please enter the correct result."
 msgid "Please enter a date and time no later than {max}."
 msgstr "Vänligen ange rätt resultat."
+
+#: pretix/base/forms/questions.py
+msgid ""
+"If you keep this empty, the ticket will be valid starting at the time of "
+"purchase."
+msgstr ""
+"Om du lämnar detta tomt kommer biljetten att vara giltig från köptillfället."
+
+#: pretix/base/forms/questions.py
+msgid "Street and Number"
+msgstr "Gata och gatunummer"
 
 #: pretix/base/forms/questions.py
 msgid ""
@@ -4159,14 +4162,11 @@ msgid "Changes to your account"
 msgstr "Aktivera ditt konto hos {organizer}"
 
 #: pretix/base/models/auth.py
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The email address has been changed from \"{old_email}\" to \"{new_email}"
-#| "\"."
+#, python-brace-format
 msgid ""
 "To change your email address from {old_email} to {new_email}, use the "
 "following code:"
-msgstr "E-postadressen har ändrats från \"{old_email}\" till \"{new_email}\"."
+msgstr "E-postadressen har ändrats från \"{old_email}\" till \"{new_email}\":"
 
 #: pretix/base/models/auth.py
 #, python-brace-format
@@ -4330,7 +4330,7 @@ msgstr "Server fel"
 
 #: pretix/base/models/checkin.py
 msgid "Ticket blocked"
-msgstr "Biljetten är blockad"
+msgstr "Biljetten är blockerad"
 
 #: pretix/base/models/checkin.py
 msgid "Order not approved"
@@ -4338,7 +4338,7 @@ msgstr "Bokning ej godkänd"
 
 #: pretix/base/models/checkin.py
 msgid "Ticket not valid at this time"
-msgstr "Biljetten är inte giltig vid detta tillfället"
+msgstr "Biljetten är inte giltig för tillfället"
 
 #: pretix/base/models/checkin.py
 #, fuzzy
@@ -4766,7 +4766,7 @@ msgstr "Serie av evenemang"
 
 #: pretix/base/models/event.py
 msgid "Seating plan"
-msgstr "Sittplatser"
+msgstr "Sittplatsplan"
 
 #: pretix/base/models/event.py pretix/base/models/items.py
 msgid "Sell on all sales channels"
@@ -4895,7 +4895,7 @@ msgid ""
 msgstr ""
 "När detta är ikryssat, kan ett evenemang endast publiceras när ett värde "
 "angetts. I en serie evenemang är det alltid valfritt att välja ett värde för "
-"respektive datum."
+"respektive datum"
 
 #: pretix/base/models/event.py pretix/base/models/items.py
 msgid "Valid values"
@@ -5038,11 +5038,8 @@ msgid "currently being transmitted"
 msgstr ""
 
 #: pretix/base/models/invoices.py
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "transmitted"
-msgstr "Inget datum valt."
+msgstr "överförd"
 
 #: pretix/base/models/invoices.py pretix/base/models/mail.py
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
@@ -5512,7 +5509,7 @@ msgid ""
 "event series date"
 msgstr ""
 "Medlemskapets giltighet motsvarar längden på evenemanget eller "
-"evenemangsserien."
+"evenemangsserien"
 
 #: pretix/base/models/items.py
 msgid "Membership duration in days"
@@ -5836,6 +5833,10 @@ msgstr "Den valda varianten tillhör inte den här produkten."
 msgid "The count needs to be equal to or greater than zero."
 msgstr "Antalet måste minst vara noll."
 
+#: pretix/base/models/items.py pretix/base/models/orders.py
+msgid "Order position"
+msgstr "Bokad produkt"
+
 #: pretix/base/models/items.py
 msgid "Number"
 msgstr "Nummer"
@@ -5872,6 +5873,10 @@ msgstr "Datum och tid"
 #: pretix/base/models/items.py
 msgid "Country code (ISO 3166-1 alpha-2)"
 msgstr "Landskod (ISO 3166-1 alpha-2)"
+
+#: pretix/base/models/items.py
+msgid "Asked on"
+msgstr ""
 
 #: pretix/base/models/items.py pretix/base/models/organizer.py
 msgid ""
@@ -6537,10 +6542,6 @@ msgstr "Presentkort"
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html
 msgid "Value"
 msgstr "Värde"
-
-#: pretix/base/models/orders.py
-msgid "Order position"
-msgstr "Bokad produkt"
 
 #: pretix/base/models/orders.py
 msgid "Cart ID (e.g. session key)"
@@ -7570,7 +7571,7 @@ msgstr "Betalningen för denna faktura har redan mottagits."
 #, fuzzy
 #| msgid "This payment can not be canceled at the moment."
 msgid ""
-"This payment is already being processed and can not be canceled any more."
+"This payment is already being processed and cannot be canceled any more."
 msgstr "Denna betalning kan inte avbrytas för tillfället."
 
 #: pretix/base/payment.py
@@ -8319,8 +8320,6 @@ msgid ""
 msgstr ""
 
 #: pretix/base/permissions.py
-#, fuzzy
-#| msgid "Seating plan"
 msgid "Seating plans"
 msgstr "Sittplatser"
 
@@ -8373,6 +8372,18 @@ msgid "Presale end"
 msgstr "Förköpsperiod slutar"
 
 #: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order details"
+msgid "Order creation"
+msgstr "Bokningsuppgifter"
+
+#: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order expired"
+msgid "Order expiry"
+msgstr "Bokningen har löpt ut"
+
+#: pretix/base/reldate.py
 msgid "before"
 msgstr "före"
 
@@ -8395,6 +8406,26 @@ msgstr "Relativ tid:"
 #: pretix/base/reldate.py
 msgid "Not set"
 msgstr "Inte inställt"
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"after\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"after\" for \"{}\""
+msgstr ""
 
 #: pretix/base/secrets.py
 msgid "Random (default, works with all pretix apps)"
@@ -8863,7 +8894,7 @@ msgstr "veckodag"
 
 #: pretix/base/services/checkin.py pretix/control/forms/filter.py
 msgid "Monday"
-msgstr "Måndag"
+msgstr "Mondag"
 
 #: pretix/base/services/checkin.py pretix/control/forms/filter.py
 msgid "Tuesday"
@@ -9153,10 +9184,8 @@ msgid "Ticket is already exchanged for reusable medium."
 msgstr "Denna biljett har redan blivit inlöst."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "Reusable Medium ID"
 msgid "Reusable medium not found."
-msgstr "Återanvändbart medium ID"
+msgstr "Återanvändbart medium ID."
 
 #: pretix/base/services/media.py
 #, fuzzy
@@ -9171,10 +9200,8 @@ msgid "Reusable medium not found and could not be created."
 msgstr "Den återanvändbara mediet har skapats."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "Reusable media type"
 msgid "Reusable medium already exists."
-msgstr "Återanvändbar medietyp"
+msgstr "Återanvändbar medietyp."
 
 #: pretix/base/services/media.py
 #, fuzzy
@@ -9691,7 +9718,7 @@ msgstr "Beloppet har debiterats ditt kort."
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr "Vänligen för över pengar till detta bankkonto: 9999-9999-9999-9999"
 
-#: pretix/base/services/placeholders.py pretix/control/views/organizer.py
+#: pretix/base/services/placeholders.py
 msgid "This value will be replaced based on dynamic parameters."
 msgstr "Detta värde kommer att ersättas baserat på dynamiska parametrar."
 
@@ -10235,18 +10262,14 @@ msgid "Ask for VAT ID"
 msgstr "Fråga efter organisationsnummer"
 
 #: pretix/base/settings.py
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Only works if an invoice address is asked for. VAT ID is never required "
-#| "and only requested from business customers in the following countries: "
-#| "{countries}"
+#, python-brace-format
 msgid ""
 "Only works if an invoice address is asked for. VAT ID is only requested from "
 "business customers in the following countries: {countries}."
 msgstr ""
 "Fungerar endast om en fakturaadress efterfrågas. Momsregistreringsnummer är "
 "aldrig obligatoriskt och efterfrågas endast från företagskunder i följande "
-"länder: {countries}"
+"länder: {countries}."
 
 #: pretix/base/settings.py
 #, fuzzy
@@ -10418,6 +10441,25 @@ msgstr ""
 "försäljningstiden för evenemanget är över. Du kan använda den för att "
 "beskriva andra alternativ för att få en biljett, som exempelvis bokningens "
 "på plats."
+
+#: pretix/base/settings.py
+msgid "No dates match your criteria."
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid "Text for empty date results"
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid ""
+"This text will be shown if the calendar or list of dates is empty, e.g. "
+"because a month does not contain any dates or a filter chosen by the user "
+"does not find any results. You can use this to advertise ways to get in "
+"touch with you to arrange further dates. We do not recommend more than one "
+"or two sentences."
+msgstr ""
 
 #: pretix/base/settings.py
 msgid "Guidance text"
@@ -10635,7 +10677,7 @@ msgstr "Generera inte fakturor"
 
 #: pretix/base/settings.py
 msgid "Only manually in admin panel"
-msgstr "Endast manuellt i adminpanelen."
+msgstr "Endast manuellt i adminpanelen"
 
 #: pretix/base/settings.py
 msgid "Automatically on user request"
@@ -10871,10 +10913,8 @@ msgstr ""
 "används i olika regioner globalt (som engelska)."
 
 #: pretix/base/settings.py
-#, fuzzy
-#| msgid "This is not an event series."
 msgid "This shop represents an event"
-msgstr "Detta är inte en serie av händelser."
+msgstr "Detta är inte en serie av händelser"
 
 #: pretix/base/settings.py
 msgid ""
@@ -14432,6 +14472,28 @@ msgstr ""
 
 #: pretix/control/forms/event.py
 #, fuzzy
+#| msgid "Payment date"
+msgid "Payment term"
+msgstr "Betalningsdatum"
+
+#: pretix/control/forms/event.py
+msgid "same as above"
+msgstr ""
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment term in days"
+msgid "different payment term in days"
+msgstr "Betalningsvillkor i dagar"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment term in minutes"
+msgid "different payment term in minutes"
+msgstr "Betalningsvillkor i minuter"
+
+#: pretix/control/forms/event.py
+#, fuzzy
 #| msgid "including all taxes"
 msgid "Prices including tax"
 msgstr "inklusive alla skatter"
@@ -14565,11 +14627,9 @@ msgid "Bcc address"
 msgstr "Bcc-adress"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
-#, fuzzy
-#| msgid "All emails will be sent to this address as a Bcc copy"
 msgid "All emails will be sent to this address as a Bcc copy."
 msgstr ""
-"Alla e-postmeddelanden kommer att skickas till denna adress som en Bcc-kopia"
+"Alla e-postmeddelanden kommer att skickas till denna adress som en Bcc-kopia."
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 msgid "Signature"
@@ -15034,7 +15094,7 @@ msgstr "Godkänd, betalning avvaktas"
 #: pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html
 msgid "Approval pending"
-msgstr "Väntar godkännande"
+msgstr "Väntar på godkännande"
 
 #: pretix/control/forms/filter.py
 msgid "Follow-up configured"
@@ -18438,10 +18498,8 @@ msgid "A payment has been performed."
 msgstr "Denna betalning har blivit avbruten."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "The refund has been processed."
 msgid "A refund has been performed. "
-msgstr "Återbetalningen har behandlats."
+msgstr "Återbetalningen har behandlats. "
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -19113,7 +19171,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html
 #: pretix/presale/templates/pretixpresale/event/position_change.html
 msgid "Continue"
-msgstr "Fortsätt"
+msgstr "Fortsätta"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 msgid "Authorize an application"
@@ -19386,7 +19444,7 @@ msgstr "körs i utvecklingsläge"
 #: pretix/presale/templates/pretixpresale/postmessage.html
 #: pretix/presale/templates/pretixpresale/waiting.html
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr "Om det tar längre tid än ett par minuter, vänligen kontakta oss."
+msgstr "Om det tar mer än några minuter, vänligen kontakta oss."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
@@ -19525,13 +19583,7 @@ msgid "Delete check-ins"
 msgstr "Radera incheckningar"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to permanently delete the check-ins of <strong>one "
-#| "ticket</strong>."
-#| msgid_plural ""
-#| "Are you sure you want to permanently delete the check-ins of "
-#| "<strong>%(count)s tickets</strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to permanently delete the check-ins of <strong>one "
 "ticket</strong>?"
@@ -19540,7 +19592,7 @@ msgid_plural ""
 "<strong>%(count)s tickets</strong>?"
 msgstr[0] ""
 "Är du säker på att du vill permanent radera incheckningarna för <strong>en "
-"biljett</strong>."
+"biljett</strong>?"
 msgstr[1] ""
 "Är du säker på att du vill permanent radera incheckningarna för "
 "<strong>%(count)s biljetter</strong>?"
@@ -20017,10 +20069,8 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
-#, fuzzy
-#| msgid "This operation cannot be reversed."
 msgid "This cannot be reverted!"
-msgstr "Denna åtgärd kan inte ångras."
+msgstr "Denna åtgärd kan inte ångras!"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
 msgid ""
@@ -21424,6 +21474,7 @@ msgid "Top recommendation"
 msgstr "Topprekommendation"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html
+#: pretix/control/templates/pretixcontrol/items/questions.html
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid "Experimental feature"
 msgstr "Experimentell funktion"
@@ -23352,6 +23403,30 @@ msgstr ""
 "kostbehov."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Create a new question"
+msgid "Create a new per-ticket question"
+msgstr "Skapa en ny fråga"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Create a new question"
+msgid "Create a new order-level question"
+msgstr "Skapa en ny fråga"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Delete question"
+msgid "Per-ticket questions"
+msgstr "Radera fråga"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"These questions are asked for every ticket, so possibly multiple times in "
+"the same order."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new question"
 msgstr "Skapa en ny fråga"
 
@@ -23366,6 +23441,30 @@ msgstr "Fråga vid incheckning"
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "All personalized products"
 msgstr "Alla personliga produkter"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Include questions"
+msgid "Per-order questions"
+msgstr "Inkludera frågor"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"This functionality is in active development and expected to change "
+"significantly over the coming months."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"Per-order questions are currently not supported and will not be displayed in "
+"pretixPOS."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "The question has been reordered."
+msgid "These questions are asked once per order."
+msgstr "Frågan har ordnats om."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
@@ -23967,6 +24066,15 @@ msgstr "Fakturainformation"
 msgid "(optional)"
 msgstr "(valfritt)"
 
+#: pretix/control/templates/pretixcontrol/order/change_questions.html
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html
+#: pretix/presale/templates/pretixpresale/event/order_modify.html
+#, fuzzy
+#| msgid "Additional information"
+msgid "Additional order information"
+msgstr "Ytterligare information"
+
 #: pretix/control/templates/pretixcontrol/order/delete.html
 msgid "Delete order"
 msgstr "Radera bokning"
@@ -23995,6 +24103,25 @@ msgstr "Ja, neka bokning"
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Extend payment term"
 msgstr "Förläng betalningsvillkor"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid ""
+"This file has been uploaded by a user and could contain viruses or other "
+"malicious content."
+msgstr ""
+"Den här filen har laddats upp av en användare och kan innehålla virus eller "
+"annat skadligt innehåll."
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid "UNSAFE"
+msgstr "OSÄKER"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "not answered"
+msgstr "utan svar"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
@@ -24293,25 +24420,8 @@ msgid "Ticket page"
 msgstr "Klient-hemlighet"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "not answered"
-msgstr "utan svar"
-
-#: pretix/control/templates/pretixcontrol/order/index.html
 msgid "This question will be asked during check-in."
 msgstr "Denna fråga kommer att ställas under incheckningen."
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid ""
-"This file has been uploaded by a user and could contain viruses or other "
-"malicious content."
-msgstr ""
-"Den här filen har laddats upp av en användare och kan innehålla virus eller "
-"annat skadligt innehåll."
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid "UNSAFE"
-msgstr "OSÄKER"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/overview.html
@@ -25696,6 +25806,16 @@ msgid "Hardware model"
 msgstr "Hårdvarumodell"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
+#, fuzzy, python-format
+#| msgid "Begin: %(time)s"
+msgid "Last seen: %(time)s"
+msgstr "Börjar: %(time)s"
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+msgid "No recent contact"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Not yet initialized"
 msgstr "Ännu inte initialiserad"
 
@@ -26715,10 +26835,8 @@ msgid "Code"
 msgstr "Kod"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
-#, fuzzy
-#| msgid "Text color"
 msgid "Text box"
-msgstr "Textfärg"
+msgstr "Textobjekt"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 #, fuzzy
@@ -28048,7 +28166,7 @@ msgstr ""
 "Om du väljer \"valfri produkt\" för en specifik kvot och väljer att "
 "reservera kvot specifikt för denna värdecheck kan produkten fortfarande vara "
 "otillgänglig för värdechecksinnehavaren om en annan kvot som är associerad "
-"med produkten är slutsåld."
+"med produkten är slutsåld!"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #, fuzzy
@@ -28568,11 +28686,11 @@ msgstr "Den valda listan har raderats."
 
 #: pretix/control/views/dashboards.py
 msgid "Attendees (ordered)"
-msgstr "Deltagare (ordnade)"
+msgstr "Deltagare (i alfabetisk ordning)"
 
 #: pretix/control/views/dashboards.py
 msgid "Attendees (paid)"
-msgstr "Deltagare (betalda)"
+msgstr "Betalande deltagare"
 
 #: pretix/control/views/dashboards.py
 #, python-brace-format
@@ -29009,10 +29127,6 @@ msgid "Not all objects have been selected."
 msgstr "Inte alla objekt har valts ut."
 
 #: pretix/control/views/item.py
-msgid "Street"
-msgstr "Gata"
-
-#: pretix/control/views/item.py
 msgid "The requested question does not exist."
 msgstr "Den begärda frågan finns inte."
 
@@ -29213,7 +29327,7 @@ msgstr ""
 #| "You should update the DNS settings of your domain to include this system "
 #| "in the SPF record."
 msgid ""
-"We did not find DMARC record for your domain. This means that there is a "
+"We did not find a DMARC record for your domain. This means that there is a "
 "very high chance most of the emails will be rejected or marked as spam. You "
 "should update the DNS settings of your domain."
 msgstr ""
@@ -29667,7 +29781,8 @@ msgstr "Ämne: {subject}"
 msgid "Your message has been queued and will be sent to {}."
 msgstr "Ditt meddelande har lagts i kön och kommer att skickas till {}."
 
-#: pretix/control/views/orders.py pretix/presale/views/order.py
+#: pretix/control/views/orders.py pretix/presale/views/cart.py
+#: pretix/presale/views/order.py
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -30127,12 +30242,10 @@ msgid "All dates would be skipped because they conflict with existing dates."
 msgstr ""
 
 #: pretix/control/views/subevents.py
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "{} new dates have been created."
+#, python-brace-format
 msgctxt "subevent"
 msgid "{} new dates have been created."
-msgstr "nya datum har blivit skapade."
+msgstr "{} nya datum har blivit skapade."
 
 #: pretix/control/views/typeahead.py
 msgid "Series:"
@@ -32017,6 +32130,29 @@ msgstr ""
 "pengar direkt."
 
 #: pretix/plugins/paypal2/payment.py
+msgid "Allow further payments during compliance hold"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"PayPals fraud prevention might block processing of individual payments for a "
+"considerable amount of time. The payment is marked as \"pending\" during "
+"this time window. You can allow your customers to start another payment "
+"attempts during that window. This might result in them being charged twice "
+"if the original payment is approved."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Timeout further payment attempts"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"Time duration in minutes after which another payment attempt is possible, "
+"while the last payment is still under investigation."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
 msgid "-- Automatic --"
 msgstr "-- Automatiskt --"
 
@@ -32275,11 +32411,12 @@ msgstr "Välj hur du vill betala."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
 msgid ""
-"Our attempt to execute your payment via PayPal has failed. Please try again "
-"or contact us."
+"Your payment is being processed by PayPal. This takes longer than usual. You "
+"can wait until PayPal acknowledges the payment or you can try paying again "
+"with this or another payment method. This might result in you being charged "
+"twice in case PayPal allows your initial payment attempt. Please contact us "
+"to resolve this case."
 msgstr ""
-"Vårt försök att genomföra din betalning via PayPal har misslyckats. Vänligen "
-"försök igen eller kontakta oss."
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
@@ -33649,7 +33786,7 @@ msgstr "iDEAL via Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "iDEAL | Wero"
-msgstr ""
+msgstr "iDEAL | Wero"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
@@ -35217,7 +35354,7 @@ msgstr "Dölj varianter"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 #: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "Original price:"
-msgstr "Original pris:"
+msgstr "Ursprungligt pris:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
@@ -35375,10 +35512,6 @@ msgid "No attendee name provided"
 msgstr "Inget deltagarnamn angivet"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "The image you previously uploaded"
-msgstr "Bilden du tidigare laddade upp"
-
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "The price of this product was reduced because of an automatic discount."
 msgstr "Priset på denna produkt har sänkts på grund av en automatisk rabatt."
 
@@ -35485,10 +35618,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
-#, fuzzy
-#| msgid "Event description"
 msgid "Renew reservation"
-msgstr "Evenemangsbeskrivning"
+msgstr "Förnya reservationen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, fuzzy
@@ -35518,7 +35649,7 @@ msgstr "Avbryt bokning"
 #: pretix/presale/templates/pretixpresale/event/index.html
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html
 msgid "Redeem a voucher"
-msgstr "Lösa in en rabattkod"
+msgstr "Lös in en rabattkod"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html
 msgid "We're applying this voucher to your cart..."
@@ -35527,7 +35658,7 @@ msgstr "Vi applicerar denna rabattkod på din bokning..."
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html
 msgid "Redeem voucher"
-msgstr "Lösa in rabattkod"
+msgstr "Lös in rabattkod"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html
 msgid "Change summary"
@@ -35818,6 +35949,10 @@ msgstr "%(value)s exklusive skatter"
 #, python-format
 msgid "Set price in %(currency)s for %(item)s"
 msgstr "Ange pris i %(currency)s för %(item)s"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "The image you previously uploaded"
+msgstr "Bilden du tidigare laddade upp"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html
 #, python-format
@@ -37620,6 +37755,13 @@ msgstr "Skrivrättigheter"
 msgid "Kosovo"
 msgstr "Kosovo"
 
+#~ msgid ""
+#~ "Our attempt to execute your payment via PayPal has failed. Please try "
+#~ "again or contact us."
+#~ msgstr ""
+#~ "Vårt försök att genomföra din betalning via PayPal har misslyckats. "
+#~ "Vänligen försök igen eller kontakta oss."
+
 #~ msgid "All actions"
 #~ msgstr "Alla åtgärder"
 
@@ -37770,9 +37912,6 @@ msgstr "Kosovo"
 
 #~ msgid "Please do not use special characters in names."
 #~ msgstr "Var snäll och använd inte specialtecken i namnen."
-
-#~ msgid "State"
-#~ msgstr "Region"
 
 #, fuzzy
 #~| msgid "Printing date and time"

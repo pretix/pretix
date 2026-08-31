@@ -751,9 +751,9 @@ class RelativeDateField(RelativeDateTimeField):
             if data.rel_days_number is None or not data.rel_days_relationto:
                 raise ValidationError(self.error_messages['incomplete'])
             elif data.rel_days_relation == "before" and not choice.supports_before:
-                raise ValidationError(_("A relative date cannot be expressed as 'before' for '{}'".format(choice.text)))
+                raise ValidationError(_('A relative date cannot be expressed as "before" for "{}"'.format(choice.text)))
             elif data.rel_days_relation == "after" and not choice.supports_after:
-                raise ValidationError(_("A relative date cannot be expressed as 'after' for '{}'".format(choice.text)))
+                raise ValidationError(_('A relative date cannot be expressed as "after" for "{}"'.format(choice.text)))
 
         return forms.MultiValueField.clean(self, value)
 

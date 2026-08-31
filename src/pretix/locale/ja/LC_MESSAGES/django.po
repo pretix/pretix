@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-30 13:52+0000\n"
-"PO-Revision-Date: 2026-07-14 15:00+0000\n"
+"POT-Creation-Date: 2026-08-24 15:35+0000\n"
+"PO-Revision-Date: 2026-08-16 22:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.7.1\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -90,6 +90,10 @@ msgstr "ギリシャ語"
 #: pretix/_base_settings.py
 msgid "Hebrew"
 msgstr "ヘブライ語"
+
+#: pretix/_base_settings.py
+msgid "Hungarian"
+msgstr ""
 
 #: pretix/_base_settings.py
 msgid "Indonesian"
@@ -422,6 +426,12 @@ msgstr "他のイベントに関連付けられているメディアです"
 #: pretix/api/views/checkin.py
 msgid "You cannot exchange a medium for a medium."
 msgstr "メディアを別のメディアに変更することはできません。"
+
+#: pretix/api/views/checkin.py
+#, fuzzy
+#| msgid "Product does not support medium exchange."
+msgid "You cannot simulate a medium exchange."
+msgstr "本製品は中程度の交換に対応していません。"
 
 #: pretix/api/views/oauth.py pretix/control/logdisplay.py
 #, python-brace-format
@@ -872,8 +882,7 @@ msgstr "イベント・日程情報"
 #: pretix/control/forms/organizer.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/control/views/item.py pretix/plugins/badges/exporters.py
-#: pretix/plugins/checkinlists/exporters.py
+#: pretix/plugins/badges/exporters.py pretix/plugins/checkinlists/exporters.py
 #: pretix/plugins/ticketoutputpdf/exporters.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/event/fragment_change_form.html
@@ -890,7 +899,6 @@ msgstr "参加者"
 #: pretix/base/forms/questions.py pretix/base/models/customers.py
 #: pretix/base/models/orders.py pretix/base/pdf.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Attendee email"
 msgstr "参加者の電子メール"
@@ -1377,10 +1385,8 @@ msgid "Membership type"
 msgstr "会員タイプ"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "Purchase time"
 msgid "Purchase ticket"
-msgstr "購入時間"
+msgstr "チケットを購入"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
 #: pretix/base/exporters/waitinglist.py pretix/base/forms/questions.py
@@ -1397,10 +1403,8 @@ msgid "Start date"
 msgstr "開始日"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "Start time from"
 msgid "Start time"
-msgstr "開始時刻（から）"
+msgstr "開始時刻"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
 #: pretix/base/exporters/waitinglist.py pretix/base/models/memberships.py
@@ -1413,10 +1417,8 @@ msgid "End date"
 msgstr "終了日"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "End: %(time)s"
 msgid "End time"
-msgstr "終了: %(time)s"
+msgstr "終了時刻"
 
 #: pretix/base/exporters/dekodi.py pretix/base/exporters/invoices.py
 msgctxt "export_category"
@@ -1631,7 +1633,7 @@ msgstr "日付"
 #: pretix/control/templates/pretixcontrol/users/index.html
 #: pretix/control/views/waitinglist.py
 msgid "Email address"
-msgstr "メールアドレス"
+msgstr "電子メールアドレス"
 
 #: pretix/base/exporters/invoices.py
 msgid "Invoice type"
@@ -1646,9 +1648,8 @@ msgid "Invoice sender:"
 msgstr "請求書の差出人:"
 
 #: pretix/base/exporters/invoices.py pretix/base/exporters/orderlist.py
-#: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
-#: pretix/base/models/customers.py pretix/base/models/orders.py
-#: pretix/control/forms/filter.py
+#: pretix/base/modelimport_orders.py pretix/base/models/customers.py
+#: pretix/base/models/orders.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
@@ -1660,8 +1661,7 @@ msgstr "住所"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "ZIP code"
 msgstr "郵便番号"
 
@@ -1669,8 +1669,7 @@ msgstr "郵便番号"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "City"
 msgstr "市区町村"
 
@@ -1693,8 +1692,7 @@ msgstr "州・都道府県"
 #: pretix/base/settings.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Country"
@@ -1722,8 +1720,7 @@ msgstr "請求書の受取人:"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Company"
@@ -2531,7 +2528,8 @@ msgstr "支払いの状態"
 msgid "Refund states"
 msgstr "払い戻し状態"
 
-#: pretix/base/exporters/orderlist.py pretix/base/models/orders.py
+#: pretix/base/exporters/orderlist.py pretix/base/models/items.py
+#: pretix/base/models/orders.py
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
@@ -3058,14 +3056,12 @@ msgstr ""
 "像ではないか、壊れています。"
 
 #: pretix/base/forms/questions.py
-msgid ""
-"If you keep this empty, the ticket will be valid starting at the time of "
-"purchase."
-msgstr "もし空欄のままにしておくと、チケットは購入時から有効になります。"
+msgid "Street"
+msgstr "町丁・番地"
 
 #: pretix/base/forms/questions.py
-msgid "Street and Number"
-msgstr "町域番地"
+msgid "State"
+msgstr "州・都道府県"
 
 #: pretix/base/forms/questions.py
 #, python-brace-format
@@ -3096,6 +3092,16 @@ msgstr "{min}より後の日時を入力してください。"
 #, python-brace-format
 msgid "Please enter a date and time no later than {max}."
 msgstr "{max}より前の日時を入力してください。"
+
+#: pretix/base/forms/questions.py
+msgid ""
+"If you keep this empty, the ticket will be valid starting at the time of "
+"purchase."
+msgstr "もし空欄のままにしておくと、チケットは購入時から有効になります。"
+
+#: pretix/base/forms/questions.py
+msgid "Street and Number"
+msgstr "町域番地"
 
 #: pretix/base/forms/questions.py
 msgid ""
@@ -4609,16 +4615,12 @@ msgid "This event is remote or partially remote."
 msgstr "このイベントは、リモート又は部分的にリモートです。"
 
 #: pretix/base/models/event.py
-#, fuzzy
-#| msgid ""
-#| "This will be used to let users know if the event is in a different "
-#| "timezone and let’s us calculate users’ local times."
 msgid ""
 "This will be used to let users know if the event is in a different timezone, "
 "and to let us calculate the local time of a user."
 msgstr ""
-"これは、イベントが異なるタイムゾーンにあるかどうかをユーザーに知らせるために"
-"使用され、ユーザーの現地時間を計算します。"
+"これは、イベントが別のタイムゾーンにあるかどうかをユーザーに知らせ、ユーザー"
+"の現地時間を計算するために使用されます。"
 
 #: pretix/base/models/event.py pretix/base/models/organizer.py
 #: pretix/control/navigation.py
@@ -5646,6 +5648,10 @@ msgstr "選択されたバリエーションはこのアイテムには属して
 msgid "The count needs to be equal to or greater than zero."
 msgstr "数量は0以上である必要があります。"
 
+#: pretix/base/models/items.py pretix/base/models/orders.py
+msgid "Order position"
+msgstr "注文ポジション"
+
 #: pretix/base/models/items.py
 msgid "Number"
 msgstr "数字"
@@ -5682,6 +5688,10 @@ msgstr "日時"
 #: pretix/base/models/items.py
 msgid "Country code (ISO 3166-1 alpha-2)"
 msgstr "国コード（ISO 3166-1 alpha-2）"
+
+#: pretix/base/models/items.py
+msgid "Asked on"
+msgstr ""
 
 #: pretix/base/models/items.py pretix/base/models/organizer.py
 msgid ""
@@ -6329,10 +6339,6 @@ msgstr "ギフトカード"
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html
 msgid "Value"
 msgstr "金額"
-
-#: pretix/base/models/orders.py
-msgid "Order position"
-msgstr "注文ポジション"
 
 #: pretix/base/models/orders.py
 msgid "Cart ID (e.g. session key)"
@@ -7334,8 +7340,11 @@ msgid "The payment for this invoice has already been received."
 msgstr "この請求書の支払いはすでに受領済みです。"
 
 #: pretix/base/payment.py
+#, fuzzy
+#| msgid ""
+#| "This payment is already being processed and can not be canceled any more."
 msgid ""
-"This payment is already being processed and can not be canceled any more."
+"This payment is already being processed and cannot be canceled any more."
 msgstr "この支払いは処理中のため、キャンセルできません。"
 
 #: pretix/base/payment.py
@@ -7454,14 +7463,12 @@ msgid "This gift card was used in the meantime. Please try again."
 msgstr "このギフトカードはその間に使用されました。もう一度お試しください。"
 
 #: pretix/base/payment.py
-#, fuzzy
-#| msgid ""
-#| "This payment provider does not exist or the respective plugin is disabled."
 msgid ""
 "This payment provider exists for historical purposes only and is no longer "
 "usable."
 msgstr ""
-"この支払いプロバイダは存在しないか、該当するプラグインが無効になっています。"
+"この決済プロバイダーは歴史的目的のためにのみ存在しており、現在はご利用いただ"
+"けません。"
 
 #: pretix/base/pdf.py
 msgid "Ticket code (barcode content)"
@@ -8098,6 +8105,18 @@ msgid "Presale end"
 msgstr "前売り終了"
 
 #: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order email"
+msgid "Order creation"
+msgstr "注文者メール"
+
+#: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order expired"
+msgid "Order expiry"
+msgstr "注文の有効期限が切れました"
+
+#: pretix/base/reldate.py
 msgid "before"
 msgstr "前に"
 
@@ -8120,6 +8139,26 @@ msgstr "相対的な時間:"
 #: pretix/base/reldate.py
 msgid "Not set"
 msgstr "未設定"
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"after\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"after\" for \"{}\""
+msgstr ""
 
 #: pretix/base/secrets.py
 msgid "Random (default, works with all pretix apps)"
@@ -9293,15 +9332,11 @@ msgstr ""
 "ん。"
 
 #: pretix/base/services/orders.py
-#, fuzzy
-#| msgid ""
-#| "You cannot change the price of a position that has been used to issue a "
-#| "gift card."
 msgid ""
 "You cannot change the ticket secret of a position that has been used to "
 "issue a gift card."
 msgstr ""
-"発行されたギフトカードに使用されたポジションの価格を変更することはできませ"
+"ギフトカードの発行に使用されたポジションのチケットシークレットは変更できませ"
 "ん。"
 
 #: pretix/base/services/orders.py
@@ -9346,7 +9381,7 @@ msgstr "金額はカードに請求されました。"
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr "金額を次の口座へお振込ください： 9999-9999-9999-9999"
 
-#: pretix/base/services/placeholders.py pretix/control/views/organizer.py
+#: pretix/base/services/placeholders.py
 msgid "This value will be replaced based on dynamic parameters."
 msgstr "この値は動的パラメータに基づいて置換されます。"
 
@@ -10029,6 +10064,25 @@ msgstr ""
 "このテキストは、指定された販売時間が終了した後にチケットショップの上に表示さ"
 "れます。これを使用して、ボックスオフィスなど、チケットを入手する他のオプショ"
 "ンを説明することができます。"
+
+#: pretix/base/settings.py
+msgid "No dates match your criteria."
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid "Text for empty date results"
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid ""
+"This text will be shown if the calendar or list of dates is empty, e.g. "
+"because a month does not contain any dates or a filter chosen by the user "
+"does not find any results. You can use this to advertise ways to get in "
+"touch with you to arrange further dates. We do not recommend more than one "
+"or two sentences."
+msgstr ""
 
 #: pretix/base/settings.py
 msgid "Guidance text"
@@ -13848,6 +13902,28 @@ msgid ""
 msgstr "ギフトカードの有効期限を発行年を含めた{}年に設定しました。"
 
 #: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment date"
+msgid "Payment term"
+msgstr "支払い日"
+
+#: pretix/control/forms/event.py
+msgid "same as above"
+msgstr ""
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment term in days"
+msgid "different payment term in days"
+msgstr "支払い条件（日数）"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment term in minutes"
+msgid "different payment term in minutes"
+msgstr "支払い期限（分単位）"
+
+#: pretix/control/forms/event.py
 msgid "Prices including tax"
 msgstr "税込価格"
 
@@ -14843,10 +14919,8 @@ msgid "Source"
 msgstr "ソース"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "All vouchers"
 msgid "All sources"
-msgstr "すべてのバウチャー"
+msgstr "すべてのソース"
 
 #: pretix/control/forms/filter.py
 msgid "Team actions"
@@ -14857,16 +14931,12 @@ msgid "Customer actions"
 msgstr "お客様の操作"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Device status"
 msgid "Device actions"
-msgstr "デバイスの状態"
+msgstr "デバイスのアクション"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Order email"
 msgid "User email"
-msgstr "注文者メール"
+msgstr "ユーザーの電子メール"
 
 #: pretix/control/forms/filter.py pretix/control/navigation.py
 msgid "All users"
@@ -16346,38 +16416,31 @@ msgid ""
 "because at least one of the selected vouchers has already been redeemed "
 "%(max_redeemed)s times."
 msgstr ""
+"選択されたバウチャーのうち少なくとも1つがすでに%(max_redeemed)s回使用されてい"
+"るため、最大償還回数を%(max_usages)sに減らすことはできません。"
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid ""
-#| "You cannot create a voucher that blocks quota as the selected product or "
-#| "quota is currently sold out or completely reserved."
 msgid ""
 "You cannot create a voucher that allows selection of a quota but has no date "
 "selected."
 msgstr ""
-"選択した製品・クォータが現在売り切れまたは完全に予約済みのため、クォータをブ"
-"ロックするバウチャーを作成することはできません。"
+"クォータを選択できても日付が選択されていないバウチャーは、作成できません。"
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid "The selected product does not allow to select a seat."
 msgid "The selected quota does not match the selected subevent."
-msgstr "選択した製品では座席の選択ができません。"
+msgstr "選択されたクォータは選択されたサブイベントと一致しません。"
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid ""
-#| "There is not enough quota available on quota \"{}\" to perform the "
-#| "operation."
 msgid "There is no sufficient quota available to perform this change."
-msgstr "クォータ\"{}\"の残量が不足しているため、操作を実行できません。"
+msgstr "この変更を実行するための十分なクォータが利用できません。"
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "Changing the maximum number of usages in bulk is not supported if any of the "
 "selected vouchers is assigned a seat."
 msgstr ""
+"選択されたバウチャーのいずれかに座席が割り当てられている場合、一括使用回数の"
+"最大変更はサポートされていません。"
 
 #: pretix/control/forms/vouchers.py
 msgctxt "subevent"
@@ -16385,18 +16448,24 @@ msgid ""
 "Changing the date in bulk is not supported if any of the selected vouchers "
 "is assigned a seat."
 msgstr ""
+"選択されたバウチャーのいずれかに座席が割り当てられている場合、一括で日付を変"
+"更することはサポートされていません。"
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "Changing the product to a quota is not supported if any of the selected "
 "vouchers is assigned a seat."
 msgstr ""
+"選択されたバウチャーのいずれかに座席が割り当てられている場合、製品をクオータ"
+"に変更することはサポートされていません。"
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "This change cannot be completed because not all assigned seats of the "
 "vouchers are still available"
 msgstr ""
+"この変更は、バウチャーに割り当てられたすべての座席がまだ利用できないため、完"
+"了できません"
 
 #: pretix/control/forms/vouchers.py
 msgid "Codes"
@@ -18069,7 +18138,7 @@ msgstr "ダッシュボード"
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html
 msgid "General"
-msgstr "一般"
+msgstr "総合"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html
@@ -19758,34 +19827,24 @@ msgstr ""
 "す！"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid "Your new SPF record could look like this:"
 msgid "Your new DKIM record should be set up as a CNAME record like this:"
-msgstr "新しいSPFレコードは次のようになります："
+msgstr "新しいDKIMレコードは、次のようにCNAMEレコードとして設定してください:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid ""
-#| "We found an SPF record on your domain that includes this system. Great!"
 msgid "We found a DKIM record on your domain for this system. Great!"
 msgstr ""
-"あなたのドメインでこのシステムを含むSPFレコードが見つかりました。素晴らしいで"
-"す！"
+"このシステムに関して、あなたのドメインでDKIMレコードが見つかりました。すご"
+"い！"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid "Your new SPF record could look like this:"
 msgid "Your new DMARC record could look like this:"
-msgstr "新しいSPFレコードは次のようになります："
+msgstr "新しいDMARCレコードは次のようになります："
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#, fuzzy
-#| msgid ""
-#| "We found an SPF record on your domain that includes this system. Great!"
 msgid "We found a DMARC record on your domain for this system. Great!"
 msgstr ""
-"あなたのドメインでこのシステムを含むSPFレコードが見つかりました。素晴らしいで"
-"す！"
+"このシステムに関して、お客様のドメインにDMARCレコードが見つかりました。すご"
+"い！"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
 msgid "Verification"
@@ -20621,6 +20680,7 @@ msgid "Top recommendation"
 msgstr "トップのおすすめ"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html
+#: pretix/control/templates/pretixcontrol/items/questions.html
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid "Experimental feature"
 msgstr "実験的な機能"
@@ -21430,10 +21490,8 @@ msgid "The quick brown fox jumps over the lazy dog."
 msgstr "素早い茶色のキツネがのろまな犬を飛び越えます。"
 
 #: pretix/control/templates/pretixcontrol/fragment_log_filter_form.html
-#, fuzzy
-#| msgid "Specific seat"
 msgid "Specific object selected"
-msgstr "特定の席"
+msgstr "特定のオブジェクトが選択されました"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html
@@ -22475,6 +22533,30 @@ msgstr ""
 "食事を提供する場合、ユーザーに食事制限について尋ねることができる一例です。"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Create a new question"
+msgid "Create a new per-ticket question"
+msgstr "新しい質問を作成"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Create a new question"
+msgid "Create a new order-level question"
+msgstr "新しい質問を作成"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Delete question"
+msgid "Per-ticket questions"
+msgstr "質問を削除"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"These questions are asked for every ticket, so possibly multiple times in "
+"the same order."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new question"
 msgstr "新しい質問を作成"
 
@@ -22489,6 +22571,30 @@ msgstr "チェックインの際に質問すること"
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "All personalized products"
 msgstr "すべてのパーソナライズされた製品"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Include questions"
+msgid "Per-order questions"
+msgstr "質問を含む"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"This functionality is in active development and expected to change "
+"significantly over the coming months."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"Per-order questions are currently not supported and will not be displayed in "
+"pretixPOS."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "The question has been reordered."
+msgid "These questions are asked once per order."
+msgstr "質問の並び順が変更されました。"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
@@ -23006,6 +23112,8 @@ msgid ""
 "Ticket secrets of order positions that have been used to issue a gift card "
 "can not be changed. Only the link will be changed in this case."
 msgstr ""
+"ギフトカードの発行に使用された注文位置のチケットシークレットは変更できませ"
+"ん。この場合、リンクのみが変更されます。"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
@@ -23074,6 +23182,15 @@ msgstr "請求書の情報"
 msgid "(optional)"
 msgstr "(任意)"
 
+#: pretix/control/templates/pretixcontrol/order/change_questions.html
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html
+#: pretix/presale/templates/pretixpresale/event/order_modify.html
+#, fuzzy
+#| msgid "Additional information"
+msgid "Additional order information"
+msgstr "追加情報"
+
 #: pretix/control/templates/pretixcontrol/order/delete.html
 msgid "Delete order"
 msgstr "注文を削除"
@@ -23102,6 +23219,25 @@ msgstr "はい、注文を承認しません"
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Extend payment term"
 msgstr "支払期日を延長する"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid ""
+"This file has been uploaded by a user and could contain viruses or other "
+"malicious content."
+msgstr ""
+"このファイルはユーザーによってアップロードされたものであり、ウイルスやその他"
+"の悪意のあるコンテンツが含まれている可能性があります。"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid "UNSAFE"
+msgstr "危険"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "not answered"
+msgstr "回答なし"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
@@ -23377,25 +23513,8 @@ msgid "Ticket page"
 msgstr "チケットページ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "not answered"
-msgstr "回答なし"
-
-#: pretix/control/templates/pretixcontrol/order/index.html
 msgid "This question will be asked during check-in."
 msgstr "この質問はチェックインの際にされます。"
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid ""
-"This file has been uploaded by a user and could contain viruses or other "
-"malicious content."
-msgstr ""
-"このファイルはユーザーによってアップロードされたものであり、ウイルスやその他"
-"の悪意のあるコンテンツが含まれている可能性があります。"
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid "UNSAFE"
-msgstr "危険"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/overview.html
@@ -24735,6 +24854,16 @@ msgstr "デバイスを接続"
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Hardware model"
 msgstr "ハードウェアの機種"
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+#, fuzzy, python-format
+#| msgid "Begin: %(time)s"
+msgid "Last seen: %(time)s"
+msgstr "開始: %(time)s"
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+msgid "No recent contact"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Not yet initialized"
@@ -26837,7 +26966,7 @@ msgstr "代わりに、WebAuthnデバイスを使用することもできます�
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html
 msgid "Log in as someone else"
-msgstr "他人としてログイン"
+msgstr "別の人としてログイン"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html
 msgid "Account settings"
@@ -27008,10 +27137,8 @@ msgstr ""
 "と、バウチャー保有者は製品を利用できない場合があります！"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
-#, fuzzy
-#| msgid "Create multiple vouchers"
 msgid "Change multiple vouchers"
-msgstr "複数のバウチャーを作成"
+msgstr "複数のバウチャーを変更"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
@@ -27407,6 +27534,9 @@ msgid ""
 "team. If you want to add a different user or create a new account, log out "
 "and click the invitation link again."
 msgstr ""
+"すでにこのチームの一員であるため、\"{}\" の招待を受け入れることはできません。"
+"別のユーザーを追加したり新しいアカウントを作成したりしたい場合は、ログアウト"
+"して再度招待リンクをクリックしてください。"
 
 #: pretix/control/views/auth.py
 #, python-brace-format
@@ -27924,10 +28054,6 @@ msgid "Not all objects have been selected."
 msgstr "すべてのオブジェクトが選択されているわけではありません。"
 
 #: pretix/control/views/item.py
-msgid "Street"
-msgstr "町丁・番地"
-
-#: pretix/control/views/item.py
 msgid "The requested question does not exist."
 msgstr "要求された質問は存在しません。"
 
@@ -28070,13 +28196,6 @@ msgstr ""
 "コードに含めるよう、ドメインのDNS設定を更新する必要があります。"
 
 #: pretix/control/views/mailsetup.py
-#, fuzzy
-#| msgid ""
-#| "We could not find an SPF record set for the domain you are trying to use. "
-#| "This means that there is a very high change most of the emails will be "
-#| "rejected or marked as spam. We strongly recommend setting an SPF record "
-#| "on the domain. You can do so through the DNS settings at the provider you "
-#| "registered your domain with."
 msgid ""
 "We could not find a CNAME record pointing to our DKIM key for domain you are "
 "trying to use. This means that there is a very high change most of the "
@@ -28084,47 +28203,36 @@ msgid ""
 "DKIM through a CNAME record. You can do so through the DNS settings at the "
 "provider you registered your domain with."
 msgstr ""
-"使用しようとしているドメインに設定されたSPFレコードが見つかりませんでした。こ"
-"れは、ほとんどのメールが拒否されるかスパムとしてマークされる可能性が非常に高"
-"いことを意味します。ドメインにSPFレコードを設定することを強く推奨します。これ"
-"は、ドメインを登録したプロバイダーのDNS設定から行えます。"
+"使用を試みているドメインのDKIMキーを指すCNAMEレコードが見つかりませんでした。"
+"これは、ほとんどのメールが拒否されたりスパムとしてマークされなど、大きな変化"
+"があることを意味します。CNAMEレコードを通じてDKIMを設定することを強くお勧めい"
+"たします。ドメインを登録したプロバイダーの DNS 設定から実行できます。"
 
 #: pretix/control/views/mailsetup.py
-#, fuzzy
-#| msgid ""
-#| "We found an SPF record set for the domain you are trying to use, but it "
-#| "does not include this system's email server. This means that there is a "
-#| "very high chance most of the emails will be rejected or marked as spam. "
-#| "You should update the DNS settings of your domain to include this system "
-#| "in the SPF record."
 msgid ""
 "We found a CNAME record for a DKIM key, but it is not pointing to the right "
 "location. This means that there is a very high chance most of the emails "
 "will be rejected or marked as spam. You should update the DNS settings of "
 "your domain."
 msgstr ""
-"使用しようとしているドメインのSPFレコードが見つかりましたが、このシステムの"
-"メールサーバーが含まれていません。これは、ほとんどのメールが拒否されるかスパ"
-"ムとしてマークされる可能性が非常に高いことを意味します。このシステムをSPFレ"
-"コードに含めるよう、ドメインのDNS設定を更新する必要があります。"
+"DKIMキーのCNAMEレコードが見つかりましたが、正しい場所を指していません。これ"
+"は、ほとんどのメールが拒否されたりスパムとしてマークされたりする可能性が非常"
+"に高いことを意味します。ドメインのDNS設定を更新すべきです。"
 
 #: pretix/control/views/mailsetup.py
 #, fuzzy
 #| msgid ""
-#| "We found an SPF record set for the domain you are trying to use, but it "
-#| "does not include this system's email server. This means that there is a "
+#| "We did not find DMARC record for your domain. This means that there is a "
 #| "very high chance most of the emails will be rejected or marked as spam. "
-#| "You should update the DNS settings of your domain to include this system "
-#| "in the SPF record."
+#| "You should update the DNS settings of your domain."
 msgid ""
-"We did not find DMARC record for your domain. This means that there is a "
+"We did not find a DMARC record for your domain. This means that there is a "
 "very high chance most of the emails will be rejected or marked as spam. You "
 "should update the DNS settings of your domain."
 msgstr ""
-"使用しようとしているドメインのSPFレコードが見つかりましたが、このシステムの"
-"メールサーバーが含まれていません。これは、ほとんどのメールが拒否されるかスパ"
-"ムとしてマークされる可能性が非常に高いことを意味します。このシステムをSPFレ"
-"コードに含めるよう、ドメインのDNS設定を更新する必要があります。"
+"お客様のドメインのDMARCレコードが見つかりませんでした。これは、ほとんどのメー"
+"ルが拒否されたりスパムとしてマークされたりする可能性が非常に高いことを意味し"
+"ます。ドメインのDNS設定を更新すべきです。"
 
 #: pretix/control/views/mailsetup.py
 msgid "The verification code was incorrect, please try again."
@@ -28559,7 +28667,8 @@ msgstr "件名: {subject}"
 msgid "Your message has been queued and will be sent to {}."
 msgstr "あなたのメッセージはキューに入れられ、{}に送信されます。"
 
-#: pretix/control/views/orders.py pretix/presale/views/order.py
+#: pretix/control/views/orders.py pretix/presale/views/cart.py
+#: pretix/presale/views/order.py
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -30796,6 +30905,29 @@ msgstr ""
 "支払う選択肢を提供します。販売者であるあなたは、すぐに代金を受け取ります。"
 
 #: pretix/plugins/paypal2/payment.py
+msgid "Allow further payments during compliance hold"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"PayPals fraud prevention might block processing of individual payments for a "
+"considerable amount of time. The payment is marked as \"pending\" during "
+"this time window. You can allow your customers to start another payment "
+"attempts during that window. This might result in them being charged twice "
+"if the original payment is approved."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Timeout further payment attempts"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"Time duration in minutes after which another payment attempt is possible, "
+"while the last payment is still under investigation."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
 msgid "-- Automatic --"
 msgstr "-- 自動 --"
 
@@ -31052,11 +31184,12 @@ msgstr "支払い方法を選択してください。"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
 msgid ""
-"Our attempt to execute your payment via PayPal has failed. Please try again "
-"or contact us."
+"Your payment is being processed by PayPal. This takes longer than usual. You "
+"can wait until PayPal acknowledges the payment or you can try paying again "
+"with this or another payment method. This might result in you being charged "
+"twice in case PayPal allows your initial payment attempt. Please contact us "
+"to resolve this case."
 msgstr ""
-"PayPalを通じてのお支払いの実行が失敗しました。もう一度お試しいただくか、お問"
-"い合わせください。"
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
@@ -31303,24 +31436,21 @@ msgid "Base redirection URLs"
 msgstr "リダイレクト先URI"
 
 #: pretix/plugins/returnurl/views.py
-#, fuzzy
-#| msgid ""
-#| "Redirection will only be allowed to URLs that start with one of these "
-#| "prefixes. Enter one or more allowed URL prefix per line. URL prefixes "
-#| "must include a slash after the hostname."
 msgid ""
 "Redirection will only be allowed to URLs that start with one of these "
 "prefixes. Enter one allowed URL prefix per line. URL prefixes must include a "
 "slash after the hostname."
 msgstr ""
-"リダイレクションは、次の接頭辞で始まるURLにのみ許可されます。1行に1つ以上の許"
-"可されたURL接頭辞を入力してください。URL接頭辞には、ホスト名の後にスラッシュ"
-"を含める必要があります。"
+"お客様のドメインのDMARCレコードが見つかりませんでした。これは、ほとんどのメー"
+"ルが拒否されたりスパムとしてマークされたりする可能性が非常に高いことを意味し"
+"ます。ドメインのDNS設定を更新すべきです。"
 
 #: pretix/plugins/returnurl/views.py
 msgid ""
 "All values must be URLs that include at last one slash after the hostname."
 msgstr ""
+"すべての値は、ホスト名の後に最後にスラッシュが1つ含まれるURLでなければなりま"
+"せん。"
 
 #: pretix/plugins/sendmail/apps.py
 msgid "Send out emails to all your customers or specific groups of customers."
@@ -34033,10 +34163,6 @@ msgid "No attendee name provided"
 msgstr "参加者の名前が入力されていません"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "The image you previously uploaded"
-msgstr "以前にアップロードした画像"
-
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "The price of this product was reduced because of an automatic discount."
 msgstr "この製品の価格が自動割引によって削減されました。"
 
@@ -34457,6 +34583,10 @@ msgstr "%(value)s 税抜"
 #, python-format
 msgid "Set price in %(currency)s for %(item)s"
 msgstr "%(item)sの%(currency)sでの価格を設定"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "The image you previously uploaded"
+msgstr "以前にアップロードした画像"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html
 #, python-format
@@ -36177,6 +36307,13 @@ msgstr "書き込みアクセス"
 msgid "Kosovo"
 msgstr "コソボ"
 
+#~ msgid ""
+#~ "Our attempt to execute your payment via PayPal has failed. Please try "
+#~ "again or contact us."
+#~ msgstr ""
+#~ "PayPalを通じてのお支払いの実行が失敗しました。もう一度お試しいただくか、お"
+#~ "問い合わせください。"
+
 #~ msgid "All actions"
 #~ msgstr "すべての操作"
 
@@ -36313,9 +36450,6 @@ msgstr "コソボ"
 
 #~ msgid "Please do not use special characters in names."
 #~ msgstr "名前に特殊文字を使用しないでください。"
-
-#~ msgid "State"
-#~ msgstr "州・都道府県"
 
 #~ msgid "Program times: date and time"
 #~ msgstr "プログラム時間:日付と時刻"

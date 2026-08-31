@@ -600,6 +600,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
         'imprint_url',
         'checkout_email_helptext',
         'presale_has_ended_text',
+        'event_list_empty_text',
         'voucher_explanation_text',
         'checkout_success_text',
         'show_dates_on_frontpage',
@@ -734,6 +735,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
             del self.fields['event_list_available_only']
             del self.fields['event_list_filters']
             del self.fields['event_calendar_future_only']
+            del self.fields['event_list_empty_text']
         self.fields['primary_font'].choices = [('Open Sans', 'Open Sans')] + sorted([
             (a, FontSelect.FontOption(title=a, data=v)) for a, v in get_fonts(self.event, pdf_support_required=False).items()
         ], key=lambda a: a[0])
@@ -855,6 +857,50 @@ class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'payment_explanation',
         'tax_rule_payment',
     ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.term_channel_fields = {}
+        for c in self.obj.organizer.sales_channels.all():
+            if c.type_instance.payment_restrictions_supported and c.identifier != "web":
+                # At the moment, it seems sufficient to allow this for the same channel types as other payment settings
+                # We can always introduce more flags later if needed
+                suffix = '_' + c.identifier.replace(".", "_")
+                self.term_channel_fields[c] = [
+                    'payment_term_mode' + suffix,
+                    'payment_term_days' + suffix,
+                    'payment_term_minutes' + suffix,
+                ]
+                self.fields['payment_term_mode' + suffix] = DEFAULTS['payment_term_mode']['form_class'](
+                    label=_("Payment term"),
+                    widget=forms.RadioSelect,
+                    required=False,
+                    choices=(
+                        ('', _("same as above")),
+                        ('days', _("different payment term in days")),
+                        ('minutes', _("different payment term in minutes"))
+                    ),
+                )
+                self.fields['payment_term_days' + suffix] = DEFAULTS['payment_term_days']['form_class'](
+                    required=False,
+                    **DEFAULTS['payment_term_days']['form_kwargs'](suffix, 1),
+                )
+                self.fields['payment_term_minutes' + suffix] = DEFAULTS['payment_term_minutes']['form_class'](
+                    required=False,
+                    **DEFAULTS['payment_term_minutes']['form_kwargs'](suffix, 2),
+                )
+
+    def clean(self):
+        data = super().clean()
+        for c in self.term_channel_fields.keys():
+            suffix = '_' + c.identifier.replace(".", "_")
+            mode = self.cleaned_data.get(f'payment_term_mode{suffix}')
+            if mode == 'days' and self.cleaned_data.get(f'payment_term_days{suffix}') is None:
+                raise ValidationError({f'payment_term_days{suffix}': _("This field is required.")})
+            if mode == 'minutes' and self.cleaned_data.get(f'payment_term_minutes{suffix}') is None:
+                raise ValidationError({f'payment_term_minutes{suffix}': _("This field is required.")})
+        return data
 
     def clean_payment_term_days(self):
         value = self.cleaned_data.get('payment_term_days')

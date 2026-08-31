@@ -933,6 +933,23 @@ DEFAULTS = {
                         "is over. You can use it to describe other options to get a ticket, such as a box office.")
         )
     },
+    'event_list_empty_text': {
+        'default': LazyI18nString.from_gettext(
+            gettext_noop('No dates match your criteria.'),
+        ),
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'serializer_class': I18nField,
+        'form_kwargs': dict(
+            label=pgettext_lazy("subevents", "Text for empty date results"),
+            widget=I18nMarkdownTextarea,
+            widget_kwargs={'attrs': {'rows': '2'}},
+            help_text=pgettext_lazy("subevents", "This text will be shown if the calendar or list of dates is empty, "
+                                                 "e.g. because a month does not contain any dates or a filter chosen by the user does "
+                                                 "not find any results. You can use this to advertise ways to get in touch with you to "
+                                                 "arrange further dates. We do not recommend more than one or two sentences.")
+        )
+    },
     'payment_explanation': {
         'default': '',
         'type': LazyI18nString,
@@ -979,12 +996,12 @@ DEFAULTS = {
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
         'write_permission': 'event.settings.payment:write',
-        'form_kwargs': dict(
+        'form_kwargs': lambda suffix="", parent=0: dict(
             label=_('Payment term in days'),
             widget=forms.NumberInput(
                 attrs={
-                    'data-display-dependency': '#id_payment_term_mode_0',
-                    'data-required-if': '#id_payment_term_mode_0'
+                    'data-display-dependency': f'#id_payment_term_mode{suffix}_{parent}',
+                    'data-required-if': f'#id_payment_term_mode{suffix}_{parent}'
                 },
             ),
             help_text=_("The number of days after placing an order the user has to pay to preserve their reservation. If "
@@ -1023,7 +1040,7 @@ DEFAULTS = {
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
         'write_permission': 'event.settings.payment:write',
-        'form_kwargs': dict(
+        'form_kwargs': lambda suffix="", parent=1: dict(
             label=_('Payment term in minutes'),
             help_text=_("The number of minutes after placing an order the user has to pay to preserve their reservation. "
                         "Only use this if you exclusively offer real-time payment methods. Please note that for technical reasons, "
@@ -1032,8 +1049,8 @@ DEFAULTS = {
                         MaxValueValidator(1440)],
             widget=forms.NumberInput(
                 attrs={
-                    'data-display-dependency': '#id_payment_term_mode_1',
-                    'data-required-if': '#id_payment_term_mode_1'
+                    'data-display-dependency': f'#id_payment_term_mode{suffix}_{parent}',
+                    'data-required-if': f'#id_payment_term_mode{suffix}_{parent}'
                 },
             ),
         ),

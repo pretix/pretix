@@ -199,7 +199,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                  help_text=_(
                      'PayPals fraud prevention might block processing of individual payments for a considerable amount '
                      'of time. The payment is marked as "pending" during this time window. You can allow your customers to '
-                     'start another payment attempts during that window. This might result in them being charged twice if the'
+                     'start another payment attempts during that window. This might result in them being charged twice if the '
                      'original payment is approved.'
                  ),
                  required=False
