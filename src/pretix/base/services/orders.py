@@ -50,7 +50,7 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import (
-    Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, QuerySet, Subquery,
+    Count, Exists, F, IntegerField, Max, Min, OuterRef, Prefetch, Q, QuerySet, Subquery,
     Sum, Value,
 )
 from django.db.models.functions import Cast, Greatest
@@ -71,6 +71,7 @@ from pretix.base.models import (
     Membership, Order, OrderPayment, OrderPosition, Quota, Seat,
     SeatCategoryMapping, User, Voucher,
 )
+from pretix.base.models.cancellation import CancellationCheck, CheckResult, CheckTypes, PositionSet
 from pretix.base.models.event import Event_SettingsStore, SubEvent
 from pretix.base.models.orders import (
     BlockedTicketSecret, CheckoutSession, InvoiceAddress, OrderFee,
@@ -103,7 +104,7 @@ from pretix.base.signals import (
     order_approved, order_canceled, order_changed, order_denied, order_expired,
     order_expiry_changed, order_fee_calculation, order_paid, order_placed,
     order_reactivated, order_split, order_valid_if_pending, periodic_task,
-    validate_order,
+    self_service_cancellation_checks, validate_order,
 )
 from pretix.base.timemachine import time_machine_now, time_machine_now_assigned
 from pretix.celery_app import app
@@ -1680,7 +1681,8 @@ class OrderChangeManager:
         @property
         def position(self) -> OrderPosition:
             if self._positions is None:
-                raise RuntimeError("Order position has not been created yet. Call commit() first on OrderChangeManager.")
+                raise RuntimeError(
+                    "Order position has not been created yet. Call commit() first on OrderChangeManager.")
             if len(self._positions) != 1:
                 raise RuntimeError("More than one position created.")
             return self._positions[0]
@@ -1899,7 +1901,8 @@ class OrderChangeManager:
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: OrderPosition = None,
                      subevent: SubEvent = None, seat: Seat = None, membership: Membership = None,
-                     valid_from: datetime = None, valid_until: datetime = None, count: int = 1) -> 'OrderChangeManager.AddPositionResult':
+                     valid_from: datetime = None, valid_until: datetime = None,
+                     count: int = 1) -> 'OrderChangeManager.AddPositionResult':
         if count < 1:
             raise ValueError("Count must be positive")
         if isinstance(seat, str):
@@ -2616,19 +2619,20 @@ class OrderChangeManager:
                     )
                     nextposid += 1
                     new_pos.append(pos)
-                    new_logs.append(self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={
-                        'position': pos.pk,
-                        'item': op.item.pk,
-                        'variation': op.variation.pk if op.variation else None,
-                        'addon_to': op.addon_to.pk if op.addon_to else None,
-                        'price': op.price.gross,
-                        'positionid': pos.positionid,
-                        'membership': pos.used_membership_id,
-                        'subevent': op.subevent.pk if op.subevent else None,
-                        'seat': op.seat.pk if op.seat else None,
-                        'valid_from': op.valid_from.isoformat() if op.valid_from else None,
-                        'valid_until': op.valid_until.isoformat() if op.valid_until else None,
-                    }, save=False))
+                    new_logs.append(
+                        self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={
+                            'position': pos.pk,
+                            'item': op.item.pk,
+                            'variation': op.variation.pk if op.variation else None,
+                            'addon_to': op.addon_to.pk if op.addon_to else None,
+                            'price': op.price.gross,
+                            'positionid': pos.positionid,
+                            'membership': pos.used_membership_id,
+                            'subevent': op.subevent.pk if op.subevent else None,
+                            'seat': op.seat.pk if op.seat else None,
+                            'valid_from': op.valid_from.isoformat() if op.valid_from else None,
+                            'valid_until': op.valid_until.isoformat() if op.valid_until else None,
+                        }, save=False))
 
                 op.result._positions = new_pos
                 LogEntry.bulk_create_and_postprocess(new_logs)
@@ -2956,7 +2960,8 @@ class OrderChangeManager:
         return total
 
     def _check_order_size(self):
-        if (len(self.order.positions.all()) + sum([op.count for op in self._operations if isinstance(op, self.AddOperation)])) > settings.PRETIX_MAX_ORDER_SIZE:
+        if (len(self.order.positions.all()) + sum([op.count for op in self._operations if isinstance(op,
+                                                                                                     self.AddOperation)])) > settings.PRETIX_MAX_ORDER_SIZE:
             raise OrderError(
                 self.error_messages['max_order_size'] % {
                     'max': settings.PRETIX_MAX_ORDER_SIZE,
@@ -3591,3 +3596,43 @@ def signal_listener_issue_media(sender: Event, order: Order, **kwargs):
                         'customer': order.customer_id,
                     }
                 )
+
+
+def position_not_used_cancellation_check(order: Order, keep: PositionSet, position: OrderPosition,
+                                         check_ts: datetime):
+    for pos in order.all_positions.all():
+        if pos == position and position not in keep:
+            for checkin in pos.all_checkins.all():
+                if checkin.successful and checkin.list.consider_tickets_used:
+                    return CheckResult(
+                        id="pretixbase_position_not_used",
+                        reason=f"Position used in Checkin {checkin}",
+                        cancellation_possible=False,
+                    )
+        else:
+            return CheckResult(
+                id="pretixbase_position_not_used",
+                reason="Position not up for cancellation",
+                cancellation_possible=True,
+            )
+
+    return CheckResult(
+        id="pretixbase_position_not_used",
+        reason="Ticket not used",
+        cancellation_possible=True,
+    )
+
+
+@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_position_not_used")
+def signal_listener_position_not_used(sender: Event, **kwargs):
+    return CancellationCheck(id="pretixbase_position_not_used",
+                             type=CheckTypes.POSITION,
+                             check_fn=position_not_used_cancellation_check,
+                             prefetches=[
+                                 lambda: Prefetch('all_positions__all_checkins__list', )
+                             ])
+
+# TODO weitere System Checks
+# OrderPositions mit Item.min_per_order dürfen nur storniert werden, wenn genug übrig bleiben oder alle des gleichen Items storniert werden
+# OrderPositions mit addon_to != None dürfen nur über den bestehenden Add-On-Flow storniert werden
+# OrderPositions mit is_bundled dürfen nur mit der Parent-Position zusammen storniert werden
