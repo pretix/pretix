@@ -124,7 +124,7 @@ class FontFallbackParagraph(Paragraph):
 
 
 class PlainTextParagraph(FontFallbackParagraph):
-    def __init__(self, text, style=None, linebreaks=True, *args, **kwargs):
+    def __init__(self, text, style=None, strip=True, linebreaks=True, *args, **kwargs):
         if not isinstance(text, str):
             if hasattr(text, '__html__'):
                 raise ValueError("It is contradictory to pass escaped content to PlainTextParagraph")
@@ -136,8 +136,11 @@ class PlainTextParagraph(FontFallbackParagraph):
         # Escape any HTML in the text
         text = escape(text)
 
+        if strip:
+            text = text.strip()
+
         if linebreaks:
-            text = text.strip().replace("\n", "<br />\n")
+            text = text.replace("\n", "<br />\n")
         super().__init__(text, style, *args, **kwargs)
 
 
