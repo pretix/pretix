@@ -72,6 +72,9 @@
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-lg-5">
                                         {% bootstrap_field form.key layout='inline' form_group_class="" %}
+                                        {% if form.key.help_text %}
+                                            <span class="help-block">{{ form.key.help_text|safe }}</span>
+                                        {% endif %}
                                     </div>
                                     <div class="col-sm-6 col-md-4 col-lg-5">
                                         {% bootstrap_field form.label layout='inline' form_group_class="" %}
