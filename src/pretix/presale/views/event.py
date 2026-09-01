@@ -79,7 +79,7 @@ from pretix.presale.signals import seatingframe_html_head
 from pretix.presale.views.organizer import (
     EventListMixin, add_subevents_for_days, days_for_template,
     filter_qs_by_attr, filter_subevents_with_plugins, has_before_after,
-    weeks_for_template,
+    should_hide_subevent, weeks_for_template,
 )
 
 from . import (
@@ -443,12 +443,10 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 )
             )
             subevents = filter_subevents_with_plugins(list(subevents), self.request.sales_channel)
-            context['subevent_list'] = subevents
-            if self.request.event.settings.event_list_available_only and not voucher:
-                context['subevent_list'] = [
-                    se for se in subevents
-                    if not se.presale_has_ended and (se.best_availability_state is None or se.best_availability_state >= Quota.AVAILABILITY_RESERVED)
-                ]
+            context['subevent_list'] = [
+                se for se in subevents
+                if not should_hide_subevent(self.request.event.settings, se, voucher)
+            ]
             context['visible_events'] = len(subevents) > 0
         return context
 
