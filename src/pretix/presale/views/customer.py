@@ -54,6 +54,7 @@ from pretix.base.models import Customer, InvoiceAddress, Order, OrderPosition
 from pretix.base.services.mail import mail
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import customer_created, customer_signed_in
+from pretix.helpers import OF_SELF
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.models import KnownDomain
@@ -280,6 +281,16 @@ class SetPasswordView(FormView):
 
     def form_valid(self, form):
         with transaction.atomic():
+            # Re-check token in transaction to prevent race condition
+            try:
+                self.customer = Customer.objects.select_for_update(of=OF_SELF).get(pk=self.customer.pk)
+            except Customer.DoesNotExist:
+                messages.error(self.request, _('You clicked an invalid link.'))
+            else:
+                if not TokenGenerator().check_token(self.customer, self.request.GET.get('token', '')):
+                    messages.error(self.request, _('You clicked an invalid link.'))
+                    return HttpResponseRedirect(self.get_success_url())
+
             self.customer.set_password(form.cleaned_data['password'])
             self.customer.is_verified = True
             self.customer.save()
