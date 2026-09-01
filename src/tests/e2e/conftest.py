@@ -89,11 +89,11 @@ def _widget_assets():
                 f'Start it with: npm run dev:widget'
             )
         yield
-    elif os.environ.get("PRETIX_WIDGET_VITE"):
+    elif os.environ.get("PRETIX_WIDGET_VUE"):
+        yield  # Old widget, no build needed
+    else:
         subprocess.check_call(['npm', 'run', 'build:widget'], cwd=PROJECT_ROOT)
         yield
-    else:
-        yield  # Old widget, no build needed
 
 
 # ============================================================================
