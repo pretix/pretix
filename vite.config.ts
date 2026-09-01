@@ -31,9 +31,6 @@ export default defineConfig({
 			// Allow serving source files from sibling plugin directories
 			allow: ['src', ...pluginDirs],
 		},
-		cors: {
-			origin: /^https?:\/\/(?:(?:[^:]+\.)?localhost|127\.0\.0\.1|\[::1\]|[^:]+\.pretix\.dev)(?::\d+)?$/
-		},
 	},
 	build: {
 		manifest: true,
