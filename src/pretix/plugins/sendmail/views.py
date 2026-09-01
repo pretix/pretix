@@ -157,6 +157,7 @@ class BaseSenderView(EventPermissionRequiredMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
         kwargs['context_parameters'] = self.context_parameters
+        kwargs['request'] = self.request
         if 'from_log' in self.request.GET:
             try:
                 from_log_id = self.request.GET.get('from_log')
