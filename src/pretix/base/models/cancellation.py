@@ -90,7 +90,6 @@ class CheckResult:
         return cls(**data)
 
 
-
 @dataclass(frozen=True)
 class RuleResult:
     """
@@ -201,12 +200,12 @@ PositionSet: TypeAlias = Set[OrderPosition]
 
 class PositionCheckFn(Protocol):
     def __call__(self, order: Order, keep: PositionSet, position: OrderPosition, check_ts: datetime.datetime,
-                 /) -> CheckResult:
+                 /) -> Optional[CheckResult]:
         ...
 
 
 class ProcessCheckFn(Protocol):
-    def __call__(self, order: Order, keep: PositionSet, check_ts: datetime.datetime, /) -> CheckResult:
+    def __call__(self, order: Order, keep: PositionSet, check_ts: datetime.datetime, /) -> Optional[CheckResult]:
         ...
 
 
@@ -219,7 +218,7 @@ class CancellationCheck:
     related_selects: List[str] = field(default_factory=list)
 
     def evaluate(self, order: Order, keep: PositionSet,
-                 position: OrderPosition | None, check_ts: datetime.datetime) -> CheckResult:
+                 position: OrderPosition | None, check_ts: datetime.datetime) -> Optional[CheckResult]:
         if position and self.type == CheckTypes.POSITION:
             return self.check_fn(order, keep, position, check_ts)
         elif position is None and self.type == CheckTypes.PROCESS:
@@ -320,11 +319,13 @@ class Cancellation(models.Model):
     CREATED: Final = "CREATED"
     APPROVAL_PENDING: Final = "APPROVAL_PENDING"
     PERFORMED: Final = "PERFORMED"
+    CANCELLED: Final = "CANCELLED"
 
     CANCELLATION_STATE = (
         (CREATED, _("Created")),
         (APPROVAL_PENDING, _("Approval pending")),
         (PERFORMED, _("Performed")),
+        (CANCELLED, _("Cancelled")),
     )
 
     event = models.ForeignKey(
@@ -348,7 +349,7 @@ class Cancellation(models.Model):
         auto_now_add=True,
     )
 
-    cancellation_state = models.CharField(
+    state = models.CharField(
         max_length=16,
         choices=CANCELLATION_STATE,
         default=CREATED,
@@ -375,7 +376,7 @@ class Cancellation(models.Model):
 
     @staticmethod
     def evaluate(event: Event, order: Order, keep: Set[OrderPosition],
-                 check_ts: datetime.datetime) -> "Cancellation":
+                 check_ts: datetime.datetime) -> "CancellationResult":
 
         # validate that all keep order positions are part of the order
         for p in keep:
@@ -411,8 +412,9 @@ class Cancellation(models.Model):
 
             # evaluate the system/plugin checks for the position
             for check in checks.position:
-                position_check_results[position.id].append(
-                    check.evaluate(order=order, keep=keep, position=position, check_ts=check_ts))
+                res = check.evaluate(order=order, keep=keep, position=position, check_ts=check_ts)
+                if res is not None:
+                    position_check_results[position.id].append(res)
 
             # evaluate all customer specified rules for this position
             for rule in position_rules:
@@ -432,7 +434,9 @@ class Cancellation(models.Model):
 
         # evaluate all system/plugin provided checks for the cancellation process
         for check in checks.process:
-            process_check_results.append(check.evaluate(order=order, keep=keep, position=None, check_ts=check_ts))
+            res = check.evaluate(order=order, keep=keep, position=None, check_ts=check_ts)
+            if res is not None:
+                process_check_results.append(res)
 
         # evaluate all customer specified rules for the cancellation process
         for rule in process_rules:
@@ -445,16 +449,16 @@ class Cancellation(models.Model):
 
         res = CancellationResult(position_result=position_results, process_result=process_result)
 
+        return res
+
+    @staticmethod
+    def prepare(event: Event, order: Order, keep: Set[OrderPosition],
+                check_ts: datetime.datetime) -> "Cancellation":
+        res = Cancellation.evaluate(event=event, order=order, keep=set(), check_ts=check_ts)
         c = Cancellation(event=event, order=order, result=res, evaluation_ts=check_ts)
         c.save()
         c.keep.add(*keep)
-
         return c
-
-
-    def prepare(self):
-        # TODO: store the cancellation id in the session storage
-        pass
 
     def execute(self):
         # TODO load the cancellation verdict from the id  and perform the actions
@@ -479,6 +483,7 @@ class CancellationRuleManager(models.Manager.from_queryset(CancellationRuleQuery
 
     def get_queryset(self):
         return super().get_queryset().filter(type=self.check_type).order_by("pk")
+
 
 class CancellationRule(models.Model):
     EARLIEST: Final = "EARLIEST"
@@ -573,10 +578,11 @@ class CancellationRule(models.Model):
             ),
         ]
 
-
     @staticmethod
     def collect_checks(event: Event, send_fn: Callable[
-        [Event], List[Tuple[Any, Any]]] = _send_self_service_cancellation_checks) -> Checks:
+        [Event], List[Tuple[Any, Any]]
+    ] = _send_self_service_cancellation_checks) -> Checks:
+
         position_checks: List[CancellationCheck] = []
         process_checks: List[CancellationCheck] = []
 
@@ -638,7 +644,6 @@ class CancellationRule(models.Model):
 
         return date_field.datetime(resolve_subevent(reldate_type))
 
-
     def clean(self):
         super().clean()
         errors = {}
@@ -673,8 +678,6 @@ class CancellationRule(models.Model):
 
 class PositionCancellationRuleManager(CancellationRuleManager):
     check_type = CheckTypes.POSITION
-
-
 
 
 class PositionCancellationRule(CancellationRule):
@@ -734,40 +737,39 @@ class PositionCancellationRule(CancellationRule):
         )
 
     def _evaluate_cancellation_moment(self, position: OrderPosition, check_ts: datetime.datetime) -> List[CheckResult]:
-        with ensure_no_queries():
-            check_results = []
+        check_results = []
 
-            order = position.order
+        order = position.order
 
-            for param in ('allowed_until', 'except_after'):
-                value: RelativeDateWrapper | None = getattr(self, param, None)
-                if value is not None:
-                    if check_ts <= self._resolve_date_field(value, order, position):
-                        check_results.append(
-                            CheckResult(
-                                id=f"position_rule_{self.id}_{param}",
-                                reason=_("{} is earlier than {} cutoff {}".format(check_ts, param, value)),
-                                cancellation_possible=True
-                            )
+        for param in ('allowed_until', 'except_after'):
+            value: RelativeDateWrapper | None = getattr(self, param, None)
+            if value is not None:
+                if check_ts <= self._resolve_date_field(value, order, position):
+                    check_results.append(
+                        CheckResult(
+                            id=f"position_rule_{self.id}_{param}",
+                            reason=_("{} is earlier than {} cutoff {}".format(check_ts, param, value)),
+                            cancellation_possible=True
                         )
-                    else:
-                        check_results.append(
-                            CheckResult(
-                                id=f"position_rule_{self.id}_{param}",
-                                reason=_("{} is later than {} cutoff {}".format(check_ts, param, value)),
-                                cancellation_possible=False
-                            )
-                        )
+                    )
                 else:
                     check_results.append(
                         CheckResult(
                             id=f"position_rule_{self.id}_{param}",
-                            reason=_("No {} limit defined".format(param)),
-                            cancellation_possible=True
+                            reason=_("{} is later than {} cutoff {}".format(check_ts, param, value)),
+                            cancellation_possible=False
                         )
                     )
+            else:
+                check_results.append(
+                    CheckResult(
+                        id=f"position_rule_{self.id}_{param}",
+                        reason=_("No {} limit defined".format(param)),
+                        cancellation_possible=True
+                    )
+                )
 
-            return check_results
+        return check_results
 
     def evaluate_position_rule(self, order: Order, _keep: Set[OrderPosition], position: OrderPosition,
                                check_ts: datetime.datetime) -> Optional[RuleResult]:
@@ -854,37 +856,37 @@ class ProcessCancellationRule(CancellationRule):
         return CancellationRule._resolve_date_field_common(date_field, order, resolve_subevent)
 
     def _evaluate_cancellation_moment(self, order: Order, check_ts: datetime.datetime) -> List[CheckResult]:
-        with ensure_no_queries():
-            check_results: List[CheckResult] = []
 
-            for param in ('allowed_until', 'except_after'):
-                value: RelativeDateWrapper | None = getattr(self, param, None)
-                if value is not None:
-                    if check_ts <= self._resolve_date_field(value, order, self.subevent_variant):
-                        check_results.append(
-                            CheckResult(
-                                id=f"process_rule_{self.id}_{param}",
-                                reason=_("{} is earlier than {} cutoff {}".format(check_ts, param, value)),
-                                cancellation_possible=True
-                            )
+        check_results: List[CheckResult] = []
+
+        for param in ('allowed_until', 'except_after'):
+            value: RelativeDateWrapper | None = getattr(self, param, None)
+            if value is not None:
+                if check_ts <= self._resolve_date_field(value, order, self.subevent_variant):
+                    check_results.append(
+                        CheckResult(
+                            id=f"process_rule_{self.id}_{param}",
+                            reason=_("{} is earlier than {} cutoff {}".format(check_ts, param, value)),
+                            cancellation_possible=True
                         )
-                    else:
-                        check_results.append(
-                            CheckResult(
-                                id=f"process_rule_{self.id}_{param}",
-                                reason=_("{} is later than {} cutoff {}".format(check_ts, param, value)),
-                                cancellation_possible=False
-                            )
-                        )
+                    )
                 else:
                     check_results.append(
                         CheckResult(
                             id=f"process_rule_{self.id}_{param}",
-                            reason=_("No {} limit defined".format(param)),
-                            cancellation_possible=True
+                            reason=_("{} is later than {} cutoff {}".format(check_ts, param, value)),
+                            cancellation_possible=False
                         )
                     )
-            return check_results
+            else:
+                check_results.append(
+                    CheckResult(
+                        id=f"process_rule_{self.id}_{param}",
+                        reason=_("No {} limit defined".format(param)),
+                        cancellation_possible=True
+                    )
+                )
+        return check_results
 
     def evaluate_process_rule(self, order: Order, _keep: Set[OrderPosition], position_fees: Decimal,
                               check_ts: datetime.datetime) -> Optional[RuleResult]:

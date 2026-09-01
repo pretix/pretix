@@ -677,6 +677,7 @@ class Order(LockModel, LoggedModel):
         return self.total - self.tax_total
 
     def cancel_allowed(self):
+        # TODO turn into check after replacing cancellation machinery
         return (
             self.status in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED) and self.count_positions
         )
@@ -786,36 +787,10 @@ class Order(LockModel, LoggedModel):
         """
         Returns whether or not this order can be canceled by the user.
         """
-        from .checkin import Checkin
-
-        if self.cancellation_requests.exists() or not self.cancel_allowed():
-            return False
-        positions = list(
-            self.positions.all().annotate(
-                has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk'), list__consider_tickets_used=True))
-            ).select_related('item').prefetch_related('issued_gift_cards')
-        )
-        cancelable = all([op.item.allow_cancel and not op.has_checkin and not op.blocked for op in positions])
-        if not cancelable or not positions:
-            return False
-        for op in positions:
-            for gc in op.issued_gift_cards.all():
-                if gc.value != op.price:
-                    return False
-            if op.granted_memberships.with_usages().filter(usages__gt=0):
-                return False
-        if self.user_cancel_deadline and time_machine_now() > self.user_cancel_deadline:
-            return False
-
-        if self.status == Order.STATUS_PAID:
-            if self.total == Decimal('0.00'):
-                return self.event.settings.cancel_allow_user
-            return self.event.settings.cancel_allow_user_paid
-        elif self.payment_refund_sum > Decimal('0.00'):
-            return False
-        elif self.status == Order.STATUS_PENDING:
-            return self.event.settings.cancel_allow_user
-        return False
+        from pretix.base.models.cancellation import Cancellation
+        res = Cancellation.evaluate(event=self.event, order=self, keep=set(),
+                                    check_ts=datetime.now(tz=ZoneInfo(self.event.settings.timezone)))
+        return res.cancellation_possible
 
     def propose_auto_refunds(self, amount: Decimal, payments: list=None):
         # Algorithm to choose which payments are to be refunded to create the least hassle

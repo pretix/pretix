@@ -50,8 +50,8 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import (
-    Count, Exists, F, IntegerField, Max, Min, OuterRef, Prefetch, Q, QuerySet, Subquery,
-    Sum, Value,
+    Count, Exists, F, IntegerField, Max, Min, OuterRef, Prefetch, Q, QuerySet,
+    Subquery, Sum, Value,
 )
 from django.db.models.functions import Cast, Greatest
 from django.db.transaction import get_connection
@@ -71,7 +71,9 @@ from pretix.base.models import (
     Membership, Order, OrderPayment, OrderPosition, Quota, Seat,
     SeatCategoryMapping, User, Voucher,
 )
-from pretix.base.models.cancellation import CancellationCheck, CheckResult, CheckTypes, PositionSet
+from pretix.base.models.cancellation import (
+    Cancellation, CancellationCheck, CheckResult, CheckTypes, PositionSet,
+)
 from pretix.base.models.event import Event_SettingsStore, SubEvent
 from pretix.base.models.orders import (
     BlockedTicketSecret, CheckoutSession, InvoiceAddress, OrderFee,
@@ -3600,7 +3602,7 @@ def signal_listener_issue_media(sender: Event, order: Order, **kwargs):
 
 def position_not_used_cancellation_check(order: Order, keep: PositionSet, position: OrderPosition,
                                          check_ts: datetime):
-    for pos in order.all_positions.all():
+    for pos in order.positions.all():
         if pos == position and position not in keep:
             for checkin in pos.all_checkins.all():
                 if checkin.successful and checkin.list.consider_tickets_used:
@@ -3631,6 +3633,202 @@ def signal_listener_position_not_used(sender: Event, **kwargs):
                              prefetches=[
                                  lambda: Prefetch('all_positions__all_checkins__list', )
                              ])
+
+
+def position_not_blocked_check(order: Order, keep: PositionSet, position: OrderPosition,
+                               check_ts: datetime):
+    for pos in order.positions.all():
+        if pos == position and position not in keep:
+            return CheckResult(
+                id="pretixbase_position_not_blocked",
+                reason="Position is blocked" if pos.blocked else "Position is not blocked",
+                cancellation_possible=not pos.blocked,
+            )
+    return None
+
+
+@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_position_not_blocked")
+def signal_listener_position_not_blocked(sender: Event, **kwargs):
+    return CancellationCheck(id="pretixbase_position_not_blocked",
+                             type=CheckTypes.POSITION,
+                             check_fn=position_not_blocked_check,
+                             prefetches=[
+                                 lambda: Prefetch('all_positions', )
+                             ])
+
+
+def position_giftcard_not_used(order: Order, keep: PositionSet, position: OrderPosition,
+                               check_ts: datetime):
+    for pos in order.positions.all():
+        if pos == position and position not in keep:
+            if len(pos.issued_gift_cards.all()) > 0:
+                for gc in pos.issued_gift_cards.all():
+                    if gc.value != pos.price:
+                        return CheckResult(
+                            id="pretixbase_position_giftcard_not_used",
+                            reason="Issued giftcard was used",
+                            cancellation_possible=False,
+                        )
+                return CheckResult(
+                    id="pretixbase_position_giftcard_not_used",
+                    reason="Issued giftcard was not used",
+                    cancellation_possible=True,
+                )
+    return None
+
+
+@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_position_giftcard_not_used")
+def signal_listener_position_giftcard_not_used(sender: Event, **kwargs):
+    return CancellationCheck(id="pretixbase_position_giftcard_not_used",
+                             type=CheckTypes.POSITION,
+                             check_fn=position_giftcard_not_used,
+                             prefetches=[
+                                 lambda: Prefetch('all_positions__issued_gift_cards', )
+                             ])
+
+
+def position_membership_not_used(order: Order, keep: PositionSet, position: OrderPosition,
+                                 check_ts: datetime):
+    for pos in order.positions.all():
+        if pos == position and position not in keep:
+            if len(pos.granted_memberships.all()) > 0:
+                for membership in pos.granted_memberships.all():
+                    if membership.usages > 0:
+                        return CheckResult(
+                            id="pretixbase_position_membership_not_used",
+                            reason="Membership was already used",
+                            cancellation_possible=False,
+                        )
+                return CheckResult(
+                    id="pretixbase_position_giftcard_not_used",
+                    reason="Included Membership was not used",
+                    cancellation_possible=True,
+                )
+            else:
+                return CheckResult(
+                    id="pretixbase_position_membership_not_used",
+                    reason="No membership included",
+                    cancellation_possible=True,
+                )
+    return None
+
+
+@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_position_membership_not_used")
+def signal_position_membership_not_used(sender: Event, **kwargs):
+    return CancellationCheck(id="pretixbase_position_membership_not_used",
+                             type=CheckTypes.POSITION,
+                             check_fn=position_membership_not_used,
+                             prefetches=[
+                                 lambda: Prefetch('all_positions__granted_memberships',
+                                                  queryset=Membership.objects.with_usages(), )
+                             ])
+
+
+def position_item_allow_cancel(order: Order, keep: PositionSet, position: OrderPosition,
+                               check_ts: datetime):
+    for pos in order.positions.all():
+        if pos == position and position not in keep:
+            return CheckResult(
+                id="pretixbase_position_item_allow_cancel",
+                reason="Item can be canceled" if pos.item.allow_cancel else "Item cannot be canceled",
+                cancellation_possible=pos.item.allow_cancel,
+            )
+    return None
+
+
+@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_position_item_allow_cancel")
+def signal_position_item_allow_cancel(sender: Event, **kwargs):
+    return CancellationCheck(id="pretixbase_position_item_allow_cancel",
+                             type=CheckTypes.POSITION,
+                             check_fn=position_item_allow_cancel,
+                             prefetches=[
+                                 lambda: Prefetch('all_positions__item')
+                             ])
+
+
+def process_order_payment_state(order: Order, keep: PositionSet, check_ts: datetime):
+    if order.status == Order.STATUS_PAID:
+        if order.total == Decimal("0.00"):
+            return CheckResult(
+                id="pretixbase_process_order_paid",
+                reason="Free orders can be canceled" if order.event.settings.cancel_allow_user else "Free orders cannot be canceled",
+                cancellation_possible=order.event.settings.cancel_allow_user,
+            )
+        return CheckResult(
+            id="pretixbase_process_order_paid",
+            reason="Paid orders can be canceled" if order.event.settings.cancel_allow_user_paid else "Paid orders cannot be canceled",
+            cancellation_possible=order.event.settings.cancel_allow_user_paid,
+        )
+    elif order.payment_refund_sum > Decimal('0.00'):
+        return CheckResult(
+            id="pretixbase_process_order_paid",
+            reason="Outstanding refund sum prevents further cancellations",
+            cancellation_possible=False,
+        )
+    elif order.status == Order.STATUS_PENDING:
+        return CheckResult(
+            id="pretixbase_process_order_paid",
+            reason="Pending orders can be canceled" if order.event.settings.cancel_allow_user else "Pending orders cannot be canceled",
+            cancellation_possible=order.event.settings.cancel_allow_user,
+        )
+    else:
+        return CheckResult(
+            id="pretixbase_process_order_paid",
+            reason="Order is in a state that does not allow cancellations",
+            cancellation_possible=False,
+        )
+
+
+@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_process_order_payment_state")
+def signal_listener_process_order_payment_state(sender: Event, **kwargs):
+    return CancellationCheck(id="pretixbase_process_order_payment_state",
+                             type=CheckTypes.PROCESS,
+                             check_fn=process_order_payment_state,
+                             prefetches=[]
+                             )
+
+
+def process_cancel_allowed(order: Order, keep: PositionSet, check_ts: datetime):
+    cancel_allowed = order.cancel_allowed()
+
+    return CheckResult(
+        id="pretixbase_process_cancel_allowed",
+        reason="Order allows cancellation" if cancel_allowed else "Order doesn't allow for cancellation",
+        cancellation_possible=cancel_allowed,
+    )
+
+
+@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_process_cancel_allowed")
+def signal_listener_process_cancel_allowed(sender: Event, **kwargs):
+    return CancellationCheck(id="pretixbase_process_process_cancel_allowed",
+                             type=CheckTypes.PROCESS,
+                             check_fn=process_cancel_allowed,
+                             prefetches=[]
+                             )
+
+
+def process_cancellation_in_progress(order: Order, keep: PositionSet, check_ts: datetime):
+    if any([c.state not in [Cancellation.PERFORMED, Cancellation.CANCELLED] for c in order.cancellations.all()]):
+        return CheckResult(
+            id="pretixbase_process_cancellation_in_progress",
+            reason="Cancellation request already in progress",
+            cancellation_possible=False,
+        )
+
+    return CheckResult(
+        id="pretixbase_process_cancellation_in_progress",
+        reason="No cancellation request in progress",
+        cancellation_possible=True,
+    )
+
+
+@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_process_cancellation_in_progress")
+def signal_listener_process_cancellation_in_progress(sender: Event, **kwargs):
+    return CancellationCheck(id="pretixbase_process_process_cancellation_in_progress",
+                             type=CheckTypes.PROCESS,
+                             check_fn=process_cancellation_in_progress,
+                             prefetches=[]
+                             )
 
 # TODO weitere System Checks
 # OrderPositions mit Item.min_per_order dürfen nur storniert werden, wenn genug übrig bleiben oder alle des gleichen Items storniert werden

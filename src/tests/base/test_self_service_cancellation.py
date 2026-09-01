@@ -230,6 +230,7 @@ class TestPositionResult:
         assert pos_res.cancellation_possible is True
         assert pos_res.fee_value == Decimal(10)
 
+
 class TestProcessResults:
     @pytest.mark.parametrize(
         ("check_results", "rule_results", "cancellation_possible", "fee"),
@@ -245,7 +246,6 @@ class TestProcessResults:
             ([make_check_result(True)],
              [make_rule_result(Decimal(10), possible=False), make_rule_result(Decimal(5), possible=False)], False,
              Decimal(0)),
-
         ],
     )
     def test_process_results(self, check_results, rule_results, cancellation_possible, fee):
@@ -279,45 +279,33 @@ class TestCancellationRule:
     @pytest.mark.parametrize(
         ("received", "position_checks", "process_checks", "raises"),
         [
-            (
-                    [make_cancellation_check('pos-1', CheckTypes.POSITION, True)],
-                    [0],
-                    [],
-                    contextlib.nullcontext()
-            ),
-            (
-                    [make_cancellation_check('proc-1', CheckTypes.PROCESS, True)],
-                    [],
-                    [0],
-                    contextlib.nullcontext()
-            ),
-            (
-                    [make_cancellation_check('pos-1', CheckTypes.POSITION, True),
-                     make_cancellation_check('proc-1', CheckTypes.PROCESS, True)],
-                    [0],
-                    [1],
-                    contextlib.nullcontext()
-            ),
-            (
-                    [make_cancellation_check('proc-1', CheckTypes.PROCESS, True),
-                     make_cancellation_check('proc-1', CheckTypes.PROCESS, True)],
-                    [],
-                    [],
-                    pytest.raises(ValueError)
-            ),
-            (
-                    [make_cancellation_check('pos-1', CheckTypes.POSITION, True),
-                     make_cancellation_check('pos-1', CheckTypes.POSITION, True)],
-                    [],
-                    [],
-                    pytest.raises(ValueError)
-            ),
-            (
-                    [('', 1)],
-                    [],
-                    [],
-                    pytest.raises(ValueError)
-            ),
+            ([make_cancellation_check('pos-1', CheckTypes.POSITION, True)],
+             [0],
+             [],
+             contextlib.nullcontext()),
+            ([make_cancellation_check('proc-1', CheckTypes.PROCESS, True)],
+             [],
+             [0],
+             contextlib.nullcontext()),
+            ([make_cancellation_check('pos-1', CheckTypes.POSITION, True),
+              make_cancellation_check('proc-1', CheckTypes.PROCESS, True)],
+             [0],
+             [1],
+             contextlib.nullcontext()),
+            ([make_cancellation_check('proc-1', CheckTypes.PROCESS, True),
+              make_cancellation_check('proc-1', CheckTypes.PROCESS, True)],
+             [],
+             [],
+             pytest.raises(ValueError)),
+            ([make_cancellation_check('pos-1', CheckTypes.POSITION, True),
+              make_cancellation_check('pos-1', CheckTypes.POSITION, True)],
+             [],
+             [],
+             pytest.raises(ValueError)),
+            ([('', 1)],
+             [],
+             [],
+             pytest.raises(ValueError)),
         ]
     )
     def test_cancellation_rule_collect_checks(self, received, position_checks, process_checks, raises):
@@ -666,7 +654,6 @@ class TestCancellationRule:
                 else:
                     raise ValueError("Unknown cancellation rule type: {}".format(rule_type_variants))
 
-
                 setattr(r, attr, RelativeDateWrapper(reference_ts))
                 r.save()
                 rule = rule_object.objects.get(id=r.id)
@@ -710,14 +697,14 @@ class TestCancellationRule:
             with scope(organizer=event.organizer):
                 cancellation = Cancellation.evaluate(event, order, keep=set(), check_ts=check_ts)
 
-            assert cancellation.possible == True
+            assert cancellation.cancellation_possible is True
 
-            position_rule_results = cancellation.result.position_result.position_rule_results[1]
+            position_rule_results = cancellation.position_result.position_rule_results[1]
             assert len(position_rule_results) == 2
-            assert position_rule_results[0].cancellation_possible == True
-            assert position_rule_results[1].cancellation_possible == False
+            assert position_rule_results[0].cancellation_possible is True
+            assert position_rule_results[1].cancellation_possible is False
 
-            process_rule_results = cancellation.result.process_result.process_rule_results
+            process_rule_results = cancellation.process_result.process_rule_results
             assert len(process_rule_results) == 2
-            assert process_rule_results[0].cancellation_possible == True
-            assert process_rule_results[1].cancellation_possible == False
+            assert process_rule_results[0].cancellation_possible is True
+            assert process_rule_results[1].cancellation_possible is False

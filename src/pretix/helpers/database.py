@@ -301,7 +301,7 @@ def ensure_no_queries():
     :return:
     """
     def blocker(*args, **kwargs):
-        if settings.DEBUG or "PYTEST_CURRENT_TEST" in os.environ and not "ENSURE_NO_QUERIES_OVERRIDE" in os.environ:
+        if settings.DEBUG or "PYTEST_CURRENT_TEST" in os.environ and "ENSURE_NO_QUERIES_OVERRIDE" not in os.environ:
             raise RuntimeError(f"Unexpected DB query: {args[1]}")
         logger.error("Unexpected DB query: %s", args[1])
 
