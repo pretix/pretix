@@ -26,7 +26,7 @@ from django.template import Context, Template
 from django.test import RequestFactory
 from django.utils import translation
 
-from pretix.base.templatetags.money import money_filter
+from pretix.base.templatetags.money import money_filter, tax_rate_format
 
 TEMPLATE_REPLACE_PAGE = Template(
     "{% load urlreplace %}{% url_replace request 'page' 3 %}"
@@ -70,11 +70,13 @@ def test_urlreplace_replace_parameter():
 
         # unknown currency
         ("de", Decimal("1234.56"), "FOO", "1.234,56" + NBSP + "FOO"),
-        ("de", Decimal("1234.567"), "FOO", "1.234,57" + NBSP + "FOO"),
+        ("de", Decimal("1234.567"), "FOO", "1.234,567" + NBSP + "FOO"),
 
-        # rounding errors
-        ("de", Decimal("1.234"), "EUR", "1,23" + NBSP + "€"),
-        ("de", Decimal("1023.1"), "JPY", "JPY 1.023,10"),
+        # deal with precision that is higher than the currency
+        ("de", Decimal("1.234"), "EUR", "1,234" + NBSP + "€"),
+        ("de", Decimal("1.2340"), "EUR", "1,234" + NBSP + "€"),
+        ("de", Decimal("1.2300"), "EUR", "1,23" + NBSP + "€"),
+        ("de", Decimal("1023.1"), "JPY", "1.023,10" + NBSP + "¥"),
     ]
 )
 def test_money_filter(locale, amount, currency, expected):
@@ -98,9 +100,26 @@ def test_money_filter(locale, amount, currency, expected):
     [
         ("de", Decimal("1000.00"), "EUR", "1.000,00"),
         ("en", Decimal("1000.00"), "EUR", "1,000.00"),
-        ("de", Decimal("1023.1"), "JPY", "1.023,10"),
+        ("de", Decimal("1023.1"), "JPY", "1.023,1"),
     ]
 )
 def test_money_filter_hidecurrency(locale, amount, currency, expected):
     translation.activate(locale)
     assert money_filter(amount, currency, hide_currency=True) == expected
+
+
+@pytest.mark.parametrize(
+    "locale,rate,expected",
+    [
+        ("de", Decimal("2.00"), "2"),
+        ("de", Decimal("2.50"), "2,5"),
+        ("de", Decimal("2.2340"), "2,234"),
+        ("en", Decimal("2.00"), "2"),
+        ("en", Decimal("2.50"), "2.5"),
+        ("en", Decimal("4.3e7"), "43000000"),
+        ("en", Decimal("2.2340"), "2.234"),
+    ]
+)
+def test_tax_rate_format(locale, rate, expected):
+    translation.activate(locale)
+    assert tax_rate_format(rate) == expected
