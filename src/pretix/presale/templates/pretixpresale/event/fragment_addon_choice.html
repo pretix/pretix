@@ -48,7 +48,8 @@
                                         {# Yes, double-escape to prevent XSS in lightbox #}
                                         data-lightbox="{{ item.id }}">
                                     <img src="{{ item.picture|thumb:'60x60^' }}"
-                                            alt="{{ item.name }}"/>
+                                         srcset="{{ item.picture|thumbset:'60x60^' }}"
+                                         alt="{{ item.name }}"/>
                                 </a>
                             {% endif %}
                             <div class="product-description {% if item.picture %}with-picture{% endif %}">
@@ -239,7 +240,8 @@
                                     {# Yes, double-escape to prevent XSS in lightbox #}
                                     data-lightbox="{{ item.id }}">
                                 <img src="{{ item.picture|thumb:'60x60^' }}"
-                                        alt="{{ item.name }}"/>
+                                     srcset="{{ item.picture|thumbset:'60x60^' }}"
+                                     alt="{{ item.name }}"/>
                             </a>
                         {% endif %}
                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
