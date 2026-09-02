@@ -604,7 +604,7 @@ def filter_subevents_with_plugins(subevents, sales_channel=None):
 def should_hide_subevent(settings, subevent, voucher=None):
     hide = False
     if settings.event_list_available_only:
-        hide = hide or (
+        hide = (
             # Presale is over → the subevent is not available → hide
             subevent.presale_has_ended or
             # Not a single product is available on this sales channel → hide
