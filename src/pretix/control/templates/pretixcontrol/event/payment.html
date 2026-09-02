@@ -109,6 +109,7 @@
                 {% bootstrap_form_errors form layout="control" %}
                 {% bootstrap_field form.tax_rule_payment layout="control" %}
                 {% bootstrap_field form.payment_explanation layout="control" %}
+                {% bootstrap_field form.payment_choice_postpone_allowed_channels layout="control" %}
             </fieldset>
         </div>
         {% if "event.settings.payment:write" in request.eventpermset %}

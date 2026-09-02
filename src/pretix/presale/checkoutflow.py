@@ -35,6 +35,7 @@ import copy
 import inspect
 import uuid
 from collections import defaultdict
+from datetime import time
 from decimal import Decimal
 
 from django import forms
@@ -52,6 +53,7 @@ from django.shortcuts import redirect
 from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.html import conditional_escape
+from django.utils.timezone import now
 from django.utils.translation import (
     get_language, gettext_lazy as _, pgettext_lazy,
 )
@@ -71,6 +73,7 @@ from pretix.base.services.cart import (
 from pretix.base.services.cross_selling import CrossSellingService
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
+from pretix.base.services.payment import compute_payment_deadline
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tasks import EventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
@@ -1344,6 +1347,11 @@ class PaymentStep(CartMixin, TemplateFlowStep):
         self.request = request
         self.request.pci_dss_payment_page = True
 
+        if "postpone" in request.POST and self._allow_postpone:
+            self.cart_session['payments_postpone'] = True
+            self.cart_session['payments'] = []
+            return redirect_to_url(self.get_next_url(request))
+
         if "remove_payment" in request.POST:
             self._remove_payment(request.POST["remove_payment"])
             return redirect_to_url(self.get_step_url(request))
@@ -1440,12 +1448,31 @@ class PaymentStep(CartMixin, TemplateFlowStep):
             ctx['selected'] = self.single_use_payment['provider']
         else:
             ctx['selected'] = ''
+
+        ctx['allow_postpone'] = self._allow_postpone
+        if self._allow_postpone:
+            now_dt = now()
+            ctx['payment_deadline'] = compute_payment_deadline(
+                event=self.request.event,
+                sales_channel=self.request.sales_channel,
+                subevents={p.subevent for p in ctx['cart']['raw']},
+                now_dt=now_dt,
+            )
+            if ctx['payment_deadline'].time() != time(hour=23, minute=59, second=59):
+                ctx['payment_deadline_minutes'] = int((ctx['payment_deadline'] - now_dt).total_seconds() // 60)
         return ctx
+
+    @cached_property
+    def _allow_postpone(self):
+        return self.request.sales_channel.identifier in self.request.event.settings.payment_choice_postpone_allowed_channels
 
     def _is_allowed(self, prov, request):
         return prov.is_allowed(request, total=self._total_order_value)
 
     def is_completed(self, request, warn=False):
+        if self.cart_session.get('payments_postpone') and self._allow_postpone:
+            return True
+
         if not self.cart_session.get('payments'):
             if warn:
                 messages.error(request, _('Please select a payment method to proceed.'))

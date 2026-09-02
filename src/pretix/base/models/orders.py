@@ -626,47 +626,14 @@ class Order(LockModel, LoggedModel):
         self.save(update_fields=['last_modified'])
 
     def set_expires(self, now_dt=None, subevents=None):
-        now_dt = now_dt or now()
-        tz = ZoneInfo(self.event.settings.timezone)
+        from pretix.base.services.payment import compute_payment_deadline
 
-        sales_channel_suffix = "_" + self.sales_channel.identifier.replace(".", "_")
-        if not (mode := self.event.settings.get(f'payment_term_mode{sales_channel_suffix}')):
-            mode = self.event.settings.get('payment_term_mode')
-            sales_channel_suffix = ""
-
-        if mode == 'days':
-            exp_by_date = now_dt.astimezone(tz) + timedelta(days=self.event.settings.get(f'payment_term_days{sales_channel_suffix}', as_type=int))
-            exp_by_date = exp_by_date.astimezone(tz).replace(hour=23, minute=59, second=59, microsecond=0)
-            if self.event.settings.get('payment_term_weekdays'):
-                if exp_by_date.weekday() == 5:
-                    exp_by_date += timedelta(days=2)
-                elif exp_by_date.weekday() == 6:
-                    exp_by_date += timedelta(days=1)
-        elif mode == 'minutes':
-            exp_by_date = now_dt.astimezone(tz) + timedelta(minutes=self.event.settings.get(f'payment_term_minutes{sales_channel_suffix}', as_type=int))
-        else:
-            raise ValueError("'payment_term_mode' has an invalid value '{}'.".format(mode))
-
-        self.expires = exp_by_date
-
-        term_last = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
-        if term_last:
-            if self.event.has_subevents and subevents:
-                terms = [
-                    term_last.datetime(se).date()
-                    for se in subevents
-                ]
-                if not terms:
-                    return
-                term_last = min(terms)
-            else:
-                term_last = term_last.datetime(self.event).date()
-            term_last = make_aware(datetime.combine(
-                term_last,
-                time(hour=23, minute=59, second=59)
-            ), tz)
-            if term_last < self.expires:
-                self.expires = term_last
+        self.expires = compute_payment_deadline(
+            event=self.event,
+            sales_channel=self.sales_channel,
+            now_dt=now_dt,
+            subevents=subevents,
+        )
 
     @cached_property
     def tax_total(self):
