@@ -363,14 +363,14 @@ def _validate_vat_id_EU_fallback_germany(vat_id, country_code, requester_id):
         if r.status_code == 200:
             if d['status'] in ('evatr-0000', 'evatr-2008'):
                 # evatr-0000: Die angefragte Ust-IdNr. ist zum Anfragezeitpunkt gültig.
-                # evatr-2002: Die angefragte USt-IdNr. ist zum Anfragezeitpunkt nicht gültig.
-                #             Sie ist erst gültig ab dem Datum im Feld gueltigAb.
+                # evatr-2008: Die angefragte Ust-IdNr. ist zum Anfragezeitpunkt gültig.
+                #             Für die qualifizierte Bestätigungsanfrage liegt einer Besonderheit vor.
+                #             Für Rückfragen wenden Sie sich an das BZSt.
                 return vat_id
+            # evatr-2002: Die angefragte USt-IdNr. ist zum Anfragezeitpunkt nicht gültig.
+            #             Sie ist erst gültig ab dem Datum im Feld gueltigAb.
             # evatr-2006: Die angefragte Ust-IdNr. ist zum Anfragezeitpunkt nicht gültig.
             #             Sie war gültig im Zeitraum, der durch die Werte in den Feldern gueltigAb und gueltigBis beschrieben ist.
-            # evatr-2008: Die angefragte Ust-IdNr. ist zum Anfragezeitpunkt gültig.
-            #             Für die qualifizierte Bestätigungsanfrage liegt einer Besonderheit vor.
-            #             Für Rückfragen wenden Sie sich an das BZSt.
             raise VATIDFinalError(error_messages['invalid'])
         elif r.status_code == 400:
             if d['status'] in ('evatr-0002', 'evatr-0004', 'evatr-0008'):
