@@ -899,7 +899,7 @@ class BaseQuestionsForm(forms.Form):
             field.widget.attrs['data-question-dependency-values'] = escapejson_attr(json.dumps(q.dependency_values))
             if q.type != 'M':
                 field.widget.attrs['required'] = q.required and not self.all_optional
-                field._required = q.required and not self.all_optional
+            field._required = q.required and not self.all_optional
             field.required = False
         return field
 
