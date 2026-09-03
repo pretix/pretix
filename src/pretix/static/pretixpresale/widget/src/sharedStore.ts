@@ -514,10 +514,6 @@ export function createWidgetStore (config: {
 					// button with subevent but no items
 					redirectUrl += `${this.subevent}/`
 				}
-				if (this.subevent && !this.cartId) {
-					// button with subevent but no items
-					redirectUrl += `${this.subevent}/`
-				}
 				redirectUrl += `?iframe=1&locale=${LANG}`
 				if (this.cartId) {
 					// ajax to make sure the cart-id is used, even if the cart is currently empty
