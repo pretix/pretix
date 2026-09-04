@@ -144,7 +144,7 @@ class VoucherList(VoucherQueryMixin, PaginationMixin, EventPermissionRequiredMix
         headers = [
             _('Voucher code'), _('Valid until'), _('Product'), _('Reserve quota'), _('Bypass quota'),
             _('Price effect'), _('Value'), _('Tag'), _('Redeemed'), _('Maximum usages'), _('Seat'),
-            _('Comment')
+            _('Comment'), _('Budget'), _('Budget used')
         ]
         writer.writerow(headers)
 
@@ -170,7 +170,9 @@ class VoucherList(VoucherQueryMixin, PaginationMixin, EventPermissionRequiredMix
                 str(v.redeemed),
                 str(v.max_usages),
                 str(v.seat) if v.seat else "",
-                str(v.comment) if v.comment else ""
+                str(v.comment) if v.comment else "",
+                str(v.budget) if v.budget is not None else "",
+                str(v.budget_used) if v.budget is not None else "",
             ]
             writer.writerow(row)
 
