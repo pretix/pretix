@@ -75,7 +75,7 @@ from pretix.presale.views.cart import get_or_create_cart_id
 from pretix.presale.views.organizer import (
     EventListMixin, add_events_for_days, add_subevents_for_days,
     days_for_template, filter_qs_by_attr, filter_subevents_with_plugins,
-    weeks_for_template,
+    should_hide_subevent, weeks_for_template,
 )
 
 logger = logging.getLogger(__name__)
@@ -757,14 +757,10 @@ class WidgetAPIProductList(EventListMixin, View):
                         evs = evs[:limit]
 
                 tz = request.event.timezone
-                if self.request.event.settings.event_list_available_only:
-                    evs = [
-                        se for se in evs
-                        if not se.presale_has_ended and (
-                            se.best_availability_state is not None and
-                            se.best_availability_state >= Quota.AVAILABILITY_RESERVED
-                        )
-                    ]
+                evs = [
+                    se for se in evs
+                    if not should_hide_subevent(self.request.event.settings, se)
+                ]
 
                 data['events'] = [
                     {

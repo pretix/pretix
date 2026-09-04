@@ -1930,8 +1930,6 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Hide all unavailable dates from calendar or list views"),
-            help_text=_("This option currently only affects the calendar of this event series, not the organizer-wide "
-                        "calendar.")
         )
     },
     'event_calendar_future_only': {
