@@ -75,9 +75,6 @@ h3, .h3 {
 
 h2.content-header {
   margin-top: 0;
-  small {
-    white-space: nowrap;
-  }
 }
 
 @media (max-width: $screen-xs-max) {
@@ -88,7 +85,6 @@ h2.content-header {
   }
   h2.content-header small {
     display: block;
-    white-space: normal;
   }
 }
 @media (min-width: $screen-sm-min) {
