@@ -128,6 +128,32 @@
                 {% endif %}
             </div>
         {% endif %}
+        {% if allow_postpone %}
+            <div class="panel panel-default">
+                <div class="panel-body row">
+                    <div class="col-md-9 col-xs-12">
+                        {% trans "Not sure yet? You can complete your order first and then select a payment method later." %}
+                        <br>
+                        <span class="text-muted">
+                            {% if payment_deadline_minutes %}
+                                {% blocktrans trimmed with minutes=payment_deadline_minutes %}
+                                    Your payment needs to be completed within {{ minutes }} minutes.
+                                {% endblocktrans %}
+                            {% else %}
+                                {% blocktrans trimmed with deadline=payment_deadline|date:"SHORT_DATE_FORMAT" %}
+                                    Your payment needs to be completed by {{ deadline }}.
+                                {% endblocktrans %}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="col-md-3 col-xs-12 text-right flip">
+                        <button name="postpone" value="on" class="btn btn-primary">
+                            {% trans "Proceed without selection" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         <div class="row checkout-button-row">
             <div class="col-md-4 col-sm-6">
                 <a class="btn btn-block btn-default btn-lg"

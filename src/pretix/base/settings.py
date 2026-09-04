@@ -1159,6 +1159,19 @@ DEFAULTS = {
                         "configured above."),
         )
     },
+    'payment_choice_postpone_allowed_channels': {
+        'default': [],
+        'type': list,
+        'form_class': forms.MultipleChoiceField,
+        'form_kwargs': dict(
+            label=_('Allow postponed payment choice for sales channels'),
+            help_text=_("If postponed payment is allowed on a sales channel, customers can complete their order without "
+                        "selecting a payment method. This is useful whenever orders are not created by the same "
+                        "person who is making the payment."),
+            widget=forms.CheckboxSelectMultiple,
+            choices=[],
+        )
+    },
     'presale_start_show_date': {
         'default': 'True',
         'type': bool,

@@ -961,7 +961,7 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
 
 
 def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: List[dict], address: InvoiceAddress,
-                             meta_info: dict, event: Event, require_approval=False):
+                             meta_info: dict, event: Event, sales_channel: SalesChannel, require_approval=False):
     fees = []
     # Pre-rounding, pre-fee total is used for fee calculation
     total = sum([c.gross_price_before_rounding for c in positions])
@@ -1021,7 +1021,14 @@ def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: Li
         payments_assigned += to_pay
         p['payment_amount'] = to_pay
 
-    if total != payments_assigned and not require_approval:
+    allow_postponed_payment = (
+        require_approval or
+        (
+            sales_channel.identifier in event.settings.payment_choice_postpone_allowed_channels and not payment_requests
+        )
+    )
+
+    if total != payments_assigned and not allow_postponed_payment:
         raise OrderError(_("The selected payment methods do not cover the total balance."))
 
     return fees
@@ -1043,7 +1050,15 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
 
     # Final calculation of fees, also performs final rounding
     try:
-        fees = _apply_rounding_and_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
+        fees = _apply_rounding_and_fees(
+            positions,
+            payment_requests,
+            address,
+            meta_info,
+            event,
+            sales_channel=sales_channel,
+            require_approval=require_approval
+        )
     except TaxRule.SaleNotAllowed:
         raise OrderError(error_messages['country_blocked'])
 
