@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-03-30 21:00+0000\n"
+"PO-Revision-Date: 2026-09-02 08:35+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -93,7 +93,7 @@ msgstr "Hebraico"
 
 #: pretix/_base_settings.py
 msgid "Hungarian"
-msgstr ""
+msgstr "Húngaro"
 
 #: pretix/_base_settings.py
 msgid "Indonesian"
@@ -153,7 +153,7 @@ msgstr "Espanhol (América latina)"
 
 #: pretix/_base_settings.py
 msgid "Thai"
-msgstr ""
+msgstr "Tailandês"
 
 #: pretix/_base_settings.py
 msgid "Turkish"
@@ -3022,11 +3022,12 @@ msgid ""
 "The field \"%(label)s\" may not contain special characters such as "
 "\"%(chars)s\"."
 msgstr ""
+"O campo \"%(label)s\" não pode conter caracteres especiais como %(chars)s\"."
 
 #: pretix/base/forms/questions.py
 #, python-format
 msgid "The field \"%(label)s\" may not contain an URL (%(url)s)."
-msgstr ""
+msgstr "O campo \"%(label)s\" não pode conter uma URL (%(url)s)."
 
 #: pretix/base/forms/questions.py
 msgctxt "phonenumber"
@@ -8173,7 +8174,7 @@ msgstr "Permitida"
 #: pretix/base/permissions.py
 msgctxt "permission_level"
 msgid "Access existing events"
-msgstr ""
+msgstr "Acessar eventos existentes"
 
 #: pretix/base/permissions.py
 msgctxt "permission_level"
@@ -13607,11 +13608,15 @@ msgstr "Por favor, continue em uma nova aba"
 #: pretix/base/templates/pretixbase/framebreak.html
 msgid "For security reasons, the following step is only possible in a new tab."
 msgstr ""
+"Por razões de segurança, o passo seguinte só é possível de ser feito em uma "
+"nova aba."
 
 #: pretix/base/templates/pretixbase/framebreak.html
 msgid ""
 "If the new tab did not open automatically, please click the following button:"
 msgstr ""
+"Se uma nova aba não abrir automaticamente, por favor, clique no botão a "
+"seguir:"
 
 #: pretix/base/templates/pretixbase/framebreak.html
 #: pretix/presale/templates/pretixpresale/event/cookies.html
