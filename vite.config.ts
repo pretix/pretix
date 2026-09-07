@@ -20,6 +20,7 @@ const pluginAliases = Object.fromEntries(
 )
 
 export default defineConfig({
+	base: './',
 	plugins: [
 		vue(),
 		sharedDepsPlugin(),
