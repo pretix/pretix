@@ -187,13 +187,32 @@ class ScheduledMail(models.Model):
                     o_sent = True
 
                 if send_to_attendees:
-                    if not self.rule.all_products:
-                        positions = [p for p in positions if p.item_id in limit_products]
                     if self.subevent_id:
                         positions = [p for p in positions if p.subevent_id == self.subevent_id]
 
+                    parent_op = None
+                    sent_to_positions = set()
                     for p in positions:
+
+                        if p.addon_to_id is None:
+                            parent_op = p
+                        if not self.rule.all_products and p.id not in position_ids:
+                            continue
+
                         if p.id in position_ids:
+                            if p.addon_to_id:
+                                if not parent_op or parent_op.id != p.addon_to_id:
+                                    # something got mixed up with this order as addons should always come after their parent-position
+                                    continue
+                                if not p.attendee_email:
+                                    if p.addon_to_id in sent_to_positions:
+                                        continue
+                                    else:
+                                        p = parent_op
+                                # with attendee-email but same as parent's and sent to parent
+                                elif parent_op.attendee_email and p.attendee_email == parent_op.attendee_email and parent_op.pk in sent_to_positions:
+                                    continue
+
                             if p.attendee_email and (p.attendee_email != o.email or not o_sent):
                                 email_ctx = get_email_context(
                                     event=e,
@@ -205,6 +224,7 @@ class ScheduledMail(models.Model):
                                 p.send_mail(self.rule.subject, self.rule.template, email_ctx,
                                             attach_ical=self.rule.attach_ical,
                                             log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
+                                sent_to_positions.add(p.id)
                             elif not o_sent and o.email:
                                 email_ctx = get_email_context(
                                     event=e,

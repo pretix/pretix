@@ -200,6 +200,82 @@ def test_sendmail_rule_send_order_vs_pos(send_to, amount_mails, recipients, orde
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize('send_to,amount_mails,recipients,ticket_mail,addon_mail, products', [
+    (Rule.ATTENDEES, 1, ['addon-attendee@dummy.test'], 'attendee@dummy.test', 'addon-attendee@dummy.test', 'addon'),
+    (Rule.ATTENDEES, 2, ['attendee@dummy.test', 'addon-attendee@dummy.test'], 'attendee@dummy.test',
+     'addon-attendee@dummy.test', 'both'),
+    (Rule.ATTENDEES, 1, ['attendee@dummy.test'], 'attendee@dummy.test', 'attendee@dummy.test', 'both'),
+    (Rule.ATTENDEES, 1, ['attendee@dummy.test'], 'attendee@dummy.test', None, 'addon'),
+    (Rule.ATTENDEES, 1, ['attendee@dummy.test'], 'attendee@dummy.test', None, 'both'),
+    (Rule.ATTENDEES, 1, ['dummy@dummy.test'], None, None, 'addon'),
+    (Rule.ATTENDEES, 1, ['dummy@dummy.test'], None, None, 'both'),
+    (Rule.ATTENDEES, 2, ['dummy@dummy.test', 'addon-attendee@dummy.test'], None, 'addon-attendee@dummy.test', 'both'),
+])
+@scopes_disabled()
+def test_sendmail_rule_send_addons(send_to, amount_mails, recipients, ticket_mail, addon_mail, products, order,
+                                   event, pos, item, item2):
+    djmail.outbox = []
+
+    order.status = order.STATUS_PAID
+    order.save()
+
+    p = pos
+    p.attendee_email = ticket_mail
+    p.save()
+    order.all_positions.create(item=item2, price=0, attendee_email=addon_mail, addon_to=p)
+    rule = order.event.sendmail_rules.create(date_is_absolute=True, send_date=dt_now - datetime.timedelta(hours=1),
+                                             send_to=send_to, subject='meow', template='meow meow meow',
+                                             all_products=False)
+    if products == 'addon':
+        rule.limit_products.set([item2])
+    if products == 'both':
+        rule.limit_products.set([item, item2])
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == amount_mails
+
+    _recipients = [mail.to[0] for mail in djmail.outbox]
+    assert set(recipients) == set(_recipients)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('send_to,amount_mails,recipients,ticket_mail,addon_mail, products', [
+    (Rule.ATTENDEES, 2, ['attendee@dummy.test', 'addon-attendee@dummy.test'], 'attendee@dummy.test',
+     'addon-attendee@dummy.test', 'addon'),
+    (Rule.ATTENDEES, 2, ['attendee@dummy.test', 'addon-attendee@dummy.test'], 'attendee@dummy.test',
+     'addon-attendee@dummy.test', 'both'),
+])
+@scopes_disabled()
+def test_sendmail_rule_send_addons_one_unp(send_to, amount_mails, recipients, ticket_mail, addon_mail, products, order,
+                                           event, pos, item, item2):
+    djmail.outbox = []
+
+    order.status = order.STATUS_PAID
+    order.save()
+
+    p = pos
+    p.attendee_email = ticket_mail
+    p.save()
+    order.all_positions.create(item=item2, price=0, attendee_email=addon_mail, addon_to=p)
+    order.all_positions.create(item=item2, price=0, addon_to=p)
+    rule = order.event.sendmail_rules.create(date_is_absolute=True, send_date=dt_now - datetime.timedelta(hours=1),
+                                             send_to=send_to, subject='meow', template='meow meow meow',
+                                             all_products=False)
+    if products == 'addon':
+        rule.limit_products.set([item2])
+    if products == 'both':
+        rule.limit_products.set([item, item2])
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == amount_mails
+
+    _recipients = [mail.to[0] for mail in djmail.outbox]
+    assert set(recipients) == set(_recipients)
+
+
+@pytest.mark.django_db
 @scopes_disabled()
 def test_sendmail_rule_send_attendees_unset_mail(order, event, item):
     djmail.outbox = []
