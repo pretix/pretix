@@ -135,7 +135,9 @@
                         {% trans "Not sure yet? You can complete your order first and then select a payment method later." %}
                         <br>
                         <span class="text-muted">
-                            {% if payment_deadline_minutes %}
+                            {% if current_payments %}
+                                {% trans "To do so, please first remove the payment methods you already selected above." %}
+                            {% elif payment_deadline_minutes %}
                                 {% blocktrans trimmed with minutes=payment_deadline_minutes %}
                                     Your payment needs to be completed within {{ minutes }} minutes.
                                 {% endblocktrans %}
@@ -147,7 +149,8 @@
                         </span>
                     </div>
                     <div class="col-md-3 col-xs-12 text-right flip">
-                        <button name="postpone" value="on" class="btn btn-primary">
+                        <button name="postpone" value="on" class="btn btn-primary"
+                                {% if current_payments %}disabled{% endif %}>
                             {% trans "Proceed without selection" %}
                         </button>
                     </div>
