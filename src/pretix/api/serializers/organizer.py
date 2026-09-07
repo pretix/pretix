@@ -40,9 +40,10 @@ from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.auth import get_auth_backends
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
-    Customer, Device, GiftCard, GiftCardAcceptance, GiftCardTransaction,
-    Membership, MembershipType, OrderPosition, Organizer, ReusableMedium,
-    SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
+    Customer, Device, EventMetaProperty, GiftCard, GiftCardAcceptance,
+    GiftCardTransaction, Membership, MembershipType, OrderPosition, Organizer,
+    ReusableMedium, SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite,
+    User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.permissions import (
@@ -640,3 +641,12 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         )
         # TODO: make sure pub is always correct
         return 'pub/' + fname
+
+
+class EventMetaPropertiesSerializer(I18nAwareModelSerializer):
+    class Meta:
+        model = EventMetaProperty
+        fields = (
+            'id', 'name', 'default', 'required', 'protected', 'filter_public', 'public_label', 'filter_allowed',
+            'choices'
+        )
