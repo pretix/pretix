@@ -663,7 +663,7 @@ class StripeMethod(BasePaymentProvider):
         return kwargs
 
     def _init_api(self):
-        stripe.api_version = '2023-10-16'
+        stripe.api_version = '2026-07-29'
         stripe.set_app_info(
             "pretix",
             partner_id="pp_partner_FSaz4PpKIur7Ox",
@@ -920,6 +920,7 @@ class StripeMethod(BasePaymentProvider):
                     currency=self.event.currency.lower(),
                     payment_method=payment_method_id,
                     payment_method_types=[self.method],
+                    capture_method='automatic',
                     confirmation_method=self.confirmation_method,
                     confirm=True,
                     description='{event}-{code}'.format(
