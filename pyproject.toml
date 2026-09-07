@@ -56,7 +56,7 @@ dependencies = [
   "django-querytagger==0.0.3",
   "django-redis==7.0.*",
   "django-scopes==2.1.*",
-  "django-statici18n==2.7.*",
+  "django-statici18n==2.8.*",
   "djangorestframework==3.17.*",
   "dnspython==2.8.*",
   "drf_ujson2==1.7.*",
