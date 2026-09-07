@@ -865,6 +865,14 @@ class Event(EventMixin, LoggedModel):
             time(hour=23, minute=59, second=59)
         ), tz)
 
+    @property
+    def max_items_per_order(self):
+        """
+        Returns the maximum number of items that can be ordered in a single order. This is the minimum of
+        the global limit and the event-specific limit.
+        """
+        return min(int(self.settings.max_items_per_order), settings.PRETIX_MAX_ORDER_SIZE)
+
     def allow_copy_data(self, new_organizer, auth) -> bool:
         """
         Returns whether it is allowed to copy the event to the target organizer. Auth can be TeamAPIToken or User.
