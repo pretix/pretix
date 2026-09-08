@@ -744,6 +744,35 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertNotIn("SOLD OUT", doc.select("section:nth-of-type(1)")[0].text)
         self.assertIn("Late-bird", doc.select("section:nth-of-type(1)")[0].text)
 
+    def test_hidden_if_item_available_variation_unavailable_by_time(self):
+        with scopes_disabled():
+            q = Quota.objects.create(event=self.event, name='Early-bird', size=10)
+            q2 = Quota.objects.create(event=self.event, name='Late-bird', size=10)
+            item_with_vars = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=12)
+            v = item_with_vars.variations.create(
+                value='Regular', active=True,
+            )
+            item2 = Item.objects.create(event=self.event, name='Late-bird ticket', default_price=12,
+                                        hidden_if_item_available=item_with_vars)
+            q.items.add(item_with_vars)
+            q.variations.add(v)
+            q2.items.add(item2)
+
+        self.event.settings.hide_sold_out = True
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertIn("Early-bird", doc.select("section:nth-of-type(1)")[0].text)
+        self.assertNotIn("SOLD OUT", doc.select("section:nth-of-type(1)")[0].text)
+        self.assertNotIn("Late-bird", doc.select("section:nth-of-type(1)")[0].text)
+
+        item_with_vars.available_until = now() - datetime.timedelta(days=3)
+        item_with_vars.available_until_mode = "hide"
+        item_with_vars.save()
+
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertNotIn("Early-bird", doc.select("section:nth-of-type(1)")[0].text)
+        self.assertNotIn("SOLD OUT", doc.select("section:nth-of-type(1)")[0].text)
+        self.assertIn("Late-bird", doc.select("section:nth-of-type(1)")[0].text)
+
     def test_bundle_sold_out(self):
         with scopes_disabled():
             q = Quota.objects.create(event=self.event, name='Quota', size=2)
