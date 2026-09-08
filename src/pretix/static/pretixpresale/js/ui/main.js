@@ -233,6 +233,7 @@ let form_handlers = function (el) {
 
 function setup_basics (el) {
 	el.find('form').attr('novalidate', true).on('submit', function (e) {
+		if (e.originalEvent.submitter.formNoValidate) return;
 		if (!this.checkValidity()) {
 			let input = this.querySelector(':invalid:not(fieldset)');
 			(input.labels[0] || input).scrollIntoView()
