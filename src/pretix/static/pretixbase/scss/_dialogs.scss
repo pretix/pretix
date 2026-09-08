@@ -171,12 +171,28 @@ body.has-modal-dialog .container, body.has-modal-dialog #wrapper {
   width: fit-content;
   max-width: 80%;
   min-width: 24em;
+  max-height: 80vh;
+  margin-top: 10vh;
+
   .modal-card-content {
-    padding: 2.5em;
+    // not symmetric, but LOOKS more symmetric since the picture has so much more optical weight than the caption
+    padding: 2.5em 2.5em 1.5em 2.5em;
+    max-height: 80vh;
+  }
+
+  figure {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(80vh - 4em);
   }
 
   img {
-    max-width: 100%;
+    width: auto;
+    object-fit: contain;
+    height: 100%;
+    flex-basis: 10%;
+    flex-grow: 1;
+    flex-shrink: 1;
   }
 
   button {
