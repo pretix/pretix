@@ -401,6 +401,9 @@ var form_handlers = function (el) {
                 if (tagName !== "div" && tagName !== "button") {
                     $toggling = dependent.closest('.form-group');
                 }
+                if ($toggling.find(".has-error").length > 0) {
+                    enabled = true;  // Don't hide error message that makes form unsubmittable
+                }
                 if (ev) {
                     if (enabled) {
                         $toggling.stop().slideDown();
