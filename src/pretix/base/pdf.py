@@ -1091,7 +1091,7 @@ class Renderer:
         fontsize = float(o['fontsize'])
         height = float(o['height']) * mm
         width = float(o['width']) * mm
-        while True:
+        for _i in range(25):  # try adapting the font size at most 25 times
             p, ad, lineheight = self._text_paragraph(op, order, o, override_fontsize=fontsize)
             w, h = p.wrapOn(canvas, width, 1000 * mm)
             widths = p.getActualLineWidths0()
