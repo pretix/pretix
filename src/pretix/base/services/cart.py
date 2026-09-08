@@ -1605,6 +1605,7 @@ def add_payment_to_cart_session(cart_session, provider, min_value: Decimal=None,
         'max_value': str(max_value) if max_value is not None else None,
         'info_data': info_data or {},
     })
+    cart_session['payments_postpone'] = False
 
 
 def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: Decimal=None, info_data: dict=None):

@@ -855,14 +855,21 @@ class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'payment_term_accept_late',
         'payment_pending_hidden',
         'payment_explanation',
+        'payment_choice_postpone_allowed_channels',
         'tax_rule_payment',
     ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        channels = list(self.obj.organizer.sales_channels.all())
+        self.fields['payment_choice_postpone_allowed_channels'].choices = [
+            (c.identifier, c.label) for c in channels
+            if c.type_instance.payment_restrictions_supported
+        ]
+
         self.term_channel_fields = {}
-        for c in self.obj.organizer.sales_channels.all():
+        for c in channels:
             if c.type_instance.payment_restrictions_supported and c.identifier != "web":
                 # At the moment, it seems sufficient to allow this for the same channel types as other payment settings
                 # We can always introduce more flags later if needed

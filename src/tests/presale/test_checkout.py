@@ -2372,6 +2372,97 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             assert p2.fee.value == Decimal("0.46")
             assert o.total == Decimal("25.76")
 
+    def test_payment_postpone_not_allowed(self):
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'postpone': 'on',
+        }, follow=False)
+        assert 'Please select' in response.content.decode()
+
+    def test_payment_postpone_allowed(self):
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.payment_choice_postpone_allowed_channels = ['web']
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'postpone': 'on',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            assert not o.payments.exists()
+
+    def test_payment_postpone_cleared_on_selection(self):
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.payment_choice_postpone_allowed_channels = ['web']
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'postpone': 'on',
+        }, follow=False)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert self.client.session['carts'][self.session_key].get('payments_postpone')
+
+        # The only available provider must not be preselected while the choice is postponed
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('input[name="payment"]')), 1)
+        self.assertEqual(len(doc.select('input[name="payment"][checked]')), 0)
+
+        # Selecting a payment method takes the order out of the postponed state again
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer',
+        }, follow=False)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert not self.client.session['carts'][self.session_key].get('payments_postpone')
+
+    def test_payment_postpone_disabled_with_partial_payment(self):
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.payment_choice_postpone_allowed_channels = ['web']
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=20, acceptor=self.orga)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('button[name="postpone"]')), 1)
+        self.assertEqual(len(doc.select('button[name="postpone"][disabled]')), 0)
+
+        # Apply a gift card that only covers part of the total
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'payment_giftcard-code': gc.secret,
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        # Postponing would silently drop the gift card, so it is no longer offered
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('button[name="postpone"][disabled]')), 1)
+
     def test_premature_confirm(self):
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
