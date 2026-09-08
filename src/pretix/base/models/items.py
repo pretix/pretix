@@ -1050,10 +1050,8 @@ class Item(LoggedModel):
 
                 replace_year = valid_until.year
                 replace_month = valid_until.month + self.validity_dynamic_duration_months
-
-                while replace_month > 12:
-                    replace_month -= 12
-                    replace_year += 1
+                replace_year += (replace_month - 1) // 12
+                replace_month = ((replace_month - 1) % 12) + 1
                 max_day = calendar.monthrange(replace_year, replace_month)[1]
                 replace_date = date(
                     year=replace_year,
