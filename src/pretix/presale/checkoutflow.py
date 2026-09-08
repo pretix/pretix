@@ -1440,10 +1440,12 @@ class PaymentStep(CartMixin, TemplateFlowStep):
         ctx['providers'] = self.provider_forms
         ctx['show_fees'] = any(p['fee'] for p in self.provider_forms)
 
-        if len(self.provider_forms) == 1:
-            ctx['selected'] = self.provider_forms[0]['provider'].identifier
-        elif 'payment' in self.request.POST:
+        if 'payment' in self.request.POST:
             ctx['selected'] = self.request.POST['payment']
+        elif self.cart_session.get('payments_postpone') and self._allow_postpone:
+            ctx['selected'] = ''
+        elif len(self.provider_forms) == 1:
+            ctx['selected'] = self.provider_forms[0]['provider'].identifier
         elif self.single_use_payment:
             ctx['selected'] = self.single_use_payment['provider']
         else:
