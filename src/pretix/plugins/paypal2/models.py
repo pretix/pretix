@@ -19,13 +19,13 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
-from django.dispatch import receiver
-
-from pretix.base.signals import register_payment_providers
+from django.db import models
 
 
-@receiver(register_payment_providers, dispatch_uid="payment_paypal")
-def register_payment_provider(sender, **kwargs):
-    from .payment import Paypal
-    return Paypal
+class ReferencedPayPalObject(models.Model):
+    reference = models.CharField(max_length=190, db_index=True, unique=True)
+    order = models.ForeignKey('pretixbase.Order', on_delete=models.CASCADE)
+    payment = models.ForeignKey('pretixbase.OrderPayment', null=True, blank=True, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'paypal_referencedpaypalobject'

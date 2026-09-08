@@ -70,7 +70,7 @@ from pretix.plugins.paypal2.client.customer.partners_merchantintegrations_get_re
 from pretix.plugins.paypal2.payment import (
     PaypalMethod, PaypalMethod as Paypal, PaypalWallet,
 )
-from pretix.plugins.paypal.models import ReferencedPayPalObject
+from pretix.plugins.paypal2.models import ReferencedPayPalObject
 from pretix.presale.views import get_cart
 from pretix.presale.views.cart import cart_session
 
@@ -350,8 +350,8 @@ def webhook(request, *args, **kwargs):
         return HttpResponse("Invalid body, no event_type given", status=400)
 
     if event_json['event_type'].startswith('PAYMENT.SALE.'):
-        from pretix.plugins.paypal.views import webhook
-        return webhook(request, *args, **kwargs)
+        logger.info(f"Received PPv1 webhook: {json.dumps(event_json)}")
+        return HttpResponse("PayPal V1 no longer supported", status=400)
     # V1/V2 Sorting -- End
 
     # We do not check the signature, we just use it as a trigger to look the charge up.
