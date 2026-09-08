@@ -251,6 +251,13 @@ def monkeypatch_reportlab_imagereader():
     utils.ImageReader.__init__ = new_init
 
 
+def monkeypatch_json_constants():
+    from json.decoder import _CONSTANTS  # noqa
+    del _CONSTANTS['-Infinity']
+    del _CONSTANTS['Infinity']
+    del _CONSTANTS['NaN']
+
+
 def monkeypatch_all_at_ready():
     monkeypatch_vobject_performance()
     monkeypatch_pillow_safer()
@@ -258,3 +265,4 @@ def monkeypatch_all_at_ready():
     monkeypatch_urllib3_ssrf_protection()
     monkeypatch_cookie_morsel()
     monkeypatch_reportlab_imagereader()
+    monkeypatch_json_constants()
