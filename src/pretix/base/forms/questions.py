@@ -600,12 +600,16 @@ class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileFiel
             image = ImageOps.exif_transpose(image)
 
             if f._cropdata:
-                image = image.crop((
-                    f._cropdata.get('x', 0),
-                    f._cropdata.get('y', 0),
-                    f._cropdata.get('x', 0) + f._cropdata.get('width', image.width),
-                    f._cropdata.get('y', 0) + f._cropdata.get('height', image.height),
-                ))
+                left = int(f._cropdata.get('x', 0))
+                top = int(f._cropdata.get('y', 0))
+                right = left + int(f._cropdata.get('width', image.width))
+                bottom = top + int(f._cropdata.get('height', image.height))
+                if left >= image.width or top >= image.height or right > image.width or bottom > image.height:
+                    raise ValidationError(
+                        self.error_messages['max_dimension'],
+                        code='max_dimension',
+                    )
+                image = image.crop((left, top, right, bottom))
                 with BytesIO() as output:
                     # This might use a lot of memory, but temporary files are not a good option since
                     # we don't control the cleanup
