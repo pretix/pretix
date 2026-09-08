@@ -251,6 +251,13 @@ def monkeypatch_csrf_middleware():
     BaseCsrfMiddleware._set_csrf_cookie = CsrfViewMiddleware._set_csrf_cookie
 
 
+def monkeypatch_json_constants():
+    from json.decoder import _CONSTANTS  # noqa
+    del _CONSTANTS['-Infinity']
+    del _CONSTANTS['Infinity']
+    del _CONSTANTS['NaN']
+
+
 def monkeypatch_all_at_ready():
     monkeypatch_vobject_performance()
     monkeypatch_pillow_safer()
@@ -259,3 +266,5 @@ def monkeypatch_all_at_ready():
     monkeypatch_cookie_morsel()
     monkeypatch_reportlab_imagereader()
     monkeypatch_csrf_middleware()
+    monkeypatch_json_constants()
+
