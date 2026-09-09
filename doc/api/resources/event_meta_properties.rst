@@ -4,10 +4,10 @@ Event Meta Properties
 Resource description
 --------------------
 
-An Event Meta Property is used to to define meta information fields for its events.
+An event meta property is used to to define meta information fields for its events.
 This information can be re-used, for example, in ticket layouts.
 
-The Event Meta Properties resource contains the following public fields:
+The event meta property resource contains the following public fields:
 
 .. rst-class:: rest-resource-table
 
@@ -20,8 +20,8 @@ default                               string                     Value of the de
 required                              boolean                    If ``true``, an event can only be taken live if the
                                                                  property is set. In event series, it's always optional
                                                                  to set a value for individual dates
-protected                             boolean                    If ``true``, this property can only be changed by
-                                                                 organizer-level administrators
+protected                             boolean                    If ``true``, the value for an event can only be changed
+                                                                 by organizer-level administrators
 filter_public                         boolean                    If ``true``, this property will be shown to filter
                                                                  events in the public event list and calendar
 public_label                          string                     Public name of the property
@@ -41,7 +41,7 @@ Endpoints
 
 .. http:get:: /api/v1/organizers/(organizer)/event_meta_properties/
 
-   Returns a list of all Meta Properties for the organizer.
+   Returns a list of all meta properties for the organizer.
 
    **Example request**:
 
