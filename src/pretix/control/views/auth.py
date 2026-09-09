@@ -64,6 +64,7 @@ from pretix.base.forms.auth import (
 )
 from pretix.base.metrics import pretix_failed_logins, pretix_successful_logins
 from pretix.base.models import TeamInvite, U2FDevice, User, WebAuthnDevice
+from pretix.helpers import OF_SELF
 from pretix.helpers.http import get_client_ip, redirect_to_url
 from pretix.helpers.ratelimit import rate_limit, rate_limit_reset
 from pretix.helpers.security import handle_login_source, session_login
@@ -395,15 +396,17 @@ class Recover(TemplateView):
 
     def post(self, request, *args, **kwargs):
         if self.form.is_valid():
-            try:
-                user = User.objects.get(id=self.request.GET.get('id'), auth_backend='native')
-            except User.DoesNotExist:
-                return self.invalid('unknownuser')
-            if not default_token_generator.check_token(user, self.request.GET.get('token')):
-                return self.invalid('invalid')
-            user.set_password(self.form.cleaned_data['password'])
-            user.needs_password_change = False
-            user.save()
+            with transaction.atomic():
+                # Check token in transaction to prevent race condition
+                try:
+                    user = User.objects.select_for_update(of=OF_SELF).get(id=self.request.GET.get('id'), auth_backend='native')
+                except User.DoesNotExist:
+                    return self.invalid('unknownuser')
+                if not default_token_generator.check_token(user, self.request.GET.get('token')):
+                    return self.invalid('invalid')
+                user.set_password(self.form.cleaned_data['password'])
+                user.needs_password_change = False
+                user.save()
             messages.success(request, _('You can now login using your new password.'))
             user.log_action('pretix.control.auth.user.forgot_password.recovered')
 
