@@ -877,7 +877,7 @@ class EventMetaPropertiesViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         inst = serializer.save(organizer_id=self.request.organizer.pk)
         serializer.instance.log_action(
-            'pretix.property.added',
+            'pretix.property.created',
             user=self.request.user,
             auth=self.request.auth,
             data=self.request.data,
