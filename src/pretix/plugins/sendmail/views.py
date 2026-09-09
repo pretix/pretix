@@ -367,50 +367,41 @@ class OrderSendView(BaseSenderView):
         )
 
         if form.cleaned_data.get('filter_checkins'):
-            ql = []
+            ci_filter = Q(pk__in=[])  # return nothing
 
             if form.cleaned_data.get('not_checked_in'):
                 opq = opq.alias(
                     any_checkins=Exists(
-                        Checkin.all.filter(
+                        Checkin.objects.filter(
                             position_id=OuterRef('pk'),
-                            successful=True,
                             list__consider_tickets_used=True,
                         )
                     ) | Exists(
-                        Checkin.all.filter(
+                        Checkin.objects.filter(
                             position__addon_to_id=OuterRef('pk'),
-                            successful=True,
                             list__consider_tickets_used=True,
                         )
                     )
                 )
-                ql.append(Q(any_checkins=False))
+                ci_filter |= Q(any_checkins=False)
 
             if form.cleaned_data.get('checkin_lists'):
                 opq = opq.alias(
                     matching_checkins=Exists(
-                        Checkin.all.filter(
+                        Checkin.objects.filter(
                             position_id=OuterRef('pk'),
                             list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists', [])],
-                            successful=True
                         )
                     ) | Exists(
-                        Checkin.all.filter(
+                        Checkin.objects.filter(
                             position__addon_to_id=OuterRef('pk'),
                             list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists', [])],
-                            successful=True
                         )
                     )
                 )
-                ql.append(Q(matching_checkins=True))
+                ci_filter |= Q(matching_checkins=True)
 
-            if len(ql) == 2:
-                opq = opq.filter(ql[0] | ql[1])
-            elif ql:
-                opq = opq.filter(ql[0])
-            else:
-                opq = opq.none()
+            opq = opq.filter(ci_filter)
 
         if form.cleaned_data.get('subevent'):
             opq = opq.filter(subevent=form.cleaned_data.get('subevent'))
