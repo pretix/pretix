@@ -866,7 +866,7 @@ class EventMetaPropertiesViewSet(viewsets.ModelViewSet):
     @transaction.atomic()
     def perform_destroy(self, instance):
         instance.log_action(
-            'pretix.organizer.event_meta_property.deleted',
+            'pretix.property.deleted',
             user=self.request.user,
             auth=self.request.auth,
             data={'id': instance.pk}
@@ -877,7 +877,7 @@ class EventMetaPropertiesViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         inst = serializer.save(organizer_id=self.request.organizer.pk)
         serializer.instance.log_action(
-            'pretix.organizer.event_meta_property.added',
+            'pretix.property.added',
             user=self.request.user,
             auth=self.request.auth,
             data=self.request.data,
@@ -888,7 +888,7 @@ class EventMetaPropertiesViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         inst = serializer.save(organizer_id=self.request.organizer.pk)
         serializer.instance.log_action(
-            'pretix.organizer.event_meta_property.changed',
+            'pretix.property.changed',
             user=self.request.user,
             auth=self.request.auth,
             data=self.request.data,
