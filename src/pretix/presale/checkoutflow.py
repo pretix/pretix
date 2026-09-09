@@ -884,7 +884,7 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
                     })
                 elif v and k.startswith('email'):
                     o.append({
-                        "attendee_email": {
+                        'attendee_email': {
                             'disabled': True,
                         }
                     })
