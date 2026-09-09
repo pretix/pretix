@@ -27,6 +27,7 @@ from decimal import Decimal
 from io import BytesIO
 
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
@@ -193,6 +194,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
             c.expires = now() + timedelta(days=7)
             c.date = now()
             c.filename = 'background_preview.pdf'
+            c.bind_to_session(request, "ticketoutput-pdf-background")
             c.type = 'application/pdf'
             c.save()
             c.file.save('empty.pdf', ContentFile(buffer.read()))
@@ -218,6 +220,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
             c.expires = now() + timedelta(days=7)
             c.date = now()
             c.filename = 'background_preview.pdf'
+            c.bind_to_session(request, "ticketoutput-pdf-background")
             c.type = 'application/pdf'
             c.file = fileobj
             c.save()
@@ -303,5 +306,7 @@ class FontsCSSView(TemplateView):
 class PdfView(TemplateView):
     def get(self, request, *args, **kwargs):
         cf = get_object_or_404(CachedFile, id=kwargs.get("filename"), filename="background_preview.pdf")
+        if not cf.allowed_for_session(request, "ticketoutput-pdf-background"):
+            raise PermissionDenied()
         resp = FileResponse(cf.file, filename=cf.filename, content_type='application/pdf')
         return resp
