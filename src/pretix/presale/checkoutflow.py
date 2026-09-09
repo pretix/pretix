@@ -873,6 +873,28 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
                 'attendee_name_parts': d
             })
 
+        wd = self.cart_session.get('widget_data', {})
+        if wd.get('attendee-fix', '') == 'true':
+            for k, v in wd.items():
+                if v and k.startswith('attendee-name'):
+                    o.append({
+                        'attendee_name_parts': {
+                            'disabled': True,
+                        }
+                    })
+                elif v and k.startswith('email'):
+                    o.append({
+                        'attendee_email': {
+                            'disabled': True,
+                        }
+                    })
+                elif v and k.startswith('question-'):
+                    o.append({
+                        k[9:].upper(): {
+                            'disabled': True,
+                        }
+                    })
+
         return o
 
     @cached_property
