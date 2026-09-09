@@ -282,14 +282,9 @@ class SetPasswordView(FormView):
     def form_valid(self, form):
         with transaction.atomic():
             # Re-check token in transaction to prevent race condition
-            try:
-                self.customer = Customer.objects.select_for_update(of=OF_SELF).get(pk=self.customer.pk)
-            except Customer.DoesNotExist:
-                messages.error(self.request, _('You clicked an invalid link.'))
-            else:
-                if not TokenGenerator().check_token(self.customer, self.request.GET.get('token', '')):
-                    messages.error(self.request, _('You clicked an invalid link.'))
-                    return HttpResponseRedirect(self.get_success_url())
+            self.customer = Customer.objects.select_for_update(of=OF_SELF).get(pk=self.customer.pk)
+            if not TokenGenerator().check_token(self.customer, self.request.GET.get('token', '')):
+                return HttpResponseRedirect(self.get_success_url())
 
             self.customer.set_password(form.cleaned_data['password'])
             self.customer.is_verified = True
