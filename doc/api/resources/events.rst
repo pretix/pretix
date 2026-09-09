@@ -579,7 +579,7 @@ organizer level.
       Content-Type: application/json
 
       {
-        "locale":
+        "region":
           {
             "value": "DE",
             "label": "Region",
