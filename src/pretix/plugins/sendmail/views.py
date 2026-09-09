@@ -370,16 +370,18 @@ class OrderSendView(BaseSenderView):
             ci_filter = Q(pk__in=[])  # return nothing
 
             if form.cleaned_data.get('not_checked_in'):
+                consider_tickets_used_lists = list(self.request.event.checkin_lists.filter(consider_tickets_used=True).values_list("id", flat=True))
+
                 opq = opq.alias(
                     any_checkins=Exists(
-                        Checkin.objects.filter(
+                        Checkin.objects.with_scopes_disabled().filter(
                             position_id=OuterRef('pk'),
-                            list__consider_tickets_used=True,
+                            list_id__in=consider_tickets_used_lists,
                         )
                     ) | Exists(
-                        Checkin.objects.filter(
+                        Checkin.objects.with_scopes_disabled().filter(
                             position__addon_to_id=OuterRef('pk'),
-                            list__consider_tickets_used=True,
+                            list_id__in=consider_tickets_used_lists,
                         )
                     )
                 )
@@ -388,12 +390,12 @@ class OrderSendView(BaseSenderView):
             if form.cleaned_data.get('checkin_lists'):
                 opq = opq.alias(
                     matching_checkins=Exists(
-                        Checkin.objects.filter(
+                        Checkin.objects.with_scopes_disabled().filter(
                             position_id=OuterRef('pk'),
                             list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists', [])],
                         )
                     ) | Exists(
-                        Checkin.objects.filter(
+                        Checkin.objects.with_scopes_disabled().filter(
                             position__addon_to_id=OuterRef('pk'),
                             list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists', [])],
                         )
