@@ -874,7 +874,7 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
             })
 
         wd = self.cart_session.get('widget_data', {})
-        if wd.get('attendee-fix', '') == "true":
+        if wd.get('attendee-fix', '') == 'true':
             for k, v in wd.items():
                 if v and k.startswith('attendee-name'):
                     o.append({
