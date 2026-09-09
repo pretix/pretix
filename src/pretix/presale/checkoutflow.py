@@ -890,7 +890,7 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
                     })
                 elif v and k.startswith('question-'):
                     o.append({
-                        k[9:]: {
+                        k[9:].upper(): {
                             'disabled': True,
                         }
                     })
