@@ -363,6 +363,11 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
                     "Gift card products should not be admission products at the same time."
                 ))
 
+        if data.get('free_price_suggestion') and data.get('free_price_suggestion') < data.get('default_price'):
+            raise ValidationError(_(
+                "Your price suggestion cannot be less than the default price. "
+            ))
+
         return data
 
     def validate_category(self, value):
