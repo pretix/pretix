@@ -116,6 +116,15 @@ def test_voucher_list(token_client, organizer, event, voucher, item, quota, sube
     assert [] == resp.data['results']
 
     resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/vouchers/?search={}'.format(organizer.slug, event.slug, voucher.code[:3])
+    )
+    assert [res] == resp.data['results']
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/vouchers/?code=RAvRcnbDehWD59oywV5x'.format(organizer.slug, event.slug)
+    )
+    assert [] == resp.data['results']
+
+    resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/vouchers/?max_usages=1'.format(organizer.slug, event.slug)
     )
     assert [res] == resp.data['results']

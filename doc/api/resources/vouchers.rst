@@ -116,6 +116,7 @@ Endpoints
 
    :query integer page: The page number in case of a multi-page result set, default is 1
    :query string code: Only show the voucher with the given voucher code.
+   :query string search: Only show the voucher with the given query found in the code, tag, or comment.
    :query integer max_usages: Only show vouchers with the given maximal number of usages.
    :query integer redeemed: Only show vouchers with the given number of redemptions. Note that this doesn't tell you if
                             the voucher can still be redeemed, as this also depends on ``max_usages``. See the
