@@ -67,8 +67,8 @@ $(function () {
 				continue
 			matches.push([rank, plugin])
 		}
-		matches.sort(function (a, b) { return (b[0] - a[0]) || strcmp(a[1].sortName, b[1].sortName) })
-		$results.append(matches.map(function (res) { return $(res[1].html).prepend('<span class="pull-right">' + res[1].categoryLabel + '</span>') }))
+		matches.sort((a, b) => ((b[0] - a[0]) || strcmp(a[1].sortName, b[1].sortName)))
+		$results.append(matches.map((res) => $(res[1].html).prepend('<span class="pull-right">' + res[1].categoryLabel + '</span>')))
 		$results.find('.panel-body, .panel, .featured-plugin, .btn-lg').removeClass('panel-body panel featured-plugin btn-lg')
 		if (matches.length === 0) {
 			$results.append(gettext('No results'))
@@ -82,9 +82,9 @@ $(function () {
 		$('#plugin_search_input').val('').trigger('input')
 	})
 	if (location.search) {
-		var search = new URLSearchParams(location.search)
-		if (search.has('q')) {
-			$('#plugin_search_input').val(search.get('q')).trigger('input')
+		const search_params = new URLSearchParams(location.search)
+		if (search_params.has('q')) {
+			$('#plugin_search_input').val(search_params.get('q')).trigger('input')
 		}
 	}
 })
