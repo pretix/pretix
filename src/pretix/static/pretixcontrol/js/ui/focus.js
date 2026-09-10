@@ -1,3 +1,3 @@
 $(function () {
-	$("input, select, textarea").not(":disabled").focus();
-});
+	$('input, select, textarea').not(':disabled').focus()
+})
