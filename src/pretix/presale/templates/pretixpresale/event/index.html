@@ -23,7 +23,11 @@
             {% endblocktrans %} ::
         {% endif %}
     {% elif subevent %}
-        {{ subevent.get_date_range_display }} ::
+        {% if subevent.name|upper != event.name|upper %}
+            {# The |upper is a trick to force LazyI18nString→str conversion before comparison #}
+            {{ subevent.name }} ::
+        {% endif %}
+        {{ subevent.get_date_range_display_with_times }} ::
     {% endif %}
 {% endblock %}
 
