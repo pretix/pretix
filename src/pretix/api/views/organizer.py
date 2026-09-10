@@ -44,15 +44,16 @@ from pretix.api.models import OAuthAccessToken
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.organizer import (
     CustomerCreateSerializer, CustomerSerializer, DeviceSerializer,
-    GiftCardSerializer, GiftCardTransactionSerializer, MembershipSerializer,
+    EventMetaPropertiesSerializer, GiftCardSerializer,
+    GiftCardTransactionSerializer, MembershipSerializer,
     MembershipTypeSerializer, OrganizerSerializer, OrganizerSettingsSerializer,
     SalesChannelSerializer, SeatingPlanSerializer, TeamAPITokenSerializer,
     TeamInviteSerializer, TeamMemberSerializer, TeamSerializer,
 )
 from pretix.base.models import (
-    Customer, Device, Event, GiftCard, GiftCardTransaction, LogEntry,
-    Membership, MembershipType, Organizer, SalesChannel, SeatingPlan, Team,
-    TeamAPIToken, TeamInvite, User,
+    Customer, Device, Event, EventMetaProperty, GiftCard, GiftCardTransaction,
+    LogEntry, Membership, MembershipType, Organizer, SalesChannel, SeatingPlan,
+    Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
@@ -846,3 +847,50 @@ class SalesChannelViewSet(viewsets.ModelViewSet):
             data={'id': instance.pk}
         )
         instance.delete()
+
+
+class EventMetaPropertiesViewSet(viewsets.ModelViewSet):
+    serializer_class = EventMetaPropertiesSerializer
+    queryset = EventMetaProperty.objects.none()
+    write_permission = 'organizer.settings.general:write'
+
+    def get_queryset(self):
+        qs = EventMetaProperty.objects.all()
+        return qs
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        return ctx
+
+    @transaction.atomic()
+    def perform_destroy(self, instance):
+        instance.log_action(
+            'pretix.property.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
+            data={'id': instance.pk}
+        )
+        instance.delete()
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        inst = serializer.save(organizer_id=self.request.organizer.pk)
+        serializer.instance.log_action(
+            'pretix.property.created',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        inst = serializer.save(organizer_id=self.request.organizer.pk)
+        serializer.instance.log_action(
+            'pretix.property.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
