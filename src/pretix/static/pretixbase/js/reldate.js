@@ -32,7 +32,7 @@ $(document).on('pretix:bind-forms', () => {
 				}
 
 				if (dirty) {
-					beforeAfterSelect.dispatchEvent(new Event('change', {bubbles: true}))
+					beforeAfterSelect.dispatchEvent(new Event('change', { bubbles: true }))
 				}
 			}
 			referenceSelect.addEventListener('change', updateBeforeOption)
