@@ -122,19 +122,20 @@ def widget_css_etag(request, version, **kwargs):
         return f'{_get_source_cache_key(version)}-{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}'
 
 
+# use vite by default, serve old vue2-based widget only for widget_vue2_origins
 def _use_vite(request):
-    if getattr(settings, 'PRETIX_WIDGET_VITE', False) or "beta" in request.GET:
-        return True
+    if getattr(settings, 'PRETIX_WIDGET_VUE', False) or "legacy" in request.GET:
+        return False
     origin = request.META.get('HTTP_ORIGIN', '')
     gs = GlobalSettingsObject()
-    vite_origins = gs.settings.get('widget_vite_origins', as_type=str, default='')
-    if vite_origins and not origin:
+    vue_origins = gs.settings.get('widget_vue2_origins', as_type=str, default='')
+    if vue_origins and not origin:
         referer = request.META.get('HTTP_REFERER', '')
         origin = '/'.join(referer.split('/', 3)[:3])
-    if origin and vite_origins:
-        origins_list = [o.strip() for o in vite_origins.strip().splitlines() if o.strip()]
-        return origin in origins_list
-    return False
+    if origin and vue_origins:
+        origins_list = [o.strip() for o in vue_origins.strip().splitlines() if o.strip()]
+        return origin not in origins_list
+    return True
 
 
 def widget_js_etag(request, version, lang, **kwargs):
