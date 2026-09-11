@@ -355,9 +355,9 @@ class OrderSendView(BaseSenderView):
             statusq |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=True)
         orders = qs.filter(statusq)
 
-        opq = OrderPosition.objects.filter(
+        opq = OrderPosition.objects.with_scopes_disabled().filter(
             Q(item_id__in=[i.pk for i in form.cleaned_data.get('items')]) | Q(Exists(
-                OrderPosition.objects.filter(
+                OrderPosition.objects.with_scopes_disabled().filter(
                     addon_to_id=OuterRef('pk'),
                     item_id__in=[i.pk for i in form.cleaned_data.get('items')]
                 )
