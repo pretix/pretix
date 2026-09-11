@@ -350,6 +350,7 @@ class WrappedPhonePrefixSelect(Select):
         return super().render(name, value or self.initial, *args, **kwargs)
 
     def get_context(self, name, value, attrs):
+        # self.choices is lazy evaluated, needs to be realized to be modifiable
         choices = list(self.choices)
         if value and choices[1][0] != value:
             matching_choices = len([1 for p, c in choices if p == value])
