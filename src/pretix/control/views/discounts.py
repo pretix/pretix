@@ -163,6 +163,9 @@ class DiscountCreate(EventPermissionRequiredMixin, CreateView):
             i = modelcopy(self.copy_from)
             i.pk = None
             kwargs['instance'] = i
+            kwargs["initial"]["limit_sales_channels"] = self.copy_from.limit_sales_channels.all()
+            kwargs["initial"]["condition_limit_products"] = self.copy_from.condition_limit_products.all()
+            kwargs["initial"]["benefit_limit_products"] = self.copy_from.benefit_limit_products.all()
         else:
             kwargs['instance'] = Discount(event=self.request.event)
 
