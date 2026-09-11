@@ -1104,8 +1104,8 @@ class SeatSerializer(I18nAwareModelSerializer):
                 raise PermissionDenied('event.vouchers:read permission required for expand=voucher')
             prefetch_by_id(items, Voucher.objects, 'voucher_id', 'voucher')
 
-    def __init__(self, instance, *args, **kwargs):
-        if not kwargs.get('data'):
+    def __init__(self, instance=None, *args, **kwargs):
+        if instance and not kwargs.get('data'):
             self.prefetch_expanded_data(instance if hasattr(instance, '__iter__') else [instance],
                                         kwargs['context']['request'],
                                         kwargs['context']['expand_fields'])
