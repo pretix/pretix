@@ -21,7 +21,8 @@
 #
 import sys
 from datetime import datetime
-from typing import Optional
+from decimal import Decimal
+from typing import List, Optional, Union
 
 from django.conf import settings
 from django.db.models import (
@@ -29,11 +30,13 @@ from django.db.models import (
 )
 from django.db.models.lookups import Exact
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    ItemVariation, Quota, SalesChannel, SeatCategoryMapping,
+    Discount, Event, Item, ItemVariation, Quota, SalesChannel,
+    SeatCategoryMapping, SubEvent, Voucher,
 )
 from pretix.base.models.items import (
-    Item, ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
+    ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.timemachine import time_machine_now
@@ -52,6 +55,35 @@ def item_group_by_category(items):
         key=lambda group: (group[0].position, group[0].id) if (
             group[0] is not None and group[0].id is not None) else (0, 0)
     )
+
+
+def _single_item_discounts(event: Event, sales_channel: Union[str, SalesChannel],
+                           subevent: SubEvent=None, voucher: Voucher=None, is_addons=False) -> List[Discount]:
+    discount_qs = event.discounts.filter(
+        Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()),
+        Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()),
+        Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=sales_channel),
+        active=True,
+        # Only discounts that can be applied before we know the full cart
+        benefit_same_products=True,
+        benefit_only_apply_to_cheapest_n_matches__isnull=True,
+        condition_min_value=Decimal("0.00"),
+        condition_min_count=1,
+    ).prefetch_related('condition_limit_products').order_by('position', 'pk')
+
+    if subevent:
+        discount_qs = discount_qs.filter(
+            Q(subevent_date_from__isnull=True) | Q(subevent_date_from__lte=subevent.date_from),
+            Q(subevent_date_until__isnull=True) | Q(subevent_date_until__gte=subevent.date_from),
+        )
+
+    if is_addons:
+        discount_qs = discount_qs.filter(condition_apply_to_addons=True, benefit_apply_to_addons=True)
+
+    if voucher and voucher.price_mode != "none":
+        discount_qs = discount_qs.filter(condition_ignore_voucher_discounted=False, benefit_ignore_voucher_discounted=False)
+
+    return list(discount_qs)
 
 
 def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, voucher=None, require_seat=0, base_qs=None,
@@ -190,6 +222,18 @@ def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, v
     if filter_categories:
         items = items.filter(category_id__in=[a for a in filter_categories if a.isdigit()])
 
+    # We pre-computate discounts that do not rely on specific combinations in the cart.
+    # This is not the same order of operations that is applied in the cart, so there could be some differences
+    # when it comes to tax rate handling, but we don't have that information in the product list anyway, so
+    # that is acceptable.
+    discounts = _single_item_discounts(
+        event=event,
+        sales_channel=channel,
+        voucher=voucher,
+        subevent=subevent,
+        is_addons=allow_addons,
+    )
+
     display_add_to_cart = False
     quota_cache_key = f'item_quota_cache:{subevent.id if subevent else 0}:{channel.identifier}:{bool(require_seat)}'
     quota_cache = quota_cache or event.cache.get(quota_cache_key) or {}
@@ -272,6 +316,10 @@ def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, v
             if resp:
                 item.description += ("<br/>" if item.description else "") + resp
 
+        matching_discounts = [
+            d for d in discounts if d.condition_all_products or item in d.condition_limit_products.all()
+        ]
+
         if not item.has_variations:
             item._remove = False
             if not bool(item._subevent_quotas):
@@ -299,30 +347,51 @@ def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, v
                 max_per_order
             )
 
-            original_price = item_price_override.get(item.pk, item.default_price)
+            configured_price = item_price_override.get(item.pk, item.default_price)
             voucher_reduced = False
             if voucher:
-                price = voucher.calculate_price(original_price)
-                voucher_reduced = price < original_price
+                price = voucher.calculate_price(configured_price)
+                voucher_reduced = price < configured_price
                 include_bundled = not voucher.all_bundles_included
             else:
-                price = original_price
+                price = configured_price
                 include_bundled = True
 
-            item.display_price = item.tax(price, currency=event.currency, include_bundled=include_bundled)
+            if matching_discounts and not item.free_price:
+                # Discounts and free prices are a non-recommended combination that behaves unintuitively, so we can
+                # accept it not being handled here.
+                discount = matching_discounts[0]  # First matching discount rule always wins
+                # First handle taxes because discount is always computed on gross
+                taxed_price = item.tax(price, currency=event.currency, include_bundled=include_bundled)
+                price_without_bundles = taxed_price.gross - sum(b.count * b.designated_price for b in item.bundles.all())
+                discounted_price = round_decimal(
+                    taxed_price.gross - price_without_bundles * discount.benefit_discount_matching_percent / Decimal('100.00'),
+                    event.currency,
+                )
+                item.display_price = item.tax(discounted_price, currency=event.currency, include_bundled=include_bundled,
+                                              base_price_is='gross')
+            else:
+                discount = None
+                item.display_price = item.tax(price, currency=event.currency, include_bundled=include_bundled)
+
             if item.free_price and item.free_price_suggestion is not None and not voucher_reduced:
                 item.suggested_price = item.tax(max(price, item.free_price_suggestion), currency=event.currency, include_bundled=include_bundled)
             else:
                 item.suggested_price = item.display_price
 
-            if price != original_price:
-                item.original_price = item.tax(original_price, currency=event.currency, include_bundled=True)
-            else:
-                item.original_price = (
-                    item.tax(item.original_price, currency=event.currency, include_bundled=True,
-                             base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
-                    if item.original_price else None
+            if voucher_reduced or (discount and not item.original_price):
+                # If a voucher is used, we use the non-voucher price as the "original price", even if a different
+                # original price is set, to highlight the voucher's impact. We also use the configured price as
+                # original price if a discount is applied and no explicit original price is set
+                item.original_price = item.tax(configured_price, currency=event.currency, include_bundled=True)
+            elif item.original_price:
+                item.original_price = item.tax(
+                    item.original_price, currency=event.currency, include_bundled=True,
+                    base_price_is='net' if event.settings.display_net_prices else 'gross'  # backwards-compat
                 )
+            else:
+                item.original_price = None
+
             if not display_add_to_cart:
                 display_add_to_cart = not item.requires_seat and item.order_max > 0
         else:
@@ -352,35 +421,53 @@ def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, v
                     max_per_order
                 )
 
-                original_price = var_price_override.get(var.pk, var.price)
+                configured_price = var_price_override.get(var.pk, var.price)
                 voucher_reduced = False
                 if voucher:
-                    price = voucher.calculate_price(original_price)
-                    voucher_reduced = price < original_price
+                    price = voucher.calculate_price(configured_price)
+                    voucher_reduced = price < configured_price
                     include_bundled = not voucher.all_bundles_included
                 else:
-                    price = original_price
+                    price = configured_price
                     include_bundled = True
 
-                var.display_price = var.tax(price, currency=event.currency, include_bundled=include_bundled)
+                if matching_discounts and not item.free_price:
+                    # Discounts and free prices are a non-recommended combination that behaves unintuitively, so we can
+                    # accept it not being handled here.
+                    discount = matching_discounts[0]  # First matching discount rule always wins
+                    # First handle taxes because discount is always computed on gross
+                    taxed_price = var.tax(price, currency=event.currency, include_bundled=include_bundled)
+                    price_without_bundles = taxed_price.gross - sum(b.count * b.designated_price for b in item.bundles.all())
+                    discounted_price = round_decimal(
+                        taxed_price.gross - price_without_bundles * discount.benefit_discount_matching_percent / Decimal('100.00'),
+                        event.currency,
+                    )
+                    var.display_price = var.tax(discounted_price, currency=event.currency,
+                                                include_bundled=include_bundled,
+                                                base_price_is='gross')
+                else:
+                    discount = None
+                    var.display_price = var.tax(price, currency=event.currency, include_bundled=include_bundled)
 
                 if item.free_price and var.free_price_suggestion is not None and not voucher_reduced:
-                    var.suggested_price = item.tax(max(price, var.free_price_suggestion), currency=event.currency,
-                                                   include_bundled=include_bundled)
+                    var.suggested_price = var.tax(max(price, var.free_price_suggestion), currency=event.currency,
+                                                  include_bundled=include_bundled)
                 elif item.free_price and item.free_price_suggestion is not None and not voucher_reduced:
-                    var.suggested_price = item.tax(max(price, item.free_price_suggestion), currency=event.currency,
-                                                   include_bundled=include_bundled)
+                    var.suggested_price = var.tax(max(price, item.free_price_suggestion), currency=event.currency,
+                                                  include_bundled=include_bundled)
                 else:
                     var.suggested_price = var.display_price
 
-                if price != original_price:
-                    var.original_price = var.tax(original_price, currency=event.currency, include_bundled=True)
+                if voucher_reduced or (discount and not item.original_price and not var.original_price):
+                    var.original_price = var.tax(configured_price, currency=event.currency, include_bundled=True)
+                elif item.original_price or var.original_price:
+                    var.original_price = var.tax(
+                        var.original_price or item.original_price, currency=event.currency,
+                        include_bundled=True,
+                        base_price_is='net' if event.settings.display_net_prices else 'gross'  # backwards-compat
+                    )
                 else:
-                    var.original_price = (
-                        var.tax(var.original_price or item.original_price, currency=event.currency,
-                                include_bundled=True,
-                                base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
-                    ) if var.original_price or item.original_price else None
+                    var.original_price = None
 
                 var.current_unavailability_reason = _get_variant_unavailability_reason(var, has_voucher=voucher, subevent=subevent)
 
