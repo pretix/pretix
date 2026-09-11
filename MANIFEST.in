@@ -16,8 +16,6 @@ recursive-include src/pretix/plugins/banktransfer/templates *
 recursive-include src/pretix/plugins/banktransfer/static *
 recursive-include src/pretix/plugins/manualpayment/templates *
 recursive-include src/pretix/plugins/manualpayment/static *
-recursive-include src/pretix/plugins/paypal/templates *
-recursive-include src/pretix/plugins/paypal/static *
 recursive-include src/pretix/plugins/paypal2/templates *
 recursive-include src/pretix/plugins/paypal2/static *
 recursive-include src/pretix/plugins/src/pretixdroid/templates *
