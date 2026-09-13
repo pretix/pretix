@@ -237,6 +237,7 @@ def test_discounts_for_products(event, quota, item, variation, channel, discount
     assert items[1].available_variations[0].display_price.gross == Decimal("42.00")
 
     discount.condition_limit_products.add(item)
+    discount.condition_limit_products.add(variation.item)
     discount.save()
     items, _ = prepare_item_list_for_shop(event, channel=channel)
     assert len(items) == 2
@@ -271,6 +272,7 @@ def test_discounts_for_products_tax_additive_bundle_included(event, quota, item,
     variation.item.tax_rule = tr
     variation.item.save()
     item.bundles.create(bundled_item=b, count=2, designated_price=Decimal("5.00"))
+    variation.item.bundles.create(bundled_item=b, count=2, designated_price=Decimal("5.00"))
     items, _ = prepare_item_list_for_shop(event, channel=channel)
     assert len(items) == 2
     assert items[0].display_price.gross == Decimal("45.98")

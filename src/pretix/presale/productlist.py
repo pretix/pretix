@@ -89,7 +89,7 @@ def _single_item_discounts(event: Event, sales_channel: Union[str, SalesChannel]
 def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, voucher=None, require_seat=0, base_qs=None,
                                allow_addons=False, allow_cross_sell=False,
                                quota_cache=None, filter_items=None, filter_categories=None, memberships=None,
-                               ignore_hide_sold_out_for_item_ids=None):
+                               ignore_hide_sold_out_for_item_ids=None, _discount_cache=None):
     base_qs_set = base_qs is not None
     base_qs = base_qs if base_qs is not None else event.items
 
@@ -226,13 +226,18 @@ def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, v
     # This is not the same order of operations that is applied in the cart, so there could be some differences
     # when it comes to tax rate handling, but we don't have that information in the product list anyway, so
     # that is acceptable.
-    discounts = _single_item_discounts(
-        event=event,
-        sales_channel=channel,
-        voucher=voucher,
-        subevent=subevent,
-        is_addons=allow_addons,
-    )
+    cache_key = (event, channel, voucher, subevent, allow_addons)
+    if _discount_cache is None:
+        _discount_cache = {}
+    if cache_key not in _discount_cache:
+        _discount_cache[cache_key] = list(_single_item_discounts(
+            event=event,
+            sales_channel=channel,
+            voucher=voucher,
+            subevent=subevent,
+            is_addons=allow_addons,
+        ))
+    discounts = _discount_cache[cache_key]
 
     display_add_to_cart = False
     quota_cache_key = f'item_quota_cache:{subevent.id if subevent else 0}:{channel.identifier}:{bool(require_seat)}'
