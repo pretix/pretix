@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from django.db.models import QuerySet
+from django.utils.functional import lazy
 from rest_framework import serializers
 
 from pretix.api.serializers import SalesChannelMigrationMixin
@@ -38,7 +40,8 @@ class DiscountSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     class Meta:
         model = Discount
         fields = ('id', 'active', 'internal_name', 'position', 'all_sales_channels', 'limit_sales_channels',
-                  'available_from', 'available_until', 'subevent_mode', 'subevent_date_from', 'subevent_date_until',
+                  'available_from', 'available_until', 'require_membership', 'require_membership_types',
+                  'subevent_mode', 'subevent_date_from', 'subevent_date_until',
                   'condition_all_products', 'condition_limit_products', 'condition_apply_to_addons',
                   'condition_min_count', 'condition_min_value', 'benefit_discount_matching_percent',
                   'benefit_only_apply_to_cheapest_n_matches', 'benefit_same_products', 'benefit_limit_products',
@@ -50,6 +53,7 @@ class DiscountSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         self.fields['condition_limit_products'].queryset = self.context['event'].items.all()
         self.fields['benefit_limit_products'].queryset = self.context['event'].items.all()
         self.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
+        self.fields['require_membership_types'].queryset = lazy(lambda: self.context['event'].organizer.membership_types.all(), QuerySet)
 
     def validate(self, data):
         data = super().validate(data)

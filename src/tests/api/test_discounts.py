@@ -46,6 +46,8 @@ TEST_DISCOUNT_RES = {
     "sales_channels": ["bar", "baz", "web"],
     "available_from": None,
     "available_until": None,
+    "require_membership_hidden": False,
+    "require_membership_types": [],
     "subevent_mode": "mixed",
     "subevent_date_from": None,
     "subevent_date_until": None,

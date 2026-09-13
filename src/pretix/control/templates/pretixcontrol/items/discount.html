@@ -17,6 +17,12 @@
                     {% bootstrap_field form.available_until layout="control" %}
                     {% bootstrap_field form.all_sales_channels layout="control" %}
                     {% bootstrap_field form.limit_sales_channels layout="control" %}
+                    {% if form.require_membership %}
+                        {% bootstrap_field form.require_membership layout="control" %}
+                        <div data-display-dependency="#{{ form.require_membership.id_for_label }}">
+                            {% bootstrap_field form.require_membership_types layout="control" %}
+                        </div>
+                    {% endif %}
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Condition" context "discount" %}</legend>

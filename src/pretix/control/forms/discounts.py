@@ -22,6 +22,7 @@
 from decimal import Decimal
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelMultipleChoiceField
 
 from pretix.base.channels import get_all_sales_channel_types
@@ -45,6 +46,8 @@ class DiscountForm(I18nModelForm):
             'limit_sales_channels',
             'available_from',
             'available_until',
+            'require_membership',
+            'require_membership_types',
             'subevent_date_from',
             'subevent_date_until',
             'subevent_mode',
@@ -107,6 +110,13 @@ class DiscountForm(I18nModelForm):
         self.fields['condition_min_value'].required = False
         self.fields['condition_min_value'].widget.is_required = False
 
+        qs = self.event.organizer.membership_types.all()
+        if qs:
+            self.fields['require_membership_types'].queryset = qs
+        else:
+            del self.fields['require_membership']
+            del self.fields['require_membership_types']
+
         if not self.event.has_subevents:
             del self.fields['subevent_mode']
 
@@ -123,4 +133,12 @@ class DiscountForm(I18nModelForm):
             d['condition_min_count'] = 0
         if d.get('condition_min_value') is None:
             d['condition_min_value'] = Decimal('0.00')
+
+        if d.get('require_membership') and not d.get('require_membership_types'):
+            self.add_error(
+                'require_membership_types',
+                _(
+                    "If a valid membership is required, at least one valid membership type needs to be selected."
+                )
+            )
         return d

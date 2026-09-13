@@ -96,6 +96,16 @@ class Discount(LoggedModel):
         choices=SUBEVENT_MODE_CHOICES,
     )
 
+    require_membership = models.BooleanField(
+        verbose_name=_('Require a valid membership'),
+        default=False,
+    )
+    require_membership_types = models.ManyToManyField(
+        'MembershipType',
+        verbose_name=_('Allowed membership types'),
+        blank=True,
+    )
+
     condition_all_products = models.BooleanField(
         default=True,
         verbose_name=_("Apply to all products (including newly created ones)")
