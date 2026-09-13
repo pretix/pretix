@@ -343,7 +343,7 @@ class Discount(LoggedModel):
             if collect_potential_discounts is not None:
                 if n_groups * self.benefit_only_apply_to_cheapest_n_matches > len(benefit_idx_group):
                     # partially used discount ("for each 1 ticket you buy, get 50% on 2 t-shirts", cart content: 1 ticket
-                    # but only 1 t-shirt) -> 1 shirt definitiv potential discount
+                    # but only 1 t-shirt) -> 1 shirt definitively potential discount
                     for idx in consume_idx:
                         collect_potential_discounts[idx] = [
                             (self, n_groups * self.benefit_only_apply_to_cheapest_n_matches - len(benefit_idx_group), -1, subevent_id)
