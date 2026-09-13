@@ -63,10 +63,10 @@ def _single_item_discounts(event: Event, sales_channel: Union[str, SalesChannel]
         Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()),
         Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()),
         Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=sales_channel),
-        active=True,
+        Q(active=True),
         # Only discounts that can be applied before we know the full cart
+        Q(benefit_only_apply_to_cheapest_n_matches__isnull=True) | Q(benefit_only_apply_to_cheapest_n_matches=1),
         benefit_same_products=True,
-        benefit_only_apply_to_cheapest_n_matches__isnull=True,
         condition_min_value=Decimal("0.00"),
         condition_min_count=1,
     ).prefetch_related('condition_limit_products').order_by('position', 'pk')
