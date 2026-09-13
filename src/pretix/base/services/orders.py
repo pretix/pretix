@@ -56,7 +56,7 @@ from django.db.models import (
 from django.db.models.functions import Cast, Greatest
 from django.db.transaction import get_connection
 from django.dispatch import receiver
-from django.utils.functional import cached_property
+from django.utils.functional import cached_property, lazy
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext as _, gettext_lazy, ngettext_lazy
 from django_scopes import scopes_disabled
@@ -923,12 +923,18 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
             continue
 
     sorted_positions = [cp for cp in sorted_positions if cp.pk and cp.pk not in deleted_positions]  # eliminate deleted
+
+    if customer:
+        memberships = lazy(lambda: list(customer.memberships.filter(testmode=event.testmode).select_related('membership_type')), list)()
+    else:
+        memberships = []
+
     discount_results = apply_discounts(
         event,
         sales_channel.identifier,
         [
             (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.line_price_gross,
-             cp.addon_to, cp.is_bundled, cp.listed_price - cp.price_after_voucher)
+             cp.addon_to, cp.is_bundled, cp.listed_price - cp.price_after_voucher, cp.memberships_valid_by_time(memberships))
             for cp in sorted_positions
         ]
     )

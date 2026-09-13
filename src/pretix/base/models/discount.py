@@ -19,12 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
-from collections import defaultdict, namedtuple
+import datetime
+from collections import defaultdict
 from decimal import Decimal
 from itertools import groupby
 from math import ceil, inf
-from typing import Dict
+from typing import TYPE_CHECKING, Dict, List, NamedTuple, Optional
 
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
@@ -35,10 +35,20 @@ from django_scopes import ScopedManager
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
+from pretix.base.timemachine import time_machine_now
 
-PositionInfo = namedtuple('PositionInfo',
-                          ['item_id', 'subevent_id', 'subevent_date_from', 'line_price_gross', 'addon_to',
-                           'voucher_discount'])
+if TYPE_CHECKING:
+    from pretix.base.models import Membership
+
+
+class PositionInfo(NamedTuple):
+    item_id: int
+    subevent_id: Optional[int]
+    subevent_date_from: Optional[datetime.datetime]
+    line_price_gross: Decimal
+    addon_to: bool
+    voucher_discount: Decimal
+    memberships_valid_by_time: Optional[List["Membership"]] = None
 
 
 class Discount(LoggedModel):
@@ -249,6 +259,46 @@ class Discount(LoggedModel):
                 ]}
             )
 
+        if data.get('require_membership'):
+            if not data.get('require_membership_types'):
+                raise ValidationError(
+                    {'require_membership_types': [
+                        _("If a valid membership is required, at least one valid membership type needs to be selected.")
+                    ]}
+                )
+            for mt in data.get('require_membership_types', []):
+                # These conditions are a bit annoying/surprising, we could also just "ignore" the
+                # transferable/allow_parallel_usage/max_usages flags, but maybe we DO want to honor them for discounts
+                # some day for use cases like "every member can get one discounted ticket per show for themselves", and
+                # then we'd be unable to move forward if we historically ignored them.
+                if not mt.transferable:
+                    raise ValidationError(
+                        {'require_membership_types': [
+                            _('The membership type "{type}" cannot be used for discounts since it is not transferable, '
+                              'which is currently not supported for discounts.').format(
+                                type=mt.name,
+                            )
+                        ]}
+                    )
+                elif not mt.allow_parallel_usage:
+                    raise ValidationError(
+                        {'require_membership_types': [
+                            _('The membership type "{type}" cannot be used for discounts since it does not allow parallel '
+                              'usage, which is currently not supported for discounts.').format(
+                                type=mt.name,
+                            )
+                        ]}
+                    )
+                elif mt.max_usages is not None:
+                    raise ValidationError(
+                        {'require_membership_types': [
+                            _('The membership type "{type}" cannot be used for discounts since it has a maximum number of '
+                              'usages, which is currently not supported for discounts.').format(
+                                type=mt.name,
+                            )
+                        ]}
+                    )
+
     def allow_delete(self):
         return not self.orderposition_set.exists()
 
@@ -260,6 +310,7 @@ class Discount(LoggedModel):
             'benefit_only_apply_to_cheapest_n_matches': self.benefit_only_apply_to_cheapest_n_matches,
             'subevent_mode': self.subevent_mode,
             'benefit_same_products': self.benefit_same_products,
+            # many-to-many is not passed here, therefore we also call validate_config in form and serializer
         })
 
     def is_available_by_time(self, now_dt=None) -> bool:
@@ -410,19 +461,25 @@ class Discount(LoggedModel):
         limit_products = set()
         if not self.condition_all_products:
             limit_products = {p.pk for p in self.condition_limit_products.all()}
+        membership_types = set()
+        if self.require_membership and self.require_membership_types:
+            membership_types = {mt.pk for mt in self.require_membership_types.all()}
 
         # First, filter out everything not even covered by our product scope
         condition_candidates = [
             idx
-            for idx, (item_id, subevent_id, subevent_date_from, line_price_gross, is_addon_to, voucher_discount) in
+            for idx, p in
             positions.items()
             if (
-                (self.condition_all_products or item_id in limit_products) and
-                (self.condition_apply_to_addons or not is_addon_to) and
-                (not self.condition_ignore_voucher_discounted or voucher_discount is None or voucher_discount == Decimal('0.00'))
-                and (not subevent_id or (
-                    self.subevent_date_from is None or subevent_date_from >= self.subevent_date_from)) and (
-                        self.subevent_date_until is None or subevent_date_from <= self.subevent_date_until)
+                (self.condition_all_products or p.item_id in limit_products) and
+                (self.condition_apply_to_addons or not p.addon_to) and
+                (not self.condition_ignore_voucher_discounted or p.voucher_discount is None or p.voucher_discount == Decimal('0.00')) and
+                (not p.subevent_id or (
+                    self.subevent_date_from is None or p.subevent_date_from >= self.subevent_date_from)) and (
+                        self.subevent_date_until is None or p.subevent_date_from <= self.subevent_date_until) and
+                (not self.require_membership or (
+                    p.memberships_valid_by_time and any(m.membership_type_id in membership_types for m in p.memberships_valid_by_time)
+                ))
             )
         ]
 
@@ -432,12 +489,15 @@ class Discount(LoggedModel):
             benefit_products = {p.pk for p in self.benefit_limit_products.all()}
             benefit_candidates = [
                 idx
-                for idx, (item_id, subevent_id, subevent_date_from, line_price_gross, is_addon_to, voucher_discount) in
+                for idx, p in
                 positions.items()
                 if (
-                    item_id in benefit_products and
-                    (self.benefit_apply_to_addons or not is_addon_to) and
-                    (not self.benefit_ignore_voucher_discounted or voucher_discount is None or voucher_discount == Decimal('0.00'))
+                    p.item_id in benefit_products and
+                    (self.benefit_apply_to_addons or not p.addon_to) and
+                    (not self.benefit_ignore_voucher_discounted or p.voucher_discount is None or p.voucher_discount == Decimal('0.00')) and
+                    (not self.require_membership or (
+                        p.memberships_valid_by_time and any(m.membership_type_id in membership_types for m in p.memberships_valid_by_time)
+                    ))
                 )
             ]
 
@@ -538,3 +598,38 @@ class Discount(LoggedModel):
                     None
                 )
         return result
+
+    def condition_matches_product(self, item) -> bool:
+        return self.condition_all_products or item in self.condition_limit_products.all()
+
+    def valid_for_memberships(self, memberships, event, subevent, item, requested_valid_from=None) -> bool:
+        if not self.require_membership_types:
+            return True
+        if not memberships:
+            return False
+        memberships = [
+            m for m in memberships
+            # Filter currently unsupported configurations
+            if (
+                m.membership_type.max_usages is None and
+                m.membership_type.transferable and
+                m.membership_type.allow_parallel_usage and
+                # Filter list of membership types
+                m.membership_type in self.require_membership_types.all()
+            )
+        ]
+        valid_from, _ = item.compute_validity(
+            requested_start=(
+                max(requested_valid_from, time_machine_now())
+                if requested_valid_from and item.validity_dynamic_start_choice
+                else time_machine_now()
+            ),
+            override_tz=self.event.timezone,
+        )
+        return any(
+            m.is_valid(
+                subevent or event,
+                valid_from,
+                valid_from_not_chosen=item.validity_dynamic_start_choice and not requested_valid_from
+            ) for m in memberships
+        )

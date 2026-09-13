@@ -22,7 +22,6 @@
 from decimal import Decimal
 
 from django import forms
-from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelMultipleChoiceField
 
 from pretix.base.channels import get_all_sales_channel_types
@@ -72,6 +71,7 @@ class DiscountForm(I18nModelForm):
             'condition_limit_products': ItemMultipleChoiceField,
             'benefit_limit_products': ItemMultipleChoiceField,
             'limit_sales_channels': SafeModelMultipleChoiceField,
+            'require_membership_types': SafeModelMultipleChoiceField,
         }
         widgets = {
             'subevent_mode': forms.RadioSelect,
@@ -91,6 +91,9 @@ class DiscountForm(I18nModelForm):
                     'data-display-dependency': '#id_condition_min_count',
                 }
             ),
+            'require_membership_types': forms.CheckboxSelectMultiple(attrs={
+                'class': 'scrolling-multiple-choice'
+            }),
         }
 
     def __init__(self, *args, **kwargs):
@@ -134,11 +137,5 @@ class DiscountForm(I18nModelForm):
         if d.get('condition_min_value') is None:
             d['condition_min_value'] = Decimal('0.00')
 
-        if d.get('require_membership') and not d.get('require_membership_types'):
-            self.add_error(
-                'require_membership_types',
-                _(
-                    "If a valid membership is required, at least one valid membership type needs to be selected."
-                )
-            )
+        Discount.validate_config(d)
         return d

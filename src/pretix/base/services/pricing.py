@@ -33,7 +33,7 @@ from django.db.models import Q
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     AbstractPosition, CartPosition, InvoiceAddress, Item, ItemAddOn,
-    ItemVariation, OrderFee, OrderPosition, SalesChannel, Voucher,
+    ItemVariation, Membership, OrderFee, OrderPosition, SalesChannel, Voucher,
 )
 from pretix.base.models.discount import Discount, PositionInfo
 from pretix.base.models.event import Event, SubEvent
@@ -167,14 +167,15 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
 
 
 def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
-                    positions: List[Tuple[int, Optional[int], Optional[datetime], Decimal, bool, bool, Decimal]],
+                    positions: List[Tuple[int, Optional[int], Optional[datetime], Decimal, bool, bool, Decimal, List[Membership]]],
                     collect_potential_discounts: Optional[defaultdict] = None) -> List[Tuple[Decimal, Optional[Discount]]]:
     """
     Applies any dynamic discounts to a cart
 
     :param event: Event the cart belongs to
     :param sales_channel: Sales channel the cart was created with
-    :param positions: Tuple of the form ``(item_id, subevent_id, subevent_date_from, line_price_gross, addon_to_id, is_bundled, voucher_discount)``
+    :param positions: Tuple of the form ``(item_id, subevent_id, subevent_date_from, line_price_gross, addon_to_id, is_bundled,
+                      voucher_discount, memberships_valid_by_time)``
                       ``addon_to_id`` does not have to be the proper ID, any identifier is okay, even ``True``/``False`` are accepted, but
                       a better result may be given if addons to the same main product have the same distinct value.
     :param collect_potential_discounts: If a `defaultdict(list)` is supplied, all discounts that could be applied to the cart
@@ -190,6 +191,17 @@ def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
         sales_channel = sales_channel.identifier
     new_prices = {}
 
+    def _filter_memberships(memberships: List[Membership]) -> List[Membership]:
+        return [
+            # Currently unsupported configurations
+            m for m in memberships
+            if (
+                m.membership_type.max_usages is None and
+                m.membership_type.transferable and
+                m.membership_type.allow_parallel_usage
+            )
+        ]
+
     discount_qs = event.discounts.filter(
         Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()),
         Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()),
@@ -198,9 +210,11 @@ def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
     ).prefetch_related('condition_limit_products', 'benefit_limit_products').order_by('position', 'pk')
     for discount in discount_qs:
         result = discount.apply({
-            idx: PositionInfo(item_id, subevent_id, subevent_date_from, line_price_gross, addon_to, voucher_discount)
+            idx: PositionInfo(item_id, subevent_id, subevent_date_from, line_price_gross, addon_to, voucher_discount,
+                              _filter_memberships(memberships_valid_by_time))
             for
-            idx, (item_id, subevent_id, subevent_date_from, line_price_gross, addon_to, is_bundled, voucher_discount)
+            idx, (item_id, subevent_id, subevent_date_from, line_price_gross, addon_to, is_bundled, voucher_discount,
+                  memberships_valid_by_time)
             in enumerate(positions)
             if not is_bundled and idx not in new_prices
         }, collect_potential_discounts)

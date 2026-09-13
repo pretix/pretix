@@ -32,7 +32,7 @@ from django.db.models.lookups import Exact
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    Discount, Event, Item, ItemVariation, Quota, SalesChannel,
+    Discount, Event, Item, ItemVariation, Membership, Quota, SalesChannel,
     SeatCategoryMapping, SubEvent, Voucher,
 )
 from pretix.base.models.items import (
@@ -58,7 +58,12 @@ def item_group_by_category(items):
 
 
 def _single_item_discounts(event: Event, sales_channel: Union[str, SalesChannel],
-                           subevent: SubEvent=None, voucher: Voucher=None, is_addons=False) -> List[Discount]:
+                           subevent: SubEvent=None, voucher: Voucher=None, is_addons=False,
+                           memberships: List[Membership]=None) -> List[Discount]:
+    if memberships is not None:
+        prefetch_membership_types = ['require_membership_types']
+    else:
+        prefetch_membership_types = []
     discount_qs = event.discounts.filter(
         Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()),
         Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()),
@@ -69,7 +74,7 @@ def _single_item_discounts(event: Event, sales_channel: Union[str, SalesChannel]
         benefit_same_products=True,
         condition_min_value=Decimal("0.00"),
         condition_min_count=1,
-    ).prefetch_related('condition_limit_products').order_by('position', 'pk')
+    ).prefetch_related('condition_limit_products', *prefetch_membership_types).order_by('position', 'pk')
 
     if subevent:
         discount_qs = discount_qs.filter(
@@ -236,6 +241,7 @@ def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, v
             voucher=voucher,
             subevent=subevent,
             is_addons=allow_addons,
+            memberships=memberships,
         ))
     discounts = _discount_cache[cache_key]
 
@@ -322,7 +328,8 @@ def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, v
                 item.description += ("<br/>" if item.description else "") + resp
 
         matching_discounts = [
-            d for d in discounts if d.condition_all_products or item in d.condition_limit_products.all()
+            d for d in discounts
+            if d.condition_matches_product(item) and d.valid_for_memberships(memberships, event, subevent, item)
         ]
 
         if not item.has_variations:
