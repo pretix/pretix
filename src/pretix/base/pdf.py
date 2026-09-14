@@ -1153,11 +1153,10 @@ class Renderer:
                 elif o['type'] == "poweredby":
                     self._draw_poweredby(canvas, op, o)
                 if self.bg_pdf:
-                    page_size = (
-                        self.bg_pdf.pages[0].mediabox[2] - self.bg_pdf.pages[0].mediabox[0],
-                        self.bg_pdf.pages[0].mediabox[3] - self.bg_pdf.pages[0].mediabox[1]
-                    )
-                    if self.bg_pdf.pages[0].get('/Rotate') in (90, 270):
+                    first_page = self.bg_pdf.pages[0]
+                    sizebox = first_page.artbox or first_page.trimbox or first_page.mediabox
+                    page_size = (sizebox.width, sizebox.height)
+                    if first_page.rotation in (90, 270):
                         # swap dimensions due to pdf being rotated
                         page_size = page_size[::-1]
                     canvas.setPageSize(page_size)
@@ -1311,7 +1310,7 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
 def _merge_with_correct_page_media_box(output: pypdf.PdfWriter, fg_page: pypdf.PageObject, bg_page: pypdf.PageObject):
     if bg_page.rotation != 0:
         bg_page.transfer_rotation_to_content()
-    media_box = bg_page.mediabox
+    media_box = bg_page.artbox or bg_page.trimbox or bg_page.mediabox
     trsf = pypdf.Transformation()
     if media_box.bottom != 0:
         trsf = trsf.translate(0, -media_box.bottom)
