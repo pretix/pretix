@@ -372,7 +372,10 @@ def _render_badges(event: Event, positions: List[OrderPosition], opt: dict) -> T
         fg_pdf.append(buffer)
         new_num_pages = len(fg_pdf.pages)
         for i in range(new_num_pages - num_pages):
-            bg_pdf.add_page(renderer.bg_pdf.pages[i])
+            bg_page = renderer.bg_pdf.pages[i]
+            if bg_page.rotation != 0:
+                bg_page.transfer_rotation_to_content()
+            bg_pdf.add_page(bg_page)
         num_pages = new_num_pages
 
     return fg_pdf, bg_pdf, num_pages
