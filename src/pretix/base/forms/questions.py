@@ -350,16 +350,22 @@ class WrappedPhonePrefixSelect(Select):
         return super().render(name, value or self.initial, *args, **kwargs)
 
     def get_context(self, name, value, attrs):
-        if value and self.choices[1][0] != value:
-            matching_choices = len([1 for p, c in self.choices if p == value])
+        # self.choices is lazy evaluated, needs to be realized to be modifiable
+        choices = list(self.choices)
+        if value and choices[1][0] != value:
+            matching_choices = len([1 for p, c in choices if p == value])
             if matching_choices > 1:
                 # Some countries share a phone prefix, for example +1 is used all over the Americas.
                 # This causes a UX problem: If the default value or the existing data is +12125552368,
                 # the widget will just show the first <option> entry with value="+1" as selected,
                 # which alphabetically is America Samoa, although most numbers statistically are from
-                # the US. As a workaround, we detect this case and add an aditional choice value with
+                # the US. As a workaround, we detect this case and add an additional choice value with
                 # just <option value="+1">+1</option> without an explicit country.
-                self.choices.insert(1, (value, value))
+                self.choices = [
+                    choices[0],
+                    (value, value),
+                    *choices[1:],
+                ]
         context = super().get_context(name, value, attrs)
         return context
 
