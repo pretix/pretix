@@ -56,7 +56,7 @@ def env():
     o = Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal'
+        date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal2'
     )
     event.settings.invoice_numbers_prefix = 'INV-'
     event.settings.invoice_numbers_counter_length = 3
