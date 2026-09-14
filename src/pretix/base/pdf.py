@@ -1305,7 +1305,7 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
         # pdf_header is a string like "%pdf-X.X"
         output.pdf_header = (
             bg_pdf.pdf_header
-            if float(bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]) 
+            if float(bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:])
             else fg_pdf.pdf_header
         )
         output.write(out_file)
