@@ -1297,15 +1297,14 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
             bg_pdf.write(bg_filename)
             subprocess.run(pdftk_cmd, check=True, stdout=out_file)
     else:
+        output = PdfWriter()
         for i, page in enumerate(fg_pdf.pages):
             bg_page = bg_pdf.pages[i]
-            _merge_with_correct_page_media_box(fg_pdf, page, bg_page)
+            _merge_with_correct_page_media_box(output, page, bg_page)
 
         # pdf_header is a string like "%pdf-X.X"
-        if float(bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
-            fg_pdf.pdf_header = bg_pdf.pdf_header
-
-        fg_pdf.write(out_file)
+        output.pdf_header = max(float(bg_pdf.pdf_header[5:]), float(fg_pdf.pdf_header[5:]))
+        output.write(out_file)
 
 
 def _merge_with_correct_page_media_box(output: pypdf.PdfWriter, fg_page: pypdf.PageObject, bg_page: pypdf.PageObject):
