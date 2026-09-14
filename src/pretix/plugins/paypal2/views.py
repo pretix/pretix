@@ -67,10 +67,10 @@ from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal2.client.customer.partners_merchantintegrations_get_request import (
     PartnersMerchantIntegrationsGetRequest,
 )
+from pretix.plugins.paypal2.models import ReferencedPayPalObject
 from pretix.plugins.paypal2.payment import (
     PaypalMethod, PaypalMethod as Paypal, PaypalWallet,
 )
-from pretix.plugins.paypal2.models import ReferencedPayPalObject
 from pretix.presale.views import get_cart
 from pretix.presale.views.cart import cart_session
 
