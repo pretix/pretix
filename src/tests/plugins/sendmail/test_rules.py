@@ -225,7 +225,7 @@ def test_sendmail_rule_send_addons(send_to, amount_mails, recipients, ticket_mai
     order.all_positions.create(item=item2, price=0, attendee_email=addon_mail, addon_to=p)
     rule = order.event.sendmail_rules.create(date_is_absolute=True, send_date=dt_now - datetime.timedelta(hours=1),
                                              send_to=send_to, subject='meow', template='meow meow meow',
-                                             all_products=products=='all')
+                                             all_products=products == 'all')
     if products == 'addon':
         rule.limit_products.set([item2])
     if products == 'both':
