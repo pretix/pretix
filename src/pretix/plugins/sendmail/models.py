@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
 from datetime import datetime, time, timedelta
 
 from dateutil.tz import datetime_exists
@@ -203,7 +204,7 @@ class ScheduledMail(models.Model):
                             continue
 
                         # attendee email available
-                        
+
                         if p.addon_to_id and p.attendee_email == parent_op.attendee_email:
                             # if op is add-on and parent's email match => send to parent
                             p = parent_op
