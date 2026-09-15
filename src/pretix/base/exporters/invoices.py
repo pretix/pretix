@@ -54,6 +54,7 @@ from ...control.forms.filter import get_all_payment_providers
 from ...helpers import GroupConcat
 from ...helpers.iter import chunked_iterable
 from ..exporter import BaseExporter, MultiSheetListExporter
+from ..invoicing.transmission import get_transmission_types
 from ..services.export import ExportError
 from ..services.invoices import invoice_pdf_task
 from ..signals import (
@@ -197,7 +198,7 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
     def iterate_sheet(self, form_data, sheet):
         _ = gettext
         if sheet == 'invoices':
-            yield [
+            headers = [
                 _('Invoice number'),
                 _('Date'),
                 _('Order code'),
@@ -230,7 +231,17 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
                 _('Total value (without taxes)'),
                 _('Payment matching IDs'),
                 _('Payment providers'),
+                _('Transmission type'),
+                _('Transmission status'),
+                _('Transmission date'),
             ]
+
+            transmission_types = get_transmission_types()
+            for tt in transmission_types:
+                for c in tt.describe_info_columns():
+                    headers.append(str(tt.verbose_name) + ': ' + str(c))
+
+            yield headers
 
             p_providers = OrderPayment.objects.filter(
                 order=OuterRef('order'),
@@ -242,7 +253,7 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
                 'm'
             ).order_by()
 
-            base_qs = self.invoices_queryset(form_data)\
+            base_qs = self.invoices_queryset(form_data)
 
             qs = base_qs.select_related(
                 'order', 'refers'
@@ -280,7 +291,7 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
                                 if mid:
                                     pmis.append(mid)
                     pmi = '\n'.join(pmis)
-                    yield [
+                    line = [
                         i.full_invoice_no,
                         date_format(i.date, "SHORT_DATE_FORMAT"),
                         i.order.code,
@@ -315,8 +326,20 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
                         ', '.join([
                             str(self.providers.get(p, p)) for p in sorted(set((i.payment_providers or '').split(',')))
                             if p and p != 'free'
-                        ])
+                        ]),
+                        i.transmission_type_instance.verbose_name,
+                        i.get_transmission_status_display(),
+                        date_format(i.transmission_date, "SHORT_DATETIME_FORMAT") if i.transmission_date else "",
                     ]
+                    for tt in transmission_types:
+                        if tt.identifier == i.transmission_type:
+                            described = dict(tt.describe_info(i.invoice_to_transmission_info, i.invoice_to_country, i.invoice_to_is_business))
+                            for c in tt.describe_info_columns():
+                                line.append(described.get(c, ""))
+                        else:
+                            for c in tt.describe_info_columns():
+                                line.append("")
+                    yield line
         elif sheet == 'lines':
             yield [
                 _('Invoice number'),
