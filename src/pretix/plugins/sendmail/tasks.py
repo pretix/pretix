@@ -88,10 +88,13 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                 ),
             ).prefetch_related('addons', 'subevent'):
 
-                is_addon = p.addon_to_id is not None
-
-                if not is_addon:
+                if p.addon_to_id is None:
                     parent_op = p
+                elif not parent_op or p.addon_to_id != parent_op.id:
+                    # this op is an add-on, but not to the current parent_op
+                    # something got mixed up as add-ons should always come directly after their parent
+                    logger.warning(f"Add-ons are mixed up for position #{p.positionid} in order {o.full_code}")
+                    continue
 
                 if p.item_id not in items:
                     continue
@@ -104,26 +107,8 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                     if not allowed:
                         continue
 
-                send_to_parent = False
-                if not p.attendee_email:
-                    if recipients == 'attendees':
-                        if is_addon:
-                            if p.addon_to_id in sent_to_positions:
-                                continue
-                            elif parent_op and parent_op.id == p.addon_to_id and parent_op.attendee_email:
-                                send_to_parent = True
-                            else:
-                                send_to_order = True
-                                continue
-                        else:
-                            send_to_order = True
-                            continue
-                # add-on's attendee-email is the same as parent's and sent to parent
-                elif is_addon and p.addon_to_id in sent_to_positions and p.attendee_email == parent_op.attendee_email:
-                    continue
-
-                if p.attendee_email and p.attendee_email == o.email and send_to_order:
-                    continue
+                if not p.attendee_email and p.addon_to_id:
+                    p = parent_op
 
                 if subevent and p.subevent_id != subevent:
                     continue
@@ -134,51 +119,44 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                 if subevents_to and p.subevent.date_from >= subevents_to:
                     continue
 
+                if not p.attendee_email:
+                    send_to_order = True
+                    continue
+
+                if p.addon_to_id and p.attendee_email == parent_op.attendee_email:
+                    # if op is add-on and parent's email match => send to parent
+                    p = parent_op
+
+                if p.pk in sent_to_positions:
+                    # this position already got an email
+                    continue
+
+                if p.attendee_email == o.email:
+                    send_to_order = True
+                    continue
+
                 with language(o.locale, event.settings.region):
-                    if send_to_parent:
-                        email_context = get_email_context(event=event, order=o, invoice_address=ia, position=parent_op)
-                        outgoing_mail = mail(
-                            parent_op.attendee_email,
-                            subject,
-                            message,
-                            email_context,
-                            event,
-                            locale=o.locale,
-                            order=o,
-                            position=parent_op,
-                            attach_tickets=attach_tickets,
-                            attach_ical=attach_ical,
-                            attach_cached_files=attachments
+                    email_context = get_email_context(event=event, order=o, invoice_address=ia, position=p)
+                    outgoing_mail = mail(
+                        p.attendee_email,
+                        subject,
+                        message,
+                        email_context,
+                        event,
+                        locale=o.locale,
+                        order=o,
+                        position=p,
+                        attach_tickets=attach_tickets,
+                        attach_ical=attach_ical,
+                        attach_cached_files=attachments
+                    )
+                    if outgoing_mail:
+                        o.log_action(
+                            'pretix.plugins.sendmail.order.email.sent.attendee',
+                            user=user,
+                            data=outgoing_mail.log_data(),
                         )
-                        if outgoing_mail:
-                            o.log_action(
-                                'pretix.plugins.sendmail.order.email.sent.attendee',
-                                user=user,
-                                data=outgoing_mail.log_data(),
-                            )
-                        sent_to_positions.add(parent_op.id)
-                    else:
-                        email_context = get_email_context(event=event, order=o, invoice_address=ia, position=p)
-                        outgoing_mail = mail(
-                            p.attendee_email,
-                            subject,
-                            message,
-                            email_context,
-                            event,
-                            locale=o.locale,
-                            order=o,
-                            position=p,
-                            attach_tickets=attach_tickets,
-                            attach_ical=attach_ical,
-                            attach_cached_files=attachments
-                        )
-                        if outgoing_mail:
-                            o.log_action(
-                                'pretix.plugins.sendmail.order.email.sent.attendee',
-                                user=user,
-                                data=outgoing_mail.log_data(),
-                            )
-                        sent_to_positions.add(p.id)
+                    sent_to_positions.add(p.pk)
 
         if send_to_order and o.email:
             with language(o.locale, event.settings.region):
