@@ -115,7 +115,7 @@ dev = [
   "fakeredis==2.37.*",
   "flake8==7.3.*",
   "freezegun",
-  "isort==8.0.*",
+  "isort==9.0.*",
   "pep8-naming==0.15.*",
   "potypo",
   "pytest-asyncio>=1.4.0",
