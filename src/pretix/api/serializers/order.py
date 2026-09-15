@@ -1585,6 +1585,11 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 order.invoice_address = ia
                 ia.last_modified = now()
 
+        if order.customer_id:
+            memberships = order.customer.memberships.filter(testmode=order.testmode).select_related('membership_type')
+        else:
+            memberships = []
+
         # Generate position objects
         pos_map = {}
         for pos_data in positions_data:
@@ -1655,7 +1660,12 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 order.sales_channel,
                 [
                     (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.price,
-                     cp.addon_to, cp.is_bundled, pos._voucher_discount)
+                     cp.addon_to, cp.is_bundled, pos._voucher_discount, [
+                         m for m in memberships if m.is_valid(
+                             cp.subevent or self.context['event'],
+                             cp.valid_from,
+                         )
+                     ])
                     for cp in order_positions
                 ]
             )
