@@ -48,19 +48,12 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
         raise ValueError("No currency passed.")
     arg = arg.upper()
 
-    places = settings.CURRENCY_PLACES.get(arg, 2)
-    rounded = value.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP)
-    if places < 2 and rounded != value:
-        # We display decimal places even if we shouldn't for this currency if rounding
-        # would make the numbers incorrect. If this branch executes, it's likely a bug in
-        # pretix, but we won't show wrong numbers!
-        if hide_currency:
-            return floatformat(value, "2g")
-        else:
-            return '{} {}'.format(arg, floatformat(value, "2g"))
+    currency_places = settings.CURRENCY_PLACES.get(arg, 2)
+    required_places = -value.normalize().as_tuple().exponent
+    render_places = max(currency_places, required_places)
 
     if hide_currency:
-        return floatformat(value, f"{places}g")
+        return floatformat(value, f"{render_places}g")
 
     try:
         locale = Locale(get_babel_locale())
@@ -68,9 +61,24 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
         locale = "en"
 
     try:
-        return format_currency(value, arg, locale=locale)
+        return format_currency(
+            value,
+            arg,
+            locale=locale,
+            # We only allow Babel to restrict the digits to the digits by the currency if this does not remove any
+            # precision in case we have sub-currency precision (which we shouldn't have in most places, but it's still
+            # better than showing wrong data). Note: Weird precision effects can occur after in-database arithmetic
+            # on SQLite, since SQLite does not have fixed-decimal computation.
+            currency_digits=currency_places >= required_places,
+            decimal_quantization=currency_places >= required_places,
+        )
     except:
-        return '{} {}'.format(arg, floatformat(value, f"{places}g"))
+        return '{} {}'.format(arg, floatformat(value, f"{render_places}g"))
+
+
+@register.filter("money_without_currency")
+def money_filter_without_currency(value: Decimal, arg=''):
+    return money_filter(value, arg, hide_currency=True)
 
 
 @register.filter("money_numberfield")
@@ -91,11 +99,18 @@ def tax_rate_format(number):
     """
     Display a Decimal to its significant decimal places, used for tax rates.
     """
-    assert isinstance(number, Decimal)
+    if isinstance(number, (float, int, str)):
+        number = Decimal(number)
+    if number is None:
+        number = Decimal('0.00')
+    if not isinstance(number, Decimal):
+        if number == '':
+            return number
+        raise TypeError("Invalid data type passed to tax rate format filter: %r" % type(number))
     return mark_safe(
         formats.number_format(
-            number.normalize(),
-            -number.as_tuple().exponent,
+            number,
+            -number.normalize().as_tuple().exponent,
             use_l10n=True,
             force_grouping=False,
         )
