@@ -379,7 +379,7 @@ DEFAULTS = {
 
         )
     },
-    'system_question_order': {
+    'system_question_order': {  # TODO(questionnaires) - remove this
         'default': {},
         'type': dict,
         'serializer_class': serializers.DictField,

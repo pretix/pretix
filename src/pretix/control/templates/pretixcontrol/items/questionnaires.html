@@ -1,0 +1,41 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load static %}
+{% load icon %}
+{% load compress %}
+{% load vite %}
+
+{% block title %}
+    {% trans "Questionnaires" %}
+{% endblock %}
+{% block inside %}
+    <h1>
+        {% trans "Questionnaires" %}
+        <a href="{% url "control:event.items.questions" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default pull-right">
+            {% icon "wrench" %} {% trans "Manage data fields" %}
+        </a>
+    </h1>
+    <p>
+        {% blocktrans trimmed %}
+            Questionaires allow your attendees to fill in additional data about their ticket. If you provide food, one
+            example might be to ask your users about dietary requirements.
+        {% endblocktrans %}
+    </p>
+    <p>
+        TODO(questionnaires) : add more specific explanation of the questionnaire concept.
+    </p>
+
+    {{ request.event.settings.locales|json_script:"event_locales" }}
+    {{ questionnaire_type_choices|json_script:"questionnaire_type_choices" }}
+
+    {% url "control:event.items.questions.edit" organizer=request.event.organizer.slug event=request.event.slug question=0 as datafield_edit_url %}
+    {{ datafield_edit_url|json_script:"datafield_edit_url" }}
+
+    <div id="questionnaires-editor">
+        <!-- Vue app mount point -->
+    </div>
+
+    {% vite_hmr %}
+    {% vite_asset "src/pretix/static/pretixcontrol/js/ui/questionnaires/index.ts" %}
+{% endblock %}
