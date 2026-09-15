@@ -771,6 +771,7 @@ class UserNotificationsEditView(TemplateView):
                 {k: a.get(t) for k, a in self.global_set.items()},
             )
             for t, tv in self.types.items()
+            if tv.is_event_level or not self.event
         ]
         ctx['event'] = self.event
         if self.event:
