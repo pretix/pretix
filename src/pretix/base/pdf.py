@@ -1323,14 +1323,18 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
 
 
 def _merge_with_correct_page_media_box(output: pypdf.PdfWriter, fg_page: pypdf.PageObject, bg_page: pypdf.PageObject):
-    if bg_page.rotation != 0:
-        bg_page.transfer_rotation_to_content()
-    media_box = get_sizebox(bg_page)
+    """
+    Adds fg_page to output, merging bg_page behind it.
+
+    If bg_page has a non-zero mergebox/cropbox or is rotated via /Rotate, a transformation is applied to fix this."""
     trsf = pypdf.Transformation()
-    if media_box.bottom != 0:
-        trsf = trsf.translate(0, -media_box.bottom)
-    if media_box.left != 0:
-        trsf = trsf.translate(-media_box.left, 0)
+    if bg_page.rotation != 0:
+        trsf = trsf.rotate(-bg_page.rotation)
+
+    mb = get_sizebox(bg_page)
+    pt1 = trsf.apply_on(mb.lower_left)
+    pt2 = trsf.apply_on(mb.upper_right)
+    trsf = trsf.translate(-min(pt1[0], pt2[0]), -min(pt1[1], pt2[1]))
 
     fg_page = output.add_page(fg_page)
     fg_page.merge_transformed_page(bg_page, trsf, over=False, expand=False)
