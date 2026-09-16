@@ -801,6 +801,18 @@ def generate_compressed_addon_list(op, order, event, only_checked_in=False):
     return addonlist
 
 
+def get_sizebox(page: pypdf.PageObject):
+    mediabox = page.mediabox
+    cropbox = page.cropbox
+
+    return pypdf.generic.RectangleObject((
+        max(mediabox[0], cropbox[0]),
+        max(mediabox[1], cropbox[1]),
+        min(mediabox[2], cropbox[2]),
+        min(mediabox[3], cropbox[3]),
+    ))
+
+
 class Renderer:
 
     def __init__(self, event, layout, background_file):
@@ -1154,7 +1166,7 @@ class Renderer:
                     self._draw_poweredby(canvas, op, o)
                 if self.bg_pdf:
                     first_page = self.bg_pdf.pages[0]
-                    sizebox = first_page.artbox or first_page.trimbox or first_page.mediabox
+                    sizebox = get_sizebox(first_page)
                     page_size = (sizebox.width, sizebox.height)
                     if first_page.rotation in (90, 270):
                         # swap dimensions due to pdf being rotated
@@ -1313,7 +1325,7 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
 def _merge_with_correct_page_media_box(output: pypdf.PdfWriter, fg_page: pypdf.PageObject, bg_page: pypdf.PageObject):
     if bg_page.rotation != 0:
         bg_page.transfer_rotation_to_content()
-    media_box = bg_page.artbox or bg_page.trimbox or bg_page.mediabox
+    media_box = get_sizebox(bg_page)
     trsf = pypdf.Transformation()
     if media_box.bottom != 0:
         trsf = trsf.translate(0, -media_box.bottom)
