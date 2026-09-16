@@ -50,10 +50,14 @@ function addOrderQuestionnaire () {
 async function saveData () {
 	using pb = ProgressBar.show('saving questionnaires')
 	let promises = [];
+	let i = 0;
 	for (const questionnaire of order_questionnaires.value) {
+		questionnaire.position = i++;
 		promises.push(saveQuestionnaire(questionnaire))
 	}
+	i = 0;
 	for (const questionnaire of position_questionnaires.value) {
+		questionnaire.position = i++;
 		promises.push(saveQuestionnaire(questionnaire))
 	}
 	await Promise.all(promises)

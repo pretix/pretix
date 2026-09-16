@@ -2036,6 +2036,9 @@ class Questionnaire(LoggedModel):
         blank=True,
     )
 
+    class Meta:
+        ordering = ('position', 'id')
+
 
 class QuestionnaireChild(LoggedModel):
     class SystemQuestion(models.TextChoices):
@@ -2083,6 +2086,9 @@ class QuestionnaireChild(LoggedModel):
         'QuestionnaireChild', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
     )
     dependency_values = MultiStringField(default=[])
+
+    class Meta:
+        ordering = ('position', 'id')
 
 
 class Quota(LoggedModel):
