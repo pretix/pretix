@@ -94,13 +94,6 @@
                     </div>
                 </div>
 
-                <h4>{% trans "Attendee data (once per personalized ticket)" %}</h4>
-
-                {% bootstrap_field sform.attendee_names_asked_required layout="control" %}
-                {% bootstrap_field sform.attendee_emails_asked_required layout="control" %}
-                {% bootstrap_field sform.attendee_company_asked_required layout="control" %}
-                {% bootstrap_field sform.attendee_addresses_asked_required layout="control" %}
-
                 <div class="form-group">
                     <label class="control-label col-md-3">
                         {% trans "Custom fields" %}
@@ -109,11 +102,27 @@
                         <p>
                             <a href="{% url "control:event.items.questions" event=request.event.slug organizer=request.organizer.slug %}"
                                target="_blank">
-                                {% trans "Manage questions" %}
+                                {% trans "Manage questionnaires" %}
                             </a>
                         </p>
                     </div>
                 </div>
+
+                <h4>{% trans "Attendee data (once per personalized ticket)" %}</h4>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3">
+                    </label>
+                    <div class="col-md-9 static-form-row">
+                        <p>
+                            <a href="{% url "control:event.items.questions" event=request.event.slug organizer=request.organizer.slug %}"
+                               target="_blank">
+                                {% trans "Manage questionnaires" %}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
                 {% bootstrap_field sform.attendee_data_explanation_text layout="control" %}
 
                 <h4>{% trans "Form settings" %}</h4>
