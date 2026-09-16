@@ -24,10 +24,15 @@ function toggleItem() {
   } else {
     props.questionnaire.items.splice(i, 1);
   }
+for (let qc of props.questionnaire.children) {
+	if (!qc._cid) qc._cid = useId();
+}
+
 }
 
 function addExistingDatafield(field) {
 	props.questionnaire.children.push({
+		_cid: useId(),
 		question: field.id,
 		required: false,
 		label: {},
@@ -46,6 +51,7 @@ function showAddTextblockDialog() {
 
 function addTextblock() {
 	props.questionnaire.children.push({
+		_cid: useId(),
 		question: null,
 		required: false,
 		label: newTextblockTitle.value,
@@ -77,7 +83,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
     <div class="panel-body" v-if="!isHidden">
       <div class="form-horizontal" :id="`questionListParent${props.questionnaire.id}`">
 				<SlickList axis="y" v-model:list="props.questionnaire.children" useDragHandle :appendTo="`#questionListParent${props.questionnaire.id}`">
-					<SlickItem v-for="(child, index) in props.questionnaire.children" :key="child.id" :index="index">
+					<SlickItem v-for="(child, index) in props.questionnaire.children" :key="child._cid" :index="index">
 						<QuestionElement
 										:datafields="props.datafields"
 										:question="child"
