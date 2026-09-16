@@ -525,7 +525,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     def is_completed(self, request, warn=False):
         if getattr(self, '_completed', None) is not None:
             return self._completed
-        for cartpos in get_cart(request).filter(addon_to__isnull=True).prefetch_related(
+        for cartpos in get_cart_positions(request).filter(addon_to__isnull=True).prefetch_related(
             'item__addons', 'item__addons__addon_category', 'addons', 'addons__item'
         ):
             a = cartpos.addons.all()
@@ -588,7 +588,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         formset = []
         quota_cache = {}
         item_cache = {}
-        for cartpos in sorted(get_cart(self.request).filter(addon_to__isnull=True).prefetch_related(
+        for cartpos in sorted(get_cart_positions(self.request).filter(addon_to__isnull=True).prefetch_related(
             'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation',
         ), key=lambda c: c.sort_key):
             formsetentry = {
@@ -1289,7 +1289,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
 
     @cached_property
     def _total_order_value(self):
-        cart = get_cart(self.request)
+        cart = get_cart_positions(self.request)
         try:
             fees = get_fees(
                 event=self.request.event, request=self.request, invoice_address=self.invoice_address,
@@ -1481,7 +1481,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                 messages.error(request, _('Please select a payment method to proceed.'))
             return False
 
-        cart = get_cart(self.request)
+        cart = get_cart_positions(self.request)
         try:
             fees = get_fees(
                 event=self.request.event,
@@ -1521,7 +1521,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
     def is_applicable(self, request):
         self.request = request
 
-        for cartpos in get_cart(self.request):
+        for cartpos in get_cart_positions(self.request):
             if cartpos.requires_approval(invoice_address=self.invoice_address):
                 if 'payments' in self.cart_session:
                     del self.cart_session['payments']
