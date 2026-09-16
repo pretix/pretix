@@ -737,6 +737,9 @@ class Event(EventMixin, LoggedModel):
         self.settings.mail_send_order_approved_attendee = True
         self.settings.mail_send_order_approved_free_attendee = True
         self.settings.mail_send_download_reminder_attendee = True
+        from . import Questionnaire
+        q = self.questionnaires.create(internal_name=str(_('Attendee data')), type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE, position=0)
+        q.children.create(label=str(_('Attendee name')), system_datafield='attendee_name_parts', position=0)
 
     @property
     def social_image(self):
