@@ -1611,6 +1611,22 @@ class Question(LoggedModel):
     class ContainerType(models.TextChoices):
         ORDER = "O", _("Order")
         ORDERPOSITION = "P", _("Order position")
+
+    class FieldType(models.TextChoices):
+        NUMBER = "N", _("Number")
+        STRING = "S", _("Text (one line)")
+        TEXT = "T", _("Multiline text")
+        BOOLEAN = "B", _("Yes/No")
+        CHOICE = "C", _("Choose one from a list")
+        CHOICE_MULTIPLE = "M", _("Choose multiple from a list")
+        FILE = "F", _("File upload")
+        DATE = "D", _("Date")
+        TIME = "H", _("Time")
+        DATETIME = "W", _("Date and time")
+        COUNTRYCODE = "CC", _("Country code (ISO 3166-1 alpha-2)")
+        PHONENUMBER = "TEL", _("Phone number")
+
+    # compat
     TYPE_NUMBER = "N"
     TYPE_STRING = "S"
     TYPE_TEXT = "T"
@@ -1623,20 +1639,8 @@ class Question(LoggedModel):
     TYPE_DATETIME = "W"
     TYPE_COUNTRYCODE = "CC"
     TYPE_PHONENUMBER = "TEL"
-    TYPE_CHOICES = (
-        (TYPE_NUMBER, _("Number")),
-        (TYPE_STRING, _("Text (one line)")),
-        (TYPE_TEXT, _("Multiline text")),
-        (TYPE_BOOLEAN, _("Yes/No")),
-        (TYPE_CHOICE, _("Choose one from a list")),
-        (TYPE_CHOICE_MULTIPLE, _("Choose multiple from a list")),
-        (TYPE_FILE, _("File upload")),
-        (TYPE_DATE, _("Date")),
-        (TYPE_TIME, _("Time")),
-        (TYPE_DATETIME, _("Date and time")),
-        (TYPE_COUNTRYCODE, _("Country code (ISO 3166-1 alpha-2)")),
-        (TYPE_PHONENUMBER, _("Phone number")),
-    )
+    TYPE_CHOICES = FieldType.choices
+
     UNLOCALIZED_TYPES = [TYPE_DATE, TYPE_TIME, TYPE_DATETIME]
     ASK_DURING_CHECKIN_UNSUPPORTED = []
     SHOW_DURING_CHECKIN_UNSUPPORTED = [TYPE_FILE]
@@ -1652,9 +1656,8 @@ class Question(LoggedModel):
         verbose_name=_("Asked on"),
         default=ContainerType.ORDERPOSITION,
     )
-    question = I18nTextField(
-        # TODO(questionnaires) : to be renamed to 'internal_name'
-        verbose_name=_("Question")
+    question = I18nTextField(  # TODO(questionnaires) : to be renamed to 'internal_name'
+        verbose_name=_("Internal name"),
     )
     identifier = models.CharField(
         max_length=190,
@@ -1676,7 +1679,7 @@ class Question(LoggedModel):
     )
     type = models.CharField(
         max_length=5,
-        choices=TYPE_CHOICES,
+        choices=FieldType.choices,
         verbose_name=_("Question type")
     )
     required = models.BooleanField(  # TODO(questionnaires) : to be removed, -> QuestionnaireChild
@@ -1990,18 +1993,12 @@ class QuestionOption(models.Model):
 
 
 class Questionnaire(LoggedModel):
-    TYPE_ORDER_SALE = "OS"
-    TYPE_ORDER_POSITION_SALE = "PS"
-    TYPE_ORDER_POSITION_ATTENDEE_ONLY = "PA"
-    TYPE_ORDER_POSITION_CHECKIN = "PC"
-    TYPE_ORDER_POSITION_HIDDEN = "PH"
-    TYPE_CHOICES = (
-        (TYPE_ORDER_SALE, _("Order-wide, before purchase")),
-        (TYPE_ORDER_POSITION_SALE, _("Per product, before purchase")),
-        (TYPE_ORDER_POSITION_ATTENDEE_ONLY, _("Per product, via attendee link")),
-        (TYPE_ORDER_POSITION_CHECKIN, _("Per product, at check-in")),
-        (TYPE_ORDER_POSITION_HIDDEN, _("Per product, hidden")),
-    )
+    class QuestionnaireType(models.TextChoices):
+        ORDER_SALE = "OS", _("Order-wide, before purchase")
+        ORDER_POSITION_SALE = "PS", _("Per product, before purchase")
+        ORDER_POSITION_ATTENDEE_ONLY = "PA", _("Per product, via attendee link")
+        ORDER_POSITION_CHECKIN = "PC", _("Per product, at check-in")
+        ORDER_POSITION_HIDDEN = "PH", _("Per product, hidden")
     event = models.ForeignKey(
         Event,
         related_name="questionnaires",
@@ -2013,7 +2010,7 @@ class Questionnaire(LoggedModel):
     )
     type = models.CharField(
         max_length=5,
-        choices=TYPE_CHOICES,
+        choices=QuestionnaireType.choices,
         verbose_name=_("Questionnaire type")
     )
     items = models.ManyToManyField(
@@ -2041,15 +2038,15 @@ class Questionnaire(LoggedModel):
 
 
 class QuestionnaireChild(LoggedModel):
-    SYSTEM_QUESTION_CHOICES = (
-        ('attendee_name_parts', _('Attendee name')),
-        ('attendee_email', _('Attendee email')),
-        ('company', _('Company')),
-        ('street', _('Street')),
-        ('zipcode', _('ZIP code')),
-        ('city', _('City')),
-        ('country', _('Country')),
-    )
+    class SystemQuestion(models.TextChoices):
+        ATTENDEE_NAME_PARTS = 'attendee_name_parts', _('Attendee name')
+        ATTENDEE_EMAIL = 'attendee_email', _('Attendee email')
+        COMPANY = 'company', _('Company')
+        STREET = 'street', _('Street')
+        ZIPCODE = 'zipcode', _('ZIP code')
+        CITY = 'city', _('City')
+        COUNTRY = 'country', _('Country')
+
     questionnaire = models.ForeignKey(
         Questionnaire,
         related_name="children",
@@ -2067,7 +2064,7 @@ class QuestionnaireChild(LoggedModel):
     )
     system_datafield = models.CharField(
         max_length=25,
-        choices=SYSTEM_QUESTION_CHOICES,
+        choices=SystemQuestion.choices,
         null=True, blank=True,
     )
     required = models.BooleanField(
