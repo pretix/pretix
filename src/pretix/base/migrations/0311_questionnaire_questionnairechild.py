@@ -37,6 +37,7 @@ def get_fake_questions(settings):
         fq.append(FakeQuestion('street', _('Street'), sqo.get('street', 0), b(settings.get('attendee_addresses_required'))))
         fq.append(FakeQuestion('zipcode', _('ZIP code'), sqo.get('zipcode', 0), b(settings.get('attendee_addresses_required'))))
         fq.append(FakeQuestion('city', _('City'), sqo.get('city', 0), b(settings.get('attendee_addresses_required'))))
+        fq.append(FakeQuestion('state', _('State'), sqo.get('country', 0), b(settings.get('attendee_addresses_required'))))
         fq.append(FakeQuestion('country', _('Country'), sqo.get('country', 0), b(settings.get('attendee_addresses_required'))))
     return fq
 
@@ -148,7 +149,7 @@ def migrate_questions_backward(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0309_alter_questionanswer_unique_together_and_more'),
+        ('pretixbase', '0310_question_valid_string_length_min'),
     ]
 
     operations = [
