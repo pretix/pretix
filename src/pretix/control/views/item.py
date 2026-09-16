@@ -59,6 +59,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, ListView, TemplateView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django_countries.fields import Country
+from i18nfield.strings import LazyI18nString
 
 from pretix.api.serializers.item import (
     ItemAddOnSerializer, ItemBundleSerializer, ItemProgramTimeSerializer,
@@ -67,11 +68,11 @@ from pretix.api.serializers.item import (
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, LogEntry,
-    OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
+    OrderPosition, Question, QuestionAnswer, QuestionOption, QuestionnaireChild, Quota,
     SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
+from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue, Questionnaire
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
@@ -436,7 +437,7 @@ class QuestionList(ListView):
     template_name = 'pretixcontrol/items/questions.html'
 
     def get_queryset(self):
-        return self.request.event.questions
+        return self.request.event.questions.all()
 
 
 class QuestionDelete(EventPermissionRequiredMixin, CompatDeleteView):
@@ -706,9 +707,27 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
         return ret
 
 
+def textchoices_to_json(choices, event):
+    return [(c.name, c.value, i18n_all(event.settings.locales, LazyI18nString.from_gettext(c.label).data)) for c in choices]
+
+
+def i18n_all(locales, data):
+    out = {}
+    for locale in locales:
+        out[locale] = data[locale]
+    return out
+
+
 class QuestionnairesEditor(EventPermissionRequiredMixin, TemplateView):
     permission = 'can_change_items'
     template_name = 'pretixcontrol/items/questionnaires.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['questionnaire_type_choices'] = textchoices_to_json(Questionnaire.QuestionnaireType, self.request.event)
+        ctx['system_question_choices'] = textchoices_to_json(QuestionnaireChild.SystemQuestion, self.request.event)
+        ctx['question_type_choices'] = textchoices_to_json(Question.FieldType, self.request.event)
+        return ctx
 
 
 class QuotaQueryMixin:
