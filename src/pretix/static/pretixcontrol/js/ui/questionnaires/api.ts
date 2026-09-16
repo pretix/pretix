@@ -1,22 +1,23 @@
-import {ApiListResponse, Datafield, Questionnaire, Item} from "./model";
+import { ApiListResponse, Datafield, Questionnaire, Item, Category } from './model'
+import { ProgressBar } from "./ProgressBar";
 
 const organizer_slug = document.body.getAttribute('data-organizer'),
-	event_slug = document.body.getAttribute('data-event');
+	event_slug = document.body.getAttribute('data-event')
 
 async function api_get(resource) {
-	return await $.getJSON(`/api/v1/${resource}?_nocache=${+new Date()}`);
+	return await $.getJSON(`/api/v1/${resource}?_nocache=${+new Date()}`)
 }
 
 async function api_get_all<T>(resource): Promise<T[]> {
-	let next = `/api/v1/${resource}?_nocache=${+new Date()}`;
+	let next = `/api/v1/${resource}?_nocache=${+new Date()}`
 	const result: T[] = [];
 	while (next) {
-		const response: ApiListResponse<T> = await $.getJSON(next);
-		result.push(...response.results);
-		next = response.next;
-		console.log('api_get_all: '+ resource, next, response, result)
+		const response: ApiListResponse<T> = await $.getJSON(next)
+		result.push(...response.results)
+		next = response.next
+		console.log('api_get_all: ' + resource, next, response, result)
 	}
-	return result;
+	return result
 }
 
 async function api_json_request(resource, method, json_body) {
@@ -24,17 +25,19 @@ async function api_json_request(resource, method, json_body) {
 		body: JSON.stringify(json_body),
 		method: method,
 		headers: {
-				"Content-Type": "application/json",
-				"X-CSRFToken": $('[name=csrfmiddlewaretoken]').val() as string,
+			'Content-Type': 'application/json',
+			'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val() as string,
 		},
-	})).json();
+	})).json()
 }
 
-export async function getDatafields() {
-	return await api_get_all<Datafield>(`organizers/${organizer_slug}/events/${event_slug}/datafields/`);
+export async function getDatafields(container_type) {
+	using pb = ProgressBar.show('loading data fields')
+	return await api_get_all<Datafield>(`organizers/${organizer_slug}/events/${event_slug}/datafields/?container_type=${container_type}&`);
 }
 
 export async function getQuestionnaires() {
+	using pb = ProgressBar.show('loading questionnaires')
 	return await api_get_all<Questionnaire>(`organizers/${organizer_slug}/events/${event_slug}/questionnaires/`);
 }
 
@@ -47,11 +50,13 @@ export async function createQuestionnaire(data) {
 }
 
 export async function getItems() {
+	using pb = ProgressBar.show('loading product list')
 	return await api_get_all<Item>(`organizers/${organizer_slug}/events/${event_slug}/items/`);
 }
 
 export async function getCategories() {
-	return await api_get_all<Item>(`organizers/${organizer_slug}/events/${event_slug}/categories/`);
+	using pb = ProgressBar.show('loading category list')
+	return await api_get_all<Category>(`organizers/${organizer_slug}/events/${event_slug}/categories/`);
 }
 
 function get_json_script_value(id) {
