@@ -540,7 +540,7 @@ class LegacyDependencyValueField(serializers.CharField):
         return [data] if data else []
 
 
-class QuestionSerializer(I18nAwareModelSerializer):
+class DatafieldSerializer(I18nAwareModelSerializer):
     options = InlineQuestionOptionSerializer(many=True, required=False)
     identifier = serializers.CharField(allow_null=True)
     internal_name = serializers.CharField(allow_null=True, source='question', read_only=True)

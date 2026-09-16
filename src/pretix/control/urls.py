@@ -342,7 +342,6 @@ urlpatterns = [
                 name='event.items.categories.edit'),
         re_path(r'^categories/add$', item.CategoryCreate.as_view(), name='event.items.categories.add'),
         re_path(r'^questions/$', item.QuestionList.as_view(), name='event.items.questions'),
-        re_path(r'^questions/reorder$', item.reorder_questions, name='event.items.questions.reorder'),
         re_path(r'^questions/(?P<question>\d+)/delete$', item.QuestionDelete.as_view(),
                 name='event.items.questions.delete'),
         re_path(r'^questions/(?P<question>\d+)/$', item.QuestionView.as_view(),
