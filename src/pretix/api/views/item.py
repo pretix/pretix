@@ -48,7 +48,7 @@ from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.item import (
     ItemAddOnSerializer, ItemBundleSerializer, ItemCategorySerializer,
     ItemProgramTimeSerializer, ItemSerializer, ItemVariationSerializer,
-    QuestionnaireSerializer, QuestionOptionSerializer, QuestionSerializer,
+    QuestionnaireSerializer, QuestionOptionSerializer, DatafieldSerializer,
     QuotaSerializer,
 )
 from pretix.api.views import ConditionalListView
@@ -466,8 +466,8 @@ with scopes_disabled():
             fields = ['ask_during_checkin', 'required', 'identifier']
 
 
-class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
-    serializer_class = QuestionSerializer
+class DatafieldViewSet(ConditionalListView, viewsets.ModelViewSet):
+    serializer_class = DatafieldSerializer
     queryset = Question.objects.none()
     filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     filterset_class = QuestionFilter

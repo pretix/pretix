@@ -5,7 +5,7 @@
 {% load escapejson %}
 {% block title %}
     {% if question %}
-        {% blocktrans with name=question.question %}Question: {{ name }}{% endblocktrans %}
+        {% blocktrans with name=question.question %}Data field: {{ name }}{% endblocktrans %}
     {% else %}
         {% trans "Question" %}
     {% endif %}
