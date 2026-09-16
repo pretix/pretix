@@ -1670,6 +1670,7 @@ class QuickSetupView(EventPermissionRequiredMixin, FormView):
                                 user=self.request.user)
 
         subevent = self.request.event.subevents.first()
+        questionnaire = self.request.event.questionnaires.first()
         for i, f in enumerate(self.formset):
             if f in self.formset.deleted_forms or not f.has_changed():
                 continue
@@ -1685,6 +1686,8 @@ class QuickSetupView(EventPermissionRequiredMixin, FormView):
                 position=i,
                 all_sales_channels=True,
             )
+            if questionnaire:
+                item.questionnaires.add(questionnaire)
             item.log_action('pretix.event.item.added', user=self.request.user, data=dict(f.cleaned_data))
             if f.cleaned_data['quota'] or not form.cleaned_data['total_quota']:
                 quota = self.request.event.quotas.create(
