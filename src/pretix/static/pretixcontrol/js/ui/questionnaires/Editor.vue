@@ -35,14 +35,14 @@ function saveQuestionnaire(questionnaire) {
 }
 function addPositionQuestionnaire () {
 	position_questionnaires.value.push({
-		all_sales_channels: false, children: [], limit_sales_channels: [], position: 0,
+		all_sales_channels: true, children: [], limit_sales_channels: [], position: 0,
 		items: [], internal_name: "Unnamed questionnaire", type: "PS",
 		_new_id: Date.now(),
 	});
 }
 function addOrderQuestionnaire () {
 	order_questionnaires.value.push({
-		all_sales_channels: false, children: [], limit_sales_channels: [], position: 0,
+		all_sales_channels: true, children: [], limit_sales_channels: [], position: 0,
 		items: [], internal_name: "Unnamed questionnaire", type: "OS",
 		_new_id: Date.now(),
 	});

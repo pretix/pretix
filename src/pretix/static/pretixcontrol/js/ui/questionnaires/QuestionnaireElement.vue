@@ -14,20 +14,19 @@ const newTextblockTitle = ref();
 const newTextblockText = ref();
 
 const id = useId();
-const props = defineProps(['questionnaire', 'datafields', 'selected_product', 'grouped_items'])
-const gettext = (window as any).gettext
+const props = defineProps(['questionnaire', 'datafields', 'selected_product', 'grouped_items', 'preview_mode'])
 
-function toggleItem() {
-  const i = props.questionnaire.items.indexOf(props.selected_product);
-  if (i === -1) {
-    props.questionnaire.items.push(props.selected_product);
-  } else {
-    props.questionnaire.items.splice(i, 1);
-  }
 for (let qc of props.questionnaire.children) {
 	if (!qc._cid) qc._cid = useId();
 }
 
+function setVisibleOnItem (checked, itemId) {
+	const i = props.questionnaire.items.indexOf(itemId)
+	if (i === -1) {
+		props.questionnaire.items.push(itemId)
+	} else {
+		props.questionnaire.items.splice(i, 1)
+	}
 }
 
 function addExistingDatafield(field) {
@@ -70,14 +69,14 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 
 <template>
 	<div class="question-edit-buttons"><div class="btn-group">
-		<DragHandle tag="button" class="btn btn-default"><i class="fa fa-arrows"></i></DragHandle>
+		<DragHandle tag="button" class="btn btn-default" v-if="!preview_mode"><i class="fa fa-arrows"></i></DragHandle>
 		<button class="btn btn-default" @click="dlgEditor.show()"><i class="fa fa-edit"></i></button>
 	</div></div>
 
   <details class="panel panel-default " :open="!!isEditable"
     :class="{ 'hidden-questionnaire': isHidden }">
     <summary class="panel-heading">
-			<input type="checkbox" @click="toggleItem()" v-if="selected_product" :checked="!isHidden">
+			<input type="checkbox" @change="setVisibleOnItem(this.checked, selected_product)" v-if="selected_product && !preview_mode" :checked="!isHidden">
 			{{ props.questionnaire.internal_name }}
     </summary>
     <div class="panel-body" v-if="!isHidden">
@@ -112,6 +111,18 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
             <input type="text" class="form-control" v-model="questionnaire.internal_name"/>
           </div>
         </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label">
+            {{ gettext('Sales channels') }}
+          </label>
+          <div class="col-md-9">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" v-model="questionnaire.all_sales_channels"> {{ gettext('All sales channels') }}
+							</label>
+						</div>
+          </div>
+        </div>
         <div class="form-group" v-if="grouped_items">
           <label class="col-md-3 control-label">
             {{ gettext('Visible on products') }}
@@ -121,7 +132,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 							<div class="category-header">{{ category.internal_name || i18n_any(category.name) }}</div>
 							<div class="checkbox" v-for="item in items">
 								<label :for="id + '_' + item.id">
-									<input :id="id + '_' + item.id" type="checkbox" :checked="questionnaire.items.indexOf(item.id) !== -1"> {{ item.internal_name || i18n_any(item.name) }}
+									<input :id="id + '_' + item.id" type="checkbox" :checked="questionnaire.items.indexOf(item.id) !== -1" @change="setVisibleOnItem(this.checked, item.id)"> {{ item.internal_name || i18n_any(item.name) }}
 								</label>
 							</div>
 						</div>
