@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
 from datetime import datetime, time, timedelta
 
 from dateutil.tz import datetime_exists
@@ -38,6 +39,8 @@ from pretix.base.models import (
     fields,
 )
 from pretix.base.models.base import LoggingMixin
+
+logger = logging.getLogger(__name__)
 
 
 class ScheduledMail(models.Model):
@@ -167,14 +170,66 @@ class ScheduledMail(models.Model):
         for o in orders:
             with language(o.locale, e.settings.region):
                 positions = list(o.positions.all())
-                o_sent = False
+                send_to_order = send_to_orders
 
                 try:
                     ia = o.invoice_address
                 except InvoiceAddress.DoesNotExist:
                     ia = InvoiceAddress(order=o)
 
-                if send_to_orders and o.email:
+                if send_to_attendees:
+                    parent_op = None
+                    sent_to_positions = set()
+                    for p in positions:
+                        if p.addon_to_id is None:
+                            # this op might have matching add-ons, so save for later
+                            parent_op = p
+                        elif not parent_op or p.addon_to_id != parent_op.id:
+                            # this op is an add-on, but not to the current parent_op
+                            # something got mixed up as add-ons should always come directly after their parent
+                            logger.warning(f"Add-ons are mixed up for position #{p.positionid} in order {o.full_code}")
+                            continue
+
+                        if p.id not in position_ids:
+                            # not a matching op, just there for parent_op
+                            continue
+
+                        if not p.attendee_email and p.addon_to_id:
+                            # no email => try parent_op
+                            p = parent_op
+
+                        if not p.attendee_email:
+                            # still no email on => send to order
+                            send_to_order = True
+                            continue
+
+                        # attendee email available
+
+                        if p.addon_to_id and p.attendee_email == parent_op.attendee_email:
+                            # if op is add-on and parent's email match => send to parent
+                            p = parent_op
+
+                        if p.pk in sent_to_positions:
+                            # this position already got an email
+                            continue
+
+                        if p.attendee_email == o.email:
+                            send_to_order = True
+                            continue
+
+                        email_ctx = get_email_context(
+                            event=e,
+                            order=o,
+                            invoice_address=ia,
+                            position=p,
+                            event_or_subevent=self.subevent or e,
+                        )
+                        p.send_mail(self.rule.subject, self.rule.template, email_ctx,
+                                    attach_ical=self.rule.attach_ical,
+                                    log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
+                        sent_to_positions.add(p.pk)
+
+                if send_to_order and o.email:
                     email_ctx = get_email_context(
                         event=e,
                         order=o,
@@ -184,38 +239,6 @@ class ScheduledMail(models.Model):
                     o.send_mail(self.rule.subject, self.rule.template, email_ctx,
                                 attach_ical=self.rule.attach_ical,
                                 log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
-                    o_sent = True
-
-                if send_to_attendees:
-                    if not self.rule.all_products:
-                        positions = [p for p in positions if p.item_id in limit_products]
-                    if self.subevent_id:
-                        positions = [p for p in positions if p.subevent_id == self.subevent_id]
-
-                    for p in positions:
-                        if p.id in position_ids:
-                            if p.attendee_email and (p.attendee_email != o.email or not o_sent):
-                                email_ctx = get_email_context(
-                                    event=e,
-                                    order=o,
-                                    invoice_address=ia,
-                                    position=p,
-                                    event_or_subevent=self.subevent or e,
-                                )
-                                p.send_mail(self.rule.subject, self.rule.template, email_ctx,
-                                            attach_ical=self.rule.attach_ical,
-                                            log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
-                            elif not o_sent and o.email:
-                                email_ctx = get_email_context(
-                                    event=e,
-                                    order=o,
-                                    invoice_address=ia,
-                                    event_or_subevent=self.subevent or e,
-                                )
-                                o.send_mail(self.rule.subject, self.rule.template, email_ctx,
-                                            attach_ical=self.rule.attach_ical,
-                                            log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
-                                o_sent = True
 
                 self.last_successful_order_id = o.pk
 
