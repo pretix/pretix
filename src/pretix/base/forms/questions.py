@@ -874,7 +874,7 @@ class BaseQuestionsForm(forms.Form):
             field.answer = answers[0]
 
         if qc.dependency_question_id:
-            field.widget.attrs['data-question-dependency'] = qc.dependency_question_id
+            field.widget.attrs['data-question-dependency'] = f"question_{qc.dependency_question.user_datafield_id}" if qc.dependency_question.user_datafield_id else qc.dependency_question.system_datafield
             field.widget.attrs['data-question-dependency-values'] = escapejson_attr(json.dumps(qc.dependency_values))
             if datafield.type != 'M':
                 field.widget.attrs['required'] = qc.required and not self.all_optional

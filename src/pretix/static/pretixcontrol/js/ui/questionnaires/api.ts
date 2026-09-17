@@ -76,9 +76,9 @@ export function getEventLocales() {
 }
 
 export function getDatafieldEditUrl(datafield_id) {
-	return fromJsonScript('datafield_edit_url').replace('/0/', `/${datafield_id}/`);
+	return fromJsonScript('datafield_edit_url').replace('/0/', `/${datafield_id}/`) + '?notify_parent=true&';
 }
 
 export function getDatafieldCreateUrl(container_type) {
-	return fromJsonScript('datafield_create_url') + '?container_type=' + container_type;
+	return fromJsonScript('datafield_create_url') + '?notify_parent=true&container_type=' + container_type;
 }

@@ -9,6 +9,8 @@ const props = defineProps({
     default: "",
   },
   title: '',
+	noPadding: false,
+	noScroll: true,
 });
 
 const visible = ref(false);
@@ -28,7 +30,7 @@ const id = useId();
 
 <template>
   <dialog
-    ref="dialog" class="modal-card"
+    ref="dialog" :class="`modal-card ${props.noPadding ? 'no-padding' : ''} ${props.noPadding ? 'no-scroll' : ''}`"
     @close="visible = false"
     closedby="any"
     :aria-labelledby="`${id}-title`"
@@ -41,9 +43,14 @@ const id = useId();
       }"
     >
       <div class="modal-card-content">
-          <h2 :id="`${id}-title`" class="modal-card-title h3">{{ title }}</h2>
+          <h2 :id="`${id}-title`" class="modal-card-title h3" v-if="title">{{ title }}</h2>
           <slot />
       </div>
     </form>
   </dialog>
 </template>
+
+<style>
+.modal-card.no-padding, .modal-card.no-padding .modal-card-content { padding: 0; }
+.modal-card.no-scroll { overflow: hidden; }
+</style>

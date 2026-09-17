@@ -1118,3 +1118,31 @@ $(function () {
 		return $(this).find('button:not([type=button]), input[type=submit]').length > 0
 	}).areYouSure({ message: gettext('You have unsaved changes!') })
 })
+
+function notify_parent_frame() {
+	window.addEventListener('message', function(e) {
+		if (e.source === window) return
+		if (e.origin === location.origin && e.data.type === 'pretix:dialog-handshake') {
+			if (!window.isInDialog) {
+				window.isInDialog = true
+				window.document.documentElement.classList.add('in-iframe')
+			}
+		}
+		if (e.origin === location.origin && e.data.type === 'pretix:dialog-loading') {
+			e.source.postMessage({ type: 'pretix:dialog-handshake' })
+		}
+	})
+	try {
+		window.parent.postMessage({
+			type: 'pretix:dialog-loading',
+			title: document.title,
+		}, location.origin)
+	} catch {}
+	$(function () {
+		window.parent.postMessage({
+			type: 'pretix:dialog-loaded',
+			contentHeight: $('body').height(),
+		}, location.origin)
+	})
+}
+notify_parent_frame()

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import QuestionnaireElement from './QuestionnaireElement.vue';
 import * as api from './api';
-import { Questionnaire } from './model';
+import {Datafield, Questionnaire} from './model';
 import {i18n_any, sort, numericComp, groupBy, SYSTEM_DATAFIELDS} from './helper';
 import { gettext } from './gettextstub';
-import { ref } from 'vue';
+import {onMounted, onUnmounted, ref} from 'vue';
 import { SlickList, SlickItem } from 'vue-slicksort';
 import { ProgressBar } from "./ProgressBar";
 
@@ -17,25 +17,38 @@ console.log('items_list', items_list)
 const grouped_items = [...groupBy(items_list, item => categories[item.category])]
 console.log('grouped_items', grouped_items)
 
-const all_questionnaires: (Omit<Questionnaire, 'id'> & { _new_id?: number, id?: number })[] = await api.getQuestionnaires();
-const order_questionnaires = ref(all_questionnaires.filter(q => q.type.startsWith('O')));
-const position_questionnaires = ref(all_questionnaires.filter(q => q.type.startsWith('P')));
-const order_datafields = ref(await api.getDatafields('O'));
-const position_datafields = ref((await api.getDatafields('P')).concat(Object.values(SYSTEM_DATAFIELDS)));
+type QuestionnaireMaybeUnsaved = Omit<Questionnaire, 'id'> & { _new_id?: number, id?: number };
+const order_questionnaires = ref<QuestionnaireMaybeUnsaved[]>();
+const position_questionnaires = ref<QuestionnaireMaybeUnsaved[]>();
+const order_datafields = ref<Datafield[]>();
+const position_datafields = ref<Datafield[]>();
+
+let lastDataRefresh = 0
+async function refreshQuestionnaireList () {
+	const all_questionnaires: QuestionnaireMaybeUnsaved[] = await api.getQuestionnaires();
+
+	order_questionnaires.value = all_questionnaires.filter(q => q.type.startsWith('O'))
+	position_questionnaires.value = all_questionnaires.filter(q => q.type.startsWith('P'))
+	lastDataRefresh = Date.now()
+}
+async function refreshDatafieldList () {
+	order_datafields.value = await api.getDatafields('O')
+	position_datafields.value = (await api.getDatafields('P')).concat(Object.values(SYSTEM_DATAFIELDS))
+}
+await Promise.all([refreshQuestionnaireList(), refreshDatafieldList()])
 
 function saveQuestionnaire(questionnaire) {
 	let result;
 	questionnaire._loading = true
 	if (questionnaire.id) {
-		result = api.updateQuestionnaire(questionnaire.id, questionnaire);
+		result = api.updateQuestionnaire(questionnaire.id, questionnaire)
 	} else {
-		result = api.createQuestionnaire(questionnaire).then(d => {
-			questionnaire.id = d.id;
-			return d;
-		});
+		result = api.createQuestionnaire(questionnaire)
 	}
 	result = result.then(d => {
 		console.log(questionnaire, 'ok')
+		questionnaire.id = d.id
+		questionnaire.children = d.children
 		questionnaire._err_mes = null
 		questionnaire._loading = false
 		return d;
@@ -97,6 +110,16 @@ export default {
 		}
 	}
 }*/
+
+function windowFocused() {
+	if (Date.now() - lastDataRefresh > 30000) {
+		console.log('refreshing to avoid overwriting with older data on edit')
+		refreshQuestionnaireList()
+	}
+}
+onMounted(() => window.addEventListener('focus', windowFocused))
+onUnmounted(() => window.removeEventListener('focus', windowFocused))
+
 const selected_product = ref("")
 const preview_mode = ref(false)
 </script>
@@ -174,7 +197,8 @@ const preview_mode = ref(false)
 						:grouped_items="null"
 						:selected_product="null"
 						:preview_mode="false"
-						@update="saveQuestionnaire(questionnaire)" />
+						@update="saveQuestionnaire(questionnaire)"
+						@invalidate:datafields="refreshDatafieldList()" />
 				</SlickItem>
 			</SlickList>
 			<div class="editor-action-row form-horizontal">
@@ -220,7 +244,8 @@ const preview_mode = ref(false)
 					:grouped_items="grouped_items"
 					:selected_product="selected_product"
 					:preview_mode="true"
-					@update="saveQuestionnaire(questionnaire)"/>
+					@update="saveQuestionnaire(questionnaire)"
+					@invalidate:datafields="refreshDatafieldList()"/>
 			</details>
 		</div>
 
@@ -233,7 +258,8 @@ const preview_mode = ref(false)
 						:grouped_items="grouped_items"
 						:selected_product="selected_product"
 						:preview_mode="false"
-						@update="saveQuestionnaire(questionnaire)"/>
+						@update="saveQuestionnaire(questionnaire)"
+						@invalidate:datafields="refreshDatafieldList()"/>
 				</SlickItem>
 			</SlickList>
 			<div v-if="!preview_mode" class="editor-action-row form-horizontal">
