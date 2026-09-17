@@ -1661,9 +1661,11 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
 
     def get_system_answer(self, system_datafield_name):
         if system_datafield_name == 'attendee_name_parts':
-            return self.attendee_name_parts
+            return self.attendee_name
         elif system_datafield_name == 'attendee_email':
             return self.attendee_email
+        elif system_datafield_name == 'company':
+            return self.company
         elif system_datafield_name == 'street':
             return self.street
         elif system_datafield_name == 'zipcode':
