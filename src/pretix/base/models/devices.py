@@ -166,6 +166,7 @@ class Device(LoggedModel):
     )
     security_profile = models.CharField(
         max_length=190,
+        verbose_name=_('Security profile'),
         default='full',
         null=True,
         blank=False
