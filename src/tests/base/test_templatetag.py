@@ -60,7 +60,9 @@ def test_urlreplace_replace_parameter():
     "locale,amount,currency,expected",
     [
         ("en", None, "USD", "$0.00"),
+        ("en", "", "USD", ""),
         ("en", 1000000, "USD", "$1,000,000.00"),
+        ("en", 2.23, "USD", "$2.23"),
         ("en", Decimal("1000.00"), "USD", "$1,000.00"),
         ("de", Decimal("1.23"), "EUR", "1,23" + NBSP + "€"),
         ("de", Decimal("1000.00"), "EUR", "1.000,00" + NBSP + "€"),
@@ -74,6 +76,7 @@ def test_urlreplace_replace_parameter():
 
         # deal with precision that is higher than the currency
         ("de", Decimal("1.234"), "EUR", "1,234" + NBSP + "€"),
+        ("de", 1.234, "EUR", "1,234" + NBSP + "€"),
         ("de", Decimal("1.2340"), "EUR", "1,234" + NBSP + "€"),
         ("de", Decimal("1.2300"), "EUR", "1,23" + NBSP + "€"),
         ("de", Decimal("1023.1"), "JPY", "1.023,10" + NBSP + "¥"),
@@ -118,6 +121,11 @@ def test_money_filter_hidecurrency(locale, amount, currency, expected):
         ("en", Decimal("2.50"), "2.5"),
         ("en", Decimal("4.3e7"), "43000000"),
         ("en", Decimal("2.2340"), "2.234"),
+        ("en", "2.23", "2.23"),
+        ("en", 2.23, "2.23"),
+        ("en", 2, "2"),
+        ("en", "", ""),
+        ("en", None, "0"),
     ]
 )
 def test_tax_rate_format(locale, rate, expected):

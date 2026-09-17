@@ -49,6 +49,13 @@ def money_filter(value: Optional[Decimal | float | int | str], arg='', hide_curr
         raise ValueError("No currency passed.")
     arg = arg.upper()
 
+    if value.normalize().as_tuple().exponent < -9:
+        # Heuristic: It's unlikely we'll ever see values of less than 0.000000001 in any currency. Therefore, if we
+        # do see them, we very likely deal with a floating point error. This happens mostly in dev mode when computations
+        # are made in SQLite, which uses REAL precision, but it can also happen when we naively pass a float from Python
+        # land to this filter (even though it should not happen).
+        value = value.quantize(Decimal('1e-9'), ROUND_HALF_UP).normalize()
+
     currency_places = settings.CURRENCY_PLACES.get(arg, 2)
     required_places = -value.normalize().as_tuple().exponent
     render_places = max(currency_places, required_places)
@@ -108,6 +115,12 @@ def tax_rate_format(number: Optional[Decimal | float | int | str]):
         number = Decimal('0.00')
     if not isinstance(number, Decimal):
         raise TypeError("Invalid data type passed to tax rate format filter: %r" % type(number))
+    if number.normalize().as_tuple().exponent < -9:
+        # Heuristic: It's unlikely we'll ever see values of less than 0.000000001 in any currency. Therefore, if we
+        # do see them, we very likely deal with a floating point error. This happens mostly in dev mode when computations
+        # are made in SQLite, which uses REAL precision, but it can also happen when we naively pass a float from Python
+        # land to this filter (even though it should not happen).
+        number = number.quantize(Decimal('1e-9'), ROUND_HALF_UP).normalize()
     return mark_safe(
         formats.number_format(
             number,
