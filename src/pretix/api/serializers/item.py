@@ -705,9 +705,17 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
 
             #Question.clean_items(event, full_data.get('items') or [])
 
+            if (full_data.get('type') == Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
+                    and any(c['dependency_question'] for c in full_data['children'])):
+                raise ValidationError('Dependencies are not supported during check-in.')
+
             if (not full_data.get('type').startswith('P')
                     and any(c['system_datafield'] for c in full_data['children'])):
                 raise ValidationError('System data fields are only supported on order positions.')
+
+            system_fields = set(c['system_datafield'] for c in full_data['children'])
+            if ('zipcode' in system_fields or 'state' in system_fields or 'street' in system_fields or 'city' in system_fields) and 'country' not in system_fields:
+                raise ValidationError('The system data fields "street", "zip code", "city", and "state" can only be used in combination with the "country" field.')
 
         return data
 
