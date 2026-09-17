@@ -725,19 +725,29 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
         data = super().validate(data)
         event = self.context['event']
 
-        #full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
-        #full_data.update(data)
+        try:
+            full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+            full_data.update(data)
+        except rest_framework.exceptions.ValidationError as e:
+            # we already have invalid state in the database, what should we do? hope it gets better after saving?
+            print(e)
+        else:
+            print('full_data', full_data)
+            #if full_data.get('ask_during_checkin') and full_data.get('dependency_question'):
+            #    raise ValidationError('Dependencies are not supported during check-in.')
 
-        #if full_data.get('ask_during_checkin') and full_data.get('dependency_question'):
-        #    raise ValidationError('Dependencies are not supported during check-in.')
+            #if full_data.get('ask_during_checkin') and full_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
+            #    raise ValidationError(_('This type of question cannot be asked during check-in.'))
 
-        #if full_data.get('ask_during_checkin') and full_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
-        #    raise ValidationError(_('This type of question cannot be asked during check-in.'))
+            #if full_data.get('show_during_checkin') and full_data.get('type') in Question.SHOW_DURING_CHECKIN_UNSUPPORTED:
+            #    raise ValidationError(_('This type of question cannot be shown during check-in.'))
 
-        #if full_data.get('show_during_checkin') and full_data.get('type') in Question.SHOW_DURING_CHECKIN_UNSUPPORTED:
-        #    raise ValidationError(_('This type of question cannot be shown during check-in.'))
+            #Question.clean_items(event, full_data.get('items') or [])
 
-        #Question.clean_items(event, full_data.get('items') or [])
+            if (not full_data.get('type').startswith('P')
+                    and any(c['system_datafield'] for c in full_data['children'])):
+                raise ValidationError('System data fields are only supported on order positions.')
+
         return data
 
     def validate_children(self, value):
