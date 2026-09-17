@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from decimal import ROUND_HALF_UP, Decimal
+from typing import Optional
 
 from babel import Locale, UnknownLocaleError
 from babel.numbers import format_currency
@@ -35,14 +36,14 @@ register = template.Library()
 
 
 @register.filter("money")
-def money_filter(value: Decimal, arg='', hide_currency=False):
+def money_filter(value: Optional[Decimal | float | int | str], arg='', hide_currency=False):
     if isinstance(value, (float, int, str)):
+        if value == '':
+            return value
         value = Decimal(value)
     if value is None:
         value = Decimal('0.00')
     if not isinstance(value, Decimal):
-        if value == '':
-            return value
         raise TypeError("Invalid data type passed to money filter: %r" % type(value))
     if not arg:
         raise ValueError("No currency passed.")
@@ -77,13 +78,13 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
 
 
 @register.filter("money_without_currency")
-def money_filter_without_currency(value: Decimal, arg=''):
+def money_filter_without_currency(value: Optional[Decimal | float | int | str], arg=''):
     return money_filter(value, arg, hide_currency=True)
 
 
 @register.filter("money_numberfield")
-def money_numberfield_filter(value: Decimal, arg=''):
-    if isinstance(value, (float, int)):
+def money_numberfield_filter(value: Optional[Decimal | float | int | str], arg=''):
+    if isinstance(value, (float, int, str)):
         value = Decimal(value)
     if not isinstance(value, Decimal):
         raise TypeError("Invalid data type passed to money filter: %r" % type(value))
@@ -95,17 +96,17 @@ def money_numberfield_filter(value: Decimal, arg=''):
 
 
 @register.filter(is_safe=True)
-def tax_rate_format(number):
+def tax_rate_format(number: Optional[Decimal | float | int | str]):
     """
     Display a Decimal to its significant decimal places, used for tax rates.
     """
     if isinstance(number, (float, int, str)):
+        if number == '':
+            return number
         number = Decimal(number)
     if number is None:
         number = Decimal('0.00')
     if not isinstance(number, Decimal):
-        if number == '':
-            return number
         raise TypeError("Invalid data type passed to tax rate format filter: %r" % type(number))
     return mark_safe(
         formats.number_format(
