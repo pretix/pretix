@@ -54,6 +54,7 @@ from pretix.base.models import (
     SalesChannel,
 )
 from pretix.base.models.items import Questionnaire, QuestionnaireChild
+from pretix.base.templatetags.rich_text import rich_text
 
 
 class InlineItemVariationSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
@@ -651,13 +652,19 @@ class QuestionRefField(serializers.PrimaryKeyRelatedField):
         return self.source == '*'
 
 
+class RenderedMarkdownField(serializers.CharField):
+    def to_representation(self, value):
+        return rich_text(value)
+
+
 class InlineQuestionnaireChildSerializer(I18nAwareModelSerializer):
     question = QuestionRefField(source='*', queryset=Question.objects.none())
     dependency_question = QuestionRefField(allow_null=True, required=False, queryset=Question.objects.none())
+    rendered_help_text = RenderedMarkdownField(read_only=True, source='help_text')
 
     class Meta:
         model = QuestionnaireChild
-        fields = ('question', 'required', 'label', 'help_text', 'dependency_question', 'dependency_values')
+        fields = ('question', 'required', 'label', 'help_text', 'dependency_question', 'dependency_values', 'rendered_help_text')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
