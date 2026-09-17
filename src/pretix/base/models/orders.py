@@ -3413,6 +3413,15 @@ class CartPosition(AbstractPosition):
     def valid_until(self):
         return self.predicted_validity[1]
 
+    def memberships_valid_by_time(self, memberships):
+        return [
+            m for m in memberships if m.is_valid(
+                self.subevent or self.event,
+                self.valid_from,
+                valid_from_not_chosen=self.item.validity_dynamic_start_choice and not self.requested_valid_from
+            ) for m in memberships
+        ]
+
 
 class InvoiceAddress(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
