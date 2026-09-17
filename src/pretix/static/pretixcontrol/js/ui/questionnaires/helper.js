@@ -2,7 +2,6 @@
 
 export function i18n_any (data) {
 	if (!data) return null
-	if (data instanceof LazyI18nString) data = data.data;
 	const preferred = document.body.getAttribute('data-pretixlocale')
 	if (data[preferred]) return data[preferred]
 	return Object.values(data)[0]
@@ -56,7 +55,7 @@ export function *groupBy (array, key) {
 	}
 }
 
-function fromJsonScript (id) {
+export function fromJsonScript (id) {
 	return JSON.parse(document.getElementById(id).textContent)
 }
 

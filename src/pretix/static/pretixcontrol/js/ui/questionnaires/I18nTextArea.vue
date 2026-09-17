@@ -8,6 +8,6 @@ const props = defineProps<{ value: any, id?: string }>();
 
 <template>
 <div class="i18n-form-group" :id="id">
-	<input v-for="locale in locales" cols="40" rows="2" :lang="locale" dir="ltr" class="form-control" title="Englisch" :id="`${id}_${locale}`" :placeholder="locale" v-model="value[locale]">
+	<textarea v-for="locale in locales" cols="40" rows="2" :lang="locale" dir="ltr" class="form-control" title="Englisch" :id="`${id}_${locale}`" :placeholder="locale" v-model="value[locale]"></textarea>
 </div>
 </template>
