@@ -65,7 +65,7 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
             value,
             arg,
             locale=locale,
-            # We only allow Babel to restrict the digits to the digits by the currency if this does not remove any
+            # We only allow Babel to restrict the digits to the digits defined by the currency if this does not remove any
             # precision in case we have sub-currency precision (which we shouldn't have in most places, but it's still
             # better than showing wrong data). Note: Weird precision effects can occur after in-database arithmetic
             # on SQLite, since SQLite does not have fixed-decimal computation.
