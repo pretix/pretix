@@ -33,7 +33,10 @@
 # License for the specific language governing permissions and limitations under the License.
 import os.path
 from decimal import Decimal
+from itertools import zip_longest
+import logging
 
+import rest_framework
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -55,6 +58,8 @@ from pretix.base.models import (
 )
 from pretix.base.models.items import Questionnaire, QuestionnaireChild
 from pretix.base.templatetags.rich_text import rich_text
+
+logger = logging.getLogger(__name__)
 
 
 class InlineItemVariationSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
@@ -630,6 +635,9 @@ class DatafieldSerializer(I18nAwareModelSerializer):
 
 
 class QuestionRefField(serializers.PrimaryKeyRelatedField):
+    default_error_messages = {
+        'invalid_choice': _('"{input}" is not a valid choice.')
+    }
     def to_representation(self, qc):
         if not qc:
             return None
@@ -643,8 +651,12 @@ class QuestionRefField(serializers.PrimaryKeyRelatedField):
     def to_internal_value(self, data):
         if type(data) == int:
             return {'user_datafield': super().to_internal_value(data), 'system_datafield': None}
-        elif type(data) == str or data is None:
+        elif type(data) == str:
+            if data not in QuestionnaireChild.SystemQuestion.values:
+                self.fail("invalid_choice", input=data)
             return {'user_datafield': None, 'system_datafield': data}
+        elif data is None:
+            return {'user_datafield': None, 'system_datafield': None}
         else:
             self.fail('incorrect_type', data_type=type(data).__name__)
 
@@ -658,7 +670,7 @@ class RenderedMarkdownField(serializers.CharField):
 
 
 class InlineQuestionnaireChildSerializer(I18nAwareModelSerializer):
-    question = QuestionRefField(source='*', queryset=Question.objects.none())
+    question = QuestionRefField(allow_null=True, source='*', queryset=Question.objects.none())
     dependency_question = QuestionRefField(allow_null=True, required=False, queryset=Question.objects.none())
     rendered_help_text = RenderedMarkdownField(read_only=True, source='help_text')
 
@@ -671,36 +683,11 @@ class InlineQuestionnaireChildSerializer(I18nAwareModelSerializer):
         self.fields["question"].queryset = self.context["event"].questions.all()
         self.fields["dependency_question"].queryset = self.context["event"].questions.all()
 
-    def validate(self, data):
-        data = super().validate(data)
-        event = self.context['event']
-
-        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
-        full_data.update(data)
-
-        if full_data.get('ask_during_checkin') and full_data.get('dependency_question'):
-            raise ValidationError('Dependencies are not supported during check-in.')
-
-        dep = full_data.get('dependency_question')
-        if dep:
-            if dep.ask_during_checkin:
-                raise ValidationError(_('Question cannot depend on a question asked during check-in.'))
-
-            seen_ids = {self.instance.pk} if self.instance else set()
-            while dep:
-                if dep.pk in seen_ids:
-                    raise ValidationError(_('Circular dependency between questions detected.'))
-                seen_ids.add(dep.pk)
-                dep = dep.dependency_question
-
-        return data
-
     def validate_dependency_question(self, value):
         if value:
-            if value.type not in (Question.TYPE_CHOICE, Question.TYPE_BOOLEAN, Question.TYPE_CHOICE_MULTIPLE):
-                raise ValidationError('Question dependencies can only be set to boolean or choice questions.')
-            if value == self.instance:
-                raise ValidationError('A question cannot depend on itself.')
+            if value['user_datafield']:
+                if value['user_datafield'].type not in (Question.TYPE_CHOICE, Question.TYPE_BOOLEAN, Question.TYPE_CHOICE_MULTIPLE):
+                    raise ValidationError('Question dependencies can only be set to boolean or choice questions.')
         return value
 
 
@@ -723,16 +710,14 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         data = super().validate(data)
-        event = self.context['event']
 
         try:
             full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
             full_data.update(data)
         except rest_framework.exceptions.ValidationError as e:
             # we already have invalid state in the database, what should we do? hope it gets better after saving?
-            print(e)
+            logger.exception("Invalid state in database, ignoring some validations!")
         else:
-            print('full_data', full_data)
             #if full_data.get('ask_during_checkin') and full_data.get('dependency_question'):
             #    raise ValidationError('Dependencies are not supported during check-in.')
 
@@ -750,19 +735,6 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
 
         return data
 
-    def validate_children(self, value):
-        prev_questions = {}
-        for child in value:
-            if child.get('dependency_question'):
-                if (child['dependency_question']['user_datafield'] or child['dependency_question']['system_datafield']) not in prev_questions:
-                    raise ValidationError('A question can only depend on a previous question from the same questionnaire.')
-
-            if child['user_datafield']:
-                prev_questions[child['user_datafield']] = child
-            if child['system_datafield']:
-                prev_questions[child['system_datafield']] = child
-        return value
-
     @transaction.atomic
     def create(self, validated_data):
         children_data = validated_data.pop('children') if 'children' in validated_data else []
@@ -779,9 +751,11 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
         return questionnaire
 
     def set_children(self, questionnaire, new_data):
-        result = []
+        result = {}
         child_serializer = self.fields['children'].child
-        existing = questionnaire.children.all()
+        existing_children = questionnaire.children.all()
+        def q(qc):
+            return qc['user_datafield'] or qc['system_datafield']
         for i, d in enumerate(new_data):
             d['questionnaire'] = questionnaire
             d['position'] = i + 1
@@ -789,13 +763,20 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
             d.setdefault('help_text', None)
             d.setdefault('dependency_question', None)
             d.setdefault('dependency_values', None)
-        updatable = min(len(existing), len(new_data))
-        for i in range(0, updatable):
-            result.append(child_serializer.update(existing[i], new_data[i]))
-        for i in range(updatable, len(new_data)):
-            result.append(child_serializer.create(new_data[i]))
-        for i in range(updatable, len(existing)):
-            existing[i].delete()
+        for existing, update_data in zip_longest(existing_children, new_data):
+            if update_data:
+                if update_data.get('dependency_question'):
+                    try:
+                        update_data['dependency_question'] = result[q(update_data['dependency_question'])]
+                    except KeyError:
+                        raise ValidationError('A question can only depend on a previous question from the same questionnaire.')
+                if existing:
+                    print(existing, update_data)
+                    result[q(update_data)] = child_serializer.update(existing, update_data)
+                else:
+                    result[q(update_data)] = child_serializer.create(update_data)
+            else:
+                existing.delete()
         return result
 
 
