@@ -7,14 +7,14 @@
     {% if question %}
         {% blocktrans with name=question.question %}Data field: {{ name }}{% endblocktrans %}
     {% else %}
-        {% trans "Question" %}
+        {% trans "Create new data field" %}
     {% endif %}
 {% endblock %}
 {% block inside %}
     {% if question %}
         <h1>{% blocktrans with name=question.question %}Data field: {{ name }}{% endblocktrans %}</h1>
     {% else %}
-        <h1>{% trans "Data field" %}</h1>
+        <h1>{% trans "Create new data field" %}</h1>
     {% endif %}
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
@@ -114,9 +114,6 @@
             </div>
         </div>
         {% bootstrap_field form.identifier layout="control" %}
-        {% if form.ask_during_checkin %}
-            {% bootstrap_field form.ask_during_checkin layout="control" %}
-        {% endif %}
         {% if form.show_during_checkin %}
             {% bootstrap_field form.show_during_checkin layout="control" %}
         {% endif %}

@@ -4,14 +4,17 @@ import NativeDialog from './NativeDialog.vue';
 import I18nTextField from './I18nTextField.vue';
 import {useId, ref, computed} from 'vue'
 import { DragHandle } from 'vue-slicksort';
-import {getDatafieldEditUrl} from "./api";
+import {getDatafieldCreateUrl, getDatafieldEditUrl} from "./api";
 import I18nTextArea from "./I18nTextArea.vue";
+import DjangoDialog from "./DjangoDialog.vue";
 
 const id = useId();
 const props = defineProps(['question', 'datafields', 'editable', 'possible_dependencies'])
-const emit = defineEmits(['removeSelf', 'update']);
+const emit = defineEmits(['removeSelf', 'update', 'invalidate:datafields']);
 const gettext = (window as any).gettext;
 const question = ref(props.question);
+
+const dlgEditDatafield = ref()
 
 const df = typeof question.value.question === 'number' ?
 		props.datafields.find(el => el.id === question.value.question) :
@@ -106,7 +109,7 @@ const editor = ref();
             <p class="form-control-static">
 							<template v-if="typeof question.question === 'number'">
 								{{ df.internal_name }}
-								<a :href="getDatafieldEditUrl(df.id)" target="_blank">Manage data field details</a>
+								<a href="javascript:" @click="dlgEditDatafield.open(getDatafieldEditUrl(df.id))">Manage data field details</a>
 							</template>
 							<template v-else>
 								{{ question.question }}
@@ -157,5 +160,7 @@ const editor = ref();
         <button @click="editor.close(); emit('update')" class="btn btn-primary pull-right"><span class="fa fa-check"></span> Save and close</button>
         <button @click="emit('removeSelf')" class="btn btn-default">Remove from questionnaire</button>
     </NativeDialog>
+
+		<DjangoDialog ref="dlgEditDatafield" @confirm="emit('invalidate:datafields')"></DjangoDialog>
   </Teleport>
 </template>

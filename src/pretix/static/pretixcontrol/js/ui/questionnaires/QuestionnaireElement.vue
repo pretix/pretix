@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useId, ref, computed} from 'vue'
+import {useId, ref, computed, onMounted} from 'vue'
 import QuestionElement from "./QuestionElement.vue";
 import {
 	i18n_any,
@@ -14,17 +14,19 @@ import I18nTextField from "./I18nTextField.vue";
 import NativeDialog from "./NativeDialog.vue";
 import { SlickList, SlickItem, DragHandle } from 'vue-slicksort';
 import {getDatafieldCreateUrl} from "./api";
+import DjangoDialog from "./DjangoDialog.vue";
 
 const dlgEditor = ref()
 const dlgAddExisting = ref()
 const dlgAddTextblock = ref()
+const dlgNewDatafield = ref()
 
 const newTextblockTitle = ref()
 const newTextblockText = ref()
 
 const id = useId();
 const props = defineProps(['questionnaire', 'datafields', 'selected_product', 'grouped_items', 'preview_mode', 'err_mes'])
-const emit = defineEmits(['update'])
+const emit = defineEmits(['update', 'invalidate:datafields'])
 
 for (let qc of props.questionnaire.children) {
 	if (!qc._cid) qc._cid = useId();
@@ -74,7 +76,12 @@ function addTextblock () {
 }
 
 function newDatafield (container_type) {
-	location.href = getDatafieldCreateUrl(container_type)
+	dlgNewDatafield.value.dialog.show()
+}
+
+async function onNewDatafieldCreated (data) {
+	await emit('invalidate:datafields')
+	dlgAddExisting.value.show()
 }
 
 const isHidden = computed(() => props.selected_product && props.questionnaire.items.indexOf(props.selected_product) === -1)
@@ -98,7 +105,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 
 				<aside class="editor-action-area"><div class="btn-group">
 					<DragHandle tag="button" class="btn btn-default" v-if="!preview_mode"><i class="fa fa-arrows"></i></DragHandle>
-					<button class="btn btn-default" @click="dlgEditor.show()"><i class="fa fa-edit"></i></button>
+					<button class="btn btn-default" @click="dlgEditor.show()"><i class="fa fa-wrench"></i></button>
 				</div></aside>
 			</div>
     </summary>
@@ -113,7 +120,8 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 										:editable="true"
 										:possible_dependencies="props.questionnaire.children.slice(0, index)"
 										@remove-self="questionnaire.children.splice(index, 1); emit('update')"
-										@update="emit('update')"/>
+										@update="emit('update')"
+										@invalidate:datafields="emit('invalidate:datafields')"/>
 					</SlickItem>
 				</SlickList>
       </div>
@@ -217,5 +225,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
         <button @click="dlgAddTextblock.close()" class="btn btn-default pull-right">{{ gettext('Cancel') }}</button>
 
     </NativeDialog>
+
+		<DjangoDialog ref="dlgNewDatafield" :default-url="getDatafieldCreateUrl(questionnaire.type[0])" @confirm="onNewDatafieldCreated"></DjangoDialog>
   </Teleport>
 </template>
