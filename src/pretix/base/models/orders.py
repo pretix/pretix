@@ -1628,14 +1628,17 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
 
         self.questions = []
         for qc in children:
-            if qc.user_datafield_id and qc.user_datafield_id in self.answer_cache:
-                qc.answer = self.answer_cache[qc.user_datafield_id]
+            if qc.user_datafield_id:
+                if qc.user_datafield_id in self.answer_cache:
+                    qc.answer = self.answer_cache[qc.user_datafield_id]
+                else:
+                    qc.answer = ""
                 #qc.answer.question = qc  # cache object
             elif qc.system_datafield:
                 qc.answer = self.get_system_answer(qc.system_datafield)
                 #qc.answer.question = qc  # cache object
             else:
-                qc.answer = ""
+                continue
             if not qc.dependency_question_id or qc_is_visible(qc.dependency_question_id, qc.dependency_values):
                 self.questions.append(qc)
 
