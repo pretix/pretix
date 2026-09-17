@@ -119,8 +119,8 @@ class BaseQuestionsViewMixin:
             override_sets = self.get_question_override_sets(cr, idx)
             for overrides in override_sets:
                 for question_name, question_field in form.fields.items():
-                    if hasattr(question_field, 'question'):
-                        src = overrides.get(question_field.question.identifier)
+                    if hasattr(question_field, 'datafield'):
+                        src = overrides.get(question_field.datafield.identifier)
                     else:
                         src = overrides.get(question_name)
                     if not src:
@@ -184,7 +184,7 @@ class BaseQuestionsViewMixin:
                                 field, v,
                                 checkoutsession=checkoutsession,
                                 order=order,
-                                question=field.question,
+                                question=field.datafield,
                             )
 
         for form in self.forms:
@@ -246,7 +246,7 @@ class BaseQuestionsViewMixin:
                                 field, v,
                                 cartposition=cartposition,
                                 orderposition=orderposition,
-                                question=field.question,
+                                question=field.datafield,
                             )
 
                             answer_dict = self._build_answer_dict(field, answer, k)
@@ -331,8 +331,8 @@ class BaseQuestionsViewMixin:
             'field_name': k,
             'field_label': str(field.label),
             'value': answer_value,
-            'question_type': field.question.type,
-            'question_identifier': field.question.identifier,
+            'question_type': field.datafield.type,
+            'question_identifier': field.datafield.identifier,
         }
 
 
