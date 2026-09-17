@@ -550,13 +550,12 @@ class DatafieldSerializer(I18nAwareModelSerializer):
     options = InlineQuestionOptionSerializer(many=True, required=False)
     identifier = serializers.CharField(allow_null=True)
     internal_name = serializers.CharField(allow_null=True, source='question', read_only=True)
-    dependency_value = LegacyDependencyValueField(source='dependency_values', required=False, allow_null=True)
 
     class Meta:
         model = Question
         fields = ('id', 'question', 'type', 'required', 'items', 'options', 'position',
-                  'ask_during_checkin', 'show_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
-                  'hidden', 'dependency_value', 'print_on_invoice', 'help_text', 'valid_number_min',
+                  'ask_during_checkin', 'show_during_checkin', 'identifier',
+                  'hidden', 'print_on_invoice', 'help_text', 'valid_number_min',
                   'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
                   'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait', 'internal_name',)
 
@@ -569,14 +568,6 @@ class DatafieldSerializer(I18nAwareModelSerializer):
             self.instance.clean_type_change(self.instance.type, value)
         return value
 
-    def validate_dependency_question(self, value):
-        if value:
-            if value.type not in (Question.TYPE_CHOICE, Question.TYPE_BOOLEAN, Question.TYPE_CHOICE_MULTIPLE):
-                raise ValidationError('Question dependencies can only be set to boolean or choice questions.')
-            if value == self.instance:
-                raise ValidationError('A question cannot depend on itself.')
-        return value
-
     def validate(self, data):
         data = super().validate(data)
         if self.instance and 'options' in data:
@@ -587,21 +578,6 @@ class DatafieldSerializer(I18nAwareModelSerializer):
 
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
         full_data.update(data)
-
-        if full_data.get('ask_during_checkin') and full_data.get('dependency_question'):
-            raise ValidationError('Dependencies are not supported during check-in.')
-
-        dep = full_data.get('dependency_question')
-        if dep:
-            if dep.ask_during_checkin:
-                raise ValidationError(_('Question cannot depend on a question asked during check-in.'))
-
-            seen_ids = {self.instance.pk} if self.instance else set()
-            while dep:
-                if dep.pk in seen_ids:
-                    raise ValidationError(_('Circular dependency between questions detected.'))
-                seen_ids.add(dep.pk)
-                dep = dep.dependency_question
 
         if full_data.get('ask_during_checkin') and full_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
             raise ValidationError(_('This type of question cannot be asked during check-in.'))
