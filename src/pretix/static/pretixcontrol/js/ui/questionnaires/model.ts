@@ -4,7 +4,7 @@ export type ApiListResponse<T> = {
 	next: string | null,
 	previous: string | null,
 	results: T[],
-};
+}
 
 // from webcheckin/i18n.ts
 export type I18nString = string | Record<string, string> | null | undefined;
@@ -35,7 +35,7 @@ export type Datafield = {
 	valid_string_length_max: null | number,
 	valid_file_portrait: boolean,
 	internal_name: string,
-};
+}
 
 export type Questionnaire = {
 	id: number,
@@ -46,7 +46,7 @@ export type Questionnaire = {
 	all_sales_channels: boolean,
 	limit_sales_channels: string[],
 	children: QuestionnaireChild[],
-};
+}
 
 export type QuestionnaireChild = {
 	question: string | number,
@@ -55,11 +55,18 @@ export type QuestionnaireChild = {
 	help_text: I18nString,
 	dependency_question: number | null,
 	dependency_values: null | string[],
-};
+}
 
 export type Item = {
 	id: number,
 	category: number,
 	name: I18nString,
 	internal_name: string | null,
-};
+}
+
+export type Category = {
+	id: number,
+	position: number,
+	name: I18nString,
+	internal_name: string | null,
+}

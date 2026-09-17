@@ -1,5 +1,6 @@
 import { ApiListResponse, Datafield, Questionnaire, Item, Category } from './model'
 import { ProgressBar } from "./ProgressBar";
+import {fromJsonScript} from "./helper";
 
 const organizer_slug = document.body.getAttribute('data-organizer'),
 	event_slug = document.body.getAttribute('data-event')
@@ -20,15 +21,26 @@ async function api_get_all<T>(resource): Promise<T[]> {
 	return result
 }
 
+class APIError extends Error {
+	api_error: string;
+	constructor(json) {
+		super('' + Object.values(json)[0]);
+		this.api_error = json;
+	}
+}
 async function api_json_request(resource, method, json_body) {
-	return await (await fetch(`/api/v1/${resource}`, {
+	const response = await fetch(`/api/v1/${resource}`, {
 		body: JSON.stringify(json_body),
 		method: method,
 		headers: {
 			'Content-Type': 'application/json',
 			'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val() as string,
 		},
-	})).json()
+	});
+	if (response.status >= 400)
+		throw new APIError(await response.json());
+	else
+		return await response.json()
 }
 
 export async function getDatafields(container_type) {
@@ -59,14 +71,14 @@ export async function getCategories() {
 	return await api_get_all<Category>(`organizers/${organizer_slug}/events/${event_slug}/categories/`);
 }
 
-function get_json_script_value(id) {
-	return JSON.parse(document.getElementById(id).innerText);
-}
-
 export function getEventLocales() {
-	return get_json_script_value('event_locales');
+	return fromJsonScript('event_locales');
 }
 
 export function getDatafieldEditUrl(datafield_id) {
-	return get_json_script_value('datafield_edit_url').replace('/0/', `/${datafield_id}/`);
+	return fromJsonScript('datafield_edit_url').replace('/0/', `/${datafield_id}/`);
+}
+
+export function getDatafieldCreateUrl(container_type) {
+	return fromJsonScript('datafield_create_url') + '?container_type=' + container_type;
 }

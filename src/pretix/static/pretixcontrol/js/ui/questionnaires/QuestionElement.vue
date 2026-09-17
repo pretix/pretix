@@ -5,10 +5,11 @@ import I18nTextField from './I18nTextField.vue';
 import {useId, ref, computed} from 'vue'
 import { DragHandle } from 'vue-slicksort';
 import {getDatafieldEditUrl} from "./api";
+import I18nTextArea from "./I18nTextArea.vue";
 
 const id = useId();
 const props = defineProps(['question', 'datafields', 'editable', 'possible_dependencies'])
-const emit = defineEmits(['removeSelf']);
+const emit = defineEmits(['removeSelf', 'update']);
 const gettext = (window as any).gettext;
 const question = ref(props.question);
 
@@ -28,55 +29,61 @@ const editor = ref();
 </script>
 
 <template>
-  <div class="form-group">
-    <div class="question-edit-buttons" v-if="editable"><div class="btn-group">
-			<DragHandle tag="button" class="btn btn-default"><i class="fa fa-arrows"></i></DragHandle>
-      <button class="btn btn-default" @click="editor.show()"><i class="fa fa-edit"></i></button>
-    </div></div>
+	<div class="editor-row">
+		<div class="editor-preview-area">
+			<div class="form-group">
 
-		<template v-if="df">
-			<div v-if="question.dependency_question" class="dependency-info debuginfo">
-				<span><span class="fa fa-link"></span> {{ question.dependency_question }} = {{ dependency_values_resolved }}</span>
-			</div>
-			<div class="col-md-3 control-label label-empty" v-if="df.type === QUESTION_TYPE.BOOLEAN"></div>
-			<label class="col-md-3 control-label" :for="id" v-else>
-				{{ i18n_any(question.label) }}
-			</label>
-			<div class="col-md-9">
-				<input :id="id" type="text" v-if="df.type === QUESTION_TYPE.STRING || df.type === QUESTION_TYPE.PHONENUMBER" class="form-control">
-				<textarea :id="id" v-if="df.type === QUESTION_TYPE.TEXT" class="form-control"></textarea>
-				<div class="checkbox" v-if="df.type === QUESTION_TYPE.BOOLEAN">
-					<label :for="id">
-						<input :id="id" type="checkbox"> {{ i18n_any(question.label) }}
+				<template v-if="df">
+					<div v-if="question.dependency_question" class="dependency-info debuginfo">
+						<span><span class="fa fa-link"></span> {{ question.dependency_question }} = {{ dependency_values_resolved }}</span>
+					</div>
+					<div class="col-md-3 control-label label-empty" v-if="df.type === QUESTION_TYPE.BOOLEAN"></div>
+					<label class="col-md-3 control-label" :for="id" v-else>
+						{{ i18n_any(question.label) }}
 					</label>
+					<div class="col-md-9">
+						<input :id="id" type="text" v-if="df.type === QUESTION_TYPE.STRING || df.type === QUESTION_TYPE.PHONENUMBER" class="form-control">
+						<textarea :id="id" v-if="df.type === QUESTION_TYPE.TEXT" class="form-control"></textarea>
+						<div class="checkbox" v-if="df.type === QUESTION_TYPE.BOOLEAN">
+							<label :for="id">
+								<input :id="id" type="checkbox"> {{ i18n_any(question.label) }}
+							</label>
+						</div>
+						<input :id="id" type="number" v-if="df.type === QUESTION_TYPE.NUMBER" class="form-control">
+						<input :id="id" type="file" v-if="df.type === QUESTION_TYPE.FILE" class="form-control">
+						<select :id="id" class="form-control"
+							v-if="df.type === QUESTION_TYPE.CHOICE || df.type === QUESTION_TYPE.COUNTRYCODE">
+							<option></option>
+							<option v-for="opt in df.options">{{ i18n_any(opt.answer) }}</option>
+						</select>
+						<div class="checkbox" v-if="df.type === QUESTION_TYPE.CHOICE_MULTIPLE" v-for="(opt, index) in df.options">
+							<label :for="`${id}-${index}`">
+								<input :id="`${id}-${index}`" type="checkbox"> {{ i18n_any(opt.answer) }}
+							</label>
+						</div>
+						<div class="help-block" v-html="question.rendered_help_text" v-if="question.rendered_help_text"></div>
+					</div>
+				</template>
+				<div v-else class="col-md-9 col-md-push-3">
+					<h4>{{ i18n_any(question.label) }}</h4>
+					<p v-html="question.rendered_help_text" v-if="question.rendered_help_text"></p>
 				</div>
-				<input :id="id" type="number" v-if="df.type === QUESTION_TYPE.NUMBER" class="form-control">
-				<input :id="id" type="file" v-if="df.type === QUESTION_TYPE.FILE" class="form-control">
-				<select :id="id" class="form-control"
-					v-if="df.type === QUESTION_TYPE.CHOICE || df.type === QUESTION_TYPE.COUNTRYCODE">
-					<option></option>
-					<option v-for="opt in df.options">{{ i18n_any(opt.answer) }}</option>
-				</select>
-				<div class="checkbox" v-if="df.type === QUESTION_TYPE.CHOICE_MULTIPLE" v-for="(opt, index) in df.options">
-					<label :for="`${id}-${index}`">
-						<input :id="`${id}-${index}`" type="checkbox"> {{ i18n_any(opt.answer) }}
-					</label>
-				</div>
-				<div class="help-block">{{ i18n_any(question.help_text) }}</div>
 			</div>
-		</template>
-		<div v-else class="col-md-12">
-			<h3>{{ i18n_any(question.label) }}</h3>
-			<p>{{ i18n_any(question.help_text) }}</p>
 		</div>
-  </div>
+		<aside class="editor-action-area">
+			<div class="btn-group" v-if="editable">
+				<DragHandle tag="button" class="btn btn-default"><i class="fa fa-arrows"></i></DragHandle>
+				<button class="btn btn-default" @click="editor.show()"><i class="fa fa-edit"></i></button>
+			</div>
+		</aside>
+	</div>
 
   <Teleport to="body">
     <NativeDialog ref="editor" class="modal-card"
-                  title="Edit question">
+                  :title="df ? gettext('Edit question') : gettext('Edit text block')">
         <div class="form-group">
           <label class="col-md-3 control-label">
-            {{ gettext('Question') }}
+            {{ df ? gettext('Question') : gettext('Headline') }}
           </label>
           <div class="col-md-9">
             <I18nTextField :value="question.label"/>
@@ -87,11 +94,11 @@ const editor = ref();
             {{ gettext('Help text') }}
           </label>
           <div class="col-md-9">
-            <I18nTextField :value="question.help_text"/>
+            <I18nTextArea :value="question.help_text"/>
             <div class="help-block">Wenn diese Frage noch weitere Erklärung braucht, können Sie sie hier eintragen.</div>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" v-if="df">
           <label class="col-md-3 control-label">
             Data field
           </label>
@@ -107,7 +114,7 @@ const editor = ref();
 						</p>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" v-if="df">
           <label class="col-md-3 control-label">
             Data field type
           </label>
@@ -117,7 +124,7 @@ const editor = ref();
             </select>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" v-if="df">
         	<label class="col-md-3 control-label label-empty">&nbsp;</label>
           <div class="col-md-9">
           	<div class="checkbox">
@@ -147,7 +154,7 @@ const editor = ref();
           </div>
         </div>
 
-        <button @click="editor.close()" class="btn btn-primary pull-right"><span class="fa fa-check"></span> Save and close</button>
+        <button @click="editor.close(); emit('update')" class="btn btn-primary pull-right"><span class="fa fa-check"></span> Save and close</button>
         <button @click="emit('removeSelf')" class="btn btn-default">Remove from questionnaire</button>
     </NativeDialog>
   </Teleport>
