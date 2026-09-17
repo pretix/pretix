@@ -50,6 +50,7 @@ from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import QuerySet
+from django.db import ProgrammingError
 from django.forms import Select, widgets
 from django.forms.widgets import FILE_INPUT_CONTRADICTION
 from django.utils.formats import date_format
@@ -865,6 +866,8 @@ class BaseQuestionsForm(forms.Form):
                 initial=initial,
                 widget=WrappedPhoneNumberPrefixWidget()
             )
+        else:
+            raise ProgrammingError('Invalid question type')
         field.datafield = datafield
         if answers:
             # Cache the answer object for later use
@@ -879,6 +882,15 @@ class BaseQuestionsForm(forms.Form):
             field.required = False
 
         return field
+
+    def build_text_block(self, request, event, qc):
+        return forms.CharField(  # TODO(questionnaires): use a less hacky way to format this field
+            required=False,
+            label="",
+            help_text=rich_text((f"#### {qc.label}\n" if qc.label else "") + str(qc.help_text)),
+            disabled=True,
+            widget=QuestionCheckboxSelectMultiple,
+        )
 
     def check_user_questions(self, d):
         question_cache = {f.question.pk: f.question for f in self.fields.values() if getattr(f, 'question', None)}
@@ -986,6 +998,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
         if cartpos and item.validity_mode == Item.VALIDITY_MODE_DYNAMIC and item.validity_dynamic_start_choice:
             self.fields['requested_valid_from'] = self.build_requested_valid_from_field(event, pos, item)
 
+        idx = 0
         for questionnaire in questionnaires:
             for child in getattr(questionnaire, 'childlist', questionnaire.children.all()):
                 if child.user_datafield:
@@ -993,6 +1006,9 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                     self.fields['question_%s' % df.id] = self.build_user_question_field(request, event, pos.answerlist, child, df)
                 elif child.system_datafield:
                     self.fields[child.system_datafield] = self.build_system_question_field(request, event, pos, child)
+                else:
+                    self.fields['text_%d' % idx] = self.build_text_block(request, event, child)
+                    idx += 1
 
         responses = question_form_fields.send(sender=event, position=pos)
         data = pos.meta_info_data
