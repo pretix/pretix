@@ -32,7 +32,7 @@ from paypalhttp.http_response import Result
 from pretix.base.models import (
     Event, Order, OrderPayment, OrderRefund, Organizer, Team, User,
 )
-from pretix.plugins.paypal.models import ReferencedPayPalObject
+from pretix.plugins.paypal2.models import ReferencedPayPalObject
 
 
 @pytest.fixture
