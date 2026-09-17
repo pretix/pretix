@@ -755,7 +755,6 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
                     except KeyError:
                         raise ValidationError('A question can only depend on a previous question from the same questionnaire.')
                 if existing:
-                    print(existing, update_data)
                     result[q(update_data)] = child_serializer.update(existing, update_data)
                 else:
                     result[q(update_data)] = child_serializer.create(update_data)
