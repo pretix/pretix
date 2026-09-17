@@ -49,8 +49,8 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db.models import QuerySet
 from django.db import ProgrammingError
+from django.db.models import Prefetch, QuerySet
 from django.forms import Select, widgets
 from django.forms.widgets import FILE_INPUT_CONTRADICTION
 from django.utils.formats import date_format
@@ -82,7 +82,7 @@ from pretix.base.i18n import (
 from pretix.base.invoicing.transmission import (
     get_transmission_types, transmission_types,
 )
-from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption
+from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption, Questionnaire, QuestionnaireChild
 from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.services.tax import (
     VATIDFinalError, VATIDTemporaryError, normalize_vat_id, validate_vat_id,
@@ -953,15 +953,34 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
 
         super().__init__(*args, **kwargs)
 
-        # TODO(questionnaires) - switch olq's to questionnaires !
-        questions = Question.objects.filter(
-            event=event, container_type=Question.ContainerType.ORDER,
-            ask_during_checkin=False, hidden=False,
-        ).order_by('position')
+        questionnaires = Questionnaire.objects.filter(
+            event=event, type=Questionnaire.QuestionnaireType.ORDER_SALE,
+        ).order_by('position').prefetch_related(
+            Prefetch('children', QuestionnaireChild.objects.prefetch_related(
+                Prefetch('user_datafield', Question.objects.prefetch_related(
+                    Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
+                        # This prefetch statement is utter bullshit, but it actually prevents Django from doing
+                        # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
+                        # a prefetch lookup on this query...
+                        'question',
+                        Question.objects.none(),
+                        to_attr='dummy'
+                    )))
+                ))
+            ),
+            to_attr='childlist')
+        )
         answerlist = container.answers.prefetch_related('options')
 
-        for q in questions:
-            self.fields['question_%s' % q.id] = self.build_user_question_field(request, event, answerlist, q)
+        idx = 0
+        for questionnaire in questionnaires:
+            for child in getattr(questionnaire, 'childlist', questionnaire.children.all()):
+                if child.user_datafield:
+                    df = child.user_datafield
+                    self.fields['question_%s' % df.id] = self.build_user_question_field(request, event, answerlist, child, df)
+                else:
+                    self.fields['text_%d' % idx] = self.build_text_block(request, event, child)
+                    idx += 1
 
     def clean(self):
         d = super().clean()
