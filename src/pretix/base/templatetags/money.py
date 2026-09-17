@@ -36,7 +36,7 @@ register = template.Library()
 
 @register.filter("money")
 def money_filter(value: Decimal, arg='', hide_currency=False):
-    if isinstance(value, (float, int)):
+    if isinstance(value, (float, int, str)):
         value = Decimal(value)
     if value is None:
         value = Decimal('0.00')
