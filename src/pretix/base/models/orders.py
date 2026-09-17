@@ -1690,20 +1690,21 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
                 else self.variation.quotas.filter(subevent=self.subevent))
 
     def save(self, *args, **kwargs):
-        update_fields = kwargs.get('update_fields', set())
-        if 'attendee_name_parts' in update_fields:
-            kwargs['update_fields'] = {'attendee_name_cached'}.union(kwargs['update_fields'])
+        def ensure_updated(fieldname):
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {fieldname}.union(kwargs['update_fields'])
+
+        if 'attendee_name_parts' in kwargs.get('update_fields', set()):
+            ensure_updated('attendee_name_cached')
 
         name = self.attendee_name
         if name != self.attendee_name_cached:
             self.attendee_name_cached = name
-            if 'update_fields' in kwargs:
-                kwargs['update_fields'] = {'attendee_name_cached'}.union(kwargs['update_fields'])
+            ensure_updated('attendee_name_cached')
 
         if self.attendee_name_parts is None:
             self.attendee_name_parts = {}
-            if 'update_fields' in kwargs:
-                kwargs['update_fields'] = {'attendee_name_parts'}.union(kwargs['update_fields'])
+            ensure_updated('attendee_name_parts')
         super().save(*args, **kwargs)
 
     @property
