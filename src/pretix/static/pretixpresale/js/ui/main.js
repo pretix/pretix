@@ -713,7 +713,7 @@ $(function () {
 	$('[data-checked-onchange]').each(function () {
 		let countInput = this
 		$('#' + this.getAttribute('data-checked-onchange')).on('input', function () {
-			if (countInput.type === 'checkbox') {
+			if (countInput.type === 'checkbox' || countInput.type == "radio") {
 				if (countInput.checked) return
 				countInput.checked = true
 			} else if (countInput.type === 'number' && !countInput.valueAsNumber) {
