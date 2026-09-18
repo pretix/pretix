@@ -32,8 +32,7 @@ choices                               list of objects            List of JSON ob
                                                                  for this property, or ``null`` for no limitation.
                                                                  Each choice object has a required internal name named
                                                                  ``key`` and optional public name named ``label``
-                                                                 consisting of a dictionary of i18n string translations,
-                                                                 as well as other implementation based key-value-pairs
+                                                                 consisting of a dictionary of i18n string translations
 ===================================== ========================== =======================================================
 
 Endpoints
@@ -76,11 +75,9 @@ Endpoints
             "choices": [
                 {
                     "key": "blue",
-                    "ORDER": 1,
                     "label": {
                         "en": "Blue"
                     },
-                    "DELETE": false
                 }
             ]
           }
