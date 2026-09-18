@@ -32,13 +32,18 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import logging
 from datetime import timedelta
 from decimal import Decimal
 from io import BytesIO
+from pathlib import Path
 
+import pypdfium2
 import pytest
+from django.core.files import File
 from django.utils.timezone import now
 from django_scopes import scope
+from PIL import ImageChops
 from pypdf import PdfReader
 
 from pretix.base.models import (
@@ -118,3 +123,53 @@ def test_generate_pdf_multi(env):
     assert ftype == 'application/pdf'
     pdf = PdfReader(BytesIO(buf))
     assert len(pdf.pages) == 1
+
+
+def asset_path(name):
+    return Path(__file__).parent / "assets" / name
+
+
+def compare_pdfs(pdf_dir: Path, inp_a: Path | bytes, inp_b: Path | bytes):
+    logging.info(f"Comparing pdfs, writing files to {pdf_dir}")
+
+    pdf_a = pypdfium2.PdfDocument(inp_a)
+    pdf_b = pypdfium2.PdfDocument(inp_b)
+
+    pdf_a.save(pdf_dir / "a.pdf")
+    pdf_a.save(pdf_dir / "b.pdf")
+
+    assert len(pdf_a) == len(pdf_b)
+
+    for i, (expected_page, output_page) in enumerate(zip(pdf_a, pdf_b)):
+        expected_render = expected_page.render()
+        output_render = output_page.render()
+        assert expected_render.height == output_render.height
+        assert expected_render.width == output_render.width
+
+        diff = ImageChops.difference(expected_render.to_pil(), output_render.to_pil())
+        if diff.getbbox():
+            diff.save(pdf_dir / f"{i}.png")
+            assert not diff.getbbox(), f"Page {i} differs."
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("case", [
+    "bg-rotated",
+    "bg-mediabox-offset",
+    "bg-cropbox"
+])
+def test_generate_pdf_weird_bgs(pdf_dir, env, case):
+    event, order, shirt = env
+    asset_folder = asset_path(case)
+    with open(asset_folder / "bg.pdf", 'rb') as fi:
+        event.badge_layouts.create(name="Default", default=True, background=File(fi, name="test.pdf"))
+    e = BadgeExporter(event, organizer=event.organizer)
+    fname, ftype, buf = e.render({
+        'items': [shirt.pk],
+        'rendering': 'one',
+        'include_pending': True
+    })
+    assert ftype == 'application/pdf'
+    assert buf
+
+    compare_pdfs(pdf_dir, buf, asset_folder / "expected.pdf")

@@ -129,6 +129,7 @@ dev = [
   "pytest==9.1.*",
   "playwright",
   "responses",
+  "pypdfium2"
 ]
 
 [project.entry-points."distutils.commands"]
