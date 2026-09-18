@@ -555,7 +555,7 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
             question=self.object, orderposition__isnull=False,
         )
         qs = qs.filter(orderposition__in=opqs)
-        op_cnt = opqs.filter(item__in=self.object.items.all()).count()
+        op_cnt = 0 # TODO opqs.filter(item__in=self.object.items.all()).count()
 
         if self.object.type == Question.TYPE_FILE:
             qs = [
@@ -600,7 +600,7 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-        ctx['items'] = self.object.items.exists()
+        #ctx['items'] = self.object.items.exists()
         ctx['has_subevents'] = self.request.event.has_subevents
         stats = self.get_answer_statistics()
         ctx['stats'], ctx['total'] = stats

@@ -4,7 +4,7 @@ import NativeDialog from './NativeDialog.vue';
 import I18nTextField from './I18nTextField.vue';
 import {useId, ref, computed} from 'vue'
 import { DragHandle } from 'vue-slicksort';
-import {getDatafieldCreateUrl, getDatafieldEditUrl} from "./api";
+import {getDatafieldCreateUrl, getDatafieldEditUrl, getDatafieldViewUrl} from "./api";
 import I18nTextArea from "./I18nTextArea.vue";
 import DjangoDialog from "./DjangoDialog.vue";
 
@@ -16,11 +16,11 @@ const question = ref(props.question);
 
 const dlgEditDatafield = ref()
 
-const df = typeof question.value.question === 'number' ?
+const df = computed(() => typeof question.value.question === 'number' ?
 		props.datafields.find(el => el.id === question.value.question) :
 	typeof question.value.question === 'string' ?
 		SYSTEM_DATAFIELDS[question.value.question] :
-		null;
+		null);
 
 const dependency_values_options = computed(() => props.datafields.find(el => el.id === question.value.dependency_question)?.options);
 const dependency_values_resolved = computed(() => question.value.dependency_values.map(ident => i18n_any(dependency_values_options.value.find(opt => opt.identifier === ident)?.answer) ?? ident));
@@ -109,7 +109,10 @@ const editor = ref();
             <p class="form-control-static">
 							<template v-if="typeof question.question === 'number'">
 								{{ df.internal_name }}
-								<a href="javascript:" @click="dlgEditDatafield.open(getDatafieldEditUrl(df.id))">Manage data field details</a>
+								<div>
+									<a class="btn btn-sm btn-default" href="javascript:" @click="dlgEditDatafield.open(getDatafieldEditUrl(df.id))"><span class="fa fa-wrench"></span> Manage data field details</a>
+									<a class="btn btn-sm btn-default" :href="getDatafieldViewUrl(df.id)" target="_blank"><span class="fa fa-external-link"></span> View answers</a>
+								</div>
 							</template>
 							<template v-else>
 								{{ question.question }}
@@ -161,6 +164,6 @@ const editor = ref();
         <button @click="emit('removeSelf')" class="btn btn-default">Remove from questionnaire</button>
     </NativeDialog>
 
-		<DjangoDialog ref="dlgEditDatafield" @confirm="emit('invalidate:datafields')"></DjangoDialog>
+		<DjangoDialog ref="dlgEditDatafield" @confirm="emit('invalidate:datafields')" max-width="60em"></DjangoDialog>
   </Teleport>
 </template>

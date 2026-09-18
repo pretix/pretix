@@ -900,6 +900,7 @@ tbody th {
 
 html.in-iframe body { background: white }
 .in-iframe #wrapper > nav.navbar, .in-iframe #page-wrapper > div > footer { display: none; }
+.in-iframe #page-wrapper { padding: 0 15px; min-height: 568px; border-left: 0; margin: 0; }
 
 @import "../../pretixbase/scss/_rtl.scss";
 @import "../../bootstrap/scss/_rtl.scss";

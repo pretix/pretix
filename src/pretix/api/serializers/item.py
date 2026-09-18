@@ -553,9 +553,9 @@ class DatafieldSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'question', 'type', 'required', 'items', 'options', 'position',
-                  'ask_during_checkin', 'show_during_checkin', 'identifier',
-                  'hidden', 'print_on_invoice', 'help_text', 'valid_number_min',
+        fields = ('id', 'question', 'type', 'options',
+                  'show_during_checkin', 'identifier',
+                  'hidden', 'print_on_invoice', 'valid_number_min',
                   'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
                   'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait', 'internal_name',)
 
@@ -682,6 +682,7 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         self.fields['children'] = InlineQuestionnaireChildSerializer(many=True, required=True, context=kwargs['context'], partial=False)
+        self.fields['limit_sales_channels'].child_relation.queryset = kwargs['context']['event'].organizer.sales_channels.all()
         super().__init__(*args, **kwargs)
 
     def validate(self, data):

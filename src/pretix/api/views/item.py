@@ -463,7 +463,7 @@ with scopes_disabled():
     class QuestionFilter(FilterSet):
         class Meta:
             model = Question
-            fields = ['ask_during_checkin', 'required', 'identifier']
+            fields = ['identifier']
 
 
 class DatafieldViewSet(ConditionalListView, viewsets.ModelViewSet):
@@ -471,8 +471,8 @@ class DatafieldViewSet(ConditionalListView, viewsets.ModelViewSet):
     queryset = Question.objects.none()
     filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     filterset_class = QuestionFilter
-    ordering_fields = ('id', 'position')
-    ordering = ('position', 'id')
+    ordering_fields = ('id')
+    ordering = ('id')
     permission = None
     write_permission = 'event.items:write'
 
@@ -568,11 +568,18 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
         super().perform_destroy(instance)
 
 
+with scopes_disabled():
+    class QuestionnaireFilter(FilterSet):
+        class Meta:
+            model = Questionnaire
+            fields = ['type']
+
+
 class QuestionnaireViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = QuestionnaireSerializer
     queryset = Questionnaire.objects.none()
-    #filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
-    #filterset_class = QuestionFilter
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
+    filterset_class = QuestionnaireFilter
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
     permission = None

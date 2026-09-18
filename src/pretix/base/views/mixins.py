@@ -37,7 +37,7 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, Question, QuestionAnswer,
-    QuestionnaireChild, QuestionOption,
+    Questionnaire, QuestionnaireChild, QuestionOption,
 )
 from pretix.base.models.customers import AttendeeProfile
 from pretix.base.models.orders import CheckoutSession, Order
@@ -350,7 +350,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
     def positions(self):
         qqs = self.request.event.questionnaires.all()
         if self.only_user_visible:
-            qqs = qqs.filter(type='PS')
+            qqs = qqs.filter(type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE)
         else:
             qqs = qqs.filter(type__startswith='P')
         qqs = qqs.filter(
