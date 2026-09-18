@@ -40,9 +40,10 @@ from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.auth import get_auth_backends
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
-    Customer, Device, GiftCard, GiftCardAcceptance, GiftCardTransaction,
-    Membership, MembershipType, OrderPosition, Organizer, ReusableMedium,
-    SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
+    Customer, Device, EventMetaProperty, GiftCard, GiftCardAcceptance,
+    GiftCardTransaction, Membership, MembershipType, OrderPosition, Organizer,
+    ReusableMedium, SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite,
+    User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.permissions import (
@@ -640,3 +641,62 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         )
         # TODO: make sure pub is always correct
         return 'pub/' + fname
+
+
+class KeyLabelObjectListField(serializers.Field):
+
+    def to_representation(self, value):
+        # django added unneccessary keys DELETE, ORDER through formsets, filter them here for backwards compat
+        def strip_unknown_keys(v):
+            return {k: v[k] for k in v.keys() if k in ("key", "label")}
+        return [strip_unknown_keys(v) for v in value]
+
+    def to_internal_value(self, data):
+        if data is None:
+            return data
+        if not isinstance(data, list):
+            raise ValidationError("Choices need to be a list or null.")
+        if not data:
+            # empty list
+            return None
+
+        if any([not isinstance(choice, dict) for choice in data]):
+            raise ValidationError("Choices need to contain only objects.")
+
+        required_keys = {"key"}
+        allowed_keys = {"key", "label"}
+        if not all([required_keys <= set(choice.keys()) <= allowed_keys for choice in data]):
+            raise ValidationError("Each choice must contain a key and optionally a label.")
+
+        choice_keys = [choice.get("key") for choice in data]
+        if len(set(choice_keys)) < len(choice_keys):
+            raise ValidationError("Each choice must have a unique key.")
+        return data
+
+
+class EventMetaPropertiesSerializer(I18nAwareModelSerializer):
+    choices = KeyLabelObjectListField(allow_null=True)
+
+    class Meta:
+        model = EventMetaProperty
+        fields = (
+            'id', 'name', 'default', 'required', 'protected', 'filter_public', 'public_label', 'filter_allowed',
+            'choices'
+        )
+
+    def validate(self, data):
+        data = super().validate(data)
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+
+        choices = full_data.get("choices")
+        default = full_data.get("default")
+        if choices and default:
+            choice_keys = [c.get("key") for c in choices]
+            if default not in choice_keys:
+                raise ValidationError("You cannot set a default value that is not a valid value.")
+
+        if not choices and "choices" in data:
+            # normalize empty dict to None
+            data["choices"] = None
+        return data
