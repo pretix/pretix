@@ -72,7 +72,7 @@ const pricerange = computed(() => {
 			STRINGS.price_from,
 			{
 				currency: store.currency,
-				price: floatformat(props.item.min_price || '0', 2),
+				price: floatformat(props.item.min_price || '0', store.currency_places),
 			},
 			true
 		).replace(
@@ -80,14 +80,14 @@ const pricerange = computed(() => {
 			`<span class="pretix-widget-pricebox-currency">${store.currency}</span>`
 		)
 	} else if (props.item.min_price !== props.item.max_price) {
-		return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${floatformat(props.item.min_price || '0', 2)} – ${floatformat(props.item.max_price || '0', 2)}`
+		return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${floatformat(props.item.min_price || '0', store.currency_places)} – ${floatformat(props.item.max_price || '0', store.currency_places)}`
 	} else if (props.item.min_price === '0.00' && props.item.max_price === '0.00') {
 		if (props.item.mandatory_priced_addons) {
 			return '\xA0' // nbsp, because an empty string would cause the HTML element to collapse
 		}
 		return STRINGS.free
 	} else {
-		return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${floatformat(props.item.min_price || '0', 2)}`
+		return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${floatformat(props.item.min_price || '0', store.currency_places)}`
 	}
 })
 

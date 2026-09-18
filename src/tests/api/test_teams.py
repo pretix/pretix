@@ -83,6 +83,7 @@ def test_team_detail(token_client, organizer, event, second_team):
 TEST_TEAM_CREATE_PAYLOAD = {
     "name": "Foobar",
     "limit_events": ["dummy"],
+    "can_view_orders": True,
 }
 
 

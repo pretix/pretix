@@ -153,11 +153,19 @@ class QuestionForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['items'].queryset = self.instance.event.items.all()
-        self.fields['items'].required = True
+        if self.instance.container_type == Question.ContainerType.ORDERPOSITION:
+            self.fields['items'].queryset = self.instance.event.items.all()
+            self.fields['items'].required = True
+        else:
+            del self.fields['items']
+            del self.fields['ask_during_checkin']
+            del self.fields['show_during_checkin']
+            del self.fields['print_on_invoice']
+        self.fields['dependency_question'].widget.attrs['data-container-type'] = self.instance.container_type
         self.fields['dependency_question'].queryset = self.instance.event.questions.filter(
             type__in=(Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE),
-            ask_during_checkin=False
+            ask_during_checkin=False,
+            container_type=self.instance.container_type,
         )
         if self.instance.pk:
             self.fields['dependency_question'].queryset = self.fields['dependency_question'].queryset.exclude(
@@ -243,6 +251,7 @@ class QuestionForm(I18nModelForm):
             'valid_date_min',
             'valid_date_max',
             'valid_file_portrait',
+            'valid_string_length_min',
             'valid_string_length_max',
         ]
         widgets = {

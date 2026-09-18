@@ -186,7 +186,7 @@ def test_sendmail_rule_send_order_vs_pos(send_to, amount_mails, recipients, orde
 
     order.event.sendmail_rules.create(date_is_absolute=True, send_date=dt_now - datetime.timedelta(hours=1),
                                       send_to=send_to,
-                                      subject='meow', template='meow meow meow')
+                                      subject='{event}: {event_location} @ {event_admission_time}', template='meow meow meow')
     order.all_positions.create(item=item, price=0, attendee_email='meow@dummy.test')
 
     sendmail_run_rules(None)
@@ -195,6 +195,8 @@ def test_sendmail_rule_send_order_vs_pos(send_to, amount_mails, recipients, orde
 
     _recipients = [mail.to[0] for mail in djmail.outbox]
     assert set(recipients) == set(_recipients)
+
+    assert djmail.outbox[0].subject == 'Dummy: Foo City @ 11:30'
 
 
 @pytest.mark.django_db
@@ -243,7 +245,7 @@ def test_sendmail_rule_send_correct_subevent(order, event_series, subevent1, sub
 
     event_series.sendmail_rules.create(date_is_absolute=False, offset_is_after=False, send_offset_days=2,
                                        send_offset_time=datetime.time(9, 30), send_to=Rule.ATTENDEES,
-                                       subject='meow', template='meow meow meow')
+                                       subject='{event}: {event_location} @ {event_admission_time}', template='meow meow meow')
     p1 = order.all_positions.create(item=item, price=13, attendee_email='se1@dummy.test', subevent=subevent1)
     order.all_positions.create(item=item, price=23, attendee_email='se2@dummy.test', subevent=subevent2)
 
@@ -252,6 +254,8 @@ def test_sendmail_rule_send_correct_subevent(order, event_series, subevent1, sub
     assert len(djmail.outbox) == 1
 
     assert djmail.outbox[0].to[0] == p1.attendee_email
+
+    assert djmail.outbox[0].subject == 'Meow: Meow Town @ 10:00'
 
 
 @pytest.mark.django_db

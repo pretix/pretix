@@ -235,7 +235,7 @@ class WaitingListTestCase(TestCase):
         self.event.settings.set('waiting_list_enabled', True)
         self.event.settings.set('waiting_list_auto', True)
         self.event.settings.waiting_list_auto_disable = RelativeDateWrapper(
-            RelativeDate(days=0, time=None, base_date_name='date_from', minutes=20, is_after=False)
+            RelativeDate(days=0, time=None, base_date_name='event__date_from', minutes=20, is_after=False)
         )
         self.event.save()
         with scope(organizer=self.o):

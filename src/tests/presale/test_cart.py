@@ -697,6 +697,42 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
 
+    def test_free_price_rounding(self):
+        self.ticket.free_price = True
+        self.ticket.save()
+
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'price_%d' % self.ticket.id: '40.1234',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.get()
+            assert cr1.listed_price == Decimal('23.00')
+            assert cr1.custom_price_input == Decimal('40.12')
+            assert cr1.price == Decimal('40.12')
+
+    def test_free_price_rounding_jpy(self):
+        self.event.currency = "JPY"
+        self.event.save()
+        self.ticket.free_price = True
+        self.ticket.save()
+
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'price_%d' % self.ticket.id: '40.1234',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.get()
+            assert cr1.listed_price == Decimal('23.00')
+            assert cr1.custom_price_input == Decimal('40.00')
+            assert cr1.price == Decimal('40.00')
+
     def test_variation_inactive(self):
         self.shirt_red.active = False
         self.shirt_red.save()
@@ -3059,6 +3095,31 @@ class CartAddonTest(CartTestMixin, TestCase):
         self.cm.commit()
         assert cp1.addons.count() == 3
         assert all(a.price == Decimal('12.00') for a in cp1.addons.all())
+
+    @classscope(attr='orga')
+    def test_free_price_rounding(self):
+        self.event.settings.locales = ['de']
+        self.event.settings.locale = 'de'
+        self.event.currency = "JPY"
+        self.event.save()
+
+        self.workshop1.free_price = True
+        self.workshop1.save()
+        cp1 = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=23, expires=now() - timedelta(minutes=10)
+        )
+
+        response = self.client.post('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug), {
+            'cp_{}_item_{}'.format(cp1.pk, self.workshop1.pk): '1',
+            'cp_{}_item_{}_price'.format(cp1.pk, self.workshop1.pk): '99,99',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        with scopes_disabled():
+            assert cp1.addons.count() == 1
+            assert cp1.addons.first().item == self.workshop1
+            assert cp1.addons.first().price == Decimal('100')
 
     @classscope(attr='orga')
     def test_change_number(self):

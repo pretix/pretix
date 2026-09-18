@@ -104,6 +104,7 @@ ALL_LANGUAGES = [
     ('gl', _('Galician')),
     ('el', _('Greek')),
     ('he', _('Hebrew')),
+    ('hu', _('Hungarian')),
     ('id', _('Indonesian')),
     ('it', _('Italian')),
     ('ja', _('Japanese')),

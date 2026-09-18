@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-30 13:52+0000\n"
+"POT-Creation-Date: 2026-08-24 15:35+0000\n"
 "PO-Revision-Date: 2025-06-11 02:00+0000\n"
 "Last-Translator: Michael Dao <garudong89@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
@@ -90,6 +90,10 @@ msgstr "Tiếng Hy Lạp"
 #: pretix/_base_settings.py
 msgid "Hebrew"
 msgstr "Tiếng Do Thái"
+
+#: pretix/_base_settings.py
+msgid "Hungarian"
+msgstr ""
 
 #: pretix/_base_settings.py
 msgid "Indonesian"
@@ -442,6 +446,12 @@ msgstr "Phương tiện kết nối với sự kiện khác"
 #, fuzzy
 #| msgid "You cannot change this order."
 msgid "You cannot exchange a medium for a medium."
+msgstr "Bạn không thể thay đổi thứ tự này."
+
+#: pretix/api/views/checkin.py
+#, fuzzy
+#| msgid "You cannot change this order."
+msgid "You cannot simulate a medium exchange."
 msgstr "Bạn không thể thay đổi thứ tự này."
 
 #: pretix/api/views/oauth.py pretix/control/logdisplay.py
@@ -910,8 +920,7 @@ msgstr "Gửi thông tin phục hồi"
 #: pretix/control/forms/organizer.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
-#: pretix/control/views/item.py pretix/plugins/badges/exporters.py
-#: pretix/plugins/checkinlists/exporters.py
+#: pretix/plugins/badges/exporters.py pretix/plugins/checkinlists/exporters.py
 #: pretix/plugins/ticketoutputpdf/exporters.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/event/fragment_change_form.html
@@ -930,7 +939,6 @@ msgstr "Tên người tham dự"
 #: pretix/base/forms/questions.py pretix/base/models/customers.py
 #: pretix/base/models/orders.py pretix/base/pdf.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Attendee email"
 msgstr "Email người tham dự"
@@ -1715,9 +1723,8 @@ msgid "Invoice sender:"
 msgstr "Người gửi hóa đơn:"
 
 #: pretix/base/exporters/invoices.py pretix/base/exporters/orderlist.py
-#: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
-#: pretix/base/models/customers.py pretix/base/models/orders.py
-#: pretix/control/forms/filter.py
+#: pretix/base/modelimport_orders.py pretix/base/models/customers.py
+#: pretix/base/models/orders.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
@@ -1729,8 +1736,7 @@ msgstr "Địa chỉ"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "ZIP code"
 msgstr "Mã zip"
 
@@ -1738,8 +1744,7 @@ msgstr "Mã zip"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/control/forms/filter.py
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "City"
 msgstr "Thành phố"
 
@@ -1762,8 +1767,7 @@ msgstr "Nhà nước"
 #: pretix/base/settings.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Country"
@@ -1791,8 +1795,7 @@ msgstr "Người nhận hóa đơn:"
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/control/views/item.py pretix/plugins/checkinlists/exporters.py
-#: pretix/plugins/reports/exporters.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Company"
@@ -2600,7 +2603,8 @@ msgstr "trạng thái thanh toán"
 msgid "Refund states"
 msgstr "Trạng thái hoàn trả"
 
-#: pretix/base/exporters/orderlist.py pretix/base/models/orders.py
+#: pretix/base/exporters/orderlist.py pretix/base/models/items.py
+#: pretix/base/models/orders.py
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
@@ -3122,14 +3126,12 @@ msgid ""
 msgstr "Tải lên một hình ảnh hợp lệ."
 
 #: pretix/base/forms/questions.py
-msgid ""
-"If you keep this empty, the ticket will be valid starting at the time of "
-"purchase."
-msgstr "Nếu bạn giữ trống này, vé sẽ có giá trị bắt đầu tại thời điểm mua."
+msgid "Street"
+msgstr "Đường phố"
 
 #: pretix/base/forms/questions.py
-msgid "Street and Number"
-msgstr "Đường phố và số"
+msgid "State"
+msgstr "Nhà nước"
 
 #: pretix/base/forms/questions.py
 #, fuzzy, python-brace-format
@@ -3165,6 +3167,16 @@ msgstr "Vui lòng nhập một kênh bán hàng hợp lệ."
 #| msgid "Please enter the code of your gift card."
 msgid "Please enter a date and time no later than {max}."
 msgstr "Vui lòng nhập mã thẻ quà tặng của bạn."
+
+#: pretix/base/forms/questions.py
+msgid ""
+"If you keep this empty, the ticket will be valid starting at the time of "
+"purchase."
+msgstr "Nếu bạn giữ trống này, vé sẽ có giá trị bắt đầu tại thời điểm mua."
+
+#: pretix/base/forms/questions.py
+msgid "Street and Number"
+msgstr "Đường phố và số"
 
 #: pretix/base/forms/questions.py
 msgid ""
@@ -5729,6 +5741,10 @@ msgstr "Biến thể được chọn không thuộc về mục này."
 msgid "The count needs to be equal to or greater than zero."
 msgstr "Số lượng cần phải bằng hoặc lớn hơn 0."
 
+#: pretix/base/models/items.py pretix/base/models/orders.py
+msgid "Order position"
+msgstr "Vị trí đặt hàng"
+
 #: pretix/base/models/items.py
 msgid "Number"
 msgstr "Số"
@@ -5765,6 +5781,10 @@ msgstr "Ngày và giờ"
 #: pretix/base/models/items.py
 msgid "Country code (ISO 3166-1 alpha-2)"
 msgstr "Mã quốc gia (ISO 3166-1 Alpha-2)"
+
+#: pretix/base/models/items.py
+msgid "Asked on"
+msgstr ""
 
 #: pretix/base/models/items.py pretix/base/models/organizer.py
 msgid ""
@@ -6405,10 +6425,6 @@ msgstr "Thẻ quà tặng"
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html
 msgid "Value"
 msgstr "Giá trị"
-
-#: pretix/base/models/orders.py
-msgid "Order position"
-msgstr "Vị trí đặt hàng"
 
 #: pretix/base/models/orders.py
 msgid "Cart ID (e.g. session key)"
@@ -7393,8 +7409,11 @@ msgid "The payment for this invoice has already been received."
 msgstr "Khoản thanh toán cho hóa đơn này đã được nhận."
 
 #: pretix/base/payment.py
+#, fuzzy
+#| msgid ""
+#| "This payment is already being processed and can not be canceled any more."
 msgid ""
-"This payment is already being processed and can not be canceled any more."
+"This payment is already being processed and cannot be canceled any more."
 msgstr "Khoản thanh toán này đã được xử lý và không thể bị hủy nữa."
 
 #: pretix/base/payment.py
@@ -8189,6 +8208,18 @@ msgid "Presale end"
 msgstr "Kết thúc trước"
 
 #: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order details"
+msgid "Order creation"
+msgstr "Chi tiết đặt hàng"
+
+#: pretix/base/reldate.py
+#, fuzzy
+#| msgid "Order expired"
+msgid "Order expiry"
+msgstr "Đơn hàng đã hết hạn"
+
+#: pretix/base/reldate.py
 msgid "before"
 msgstr "Trước đây"
 
@@ -8211,6 +8242,26 @@ msgstr "Thời gian tương đối:"
 #: pretix/base/reldate.py
 msgid "Not set"
 msgstr "Không được đặt"
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative date cannot be expressed as \"after\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"before\" for \"{}\""
+msgstr ""
+
+#: pretix/base/reldate.py
+#, python-brace-format
+msgid "A relative time cannot be expressed as \"after\" for \"{}\""
+msgstr ""
 
 #: pretix/base/secrets.py
 msgid "Random (default, works with all pretix apps)"
@@ -9403,7 +9454,7 @@ msgstr "Số tiền đã được tính vào thẻ của bạn."
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr "Vui lòng chuyển tiền vào tài khoản ngân hàng này: 9999-9999-9999-9999"
 
-#: pretix/base/services/placeholders.py pretix/control/views/organizer.py
+#: pretix/base/services/placeholders.py
 msgid "This value will be replaced based on dynamic parameters."
 msgstr "Giá trị này sẽ được thay thế dựa trên các tham số động."
 
@@ -10069,6 +10120,25 @@ msgid ""
 msgstr ""
 "Văn bản này sẽ được hiển thị phía trên cửa hàng vé sau khi khung thời gian "
 "bán hàng được chỉ định cho sự kiện này kết thúc."
+
+#: pretix/base/settings.py
+msgid "No dates match your criteria."
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid "Text for empty date results"
+msgstr ""
+
+#: pretix/base/settings.py
+msgctxt "subevents"
+msgid ""
+"This text will be shown if the calendar or list of dates is empty, e.g. "
+"because a month does not contain any dates or a filter chosen by the user "
+"does not find any results. You can use this to advertise ways to get in "
+"touch with you to arrange further dates. We do not recommend more than one "
+"or two sentences."
+msgstr ""
 
 #: pretix/base/settings.py
 msgid "Guidance text"
@@ -13513,6 +13583,28 @@ msgid ""
 msgstr ""
 "Bạn đã cấu hình thẻ quà tặng là hợp lệ {} năm cộng với năm thẻ quà tặng được "
 "cấp."
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment date"
+msgid "Payment term"
+msgstr "Ngày thanh toán"
+
+#: pretix/control/forms/event.py
+msgid "same as above"
+msgstr ""
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment term in days"
+msgid "different payment term in days"
+msgstr "Thời hạn thanh toán tính theo ngày"
+
+#: pretix/control/forms/event.py
+#, fuzzy
+#| msgid "Payment term in minutes"
+msgid "different payment term in minutes"
+msgstr "Thời hạn thanh toán trong vài phút"
 
 #: pretix/control/forms/event.py
 #, fuzzy
@@ -20153,6 +20245,7 @@ msgid "Top recommendation"
 msgstr "Khuyến nghị hàng đầu"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html
+#: pretix/control/templates/pretixcontrol/items/questions.html
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid "Experimental feature"
 msgstr "Tính năng thử nghiệm"
@@ -21958,6 +22051,30 @@ msgstr ""
 "Câu hỏi cho phép người tham dự của bạn điền vào dữ liệu bổ sung về vé của họ."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Create a new question"
+msgid "Create a new per-ticket question"
+msgstr "Tạo một câu hỏi mới"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Create a new question"
+msgid "Create a new order-level question"
+msgstr "Tạo một câu hỏi mới"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Delete question"
+msgid "Per-ticket questions"
+msgstr "Xóa câu hỏi"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"These questions are asked for every ticket, so possibly multiple times in "
+"the same order."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new question"
 msgstr "Tạo một câu hỏi mới"
 
@@ -21972,6 +22089,30 @@ msgstr "Hỏi trong khi nhận phòng"
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "All personalized products"
 msgstr "Tất cả các sản phẩm được cá nhân hóa"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "Include questions"
+msgid "Per-order questions"
+msgstr "Bao gồm các câu hỏi"
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"This functionality is in active development and expected to change "
+"significantly over the coming months."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+msgid ""
+"Per-order questions are currently not supported and will not be displayed in "
+"pretixPOS."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/items/questions.html
+#, fuzzy
+#| msgid "The question has been reordered."
+msgid "These questions are asked once per order."
+msgstr "Câu hỏi đã được sắp xếp lại."
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
@@ -22539,6 +22680,15 @@ msgstr "Thông tin hóa đơn"
 msgid "(optional)"
 msgstr "(Tùy chọn)"
 
+#: pretix/control/templates/pretixcontrol/order/change_questions.html
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html
+#: pretix/presale/templates/pretixpresale/event/order_modify.html
+#, fuzzy
+#| msgid "Additional information"
+msgid "Additional order information"
+msgstr "Thông tin bổ sung"
+
 #: pretix/control/templates/pretixcontrol/order/delete.html
 msgid "Delete order"
 msgstr "Xóa thứ tự"
@@ -22566,6 +22716,25 @@ msgstr "Vâng, từ chối trật tự"
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Extend payment term"
 msgstr "mở rộng thời hạn thanh toán"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid ""
+"This file has been uploaded by a user and could contain viruses or other "
+"malicious content."
+msgstr ""
+"Tệp này đã được người dùng tải lên và có thể chứa vi -rút hoặc nội dung độc "
+"hại khác."
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+msgid "UNSAFE"
+msgstr "Không an toàn"
+
+#: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
+#: pretix/control/templates/pretixcontrol/order/index.html
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "not answered"
+msgstr "Không được trả lời"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, fuzzy, python-format
@@ -22856,25 +23025,8 @@ msgid "Ticket page"
 msgstr "Trang vé"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "not answered"
-msgstr "Không được trả lời"
-
-#: pretix/control/templates/pretixcontrol/order/index.html
 msgid "This question will be asked during check-in."
 msgstr "Câu hỏi này sẽ được hỏi trong khi nhận phòng."
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid ""
-"This file has been uploaded by a user and could contain viruses or other "
-"malicious content."
-msgstr ""
-"Tệp này đã được người dùng tải lên và có thể chứa vi -rút hoặc nội dung độc "
-"hại khác."
-
-#: pretix/control/templates/pretixcontrol/order/index.html
-msgid "UNSAFE"
-msgstr "Không an toàn"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/overview.html
@@ -24207,6 +24359,15 @@ msgstr "Kết nối một thiết bị"
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Hardware model"
 msgstr "Mô hình phần cứng"
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+#, fuzzy, python-format
+msgid "Last seen: %(time)s"
+msgstr "Bắt đầu: %(thời gian) s"
+
+#: pretix/control/templates/pretixcontrol/organizers/devices.html
+msgid "No recent contact"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Not yet initialized"
@@ -27364,10 +27525,6 @@ msgid "Not all objects have been selected."
 msgstr "Không phải tất cả các đối tượng đã được chọn."
 
 #: pretix/control/views/item.py
-msgid "Street"
-msgstr "Đường phố"
-
-#: pretix/control/views/item.py
 msgid "The requested question does not exist."
 msgstr "Câu hỏi được yêu cầu không tồn tại."
 
@@ -27551,7 +27708,7 @@ msgstr ""
 #| "You should update the DNS settings of your domain to include this system "
 #| "in the SPF record."
 msgid ""
-"We did not find DMARC record for your domain. This means that there is a "
+"We did not find a DMARC record for your domain. This means that there is a "
 "very high chance most of the emails will be rejected or marked as spam. You "
 "should update the DNS settings of your domain."
 msgstr ""
@@ -27970,7 +28127,8 @@ msgstr "Chủ đề: {chủ đề}"
 msgid "Your message has been queued and will be sent to {}."
 msgstr "Tin nhắn của bạn đã được xếp hàng và sẽ được gửi đến {}."
 
-#: pretix/control/views/orders.py pretix/presale/views/order.py
+#: pretix/control/views/orders.py pretix/presale/views/cart.py
+#: pretix/presale/views/order.py
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -30180,6 +30338,29 @@ msgstr ""
 "hạn nhất định) và thanh toán theo nhiều đợt hoặc trong vòng 30 ngày."
 
 #: pretix/plugins/paypal2/payment.py
+msgid "Allow further payments during compliance hold"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"PayPals fraud prevention might block processing of individual payments for a "
+"considerable amount of time. The payment is marked as \"pending\" during "
+"this time window. You can allow your customers to start another payment "
+"attempts during that window. This might result in them being charged twice "
+"if the original payment is approved."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Timeout further payment attempts"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"Time duration in minutes after which another payment attempt is possible, "
+"while the last payment is still under investigation."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py
 msgid "-- Automatic --"
 msgstr "-Tự động-"
 
@@ -30431,10 +30612,12 @@ msgstr "Vui lòng chọn cách bạn muốn thanh toán."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
 msgid ""
-"Our attempt to execute your payment via PayPal has failed. Please try again "
-"or contact us."
+"Your payment is being processed by PayPal. This takes longer than usual. You "
+"can wait until PayPal acknowledges the payment or you can try paying again "
+"with this or another payment method. This might result in you being charged "
+"twice in case PayPal allows your initial payment attempt. Please contact us "
+"to resolve this case."
 msgstr ""
-"Nỗ lực của chúng tôi để thực hiện thanh toán của bạn qua PayPal đã thất bại."
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
@@ -33390,10 +33573,6 @@ msgid "No attendee name provided"
 msgstr "Không có tên người tham dự được cung cấp"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-msgid "The image you previously uploaded"
-msgstr "Hình ảnh bạn đã tải lên trước đó"
-
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "The price of this product was reduced because of an automatic discount."
 msgstr "Giá của sản phẩm này đã giảm do giảm giá tự động."
 
@@ -33803,6 +33982,10 @@ msgstr "%(giá trị) s không có thuế"
 #, fuzzy, python-format
 msgid "Set price in %(currency)s for %(item)s"
 msgstr "Đặt giá tính theo %(tiền tệ) s cho %(mục) s"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
+msgid "The image you previously uploaded"
+msgstr "Hình ảnh bạn đã tải lên trước đó"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html
 #, fuzzy, python-format
@@ -35498,6 +35681,13 @@ msgstr "Viết quyền truy cập"
 msgid "Kosovo"
 msgstr "Kosovo"
 
+#~ msgid ""
+#~ "Our attempt to execute your payment via PayPal has failed. Please try "
+#~ "again or contact us."
+#~ msgstr ""
+#~ "Nỗ lực của chúng tôi để thực hiện thanh toán của bạn qua PayPal đã thất "
+#~ "bại."
+
 #~ msgid "All actions"
 #~ msgstr "Tất cả các hành động"
 
@@ -35613,9 +35803,6 @@ msgstr "Kosovo"
 
 #~ msgid "Please do not use special characters in names."
 #~ msgstr "Vui lòng không sử dụng các ký tự đặc biệt trong tên."
-
-#~ msgid "State"
-#~ msgstr "Nhà nước"
 
 #, fuzzy
 #~| msgid "Printing date and time"

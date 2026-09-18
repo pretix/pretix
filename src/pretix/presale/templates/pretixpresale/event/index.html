@@ -23,7 +23,11 @@
             {% endblocktrans %} ::
         {% endif %}
     {% elif subevent %}
-        {{ subevent.get_date_range_display }} ::
+        {% if subevent.name|upper != event.name|upper %}
+            {# The |upper is a trick to force LazyI18nString→str conversion before comparison #}
+            {{ subevent.name }} ::
+        {% endif %}
+        {{ subevent.get_date_range_display_with_times }} ::
     {% endif %}
 {% endblock %}
 
@@ -74,7 +78,7 @@
         {% endif %}
 
 
-        {% if subevent_list.list_type != "list" or subevent_list.visible_events %}
+        {% if subevent_list.list_type != "list" or subevent_list.visible_events or "filtered" in request.GET %}
             {% if subevent_list_foldable %}
                 <details class="panel panel-{% if show_cart %}primary{% else %}default{% endif %}">
                 <summary class="panel-heading">

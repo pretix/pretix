@@ -87,6 +87,7 @@ class RRuleForm(forms.Form):
             ('1', pgettext_lazy('rrule', 'first')),
             ('2', pgettext_lazy('rrule', 'second')),
             ('3', pgettext_lazy('rrule', 'third')),
+            ('4', pgettext_lazy('rrule', 'fourth')),
             ('-1', pgettext_lazy('rrule', 'last')),
         ],
         required=False
@@ -134,6 +135,7 @@ class RRuleForm(forms.Form):
             ('1', pgettext_lazy('rrule', 'first')),
             ('2', pgettext_lazy('rrule', 'second')),
             ('3', pgettext_lazy('rrule', 'third')),
+            ('4', pgettext_lazy('rrule', 'fourth')),
             ('-1', pgettext_lazy('rrule', 'last')),
         ],
         required=False

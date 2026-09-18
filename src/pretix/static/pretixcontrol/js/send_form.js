@@ -1,1 +1,1 @@
-document.forms[0].submit();
+document.forms[0].submit()

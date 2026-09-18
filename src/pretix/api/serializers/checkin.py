@@ -90,6 +90,7 @@ class CheckinRPCRedeemInputSerializer(serializers.Serializer):
     answers = serializers.JSONField(required=False, allow_null=True)
     exchange_medium_type = serializers.ChoiceField(required=False, choices=MEDIA_TYPES)
     exchange_medium_identifier = serializers.CharField(required=False)
+    simulate = serializers.BooleanField(default=False, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -55,6 +55,8 @@ from django_countries.fields import Country
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
+from reportlab.lib.utils import simpleSplit
+from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import PageBreak, Spacer, Table, TableStyle
 
@@ -226,10 +228,20 @@ class ReportlabExportMixin:
     def page_header(self, canvas, doc):
         from reportlab.lib.units import mm
 
-        canvas.setFont('OpenSans', 10)
-        canvas.drawString(doc.leftMargin, self.pagesize[1] - 15 * mm, self.get_left_header_string())
+        font_name = 'OpenSans'
+        font_size = 10
+        left_string = self.get_left_header_string()
+        right_string = self.get_right_header_string()
+        right_width = stringWidth(right_string, font_name, font_size)
+        max_left_width = self.pagesize[0] - doc.leftMargin - doc.rightMargin - right_width - 5 * mm
+        left_string_lines = simpleSplit(left_string, font_name, font_size, max_left_width)
+        if len(left_string_lines) > 1:
+            left_string = left_string_lines[0] + " …"
+
+        canvas.setFont(font_name, font_size)
+        canvas.drawString(doc.leftMargin, self.pagesize[1] - 15 * mm, left_string)
         canvas.drawRightString(self.pagesize[0] - doc.rightMargin, self.pagesize[1] - 15 * mm,
-                               self.get_right_header_string())
+                               right_string)
         canvas.setStrokeColorRGB(0, 0, 0)
         canvas.line(doc.leftMargin, self.pagesize[1] - 17 * mm,
                     self.pagesize[0] - doc.rightMargin, self.pagesize[1] - 17 * mm)

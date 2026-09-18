@@ -71,6 +71,8 @@ Checking a ticket in
    :>json object questions: List of questions to be answered for check-in, only set on status ``"incomplete"``.
    :>json object media_policy: Reusable media policy (see documentation on items), only set on status ``"exchange"``.
    :>json object media_type: Reusable media type (see documentation on items), only set on status ``"exchange"``.
+   :>json boolean simulate: Do not actually perform the check-in, only simulate the response. The ``position`` response
+                            object will not reflect the simulated changes.
 
    **Example request**:
 

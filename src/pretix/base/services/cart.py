@@ -52,6 +52,7 @@ from django.utils.translation import (
 )
 from django_scopes import scopes_disabled
 
+from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
@@ -59,7 +60,7 @@ from pretix.base.models import (
     Seat, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.orders import OrderFee
+from pretix.base.models.orders import CheckoutSession, OrderFee
 from pretix.base.models.tax import TaxRule
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
@@ -469,6 +470,16 @@ class CartManager:
                 ), self.event.timezone)
                 if term_last < time_machine_now(self.real_now_dt):
                     raise CartError(error_messages['payment_ended'])
+
+    def _ensure_checkout_session(self):
+        CheckoutSession.objects.get_or_create(
+            event=self.event,
+            cart_id=self.cart_id,
+            defaults={
+                "sales_channel": self._sales_channel,
+                "testmode": self.event.testmode,
+            },
+        )
 
     def _extend_expiry_of_valid_existing_positions(self):
         # real_now_dt is initialized at CartManager instantiation, so it's slightly in the past. Add a small
@@ -915,6 +926,8 @@ class CartManager:
                 if custom_price > 99_999_999_999:
                     raise CartError(error_messages['price_too_high'])
 
+                custom_price = round_decimal(custom_price, currency=self.event.currency)
+
             op = self.AddOperation(
                 count=i['count'],
                 item=item,
@@ -1036,6 +1049,8 @@ class CartManager:
                         raise CartError(error_messages['price_not_a_number'])
                 if custom_price > 99_999_999_999:
                     raise CartError(error_messages['price_too_high'])
+
+                custom_price = round_decimal(custom_price, currency=self.event.currency)
 
             # Fix positions with wrong price (TODO: happens out-of-cartmanager-transaction and therefore a little hacky)
             for ca in current_addons[cp][a['item'], a['variation']]:
@@ -1553,6 +1568,7 @@ class CartManager:
 
     def commit(self):
         self._check_presale_dates()
+        self._ensure_checkout_session()
         self._check_max_cart_size()
 
         err = self._delete_out_of_timeframe()
@@ -1588,6 +1604,7 @@ def add_payment_to_cart_session(cart_session, provider, min_value: Decimal=None,
         'max_value': str(max_value) if max_value is not None else None,
         'info_data': info_data or {},
     })
+    cart_session['payments_postpone'] = False
 
 
 def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: Decimal=None, info_data: dict=None):

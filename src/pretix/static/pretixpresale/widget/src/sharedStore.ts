@@ -71,6 +71,7 @@ export function createWidgetStore (config: {
 			frontpageText: null as string | null,
 			categories: [] as Category[],
 			currency: '',
+			currency_places: 2,
 			displayNetPrices: false,
 			voucherExplanationText: null as string | null,
 			displayAddToCart: false,
@@ -94,6 +95,7 @@ export function createWidgetStore (config: {
 			offset: 0,
 			appendEvents: false,
 			metaFilterFields: [] as MetaFilterField[],
+			emptyText: null as string | null,
 
 			// UI state
 			mobile: false,
@@ -269,6 +271,7 @@ export function createWidgetStore (config: {
 						this.name = data.name ?? null
 						this.frontpageText = data.frontpage_text ?? null
 						this.metaFilterFields = data.meta_filter_fields ?? []
+						this.emptyText = data.empty_text ?? null
 					} else if (data.days !== undefined) {
 						this.days = data.days
 						this.date = null
@@ -278,6 +281,7 @@ export function createWidgetStore (config: {
 						this.name = data.name ?? null
 						this.frontpageText = data.frontpage_text ?? null
 						this.metaFilterFields = data.meta_filter_fields ?? []
+						this.emptyText = data.empty_text ?? null
 					} else if (data.events !== undefined) {
 						this.events = this.appendEvents && this.events
 							? this.events.concat(data.events)
@@ -289,6 +293,7 @@ export function createWidgetStore (config: {
 						this.frontpageText = data.frontpage_text ?? null
 						this.hasMoreEvents = data.has_more_events ?? false
 						this.metaFilterFields = data.meta_filter_fields ?? []
+						this.emptyText = data.empty_text ?? null
 					} else {
 						this.view = 'event'
 						this.targetUrl = data.target_url ?? this.targetUrl
@@ -299,6 +304,7 @@ export function createWidgetStore (config: {
 						this.location = data.location ?? null
 						this.categories = data.items_by_category ?? []
 						this.currency = data.currency ?? ''
+						this.currency_places = data.currency_places ?? 2
 						this.displayNetPrices = data.display_net_prices ?? false
 						this.voucherExplanationText = data.voucher_explanation_text ?? null
 						this.error = data.error ?? null
@@ -338,6 +344,7 @@ export function createWidgetStore (config: {
 				} catch (e) {
 					this.categories = []
 					this.currency = ''
+					this.currency_places = 2
 					if (e instanceof ApiError && e.status === 429) {
 						this.error = STRINGS.loading_error_429
 					} else {
@@ -504,10 +511,6 @@ export function createWidgetStore (config: {
 				}
 				let redirectUrl = `${this.targetUrl}w/${globalWidgetId}/`
 				if (this.subevent && this.isButton && this.items.length === 0) {
-					// button with subevent but no items
-					redirectUrl += `${this.subevent}/`
-				}
-				if (this.subevent && !this.cartId) {
 					// button with subevent but no items
 					redirectUrl += `${this.subevent}/`
 				}

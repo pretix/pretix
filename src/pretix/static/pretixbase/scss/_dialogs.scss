@@ -170,13 +170,14 @@ body.has-modal-dialog .container, body.has-modal-dialog #wrapper {
 #lightbox-dialog {
   width: fit-content;
   max-width: 80%;
-  min-width: 24em;
+  min-width: calc(min(24em, 90%));
   .modal-card-content {
     padding: 2.5em;
   }
 
   img {
     max-width: 100%;
+    max-height: calc(100dvh - 60px - 5em - 5em);
   }
 
   button {

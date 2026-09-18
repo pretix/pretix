@@ -1,7 +1,7 @@
 {% load html_time %}
 {% load i18n %}
 {% load date_fast %}
-<div class="week-calendar">
+<div class="week-calendar"{% if any_events is False %} aria-hidden="true"{% endif %}>
     {% for day in days %}
         <details class="weekday {% if day.events %}has-events{% else %}no-events{% endif %} {% if day.today %}today{% endif %}"
                 data-date="{{ day.date|date_fast:"SHORT_DATE_FORMAT" }}" open>

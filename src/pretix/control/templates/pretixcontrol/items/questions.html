@@ -10,11 +10,26 @@
         {% endblocktrans %}
     </p>
     {% csrf_token %}
-    {% if 'event.items:write' in request.eventpermset %}
-        <p>
-            <a href="{% url "control:event.items.questions.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new question" %}
-            </a>
-        </p>
+
+    {% if request.event.settings.feature_flag_order_level_questions %}
+        {% if 'event.items:write' in request.eventpermset %}
+            <p>
+                <a href="{% url "control:event.items.questions.add" organizer=request.event.organizer.slug event=request.event.slug %}?container_type=P" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new per-ticket question" %}
+                </a>
+                <a href="{% url "control:event.items.questions.add" organizer=request.event.organizer.slug event=request.event.slug %}?container_type=O" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new order-level question" %}
+                </a>
+            </p>
+        {% endif %}
+
+        <h2>{% trans "Per-ticket questions" %}</h2>
+        <p>{% trans "These questions are asked for every ticket, so possibly multiple times in the same order." %}</p>
+    {% else %}
+        {% if 'event.items:write' in request.eventpermset %}
+            <p>
+                <a href="{% url "control:event.items.questions.add" organizer=request.event.organizer.slug event=request.event.slug %}?container_type=P" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new question" %}
+                </a>
+            </p>
+        {% endif %}
     {% endif %}
     <div class="table-responsive">
         <table class="table table-hover table-quotas">
@@ -32,8 +47,8 @@
                 <th class="action-col-2"></th>
             </tr>
             </thead>
-            <tbody data-dnd-url="{% url "control:event.items.questions.reorder" organizer=request.event.organizer.slug event=request.event.slug %}">
-            {% for q in questions %}
+            <tbody data-dnd-url="{% url "control:event.items.questions.reorder" organizer=request.event.organizer.slug event=request.event.slug %}?container_type=P">
+            {% for q in questions %}{% if q.container_type == "P" %}
                 <tr data-dnd-id="{{ q.id }}">
                     <td>
                         <strong>
@@ -63,7 +78,6 @@
                         {% if q.pk and q.ask_during_checkin %}
                             <span class="fa fa-check-square text-muted" data-toggle="tooltip" title="{% trans "Ask during check-in" %}"></span>
                         {% endif %}
-
                     </td>
                     <td>
                         {% if q.pk and q.hidden %}
@@ -102,8 +116,90 @@
                         {% endif %}
                     </td>
                 </tr>
-            {% endfor %}
+            {% endif %}{% endfor %}
             </tbody>
         </table>
     </div>
+
+    {% if request.event.settings.feature_flag_order_level_questions %}
+        <h2>
+            {% trans "Per-order questions" %}
+            <small><span class="label label-info" title="
+                {% trans "This functionality is in active development and expected to change significantly over the coming months." %}
+                {% trans "Per-order questions are currently not supported and will not be displayed in pretixPOS." %}
+            " data-toggle="tooltip">
+                <span class="fa fa-flask" aria-hidden="true"></span>
+                {% trans "Experimental feature" %}
+            </span></small>
+        </h2>
+        <p>{% trans "These questions are asked once per order." %}</p>
+        <div class="table-responsive">
+            <table class="table table-hover table-quotas">
+                <thead>
+                <tr>
+                    <th>{% trans "Question" %}</th>
+                    <th>{% trans "Type" %}</th>
+                    <th class="iconcol"></th>
+                    <th class="iconcol"></th>
+                    <th class="iconcol"></th>
+                    {% if 'event.items:write' in request.eventpermset %}
+                        <th class="action-col-2"></th>
+                    {% endif %}
+                    <th class="action-col-2"></th>
+                </tr>
+                </thead>
+                <tbody data-dnd-url="{% url "control:event.items.questions.reorder" organizer=request.event.organizer.slug event=request.event.slug %}?container_type=O">
+                {% for q in questions %}{% if q.container_type == "O" %}
+                    <tr data-dnd-id="{{ q.id }}">
+                        <td>
+                            <strong>
+                                {{ q.question }}
+                            </strong><br>
+                            <small class="text-muted">{{ q.identifier }}</small>
+                        </td>
+                        <td>
+                            {% if q.pk %}
+                                {{ q.get_type_display }}
+                            {% else %}
+                                {% trans "System question" %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if q.required %}
+                                <span class="fa fa-exclamation-circle text-muted" data-toggle="tooltip" title="{% trans "Required question" %}"></span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if q.pk and q.ask_during_checkin %}
+                                <span class="fa fa-check-square text-muted" data-toggle="tooltip" title="{% trans "Ask during check-in" %}"></span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if q.pk and q.hidden %}
+                                <span class="fa fa-eye-slash text-muted" data-toggle="tooltip" title="{% trans "Hidden question" %}"></span>
+                            {% endif %}
+                        </td>
+                        {% if 'event.items:write' in request.eventpermset %}
+                            <td class="dnd-container">
+                            </td>
+                        {% endif %}
+                        <td class="text-right flip">
+                            {% if q.pk %}
+                                {% if 'event.items:write' in request.eventpermset %}
+                                    <a href="{% url "control:event.items.questions.edit" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                    <a href="{% url "control:event.items.questions.delete" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                {% endif %}
+                            {% else %}
+                                {% if 'event.settings.general:write' in request.eventpermset %}
+                                    <a href="{% url "control:event.settings" organizer=request.event.organizer.slug event=request.event.slug %}#tab-0-2-open"
+                                            class="btn btn-default btn-sm"><i class="fa fa-wrench"></i></a>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}{% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
 {% endblock %}

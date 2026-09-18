@@ -35,13 +35,17 @@
 from django.utils.functional import cached_property
 
 from pretix.base.views.mixins import BaseQuestionsViewMixin
-from pretix.presale.forms.checkout import QuestionsForm
+from pretix.presale.forms.checkout import CustomerAwareQuestionsForm
 from pretix.presale.views import get_cart
 
 
-class QuestionsViewMixin(BaseQuestionsViewMixin):
-    form_class = QuestionsForm
+class CartQuestionsViewMixin(BaseQuestionsViewMixin):
+    orderposition_form_class = CustomerAwareQuestionsForm
     only_user_visible = True
+
+    @property
+    def order_question_container(self):
+        return self.checkout_session
 
     @cached_property
     def _positions_for_questions(self):

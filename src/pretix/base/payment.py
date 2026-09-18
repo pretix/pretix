@@ -330,8 +330,23 @@ class BasePaymentProvider:
         payment method. This returns ``False`` by default which is no guarantee that
         aborting a pending payment can never happen, it just hides the frontend button
         to avoid users accidentally committing double payments.
+        If the decision doesn't depend on the specific payment, then only implementing
+        ``abort_pending_allowed`` is enough, ``payment_abort_pending_allowed(payment: OrderPayment)``
+        is expected to take this into account.
+        As a consumer only evaluate ``payment_abort_pending_allowed(payment: OrderPayment)``
+        to check if aborting this pending payment is possible.
         """
         return False
+
+    def _payment_abort_pending_allowed(self, payment: OrderPayment) -> bool:
+        """
+        Experimental: This might change during upcomming releases.
+        Whether or not a user can abort a payment in pending state to switch to another
+        payment method. This returns ``self.abort_pending_allowed`` by default which is
+        no guarantee that aborting a pending payment can never happen, it just hides the
+        frontend button to avoid users accidentally committing double payments.
+        """
+        return self.abort_pending_allowed
 
     @property
     def requires_invoice_immediately(self):
@@ -1019,10 +1034,12 @@ class BasePaymentProvider:
         On success, you should set ``payment.state = OrderPayment.PAYMENT_STATE_CANCELED`` (or call the super method).
         On failure, you should raise a PaymentException.
         """
-        if payment.state == OrderPayment.PAYMENT_STATE_PENDING and not self.abort_pending_allowed:
-            raise PaymentException(_(
-                "This payment is already being processed and can not be canceled any more."
-            ))
+
+        if payment.state == OrderPayment.PAYMENT_STATE_PENDING:
+            if not self._payment_abort_pending_allowed(payment):
+                raise PaymentException(_(
+                    "This payment is already being processed and cannot be canceled any more."
+                ))
 
         payment.state = OrderPayment.PAYMENT_STATE_CANCELED
         payment.save(update_fields=['state'])

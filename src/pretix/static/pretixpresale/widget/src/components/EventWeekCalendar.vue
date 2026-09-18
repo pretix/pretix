@@ -88,7 +88,8 @@ function nextweek () {
 			| {{ STRINGS.next_week }} &raquo;
 
 	//- Actual calendar
-	.pretix-widget-event-week-table(:id="id", tabindex="0", :aria-label="weekname")
+	.pretix-widget-event-week-empty(v-if="store.emptyText", v-html="store.emptyText")
+	.pretix-widget-event-week-table(v-else, :id="id", tabindex="0", :aria-label="weekname")
 		.pretix-widget-event-week-col(v-for="d in store.days", :key="d?.date || ''")
 			EventWeekCell(:day="d", :mobile="mobile")
 </template>

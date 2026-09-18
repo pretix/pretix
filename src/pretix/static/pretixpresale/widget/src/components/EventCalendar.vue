@@ -92,7 +92,9 @@ function nextmonth () {
 			| {{ STRINGS.next_month }} &raquo;
 
 	//- Calendar
+	.pretix-widget-event-calendar-empty(v-if="!!store.emptyText", v-html="store.emptyText")
 	table.pretix-widget-event-calendar-table(
+		v-else
 		:id="id",
 		tabindex="0",
 		:aria-labelledby="ariaLabelledby"

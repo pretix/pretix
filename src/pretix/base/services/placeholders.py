@@ -562,6 +562,22 @@ def base_placeholders(sender, **kwargs):
             lambda event: str(event.location or ''),
         ),
         SimpleFunctionalTextPlaceholder(
+            'event_begin_time', ['event_or_subevent'],
+            lambda event_or_subevent:
+                date_format(event_or_subevent.date_from.astimezone(event_or_subevent.timezone), 'TIME_FORMAT')
+                if event_or_subevent.date_from
+                else '',
+            lambda event: date_format(event.date_from.astimezone(event.timezone), 'TIME_FORMAT') if event.date_from else '',
+        ),
+        SimpleFunctionalTextPlaceholder(
+            'event_end_time', ['event_or_subevent'],
+            lambda event_or_subevent:
+                date_format(event_or_subevent.date_to.astimezone(event_or_subevent.timezone), 'TIME_FORMAT')
+                if event_or_subevent.date_to
+                else '',
+            lambda event: date_format(event.date_to.astimezone(event.timezone), 'TIME_FORMAT') if event.date_to else '',
+        ),
+        SimpleFunctionalTextPlaceholder(
             'event_admission_time', ['event_or_subevent'],
             lambda event_or_subevent:
                 date_format(event_or_subevent.date_admission.astimezone(event_or_subevent.timezone), 'TIME_FORMAT')
@@ -801,11 +817,10 @@ def get_available_placeholders(event, base_parameters, rich=False):
     return params
 
 
-def get_sample_context(event, context_parameters, rich=True):
+def prepare_sample_context_for_preview(placeholder_to_sample):
     context_dict = {}
     lbl = _('This value will be replaced based on dynamic parameters.')
-    for k, v in get_available_placeholders(event, context_parameters, rich=rich).items():
-        sample = v.render_sample(event)
+    for k, sample in placeholder_to_sample.items():
         if isinstance(sample, PlainHtmlAlternativeString):
             context_dict[k] = PlainHtmlAlternativeString(
                 '<{el} class="placeholder" title="{title}">{plain}</{el}>'.format(
@@ -830,3 +845,12 @@ def get_sample_context(event, context_parameters, rich=True):
                 escape(sample)
             ))
     return context_dict
+
+
+def get_sample_context(event, context_parameters, rich=True):
+    return prepare_sample_context_for_preview(
+        {
+            k: v.render_sample(event)
+            for k, v in get_available_placeholders(event, context_parameters, rich=rich).items()
+        }
+    )

@@ -275,6 +275,9 @@
                     {% bootstrap_field sform.event_calendar_future_only layout="control" %}
                 {% endif %}
                 {% bootstrap_field sform.low_availability_percentage layout="control" addon_after="%" %}
+                {% if sform.event_list_empty_text %}
+                    {% bootstrap_field sform.event_list_empty_text layout="control" %}
+                {% endif %}
 
 
                 <h4>{% trans "Order details" %}</h4>

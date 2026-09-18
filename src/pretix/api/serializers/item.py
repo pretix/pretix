@@ -550,7 +550,7 @@ class QuestionSerializer(I18nAwareModelSerializer):
                   'ask_during_checkin', 'show_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
                   'hidden', 'dependency_value', 'print_on_invoice', 'help_text', 'valid_number_min',
                   'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
-                  'valid_string_length_max', 'valid_file_portrait')
+                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait')
 
     def validate_identifier(self, value):
         Question._clean_identifier(self.context['event'], value, self.instance)
@@ -619,7 +619,7 @@ class QuestionSerializer(I18nAwareModelSerializer):
         options_data = validated_data.pop('options') if 'options' in validated_data else []
         items = validated_data.pop('items', [])
 
-        question = Question.objects.create(**validated_data)
+        question = Question.objects.create(**validated_data, container_type=Question.ContainerType.ORDERPOSITION)
         question.items.set(items)
         for opt_data in options_data:
             QuestionOption.objects.create(question=question, **opt_data)

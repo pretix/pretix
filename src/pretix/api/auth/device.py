@@ -20,8 +20,11 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+from datetime import timedelta
 
 from django.contrib.auth.models import AnonymousUser
+from django.db import DatabaseError
+from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from rest_framework import exceptions
 from rest_framework.authentication import TokenAuthentication
@@ -30,6 +33,7 @@ from pretix.api.auth.devicesecurity import (
     FullAccessSecurityProfile, get_all_security_profiles,
 )
 from pretix.base.models import Device
+from pretix.base.models.devices import DeviceLastSeen
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +46,7 @@ class DeviceTokenAuthentication(TokenAuthentication):
         model = self.get_model()
         try:
             with scopes_disabled():
-                device = model.objects.select_related('organizer').get(api_token=key)
+                device = model.objects.select_related('organizer', 'last_seen').get(api_token=key)
         except model.DoesNotExist:
             raise exceptions.AuthenticationFailed('Invalid token.')
 
@@ -53,6 +57,7 @@ class DeviceTokenAuthentication(TokenAuthentication):
             logging.warning(f'Connection attempt of revoked device {device.pk}.')
             raise exceptions.AuthenticationFailed('Device access has been revoked.')
 
+        self._update_last_seen(device)
         return AnonymousUser(), device
 
     def authenticate(self, request):
@@ -63,3 +68,22 @@ class DeviceTokenAuthentication(TokenAuthentication):
             if not profile.is_allowed(request):
                 raise exceptions.PermissionDenied('Request denied by device security profile.')
         return r
+
+    def _update_last_seen(self, device: Device):
+        try:
+            try:
+                last_seen_obj = device.last_seen
+            except DeviceLastSeen.DoesNotExist:
+                # First request from device, create model, ignore result. Use get_or_create to be safe
+                # against concurrent create requests
+                DeviceLastSeen.objects.get_or_create(device=device, last_seen=now())
+            else:
+                if now() - last_seen_obj.last_seen < timedelta(seconds=10):
+                    # We don't need to know the last seen info of a device to more precision than this,
+                    # so we can avoid some database writes if the device is bursting a lot of requests.
+                    return
+                last_seen_obj.last_seen = now()
+                last_seen_obj.save(update_fields=["last_seen"])
+        except DatabaseError:
+            # Do not stop the request from happening
+            logger.exception("Database error while updating last_seen")

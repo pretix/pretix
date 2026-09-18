@@ -48,12 +48,12 @@ from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
-from django.db import transaction
+from django.db import models, transaction
 from django.db.models import (
-    Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, QuerySet, Sum,
-    Value,
+    Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, QuerySet, Subquery,
+    Sum, Value,
 )
-from django.db.models.functions import Coalesce, Greatest
+from django.db.models.functions import Cast, Greatest
 from django.db.transaction import get_connection
 from django.dispatch import receiver
 from django.utils.functional import cached_property
@@ -71,10 +71,10 @@ from pretix.base.models import (
     Membership, Order, OrderPayment, OrderPosition, Quota, Seat,
     SeatCategoryMapping, User, Voucher,
 )
-from pretix.base.models.event import SubEvent
+from pretix.base.models.event import Event_SettingsStore, SubEvent
 from pretix.base.models.orders import (
-    BlockedTicketSecret, InvoiceAddress, OrderFee, OrderRefund,
-    generate_secret,
+    BlockedTicketSecret, CheckoutSession, InvoiceAddress, OrderFee,
+    OrderRefund, generate_secret,
 )
 from pretix.base.models.organizer import SalesChannel, TeamAPIToken
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
@@ -961,7 +961,7 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
 
 
 def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: List[dict], address: InvoiceAddress,
-                             meta_info: dict, event: Event, require_approval=False):
+                             meta_info: dict, event: Event, sales_channel: SalesChannel, require_approval=False):
     fees = []
     # Pre-rounding, pre-fee total is used for fee calculation
     total = sum([c.gross_price_before_rounding for c in positions])
@@ -1021,7 +1021,14 @@ def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: Li
         payments_assigned += to_pay
         p['payment_amount'] = to_pay
 
-    if total != payments_assigned and not require_approval:
+    allow_postponed_payment = (
+        require_approval or
+        (
+            sales_channel.identifier in event.settings.payment_choice_postpone_allowed_channels and not payment_requests
+        )
+    )
+
+    if total != payments_assigned and not allow_postponed_payment:
         raise OrderError(_("The selected payment methods do not cover the total balance."))
 
     return fees
@@ -1030,7 +1037,8 @@ def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: Li
 def _create_order(event: Event, *, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_requests: List[dict], sales_channel: SalesChannel, locale: str=None,
                   address: InvoiceAddress=None, meta_info: dict=None, shown_total=None,
-                  customer=None, valid_if_pending=False, api_meta: dict=None, tax_rounding_mode=None):
+                  customer=None, valid_if_pending=False, api_meta: dict=None, tax_rounding_mode=None,
+                  cart_id: str=None):
     payments = []
 
     try:
@@ -1042,7 +1050,15 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
 
     # Final calculation of fees, also performs final rounding
     try:
-        fees = _apply_rounding_and_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
+        fees = _apply_rounding_and_fees(
+            positions,
+            payment_requests,
+            address,
+            meta_info,
+            event,
+            sales_channel=sales_channel,
+            require_approval=require_approval
+        )
     except TaxRule.SaleNotAllowed:
         raise OrderError(error_messages['country_blocked'])
 
@@ -1113,6 +1129,14 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
     if meta_info:
         for msg in meta_info.get('confirm_messages', []):
             order.log_action('pretix.event.order.consent', data={'msg': msg})
+    if cart_id:
+        try:
+            session = CheckoutSession.objects.get(event=event, cart_id=cart_id)
+        except CheckoutSession.DoesNotExist:
+            pass
+        else:
+            session.answers.update(order=order, checkoutsession=None)
+            session.delete()
 
     order_placed.send(event, order=order, bulk=False)
     return order, payments
@@ -1160,7 +1184,7 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
 
 def _perform_order(event: Event, payment_requests: List[dict], position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None, sales_channel: str='web',
-                   shown_total=None, customer=None, api_meta: dict=None, tax_rounding_mode=None):
+                   shown_total=None, customer=None, api_meta: dict=None, tax_rounding_mode=None, cart_id: str=None):
     for p in payment_requests:
         p['pprov'] = event.get_payment_providers(cached=True)[p['provider']]
         if not p['pprov']:
@@ -1267,6 +1291,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
                 valid_if_pending=valid_if_pending,
                 api_meta=api_meta,
                 tax_rounding_mode=tax_rounding_mode,
+                cart_id=cart_id,
             )
 
             try:
@@ -1494,83 +1519,104 @@ def send_expiry_warnings(sender, **kwargs):
 @scopes_disabled()
 def send_download_reminders(sender, **kwargs):
     today = now().replace(hour=0, minute=0, second=0, microsecond=0)
-    qs = Order.objects.annotate(
-        first_date=Coalesce(
-            Min('all_positions__subevent__date_from'),
-            F('event__date_from')
+
+    events = Event.objects.filter(
+        Q(has_subevents=False, date_from__gte=now()) |
+        (Q(has_subevents=True) & Q(Exists(
+            SubEvent.objects.filter(event_id=OuterRef('id'), date_from__gte=now())
+        )))
+    ).annotate(
+        reminder_days=Subquery(
+            Event_SettingsStore.objects.filter(
+                object=OuterRef('id'),
+                key='mail_days_download_reminder'
+            ).exclude(
+                value="None"
+            ).annotate(
+                val=Cast(F("value"), output_field=models.IntegerField()),
+            ).values("val")
         )
     ).filter(
-        download_reminder_sent=False,
-        datetime__lte=now() - timedelta(hours=2),
-        first_date__gte=today,
-    ).only(
-        'pk', 'event_id', 'sales_channel', 'datetime',
-    ).order_by('event_id')
-    event_id = None
-    days = None
-    event = None
+        reminder_days__isnull=False,
+    ).order_by()
 
-    for o in qs:
-        if o.event_id != event_id:
-            days = o.event.settings.get('mail_days_download_reminder', as_type=int)
-            event = o.event
-            event_id = o.event_id
+    for event in events.iterator(chunk_size=10_000):
+        qs = event.orders.filter(
+            download_reminder_sent=False,
+            datetime__lte=now() - timedelta(hours=2),
+        )
 
-        if days is None:
-            continue
-
-        if o.sales_channel.identifier not in event.settings.mail_sales_channel_download_reminder:
-            continue
-
-        reminder_date = (o.first_date - timedelta(days=days)).replace(hour=0, minute=0, second=0, microsecond=0)
-        if now() < reminder_date or o.datetime > reminder_date:
-            continue
-
-        with transaction.atomic():
-            o = Order.objects.select_for_update(of=OF_SELF).get(pk=o.pk)
-            if o.download_reminder_sent:
-                # Race condition
-                continue
-            positions = list(o.positions_with_tickets)
-            if not positions:
+        if event.has_subevents:
+            qs = qs.annotate(
+                first_date=Min('all_positions__subevent__date_from')
+            ).filter(
+                Q(first_date__gte=today)
+            )
+        else:
+            event_reminder_date = (event.date_from - timedelta(days=event.reminder_days)).replace(hour=0, minute=0, second=0, microsecond=0)
+            if now() < event_reminder_date:
                 continue
 
-            if not o.ticket_download_available:
+        qs = qs.only(
+            'pk', 'event_id', 'sales_channel', 'datetime',
+        ).order_by()
+
+        for o in qs:
+            if o.sales_channel.identifier not in event.settings.mail_sales_channel_download_reminder:
                 continue
 
-            if o.status != Order.STATUS_PAID:
-                if o.status != Order.STATUS_PENDING or o.require_approval or (not o.valid_if_pending and not o.event.settings.ticket_download_pending):
+            if event.has_subevents:
+                reminder_date = ((o.first_date or event.date_from) - timedelta(days=event.reminder_days)).replace(hour=0, minute=0, second=0, microsecond=0)
+            else:
+                reminder_date = event_reminder_date
+            if now() < reminder_date or o.datetime > reminder_date:
+                continue
+
+            with transaction.atomic():
+                o = Order.objects.select_for_update(of=OF_SELF).get(pk=o.pk)
+                if o.download_reminder_sent:
+                    # Race condition
+                    continue
+                positions = list(o.positions_with_tickets)
+                if not positions:
                     continue
 
-            with language(o.locale, o.event.settings.region):
-                o.download_reminder_sent = True
-                o.save(update_fields=['download_reminder_sent'])
-                email_template = event.settings.mail_text_download_reminder
-                email_subject = event.settings.mail_subject_download_reminder
-                email_context = get_email_context(event=event, order=o)
-                o.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.download_reminder_sent',
-                    attach_tickets=True
-                )
+                if not o.ticket_download_available:
+                    continue
 
-                if event.settings.mail_send_download_reminder_attendee:
-                    for p in positions:
-                        if p.subevent_id:
-                            reminder_date = (p.subevent.date_from - timedelta(days=days)).replace(
-                                hour=0, minute=0, second=0, microsecond=0
-                            )
-                            if now() < reminder_date:
-                                continue
-                        if p.addon_to_id is None and p.attendee_email and p.attendee_email != o.email:
-                            email_template = event.settings.mail_text_download_reminder_attendee
-                            email_subject = event.settings.mail_subject_download_reminder_attendee
-                            email_context = get_email_context(event=event, order=o, position=p)
-                            o.send_mail(
-                                email_subject, email_template, email_context,
-                                'pretix.event.order.email.download_reminder_sent',
-                                attach_tickets=True, position=p
-                            )
+                if o.status != Order.STATUS_PAID:
+                    if o.status != Order.STATUS_PENDING or o.require_approval or (not o.valid_if_pending and not o.event.settings.ticket_download_pending):
+                        continue
+
+                with language(o.locale, o.event.settings.region):
+                    o.download_reminder_sent = True
+                    o.save(update_fields=['download_reminder_sent'])
+                    email_template = event.settings.mail_text_download_reminder
+                    email_subject = event.settings.mail_subject_download_reminder
+                    email_context = get_email_context(event=event, order=o)
+                    o.send_mail(
+                        email_subject, email_template, email_context,
+                        'pretix.event.order.email.download_reminder_sent',
+                        attach_tickets=True
+                    )
+
+                    if event.settings.mail_send_download_reminder_attendee:
+                        for p in positions:
+                            if p.subevent_id:
+                                reminder_date = (p.subevent.date_from - timedelta(days=event.reminder_days)).replace(
+                                    hour=0, minute=0, second=0, microsecond=0
+                                )
+                                if now() < reminder_date:
+                                    continue
+                            if p.addon_to_id is None and p.attendee_email and p.attendee_email != o.email:
+                                email_template = event.settings.mail_text_download_reminder_attendee
+                                email_subject = event.settings.mail_subject_download_reminder_attendee
+                                email_context = get_email_context(event=event, order=o, position=p)
+                                o.send_mail(
+                                    email_subject, email_template, email_context,
+                                    'pretix.event.order.email.download_reminder_sent',
+                                    attach_tickets=True, position=p
+                                )
 
 
 def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
@@ -3169,12 +3215,12 @@ class OrderChangeManager:
 def perform_order(self, event: Event, payments: List[dict], positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
                   sales_channel: str='web', shown_total=None, customer=None, override_now_dt: datetime=None,
-                  api_meta: dict=None):
+                  api_meta: dict=None, cart_id: str=None):
     with language(locale), time_machine_now_assigned(override_now_dt):
         try:
             try:
                 return _perform_order(event, payments, positions, email, locale, address, meta_info,
-                                      sales_channel, shown_total, customer, api_meta)
+                                      sales_channel, shown_total, customer, api_meta, cart_id=cart_id)
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
@@ -3438,7 +3484,7 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
             }
         )
 
-    new_invoice_created = False
+    new_invoice = None
     if recreate_invoices:
         # Lock to prevent duplicate invoice creation
         order = Order.objects.select_for_update(of=OF_SELF).get(pk=order.pk)
@@ -3449,13 +3495,16 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
         if has_active_invoice and order.total != oldtotal:
             try:
                 generate_cancellation(i)
-                generate_invoice(order)
+                new_invoice = generate_invoice(order)
             except Exception as e:
                 logger.exception("Could not generate invoice.")
                 order.log_action("pretix.event.order.invoice.failed", data={
                     "exception": str(e)
                 })
-            new_invoice_created = True
+            else:
+                order.log_action('pretix.event.order.invoice.generated', data={
+                    'invoice': new_invoice.pk
+                })
 
         elif (not has_active_invoice or order.invoice_dirty) and invoice_qualified(order):
             if order.event.settings.get('invoice_generate') == 'True' or (
@@ -3465,10 +3514,9 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
                 try:
                     if has_active_invoice:
                         generate_cancellation(i)
-                    i = generate_invoice(order)
-                    new_invoice_created = True
+                    new_invoice = generate_invoice(order)
                     order.log_action('pretix.event.order.invoice.generated', data={
-                        'invoice': i.pk
+                        'invoice': new_invoice.pk
                     })
                 except Exception as e:
                     logger.exception("Could not generate invoice.")
@@ -3476,8 +3524,11 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
                         "exception": str(e)
                     })
 
+    if new_invoice and invoice_transmission_separately(new_invoice):
+        transmit_invoice.apply_async(args=(order.event_id, new_invoice.pk, False))
+
     order.create_transactions()
-    return old_fee, new_fee, fee, new_payment, new_invoice_created
+    return old_fee, new_fee, fee, new_payment, bool(new_invoice)
 
 
 @receiver(order_paid, dispatch_uid="pretixbase_order_paid_giftcards")

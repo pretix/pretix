@@ -2,6 +2,7 @@
 {% load icon %}
 {% load eventurl %}
 {% load date_fast %}
+{% load rich_text %}
 
 <div class="event-list full-width-list alternating-rows">
 {% for subev in subevent_list.subevent_list %}
@@ -43,5 +44,10 @@
             </a>
         </p>
     </article>
+{% empty %}
+    <div class="calendar-empty">
+        <span class="fa fa-calendar-times-o fa-4x text-muted"></span>
+        {{ event.settings.event_list_empty_text|rich_text }}
+    </div>
 {% endfor %}
 </div>

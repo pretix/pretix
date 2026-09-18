@@ -89,11 +89,11 @@ def _widget_assets():
                 f'Start it with: npm run dev:widget'
             )
         yield
-    elif os.environ.get("PRETIX_WIDGET_VITE"):
+    elif os.environ.get("PRETIX_WIDGET_VUE"):
+        yield  # Old widget, no build needed
+    else:
         subprocess.check_call(['npm', 'run', 'build:widget'], cwd=PROJECT_ROOT)
         yield
-    else:
-        yield  # Old widget, no build needed
 
 
 # ============================================================================
@@ -154,10 +154,6 @@ def live_server_url(live_server, settings):
         }
 
     settings.SITE_URL = live_server.url
-
-    # Enable Vite widget if requested via env var
-    if os.environ.get("PRETIX_WIDGET_VITE") or os.environ.get("PRETIX_WIDGET_VITE_DEV"):
-        settings.PRETIX_WIDGET_VITE = True
 
     return live_server.url
 

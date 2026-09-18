@@ -67,6 +67,7 @@ from pretix.base.services.cart import (
 from pretix.base.timemachine import time_machine_now
 from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.http import redirect_to_url
+from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.productlist import (
     item_group_by_category, prepare_item_list_for_shop,
@@ -388,6 +389,7 @@ def get_or_create_cart_id(request, create=True):
             if 'carts' in request.session:
                 request.session['carts'][current_id] = {}
         else:
+            # We found a valid, existing cart.
             return current_id
 
     cart_data = {}
@@ -398,6 +400,7 @@ def get_or_create_cart_id(request, create=True):
             cart_data['widget_data'] = cached_widget_data
     else:
         if not create:
+            # There is no existing cart for this request and we're not supposed to create a new one.
             return None
         new_id = generate_cart_id(request, prefix=prefix)
 
@@ -846,15 +849,19 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
 class AnswerDownload(EventViewMixin, View):
     def get(self, request, *args, **kwargs):
         answid = kwargs.get('answer')
+        token = request.GET.get('token', '')
+        cart_id = get_or_create_cart_id(self.request)
         answer = get_object_or_404(
             QuestionAnswer,
-            cartposition__cart_id=get_or_create_cart_id(self.request),
+            Q(cartposition__cart_id=cart_id) | Q(checkoutsession__cart_id=cart_id),
             id=answid
         )
         if not answer.file:
             return Http404()
+        if not check_token(request, answer, token):
+            raise Http404(_("This link is no longer valid. Please go back, refresh the page, and try again."))
 
-        ftype, _ = mimetypes.guess_type(answer.file.name)
+        ftype, _1 = mimetypes.guess_type(answer.file.name)
         filename = '{}-cart-{}'.format(
             self.request.event.slug.upper(),
             os.path.basename(answer.file.name).split('.', 1)[1]
@@ -862,6 +869,7 @@ class AnswerDownload(EventViewMixin, View):
         resp = FileResponse(
             answer.file,
             filename=filename,
+            as_attachment=True,
             content_type=ftype or 'application/binary'
         )
         return resp
