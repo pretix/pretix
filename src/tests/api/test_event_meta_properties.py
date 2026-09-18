@@ -29,7 +29,14 @@ def event_meta_property(organizer):
         name="Color",
         default="Red",
         required=False,
-        choices=None,
+        choices=[
+            {
+                "key": "Red",
+                "label": "Rot",
+                "DELETE": False,
+                "ORDER": 1,
+            }
+        ],
     )
 
 
@@ -37,7 +44,7 @@ TEST_TYPE_RES = {
     "name": "Color",
     "default": "Red",
     "required": False,
-    "choices": None,
+    "choices": [{"key": "Red", "label": "Rot"}],
     'filter_allowed': True,
     'filter_public': False,
     'protected': False,
@@ -146,6 +153,18 @@ def test_meta_property_patch(token_client, organizer, event_meta_property):
         .format(organizer.slug, event_meta_property.pk),
         format='json',
         data={
+            "choices": [],
+        }
+    )
+    assert resp.status_code == 200
+    event_meta_property.refresh_from_db()
+    assert event_meta_property.choices is None
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/event_meta_properties/{}/'
+        .format(organizer.slug, event_meta_property.pk),
+        format='json',
+        data={
             "required": True,
             "choices": None,
         }
@@ -154,8 +173,6 @@ def test_meta_property_patch(token_client, organizer, event_meta_property):
     event_meta_property.refresh_from_db()
     assert event_meta_property.required
     assert event_meta_property.choices is None
-
-
 
 
 @pytest.mark.django_db
