@@ -32,7 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-import tempfile
+import logging
 from datetime import timedelta
 from decimal import Decimal
 from io import BytesIO
@@ -129,9 +129,14 @@ def asset_path(name):
     return Path(__file__).parent / "assets" / name
 
 
-def compare_pdfs(inp_a: Path | bytes, inp_b: Path | bytes):
+def compare_pdfs(pdf_dir: Path, inp_a: Path | bytes, inp_b: Path | bytes):
+    logging.info(f"Comparing pdfs, writing files to {pdf_dir}")
+
     pdf_a = pypdfium2.PdfDocument(inp_a)
     pdf_b = pypdfium2.PdfDocument(inp_b)
+
+    pdf_a.save(pdf_dir / "a.pdf")
+    pdf_a.save(pdf_dir / "b.pdf")
 
     assert len(pdf_a) == len(pdf_b)
 
@@ -143,9 +148,8 @@ def compare_pdfs(inp_a: Path | bytes, inp_b: Path | bytes):
 
         diff = ImageChops.difference(expected_render.to_pil(), output_render.to_pil())
         if diff.getbbox():
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as f:
-                diff.save(f)
-            assert not diff.getbbox(), f"Page {i} differs. Diff was written to {f.name}"
+            diff.save(pdf_dir / f"{i}.png")
+            assert not diff.getbbox(), f"Page {i} differs."
 
 
 @pytest.mark.django_db
@@ -154,7 +158,7 @@ def compare_pdfs(inp_a: Path | bytes, inp_b: Path | bytes):
     "bg-mediabox-offset",
     "bg-cropbox"
 ])
-def test_generate_pdf_weird_bgs(env, case):
+def test_generate_pdf_weird_bgs(pdf_dir, env, case):
     event, order, shirt = env
     asset_folder = asset_path(case)
     with open(asset_folder / "bg.pdf", 'rb') as fi:
@@ -168,4 +172,4 @@ def test_generate_pdf_weird_bgs(env, case):
     assert ftype == 'application/pdf'
     assert buf
 
-    compare_pdfs(buf, asset_folder / "expected.pdf")
+    compare_pdfs(pdf_dir, buf, asset_folder / "expected.pdf")
