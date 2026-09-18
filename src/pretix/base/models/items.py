@@ -1671,37 +1671,37 @@ class Question(LoggedModel):
             ),
         ],
     )
-    help_text = I18nTextField(
-        # TODO(questionnaires) : to be removed
-        verbose_name=_("Help text"),
-        help_text=_("If the question needs to be explained or clarified, do it here!"),
-        null=True, blank=True,
-    )
+    #help_text = I18nTextField(
+    #    # TODO(questionnaires) : to be removed
+    #    verbose_name=_("Help text"),
+    #    help_text=_("If the question needs to be explained or clarified, do it here!"),
+    #    null=True, blank=True,
+    #)
     type = models.CharField(
         max_length=5,
         choices=FieldType.choices,
         verbose_name=_("Question type")
     )
-    required = models.BooleanField(  # TODO(questionnaires) : to be removed, -> QuestionnaireChild
-        default=False,
-        verbose_name=_("Required question")
-    )
-    items = models.ManyToManyField(  # TODO(questionnaires) : to be removed, -> Questionnaire
-        Item,
-        related_name='questions',
-        verbose_name=_("Products"),
-        blank=True,
-        help_text=_('This question will be asked to buyers of the selected products')
-    )
-    position = models.PositiveIntegerField(  # TODO(questionnaires) : to be removed, -> Questionnaire + QuestionnaireChild
-        default=0,
-        verbose_name=_("Position")
-    )
-    ask_during_checkin = models.BooleanField(  # TODO(questionnaires) : to be removed
-        verbose_name=_('Ask during check-in instead of in the ticket buying process'),
-        help_text=_('Not supported by all check-in apps for all question types.'),
-        default=False
-    )
+    #required = models.BooleanField(  # TODO(questionnaires) : to be removed, -> QuestionnaireChild
+    #    default=False,
+    #    verbose_name=_("Required question")
+    #)
+    #items = models.ManyToManyField(  # TODO(questionnaires) : to be removed, -> Questionnaire
+    #    Item,
+    #    related_name='questions',
+    #    verbose_name=_("Products"),
+    #    blank=True,
+    #    help_text=_('This question will be asked to buyers of the selected products')
+    #)
+    #position = models.PositiveIntegerField(  # TODO(questionnaires) : to be removed, -> Questionnaire + QuestionnaireChild
+    #    default=0,
+    #    verbose_name=_("Position")
+    #)
+    #ask_during_checkin = models.BooleanField(  # TODO(questionnaires) : to be removed
+    #    verbose_name=_('Ask during check-in instead of in the ticket buying process'),
+    #    help_text=_('Not supported by all check-in apps for all question types.'),
+    #    default=False
+    #)
     show_during_checkin = models.BooleanField(
         verbose_name=_('Show answer during check-in'),
         help_text=_('Not supported by all check-in apps for all question types.'),

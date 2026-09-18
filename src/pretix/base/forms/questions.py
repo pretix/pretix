@@ -50,7 +50,7 @@ from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import ProgrammingError
-from django.db.models import Prefetch, QuerySet
+from django.db.models import Prefetch, Q, QuerySet
 from django.forms import Select, widgets
 from django.forms.widgets import FILE_INPUT_CONTRADICTION
 from django.utils.formats import date_format
@@ -943,8 +943,7 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
         """
         Takes two additional keyword arguments:
 
-        :param checkoutsession: The checkout session the form should be for
-        :param order: The order the form should be for
+        :param container: The checkout session or order the form should be for
         :param event: The event this belongs to
         """
         request = kwargs.pop('request', None)
@@ -954,6 +953,7 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
         super().__init__(*args, **kwargs)
 
         questionnaires = Questionnaire.objects.filter(
+            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=container.sales_channel.identifier),
             event=event, type=Questionnaire.QuestionnaireType.ORDER_SALE,
         ).order_by('position').prefetch_related(
             Prefetch('children', QuestionnaireChild.objects.prefetch_related(

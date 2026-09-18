@@ -71,10 +71,17 @@ export async function getCategories() {
 	return await api_get_all<Category>(`organizers/${organizer_slug}/events/${event_slug}/categories/`);
 }
 
+export async function getSalesChannels() {
+	return await api_get_all<Category>(`organizers/${organizer_slug}/saleschannels/`);
+}
+
 export function getEventLocales() {
 	return fromJsonScript('event_locales');
 }
 
+export function getDatafieldViewUrl(datafield_id) {
+	return fromJsonScript('datafield_view_url').replace('/0/', `/${datafield_id}/`);
+}
 export function getDatafieldEditUrl(datafield_id) {
 	return fromJsonScript('datafield_edit_url').replace('/0/', `/${datafield_id}/`) + '?notify_parent=true&';
 }

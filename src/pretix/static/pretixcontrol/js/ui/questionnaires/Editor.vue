@@ -8,6 +8,7 @@ import {onMounted, onUnmounted, ref} from 'vue';
 import { SlickList, SlickItem } from 'vue-slicksort';
 import { ProgressBar } from "./ProgressBar";
 
+const sales_channels_list = await api.getSalesChannels();
 const items_list = await api.getItems();
 const categories_list = await api.getCategories();
 const categories = Object.fromEntries(categories_list.map(cat => [cat.id, cat]));
@@ -34,6 +35,7 @@ async function refreshQuestionnaireList () {
 async function refreshDatafieldList () {
 	order_datafields.value = await api.getDatafields('O')
 	position_datafields.value = (await api.getDatafields('P')).concat(Object.values(SYSTEM_DATAFIELDS))
+	console.log('datafield list refreshed')
 }
 await Promise.all([refreshQuestionnaireList(), refreshDatafieldList()])
 
@@ -46,14 +48,12 @@ function saveQuestionnaire(questionnaire) {
 		result = api.createQuestionnaire(questionnaire)
 	}
 	result = result.then(d => {
-		console.log(questionnaire, 'ok')
 		questionnaire.id = d.id
 		questionnaire.children = d.children
 		questionnaire._err_mes = null
 		questionnaire._loading = false
 		return d;
 	}, err => {
-		console.log(questionnaire, 'err:', err)
 		questionnaire._err_mes = err
 		questionnaire._loading = false
 		return err;
@@ -180,8 +180,8 @@ const preview_mode = ref(false)
     transform: rotate(0deg);
 }
 
-.questionnaires-list > .editor-action-row { border-top: 1px solid rgb(175 175 175 / 0.3); }
 .editor-action-row { padding-top: 10px; width: calc(100% + 190px); padding-right: 170px }
+.questionnaires-list > .editor-action-row { border-top: 1px solid rgb(175 175 175 / 0.3); padding-top: 25px; padding-bottom: 10px }
 </style>
 <template>
 	<div class="questionnaires-editor" v-if="!preview_mode">
@@ -194,6 +194,7 @@ const preview_mode = ref(false)
 					<QuestionnaireElement
 						:questionnaire="questionnaire"
 						:datafields="order_datafields"
+						:sales_channels="sales_channels_list"
 						:grouped_items="null"
 						:selected_product="null"
 						:preview_mode="false"
@@ -241,6 +242,7 @@ const preview_mode = ref(false)
 				<QuestionnaireElement v-for="(questionnaire, index) in position_questionnaires.filter(q => q.items.indexOf(selected_product as any) !== -1)"
 					:questionnaire="questionnaire"
 					:datafields="position_datafields"
+					:sales_channels="sales_channels_list"
 					:grouped_items="grouped_items"
 					:selected_product="selected_product"
 					:preview_mode="true"
@@ -255,6 +257,7 @@ const preview_mode = ref(false)
 					<QuestionnaireElement
 						:questionnaire="questionnaire"
 						:datafields="position_datafields"
+						:sales_channels="sales_channels_list"
 						:grouped_items="grouped_items"
 						:selected_product="selected_product"
 						:preview_mode="false"

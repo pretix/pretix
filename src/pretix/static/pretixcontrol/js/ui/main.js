@@ -1139,10 +1139,12 @@ function notify_parent_frame() {
 		}, location.origin)
 	} catch {}
 	$(function () {
-		window.parent.postMessage({
-			type: 'pretix:dialog-loaded',
-			contentHeight: $('body').height(),
-		}, location.origin)
+		setTimeout(() => {
+			window.parent.postMessage({
+				type: 'pretix:dialog-loaded',
+				contentHeight: $('#page-wrapper > .container-fluid').outerHeight() + 20,
+			}, location.origin)
+		}, 100)
 	})
 }
 notify_parent_frame()

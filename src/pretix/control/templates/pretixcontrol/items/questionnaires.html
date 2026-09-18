@@ -34,6 +34,9 @@
     {% url "control:event.items.questions.edit" organizer=request.event.organizer.slug event=request.event.slug question=0 as datafield_edit_url %}
     {{ datafield_edit_url|json_script:"datafield_edit_url" }}
 
+    {% url "control:event.items.questions.show" organizer=request.event.organizer.slug event=request.event.slug question=0 as datafield_view_url %}
+    {{ datafield_view_url|json_script:"datafield_view_url" }}
+
     {% url "control:event.items.questions.add" organizer=request.event.organizer.slug event=request.event.slug as datafield_create_url %}
     {{ datafield_create_url|json_script:"datafield_create_url" }}
 

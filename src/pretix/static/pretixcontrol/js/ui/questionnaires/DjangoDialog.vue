@@ -4,7 +4,10 @@ import {gettext} from "./gettextstub";
 import NativeDialog from "./NativeDialog.vue";
 import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 
-const props = defineProps(['defaultUrl'])
+const props = defineProps({
+	'defaultUrl': {type: String, default: null},
+	'maxWidth': {type: String, default: '43em'},
+})
 const emit = defineEmits(['confirm'])
 const dlgDjangoDialog = ref()
 const url = ref(props.defaultUrl)
@@ -40,20 +43,20 @@ defineExpose({
 		frameHeight.value = 400
 		url.value = newUrl
 		dlgDjangoDialog.value.show()
-	}
+	},
 });
 </script>
 
 <template>
-    <NativeDialog ref="dlgDjangoDialog" class="modal-card" no-padding="true" no-scroll="true">
+    <NativeDialog ref="dlgDjangoDialog" class="modal-card" :no-padding="true" :no-scroll="true" :max-width="maxWidth">
 			<div :style="{'height': frameHeight + 'px'}">
-        <i class="fa fa-cog big-rotating-icon" v-if="frameLoading"></i>
-				<iframe :src="url" v-if="dlgDjangoDialog.visible" :height="frameHeight" :style="{'visibility': frameLoading ? 'hidden' : 'visible'}"></iframe>
+        <div class="frame-load-indicator" v-if="frameLoading"><i class="fa fa-cog big-rotating-icon"></i></div>
+				<iframe :src="url" v-if="dlgDjangoDialog.visible" :height="frameHeight" :style="{'opacity': frameLoading ? '0' : '1'}"></iframe>
 			</div>
     </NativeDialog>
 </template>
 
 <style scoped>
-div { text-align: center; }
-iframe { width: 100%; border: 0; }
+.frame-load-indicator { text-align: center; }
+iframe { width: 100%; border: 0;  }
 </style>

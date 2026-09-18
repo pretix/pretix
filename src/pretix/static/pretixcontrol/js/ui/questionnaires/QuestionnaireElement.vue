@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useId, ref, computed, onMounted} from 'vue'
+import {useId, ref, computed, onMounted, watch} from 'vue'
 import QuestionElement from "./QuestionElement.vue";
 import {
 	i18n_any,
@@ -25,12 +25,15 @@ const newTextblockTitle = ref()
 const newTextblockText = ref()
 
 const id = useId();
-const props = defineProps(['questionnaire', 'datafields', 'selected_product', 'grouped_items', 'preview_mode', 'err_mes'])
+const props = defineProps(['questionnaire', 'datafields', 'sales_channels', 'selected_product', 'grouped_items', 'preview_mode', 'err_mes'])
 const emit = defineEmits(['update', 'invalidate:datafields'])
 
-for (let qc of props.questionnaire.children) {
-	if (!qc._cid) qc._cid = useId();
-}
+let nextId = 1;
+watch(() => props.questionnaire.children, () => {
+	for (let qc of props.questionnaire.children) {
+		if (!qc._cid) qc._cid = id + (++nextId);
+	}
+})
 
 function setVisibleOnItem (checked, itemId) {
 	const i = props.questionnaire.items.indexOf(itemId)
@@ -76,12 +79,19 @@ function addTextblock () {
 }
 
 function newDatafield (container_type) {
-	dlgNewDatafield.value.dialog.show()
+	dlgNewDatafield.value.open(getDatafieldCreateUrl(props.questionnaire.type[0]))
 }
 
 async function onNewDatafieldCreated (data) {
-	await emit('invalidate:datafields')
-	dlgAddExisting.value.show()
+	watch(
+		() => props.datafields,
+		(newValue, oldValue) => {
+			console.log('datafields changed watcher called')
+			addExistingDatafield(newValue.find(f => f.id === data.object))
+		},
+		{ once: true }
+	)
+	emit('invalidate:datafields')
 }
 
 const isHidden = computed(() => props.selected_product && props.questionnaire.items.indexOf(props.selected_product) === -1)
@@ -97,7 +107,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
     <summary class="questionnaire-panel-heading">
 			<div class=" editor-row">
 				<div class="editor-preview-area">
-					<input type="checkbox" @change="setVisibleOnItem(this.checked, selected_product); emit('update')" v-if="selected_product && !preview_mode" :checked="!isHidden">
+					<input type="checkbox" @change="e => {setVisibleOnItem(e.target.checked, selected_product); emit('update')}" v-if="selected_product && !preview_mode" :checked="!isHidden">
 					{{ props.questionnaire.internal_name }}
 					<span class="fa fa-warning" v-if="questionnaire._err_mes"></span>
 					<span class="fa fa-cog fa-spin" v-if="questionnaire._loading"></span>
@@ -170,6 +180,14 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 								<input type="checkbox" v-model="questionnaire.all_sales_channels"> {{ gettext('All sales channels') }}
 							</label>
 						</div>
+						<div class="checkbox" v-for="channel in sales_channels">
+							<label>
+								<input type="checkbox" :checked="questionnaire.all_sales_channels || questionnaire.limit_sales_channels.indexOf(channel.identifier) !== -1"
+											 @change="e => e.target.checked ? questionnaire.limit_sales_channels.push(channel.identifier) : questionnaire.limit_sales_channels.splice(questionnaire.limit_sales_channels.indexOf(channel.identifier), 1)"
+											 :disabled="questionnaire.all_sales_channels">
+								{{ i18n_any(channel.label) }}
+							</label>
+						</div>
           </div>
         </div>
         <div class="form-group" v-if="grouped_items">
@@ -181,7 +199,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 							<div class="category-header">{{ category.internal_name || i18n_any(category.name) }}</div>
 							<div class="checkbox" v-for="item in items">
 								<label :for="id + '_' + item.id">
-									<input :id="id + '_' + item.id" type="checkbox" :checked="questionnaire.items.indexOf(item.id) !== -1" @change="setVisibleOnItem(this.checked, item.id)"> {{ item.internal_name || i18n_any(item.name) }}
+									<input :id="id + '_' + item.id" type="checkbox" :checked="questionnaire.items.indexOf(item.id) !== -1" @change="e => setVisibleOnItem(e.target.checked, item.id)"> {{ item.internal_name || i18n_any(item.name) }}
 								</label>
 							</div>
 						</div>
@@ -226,6 +244,6 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 
     </NativeDialog>
 
-		<DjangoDialog ref="dlgNewDatafield" :default-url="getDatafieldCreateUrl(questionnaire.type[0])" @confirm="onNewDatafieldCreated"></DjangoDialog>
+		<DjangoDialog ref="dlgNewDatafield" @confirm="onNewDatafieldCreated" max-width="60em"></DjangoDialog>
   </Teleport>
 </template>

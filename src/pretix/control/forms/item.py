@@ -157,7 +157,6 @@ class QuestionForm(I18nModelForm):
             del self.fields['show_during_checkin']
             del self.fields['print_on_invoice']
         self.fields['identifier'].required = False
-        self.fields['help_text'].widget.attrs['rows'] = 3
 
     def clean_show_during_checkin(self):
         val = self.cleaned_data.get('show_during_checkin')
@@ -191,9 +190,7 @@ class QuestionForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'question',
-            'help_text',
             'type',
-            'required',
             'show_during_checkin',
             'hidden',
             'identifier',

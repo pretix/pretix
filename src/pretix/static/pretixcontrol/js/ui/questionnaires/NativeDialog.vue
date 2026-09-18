@@ -8,9 +8,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
-  title: '',
-	noPadding: false,
-	noScroll: true,
+  title: {type: String, default: ''},
+	noPadding: {type: Boolean, default: false},
+	noScroll: {type: Boolean, default: true},
+	maxWidth: {type: String, default: '43em'},
 });
 
 const visible = ref(false);
@@ -34,6 +35,7 @@ const id = useId();
     @close="visible = false"
     closedby="any"
     :aria-labelledby="`${id}-title`"
+		:style="{maxWidth: props.maxWidth}"
   >
     <form
       v-if="visible"
