@@ -45,12 +45,14 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 from hijack import signals
 
 from pretix.base.auth import get_auth_backends
-from pretix.base.models import User, U2FDevice, WebAuthnDevice
+from pretix.base.models import U2FDevice, User, WebAuthnDevice
 from pretix.control.forms.filter import UserFilterForm
 from pretix.control.forms.users import UserEditForm
 from pretix.control.permissions import AdministratorPermissionRequiredMixin
 from pretix.control.views import CreateView, UpdateView
-from pretix.control.views.user import RecentAuthenticationRequiredMixin, REAL_DEVICE_TYPES
+from pretix.control.views.user import (
+    REAL_DEVICE_TYPES, RecentAuthenticationRequiredMixin,
+)
 
 
 def get_used_backend(request):
@@ -193,6 +195,24 @@ class UserEmergencyTokenView(AdministratorPermissionRequiredMixin, RecentAuthent
             token=token.token
         ))
 
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('control:users.edit', kwargs=self.kwargs)
+
+
+class Reset2FADriftView(AdministratorPermissionRequiredMixin, RecentAuthenticationRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        return redirect(reverse('control:users.edit', kwargs=self.kwargs))
+
+    def post(self, request, *args, **kwargs):
+        self.object = get_object_or_404(User, pk=self.kwargs.get("id"))
+        self.object.totpdevice_set.update(drift=0)
+        self.object.log_action('pretix.user.settings.2fa.resetdrift', user=self.request.user)
+        messages.success(request, _(
+            'The drift values for TOTP devices have been reset.'
+        ))
         return redirect(self.get_success_url())
 
     def get_success_url(self):
