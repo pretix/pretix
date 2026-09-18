@@ -443,6 +443,15 @@ let form_handlers = function (el) {
 		})
 	})
 
+	function addClearButton($input) {
+		var $btn = $("<button class='clear-input-button'><span class='fa fa-times'></span></button>").insertAfter($input).on('click', function(e) {
+			$input.val('').trigger('input').trigger('change'); e.preventDefault()
+		}).toggle($input.val() !== '')
+		$input.on('input', function() {
+			$btn.toggle($input.val() !== '')
+		})
+	}
+
 	el.find('div.scrolling-choice:not(.no-search)').each(function () {
 		if ($(this).find('input[type=text]').length > 0) {
 			return
@@ -450,6 +459,7 @@ let form_handlers = function (el) {
 		let $menu = $('<div>').addClass('choice-options-menu')
 		let $inp_search = $('<input>').addClass('form-control').attr('type', 'text').attr('placeholder', gettext('Search query'))
 		$menu.append($inp_search)
+		addClearButton($inp_search)
 		$(this).prepend($menu)
 
 		$inp_search.on('keyup change', function (e) {
@@ -478,6 +488,7 @@ let form_handlers = function (el) {
 			$menu.append($lbl_tgl)
 		}
 		$(this).prepend($menu)
+		addClearButton($inp_search)
 
 		$(this).find('.choice-options-none').click(function (e) {
 			$(this).closest('.scrolling-multiple-choice').find('input[type=checkbox]:not(.menu-checkbox)').prop('checked', false)
