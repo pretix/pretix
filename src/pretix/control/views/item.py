@@ -56,23 +56,23 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.generic import FormView, ListView, View
+from django.views.generic import FormView, ListView, TemplateView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django_countries.fields import Country
+from i18nfield.strings import LazyI18nString
 
 from pretix.api.serializers.item import (
     ItemAddOnSerializer, ItemBundleSerializer, ItemProgramTimeSerializer,
     ItemVariationSerializer,
 )
 from pretix.base.forms import I18nFormSet
-from pretix.base.forms.questions import get_fake_attendee_questions
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, LogEntry,
-    OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
+    OrderPosition, Question, QuestionAnswer, QuestionOption, QuestionnaireChild, Quota,
     SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
+from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue, Questionnaire
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
@@ -437,66 +437,7 @@ class QuestionList(ListView):
     template_name = 'pretixcontrol/items/questions.html'
 
     def get_queryset(self):
-        return self.request.event.questions.prefetch_related('items')
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-
-        questions = get_fake_attendee_questions(self.request.event.settings)
-
-        questions += list(ctx['questions'])
-        questions.sort(key=lambda q: q.position)
-        ctx['questions'] = questions
-        return ctx
-
-
-@transaction.atomic
-@event_permission_required("event.items:write")
-@require_http_methods(["POST"])
-def reorder_questions(request, organizer, event):
-    try:
-        ids = json.loads(request.body.decode('utf-8'))['ids']
-    except (JSONDecodeError, KeyError, ValueError):
-        return HttpResponseBadRequest("expected JSON: {ids:[]}")
-
-    qs = request.event.questions.filter(container_type=request.GET['container_type'])
-
-    # filter system_questions - normal questions are int/digit, system_questions strings
-    custom_question_ids = [i for i in ids if i.isdigit()]
-    input_questions = list(qs.filter(id__in=custom_question_ids))
-
-    if len(input_questions) != len(custom_question_ids):
-        raise Http404(_("Some of the provided object ids are invalid."))
-
-    if len(input_questions) != qs.count():
-        raise Http404(_("Not all objects have been selected."))
-
-    for q in input_questions:
-        pos = ids.index(str(q.pk))
-        if pos != q.position:  # Save unneccessary UPDATE queries
-            q.position = pos
-            q.save(update_fields=['position'])
-            q.log_action(
-                'pretix.event.question.reordered', user=request.user, data={
-                    'position': pos,
-                }
-            )
-
-    if request.GET['container_type'] == Question.ContainerType.ORDERPOSITION:
-        system_question_order = {}
-        for s in ('attendee_name_parts', 'attendee_email', 'company', 'street', 'zipcode', 'city', 'country'):
-            if s in ids:
-                system_question_order[s] = ids.index(s)
-            else:
-                system_question_order[s] = -1
-        request.event.settings.system_question_order = system_question_order
-        request.event.log_action(
-            'pretix.event.settings', user=request.user, data={
-                'system_question_order': system_question_order,
-            }
-        )
-
-    return HttpResponse()
+        return self.request.event.questions.all()
 
 
 class QuestionDelete(EventPermissionRequiredMixin, CompatDeleteView):
@@ -614,7 +555,7 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
             question=self.object, orderposition__isnull=False,
         )
         qs = qs.filter(orderposition__in=opqs)
-        op_cnt = opqs.filter(item__in=self.object.items.all()).count()
+        op_cnt = 0 # TODO opqs.filter(item__in=self.object.items.all()).count()
 
         if self.object.type == Question.TYPE_FILE:
             qs = [
@@ -659,7 +600,7 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-        ctx['items'] = self.object.items.exists()
+        #ctx['items'] = self.object.items.exists()
         ctx['has_subevents'] = self.request.event.has_subevents
         stats = self.get_answer_statistics()
         ctx['stats'], ctx['total'] = stats
@@ -764,6 +705,29 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
             self.save_formset(form.instance)
 
         return ret
+
+
+def textchoices_to_json(choices, event):
+    return [(c.name, c.value, i18n_all(event.settings.locales, LazyI18nString.from_gettext(c.label).data)) for c in choices]
+
+
+def i18n_all(locales, data):
+    out = {}
+    for locale in locales:
+        out[locale] = data[locale]
+    return out
+
+
+class QuestionnairesEditor(EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_change_items'
+    template_name = 'pretixcontrol/items/questionnaires.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['questionnaire_type_choices'] = textchoices_to_json(Questionnaire.QuestionnaireType, self.request.event)
+        ctx['system_question_choices'] = textchoices_to_json(QuestionnaireChild.SystemQuestion, self.request.event)
+        ctx['question_type_choices'] = textchoices_to_json(Question.FieldType, self.request.event)
+        return ctx
 
 
 class QuotaQueryMixin:

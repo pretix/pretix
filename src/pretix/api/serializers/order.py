@@ -46,7 +46,7 @@ from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
-    InlineItemVariationSerializer, ItemSerializer, QuestionSerializer,
+    InlineItemVariationSerializer, ItemSerializer, DatafieldSerializer,
 )
 from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
@@ -715,7 +715,7 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
             self.fields['variation'] = InlineItemVariationSerializer(read_only=True, context=self.context)
 
         if 'answers.question' in self.context['expand']:
-            self.fields['answers'].child.fields['question'] = QuestionSerializer(read_only=True)
+            self.fields['answers'].child.fields['question'] = DatafieldSerializer(read_only=True)   # TODO(questionnaires)
 
         if 'addons' in self.context['expand']:
             # Experimental feature, undocumented on purpose for now in case we need to remove it again

@@ -764,14 +764,6 @@ class EventSettingsSerializer(SettingsSerializer):
         'event_calendar_future_only',
         'frontpage_text',
         'event_info_text',
-        'attendee_names_asked',
-        'attendee_names_required',
-        'attendee_emails_asked',
-        'attendee_emails_required',
-        'attendee_addresses_asked',
-        'attendee_addresses_required',
-        'attendee_company_asked',
-        'attendee_company_required',
         'attendee_data_explanation_text',
         'confirm_texts',
         'order_email_asked_twice',
@@ -979,7 +971,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'reusable_media_type_nfc_mf0aes',
         'reusable_media_type_nfc_mf0aes_random_uid',
         'reusable_media_usage_enforced',
-        'system_question_order',
+        'system_question_order',  # TODO(questionnaires) - remove or replace
         'tax_rule_payment',
         'tax_rule_cancellation',
     ]
