@@ -736,6 +736,25 @@ let form_handlers = function (el) {
 	el.find('input[name*=question], select[name*=question]').change(questions_toggle_dependent)
 	questions_toggle_dependent()
 	questions_init_photos(el)
+
+	el.find("[data-iframe-dialog]").on("click", function(e) {
+		let url;
+		if (this.tagName === "A" && !this.hasAttribute("data-iframe-dialog-url")) {
+			url = this.getAttribute("href")
+			url += (url.includes('?') ? '&' : '?') + 'notify_parent=true'
+		} else {
+			url = this.getAttribute("data-iframe-dialog-url")
+		}
+		show_iframe_dialog(url, (data) => {
+			if (this.getAttribute("data-iframe-dialog-target")) {
+				var $target = findDependency(this.getAttribute("data-iframe-dialog-target"), this)
+				if ($target.is('select')) {
+					$target.append(new Option(data.object_str, data.object, false, true)).trigger('change')
+				}
+			}
+		})
+		e.preventDefault()
+	})
 }
 
 function setup_placeholders() {
@@ -1125,10 +1144,8 @@ $(function () {
 		return $(this).find('button:not([type=button]), input[type=submit]').length > 0
 	}).areYouSure({ message: gettext('You have unsaved changes!') })
 })
-
-function show_django_dialog(url, callback) {
+function show_iframe_dialog(url, callback) {
 	function messageEvent(e) {
-		console.log('messageEvent', e.origin, e.source, e.data)
 		if (e.origin === location.origin && e.data.type === 'pretix:dialog-loaded') {
 			$dlg.find("iframe").attr("height", Math.min(window.innerHeight - 120, e.data.contentHeight|0)).css("visibility", "visible")
 			$dlg.find("center").remove()
@@ -1142,7 +1159,7 @@ function show_django_dialog(url, callback) {
 			}
 		}
 	}
-	var $dlg = $('<dialog class="modal-card no-padding no-scroll" closedby="any"><center><i class="fa fa-cog big-rotating-icon"></i></center><iframe height="400" width="100%"></iframe></div>')
+	var $dlg = $('<dialog class="modal-card no-padding no-scroll" closedby="any"><center><i class="fa fa-cog big-rotating-icon"></i></center><iframe height="100" width="100%"></iframe></div>')
 		.css('max-width', '60em')
 	$dlg.find("iframe").attr("src", url).css("visibility", "hidden").css("border", "0")
 	window.addEventListener('message', messageEvent)
@@ -1153,37 +1170,40 @@ function show_django_dialog(url, callback) {
 	})
 	$dlg[0].showModal()
 }
-$(function() {
-	$("[data-django-dialog]").on("click", function(e) {
-		show_django_dialog(this.getAttribute("data-django-dialog"), function() {})
-	})
-})
-function notify_parent_frame() {
+function setup_dialog_frame_events() {
+	var dom_ready = false, parent_responded = false
+	function notify_dialog_loaded() {
+		console.log('ready', window.innerWidth, window.innerHeight, $('#page-wrapper > .container-fluid').outerHeight() + 20)
+		window.parent.postMessage({
+			type: 'pretix:dialog-loaded',
+			contentHeight: $('#page-wrapper > .container-fluid').outerHeight() + 20,
+			title: document.title,
+		}, location.origin)
+	}
 	window.addEventListener('message', function(e) {
-		if (e.source === window) return
-		if (e.origin === location.origin && e.data.type === 'pretix:dialog-handshake') {
-			if (!window.isInDialog) {
-				window.isInDialog = true
+		if (e.source === window) return  // don't handle messages from ourselves
+		if (e.origin !== location.origin) return  // only handle messages from same origin
+
+		if (e.data.type === 'pretix:dialog-handshake') {
+			// we are inside an iframe in a dialog
+			if (!parent_responded) {
 				window.document.documentElement.classList.add('in-iframe')
+				if (dom_ready) setTimeout(notify_dialog_loaded, 1)
+				parent_responded = true
 			}
-		}
-		if (e.origin === location.origin && e.data.type === 'pretix:dialog-loading') {
+		} else if (e.data.type === 'pretix:dialog-loading') {
+			// we are parent to a dialog
 			e.source.postMessage({ type: 'pretix:dialog-handshake' })
 		}
+	})
+	$(function () {
+		if (parent_responded) setTimeout(notify_dialog_loaded, 1)
+		dom_ready = true
 	})
 	try {
 		window.parent.postMessage({
 			type: 'pretix:dialog-loading',
-			title: document.title,
 		}, location.origin)
 	} catch {}
-	$(function () {
-		setTimeout(() => {
-			window.parent.postMessage({
-				type: 'pretix:dialog-loaded',
-				contentHeight: $('#page-wrapper > .container-fluid').outerHeight() + 20,
-			}, location.origin)
-		}, 100)
-	})
 }
-notify_parent_frame()
+setup_dialog_frame_events()
