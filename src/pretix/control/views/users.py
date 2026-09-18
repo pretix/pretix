@@ -41,15 +41,16 @@ from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import ListView, TemplateView
 from django_otp.plugins.otp_static.models import StaticDevice
+from django_otp.plugins.otp_totp.models import TOTPDevice
 from hijack import signals
 
 from pretix.base.auth import get_auth_backends
-from pretix.base.models import User
+from pretix.base.models import User, U2FDevice, WebAuthnDevice
 from pretix.control.forms.filter import UserFilterForm
 from pretix.control.forms.users import UserEditForm
 from pretix.control.permissions import AdministratorPermissionRequiredMixin
 from pretix.control.views import CreateView, UpdateView
-from pretix.control.views.user import RecentAuthenticationRequiredMixin
+from pretix.control.views.user import RecentAuthenticationRequiredMixin, REAL_DEVICE_TYPES
 
 
 def get_used_backend(request):
@@ -107,6 +108,21 @@ class UserEditView(AdministratorPermissionRequiredMixin, RecentAuthenticationReq
         ctx['backend'] = (
             b[self.object.auth_backend].verbose_name if self.object.auth_backend in b else self.object.auth_backend
         )
+
+        ctx['devices'] = []
+        for dt in [*REAL_DEVICE_TYPES, StaticDevice]:
+            objs = list(dt.objects.filter(user=self.request.user, confirmed=True))
+            for obj in objs:
+                if dt == TOTPDevice:
+                    obj.devicetype = 'totp'
+                elif dt == U2FDevice:
+                    obj.devicetype = 'u2f'
+                elif dt == WebAuthnDevice:
+                    obj.devicetype = 'webauthn'
+                elif dt == StaticDevice:
+                    obj.devicetype = 'emergency'
+            ctx['devices'] += objs
+
         return ctx
 
     def get_success_url(self):
