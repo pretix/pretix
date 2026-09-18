@@ -82,13 +82,28 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
-    choices = {"r": "Red", "g": "Green", "b": "Blue"}
     resp = token_client.post(
         '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
         format='json',
         data={
             "name": "Color",
             "default": "Red",
+            "required": False,
+            "choices": {"key": "r", "label": "Red"},
+        }
+    )
+    assert resp.status_code == 400
+    choices = [
+        {"key": "r", "label": "Red"},
+        {"key": "g", "label": "Green"},
+        {"key": "b", "label": "Blue"},
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
+        format='json',
+        data={
+            "name": "Color",
+            "default": "k",
             "required": False,
             "choices": choices,
         }
@@ -122,7 +137,7 @@ def test_meta_property_patch(token_client, organizer, event_meta_property):
         format='json',
         data={
             # existing default is not in choices
-            "choices": {'k': 'Black'},
+            "choices": [{'k': 'Black'}],
         }
     )
     assert resp.status_code == 400

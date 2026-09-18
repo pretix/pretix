@@ -657,11 +657,24 @@ class EventMetaPropertiesSerializer(I18nAwareModelSerializer):
         full_data.update(data)
 
         choices = full_data.get("choices")
-        if choices is not None and not isinstance(choices, dict):
-            raise ValidationError("Choices need to be a dictionary or null.")
-        default = full_data.get("default")
-        if choices and default and default not in choices.keys():
-            raise ValidationError("You cannot set a default value that is not a valid value.")
+        if "choices" in data and data["choices"] is not None:
+            if not isinstance(choices, list):
+                raise ValidationError("Choices need to be a list or null.")
+            if any([not isinstance(c, dict) for c in choices]):
+                raise ValidationError("Choices need to contain only objects.")
+            required_keys = {"key"}
+            allowed_keys = {"key", "label"}
+            if not all([required_keys <= set(c.keys()) <= allowed_keys for c in choices]):
+                raise ValidationError("Each choice must contain a key and optionally a label.")
+
+        if choices:
+            choice_keys = [c.get("key") for c in choices]
+            if len(set(choice_keys)) < len(choice_keys):
+                raise ValidationError("Each choice must have a unique key.")
+
+            default = full_data.get("default")
+            if default and default not in choice_keys:
+                raise ValidationError("You cannot set a default value that is not a valid value.")
 
         if not choices and "choices" in data:
             # normalize empty dict to None 
