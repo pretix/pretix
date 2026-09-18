@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load icon %}
 {% block title %}{% trans "User" %}{% endblock %}
 {% block content %}
     <h1>{% trans "User" %} {{ user.email }}</h1>
@@ -15,6 +16,10 @@
             <form action="{% url "control:users.emergencytoken" id=user.pk %}" method="post" class="form-inline helper-display-inline">
                 {% csrf_token %}
                 <button class="btn btn-default">{% trans "Generate 2FA emergency token" %}</button>
+            </form>
+            <form action="{% url "control:users.resetdrift" id=user.pk %}" method="post" class="form-inline helper-display-inline">
+                {% csrf_token %}
+                <button class="btn btn-default">{% trans "Reset 2FA drift" %}</button>
             </form>
         {% endif %}
         <form action="{% url "control:users.impersonate" id=user.pk %}" method="post" class="form-inline helper-display-inline">
@@ -59,8 +64,72 @@
                         {% bootstrap_field form.is_verified layout='control' %}
                     {% endif %}
                     {% bootstrap_field form.last_login layout='control' %}
-                    {% bootstrap_field form.require_2fa layout='control' %}
                     {% bootstrap_field form.needs_password_change layout='control' %}
+                    {% bootstrap_field form.require_2fa layout='control' %}
+                    <div class="form-group">
+                        <div class="col-md-9 col-md-offset-3">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        {% trans "Available two-factor authentication methods" %}
+                                    </h3>
+                                </div>
+                                <table class="panel-body table table-hover">
+                                    {% for d in devices %}
+                                    <tr>
+                                        <td>
+                                            {% if d.devicetype == 'totp' %}
+                                                TOTP
+                                            {% elif d.devicetype == 'u2f' %}
+                                                U2F
+                                            {% elif d.devicetype == 'webauthn' %}
+                                                WebAuthn
+                                            {% elif d.devicetype == 'emergency' %}
+                                                {% trans "Emergency tokens" %}
+                                            {% endif %}
+                                            {% if d.confirmed %}
+                                                {% icon "check" %}
+                                            {% else %}
+                                                {% icon "warning" %}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{ d.name }}
+                                        </td>
+                                        <td>
+                                            {% if d.throttling_failure_timestamp %}
+                                                {% blocktrans trimmed with date=d.throttling_failure_timestamp|date:"SHORT_DATETIME_FORMAT" count cnt=d.throttling_failure_count %}
+                                                    1 failed attempt since {{ date }}
+                                                {% plural %}
+                                                    {{ cnt }} failed attempts since {{ date }}
+                                                {% endblocktrans %}
+                                                <br>
+                                            {% endif %}
+                                            {% if d.devicetype == 'totp' %}
+                                                <small>
+                                                    <code>step = {{ d.step }},
+                                                    t0 = {{ d.t0 }},
+                                                    digits = {{ d.digits }},
+                                                    tolerance = {{ d.tolerance }},
+                                                    drift = {{ d.drift }},
+                                                    last_t = {{ d.last_t }}</code>
+                                                </small>
+                                            {% elif d.devicetype == 'u2f' %}
+                                                <small>
+                                                    <code>sign_count = {{ d.sign_count }}</code>
+                                                </small>
+                                            {% elif d.devicetype == 'emergency' %}
+                                                <small>
+                                                    <code>token_count = {{ d.token_set.count }}</code>
+                                                </small>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Team memberships" %}</legend>

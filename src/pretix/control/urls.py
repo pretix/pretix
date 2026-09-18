@@ -78,6 +78,7 @@ urlpatterns = [
     re_path(r'^users/(?P<id>\d+)/impersonate$', users.UserImpersonateView.as_view(), name='users.impersonate'),
     re_path(r'^users/(?P<id>\d+)/anonymize$', users.UserAnonymizeView.as_view(), name='users.anonymize'),
     re_path(r'^users/(?P<id>\d+)/emergencytoken$', users.UserEmergencyTokenView.as_view(), name='users.emergencytoken'),
+    re_path(r'^users/(?P<id>\d+)/resetdrift$', users.Reset2FADriftView.as_view(), name='users.resetdrift'),
     re_path(r'^pdf/editor/webfonts.css', pdf.FontsCSSView.as_view(), name='pdf.css'),
     re_path(r'^settings/?$', user.UserSettings.as_view(), name='user.settings'),
     re_path(r'^settings/history/$', user.UserHistoryView.as_view(), name='user.settings.history'),
