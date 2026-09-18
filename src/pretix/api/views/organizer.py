@@ -855,8 +855,7 @@ class EventMetaPropertiesViewSet(viewsets.ModelViewSet):
     write_permission = 'organizer.settings.general:write'
 
     def get_queryset(self):
-        qs = EventMetaProperty.objects.all()
-        return qs
+        return self.request.organizer.meta_properties.all()
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
