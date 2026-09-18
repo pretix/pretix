@@ -458,3 +458,16 @@ def _get_variant_unavailability_reason(variant, now_dt: Optional[datetime]=None,
         return 'available_until'
     else:
         return None
+
+
+def _item_num_options(item):
+    if item.current_unavailability_reason:
+        return 0
+    if item.has_variations:
+        return len([v for v in item.available_variations if not v.current_unavailability_reason])
+    else:
+        return 1
+
+
+def get_item_option_count(items):
+    return sum(_item_num_options(item) for item in items)
