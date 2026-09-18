@@ -35,6 +35,7 @@
 import json
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
+from io import BytesIO
 
 import pytest
 from django.db import DatabaseError, transaction
@@ -43,13 +44,14 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
+from pypdf import PdfReader
 
 from pretix.base.invoice import addon_aware_groupby
 from pretix.base.models import (
     Event, ExchangeRate, Invoice, InvoiceAddress, Item, ItemVariation, Order,
     OrderPosition, Organizer,
 )
-from pretix.base.models.orders import OrderFee
+from pretix.base.models.orders import OrderFee, OrderPayment
 from pretix.base.services.invoices import (
     build_preview_invoice_pdf, generate_cancellation, generate_invoice,
     invoice_pdf_task, invoice_qualified, regenerate_invoice,
@@ -453,6 +455,32 @@ def test_pdf_generation_custom_text(env):
     event.settings.set('show_date_to', False)
     inv = generate_invoice(order)
     assert invoice_pdf_task(inv.pk)
+
+
+@pytest.mark.django_db
+def test_pdf_generation_paid_stamp_with_partial_giftcard_payment(env):
+    event, order = env
+    # Sum of the two positions plus the payment fee created by the fixture
+    order.total = Decimal('65.25')
+    order.status = Order.STATUS_PAID
+    order.save()
+    order.payments.create(
+        provider='giftcard', state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=Decimal('10.00'),
+    )
+    order.payments.create(
+        provider='manual', state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=order.total - Decimal('10.00'),
+    )
+
+    inv = generate_invoice(order)
+    assert inv.payment_provider_stamp == 'paid'
+    assert invoice_pdf_task(inv.pk)
+
+    inv.refresh_from_db()
+    with inv.file as f:
+        text = "\n".join(p.extract_text() for p in PdfReader(BytesIO(f.read())).pages)
+    # The gift card is only a part of the payment, the order is paid, so both need to be shown
+    assert 'Paid by gift card' in text
+    assert inv.payment_provider_stamp in text
 
 
 @pytest.mark.django_db
