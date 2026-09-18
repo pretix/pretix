@@ -650,3 +650,20 @@ class EventMetaPropertiesSerializer(I18nAwareModelSerializer):
             'id', 'name', 'default', 'required', 'protected', 'filter_public', 'public_label', 'filter_allowed',
             'choices'
         )
+
+    def validate(self, data):
+        data = super().validate(data)
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+
+        choices = full_data.get("choices")
+        if choices is not None and not isinstance(choices, dict):
+            raise ValidationError("Choices need to be a dictionary or null.")
+        default = full_data.get("default")
+        if choices and default and default not in choices.keys():
+            raise ValidationError("You cannot set a default value that is not a valid value.")
+
+        if not choices and "choices" in data:
+            # normalize empty dict to None 
+            data["choices"] = None
+        return data
