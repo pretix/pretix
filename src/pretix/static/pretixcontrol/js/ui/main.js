@@ -1119,6 +1119,38 @@ $(function () {
 	}).areYouSure({ message: gettext('You have unsaved changes!') })
 })
 
+function show_django_dialog(url, callback) {
+	function messageEvent(e) {
+		console.log('messageEvent', e.origin, e.source, e.data)
+		if (e.origin === location.origin && e.data.type === 'pretix:dialog-loaded') {
+			$dlg.find("iframe").attr("height", Math.min(window.innerHeight - 120, e.data.contentHeight|0)).css("visibility", "visible")
+			$dlg.find("center").remove()
+		}
+		if (e.origin === location.origin && e.data.type === 'pretix:notify-parent') {
+			$dlg[0].close()
+			if (!callback(e.data.data)) {
+				if (e.data.data.messages?.length) {
+					alert(e.data.data.messages.map(m => m.message).join('\n\n'))
+				}
+			}
+		}
+	}
+	var $dlg = $('<dialog class="modal-card no-padding no-scroll" closedby="any"><center><i class="fa fa-cog big-rotating-icon"></i></center><iframe height="400" width="100%"></iframe></div>')
+		.css('max-width', '60em')
+	$dlg.find("iframe").attr("src", url).css("visibility", "hidden").css("border", "0")
+	window.addEventListener('message', messageEvent)
+	$dlg.appendTo("body")
+	$dlg.on('close', function() {
+		window.removeEventListener('message', messageEvent)
+		$dlg.remove()
+	})
+	$dlg[0].showModal()
+}
+$(function() {
+	$("[data-django-dialog]").on("click", function(e) {
+		show_django_dialog(this.getAttribute("data-django-dialog"), function() {})
+	})
+})
 function notify_parent_frame() {
 	window.addEventListener('message', function(e) {
 		if (e.source === window) return
