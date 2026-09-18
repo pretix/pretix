@@ -736,7 +736,9 @@ let form_handlers = function (el) {
 	el.find('input[name*=question], select[name*=question]').change(questions_toggle_dependent)
 	questions_toggle_dependent()
 	questions_init_photos(el)
+}
 
+function setup_placeholders() {
 	let lastFocusedInput
 	$(document).on('focusin', 'input, textarea', function (e) {
 		lastFocusedInput = e.target
@@ -1080,6 +1082,7 @@ $(function () {
 
 	setup_basics($('body'))
 	form_handlers($('body'))
+	setup_placeholders()
 	$(document).trigger('pretix:bind-forms')
 
 	$('#ajaxerr').on('click', '.ajaxerr-close', ajaxErrDialog.hide)
