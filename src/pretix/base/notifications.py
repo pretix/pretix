@@ -35,12 +35,13 @@
 import logging
 from collections import OrderedDict, namedtuple
 from itertools import groupby
+from typing import Union
 
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
-from pretix.base.models import Event, LogEntry
+from pretix.base.models import Event, LogEntry, Organizer
 from pretix.base.signals import register_notification_types
 from pretix.base.templatetags.money import money_filter
 from pretix.helpers.urls import mainreverse_absolute
@@ -57,7 +58,8 @@ class Notification:
     """
     Represents a notification that is sent/shown to a user. A notification consists of:
 
-    * one ``event`` reference
+    * one ``event`` reference (can be ``Ǹone``)
+    * one ``organizer`` reference
     * one ``title`` text that is shown e.g. in the email subject or in a headline
     * optionally one ``detail`` text that may or may not be shown depending on the notification method
     * optionally one ``url`` that should be absolute and point to the context of an notification (e.g. an order)
@@ -67,8 +69,10 @@ class Notification:
       each consisting of a button label and an absolute URL to point to.
     """
 
-    def __init__(self, event: Event, title: str, detail: str=None, url: str=None):
+    def __init__(self, event: Event, title: str, detail: str=None, url: str=None, organizer: Organizer=None):
+        assert event or organizer
         self.title = title
+        self.organizer = organizer or event.organizer
         self.event = event
         self.detail = detail
         self.url = url
@@ -91,8 +95,16 @@ class Notification:
 
 
 class NotificationType:
-    def __init__(self, event: Event = None):
-        self.event = event
+    def __init__(self, event_or_organizer: Union[Event, Organizer] = None):
+        if isinstance(event_or_organizer, Event):
+            self.event = event_or_organizer
+            self.organizer = event_or_organizer.organizer
+        elif isinstance(event_or_organizer, Organizer):
+            self.event = None
+            self.organizer = event_or_organizer
+        else:
+            self.event = None
+            self.organizer = None
 
     def __repr__(self):
         return '<NotificationType: {}>'.format(self.action_type)
@@ -121,31 +133,39 @@ class NotificationType:
         """
         raise NotImplementedError()  # NOQA
 
+    @property
+    def is_event_level(self) -> bool:
+        """
+        Return `True` if this notification type can be configured per event (the default).
+        """
+        return True
+
     def build_notification(self, logentry: LogEntry) -> Notification:
         """
         This is the main function that you should override. It is supposed to turn a log entry
         object into a notification object that can then be rendered e.g. into an email.
         """
         return Notification(
-            logentry.event,
-            logentry.display()
+            event=logentry.event,
+            title=logentry.display(),
+            organizer=logentry.organizer,
         )
 
 
-def get_all_notification_types(event=None):
+def get_all_notification_types(event_or_organizer=None):
     global _ALL_TYPES
 
-    if event is None and _ALL_TYPES:
+    if event_or_organizer is None and _ALL_TYPES:
         return _ALL_TYPES
 
     types = OrderedDict()
-    for recv, ret in register_notification_types.send(event):
+    for recv, ret in register_notification_types.send(event_or_organizer):
         if isinstance(ret, (list, tuple)):
             for r in ret:
                 types[r.action_type] = r
         else:
             types[ret.action_type] = ret
-    if event is None:
+    if event_or_organizer is None:
         _ALL_TYPES = types
     return types
 
@@ -181,6 +201,7 @@ class ParametrizedOrderNotificationType(NotificationType):
 
         n = Notification(
             event=logentry.event,
+            organizer=logentry.organizer,
             title=self._title.format(order=order, event=logentry.event),
             url=order_url
         )
