@@ -32,6 +32,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+
 import hashlib
 import inspect
 import logging
@@ -42,6 +43,9 @@ import smtplib
 import uuid
 import warnings
 from datetime import timedelta
+from email import encoders, message_from_bytes
+from email.message import Message
+from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from email.utils import formataddr
 from typing import Any, Dict, List, Optional, Sequence, Union
@@ -53,12 +57,15 @@ from celery import chain
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.files.storage import default_storage
-from django.core.mail import EmailMultiAlternatives, SafeMIMEMultipart
-from django.core.mail.message import SafeMIMEText
+from django.core.mail import (
+    EmailMessage, EmailMultiAlternatives, SafeMIMEMultipart,
+)
+from django.core.mail.message import SafeMIMEMessage, SafeMIMEText
 from django.db import connection, transaction
 from django.db.models import Q
 from django.dispatch import receiver
 from django.template.loader import get_template
+from django.utils.encoding import force_bytes
 from django.utils.html import escape
 from django.utils.timezone import now, override
 from django.utils.translation import gettext as _, pgettext
@@ -382,15 +389,25 @@ def mail(email: Union[str, Sequence[str]], subject: Union[str, FormattedString],
 class CustomEmail(EmailMultiAlternatives):
     def _create_mime_attachment(self, content, mimetype):
         """
-        Convert the content, mimetype pair into a MIME attachment object.
-
-        If the mimetype is message/rfc822, content may be an
-        email.Message or EmailMessage object, as well as a str.
+        Modified version of EmailMessage._create_mime_attachment that supports multiparts and
+        never generates plaintext attachments.
         """
         basetype, subtype = mimetype.split('/', 1)
         if basetype == 'multipart' and isinstance(content, SafeMIMEMultipart):
-            return content
-        return super()._create_mime_attachment(content, mimetype)
+            attachment = content
+        # START: VENDORED FROM EmailMessage #
+        elif basetype == "message" and subtype == "rfc822":
+            if isinstance(content, EmailMessage):
+                content = content.message()
+            elif not isinstance(content, Message):
+                content = message_from_bytes(force_bytes(content))
+            attachment = SafeMIMEMessage(content, subtype)
+        else:
+            attachment = MIMEBase(basetype, subtype)
+            attachment.set_payload(content)
+            encoders.encode_base64(attachment)
+        return attachment
+        # END: VENDORED FROM EmailMessage #
 
 
 @app.task(base=TransactionAwareTask, bind=True, acks_late=True)
