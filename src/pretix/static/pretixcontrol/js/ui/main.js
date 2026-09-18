@@ -72,6 +72,10 @@ $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
 })
 
 let form_handlers = function (el) {
+	// Prevent running multiple times on the same elements
+	if (el.is('[data-formset-form-handlers-created]')) return
+	el.find('[data-formset-form]').attr('data-formset-form-handlers-created', 'true')
+
 	el.trigger('rescan.areYouSure')
 	el.find('[data-formset]').formset(
 		{
