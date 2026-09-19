@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-05-20 10:58+0000\n"
-"Last-Translator: Phumraphee Sae-tang <phumraphee@gmail.com>\n"
-"Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/"
-">\n"
+"PO-Revision-Date: 2026-09-19 13:00+0000\n"
+"Last-Translator: Nate Horst <nate@agcthailand.org>\n"
+"Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
+"\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.5\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -17264,7 +17264,7 @@ msgstr ""
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/dashboard.html
 msgid "Dashboard"
-msgstr ""
+msgstr "แผงควบคุม"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
@@ -17278,7 +17278,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html
 msgid "General"
-msgstr ""
+msgstr "ทั่วไป"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html
@@ -17290,7 +17290,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Payment"
-msgstr ""
+msgstr "การชำระเงิน"
 
 #: pretix/control/navigation.py pretix/control/views/event.py
 #: pretix/control/views/subevents.py
@@ -17300,18 +17300,18 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html
 #: pretix/presale/templates/pretixpresale/organizers/index.html
 msgid "Tickets"
-msgstr ""
+msgstr "ตั๋ว"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/event/tax.html
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Taxes"
-msgstr ""
+msgstr "ภาษี"
 
 #: pretix/control/navigation.py
 msgid "Invoicing"
-msgstr ""
+msgstr "การออกใบแจ้งหนี้"
 
 #: pretix/control/navigation.py
 msgctxt "action"
@@ -21506,19 +21506,19 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html
 msgid "Permissions"
-msgstr ""
+msgstr "สิทธิ์การใช้งาน"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html
 msgid "No applications have access to your pretix account."
-msgstr ""
+msgstr "ไม่มีแอปพลิเคชันใดเข้าถึงบัญชี pretix ของคุณ"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html
 msgid "Approve order"
-msgstr ""
+msgstr "อนุมัติคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html
 msgid "Do you really want to approve this order?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการอนุมัติคำสั่งซื้อนี้?"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html
 #: pretix/control/templates/pretixcontrol/order/cancel.html
@@ -21529,29 +21529,32 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid "No, take me back"
-msgstr ""
+msgstr "ไม่, ย้อนกลับ"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html
 msgid "Yes, approve order"
-msgstr ""
+msgstr "ใช่, อนุมัติคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid "Cancel order"
-msgstr ""
+msgstr "ยกเลิกคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html
 #: pretix/control/templates/pretixcontrol/order/deny.html
 msgid "Do you really want to cancel this order? You cannot revert this action."
 msgstr ""
+"คุณแน่ใจหรือไม่ว่าต้องการยกเลิกคำสั่งซื้อนี้? การดำเนินการนี้ไม่สามารถย้อนกลับได้"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html
 msgid ""
 "This will <strong>not</strong> automatically transfer the money back, but "
 "you will be offered options to refund the payment afterwards."
 msgstr ""
+"การดำเนินการนี้จะ <strong>ไม่</strong>คืนเงินโดยอัตโนมัติ แต่คุณจะมีตัวเลือกในการคืนเงินหลังจา"
+"กนี้"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html
 #, python-format
@@ -21560,15 +21563,17 @@ msgid ""
 "%(fee)s for this order, but for a cancellation performed by you, you need to "
 "set the cancellation fee here:"
 msgstr ""
+"ค่าธรรมเนียมการยกเลิกที่ตั้งค่าไว้สำหรับการยกเลิกด้วยตนเองจะอยู่ที่ %(fee)s สำหรับคำสั่งซื้อนี้ แต่สำ"
+"หรับการยกเลิกที่ดำเนินการโดยคุณ คุณจะต้องกำหนดค่าธรรมเนียมการยกเลิกที่นี่:"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid "Yes, cancel order"
-msgstr ""
+msgstr "ใช่, ยกเลิกคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html
 msgid "Ignore cancellation request"
-msgstr ""
+msgstr "เพิกเฉยต่อคำขอยกเลิก"
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html
 msgid ""
@@ -21576,6 +21581,8 @@ msgid ""
 "informed automatically, but you will have the option to email them "
 "individually in the next step."
 msgstr ""
+"คุณแน่ใจหรือไม่ว่าต้องการลบคำขอยกเลิกนี้? ผู้ใช้จะไม่ได้รับการแจ้งเตือนโดยอัตโนมัติ แต่คุณจะมีตัวเลือก"
+"ในการส่งอีเมลถึงพวกเขาโดยตรงในขั้นตอนถัดไป"
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html
 msgid "Yes, delete request"
@@ -21753,24 +21760,24 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html
 msgid "Perform changes"
-msgstr ""
+msgstr "ดำเนินการเปลี่ยนแปลง"
 
 #: pretix/control/templates/pretixcontrol/order/change_contact.html
 #: pretix/control/templates/pretixcontrol/order/change_questions.html
 msgid "Change contact information"
-msgstr ""
+msgstr "เปลี่ยนแปลงข้อมูลการติดต่อ"
 
 #: pretix/control/templates/pretixcontrol/order/change_locale.html
 msgid "Change locale information"
-msgstr ""
+msgstr "เปลี่ยนแปลงข้อมูลภาษาและภูมิภาค"
 
 #: pretix/control/templates/pretixcontrol/order/change_locale.html
 msgid "This language will be used whenever emails are sent to the users."
-msgstr ""
+msgstr "ภาษานี้จะถูกใช้เมื่อใดก็ตามที่มีการส่งอีเมลไปยังผู้ใช้"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html
 msgid "Change order information"
-msgstr ""
+msgstr "เปลี่ยนแปลงข้อมูลคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html
 #: pretix/control/templates/pretixcontrol/order/index.html
@@ -21778,13 +21785,13 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html
 #: pretix/presale/templates/pretixpresale/event/order_modify.html
 msgid "Invoice information"
-msgstr ""
+msgstr "ข้อมูลใบแจ้งหนี้"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html
 #: pretix/presale/templates/pretixpresale/event/order_modify.html
 msgid "(optional)"
-msgstr ""
+msgstr "(ระบุหรือไม่ก็ได้)"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
@@ -21797,17 +21804,19 @@ msgstr "ต้องการข้อมูลเพิ่มเติม"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html
 msgid "Delete order"
-msgstr ""
+msgstr "ลบคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html
 msgid ""
 "Do you really want to delete this order? <strong>You really cannot revert "
 "this action and we can't either.</strong>"
 msgstr ""
+"คุณแน่ใจหรือไม่ว่าต้องการลบคำสั่งซื้อนี้? <strong>คุณจะไม่สามารถย้อนกลับการดำเนินการนี้ได้จริงๆ แล"
+"ะเราก็ไม่สามารถย้อนกลับได้เช่นกัน</strong>"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html
 msgid "Yes, delete order"
-msgstr ""
+msgstr "ใช่, ลบคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html
 msgid "Deny order"
@@ -22256,12 +22265,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html
 msgid "Cancel refund"
-msgstr ""
+msgstr "ยกเลิกการคืนเงิน"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html
 msgid ""
 "Do you really want to cancel this refund? You cannot revert this action."
 msgstr ""
+"คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการคืนเงินนี้? การดำเนินการนี้ไม่สามารถย้อนกลับได้"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html
 msgid ""
@@ -22269,19 +22279,22 @@ msgid ""
 "will just mark this transfer as aborted in pretix. This will also not "
 "reactivate the order, it will just allow you to choose a new refund method."
 msgstr ""
+"หากอยู่ในระหว่างการโอนเงินคืนแล้ว การดำเนินการนี้จะไม่สามารถระงับการโอนเงินได้ แต่จะเป็นเพียง"
+"การทำเครื่องหมายว่ารายการโอนนี้ถูกยกเลิกใน pretix เท่านั้น ทั้งนี้ จะไม่เป็นการเปิดใช้งานคำสั่งซื้อ"
+"อีกครั้ง แต่จะเปิดโอกาสให้คุณเลือกวิธีการคืนเงินรูปแบบใหม่ได้"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html
 msgid "Yes, cancel refund"
-msgstr ""
+msgstr "ใช่, ยกเลิกการคืนเงิน"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 #: pretix/control/templates/pretixcontrol/order/refund_start.html
 msgid "Refund order"
-msgstr ""
+msgstr "คืนเงินคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid "How should the refund be sent?"
-msgstr ""
+msgstr "ต้องการส่งเงินคืนด้วยวิธีใด?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid ""
@@ -22290,38 +22303,41 @@ msgid ""
 "created as pending refunds, which you can later mark as done once you have "
 "actually transferred the money back to the customer."
 msgstr ""
+"รายการชำระเงินใดที่คุณเลือกเป็นการคืนเงินอัตโนมัติ คำขอคืนเงินจะถูกส่งไปยังผู้ให้บริการชำระเงินที่เกี่"
+"ยวข้องทันที ส่วนการคืนเงินด้วยตนเองจะถูกสร้างเป็นรายการคืนเงินที่รอดำเนินการ ซึ่งคุณสามารถทำเครื่"
+"องหมายว่าเสร็จสิ้นได้ในภายหลัง หลังจากที่ได้โอนเงินคืนให้ลูกค้าเรียบร้อยแล้ว"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid "Refund to original payment method"
-msgstr ""
+msgstr "คืนเงินไปยังช่องทางชำระเงินเดิม"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid "Amount not refunded"
-msgstr ""
+msgstr "จำนวนเงินที่ไม่ได้รับการคืน"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid "Refund amount"
-msgstr ""
+msgstr "จำนวนเงินที่คืน"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid "Full amount"
-msgstr ""
+msgstr "จำนวนเงินเต็ม"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid "This payment method does not support automatic refunds."
-msgstr ""
+msgstr "วิธีการชำระเงินนี้ไม่รองรับการคืนเงินอัตโนมัติ"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid "Refund to a different payment method"
-msgstr ""
+msgstr "คืนเงินไปยังช่องทางชำระเงินอื่น"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid "Recipient / options"
-msgstr ""
+msgstr "ผู้รับ / ตัวเลือก"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid "Transfer to other order"
-msgstr ""
+msgstr "โอนไปยังคำสั่งซื้ออื่น"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_create.html
@@ -31172,48 +31188,48 @@ msgstr ""
 #: pretix/presale/forms/renderers.py
 msgctxt "form"
 msgid "is valid"
-msgstr ""
+msgstr "ใช้ได้"
 
 #: pretix/presale/forms/renderers.py
 msgctxt "form"
 msgid "has errors"
-msgstr ""
+msgstr "มีข้อผิดพลาด"
 
 #: pretix/presale/forms/renderers.py
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html
 msgctxt "form"
 msgid "required"
-msgstr ""
+msgstr "จำเป็นต้องระบุ"
 
 #: pretix/presale/ical.py
 #, python-brace-format
 msgid "Tickets: {url}"
-msgstr ""
+msgstr "ตั๋ว: {url}"
 
 #: pretix/presale/ical.py
 #, python-brace-format
 msgid "Admission: {datetime}"
-msgstr ""
+msgstr "เวลาประตูเปิด: {datetime}"
 
 #: pretix/presale/ical.py
 #, python-brace-format
 msgid "Organizer: {organizer}"
-msgstr ""
+msgstr "ผู้จัดงาน: {organizer}"
 
 #: pretix/presale/ical.py
 #, python-brace-format
 msgid "{event} - {item}"
-msgstr ""
+msgstr "{event} - {item}"
 
 #: pretix/presale/ical.py
 #, python-brace-format
 msgid "Start: {datetime}"
-msgstr ""
+msgstr "เริ่มต้น: {datetime}"
 
 #: pretix/presale/ical.py
 #, python-brace-format
 msgid "End: {datetime}"
-msgstr ""
+msgstr "สิ้นสุด: {datetime}"
 
 #: pretix/presale/templates/pretixpresale/base.html
 msgctxt "skip-to-main-nav"
@@ -31355,23 +31371,23 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html
 msgid "Go back"
-msgstr ""
+msgstr "ย้อนกลับ"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html
 #, python-format
 msgid "Step %(current)s of %(total)s: %(label)s"
-msgstr ""
+msgstr "ขั้นตอนที่ %(current)s จาก %(total)s: %(label)s"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html
 msgid "Checkout"
-msgstr ""
+msgstr "ชำระเงิน"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html
 msgid "Your cart"
-msgstr ""
+msgstr "ตระกร้าของคุณ"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
@@ -31381,36 +31397,36 @@ msgstr "ตะกร้าสินค้าหมดเวลาแล้ว"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html
 msgid "Show full cart"
-msgstr ""
+msgstr "แสดงตะกร้าสินค้าทั้งหมด"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html
 #: pretix/presale/templates/pretixpresale/event/index.html
 msgid "Add tickets for a different date"
-msgstr ""
+msgstr "เพิ่มตั๋วสำหรับวันที่อื่น"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 msgid "Review order"
-msgstr ""
+msgstr "ตรวจสอบคำสั่งซื้อ"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 msgid "Please review the details below and confirm your order."
-msgstr ""
+msgstr "โปรดตรวจสอบรายละเอียดด้านล่างและยืนยันคำสั่งซื้อของคุณ"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 msgid "Add or remove tickets"
-msgstr ""
+msgstr "เพิ่มหรือลบตั๋ว"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 msgid "Please hang tight, we're finalizing your order!"
-msgstr ""
+msgstr "โปรดรอสักครู่ ระบบกำลังดำเนินการสรุปคำสั่งซื้อของคุณ!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 msgid "Modify payment"
-msgstr ""
+msgstr "แก้ไขการชำระเงิน"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 msgid "Modify"
-msgstr ""
+msgstr "แก้ไข"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
 msgid "Modify invoice information"
@@ -31901,8 +31917,7 @@ msgstr ""
 #, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num)s รายการสินค้า"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, python-format
@@ -32442,31 +32457,35 @@ msgid ""
 "your order later. We also sent you an email to the address you specified "
 "containing the link to this page."
 msgstr ""
+"โปรดบุ๊กมาร์กหรือบันทึกลิงก์ของหน้านี้ไว้ หากคุณต้องการเข้าถึงคำสั่งซื้อของคุณในภายหลัง นอกจากนี้ เรา"
+"ได้ส่งอีเมลพร้อมลิงก์สำหรับเข้าถึงหน้านี้ไปยังที่อยู่อีเมลที่คุณระบุไว้แล้ว"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email to the address you specified containing the link."
 msgstr ""
+"โปรดบันทึกลิงก์ต่อไปนี้ไว้ หากคุณต้องการเข้าถึงคำสั่งซื้อของคุณในภายหลัง นอกจากนี้ เราได้ส่งอีเมลพร้อ"
+"มลิงก์ไปยังที่อยู่อีเมลที่คุณระบุไว้แล้ว"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 #: pretix/presale/templates/pretixpresale/event/position.html
 msgid "View in backend"
-msgstr ""
+msgstr "ดูในระบบหลังบ้าน"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "คำสั่งซื้อนี้ยังมียอดคงค้างชำระอยู่อีก %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 #, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr ""
+msgstr "โปรดชำระเงินให้เสร็จสิ้นก่อนวันที่ %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Re-try payment or choose another payment method"
-msgstr ""
+msgstr "ลองชำระเงินอีกครั้ง หรือเลือกวิธีชำระเงินอื่น"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid ""
@@ -32510,22 +32529,22 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html
 #: pretix/presale/templates/pretixpresale/event/position.html
 msgid "Change ordered items"
-msgstr ""
+msgstr "เปลี่ยนแปลงรายการสินค้าที่สั่งซื้อ"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 #: pretix/presale/templates/pretixpresale/event/position.html
 msgid "Change details"
-msgstr ""
+msgstr "เปลี่ยนแปลงรายละเอียด"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid ""
 "You need to select a payment method above before you can request an invoice."
-msgstr ""
+msgstr "คุณต้องเลือกวิธีการชำระเงินด้านบนก่อน จึงจะสามารถขอใบแจ้งหนี้ได้"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 #: pretix/presale/templates/pretixpresale/event/order_modify.html
 msgid "Request invoice"
-msgstr ""
+msgstr "ขอใบแจ้งหนี้"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Your information"
@@ -32533,41 +32552,42 @@ msgstr "ข้อมูลของคุณ"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Change your information"
-msgstr ""
+msgstr "เปลี่ยนแปลงข้อมูลของคุณ"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Internal Reference"
-msgstr ""
+msgstr "รหัสอ้างอิงภายใน"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr ""
+msgstr "เปลี่ยนแปลงหรือยกเลิกคำสั่งซื้อของคุณ"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgctxt "action"
 msgid "Change your order"
-msgstr ""
+msgstr "เปลี่ยนแปลงคำสั่งซื้อของคุณ"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgctxt "action"
 msgid "Cancel your order"
-msgstr ""
+msgstr "ยกเลิกคำสั่งซื้อของคุณ"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
 msgstr ""
+"หากคุณต้องการเปลี่ยนแปลงสินค้าที่ซื้อไว้ คุณสามารถคลิกที่ปุ่มเพื่อเปลี่ยนแปลงคำสั่งซื้อของคุณได้"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Change order"
-msgstr ""
+msgstr "เปลี่ยนแปลงคำสั่งซื้อ"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid "You can request to cancel this order."
-msgstr ""
+msgstr "คุณสามารถยื่นขอยกเลิกคำสั่งซื้อนี้ได้"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
@@ -32635,17 +32655,17 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "You can cancel this order using the following button."
-msgstr ""
+msgstr "คุณสามารถยกเลิกคำสั่งซื้อนี้ได้โดยใช้ปุ่มต่อไปนี้"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 #, python-format
 msgid "Request cancellation: %(code)s"
-msgstr ""
+msgstr "ยื่นขอยกเลิก: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 #, python-format
 msgid "Cancel order: %(code)s"
-msgstr ""
+msgstr "ยกเลิกคำสั่งซื้อ: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid ""
@@ -32653,12 +32673,16 @@ msgid ""
 "organizer will then decide on your request. If they approve, your order will "
 "be canceled and all tickets will be invalidated."
 msgstr ""
+"คุณสามารถยื่นขอยกเลิกคำสั่งซื้อของคุณได้ในหน้านี้ โดยผู้จัดงานจะพิจารณาคำขอของคุณ หากคำขอได้รับกา"
+"รอนุมัติ คำสั่งซื้อของคุณจะถูกยกเลิก และตั๋วทั้งหมดจะถูกยกเลิกใช้งาน"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid ""
 "If you cancel this order, all tickets will be invalidated and you can no "
 "longer use them. You cannot revert this action."
 msgstr ""
+"หากคุณยกเลิกคำสั่งซื้อนี้ ตั๋วทั้งหมดจะถูกยกเลิกใช้งาน และคุณจะไม่สามารถใช้งานตั๋วได้อีกต่อไป การดำเ"
+"นินการนี้ไม่สามารถย้อนกลับได้"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 #, python-format
@@ -32666,97 +32690,102 @@ msgid ""
 "If you want, you can request a refund for the full amount minus a "
 "cancellation fee of %(fee)s."
 msgstr ""
+"หากคุณต้องการ คุณสามารถยื่นขอคืนเงินเต็มจำนวนโดยหักค่าธรรมเนียมการยกเลิก %(fee)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid "If you want, you can request a full refund."
-msgstr ""
+msgstr "หากคุณต้องการ คุณสามารถยื่นขอคืนเงินเต็มจำนวนได้"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid "Enter custom amount"
-msgstr ""
+msgstr "ระบุจำนวนเงินเอง"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid "Refund amount:"
-msgstr ""
+msgstr "จำนวนเงินที่คืน:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 #, python-format
 msgid "Your gift card will be valid until %(expiry_date)s."
-msgstr ""
+msgstr "บัตรของขวัญของคุณจะสามารถใช้งานได้จนถึงวันที่ %(expiry_date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid "I want the refund as a gift card for later purchases"
-msgstr ""
+msgstr "ฉันต้องการรับเงินคืนเป็นบัตรของขวัญสำหรับการซื้อในครั้งถัดไป"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid "I want the refund to be sent to my original payment method"
-msgstr ""
+msgstr "ฉันต้องการรับเงินคืนผ่านช่องทางชำระเงินเดิม"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid "The following payment methods will be used to refund the money to you:"
-msgstr ""
+msgstr "ช่องทางการชำระเงินต่อไปนี้จะถูกใช้เพื่อคืนเงินให้กับคุณ:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html
 msgid "Yes, request cancellation"
-msgstr ""
+msgstr "ใช่, ยื่นขอยกเลิก"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html
 msgid "Please confirm the following changes to your order."
-msgstr ""
+msgstr "โปรดยืนยันการเปลี่ยนแปลงคำสั่งซื้อของคุณดังต่อไปนี้"
 
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html
 #, python-format
 msgid "Gift card: %(code)s"
-msgstr ""
+msgstr "บัตรของขวัญ: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html
 msgid "Modify order"
-msgstr ""
+msgstr "แก้ไขคำสั่งซื้อ"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html
 #, python-format
 msgid "Modify order: %(code)s"
-msgstr ""
+msgstr "แก้ไขคำสั่งซื้อ: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html
 msgid ""
 "Modifying your invoice address will not automatically generate a new "
 "invoice. Please contact us if you need a new invoice."
 msgstr ""
+"การแก้ไขที่อยู่สำหรับออกใบแจ้งหนี้จะไม่สร้างใบแจ้งหนี้ใหม่โดยอัตโนมัติ โปรดติดต่อเราหากคุณต้องการใบ"
+"แจ้งหนี้ใหม่"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html
 #: pretix/presale/templates/pretixpresale/event/position_modify.html
 msgid "Save changes"
-msgstr ""
+msgstr "บันทึกการเปลี่ยนแปลง"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html
 msgid "Change payment method"
-msgstr ""
+msgstr "เปลี่ยนแปลงวิธีการชำระเงิน"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html
 #, python-format
 msgid "Choose payment method: %(code)s"
-msgstr ""
+msgstr "เลือกวิธีการชำระเงิน: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html
 msgid ""
 "Please note: If you change your payment method, your order total will change "
 "by the amount displayed to the right of each method."
 msgstr ""
+"ข้อควรจำ: หากคุณเปลี่ยนแปลงวิธีการชำระเงิน ยอดรวมคำสั่งซื้อของคุณจะเปลี่ยนแปลงตามจำนวนที่แสดง"
+"ด้านขวาของแต่ละวิธี"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html
 msgid "There are no alternative payment providers available for this order."
-msgstr ""
+msgstr "ไม่มีผู้ให้บริการชำระเงินอื่นที่สามารถใช้งานได้สำหรับคำสั่งซื้อนี้"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html
 msgid "Please confirm the following payment details."
-msgstr ""
+msgstr "โปรดยืนยันรายละเอียดการชำระเงินดังต่อไปนี้"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html
 #, python-format
 msgid "Total: %(total)s"
-msgstr ""
+msgstr "ยอดรวม: %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/payment_qr_codes.html
 msgid ""
