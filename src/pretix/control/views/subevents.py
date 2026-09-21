@@ -1276,6 +1276,11 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             self._default_meta = self.request.event.meta_data
 
         for p in self.request.organizer.meta_properties.all():
+            if p.protected and not self.request.user.has_organizer_permission(
+                    self.request.organizer, 'organizer.settings.general:write', request=self.request
+            ):
+                continue
+
             inst = SubEventMetaValue(property=p)
             if len(matches[p.id]) == 1 and matches[p.id][0]['c'] == total:
                 inst.value = matches[p.id][0]['value']
