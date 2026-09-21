@@ -674,10 +674,10 @@ class ObjectListField(serializers.Field):
             raise ValidationError("Must only contain objects.")
 
         if not all(self.required_keys <= set(obj.keys()) for obj in data):
-            raise ValidationError(f"Each object must contain keys: {', '.join(self.required_keys)}.")
+            raise ValidationError(f"Each object must contain keys: {', '.join(sorted(self.required_keys))}.")
 
         if not all(self.allowed_keys >= set(obj.keys()) for obj in data):
-            raise ValidationError(f"Each object may only contain keys: {', '.join(self.allowed_keys)}.")
+            raise ValidationError(f"Each object may only contain keys: {', '.join(sorted(self.allowed_keys))}.")
 
         if self.make_unique:
             uniques = [self.make_unique(obj) for obj in data]
