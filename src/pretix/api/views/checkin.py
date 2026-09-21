@@ -50,6 +50,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
+from pretix.api.auth.utils import get_session_key_for_api_auth
 from pretix.api.serializers.checkin import (
     CheckinListSerializer, CheckinRPCAnnulInputSerializer,
     CheckinRPCRedeemInputSerializer, MiniCheckinListSerializer,
@@ -331,10 +332,16 @@ with scopes_disabled():
 def _handle_file_upload(data, user, auth):
     try:
         cf = CachedFile.objects.get(
-            session_key=f'api-upload-{str(type(user or auth))}-{(user or auth).pk}',
             file__isnull=False,
             pk=data[len("file:"):],
         )
+        if cf.session_key == "api-upload-<class 'django.contrib.auth.models.AnonymousUser'>-None":
+            # OK, backwards-compatibility of a security bug fixed 2026-09, delete this at some point, but should
+            # also be harmless because all files with this key are expired one day after deployment of this fix
+            # and no new files with this key are created
+            pass
+        elif cf.session_key != get_session_key_for_api_auth(user, auth):
+            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
     except (ValidationError, BaseValidationError, IndexError):  # invalid uuid
         raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
     except CachedFile.DoesNotExist:
