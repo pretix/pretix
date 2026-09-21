@@ -89,7 +89,7 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
-    assert str(resp.data["choices"][0]) == "Choices need to contain only objects."
+    assert str(resp.data["choices"][0]) == "Must only contain objects."
 
     resp = token_client.post(
         '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
@@ -102,7 +102,7 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
-    assert str(resp.data["choices"][0]) == "Choices need to be a list or null."
+    assert str(resp.data["choices"][0]) == "Must be a list or null."
 
     resp = token_client.post(
         '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
@@ -118,7 +118,7 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
-    assert str(resp.data["choices"][0]) == "Each choice must have a unique key."
+    assert str(resp.data["choices"][0]) == "Each object must be unique."
 
     resp = token_client.post(
         '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
@@ -134,7 +134,7 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
-    assert str(resp.data["choices"][0]) == "Each choice must contain a key and optionally a label."
+    assert str(resp.data["choices"][0]) == "Each object must contain keys: key."
 
     resp = token_client.post(
         '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
@@ -149,7 +149,7 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
-    assert str(resp.data["choices"][0]) == "Each choice must contain a key and optionally a label."
+    assert str(resp.data["choices"][0]) == "Each object may only contain keys: key, label."
 
     choices = [
         {"key": "r", "label": "Red"},

@@ -643,7 +643,13 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         return 'pub/' + fname
 
 
-class KeyLabelObjectListField(serializers.Field):
+class ObjectListField(serializers.Field):
+
+    def __init__(self, *args, **kwargs):
+        self.required_keys = set(kwargs.pop("required_keys", {}))
+        self.allowed_keys = self.required_keys | set(kwargs.pop("allowed_keys", {}))
+        self.make_unique = kwargs.pop("make_unique", None)
+        super().__init__(*args, **kwargs)
 
     def to_representation(self, value):
         if not value:
@@ -652,34 +658,41 @@ class KeyLabelObjectListField(serializers.Field):
 
         # django added unneccessary keys DELETE, ORDER through formsets, filter them here for backwards compat
         def strip_unknown_keys(v):
-            return {k: v[k] for k in v.keys() if k in ("key", "label")}
+            return {k: v[k] for k in v.keys() if k in self.allowed_keys}
         return [strip_unknown_keys(v) for v in value]
 
     def to_internal_value(self, data):
         if data is None:
             return data
         if not isinstance(data, list):
-            raise ValidationError("Choices need to be a list or null.")
+            raise ValidationError("Must be a list or null.")
         if not data:
             # empty list
             return None
 
-        if not all(isinstance(choice, dict) for choice in data):
-            raise ValidationError("Choices need to contain only objects.")
+        if not all(isinstance(obj, dict) for obj in data):
+            raise ValidationError("Must only contain objects.")
 
-        required_keys = {"key"}
-        allowed_keys = {"key", "label"}
-        if not all(required_keys <= set(choice.keys()) <= allowed_keys for choice in data):
-            raise ValidationError("Each choice must contain a key and optionally a label.")
+        if not all(self.required_keys <= set(obj.keys()) for obj in data):
+            raise ValidationError(f"Each object must contain keys: {', '.join(self.required_keys)}.")
 
-        choice_keys = [choice.get("key") for choice in data]
-        if len(set(choice_keys)) < len(choice_keys):
-            raise ValidationError("Each choice must have a unique key.")
+        if not all(self.allowed_keys >= set(obj.keys()) for obj in data):
+            raise ValidationError(f"Each object may only contain keys: {', '.join(self.allowed_keys)}.")
+
+        if self.make_unique:
+            uniques = [self.make_unique(obj) for obj in data]
+            if len(set(uniques)) < len(uniques):
+                raise ValidationError("Each object must be unique.")
         return data
 
 
 class EventMetaPropertiesSerializer(I18nAwareModelSerializer):
-    choices = KeyLabelObjectListField(allow_null=True)
+    choices = ObjectListField(
+        allow_null=True,
+        required_keys={"key"},
+        allowed_keys={"key", "label"},
+        make_unique=lambda c: c.get("key"),
+    )
 
     class Meta:
         model = EventMetaProperty
