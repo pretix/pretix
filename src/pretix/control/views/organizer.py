@@ -778,9 +778,9 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["events"] = self.request.user.get_events_with_permission(
-            "event.settings.general:write", request=self.request
-        ).filter(organizer=self.request.organizer)
+        # Assumption: Who has access to modify organizer settings may see all events and disable/enable plugins
+        # for them. Otherwise, inconsistent situations occur.
+        kwargs["events"] = self.request.organizer.events.all()
         kwargs["initial"] = {
             "events": self.request.organizer.events.filter(plugins__regex='(^|,)' + self.plugin.module + '(,|$)')
         }
