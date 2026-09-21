@@ -402,9 +402,12 @@ def event_index_widgets_lazy(request, organizer, event):
         except SubEvent.DoesNotExist:
             pass
 
+    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'event.orders:read',
+                                                        request=request)
     widgets = []
-    for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=False):
-        widgets.extend(result)
+    if can_view_orders:
+        for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=False):
+            widgets.extend(result)
 
     return build_json_response(widgets)
 
