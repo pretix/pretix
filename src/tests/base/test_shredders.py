@@ -342,8 +342,11 @@ def test_invoice_shredder(event, order):
     s.shred_data()
     inv.refresh_from_db()
 
-    assert "Acme" not in inv.invoice_to
-    assert "icket" not in inv.lines.first().description
+    assert inv.invoice_to == "█"
+    assert inv.invoice_to_company == "█"
+    l = inv.lines.first()
+    assert l.description == "█"
+    assert l.attendee_name == "█"
     assert not inv.file
     assert not os.path.exists(fname)
 
