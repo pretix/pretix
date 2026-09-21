@@ -1202,8 +1202,9 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
             return field
 
     def clean(self):
-        from pretix.base.addressvalidation import \
-            validate_address  # local import to prevent impact on startup time
+        from pretix.base.addressvalidation import (  # local import to prevent impact on startup time
+            validate_address,
+        )
 
         d = super().clean()
 
@@ -1444,8 +1445,9 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         self.fields['transmission_type'].widget.attrs['data-trigger-address-info'] = 'on'
 
     def clean(self):
-        from pretix.base.addressvalidation import \
-            validate_address  # local import to prevent impact on startup time
+        from pretix.base.addressvalidation import (  # local import to prevent impact on startup time
+            validate_address,
+        )
 
         data = self.cleaned_data
 
