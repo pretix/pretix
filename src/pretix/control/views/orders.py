@@ -1177,6 +1177,8 @@ class OrderRefundView(OrderView):
         manual_value = formats.sanitize_separators(manual_value)
         try:
             manual_value = Decimal(manual_value)
+            if manual_value < Decimal("0.00"):
+                raise TypeError("Please do not use negative numbers")
         except (DecimalException, TypeError):
             messages.error(self.request, _('You entered an invalid number.'))
             is_valid = False
@@ -1206,6 +1208,8 @@ class OrderRefundView(OrderView):
         giftcard_value = formats.sanitize_separators(giftcard_value)
         try:
             giftcard_value = Decimal(giftcard_value)
+            if giftcard_value < Decimal("0.00"):
+                raise TypeError("Please do not use negative numbers")
         except (DecimalException, TypeError):
             messages.error(self.request, _('You entered an invalid number.'))
             is_valid = False
@@ -1255,6 +1259,8 @@ class OrderRefundView(OrderView):
         offsetting_value = formats.sanitize_separators(offsetting_value)
         try:
             offsetting_value = Decimal(offsetting_value)
+            if offsetting_value < Decimal("0.00"):
+                raise TypeError("Please do not use negative numbers")
         except (DecimalException, TypeError):
             messages.error(self.request, _('You entered an invalid number.'))
             is_valid = False
@@ -1286,10 +1292,13 @@ class OrderRefundView(OrderView):
                     ))
 
         for identifier, prov in self.request.event.get_payment_providers().items():
+            # prof = process form, not a typo for prov(ider)
             prof_value = self.request.POST.get(f'newrefund-{identifier}', '0') or '0'
             prof_value = formats.sanitize_separators(prof_value)
             try:
                 prof_value = Decimal(prof_value)
+                if prof_value < Decimal("0.00"):
+                    raise TypeError("Please do not use negative numbers")
             except (DecimalException, TypeError):
                 messages.error(self.request, _('You entered an invalid number.'))
                 is_valid = False
@@ -1313,6 +1322,8 @@ class OrderRefundView(OrderView):
             value = formats.sanitize_separators(value)
             try:
                 value = Decimal(value)
+                if value < Decimal("0.00"):
+                    raise TypeError("Please do not use negative numbers")
             except (DecimalException, TypeError):
                 messages.error(self.request, _('You entered an invalid number.'))
                 is_valid = False
