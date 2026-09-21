@@ -663,12 +663,12 @@ class KeyLabelObjectListField(serializers.Field):
             # empty list
             return None
 
-        if any([not isinstance(choice, dict) for choice in data]):
+        if not all(isinstance(choice, dict) for choice in data):
             raise ValidationError("Choices need to contain only objects.")
 
         required_keys = {"key"}
         allowed_keys = {"key", "label"}
-        if not all([required_keys <= set(choice.keys()) <= allowed_keys for choice in data]):
+        if not all(required_keys <= set(choice.keys()) <= allowed_keys for choice in data):
             raise ValidationError("Each choice must contain a key and optionally a label.")
 
         choice_keys = [choice.get("key") for choice in data]
