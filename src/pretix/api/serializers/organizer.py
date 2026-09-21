@@ -646,6 +646,9 @@ class OrganizerSettingsSerializer(SettingsSerializer):
 class KeyLabelObjectListField(serializers.Field):
 
     def to_representation(self, value):
+        if not value:
+            # normalize empty lists to None
+            return None
         # django added unneccessary keys DELETE, ORDER through formsets, filter them here for backwards compat
         def strip_unknown_keys(v):
             return {k: v[k] for k in v.keys() if k in ("key", "label")}
