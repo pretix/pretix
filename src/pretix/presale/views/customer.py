@@ -146,6 +146,7 @@ class LoginView(RedirectBackMixin, FormView):
             u = urlparse(url)
             qsl = parse_qs(u.query)
             qsl['cross_domain_customer_auth'] = otp
+            qsl['cross_domain_customer_auth_nonce'] = self.request.GET.get("request_cross_domain_customer_auth_nonce", "")
             url = urlunparse((u.scheme, u.netloc, u.path, u.params, urlencode(qsl, doseq=True), u.fragment))
 
         return url
@@ -703,6 +704,7 @@ class SSOLoginView(RedirectBackMixin, View):
         request.session[f'pretix_customerauth_{self.provider.pk}_nonce'] = nonce
         request.session[f'pretix_customerauth_{self.provider.pk}_popup_origin'] = popup_origin
         request.session[f'pretix_customerauth_{self.provider.pk}_cross_domain_requested'] = self.request.GET.get("request_cross_domain_customer_auth") == "true"
+        request.session[f'pretix_customerauth_{self.provider.pk}_cross_domain_nonce'] = self.request.GET.get("request_cross_domain_customer_auth_nonce")
         redirect_uri = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.login.return', kwargs={
             'provider': self.provider.pk
         })
@@ -953,6 +955,28 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                 u = urlparse(url)
                 qsl = parse_qs(u.query)
                 qsl['cross_domain_customer_auth'] = otp
+                qsl['cross_domain_customer_auth_nonce'] = self.request.session.get(f'pretix_customerauth_{self.provider.pk}_cross_domain_nonce', '')
                 url = urlunparse((u.scheme, u.netloc, u.path, u.params, urlencode(qsl, doseq=True), u.fragment))
 
         return url
+
+
+class LoginStartView(View):
+    # When a login is initiated on a event-domain-level view, we need to carry the user to the organizer domain through
+    # this POST request to be able to set a nonce on their current session. We can't just use a link, since then we'd
+    # need to create sessions for every anonymous user of the ticketshop, which is too expensive.
+
+    def post(self, request, *args, **kwargs):
+        if getattr(self.request, 'domain_mode', 'system') not in (KnownDomain.MODE_ORG_ALT_DOMAIN, KnownDomain.MODE_EVENT_DOMAIN):
+            raise Http404("Only active on event-level domains")
+
+        nonce = get_random_string(32)
+        request.session['cross_domain_customer_auth_nonce'] = nonce
+        query = {
+            "next": request.POST.get("next", ""),
+            "request_cross_domain_customer_auth_nonce": nonce,
+            "request_cross_domain_customer_auth": "true",
+        }
+        return redirect_to_url(
+            build_absolute_uri(self.request.organizer, "presale:organizer.customer.login") + "?" + urlencode(query)
+        )
