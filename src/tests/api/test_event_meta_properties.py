@@ -89,6 +89,8 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
+    assert str(resp.data["choices"][0]) == "Choices need to contain only objects."
+
     resp = token_client.post(
         '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
         format='json',
@@ -100,6 +102,55 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
+    assert str(resp.data["choices"][0]) == "Choices need to be a list or null."
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
+        format='json',
+        data={
+            "name": "Color",
+            "default": "r",
+            "required": False,
+            "choices": [
+                {"key": "r", "label": "Red"},
+                {"key": "r", "label": "Razzmatazz"},
+            ],
+        }
+    )
+    assert resp.status_code == 400
+    assert str(resp.data["choices"][0]) == "Each choice must have a unique key."
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
+        format='json',
+        data={
+            "name": "Color",
+            "default": "r",
+            "required": False,
+            "choices": [
+                {"key": "r", "label": "Red"},
+                {"label": "Green"},
+            ],
+        }
+    )
+    assert resp.status_code == 400
+    assert str(resp.data["choices"][0]) == "Each choice must contain a key and optionally a label."
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
+        format='json',
+        data={
+            "name": "Color",
+            "default": "r",
+            "required": False,
+            "choices": [
+                {"key": "r", "label": "Red", "UNKNOWN_KEY": 1},
+            ],
+        }
+    )
+    assert resp.status_code == 400
+    assert str(resp.data["choices"][0]) == "Each choice must contain a key and optionally a label."
+
     choices = [
         {"key": "r", "label": "Red"},
         {"key": "g", "label": "Green"},
@@ -116,6 +167,8 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
+    assert str(resp.data["non_field_errors"][0]) == "You cannot set a default value that is not a valid value."
+
     resp = token_client.post(
         '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
         format='json',
@@ -144,10 +197,12 @@ def test_meta_property_patch(token_client, organizer, event_meta_property):
         format='json',
         data={
             # existing default is not in choices
-            "choices": [{'k': 'Black'}],
+            "choices": [{'key': 'k', 'label': 'Black'}],
         }
     )
     assert resp.status_code == 400
+    assert str(resp.data["non_field_errors"][0]) == "You cannot set a default value that is not a valid value."
+
     resp = token_client.patch(
         '/api/v1/organizers/{}/event_meta_properties/{}/'
         .format(organizer.slug, event_meta_property.pk),
