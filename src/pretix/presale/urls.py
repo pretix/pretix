@@ -98,6 +98,7 @@ event_patterns = [
     re_path(r'unlock/(?P<hash>[a-z0-9]{64})/$', pretix.presale.views.user.UnlockHashView.as_view(),
             name='event.payment.unlock'),
     re_path(r'resend/$', pretix.presale.views.user.ResendLinkView.as_view(), name='event.resend_link'),
+    re_path(r'^account/loginstart$', pretix.presale.views.customer.LoginStartView.as_view(), name='event.customer.loginstart'),
 
     re_path(r'^favicon.ico/?$',
             pretix.presale.views.organizer.OrganizerFavicon.as_view(),

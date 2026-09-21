@@ -42,7 +42,7 @@ import os
 import re
 from collections import Counter, OrderedDict, defaultdict
 from decimal import Decimal
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 
 from django import forms
 from django.conf import settings
@@ -55,6 +55,7 @@ from django.http import (
     FileResponse, Http404, HttpResponseRedirect, JsonResponse,
 )
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -117,8 +118,14 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
             login_url = eventreverse(self.request.organizer, 'presale:organizer.customer.login', kwargs={})
 
             if hasattr(self.request, "event_domain") and self.request.event_domain:
-                next_url = quote(self.request.scheme + "://" + self.request.get_host() + self.request.get_full_path())
-                return redirect_to_url(f'{login_url}?next={next_url}&request_cross_domain_customer_auth=true')
+                nonce = get_random_string(32)
+                self.request.session['cross_domain_customer_auth_nonce'] = nonce
+                query = {
+                    "next": self.request.scheme + "://" + self.request.get_host() + self.request.get_full_path(),
+                    "request_cross_domain_customer_auth_nonce": nonce,
+                    "request_cross_domain_customer_auth": "true",
+                }
+                return redirect_to_url(f'{login_url}?{urlencode(query)}')
 
             else:
                 next_url = quote(self.request.get_full_path())
