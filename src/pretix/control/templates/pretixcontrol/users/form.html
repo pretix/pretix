@@ -17,10 +17,6 @@
                 {% csrf_token %}
                 <button class="btn btn-default">{% trans "Generate 2FA emergency token" %}</button>
             </form>
-            <form action="{% url "control:users.resetdrift" id=user.pk %}" method="post" class="form-inline helper-display-inline">
-                {% csrf_token %}
-                <button class="btn btn-default">{% trans "Reset 2FA drift" %}</button>
-            </form>
         {% endif %}
         <form action="{% url "control:users.impersonate" id=user.pk %}" method="post" class="form-inline helper-display-inline">
             {% csrf_token %}
@@ -70,6 +66,9 @@
                         <div class="col-md-9 col-md-offset-3">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
+                                    <button class="btn btn-default btn-xs pull-right" type="submit" form="resetdriftthrottle">
+                                        {% trans "Reset drift and throttle" %}
+                                    </button>
                                     <h3 class="panel-title">
                                         {% trans "Available two-factor authentication methods" %}
                                     </h3>
@@ -103,6 +102,14 @@
                                                 {% plural %}
                                                     {{ cnt }} failed attempts since {{ date }}
                                                 {% endblocktrans %}
+                                                <br>
+                                            {% endif %}
+                                            {% if d.throttling_enabled and not d.verify_is_allowed.0 %}
+                                                <strong>
+                                                    {% blocktrans trimmed with date=d.verify_is_allowed.1.locked_until|date:"SHORT_DATETIME_FORMAT" %}
+                                                        Currently locked until {{ date }}
+                                                    {% endblocktrans %}
+                                                </strong>
                                                 <br>
                                             {% endif %}
                                             {% if d.devicetype == 'totp' %}
@@ -171,4 +178,8 @@
             </div>
         </div>
     </div>
+
+    <form action="{% url "control:users.resetdriftthrottle" id=user.pk %}" id="resetdriftthrottle" method="post">
+        {% csrf_token %}
+    </form>
 {% endblock %}
