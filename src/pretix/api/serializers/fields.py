@@ -37,6 +37,8 @@ from collections import OrderedDict
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
+from pretix.api.auth.utils import get_session_key_for_api_request
+
 
 def remove_duplicates_from_list(data):
     return list(OrderedDict.fromkeys(data))
@@ -83,10 +85,16 @@ class UploadedFileField(serializers.Field):
         request = self.context.get('request', None)
         try:
             cf = CachedFile.objects.get(
-                session_key=f'api-upload-{str(type(request.user or request.auth))}-{(request.user or request.auth).pk}',
                 file__isnull=False,
                 pk=data[len("file:"):],
             )
+            if cf.session_key == "api-upload-<class 'django.contrib.auth.models.AnonymousUser'>-None":
+                # OK, backwards-compatibility of a security bug fixed 2026-09, delete this at some point, but should
+                # also be harmless because all files with this key are expired one day after deployment of this fix
+                # and no new files with this key are created
+                pass
+            elif cf.session_key != get_session_key_for_api_request(request):
+                self.fail('not_found')
         except (ValidationError, IndexError):  # invalid uuid
             self.fail('not_found')
         except CachedFile.DoesNotExist:
