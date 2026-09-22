@@ -193,10 +193,8 @@ def test_meta_property_patch(token_client, organizer, event_meta_property):
         }
     )
     assert resp.status_code == 400
-    #assert resp.data == 123
     assert str(resp.data["choices"][0]["label"][0]) == "Invalid data type."
     assert str(resp.data["choices"][1]["label"][0]) == "All entries must be strings."
-
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/event_meta_properties/{}/'
