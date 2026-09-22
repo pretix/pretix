@@ -117,7 +117,7 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
             raise Http404(_('Unknown order code or not authorized to access this order.'))
 
         if o is False:
-            login_url = eventreverse(self.request.organizer, 'presale:organizer.customer.login', kwargs={})
+            login_url = eventreverse_absolute(self.request.organizer, 'presale:organizer.customer.login', kwargs={})
 
             if hasattr(self.request, "event_domain") and self.request.event_domain:
                 nonce = get_random_string(32)
