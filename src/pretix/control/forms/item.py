@@ -1142,10 +1142,10 @@ class ItemAddOnForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['addon_category'].queryset = self.event.categories.all()
-        self.fields['addon_category'].help_text = format_html('<a href="javascript:" data-django-dialog="{}?notify_parent=true">{}</a>', reverse('control:event.items.categories.add', kwargs={
+        self.fields['addon_category'].help_text = format_html('<a href="{}" data-iframe-dialog="true" data-iframe-dialog-target="<[name$=addon_category]" target="_blank">{}</a>', reverse('control:event.items.categories.add', kwargs={
                     'event': self.event.slug,
                     'organizer': self.event.organizer.slug,
-                }), _("Create new category"))
+                }), _("Create a new category"))
         self.fields['addon_category'].widget = Select2(
             attrs={
                 'data-model-select2': 'generic',
