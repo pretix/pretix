@@ -29,7 +29,7 @@ from django.contrib import messages
 from django.contrib.staticfiles import finders
 from django.utils.functional import cached_property
 from django.templatetags.static import static
-from .placeholders import get_wallet_placeholders, WalletPlaceholderContext
+from .placeholders import get_wallet_placeholder_renderer, get_wallet_placeholders, WalletPlaceholderRenderer
 from pretix.base.middleware import add_to_response_csp
 
 def get_editor_placeholders(event):
@@ -38,7 +38,7 @@ def get_editor_placeholders(event):
         language(event.settings.locale, event.settings.region),
     ):
         p = get_preview_position(event)
-        context = WalletPlaceholderContext(event=event, order=p.order, order_position=p)
+        context = get_wallet_placeholder_renderer(order_position=p)
         placeholders = {
             t: {
                 pid: {"label": str(p.label), "sample": str(context.render_sample(p)), "required_context": list(sorted(p.required_context))}
@@ -160,6 +160,13 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
         platform_id = request.POST.get("platform")
         style_id = request.POST.get("style")
         layout = request.POST.get("layout")
+        file_settings = json.loads(request.POST.get("file_settings"))
+        base_layout = event.wallet_layouts.get(pk=request.POST.get("id")).platform_layouts.filter(platform=platform_id).first()
+
+        if base_layout:
+            base_file_settings = {fs.key: fs.file for fs in base_layout.file_settings.all()}
+        else:
+            base_file_settings = {}
 
         platform = None
         for p in AVAILABLE_PLATFORMS:
@@ -177,8 +184,8 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
             language(request.event.settings.locale, request.event.settings.region),
         ):
             p = get_preview_position(request.event)
-            l = style(event=event, layout=layout) # TODO
-            file_settings = l.extract_file_settings(request)
+            l = style(event=event, layout=layout)
+            file_settings = {**base_file_settings, **l.extract_file_settings(request, file_settings)}
             layout = style(event, layout, file_settings)
             layout.validate()
 
