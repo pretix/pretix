@@ -150,6 +150,8 @@ class SendmailPluginRuleLogEntryType(EventLogEntryType):
 
 @receiver(periodic_task)
 def sendmail_run_rules(sender, **kwargs):
+    if "pretix.plugins.sendmail" not in sender.get_plugins():
+        return  # do not send scheduled mails if this plugin is disabled
     with scopes_disabled():
         mails = ScheduledMail.objects.all()
 
