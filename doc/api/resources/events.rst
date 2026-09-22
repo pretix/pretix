@@ -110,7 +110,7 @@ Endpoints
             "plugins": [
               "pretix.plugins.banktransfer",
               "pretix.plugins.stripe",
-              "pretix.plugins.paypal",
+              "pretix.plugins.paypal2",
               "pretix.plugins.ticketoutputpdf"
             ],
             "all_sales_channels": false,
@@ -199,7 +199,7 @@ Endpoints
         "plugins": [
           "pretix.plugins.banktransfer",
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal",
+          "pretix.plugins.paypal2",
           "pretix.plugins.ticketoutputpdf"
         ],
         "valid_keys": {
@@ -262,7 +262,7 @@ Endpoints
         "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal"
+          "pretix.plugins.paypal2"
         ],
         "all_sales_channels": true,
         "limit_sales_channels": []
@@ -299,7 +299,7 @@ Endpoints
         "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal"
+          "pretix.plugins.paypal2"
         ],
         "all_sales_channels": true,
         "limit_sales_channels": [],
@@ -364,7 +364,7 @@ Endpoints
         "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal"
+          "pretix.plugins.paypal2"
         ],
         "all_sales_channels": true,
         "limit_sales_channels": []
@@ -401,7 +401,7 @@ Endpoints
         "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal"
+          "pretix.plugins.paypal2"
         ],
         "all_sales_channels": true,
         "limit_sales_channels": [],
@@ -438,7 +438,7 @@ Endpoints
         "plugins": [
           "pretix.plugins.banktransfer",
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal",
+          "pretix.plugins.paypal2",
           "pretix.plugins.pretixdroid"
         ]
       }
@@ -475,7 +475,7 @@ Endpoints
         "plugins": [
           "pretix.plugins.banktransfer",
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal",
+          "pretix.plugins.paypal2",
           "pretix.plugins.pretixdroid"
         ],
         "all_sales_channels": true,

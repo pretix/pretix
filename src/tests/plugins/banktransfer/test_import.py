@@ -843,7 +843,7 @@ def test_event_name_prefix_contains_dash(env, orga_job):
     for slug in slugs:
         event = Event.objects.create(
             organizer=event.organizer, name=slug.upper(), slug=slug,
-            date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal'
+            date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal2'
         )
     with scopes_disabled():
         o1.event = Event.objects.get(slug="dummy2345")
@@ -871,7 +871,7 @@ def test_event_name_prefix_multiple_dashes(env, orga_job):
     for slug in slugs:
         event = Event.objects.create(
             organizer=event.organizer, name=slug.upper(), slug=slug,
-            date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal'
+            date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal2'
         )
 
     with scopes_disabled():
