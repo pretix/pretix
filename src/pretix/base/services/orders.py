@@ -53,7 +53,7 @@ from django.db.models import (
     Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, QuerySet, Subquery,
     Sum, Value,
 )
-from django.db.models.functions import Cast, Greatest
+from django.db.models.functions import Cast, Coalesce, Greatest
 from django.db.transaction import get_connection
 from django.dispatch import receiver
 from django.utils.functional import cached_property
@@ -1548,7 +1548,7 @@ def send_download_reminders(sender, **kwargs):
 
         if event.has_subevents:
             qs = qs.annotate(
-                first_date=Min('all_positions__subevent__date_from')
+                first_date=Coalesce(Min('all_positions__subevent__date_from'), Value(event.date_from))
             ).filter(
                 Q(first_date__gte=today)
             )
@@ -1954,8 +1954,6 @@ class OrderChangeManager:
                     is_bundled = True
                 else:
                     raise OrderError(self.error_messages['addon_invalid'])
-        if self.order.event.has_subevents and not subevent:
-            raise OrderError(self.error_messages['subevent_required'])
 
         seated = item.seat_category_mappings.filter(subevent=subevent).exists()
         if seated and not seat and self.event.settings.seating_choice:

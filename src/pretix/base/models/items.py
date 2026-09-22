@@ -896,7 +896,7 @@ class Item(LoggedModel):
         return check_quotas
 
     def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None,
-                     include_bundled=False, trust_parameters=False, fail_on_no_quotas=False):
+                     include_bundled=False, fail_on_no_quotas=False):
         """
         This method is used to determine whether this Item is currently available
         for sale.
@@ -906,8 +906,6 @@ class Item(LoggedModel):
                                to no quotas being checked at all, this method will return
                                unlimited availability.
         :param include_bundled: Also take availability of bundled items into consideration.
-        :param trust_parameters: Disable checking of the subevent parameter and disable checking if
-                                 any variations exist (performance optimization).
         :returns: any of the return codes of :py:meth:`Quota.availability()`.
 
         :raises ValueError: if you call this on an item which has variations associated with it.
@@ -1307,7 +1305,7 @@ class ItemVariation(models.Model):
         return check_quotas
 
     def check_quotas(self, ignored_quotas=None, count_waitinglist=True, subevent=None, _cache=None,
-                     include_bundled=False, trust_parameters=False, fail_on_no_quotas=False) -> Tuple[int, int]:
+                     include_bundled=False, fail_on_no_quotas=False) -> Tuple[int, int]:
         """
         This method is used to determine whether this ItemVariation is currently
         available for sale in terms of quotas.
@@ -1319,8 +1317,6 @@ class ItemVariation(models.Model):
         :param count_waitinglist: If ``False``, waiting list entries will be ignored for quota calculation.
         :returns: any of the return codes of :py:meth:`Quota.availability()`.
         """
-        if not trust_parameters and not subevent and self.item.event.has_subevents:  # NOQA
-            raise TypeError('You need to supply a subevent.')
         check_quotas = self._get_quotas(ignored_quotas=ignored_quotas, subevent=subevent)
         quotacounter = Counter()
         res = Quota.AVAILABILITY_OK, None
@@ -2201,9 +2197,7 @@ class Quota(LoggedModel):
     @staticmethod
     def clean_subevent(event, subevent):
         if event.has_subevents:
-            if not subevent:
-                raise ValidationError(_('Subevent cannot be null for event series.'))
-            if event != subevent.event:
+            if subevent and event != subevent.event:
                 raise ValidationError(_('The subevent does not belong to this event.'))
         else:
             if subevent:

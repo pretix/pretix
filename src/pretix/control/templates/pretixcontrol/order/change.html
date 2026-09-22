@@ -113,7 +113,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="col-sm-5">
-                                    {{ position.subevent }}
+                                    {{ position.subevent|default_if_none:"–" }}
                                 </div>
                                 <div class="col-sm-4">
                                     {% bootstrap_field position.form.subevent layout='inline' %}
