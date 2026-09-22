@@ -1271,6 +1271,9 @@ class OrderRefundView(OrderView):
                     if offset_order.event.currency != self.request.event.currency:
                         messages.error(self.request, _('You entered an order in an event with a different currency.'))
                         is_valid = False
+                    if not self.request.user.has_event_permission(self.request.organizer, offset_order.event, 'event.orders:write', request=self.request):
+                        messages.error(self.request, _('You entered an order in an event that you do not have access to.'))
+                        is_valid = False
                     refunds.append(OrderRefund(
                         order=order,
                         payment=None,
@@ -1342,7 +1345,12 @@ class OrderRefundView(OrderView):
                     ))
 
         any_success = False
-        if refund_selected == full_refund and is_valid:
+        if refund_selected != full_refund:
+            messages.error(self.request, _('The refunds you selected do not match the selected total refund '
+                                           'amount.'))
+            is_valid = False
+
+        if is_valid:
             for r in refunds:
                 r.save()
                 order.log_action('pretix.event.order.refund.created', {
@@ -1414,9 +1422,6 @@ class OrderRefundView(OrderView):
                             )
                         }))
             return redirect(self.get_order_url())
-        else:
-            messages.error(self.request, _('The refunds you selected do not match the selected total refund '
-                                           'amount.'))
 
     def post(self, *args, **kwargs):
         if self.start_form.is_valid():
