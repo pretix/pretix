@@ -32,8 +32,7 @@ choices                               list of objects            List of JSON ob
                                                                  for this property, or ``null`` for no limitation.
                                                                  Each choice object has a required internal name named
                                                                  ``key`` and optional public name named ``label``
-                                                                 consisting of either a string or a dictionary of i18n
-                                                                 string translations
+                                                                 consisting of a dictionary of i18n string translations
 ===================================== ========================== =======================================================
 
 Endpoints
