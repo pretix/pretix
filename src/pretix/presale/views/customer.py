@@ -169,40 +169,37 @@ class LogoutView(View):
         next_page = self.get_next_page()
         return HttpResponseRedirect(next_page)
 
+    def get_redirect_field(self):
+        return self.request.POST.get(
+            self.redirect_field_name,
+            self.request.GET.get(self.redirect_field_name)
+        )
+
     def get_next_page(self):
         if getattr(self.request, 'domain_mode', 'system') in (KnownDomain.MODE_ORG_ALT_DOMAIN, KnownDomain.MODE_EVENT_DOMAIN):
             # After we cleared the cookies on this domain, redirect to the parent domain to clear cookies as well
-            next_page = eventreverse(self.request.organizer, 'presale:organizer.customer.logout', kwargs={})
-            if self.redirect_field_name in self.request.POST or self.redirect_field_name in self.request.GET:
-                after_next_page = self.request.POST.get(
-                    self.redirect_field_name,
-                    self.request.GET.get(self.redirect_field_name)
-                )
+            next_page = eventreverse_absolute(self.request.organizer, 'presale:organizer.customer.logout', kwargs={})
+            if after_next_page := self.get_redirect_field():
                 next_page += '?' + urlencode({
                     'next': urljoin(f'{self.request.scheme}://{self.request.get_host()}', after_next_page)
                 })
         else:
             next_page = eventreverse(self.request.organizer, 'presale:organizer.index', kwargs={})
 
-            if (self.redirect_field_name in self.request.POST or
-                    self.redirect_field_name in self.request.GET):
-                next_page = self.request.POST.get(
-                    self.redirect_field_name,
-                    self.request.GET.get(self.redirect_field_name)
-                )
+            if url_from_param := self.get_redirect_field():
                 hosts = list(KnownDomain.objects.filter(organizer=self.request.organizer).values_list('domainname', flat=True))
                 siteurlsplit = urlsplit(settings.SITE_URL)
                 if siteurlsplit.port and siteurlsplit.port not in (80, 443):
                     hosts = ['%s:%d' % (h, siteurlsplit.port) for h in hosts]
                 url_is_safe = url_has_allowed_host_and_scheme(
-                    url=next_page,
+                    url=url_from_param,
                     allowed_hosts=hosts,
                     require_https=self.request.is_secure(),
                 )
                 # Security check -- Ensure the user-originating redirection URL is
                 # safe.
-                if not url_is_safe:
-                    next_page = self.request.path
+                if url_is_safe:
+                    next_page = url_from_param
 
         return next_page
 
