@@ -478,6 +478,58 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         assert ia.vat_id == "AT123456"
         assert not ia.vat_id_validated
 
+    def test_vat_id_revalidated_after_country_change(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.keep_gross_if_rate_changes = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '1234',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
+            }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('23.00')
+        assert cr1.tax_rate == Decimal('0.00')
+        assert cr1.tax_value == Decimal('0.00')
+
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            def raiser(*args, **kwargs):
+                raise VATIDFinalError('country mismatch')
+
+            mock_validate.side_effect = raiser
+            r = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '1012 WX',
+                'city': 'Here',
+                'country': 'NL',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
+            }, follow=True)
+            assert b'alert-danger' in r.content
+
     def test_reverse_charge_keep_gross(self):
         self.tr19.eu_reverse_charge = True
         self.tr19.keep_gross_if_rate_changes = True

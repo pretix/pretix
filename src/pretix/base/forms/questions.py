@@ -1501,7 +1501,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 "vat_id": _("This field is required.")
             })
 
-        if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
+        if self.validate_vat_id and self.instance.vat_id_validated and not any(v in self.changed_data for v in ('is_business', 'vat_id', 'country')):
             pass  # Skip re-validation if it is validated
         elif self.validate_vat_id and vat_id_applicable:
             try:
