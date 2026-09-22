@@ -662,9 +662,10 @@ class MetaPropertyListField(serializers.ListField):
 
 
 class MetaPropertyDictField(serializers.DictField):
-    child_per_key = {
-        "label": I18nField()
-    }
+
+    def __init__(self, **kwargs):
+        self.label_field = I18nField()
+        super().__init__(**kwargs)
 
     def to_representation(self, value):
         # django added unneccessary keys DELETE, ORDER through formsets, filter them here for backwards compat
@@ -672,8 +673,7 @@ class MetaPropertyDictField(serializers.DictField):
             "key": value["key"]
         }
         if "label" in value:
-            f = I18nField()
-            d["label"] = f.to_representation(value["label"])
+            d["label"] = self.label_field.to_representation(value["label"])
 
         return super().to_representation(d)
 
@@ -688,9 +688,8 @@ class MetaPropertyDictField(serializers.DictField):
             raise ValidationError("Meta properties may only have a key and optionally a label.")
 
         if "label" in data:
-            f = I18nField()
             try:
-                data["label"] = f.to_internal_value(data["label"])
+                data["label"] = self.label_field.to_internal_value(data["label"])
             except ValidationError as e:
                 raise ValidationError({"label": e.detail})
 
