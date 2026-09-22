@@ -37,7 +37,7 @@ export function sort (array, ...orderBy) {
 		return 0
 	})
 }
-export function *groupBy (array, key) {
+export function *groupBy<K,V> (array: V[], key: (v: V) => K): Generator<[K, V[]]> {
 	let lastKey, lastArray
 	for (const x of array) {
 		const k = key(x)
@@ -52,6 +52,15 @@ export function *groupBy (array, key) {
 	}
 	if (lastArray) {
 		yield [lastKey, lastArray]
+	}
+}
+
+export function setListState(list, state, identifier) {
+	const i = list.indexOf(identifier)
+	if (i === -1) {
+		if (state) list.push(identifier)
+	} else {
+		if (!state) list.splice(i, 1)
 	}
 }
 

@@ -1,4 +1,4 @@
-import { ApiListResponse, Datafield, Questionnaire, Item, Category } from './model'
+import {ApiListResponse, Datafield, Questionnaire, Item, Category, SalesChannel} from './model'
 import { ProgressBar } from "./ProgressBar";
 import {fromJsonScript} from "./helper";
 
@@ -37,7 +37,9 @@ async function api_json_request(resource, method, json_body) {
 			'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val() as string,
 		},
 	});
-	if (response.status >= 400)
+	if (response.status === 204)
+		return {}
+	else if (response.status >= 400)
 		throw new APIError(await response.json());
 	else
 		return await response.json()
@@ -61,6 +63,10 @@ export async function createQuestionnaire(data) {
 	return await api_json_request(`organizers/${organizer_slug}/events/${event_slug}/questionnaires/`, 'POST', data);
 }
 
+export async function deleteQuestionnaire(id) {
+	return await api_json_request(`organizers/${organizer_slug}/events/${event_slug}/questionnaires/${id}/`, 'DELETE', {});
+}
+
 export async function getItems() {
 	using pb = ProgressBar.show('loading product list')
 	return await api_get_all<Item>(`organizers/${organizer_slug}/events/${event_slug}/items/`);
@@ -72,7 +78,7 @@ export async function getCategories() {
 }
 
 export async function getSalesChannels() {
-	return await api_get_all<Category>(`organizers/${organizer_slug}/saleschannels/`);
+	return await api_get_all<SalesChannel>(`organizers/${organizer_slug}/saleschannels/`);
 }
 
 export function getEventLocales() {
