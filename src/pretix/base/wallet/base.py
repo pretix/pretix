@@ -4,7 +4,7 @@ from i18nfield.strings import LazyI18nString
 import jsonschema
 from django.core.exceptions import ValidationError
 from pretix.base.models import OrderPosition
-from ..placeholders import WalletPlaceholderRenderer, get_available_context, get_wallet_placeholder_renderer, get_wallet_placeholders
+from ...plugins.wallet.placeholders import WalletPlaceholderRenderer, get_available_context, get_wallet_placeholder_renderer, get_wallet_placeholders
 from django import forms
 from pretix.api.helpers import handle_file_upload
 from django.core.files import File
@@ -374,7 +374,7 @@ class PassStyle:
 
         return None, None
 
-    def __init__(self, event, layout, file_settings: dict[str, File] | None = None):
+    def __init__(self, event, layout = None, file_settings: dict[str, File] | None = None):
         self.event = event
         self.layout = layout
         self.file_settings = file_settings or {}
@@ -401,6 +401,9 @@ class PassStyle:
         return res
 
     def get_pass_fields(self, op: OrderPosition):
+        if not self.layout:
+            raise ValueError("`value` needs to be set")
+
         context = get_wallet_placeholder_renderer(order_position=op)
 
         fields = {}
@@ -448,6 +451,9 @@ class PassStyle:
         return fields
 
     def group_is_active(self, identifier: str):
+        if not self.layout:
+            raise ValueError("`value` needs to be set")
+
         return self.layout["fieldgroups"].get(identifier, {}).get("active", False)
 
     def generate(self, op: OrderPosition):

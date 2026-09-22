@@ -70,7 +70,7 @@ class WalletPlatformLayout(LoggedModel):
 
         style = get_style(self.platform, self.style)
         if style:
-            file_settings = dict(self.file_settings.values_list("key", "file"))
+            file_settings = {fs.key: fs.file for fs in self.file_settings.all()}
             return style(event=self.parent.event, layout=self.layout, file_settings=file_settings)
         else:
             raise RuntimeError(f"Style {self.platform}.{self.style} not found")
@@ -95,3 +95,8 @@ class WalletLayoutFileSetting(models.Model):
 #     order_position = models.ForeignKey(OrderPosition, on_delete=models.PROTECT)
 #     content = models.BinaryField()
 #     updated_at = models.DateTimeField(null=True, auto_now=True)
+# prob smth like this
+# class GoogleWalletObject(models.Model):
+#     type = models.CharField(choices=["CLASS", "OBJECT"])
+#     identifier = models.CharField()
+#     data = models.JSONField()
