@@ -252,7 +252,10 @@ def test_event_create(team, token_client, organizer, event, meta_prop):
     resp = token_client.post(
         '/api/v1/organizers/{}/events/'.format(organizer.slug),
         {
-            "name": ["Demo Konference 2020 Test"],
+            "name": {
+                "de": "Demo Konference 2020 Test",
+                "en": "Demo Conference 2020 Test"
+            },
             "live": False,
             "currency": "EUR",
             "date_from": "2017-12-27T10:00:00Z",
@@ -272,7 +275,6 @@ def test_event_create(team, token_client, organizer, event, meta_prop):
         },
         format='json'
     )
-    print(resp.data)
     assert resp.status_code == 201
     with scopes_disabled():
         assert not organizer.events.get(slug="2030").testmode
