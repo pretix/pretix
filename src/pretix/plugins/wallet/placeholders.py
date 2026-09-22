@@ -1,4 +1,8 @@
 from collections.abc import Callable
+from functools import cached_property
+from typing import Any
+
+from tests.api.test_items import order_position
 from .signals import (
     register_wallet_text_placeholders,
     register_wallet_image_placeholders,
@@ -48,7 +52,6 @@ class BaseWalletPlaceholder:
 
     def render_sample(self, **context):
         raise NotImplementedError()
-
 
 
 class BaseWalletTextPlaceholder(BaseWalletPlaceholder):
@@ -165,36 +168,138 @@ class MissingContextException(Exception):
     pass
 
 
-class WalletPlaceholderContext:
-    def __init__(self, **kwargs):
-        self.context_args = kwargs
+class PlaceholderContextTransformation:
+    @property
+    def required_context(self) -> set[str]:
+        """
+        A a set of all attribute names that need to be contained in the base context for this transformation to function.
+        """
+        return set()
+
+    @property
+    def generated_context_name(self) -> str:
+        """The name of the context arg this transformation produces"""
+        raise NotImplementedError()
+
+    def transform(self, context):
+        raise NotImplementedError("`transform` not implemented")
+
+
+class FunctionalContextTransformation(PlaceholderContextTransformation):
+    def __init__(self, context_name: str, context_args: set[str], func: Callable):
+        self.context_args = context_args
+        self.context_name = context_name
+        self.transform = func
+
+    @property
+    def required_context(self) -> set[str]:
+        return self.context_args
+
+    @property
+    def generated_context_name(self) -> str:
+        return self.context_name
+
+def get_available_context(initial_context: set[str], transformations: list[PlaceholderContextTransformation]):
+    used_trans = set()
+    available_context = set(initial_context)
+    changed = True
+    while changed:
+        changed = False
+        for trans in transformations:
+            if trans in used_trans:
+                continue
+
+            if trans.required_context <= available_context:
+                used_trans.add(trans)
+                if trans.generated_context_name not in available_context:
+                    available_context.add(trans.generated_context_name)
+                    changed = True
+
+    return available_context
+
+def get_transformed_context(context_args: dict[str, Any], transformations: list[PlaceholderContextTransformation]):
+    used_trans = set()
+    transformed_context_args = dict(context_args)
+    changed = True
+    while changed:
+        changed = False
+        for trans in transformations:
+            if trans in used_trans:
+                continue
+
+            if trans.required_context <= transformed_context_args.keys():
+                used_trans.add(trans)
+                if trans.generated_context_name not in transformed_context_args.keys():
+                    transformation_context = {
+                        k: v
+                        for k, v in transformed_context_args.items()
+                        if k in trans.required_context
+                    }
+                    transformed_context_args[trans.generated_context_name] = trans.transform(**transformation_context)
+                    changed = True
+
+    return transformed_context_args
+
+class WalletPlaceholderRenderer:
+    def __init__(
+        self,
+        *,
+        transformations: list[PlaceholderContextTransformation] = None,
+        **kwargs,
+    ):
+        self.context = kwargs
         self.cache = {}
+        self.transformations = list(transformations) if transformations else []
+
+    @cached_property
+    def _get_transformed_context(self):
+        return get_transformed_context(self.context, self.transformations)
 
     def _get_placeholder_context(self, placeholder: BaseWalletPlaceholder):
-        missing_context = placeholder.required_context - self.context_args.keys()
+        context = self._get_transformed_context
+        missing_context = placeholder.required_context - context.keys()
         if missing_context:
             raise MissingContextException(
                 f"Missing context args for '{placeholder.identifier}': {', '.join(missing_context)}"
             )
 
         return {
-            k: v for k, v in self.context_args.items() if k in placeholder.required_context
+            k: v
+            for k, v in context.items()
+            if k in placeholder.required_context
         }
 
-    @classmethod
-    def is_available(cls, placeholder: BaseWalletPlaceholder, context_args: set[str]):
-        missing_context = placeholder.required_context - context_args
+    def is_available(self, placeholder: BaseWalletPlaceholder, context_args: set[str]):
+        available_context = get_available_context(context_args, self.transformations)
+        missing_context = placeholder.required_context - available_context
         return not missing_context
 
     def render_placeholder(self, placeholder: BaseWalletPlaceholder):
         if placeholder.identifier in self.cache:
             return self.cache[placeholder.identifier]
 
-        value = self.cache[placeholder.identifier] = placeholder.render(**self._get_placeholder_context(placeholder))
+        value = self.cache[placeholder.identifier] = placeholder.render(
+            **self._get_placeholder_context(placeholder)
+        )
         return value
 
     def render_sample(self, placeholder: BaseWalletPlaceholder):
         return placeholder.render_sample(**self._get_placeholder_context(placeholder))
+
+
+def get_wallet_placeholder_renderer(**kwargs):
+    return WalletPlaceholderRenderer(**kwargs, transformations=[
+        # TODO: make this extendable via signal?
+        FunctionalContextTransformation(
+            "order", {"order_position"}, lambda order_position: order_position.order
+        ),
+        FunctionalContextTransformation(
+            "event", {"order"}, lambda order: order.event
+        ),
+        FunctionalContextTransformation(
+            "item", {"order_position"}, lambda order_position: order_position.item
+        )
+    ])
 
 
 def get_wallet_placeholders(event) -> dict[str, dict[str, BaseWalletPlaceholder]]:
@@ -213,7 +318,6 @@ def get_wallet_placeholders(event) -> dict[str, dict[str, BaseWalletPlaceholder]
     return placeholders
 
 
-
 def get_static_file(name) -> File | None:
     path: str | None = finders.find(name)  # type: ignore
     if not path:
@@ -227,11 +331,24 @@ def get_static_file(name) -> File | None:
 )
 def base_text_placeholders(sender, **kwargs):
     return [
-        FunctionalWalletTextPlaceholder("name", LazyI18nString.from_gettext("Event Name"), {"event"}, lambda event: event.name),
         FunctionalWalletTextPlaceholder(
-            "event_slug", LazyI18nString.from_gettext("Event Slug"), {"event"}, lambda event: event.slug
+            "name",
+            LazyI18nString.from_gettext("Event Name"),
+            {"event"},
+            lambda event: event.name,
         ),
-        FunctionalWalletTextPlaceholder("order", LazyI18nString.from_gettext("Order Code"), {"order"}, lambda order: order.code),
+        FunctionalWalletTextPlaceholder(
+            "event_slug",
+            LazyI18nString.from_gettext("Event Slug"),
+            {"event"},
+            lambda event: event.slug,
+        ),
+        FunctionalWalletTextPlaceholder(
+            "order",
+            LazyI18nString.from_gettext("Order Code"),
+            {"order"},
+            lambda order: order.code,
+        ),
         FunctionalWalletTextPlaceholder(
             "total",
             LazyI18nString.from_gettext("Order Total"),
@@ -239,15 +356,39 @@ def base_text_placeholders(sender, **kwargs):
             lambda event, order: money_filter(order.total, event.currency),
         ),
         FunctionalWalletTextPlaceholder(
-            "order_email",LazyI18nString.from_gettext("Order Email"), {"order"}, lambda order: order.email
+            "order_email",
+            LazyI18nString.from_gettext("Order Email"),
+            {"order"},
+            lambda order: order.email,
         ),
         FunctionalWalletTextPlaceholder(
-            "price",LazyI18nString.from_gettext("Item Price"), {"event", "order_position"}, lambda event, order_position: money_filter(order_position.price, event.currency)
+            "price",
+            LazyI18nString.from_gettext("Item Price"),
+            {"event", "order_position"},
+            lambda event, order_position: money_filter(
+                order_position.price, event.currency
+            ),
         ),
         FunctionalWalletTextPlaceholder(
-            "secret",LazyI18nString.from_gettext("Order Secret (QR-Code-Content)"), {"order_position"}, lambda order_position: order_position.secret
+            "secret",
+            LazyI18nString.from_gettext("Order Secret (QR-Code-Content)"),
+            {"order_position"},
+            lambda order_position: order_position.secret,
+        ),
+        FunctionalWalletTextPlaceholder(
+            "item",
+            LazyI18nString.from_gettext("Product name"),
+            {"item"},
+            lambda item: item.name,
+        ),
+        FunctionalWalletTextPlaceholder(
+            "item_description",
+            LazyI18nString.from_gettext("Product description"),
+            {"item"},
+            lambda item: item.description,
         ),
     ]
+
 
 @receiver(
     register_wallet_image_placeholders,

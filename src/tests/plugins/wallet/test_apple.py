@@ -182,5 +182,3 @@ def test_generate_pass_json():
         assert field in result
 
     assert result['formatVersion'] == 1
-
-    breakpoint()

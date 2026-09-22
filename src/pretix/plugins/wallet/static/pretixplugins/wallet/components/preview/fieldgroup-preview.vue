@@ -26,7 +26,6 @@ function focusGroup() {
 </script>
 
 <template lang="pug">
-div(@click="focusGroup")
-    PlaceholderFieldgroupPreview(v-if="style_def && style_def.type == 'placeholder'" :config="config" :style_def="style_def")
-    PredefinedFieldgroupPreview(v-else-if="style_def && style_def.type == 'predefined'" :config="config" :style_def="style_def")
+	PlaceholderFieldgroupPreview(v-if="style_def && style_def.type == 'placeholder'" :config="config" :style_def="style_def" @click="focusGroup")
+	PredefinedFieldgroupPreview(v-else-if="style_def && style_def.type == 'predefined'" :config="config" :style_def="style_def" @click="focusGroup")
 </template>
