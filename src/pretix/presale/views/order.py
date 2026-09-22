@@ -119,7 +119,7 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
         if o is False:
             login_url = eventreverse_absolute(self.request.organizer, 'presale:organizer.customer.login', kwargs={})
 
-            if hasattr(self.request, "event_domain") and self.request.event_domain:
+            if self.request.domain_mode in ('event', 'organizer_alternative'):
                 nonce = get_random_string(32)
                 self.request.session['cross_domain_customer_auth_nonce'] = nonce
                 query = {

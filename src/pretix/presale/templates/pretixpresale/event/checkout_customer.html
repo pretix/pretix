@@ -55,7 +55,7 @@
                             <div class="col-md-6 col-md-offset-3">
                                 {% for provider in request.organizer.sso_providers.all %}
                                     {% if provider.is_active %}
-                                        <a href="{% eventurl request.organizer "presale:organizer.customer.login" provider=provider.pk %}?next={% if request.event_domain %}{{ request.scheme }}://{{ request.get_host }}{% endif %}{{ request.get_full_path|urlencode }}"
+                                        <a href="{% eventurl request.organizer "presale:organizer.customer.login" provider=provider.pk %}?next={% if request.domain_mode == 'event' or request.domain_mode == 'organizer_alternative' %}{{ request.scheme }}://{{ request.get_host }}{% endif %}{{ request.get_full_path|urlencode }}"
                                            class="btn btn-primary btn-lg btn-block" data-open-in-popup-window>
                                             {{ provider.button_label }}
                                         </a>
