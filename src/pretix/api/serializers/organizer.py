@@ -28,6 +28,7 @@ from django.db import transaction
 from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext, gettext_lazy as _
+from i18nfield.rest_framework import I18nField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -661,9 +662,20 @@ class MetaPropertyListField(serializers.ListField):
 
 
 class MetaPropertyDictField(serializers.DictField):
+    child_per_key = {
+        "label": I18nField()
+    }
+
     def to_representation(self, value):
         # django added unneccessary keys DELETE, ORDER through formsets, filter them here for backwards compat
-        return super().to_representation({k: value[k] for k in ("key", "label") if k in value})
+        d = {
+            "key": value["key"]
+        }
+        if "label" in value:
+            f = I18nField()
+            d["label"] = f.to_representation(value["label"])
+
+        return super().to_representation(d)
 
     def to_internal_value(self, data):
         if not isinstance(data, dict):
@@ -675,30 +687,19 @@ class MetaPropertyDictField(serializers.DictField):
         if any(k not in {"key", "label"} for k in data.keys()):
             raise ValidationError("Meta properties may only have a key and optionally a label.")
 
+        if "label" in data:
+            f = I18nField()
+            try:
+                data["label"] = f.to_internal_value(data["label"])
+            except ValidationError as e:
+                raise ValidationError({"label": e.detail})
+
         return super().to_internal_value(data)
-
-
-class I18nField(serializers.Field):
-    def to_representation(self, value):
-        return value
-
-    def to_internal_value(self, data):
-        if isinstance(data, str):
-            return data
-        if not isinstance(data, dict):
-            raise ValidationError("Must either be a string or a dict.")
-        if not all(isinstance(k, str) for k in data.keys()):
-            raise ValidationError("All keys must be strings.")
-        if not all(isinstance(v, str) for v in data.values()):
-            raise ValidationError("All values must be strings.")
 
 
 class EventMetaPropertiesSerializer(I18nAwareModelSerializer):
     choices = MetaPropertyListField(
-        child=MetaPropertyDictField(
-            # careful: this only works because I18nField allows plain strings (e.g. keys need to be plain strings)
-            child=I18nField()
-        ),
+        child=MetaPropertyDictField(),
         allow_null=True,
     )
 

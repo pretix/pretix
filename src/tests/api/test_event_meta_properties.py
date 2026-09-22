@@ -21,6 +21,7 @@
 #
 import pytest
 from django_scopes import scopes_disabled
+from i18nfield.strings import LazyI18nString
 
 
 @pytest.fixture
@@ -32,7 +33,7 @@ def event_meta_property(organizer):
         choices=[
             {
                 "key": "Red",
-                "label": "Rot",
+                "label": LazyI18nString("Rot"),
                 "DELETE": False,
                 "ORDER": 1,
             }
@@ -44,7 +45,7 @@ TEST_TYPE_RES = {
     "name": "Color",
     "default": "Red",
     "required": False,
-    "choices": [{"key": "Red", "label": "Rot"}],
+    "choices": [{"key": "Red", "label": {"en": "Rot"}}],
     'filter_allowed': True,
     'filter_public': False,
     'protected': False,
@@ -120,8 +121,8 @@ def test_meta_property_create(token_client, organizer):
             "default": "r",
             "required": False,
             "choices": [
-                {"key": "r", "label": "Red"},
-                {"key": "r", "label": "Razzmatazz"},
+                {"key": "r", "label": {"en": "Red"}},
+                {"key": "r", "label": {"en": "Razzmatazz"}},
             ],
         }
     )
@@ -192,8 +193,9 @@ def test_meta_property_patch(token_client, organizer, event_meta_property):
         }
     )
     assert resp.status_code == 400
-    assert str(resp.data["choices"][0]["label"][0]) == "Must either be a string or a dict."
-    assert str(resp.data["choices"][1]["label"][0]) == "All values must be strings."
+    #assert resp.data == 123
+    assert str(resp.data["choices"][0]["label"][0]) == "Invalid data type."
+    assert str(resp.data["choices"][1]["label"][0]) == "All entries must be strings."
 
 
     resp = token_client.patch(
