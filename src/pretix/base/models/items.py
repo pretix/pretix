@@ -913,8 +913,6 @@ class Item(LoggedModel):
         :raises ValueError: if you call this on an item which has variations associated with it.
                             Please use the method on the ItemVariation object you are interested in.
         """
-        if not trust_parameters and not subevent and self.event.has_subevents:
-            raise TypeError('You need to supply a subevent.')
         check_quotas = self._get_quotas(ignored_quotas=ignored_quotas, subevent=subevent)
         quotacounter = Counter()
         res = Quota.AVAILABILITY_OK, None
