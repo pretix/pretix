@@ -35,6 +35,7 @@
 import base64
 import json
 import logging
+import math
 import time
 from urllib.parse import quote, urljoin, urlparse
 
@@ -556,20 +557,20 @@ class Login2FAView(TemplateView):
             pretix_failed_logins.inc(1, reason="2fa")
             msg = _('Invalid code, please try again.')
             if retry_after:
-                seconds = int((retry_after - now()).total_seconds())
-                minutes = int(seconds // 60)
-                if minutes:
+                seconds = (retry_after - now()).total_seconds()
+                minutes = seconds / 60
+                if minutes >= 1:
                     msg = ngettext(
                         'Invalid code. Please try again after waiting {value} minute.',
                         'Invalid code. Please try again after waiting {value} minutes.',
                         minutes,
-                    ).format(value=minutes)
-                elif seconds:
+                    ).format(value=math.ceil(minutes))
+                elif seconds >= 1:
                     msg = ngettext(
                         'Invalid code. Please try again after waiting {value} second.',
                         'Invalid code. Please try again after waiting {value} seconds.',
                         seconds,
-                    ).format(value=seconds)
+                    ).format(value=math.ceil(seconds))
             messages.error(request, msg)
             return redirect('control:auth.login.2fa')
 
