@@ -1,6 +1,5 @@
-import { serialize } from "node:v8";
 import { i18nstringLocalize } from "./helpers.js";
-import { createStore } from "./lib/store.ts";
+import { createStore } from "./lib/store";
 import { toRaw, type InjectionKey } from "vue";
 
 export type WidgetStore = ReturnType<typeof createWalletStore>;
@@ -59,7 +58,7 @@ export function createWalletStore(config: {
 			platformLayouts: {} as Record<string, NewPlatformLayout>,
 		}),
 		getters: {
-			platform() {
+			platform(): Platform {
 				return this.getPlatform(this.activePlatform);
 			},
 			layout() {
@@ -283,6 +282,9 @@ export function createWalletStore(config: {
 						settings: layout.settings,
 					},
 				};
+			},
+			async serializeCurrentPlatformLayout() {
+				return this.serializePlatformLayout(this.activePlatform, this.layout)
 			},
 			async serializeLayout() {
 				const layoutPromises = Object.entries(this.platformLayouts).map(

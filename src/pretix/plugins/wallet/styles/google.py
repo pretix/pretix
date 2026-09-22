@@ -23,6 +23,7 @@ from walletobjects.constants import (
     ObjectType,
     ReviewStatus,
     Seat,
+    AnimationType
 )
 from pretix.base.settings import GlobalSettingsObject
 import uuid
@@ -39,15 +40,16 @@ def _get_instance_uuid():
     return gs.settings.wallet_google_instance_uuid
 
 
-def get_class_id(event: Event):
-    # TODO: add layout id somewhere
+def get_class_id(event: Event, op: OrderPosition):
     instance_uuid = _get_instance_uuid()
     issuer_id = event.settings.get("wallet_google_issuer_id")
-    return "%s.pretix-%s-%s-%s" % (
+    return "%s.pretix-%s-%s-%s-%s-%s" % (
         issuer_id,
         instance_uuid,
         event.organizer.slug,
         event.slug,
+        op.item_id,
+        op.variation_id or 0
     )
 
 
@@ -95,7 +97,7 @@ class GoogleWalletStyle(PassStyle):
     def _generate_class(self):
         output_class = EventTicketClass(
             self.event.organizer.name,
-            get_class_id(self.event),
+            get_class_id(self.event, self.op),
             MultipleDevicesAndHoldersAllowedStatus.multipleHolders,  # TODO: Make configurable
             self.event.name,
             ReviewStatus.underReview,
@@ -239,7 +241,7 @@ class GoogleWalletEventTicket(GoogleWalletStyle):
                     content="secret",
                 )
             ],
-            context_args={"event", "order", "order_position"},
+            context_args={"order_position"},
         ),
     ]
 
@@ -317,6 +319,8 @@ class GoogleWalletEventTicket(GoogleWalletStyle):
         output_class = super()._generate_class()
         if self.group_is_active("venue") and all(self.venue()):
             output_class.venue(*self.venue())
+        # TODO: hidden flag to enable:
+        # output_class.securityAnimation(AnimationType.FOIL_SHIMMER)
         return output_class
 
     def _generate_object(self, op: OrderPosition, class_id: str):
