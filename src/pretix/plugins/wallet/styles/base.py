@@ -4,7 +4,7 @@ from i18nfield.strings import LazyI18nString
 import jsonschema
 from django.core.exceptions import ValidationError
 from pretix.base.models import OrderPosition
-from ..placeholders import WalletPlaceholderContext, get_wallet_placeholders
+from ..placeholders import WalletPlaceholderRenderer, get_available_context, get_wallet_placeholder_renderer, get_wallet_placeholders
 from django import forms
 from pretix.api.helpers import handle_file_upload
 from django.core.files import File
@@ -16,6 +16,7 @@ class WalletPlatform:
 
 class LayoutContext(TypedDict):
     placeholders: dict[str, dict]
+    placeholder_renderer: WalletPlaceholderRenderer
 
 
 class FieldGroupType(enum.Enum):
@@ -49,7 +50,7 @@ class FieldGroup:
     ) -> dict:
         raise NotImplementedError()
 
-    def asdict(self):
+    def asdict(self, context: LayoutContext):
         return {
             "type": self.type.value,
             "identifier": self.identifier,
@@ -158,15 +159,15 @@ class PlaceholderFieldGroup(FieldGroup):
         if self.required and (self.min_entries is None or self.min_entries < 1):
             self.min_entries = 1
 
-    def asdict(self):
+    def asdict(self, context: LayoutContext):
         return {
-            **super().asdict(),
+            **super().asdict(context),
             "content_type": self.content_type.value,
             "default_entries": [x.asdict() for x in self.default_entries],
             "display": self.display.value,
             "min_entries": self.min_entries,
             "max_entries": self.max_entries,
-            "context_args": list(sorted(self.context_args)),
+            "context_args": list(get_available_context(self.context_args, context['placeholder_renderer'].transformations)),
         }
 
     def layout_schema(
@@ -177,10 +178,11 @@ class PlaceholderFieldGroup(FieldGroup):
         content_type_placeholders = (
             context["placeholders"].get(self.content_type.value, {}).values()
         )
+        renderer = context['placeholder_renderer']
         available_placeholders = [
             x.identifier
             for x in content_type_placeholders
-            if WalletPlaceholderContext.is_available(x, self.context_args)
+            if renderer.is_available(x, self.context_args)
         ]
         return {
             "type": "object",
@@ -303,16 +305,17 @@ class PassStyle:
         return None
 
     def asdict(self):
+        context = LayoutContext(placeholders=self.placeholders, placeholder_renderer=get_wallet_placeholder_renderer())
         return {
             "identifier": self.identifier,
             "name": self.name,
-            "fieldgroups": [x.asdict() for x in self.fieldgroups],
+            "fieldgroups": [x.asdict(context) for x in self.fieldgroups],
             "preview_layout": self.preview_layout,
             "settings": [x.asdict() for x in self.settings],
         }
 
     def layout_schema(self):
-        context = LayoutContext(placeholders=self.placeholders)
+        context = LayoutContext(placeholders=self.placeholders, placeholder_renderer=get_wallet_placeholder_renderer())
         print(f"schema {self.settings=}")
         schema = {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -371,11 +374,11 @@ class PassStyle:
 
         return None, None
 
-    def __init__(self, event, layout = None, file_settings: dict[str, File] | None = None):
+    def __init__(self, event, layout, file_settings: dict[str, File] | None = None):
         self.event = event
         self.layout = layout
+        self.file_settings = file_settings or {}
         self.placeholders = get_wallet_placeholders(self.event)
-        self.file_settings = file_settings
 
     def validate(self):
         schema = self.layout_schema()
@@ -391,16 +394,14 @@ class PassStyle:
                 if file_settings.get(setting.identifier) == "file:keep":
                     res[setting.identifier] = "keep"
                 elif data := file_settings.get(setting.identifier):
-                    res[setting.identifier] = handle_file_upload(data, request.user, request.auth, {"image/png", "image/jpeg"})
+                    res[setting.identifier] = handle_file_upload(data, request.user, getattr(request, "auth", None), {"image/png", "image/jpeg"})
                 elif setting.identifier in file_settings:
                     res[setting.identifier] = None
 
         return res
 
     def get_pass_fields(self, op: OrderPosition):
-        context = WalletPlaceholderContext(
-            event=self.event, order=op.order, order_position=op
-        )
+        context = get_wallet_placeholder_renderer(order_position=op)
 
         fields = {}
         for group in self.fieldgroups:
