@@ -9,7 +9,7 @@ import { StoreKey } from "../walletStore";
 const store = inject(StoreKey)!;
 const gettext = (window as any).gettext;
 
-function openForm(url: string, data: Record<string, string>) {
+function openForm(url: string, data: Record<string, string|object>) {
 	let form = document.createElement("form");
 	form.target = "_blank";
 	form.method = "POST";
@@ -20,7 +20,11 @@ function openForm(url: string, data: Record<string, string>) {
 		var input = document.createElement("input");
 		input.type = "hidden";
 		input.name = key;
-		input.value = data[key];
+		let value = data[key];
+		if (value instanceof Object) {
+			value = JSON.stringify(data[key]);
+		}
+		input.value = value
 		form.appendChild(input);
 	}
 	document.body.appendChild(form);
@@ -28,13 +32,12 @@ function openForm(url: string, data: Record<string, string>) {
 	document.body.removeChild(form);
 }
 
-function openPreview(e: Event) {
+async function openPreview(e: Event) {
 	e.preventDefault();
 	openForm("../../preview/", {
 		csrfmiddlewaretoken: store.csrfToken,
-		platform: store.currentPlatform,
-		style: store.layout.style,
-		layout: JSON.stringify(store.layout.layout),
+		id: store.layoutId,
+		...(await store.serializeCurrentPlatformLayout())
 	});
 }
 
@@ -73,8 +76,6 @@ const platformChoices = computed(() => {
                                 div(style="display: grid; gap: 1em; grid-template-columns: repeat(auto-fit, minmax(auto, 360px));")
                                     PassPreview(v-for="layout in store.style.preview_layout" :layout="layout")
                             div(v-else) Preview not supported
-                            //- pre
-                            //-     code {{ store.currentPlatformLayout }}
                             //- pre(v-if="store.currentPlatformLayout.style")
                             //-     code {{ store.currentPlatformStyles[store.currentPlatformLayout.style] }}
                             //- pre
