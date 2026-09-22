@@ -71,7 +71,6 @@ class WalletPlatformLayout(LoggedModel):
         style = get_style(self.platform, self.style)
         if style:
             file_settings = dict(self.file_settings.values_list("key", "file"))
-            print(file_settings)
             return style(event=self.parent.event, layout=self.layout, file_settings=file_settings)
         else:
             raise RuntimeError(f"Style {self.platform}.{self.style} not found")
