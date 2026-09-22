@@ -918,7 +918,7 @@ class Order(LockModel, LoggedModel):
         positions = list(
             self.positions.all().annotate(
                 has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk'), list__consider_tickets_used=True))
-            ).select_related('item').prefetch_related('item__questions')
+            ).select_related('item').prefetch_related('item__questionnaires')
         )
         if not self.event.settings.allow_modifications_after_checkin:
             for cp in positions:
@@ -929,7 +929,7 @@ class Order(LockModel, LoggedModel):
             return True
         ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
         for cp in positions:
-            if (cp.item.ask_attendee_data and ask_names) or cp.item.questions.all():
+            if (cp.item.ask_attendee_data and ask_names) or cp.item.questionnaires.all():  # TODO(questionnaires) : filter to only QuestionnaireType.ORDER_POSITION_SALE
                 return True
 
         return False  # nothing there to modify
@@ -2780,7 +2780,7 @@ class OrderPosition(AbstractPosition):
         positions = list(
             self.order.positions.all().annotate(
                 has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk'), list__consider_tickets_used=True))
-            ).select_related('item').prefetch_related('item__questions')
+            ).select_related('item').prefetch_related('item__questionnaires')
         )
         if not self.event.settings.allow_modifications_after_checkin:
             for cp in positions:
@@ -2790,7 +2790,7 @@ class OrderPosition(AbstractPosition):
         ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
         for cp in positions:
             if cp.pk == self.pk or cp.addon_to_id == self.pk:
-                if (cp.item.ask_attendee_data and ask_names) or cp.item.questions.all():
+                if (cp.item.ask_attendee_data and ask_names) or cp.item.questionnaires.all():  # TODO(questionnaires) : filter to only QuestionnaireType.ORDER_POSITION_SALE
                     return True
 
         return False  # nothing there to modify

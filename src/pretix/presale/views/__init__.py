@@ -136,7 +136,7 @@ class CartMixin:
         if queryset is not None:
             prefetch = []
             if answers:
-                prefetch.append('item__questions')
+                prefetch.append('item__questionnaires')
                 prefetch.append(Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options')))
 
             cartpos = queryset.order_by(
@@ -213,7 +213,7 @@ class CartMixin:
                 # Never group if the position has add-ons
                 pos.pk not in has_addons and
                 # Never group if we have answers to show
-                (not answers or (not has_attendee_data and not bool(pos.item.questions.all()))) and  # do not use .exists() to re-use prefetch cache
+                (not answers or (not has_attendee_data and not bool(pos.item.questionnaires.all()))) and  # do not use .exists() to re-use prefetch cache
                 # Never group when we have a final order and a gift card code
                 (isinstance(pos, CartPosition) or not pos.item.issue_giftcard)
             )

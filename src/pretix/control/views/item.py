@@ -456,7 +456,7 @@ class QuestionDelete(EventPermissionRequiredMixin, CompatDeleteView):
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
-        context['dependent'] = list(self.get_object().items.all())
+        # TODO(questionnaires)  context['dependent'] = list(self.get_object().items.all())
         context['edit_url'] = reverse('control:event.items.questions.edit', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,

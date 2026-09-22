@@ -1682,10 +1682,11 @@ class Question(LoggedModel):
         choices=FieldType.choices,
         verbose_name=_("Question type")
     )
-    #required = models.BooleanField(  # TODO(questionnaires) : to be removed, -> QuestionnaireChild
-    #    default=False,
-    #    verbose_name=_("Required question")
-    #)
+    tbd_required = models.BooleanField(  # TODO(questionnaires) : to be removed, -> QuestionnaireChild
+        default=False,
+        verbose_name=_("Required question"),
+        db_column="required",
+    )
     #items = models.ManyToManyField(  # TODO(questionnaires) : to be removed, -> Questionnaire
     #    Item,
     #    related_name='questions',
@@ -1693,15 +1694,17 @@ class Question(LoggedModel):
     #    blank=True,
     #    help_text=_('This question will be asked to buyers of the selected products')
     #)
-    #position = models.PositiveIntegerField(  # TODO(questionnaires) : to be removed, -> Questionnaire + QuestionnaireChild
-    #    default=0,
-    #    verbose_name=_("Position")
-    #)
-    #ask_during_checkin = models.BooleanField(  # TODO(questionnaires) : to be removed
-    #    verbose_name=_('Ask during check-in instead of in the ticket buying process'),
-    #    help_text=_('Not supported by all check-in apps for all question types.'),
-    #    default=False
-    #)
+    tbd_position = models.PositiveIntegerField(  # TODO(questionnaires) : to be removed, -> Questionnaire + QuestionnaireChild
+        default=0,
+        verbose_name=_("Position"),
+        db_column="position",
+    )
+    tbd_ask_during_checkin = models.BooleanField(  # TODO(questionnaires) : to be removed
+        verbose_name=_('Ask during check-in instead of in the ticket buying process'),
+        help_text=_('Not supported by all check-in apps for all question types.'),
+        default=False,
+        db_column="ask_during_checkin",
+    )
     show_during_checkin = models.BooleanField(
         verbose_name=_('Show answer during check-in'),
         help_text=_('Not supported by all check-in apps for all question types.'),
