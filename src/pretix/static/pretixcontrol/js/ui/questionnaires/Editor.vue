@@ -4,19 +4,11 @@ import * as api from './api';
 import {Datafield, Questionnaire} from './model';
 import {i18n_any, sort, numericComp, groupBy, SYSTEM_DATAFIELDS} from './helper';
 import { gettext } from './gettextstub';
-import {onMounted, onUnmounted, ref} from 'vue';
+import {inject, onMounted, onUnmounted, ref} from 'vue';
 import { SlickList, SlickItem } from 'vue-slicksort';
 import { ProgressBar } from "./ProgressBar";
 
-const sales_channels_list = await api.getSalesChannels();
-const items_list = await api.getItems();
-const categories_list = await api.getCategories();
-const categories = Object.fromEntries(categories_list.map(cat => [cat.id, cat]));
-categories['null'] = { position: -1, internal_name: gettext('Uncategorized'), name: null, id: null };
-sort(items_list, numericComp(item => categories[item.category]?.position), numericComp(item => item.position));
-console.log('items_list', items_list)
-const grouped_items = [...groupBy(items_list, item => categories[item.category])]
-console.log('grouped_items', grouped_items)
+const grouped_items = inject('pretix:env:event:grouped_items')
 
 type QuestionnaireMaybeUnsaved = Omit<Questionnaire, 'id'> & { _new_id?: number, id?: number };
 const order_questionnaires = ref<QuestionnaireMaybeUnsaved[]>();
@@ -113,6 +105,13 @@ export default {
 
 function windowFocused() {
 	if (Date.now() - lastDataRefresh > 30000) {
+		if (document.querySelector("dialog[open]")) {
+			// TODO this should not be skipped completely but handled in a more robust way
+			// currently dialogs are very flaky if the whole questionnaires list gets replaced underneath
+			// them (they will stay open, but saving them will cause weird problems i don't fully understand yet)
+			console.log('skipping refresh because a dialog is open')
+			return
+		}
 		console.log('refreshing to avoid overwriting with older data on edit')
 		refreshQuestionnaireList()
 	}
@@ -194,12 +193,12 @@ const preview_mode = ref(false)
 					<QuestionnaireElement
 						:questionnaire="questionnaire"
 						:datafields="order_datafields"
-						:sales_channels="sales_channels_list"
 						:grouped_items="null"
 						:selected_product="null"
 						:preview_mode="false"
 						@update="saveQuestionnaire(questionnaire)"
-						@invalidate:datafields="refreshDatafieldList()" />
+						@invalidate:datafields="refreshDatafieldList()"
+						@invalidate:questionnaires="refreshQuestionnaireList()"/>
 				</SlickItem>
 			</SlickList>
 			<div class="editor-action-row form-horizontal">
@@ -242,12 +241,12 @@ const preview_mode = ref(false)
 				<QuestionnaireElement v-for="(questionnaire, index) in position_questionnaires.filter(q => q.items.indexOf(selected_product as any) !== -1)"
 					:questionnaire="questionnaire"
 					:datafields="position_datafields"
-					:sales_channels="sales_channels_list"
 					:grouped_items="grouped_items"
 					:selected_product="selected_product"
 					:preview_mode="true"
 					@update="saveQuestionnaire(questionnaire)"
-					@invalidate:datafields="refreshDatafieldList()"/>
+					@invalidate:datafields="refreshDatafieldList()"
+					@invalidate:questionnaires="refreshQuestionnaireList()"/>
 			</details>
 		</div>
 
@@ -257,12 +256,12 @@ const preview_mode = ref(false)
 					<QuestionnaireElement
 						:questionnaire="questionnaire"
 						:datafields="position_datafields"
-						:sales_channels="sales_channels_list"
 						:grouped_items="grouped_items"
 						:selected_product="selected_product"
 						:preview_mode="false"
 						@update="saveQuestionnaire(questionnaire)"
-						@invalidate:datafields="refreshDatafieldList()"/>
+						@invalidate:datafields="refreshDatafieldList()"
+						@invalidate:questionnaires="refreshQuestionnaireList()"/>
 				</SlickItem>
 			</SlickList>
 			<div v-if="!preview_mode" class="editor-action-row form-horizontal">

@@ -6,7 +6,7 @@ import {
 	QUESTION_TYPE,
 	QUESTION_TYPE_LABEL,
 	QUESTIONNAIRE_TYPE,
-	QUESTIONNAIRE_TYPE_LABEL,
+	QUESTIONNAIRE_TYPE_LABEL, setListState,
 	SYSTEM_DATAFIELDS
 } from "./helper";
 import { gettext } from './gettextstub';
@@ -15,6 +15,8 @@ import NativeDialog from "./NativeDialog.vue";
 import { SlickList, SlickItem, DragHandle } from 'vue-slicksort';
 import {getDatafieldCreateUrl} from "./api";
 import DjangoDialog from "./DjangoDialog.vue";
+import * as api from './api';
+import QuestionnaireDetailForm from "./QuestionnaireDetailForm.vue";
 
 const dlgEditor = ref()
 const dlgAddExisting = ref()
@@ -25,8 +27,8 @@ const newTextblockTitle = ref()
 const newTextblockText = ref()
 
 const id = useId();
-const props = defineProps(['questionnaire', 'datafields', 'sales_channels', 'selected_product', 'grouped_items', 'preview_mode', 'err_mes'])
-const emit = defineEmits(['update', 'invalidate:datafields'])
+const props = defineProps(['questionnaire', 'datafields', 'selected_product', 'grouped_items', 'preview_mode', 'err_mes'])
+const emit = defineEmits(['update', 'invalidate:datafields', 'invalidate:questionnaires'])
 
 let nextId = 1;
 watch(() => props.questionnaire.children, () => {
@@ -34,15 +36,6 @@ watch(() => props.questionnaire.children, () => {
 		if (!qc._cid) qc._cid = id + (++nextId);
 	}
 })
-
-function setVisibleOnItem (checked, itemId) {
-	const i = props.questionnaire.items.indexOf(itemId)
-	if (i === -1) {
-		props.questionnaire.items.push(itemId)
-	} else {
-		props.questionnaire.items.splice(i, 1)
-	}
-}
 
 function addExistingDatafield (field) {
 	props.questionnaire.children.push({
@@ -94,6 +87,18 @@ async function onNewDatafieldCreated (data) {
 	emit('invalidate:datafields')
 }
 
+async function deleteQuestionnaire () {
+	if (confirm("Are you sure?")) {
+		try {
+			await api.deleteQuestionnaire(props.questionnaire.id)
+		} catch (e) {
+			console.error('Failed to delete questionnaire', e)
+			alert('Error while deleting questionnaire')
+		}
+		emit('invalidate:questionnaires')
+	}
+}
+
 const isHidden = computed(() => props.selected_product && props.questionnaire.items.indexOf(props.selected_product) === -1)
 const isEditable = computed(() => props.selected_product && props.questionnaire.items.indexOf(props.selected_product) !== -1)
 
@@ -107,7 +112,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
     <summary class="questionnaire-panel-heading">
 			<div class=" editor-row">
 				<div class="editor-preview-area">
-					<input type="checkbox" @change="e => {setVisibleOnItem(e.target.checked, selected_product); emit('update')}" v-if="selected_product && !preview_mode" :checked="!isHidden">
+					<input type="checkbox" @change="e => {setListState(props.questionnaire.items, selected_product, e.target.checked); emit('update')}" v-if="selected_product && !preview_mode" :checked="!isHidden">
 					{{ props.questionnaire.internal_name }}
 					<span class="fa fa-warning" v-if="questionnaire._err_mes"></span>
 					<span class="fa fa-cog fa-spin" v-if="questionnaire._loading"></span>
@@ -152,61 +157,10 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
   <Teleport to="body">
     <NativeDialog ref="dlgEditor" class="modal-card"
                   :title="gettext('Edit questionnaire')">
-        <div class="form-group">
-          <label class="col-md-3 control-label">
-            {{ gettext('Internal name') }}
-          </label>
-          <div class="col-md-9">
-            <input type="text" class="form-control" v-model="questionnaire.internal_name"/>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-md-3 control-label">
-            {{ gettext('Where to ask') }}
-          </label>
-          <div class="col-md-9">
-            <select v-model="questionnaire.type" class="form-control">
-              <option v-for="(label, type) in QUESTIONNAIRE_TYPE_LABEL" :value="QUESTIONNAIRE_TYPE[type]">{{ label }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-md-3 control-label">
-            {{ gettext('Sales channels') }}
-          </label>
-          <div class="col-md-9">
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" v-model="questionnaire.all_sales_channels"> {{ gettext('All sales channels') }}
-							</label>
-						</div>
-						<div class="checkbox" v-for="channel in sales_channels">
-							<label>
-								<input type="checkbox" :checked="questionnaire.all_sales_channels || questionnaire.limit_sales_channels.indexOf(channel.identifier) !== -1"
-											 @change="e => e.target.checked ? questionnaire.limit_sales_channels.push(channel.identifier) : questionnaire.limit_sales_channels.splice(questionnaire.limit_sales_channels.indexOf(channel.identifier), 1)"
-											 :disabled="questionnaire.all_sales_channels">
-								{{ i18n_any(channel.label) }}
-							</label>
-						</div>
-          </div>
-        </div>
-        <div class="form-group" v-if="grouped_items">
-          <label class="col-md-3 control-label">
-            {{ gettext('Visible on products') }}
-          </label>
-          <div class="col-md-9">
-						<div v-for="[category, items] in grouped_items">
-							<div class="category-header">{{ category.internal_name || i18n_any(category.name) }}</div>
-							<div class="checkbox" v-for="item in items">
-								<label :for="id + '_' + item.id">
-									<input :id="id + '_' + item.id" type="checkbox" :checked="questionnaire.items.indexOf(item.id) !== -1" @change="e => setVisibleOnItem(e.target.checked, item.id)"> {{ item.internal_name || i18n_any(item.name) }}
-								</label>
-							</div>
-						</div>
-          </div>
-        </div>
-        <button @click="dlgEditor.close(); emit('update')" class="btn btn-primary pull-right"><span class="fa fa-check"></span> {{ gettext('Save and close') }}</button>
-        <button class="btn btn-default">{{ gettext('Delete') }}</button>
+			<QuestionnaireDetailForm :questionnaire="questionnaire" :grouped_items="grouped_items"/>
+
+			<button @click="dlgEditor.close(); emit('update')" class="btn btn-primary pull-right"><span class="fa fa-check"></span> {{ gettext('Save and close') }}</button>
+			<button @click="deleteQuestionnaire" class="btn btn-default">{{ gettext('Delete') }}</button>
     </NativeDialog>
 
     <NativeDialog ref="dlgAddExisting" class="modal-card"

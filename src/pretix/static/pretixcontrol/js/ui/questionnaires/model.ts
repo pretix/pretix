@@ -70,3 +70,12 @@ export type Category = {
 	name: I18nString,
 	internal_name: string | null,
 }
+
+export type SalesChannel = {
+	identifier: string,
+	type: string,
+	label: I18nString,
+	position: number,
+}
+
+export type GroupedItems = [Category, Item[]][];
