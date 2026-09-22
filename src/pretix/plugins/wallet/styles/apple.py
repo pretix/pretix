@@ -21,12 +21,18 @@ import zipfile
 import cryptography
 import cryptography.x509
 import cryptography.hazmat.primitives.serialization.pkcs7
+import cryptography.hazmat.primitives.hashes
 import json
 from django.contrib.staticfiles import finders
 from pretix.base.models import OrderPosition
 from django.utils.encoding import force_bytes
-from django import forms
+import tempfile
+from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
+import logging
+from django.forms import ValidationError
 
+logger = logging.getLogger()
 
 class ApplePlatform(WalletPlatform):
     identifier = "apple"
@@ -40,6 +46,7 @@ class FormattedLazyI18nString:
 
     def localize(self, language):
         return self.base_str.localize(language).format(**self.format_args)
+
 
 def lazyi18nstring_from_gettext(text: str, locales: set[str]) -> LazyI18nString:
     data = {}
@@ -139,6 +146,32 @@ class SignedZipFile:
             f.write(content)
         self.manifest[filename] = hashlib.sha1(content).hexdigest()
 
+def convert_to_png(file, max_size=None):
+    # TODO: move validation to upload
+    try:
+        from PIL import Image
+    except ImportError:
+        return file
+
+    file.open("rb")
+    file.seek(0)
+    try:
+        with (
+            Image.open(file, formats=settings.PILLOW_FORMATS_IMAGE) as im,
+            tempfile.NamedTemporaryFile("rb", suffix=".png") as tmpfile,
+        ):
+            if max_size:
+                im.thumbnail(max_size)
+            im.save(tmpfile.name)
+            tmpfile.seek(0)
+            return SimpleUploadedFile(
+                "picture.png", tmpfile.read(), "image png"
+            )
+    except IOError:
+        logger.exception("Could not convert image to PNG.")
+        raise ValidationError(
+            _("The file you uploaded could not be converted to PNG format.")
+        )
 
 class AppleWalletStyle(PassStyle):
     @property
@@ -149,14 +182,14 @@ class AppleWalletStyle(PassStyle):
                 label=_("Logo"),
                 type="image",
                 required=False,
-                help_text="Will be displayed on the top left corner of the pass"
+                help_text="Will be displayed on the top left corner of the pass",
             ),
             SettingsField(
                 identifier="icon",
                 label=_("Icon"),
                 type="image",
                 required=False,
-                help_text="Will be displayed as the file icon"
+                help_text="Will be displayed as the file icon",
             ),
         ]
 
@@ -209,14 +242,14 @@ class AppleWalletStyle(PassStyle):
 
         pass_json = self.generate_pass_json(fields, op, strings)
         print(pass_json)
-        breakpoint()
-        if fields["logo"]:
-            logo = fields["logo"][0]["value"]
+        if (file := self.file_settings.get("logo")):
+            logo = convert_to_png(file, (480, 150)) # TODO: check max_size against apple HIG
         else:
+            # TODO: move to own plugin folder
             logo = open(finders.find("pretix_passbook/logo.png"), "rb")
 
-        if fields["icon"]:
-            icon = fields["icon"][0]["value"]
+        if (file := self.file_settings.get("icon")):
+            icon = convert_to_png(file, max_size=(87,87)) # TODO: check max_size against apple HIG
         else:
             icon = open(finders.find("pretix_passbook/icon.png"), "rb")
 
@@ -240,7 +273,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
             max_entries=1,
             display=FieldGroupDisplay.PLAIN,
             default_entries=[],
-            context_args={"event", "order", "order_position"},
+            context_args={"order_position"},
         ),
         TextFieldGroup(
             identifier="primary",
@@ -255,25 +288,25 @@ class AppleWalletEventTicket(AppleWalletStyle):
             ],  # TODO: support Lazyi18nproxy here by using lazyi18nstring_from_gettext
             description=_("These fields appear prominently featured on the pass."),
             required=True,
-            context_args={"event", "order", "order_position"},
+            context_args={"order_position"},
         ),
         TextFieldGroup(
             identifier="secondary",
             name=_("Secondary"),
             max_entries=4,
-            context_args={"event", "order", "order_position"},
+            context_args={"order_position"},
         ),  # TODO: validation of max field count if combined "Coupons, store cards, and generic passes with a square barcode can have a total of up to four secondary and auxiliary fields, combined."
         TextFieldGroup(
             identifier="header",
             name=_("Header"),
             max_entries=3,
-            context_args={"event", "order", "order_position"},
+            context_args={"order_position"},
         ),
         TextFieldGroup(
             identifier="auxiliary",
             name=_("Auxiliary"),
             max_entries=4,
-            context_args={"event", "order", "order_position"},
+            context_args={"order_position"},
         ),
         TextFieldGroup(
             identifier="code",
@@ -285,38 +318,41 @@ class AppleWalletEventTicket(AppleWalletStyle):
                     content="secret",
                 )
             ],
-            context_args={"event", "order", "order_position"},
+            context_args={"order_position"},
         ),
         TextFieldGroup(
             identifier="back",
             name=_("Back"),
-            context_args={"event", "order", "order_position"},
+            context_args={"order_position"},
         ),
     ]
-    preview_layout = [
-        [
-            {
-                "children": [
-                    {"setting": "logo"},
-                    {
-                        "fieldgroup": "logo_text",
-                        "relSize": 3,
-                        "display": ["bold", "large", "centered"],
-                    },
-                    {
-                        "fieldgroup": "header",
-                        "relSize": 2,
-                        "display": ["large", "tight"],
-                    },
-                ]
-            },
-            {"fieldgroup": "primary", "display": "large"},
-            {"fieldgroup": "secondary"},
-            {"fieldgroup": "auxiliary"},
-            {"fieldgroup": "code"},
-        ],
-        [{"fieldgroup": "back", "direction": "column"}],
-    ]
+
+    @property
+    def preview_layout(self):
+        return [
+            [
+                {
+                    "children": [
+                        {"setting": "logo"},
+                        {
+                            "fieldgroup": "logo_text",
+                            "relSize": 3,
+                            "display": ["bold", "large", "centered"],
+                        },
+                        {
+                            "fieldgroup": "header",
+                            "relSize": 2,
+                            "display": ["large", "tight"],
+                        },
+                    ]
+                },
+                {"fieldgroup": "primary", "display": "large"},
+                {"fieldgroup": "secondary"},
+                {"fieldgroup": "auxiliary"},
+                {"fieldgroup": "code"},
+            ],
+            [{"fieldgroup": "back", "direction": "column"}],
+        ]
 
     def convert_fields(self, strings, fields, prefix):
         converted = []

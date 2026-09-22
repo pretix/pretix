@@ -36,10 +36,10 @@ register = template.Library()
 
 
 @register.filter("money")
-def money_filter(value: Optional[Decimal | float | int | str], arg='', hide_currency=False):
+def money_filter(value: Optional[Decimal | float | int | str], arg='', hide_currency=False) -> str:
     if isinstance(value, (float, int, str)):
         if value == '':
-            return value
+            return value # pyright: ignore[reportReturnType]
         value = Decimal(value)
     if value is None:
         value = Decimal('0.00')
