@@ -664,7 +664,7 @@ class MetaPropertyListField(serializers.ListField):
 class MetaPropertyDictField(serializers.DictField):
 
     def __init__(self, **kwargs):
-        self.label_field = I18nField()
+        self.label_child = kwargs.pop("label_child", I18nField())
         super().__init__(**kwargs)
 
     def to_representation(self, value):
@@ -673,7 +673,7 @@ class MetaPropertyDictField(serializers.DictField):
             "key": value["key"]
         }
         if "label" in value:
-            d["label"] = self.label_field.to_representation(value["label"])
+            d["label"] = self.label_child.to_representation(value["label"])
 
         return super().to_representation(d)
 
@@ -689,7 +689,7 @@ class MetaPropertyDictField(serializers.DictField):
 
         if "label" in data:
             try:
-                data["label"] = self.label_field.to_internal_value(data["label"])
+                data["label"] = self.label_child.to_internal_value(data["label"])
             except ValidationError as e:
                 raise ValidationError({"label": e.detail})
 
@@ -698,7 +698,9 @@ class MetaPropertyDictField(serializers.DictField):
 
 class EventMetaPropertiesSerializer(I18nAwareModelSerializer):
     choices = MetaPropertyListField(
-        child=MetaPropertyDictField(),
+        child=MetaPropertyDictField(
+            label_child=I18nField()
+        ),
         allow_null=True,
     )
 
