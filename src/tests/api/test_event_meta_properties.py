@@ -83,13 +83,21 @@ def test_meta_property_create(token_client, organizer):
         format='json',
         data={
             "name": "Color",
-            "default": "Red",
+            "default": "",
             "required": False,
-            "choices": ["Red", "Green", "Blue"]
+            "choices": [
+                {"key": {"foo": "bar"}},
+                "blabla",
+                {"label": "Green"},
+                {"key": "g", "label": "Green", "foo": "bar"},
+            ],
         }
     )
     assert resp.status_code == 400
-    assert str(resp.data["choices"][0]) == "Must only contain objects."
+    assert str(resp.data["choices"][0][0]) == "Meta properties must have a key of type string."
+    assert str(resp.data["choices"][1][0]) == "Meta properties must be a dict."
+    assert str(resp.data["choices"][2][0]) == "Meta properties must have a key of type string."
+    assert str(resp.data["choices"][3][0]) == "Meta properties may only have a key and optionally a label."
 
     resp = token_client.post(
         '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
@@ -102,7 +110,7 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
-    assert str(resp.data["choices"][0]) == "Must be a list or null."
+    assert str(resp.data["choices"][0]) == 'Expected a list of items but got type "dict".'
 
     resp = token_client.post(
         '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
@@ -118,38 +126,7 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
-    assert str(resp.data["choices"][0]) == "Each object must be unique."
-
-    resp = token_client.post(
-        '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
-        format='json',
-        data={
-            "name": "Color",
-            "default": "r",
-            "required": False,
-            "choices": [
-                {"key": "r", "label": "Red"},
-                {"label": "Green"},
-            ],
-        }
-    )
-    assert resp.status_code == 400
-    assert str(resp.data["choices"][0]) == "Each object must contain keys: key."
-
-    resp = token_client.post(
-        '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
-        format='json',
-        data={
-            "name": "Color",
-            "default": "r",
-            "required": False,
-            "choices": [
-                {"key": "r", "label": "Red", "UNKNOWN_KEY": 1},
-            ],
-        }
-    )
-    assert resp.status_code == 400
-    assert str(resp.data["choices"][0]) == "Each object may only contain keys: key, label."
+    assert str(resp.data["choices"][0]) == "The key for each meta property must be unique."
 
     choices = [
         {"key": "r", "label": "Red"},
@@ -202,6 +179,22 @@ def test_meta_property_patch(token_client, organizer, event_meta_property):
     )
     assert resp.status_code == 400
     assert str(resp.data["non_field_errors"][0]) == "You cannot set a default value that is not a valid value."
+
+    resp = token_client.patch(
+        "/api/v1/organizers/{}/event_meta_properties/{}/"
+        .format(organizer.slug, event_meta_property.pk),
+        format="json",
+        data={
+            "choices": [
+                {"key": "r", "label": ["wrong"]},
+                {"key": "g", "label": {"de": {"de": 123, "en": "wrong"}}}
+            ],
+        }
+    )
+    assert resp.status_code == 400
+    assert str(resp.data["choices"][0]["label"][0]) == "Must either be a string or a dict."
+    assert str(resp.data["choices"][1]["label"][0]) == "All values must be strings."
+
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/event_meta_properties/{}/'

@@ -643,55 +643,63 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         return 'pub/' + fname
 
 
-class ObjectListField(serializers.Field):
-
+class MetaPropertyListField(serializers.ListField):
     def __init__(self, *args, **kwargs):
-        self.required_keys = set(kwargs.pop("required_keys", {}))
-        self.allowed_keys = self.required_keys | set(kwargs.pop("allowed_keys", {}))
-        self.make_unique = kwargs.pop("make_unique", None)
+        kwargs["validators"] = kwargs.pop("validators", [])
+
+        def validate_keys_unique(choices):
+            if not choices:
+                return
+            keys = [c.get("key") for c in choices]
+            if len(set(keys)) < len(keys):
+                raise ValidationError("The key for each meta property must be unique.")
+
+        kwargs["validators"].append(
+            validate_keys_unique
+        )
         super().__init__(*args, **kwargs)
 
-    def to_representation(self, value):
-        if not value:
-            # normalize empty lists to None
-            return None
 
+class MetaPropertyDictField(serializers.DictField):
+    def to_representation(self, value):
         # django added unneccessary keys DELETE, ORDER through formsets, filter them here for backwards compat
-        def strip_unknown_keys(v):
-            return {k: v[k] for k in v.keys() if k in self.allowed_keys}
-        return [strip_unknown_keys(v) for v in value]
+        return super().to_representation({k: value[k] for k in ("key", "label") if k in value})
 
     def to_internal_value(self, data):
-        if data is None:
+        if not isinstance(data, dict):
+            raise ValidationError("Meta properties must be a dict.")
+
+        if not isinstance(data.get("key"), str):
+            raise ValidationError("Meta properties must have a key of type string.")
+
+        if any(k not in {"key", "label"} for k in data.keys()):
+            raise ValidationError("Meta properties may only have a key and optionally a label.")
+
+        return super().to_internal_value(data)
+
+
+class I18nField(serializers.Field):
+    def to_representation(self, value):
+        return value
+
+    def to_internal_value(self, data):
+        if isinstance(data, str):
             return data
-        if not isinstance(data, list):
-            raise ValidationError("Must be a list or null.")
-        if not data:
-            # empty list
-            return None
-
-        if not all(isinstance(obj, dict) for obj in data):
-            raise ValidationError("Must only contain objects.")
-
-        if not all(self.required_keys <= set(obj.keys()) for obj in data):
-            raise ValidationError(f"Each object must contain keys: {', '.join(sorted(self.required_keys))}.")
-
-        if not all(self.allowed_keys >= set(obj.keys()) for obj in data):
-            raise ValidationError(f"Each object may only contain keys: {', '.join(sorted(self.allowed_keys))}.")
-
-        if self.make_unique:
-            uniques = [self.make_unique(obj) for obj in data]
-            if len(set(uniques)) < len(uniques):
-                raise ValidationError("Each object must be unique.")
-        return data
+        if not isinstance(data, dict):
+            raise ValidationError("Must either be a string or a dict.")
+        if not all(isinstance(k, str) for k in data.keys()):
+            raise ValidationError("All keys must be strings.")
+        if not all(isinstance(v, str) for v in data.values()):
+            raise ValidationError("All values must be strings.")
 
 
 class EventMetaPropertiesSerializer(I18nAwareModelSerializer):
-    choices = ObjectListField(
+    choices = MetaPropertyListField(
+        child=MetaPropertyDictField(
+            # careful: this only works because I18nField allows plain strings (e.g. keys need to be plain strings)
+            child=I18nField()
+        ),
         allow_null=True,
-        required_keys={"key"},
-        allowed_keys={"key", "label"},
-        make_unique=lambda c: c.get("key"),
     )
 
     class Meta:
