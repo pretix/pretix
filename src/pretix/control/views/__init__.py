@@ -52,7 +52,7 @@ class TellParentFormMixin:
             msgs = [{'level': msg.level_tag, 'message': msg.message} for msg in message_store]
             #message_store._queued_messages = []
             return render(self.request, 'pretixcontrol/notify_parent.html', {
-                'notify_info': {'object': self.object.pk, 'redirect_url': result.url, 'messages': msgs},
+                'notify_info': {'object': self.object.pk, 'object_str': str(self.object), 'redirect_url': result.url, 'messages': msgs},
             })
         else:
             return result
