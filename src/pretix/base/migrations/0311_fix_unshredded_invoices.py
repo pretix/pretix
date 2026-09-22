@@ -8,6 +8,7 @@ def fix_unshredded_invoices(apps, _):
     Invoice = apps.get_model("pretixbase", "Invoice")
     InvoiceLine = apps.get_model("pretixbase", "InvoiceLine")
     ignore_fields = (
+        # bool/int fields are not listed and skipped automatically
         'prefix', 'invoice_no', 'full_invoice_no', 'invoice_from', 'invoice_from_name', 'invoice_from_zipcode',
         'invoice_from_city', 'invoice_from_state', 'invoice_from_country', 'invoice_from_tax_id',
         'invoice_from_vat_id', 'locale', 'payment_provider_stamp', 'footer_text', 'foreign_currency_display',
