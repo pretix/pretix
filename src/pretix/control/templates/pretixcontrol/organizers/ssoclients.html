@@ -3,16 +3,23 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "SSO clients" %}{% endblock %}
 {% block inner %}
-    <h1>{% trans "SSO clients" %}</h1>
+    <h1>{% trans "SSO clients" %}  <small> &mdash; {% blocktrans %}
+    	"Login with pretix" in external systems
+    {% endblocktrans %}</small></h1>
     <p>
         {% blocktrans trimmed %}
             You can allow your customers to log into other systems using their customer account credentials by setting up
             your other systems as a Single-Sign-On (SSO) client based on OpenID Connect.
         {% endblocktrans %}
     </p>
+    <p>
+        {% blocktrans trimmed with url="https://docs.pretix.eu/guides/customer-accounts/#using-pretix-as-an-sso-provider" %}
+            For more information, refer to our documentation on <a href="{{ url }}">Using pretix as an SSO provider with external SSO clients</a>.
+        {% endblocktrans %}
+    </p>
     <a href="{% url "control:organizer.ssoclient.add" organizer=request.organizer.slug %}" class="btn btn-default">
         <span class="fa fa-plus"></span>
-        {% trans "Create a new SSO client" %}
+        {% trans "Create credentials for a new SSO client" %}
     </a>
     <table class="table table-condensed table-hover">
         <thead>

@@ -2817,9 +2817,14 @@ class SSOProviderCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
         return get_object_or_404(CustomerSSOProvider, organizer=self.request.organizer, pk=self.kwargs.get('provider'))
 
     def get_success_url(self):
-        return reverse('control:organizer.ssoproviders', kwargs={
-            'organizer': self.request.organizer.slug,
+        return reverse('control:organizer.ssoprovider.edit', kwargs={
+            'organizer': self.request.organizer.slug, 'provider': self.object.pk,
         })
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['redirect_uri'] = _('(will be generated)')
+        return ctx
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
