@@ -71,7 +71,7 @@ class WalletOutput(BaseTicketOutput):
         platform_layout = get_object_or_404(
             wallet_layout.platform_layouts, platform=self.platform.identifier
         )
-        return self.platform.generate(platform_layout.pass_layout, op)
+        return platform_layout.pass_layout.generate(op)
 
 
 class GoogleWalletTicketOutput(WalletOutput):
