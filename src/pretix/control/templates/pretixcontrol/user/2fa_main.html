@@ -116,14 +116,14 @@
             {% for d in devices %}
                 <li class="list-group-item">
                     <a class="btn btn-danger btn-xs pull-right flip"
-                       href="{% url "control:user.settings.2fa.delete" devicetype=d.devicetype device=d.pk %}">
+                       href="{% url "control:user.settings.2fa.delete" devicetype=d.model_label device=d.pk %}">
                         Delete
                     </a>
-                    {% if d.devicetype == "totp" %}
+                    {% if d.model_label == "otp_totp.totpdevice" %}
                         <span class="fa fa-mobile"></span>
-                    {% elif d.devicetype == "webauthn" %}
+                    {% elif d.model_label == "pretixbase.webauthndevice" %}
                         <span class="fa fa-usb"></span>
-                    {% elif d.devicetype == "u2f" %}
+                    {% elif d.model_label == "pretixbase.u2fdevice" %}
                         <span class="fa fa-usb"></span>
                     {% endif %}
                     {{ d.name }}
