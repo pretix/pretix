@@ -247,14 +247,15 @@ def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, v
                 continue
 
         if item.hidden_if_item_available:
+            time_available = item.hidden_if_item_available.is_available()
             if item.hidden_if_item_available.has_variations:
                 item._dependency_available = any(
                     var.check_quotas(subevent=subevent, _cache=quota_cache, include_bundled=True)[0] == Quota.AVAILABILITY_OK
+                    # is_available on variant is evaluated called by available_variations
                     for var in item.hidden_if_item_available.available_variations
-                )
+                ) and time_available
             else:
                 q = item.hidden_if_item_available.check_quotas(subevent=subevent, _cache=quota_cache, include_bundled=True)
-                time_available = item.hidden_if_item_available.is_available()
                 item._dependency_available = (q[0] == Quota.AVAILABILITY_OK) and time_available
             if item._dependency_available and item.hidden_if_item_available_mode == Item.UNAVAIL_MODE_HIDDEN:
                 item._remove = True
