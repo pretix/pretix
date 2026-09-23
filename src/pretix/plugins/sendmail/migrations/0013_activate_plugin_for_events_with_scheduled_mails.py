@@ -17,15 +17,15 @@ def activate_plugin(apps, schema_editor):
         )
     )
 
+    for event in events:
+        event.enable_plugin('pretix.plugins.sendmail')
+        event.save(update_fields=['plugins'])
+
     only_completed_rules = Rule.objects.exclude(event__plugins__icontains="pretix.plugins.sendmail",
                                                 enabled=False).filter(
         ~Exists(ScheduledMail.objects.filter(rule=OuterRef('pk')).exclude(state='completed'))
     )
     only_completed_rules.update(enabled=False)
-
-    for event in events:
-        event.enable_plugin('pretix.plugins.sendmail')
-        event.save(update_fields=['plugins'])
 
 
 class Migration(migrations.Migration):
