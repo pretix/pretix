@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from django.conf import settings
 from django.http import (
     HttpResponseForbidden, HttpResponseNotFound, HttpResponseServerError,
 )
@@ -27,7 +28,6 @@ from django.template import TemplateDoesNotExist, loader
 from django.template.loader import get_template
 from django.utils.functional import Promise
 from django.utils.translation import gettext as _
-from sentry_sdk import last_event_id
 
 from pretix.base.i18n import language
 from pretix.base.middleware import get_language_from_request
@@ -106,9 +106,14 @@ def server_error(request):
             template = loader.get_template('500.html')
         except TemplateDoesNotExist:
             return HttpResponseServerError('<h1>Server Error (500)</h1>', content_type='text/html')
+        if settings.SENTRY_ENABLED:
+            from sentry_sdk import last_event_id
+            sentry_id = last_event_id()
+        else:
+            sentry_id = None
         r = HttpResponseServerError(template.render({
             'request': request,
-            'sentry_event_id': last_event_id(),
+            'sentry_event_id': sentry_id,
         }))
         r.xframe_options_exempt = True
         return r
