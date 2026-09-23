@@ -38,7 +38,7 @@
     {% endif %}
 
     <p>
-    {% if options == 0 and not seating_available %}
+    {% if itemnum == 0 and not seating_available %}
         {% if request.event.has_subevents and not voucher.subevent %}
             {% blocktrans trimmed %}
                 For the selected date, there are currently no products available that can be bought with this voucher. Please try a different date or a different voucher.
@@ -76,7 +76,7 @@
             {% include "pretixpresale/event/fragment_product_list.html" with ev=event always_show_open=True %}
 
             {% eventsignal event "pretix.presale.signals.voucher_redeem_info" voucher=voucher %}
-            {% if event.presale_is_running and options > 0 %}
+            {% if event.presale_is_running and itemnum > 0 %}
                 <div class="row checkout-button-row">
                     <div class="col-md-4 col-md-offset-8 col-xs-12 text-center">
                         {% if voucher.min_usages_remaining > 1 %}
