@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-09-23 09:33+0000\n"
+"PO-Revision-Date: 2026-09-23 09:38+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -8904,7 +8904,7 @@ msgid ""
 "Vouchers could not be imported, probably due to a voucher code already being "
 "in use."
 msgstr ""
-"รหัสวอเชอร์ต้องไม่ซ้ำกัน ไฟล์นำเข้ามีรหัสวอเชอร์ {code} ซึ่งมีอยู่แล้วในระบบ"
+"ไม่สามารถนำเข้าวอเชอร์ได้ ซึ่งอาจเกิดจากรหัสวอเชอร์ถูกใช้งานอยู่แล้วในระบบ"
 
 #: pretix/base/services/orders.py
 msgid ""
@@ -8950,7 +8950,8 @@ msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr[0] ""
-msgstr[1] ""
+"คุณไม่สามารถเลือกสินค้า %(product)s ได้เกิน %(max)s รายการ ระบบได้นำสินค้าส่วนเกินออกจากต"
+"ะกร้าของคุณแล้ว"
 
 #: pretix/base/services/orders.py
 msgid "The booking period has ended."
@@ -9349,6 +9350,8 @@ msgid ""
 "For business customers, compute taxes based on net total. For individuals, "
 "use line-based rounding"
 msgstr ""
+"สำหรับลูกค้าองค์กร/ธุรกิจ ให้คำนวณภาษีจากยอดรวมสุทธิ สำหรับบุคคลธรรมดา ให้ใช้การปัดเศษแยกตาม"
+"รายการ"
 
 #: pretix/base/settings.py
 msgid "Compute taxes based on net total with stable gross prices"
@@ -9429,7 +9432,7 @@ msgstr ""
 
 #: pretix/base/settings.py
 msgid "Enforce the usage of issued reusable media for check-in"
-msgstr ""
+msgstr "บังคับใช้สื่อบันทึกแบบใช้ซ้ำได้ที่ออกให้แล้วสำหรับการเช็คอิน"
 
 #: pretix/base/settings.py
 msgid ""
@@ -9437,6 +9440,8 @@ msgid ""
 "medium has been created and linked to a ticket. Keeping this option turned "
 "off will treat the reusable medium and ticket as equals."
 msgstr ""
+"หากเปิดใช้งาน บาร์โค้ดตั๋วจะไม่สามารถใช้งานได้อีกต่อไปหากมีการสร้างสื่อบันทึกแบบใช้ซ้ำได้และเชื่อมโ"
+"ยงกับตั๋วนั้นแล้ว การปิดตัวเลือกนี้ไว้จะถือว่าสื่อบันทึกแบบใช้ซ้ำได้และตั๋วมีสิทธิ์เท่าเทียมกัน"
 
 #: pretix/base/settings.py
 msgid "Length of barcodes"
@@ -9869,12 +9874,12 @@ msgstr ""
 
 #: pretix/base/settings.py
 msgid "No dates match your criteria."
-msgstr ""
+msgstr "ไม่มีวันที่ตรงกับเงื่อนไขที่คุณระบุ"
 
 #: pretix/base/settings.py
 msgctxt "subevents"
 msgid "Text for empty date results"
-msgstr ""
+msgstr "ข้อความสำหรับผลลัพธ์วันที่ว่างเปล่า"
 
 #: pretix/base/settings.py
 msgctxt "subevents"
@@ -9885,6 +9890,9 @@ msgid ""
 "touch with you to arrange further dates. We do not recommend more than one "
 "or two sentences."
 msgstr ""
+"ข้อความนี้จะแสดงขึ้นหากปฏิทินหรือรายการวันที่ว่างเปล่า เช่น เนื่องจากเดือนนั้นไม่มีวันจัดกิจกรรม หรือตั"
+"วกรองที่ผู้ใช้เลือกไม่พบผลลัพธ์ใดๆ คุณสามารถใช้ข้อความนี้เพื่อประชาสัมพันธ์ช่องทางการติดต่อสำหรับการ"
+"นัดหมายรอบเพิ่มเติม ขอแนะนำให้ใช้ความยาวไม่เกินหนึ่งถึงสองประโยค"
 
 #: pretix/base/settings.py
 msgid "Guidance text"
@@ -10933,6 +10941,8 @@ msgid ""
 "the email address above. Please note that you still need to add a contact "
 "email address that will be shared with all emails you send."
 msgstr ""
+"หากคุณตั้งค่านี้ ลิงก์การติดต่อส่วนท้ายหน้าจะเชื่อมโยงมาที่นี่แทนที่จะใช้อีเมลด้านบน โปรดทราบว่าคุณยังคง"
+"ต้องระบุอีเมลการติดต่อที่จะถูกแชร์ไปพร้อมกับอีเมลทั้งหมดที่คุณส่งออก"
 
 #: pretix/base/settings.py pretix/control/forms/event.py
 msgid "Imprint URL"
@@ -11464,11 +11474,23 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เราได้รับการชำระเงินสำหรับคำสั่งซื้อของคุณสำหรับงาน {event} เรียบร้อยแล้ว\n"
+"\n"
+"อย่างไรก็ตาม จำนวนเงินที่ได้รับน้อยกว่ายอดรวมที่ต้องชำระ\n"
+"ดังนั้นคำสั่งซื้อของคุณจึงยังถือว่ายังไม่ได้ชำระ \n"
+"เนื่องจากยังขาดชำระเพิ่มเติมอีก {pending_sum}\n"
+"\n"
+"คุณสามารถดูข้อมูลการชำระเงินและสถานะคำสั่งซื้อของคุณได้ที่ {url}\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีมงาน {event}"
 
 #: pretix/base/settings.py
 #, python-brace-format
 msgid "Payment failed for your order: {code}"
-msgstr ""
+msgstr "การชำระเงินล้มเหลวสำหรับคำสั่งซื้อของคุณ: {code}"
 
 #: pretix/base/settings.py
 #, python-brace-format
