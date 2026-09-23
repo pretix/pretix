@@ -19070,6 +19070,10 @@ msgid "Authorize an application"
 msgstr "Autoriseer een applicatie"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
+msgid "Authorize"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #, python-format
 msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
@@ -19494,6 +19498,7 @@ msgstr[1] ""
 "Weet u zeker dat u de check-ins van <strong>%(count)s tickets</strong> "
 "permanent wilt verwijderen?"
 
+#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html

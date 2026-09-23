@@ -18518,6 +18518,7 @@ msgid_plural ""
 "<strong>%(count)s tickets</strong>?"
 msgstr[0] ""
 
+#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html

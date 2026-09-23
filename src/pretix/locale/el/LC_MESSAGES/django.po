@@ -20443,6 +20443,10 @@ msgid "Authorize an application"
 msgstr "Εξουσιοδότηση μιας εφαρμογής"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
+msgid "Authorize"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #, python-format
 msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
@@ -20899,6 +20903,7 @@ msgstr[1] ""
 "Είστε βέβαιοι ότι θέλετε να διαγράψετε τη λίστα ελέγχου <strong> %(name)s </"
 "strong>;"
 
+#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
