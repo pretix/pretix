@@ -43,7 +43,7 @@ def event():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal'
+        date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal2'
     )
     return event
 

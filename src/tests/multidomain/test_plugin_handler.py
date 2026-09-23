@@ -37,26 +37,26 @@ def event():
 
 @pytest.mark.django_db
 def test_require_plugin(event, client):
-    event.plugins = 'pretix.plugins.paypal'
+    event.plugins = 'pretix.plugins.paypal2'
     event.live = True
     event.save()
-    r = client.get('/mrmcd/2015/paypal/abort/', follow=False)
+    r = client.get('/mrmcd/2015/paypal2/abort/', follow=False)
     assert r.status_code == 302
     event.plugins = ''
     event.save()
-    r = client.get('/mrmcd/2015/paypal/abort/', follow=False)
+    r = client.get('/mrmcd/2015/paypal2/abort/', follow=False)
     assert r.status_code == 404
 
 
 @pytest.mark.django_db
 def test_require_live(event, client):
-    event.plugins = 'pretix.plugins.paypal'
+    event.plugins = 'pretix.plugins.paypal2'
     event.live = True
     event.save()
-    r = client.get('/mrmcd/2015/paypal/abort/', follow=False)
+    r = client.get('/mrmcd/2015/paypal2/abort/', follow=False)
     assert r.status_code == 302
 
     event.live = False
     event.save()
-    r = client.get('/mrmcd/2015/paypal/abort/', follow=False)
+    r = client.get('/mrmcd/2015/paypal2/abort/', follow=False)
     assert r.status_code == 403
