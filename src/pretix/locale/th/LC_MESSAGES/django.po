@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-09-23 09:38+0000\n"
+"PO-Revision-Date: 2026-09-23 18:00+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -11509,11 +11509,23 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"การพยายามชำระเงินสำหรับคำสั่งซื้อของคุณสำหรับงาน {event} ล้มเหลว\n"
+"\n"
+"คำสั่งซื้อของคุณยังคงมีผลสมบูรณ์ และคุณสามารถพยายามชำระเงินอีกครั้งโดยใช้วิธีการชำระเงินเดิมหรือวิ"
+"ธีการอื่น โปรดทำรายการชำระเงินให้เสร็จสิ้นก่อน {expire_date}\n"
+"\n"
+"คุณสามารถลองชำระเงินใหม่และดูสถานะคำสั่งซื้อของคุณได้ที่ \n"
+"{url}\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีมงาน {event}"
 
 #: pretix/base/settings.py
 #, python-brace-format
 msgid "You have been selected from the waitinglist for {event}"
-msgstr ""
+msgstr "คุณได้รับเลือกจากรายชื่อสำรอง (Waiting list) สำหรับงาน {event}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11545,11 +11557,36 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"คุณได้ลงทะเบียนในรายชื่อสำรองสำหรับงาน {event}\n"
+"ในรายการสินค้า {product}\n"
+"\n"
+"ขณะนี้เรามีตั๋วพร้อมสำหรับคุณแล้ว! คุณสามารถใช้สิทธิ์รับตั๋วได้ในร้านค้าตั๋วของเราภายใน\n"
+" {hours} ชั่วโมงข้างหน้า โดยกรอกรหัสวอเชอร์ดังต่อไปนี้:\n"
+"\n"
+"{code}\n"
+"\n"
+"หรือคุณสามารถคลิกที่ลิงก์ต่อไปนี้ได้ทันที:\n"
+"\n"
+"{url}\n"
+"\n"
+"โปรดทราบว่าลิงก์นี้ใช้ได้ภายใน {hours} ชั่วโมงข้างหน้าเท่านั้น!\n"
+"หากคุณไม่ใช้สิทธิ์วอเชอร์ภายในระยะเวลาดังกล่าว\n"
+"เราจะจัดสรรตั๋วให้กับบุคคลถัดไปในรายชื่อสำรอง\n"
+"\n"
+"หากคุณไม่ต้องการตั๋วแล้ว เราขอความกรุณาคลิกที่ลิงก์ต่อไปนี้เพื่อแจ้งให้เราทราบ\n"
+"เพื่อที่เราจะได้จัดส่งตั๋วให้กับบุคคลถัดไปในรายชื่อสำรองโดยเร็วที่สุด:\n"
+"\n"
+"{url_remove}\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีมงาน {event}"
 
 #: pretix/base/settings.py
 #, python-brace-format
 msgid "Order canceled: {code}"
-msgstr ""
+msgstr "คำสั่งซื้อถูกยกเลิก: {code}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11566,11 +11603,22 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"คำสั่งซื้อ {code} ของคุณสำหรับงาน {event} ถูกยกเลิกเรียบร้อยแล้ว\n"
+"\n"
+"{comment}\n"
+"\n"
+"คุณสามารถดูรายละเอียดคำสั่งซื้อของคุณได้ที่\n"
+" {url}\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีมงาน {event}"
 
 #: pretix/base/settings.py
 #, python-brace-format
 msgid "Order approved and awaiting payment: {code}"
-msgstr ""
+msgstr "คำสั่งซื้อได้รับการอนุมัติและกำลังรอการชำระเงิน: {code}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11589,6 +11637,19 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เราได้อนุมัติคำสั่งซื้อของคุณสำหรับงาน {event} แล้ว\n"
+"และยินดีเป็นอย่างยิ่งที่จะได้ต้อนรับคุณในงานของเรา\n"
+"\n"
+"โปรดดำเนินการชำระเงินสำหรับคำสั่งซื้อของคุณก่อน {expire_date}\n"
+"\n"
+"คุณสามารถเลือกวิธีการชำระเงินและทำรายการชำระเงินได้ที่นี่:\n"
+"\n"
+"{url}\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีมงาน {event}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11603,11 +11664,20 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เราได้อนุมัติการสั่งซื้อตั๋วสำหรับคุณสำหรับงาน {event} แล้ว\n"
+"\n"
+"คุณสามารถดูรายละเอียดและสถานะตั๋วของคุณได้ที่นี่:\n"
+"{url}\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีมงาน {event}"
 
 #: pretix/base/settings.py
 #, python-brace-format
 msgid "Order approved and confirmed: {code}"
-msgstr ""
+msgstr "คำสั่งซื้อได้รับการอนุมัติและยืนยันแล้ว: {code}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11623,11 +11693,22 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เราได้อนุมัติคำสั่งซื้อของคุณสำหรับงาน {event} แล้ว และยินดีเป็นอย่างยิ่งที่จะได้ต้อนรับคุณในงานของเ"
+"รา\n"
+"เนื่องจากคุณสั่งซื้อเฉพาะรายการสินค้าฟรี จึงไม่มีค่าใช้จ่ายที่ต้องชำระ\n"
+"\n"
+"คุณสามารถแก้ไขรายละเอียดคำสั่งซื้อและดูสถานะคำสั่งซื้อของคุณได้ที่ \n"
+"{url}\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีมงาน {event}"
 
 #: pretix/base/settings.py
 #, python-brace-format
 msgid "Order denied: {code}"
-msgstr ""
+msgstr "คำสั่งซื้อถูกปฏิเสธ: {code}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11645,6 +11726,18 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"ขออภัยเป็นอย่างยิ่ง เราได้ปฏิเสธคำขอสั่งซื้อของคุณสำหรับงาน {event}\n"
+"\n"
+"{comment}\n"
+"\n"
+"คุณสามารถดูรายละเอียดคำสั่งซื้อของคุณได้ที่นี่:\n"
+"\n"
+"{url}\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีมงาน {event}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11657,11 +11750,18 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดีค่ะ/ครับ\n"
+"\n"
+"คุณสามารถแก้ไขรายละเอียดคำสั่งซื้อและดูสถานะคำสั่งซื้อของคุณได้ที่\n"
+"{url}\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีมงาน {event}"
 
 #: pretix/base/settings.py
 #, python-brace-format
 msgid "Invoice {invoice_number}"
-msgstr ""
+msgstr "ใบกำกับภาษี {invoice_number}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11675,6 +11775,14 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"โปรดดูใบแจ้งหนี้/ใบกำกับภาษีใหม่ที่แนบมาพร้อมนี้สำหรับคำสั่งซื้อ {code} ของงาน {event} คำสั่งซื้อนี้"
+"ถูกทำรายการโดย {order_email}\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"\n"
+"ทีมงาน {event}"
 
 #: pretix/base/settings.py
 #, python-brace-format
@@ -11871,6 +11979,21 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"สวัสดี {name}\n"
+"\n"
+"มีการเปลี่ยนแปลงต่อไปนี้เกิดขึ้นกับบัญชีของคุณที่ {organizer}:\n"
+"\n"
+"{message}\n"
+"\n"
+"คุณสามารถตรวจสอบและเปลี่ยนแปลงการตั้งค่าบัญชีของคุณได้ที่นี่:\n"
+"\n"
+"{url}\n"
+"\n"
+"หากการเปลี่ยนแปลงนี้ไม่ได้ดำเนินการโดยคุณ โปรดติดต่อเราโดยทันที\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"\n"
+"ทีมงาน {organizer}"
 
 #: pretix/base/settings.py
 msgid "Please enter the hexadecimal code of a color, e.g. #990000."
@@ -13057,95 +13180,96 @@ msgstr ""
 #: pretix/base/timeline.py
 msgctxt "timeline"
 msgid "Customers can no longer modify their order information"
-msgstr ""
+msgstr "ลูกค้าไม่สามารถแก้ไขข้อมูลคำสั่งซื้อของตนเองได้อีกต่อไป"
 
 #: pretix/base/timeline.py
 msgctxt "timeline"
 msgid "No more payments can be completed"
-msgstr ""
+msgstr "ไม่สามารถทำรายการชำระเงินเพิ่มเติมได้อีกต่อไป"
 
 #: pretix/base/timeline.py
 msgctxt "timeline"
 msgid "Tickets can be downloaded"
-msgstr ""
+msgstr "สามารถดาวน์โหลดตั๋วได้แล้ว"
 
 #: pretix/base/timeline.py
 msgctxt "timeline"
 msgid "Customers can no longer cancel free or unpaid orders"
 msgstr ""
+"ลูกค้าไม่สามารถยกเลิกคำสั่งซื้อฟรีหรือรายการที่ยังไม่ได้ชำระเงินได้อีกต่อไป"
 
 #: pretix/base/timeline.py
 msgctxt "timeline"
 msgid "Customers can no longer cancel paid orders"
-msgstr ""
+msgstr "ลูกค้าไม่สามารถยกเลิกคำสั่งซื้อที่ชำระเงินแล้วได้อีกต่อไป"
 
 #: pretix/base/timeline.py
 msgctxt "timeline"
 msgid "Customers can no longer make changes to their orders"
-msgstr ""
+msgstr "ลูกค้าไม่สามารถเปลี่ยนแปลงรายการในคำสั่งซื้อได้อีกต่อไป"
 
 #: pretix/base/timeline.py
 msgctxt "timeline"
 msgid "Waiting list is disabled"
-msgstr ""
+msgstr "รายชื่อสำรอง (Waiting list) ถูกปิดใช้งาน"
 
 #: pretix/base/timeline.py
 msgctxt "timeline"
 msgid "Download reminders are being sent out"
-msgstr ""
+msgstr "กำลังจัดส่งอีเมลแจ้งเตือนให้ดาวน์โหลดตั๋ว"
 
 #: pretix/base/timeline.py
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes available"
-msgstr ""
+msgstr "สินค้า \"{name}\" เริ่มเปิดให้สั่งซื้อ"
 
 #: pretix/base/timeline.py
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
-msgstr ""
+msgstr "สินค้า \"{name}\" ปิดการสั่งซื้อแล้ว"
 
 #: pretix/base/timeline.py
 #, python-brace-format
 msgctxt "timeline"
 msgid "Discount \"{name}\" becomes active"
-msgstr ""
+msgstr "ส่วนลด \"{name}\" เริ่มมีผลใช้งาน"
 
 #: pretix/base/timeline.py
 #, python-brace-format
 msgctxt "timeline"
 msgid "Discount \"{name}\" becomes inactive"
-msgstr ""
+msgstr "ส่วนลด \"{name}\" หมดผลใช้งานแล้ว"
 
 #: pretix/base/timeline.py
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes available"
-msgstr ""
+msgstr "แบบสินค้าย่อย \"{product} – {variation}\" เริ่มเปิดให้สั่งซื้อ"
 
 #: pretix/base/timeline.py
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes unavailable"
-msgstr ""
+msgstr "แบบสินค้าย่อย \"{product} – {variation}\" ปิดการสั่งซื้อแล้ว"
 
 #: pretix/base/timeline.py
 #, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" becomes active"
-msgstr ""
+msgstr "ผู้ให้บริการชำระเงิน \"{name}\" เปิดใช้งานแล้ว"
 
 #: pretix/base/timeline.py
 #, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" can no longer be selected"
-msgstr ""
+msgstr "ไม่สามารถเลือกผู้ให้บริการชำระเงิน \"{name}\" ได้อีกต่อไป"
 
 #: pretix/base/validators.py
 #, python-format
 msgid "This field has an invalid value: %(value)s."
-msgstr ""
+msgstr "ฟิลด์นี้มีค่าที่ไม่ถูกต้อง: %(value)s"
 
 #: pretix/base/validators.py
 #, python-format
@@ -13153,6 +13277,7 @@ msgid ""
 "You entered an URL, which is not allowed. Please remove %(match)s from your "
 "input."
 msgstr ""
+"คุณกรอก URL ซึ่งเป็นค่าที่ไม่ได้รับอนุญาต โปรดลบ %(match)s ออกจากการกรอกข้อมูลของคุณ"
 
 #: pretix/base/views/errors.py
 msgid ""
@@ -13161,6 +13286,9 @@ msgid ""
 "required for security reasons, to ensure that your browser is not being "
 "hijacked by third parties."
 msgstr ""
+"คุณเห็นข้อความนี้เนื่องจากเว็บไซต์ HTTPS นี้ต้องการให้เว็บเบราว์เซอร์ของคุณส่ง 'Referer "
+"header' แต่ไม่มีการส่งข้อมูลดังกล่าว ส่วนหัว (header) นี้จำเป็นด้วยเหตุผลด้านความปลอดภัย เพื่อให้"
+"แน่ใจว่าเบราว์เซอร์ของคุณจะไม่ถูกดักจับหรือจู่โจมโดยบุคคลภายนอก"
 
 #: pretix/base/views/errors.py
 msgid ""
@@ -13168,6 +13296,8 @@ msgid ""
 "enable them, at least for this site, or for HTTPS connections, or for 'same-"
 "origin' requests."
 msgstr ""
+"หากคุณได้ตั้งค่าเบราว์เซอร์เพื่อปิดใช้งาน 'Referer' headers โปรดเปิดใช้งานอีกครั้ง อย่างน้อยสำห"
+"รับเว็บไซต์นี้ หรือสำหรับการเชื่อมต่อ HTTPS หรือสำหรับคำขอประเภท 'same-origin'"
 
 #: pretix/base/views/errors.py
 msgid ""
@@ -13175,63 +13305,67 @@ msgid ""
 "submitting forms. This cookie is required for security reasons, to ensure "
 "that your browser is not being hijacked by third parties."
 msgstr ""
+"คุณเห็นข้อความนี้เนื่องจากเว็บไซต์นี้จำเป็นต้องใช้คุกกี้ CSRF เมื่อส่งแบบฟอร์ม คุกกี้นี้จำเป็นด้วยเหตุผลด้า"
+"นความปลอดภัย เพื่อให้แน่ใจว่าเบราว์เซอร์ของคุณจะไม่ถูกดักจับหรือจู่โจมโดยบุคคลภายนอก"
 
 #: pretix/base/views/errors.py
 msgid ""
 "If you have configured your browser to disable cookies, please re-enable "
 "them, at least for this site, or for 'same-origin' requests."
 msgstr ""
+"หากคุณได้ตั้งค่าเบราว์เซอร์เพื่อปิดใช้งานคุกกี้ โปรดเปิดใช้งานอีกครั้ง อย่างน้อยสำหรับเว็บไซต์นี้ หรือสำ"
+"หรับคำขอประเภท 'same-origin'"
 
 #. Translators: Only translate to French (IDE) and Italien (IDI), otherwise keep the same
 #: pretix/base/views/js_helpers.py
 msgctxt "tax_id_swiss"
 msgid "UID"
-msgstr ""
+msgstr "UID"
 
 #. Translators: Translate to only "P.IVA" in Italian, keep second part as-is in other languages
 #: pretix/base/views/js_helpers.py
 msgctxt "tax_id_italy"
 msgid "VAT ID / P.IVA"
-msgstr ""
+msgstr "VAT ID / P.IVA"
 
 #. Translators: Translate to only "ΑΦΜ" in Greek
 #: pretix/base/views/js_helpers.py
 msgctxt "tax_id_greece"
 msgid "VAT ID / TIN"
-msgstr ""
+msgstr "VAT ID / TIN"
 
 #. Translators: Translate to only "NIF" in Spanish
 #: pretix/base/views/js_helpers.py
 msgctxt "tax_id_spain"
 msgid "VAT ID / NIF"
-msgstr ""
+msgstr "VAT ID / NIF"
 
 #. Translators: Translate to only "NIF" in Portuguese
 #: pretix/base/views/js_helpers.py
 msgctxt "tax_id_portugal"
 msgid "VAT ID / NIF"
-msgstr ""
+msgstr "VAT ID / NIF"
 
 #: pretix/base/views/tasks.py
 msgid "An unexpected error has occurred, please try again later."
-msgstr ""
+msgstr "เกิดข้อผิดพลาดที่ไม่คาดคิด โปรดลองใหม่อีกครั้งในภายหลัง"
 
 #: pretix/base/views/tasks.py
 msgid "The task has been completed."
-msgstr ""
+msgstr "ดำเนินการเสร็จสมบูรณ์แล้ว"
 
 #: pretix/control/forms/__init__.py
 #, python-brace-format
 msgid "Please do not upload files larger than {size}!"
-msgstr ""
+msgstr "โปรดอย่าอัปโหลดไฟล์ที่มีขนาดใหญ่กว่า {size}!"
 
 #: pretix/control/forms/__init__.py
 msgid "Filetype not allowed!"
-msgstr ""
+msgstr "ประเภทไฟล์ไม่ได้รับอนุญาต!"
 
 #: pretix/control/forms/__init__.py
 msgid "Community translations"
-msgstr ""
+msgstr "คำแปลภาษาจากชุมชนผู้ใช้งาน"
 
 #: pretix/control/forms/__init__.py
 #, python-brace-format
@@ -13241,16 +13375,21 @@ msgid ""
 "translated and will show in English instead. You can <a "
 "href=\"{translate_url}\" target=\"_blank\">help translating</a>."
 msgstr ""
+"คำแปลเหล่านี้ไม่ได้ดูแลโดยทีมงาน pretix เราไม่สามารถรับประกันความถูกต้องได้ และคุณสมบัติใหม่หรื"
+"อที่เพิ่งเปลี่ยนแปลงอาจยังไม่ได้แปลและจะแสดงเป็นภาษาอังกฤษแทน คุณสามารถ <a href=\""
+"{translate_url}\" target=\"_blank\">ช่วยแปลภาษาได้</a>"
 
 #: pretix/control/forms/__init__.py
 msgid "Development only"
-msgstr ""
+msgstr "สำหรับสภาพแวดล้อมการพัฒนาเท่านั้น"
 
 #: pretix/control/forms/__init__.py
 msgid ""
 "These translations are still in progress. These languages can currently only "
 "be selected on development installations of pretix, not in production."
 msgstr ""
+"คำแปลเหล่านี้ยังอยู่ในระหว่างดำเนินการ ปัจจุบันสามารถเลือกภาษาเหล่านี้ได้เฉพาะในระบบ pretix ส"
+"ำหรับการพัฒนาเท่านั้น ไม่สามารถใช้ในระบบใช้งานจริง (Production) ได้"
 
 #: pretix/control/forms/checkin.py
 msgid ""
