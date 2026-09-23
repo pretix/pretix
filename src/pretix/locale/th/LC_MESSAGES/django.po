@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-09-22 12:00+0000\n"
+"PO-Revision-Date: 2026-09-23 09:29+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -400,7 +400,7 @@ msgstr "มีบัตรของขวัญที่มีรหัสลั
 #: pretix/api/serializers/organizer.py pretix/control/views/organizer.py
 #, python-format
 msgid "You've been invited to join %(organizer)s"
-msgstr ""
+msgstr "คุณได้รับการเรียนเชิญให้เข้าร่วม %(organizer)s"
 
 #: pretix/api/serializers/organizer.py pretix/control/views/organizer.py
 msgid "This user already has been invited for this team."
@@ -420,16 +420,12 @@ msgid "Medium connected to other event"
 msgstr "สื่อนี้เชื่อมต่อกับกิจกรรมอื่นอยู่"
 
 #: pretix/api/views/checkin.py
-#, fuzzy
-#| msgid "You cannot change this order."
 msgid "You cannot exchange a medium for a medium."
-msgstr "คุณไม่สามารถเปลี่ยนแปลงคำสั่งซื้อนี้ได้"
+msgstr "คุณไม่สามารถแลกเปลี่ยนสื่อบันทึก/ตัวกลางข้อมูลเดียวกันได้"
 
 #: pretix/api/views/checkin.py
-#, fuzzy
-#| msgid "You cannot change this order."
 msgid "You cannot simulate a medium exchange."
-msgstr "คุณไม่สามารถเปลี่ยนแปลงคำสั่งซื้อนี้ได้"
+msgstr "คุณไม่สามารถจำลองการแลกเปลี่ยนสื่อบันทึก/ตัวกลางข้อมูลได้"
 
 #: pretix/api/views/oauth.py pretix/control/logdisplay.py
 #, python-brace-format
@@ -584,16 +580,16 @@ msgstr ""
 "ซึ่งรวมถึงการเพิ่มหรือลบสินค้า และการเปลี่ยนแปลงรายการย่อย เช่น รูปแบบสินค้า หรือสินค้าชุด"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Product changed"
 msgid "Quota changed"
-msgstr "สินค้าถูกเปลี่ยนแปลง"
+msgstr "เปลี่ยนแปลงโควตาแล้ว"
 
 #: pretix/api/webhooks.py
 msgid ""
 "This includes related events like creation, deletion, opening or closing of "
 "quotas. No webhook is sent for changes to the resulting availability."
 msgstr ""
+"ซึ่งรวมถึงเหตุการณ์ที่เกี่ยวข้อง เช่น การสร้าง การลบ การเปิด หรือการปิดโควตา ทั้งนี้ จะไม่มีการส่ง "
+"Webhook สำหรับการเปลี่ยนแปลงของจำนวนสินค้าที่พร้อมจำหน่ายที่เป็นผลลัพธ์"
 
 #: pretix/api/webhooks.py
 msgid "Shop taken live"
@@ -1207,7 +1203,7 @@ msgstr "ลูกค้า"
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
 #: pretix/presale/views/customer.py
 msgid "Memberships"
-msgstr ""
+msgstr "สมาชิกภาพ"
 
 #: pretix/base/exporters/customers.py pretix/base/models/customers.py
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
@@ -2967,12 +2963,12 @@ msgstr "โปรดระบุชื่อที่สั้นกว่าน
 msgid ""
 "The field \"%(label)s\" may not contain special characters such as "
 "\"%(chars)s\"."
-msgstr ""
+msgstr "ช่อง \"%(label)s\" ต้องไม่มีตัวอักษรพิเศษ เช่น \"%(chars)s\""
 
 #: pretix/base/forms/questions.py
 #, python-format
 msgid "The field \"%(label)s\" may not contain an URL (%(url)s)."
-msgstr ""
+msgstr "ช่อง \"%(label)s\" ต้องไม่มี URL (%(url)s)"
 
 #: pretix/base/forms/questions.py
 msgctxt "phonenumber"
@@ -3010,7 +3006,7 @@ msgstr "โปรดอัปโหลดไฟล์รูปภาพที่
 
 #: pretix/base/forms/questions.py
 msgid "Street"
-msgstr ""
+msgstr "ถนน / ที่อยู่"
 
 #: pretix/base/forms/questions.py
 msgid "State"
@@ -5385,6 +5381,8 @@ msgid ""
 "prior to their usage. Therefore, the selected media policy does not make "
 "sense for this media type."
 msgstr ""
+"ชนิดสื่อบันทึก/ตัวกลางที่เลือกกำหนดให้สื่อบันทึกทั้งหมดต้องลงทะเบียนในระบบก่อนการใช้งาน ดังนั้น นโยบ"
+"ายสื่อบันทึกที่เลือกจึงไม่เหมาะสมสำหรับสื่อบันทึกประเภทนี้"
 
 #: pretix/base/models/items.py
 msgid ""
@@ -5599,7 +5597,7 @@ msgstr "รหัสประเทศ (ISO 3166-1 alpha-2)"
 
 #: pretix/base/models/items.py
 msgid "Asked on"
-msgstr ""
+msgstr "สอบถามเมื่อ"
 
 #: pretix/base/models/items.py pretix/base/models/organizer.py
 msgid ""
@@ -5923,16 +5921,14 @@ msgstr "ตีกลับ"
 #: pretix/base/models/media.py
 msgctxt "reusable_medium"
 msgid "Claim token"
-msgstr ""
+msgstr "โทเคนสำหรับรับสิทธิ์ (Claim token)"
 
 #: pretix/base/models/media.py
 msgctxt "reusable_medium"
 msgid "Label"
-msgstr ""
+msgstr "ป้ายชื่อ"
 
 #: pretix/base/models/media.py
-#, fuzzy
-#| msgid "Linked ticket"
 msgid "Linked tickets"
 msgstr "ตั๋วที่เชื่อมโยงไว้"
 
@@ -5942,6 +5938,8 @@ msgid ""
 "validity. If multiple tickets are valid at once, this will lead to failed "
 "check-ins."
 msgstr ""
+"หากคุณเชื่อมโยงกับตั๋วมากกว่าหนึ่งใบ โปรดตรวจสอบให้แน่ใจว่าไม่มีช่วงเวลาการใช้งานที่ซ้อนทับกัน หาก"
+"มีตั๋วหลายใบใช้งานได้พร้อมกันในเวลาเดียวกัน จะส่งผลให้การเช็คอินล้มเหลว"
 
 #: pretix/base/models/memberships.py
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
@@ -7328,6 +7326,7 @@ msgid ""
 "This payment provider exists for historical purposes only and is no longer "
 "usable."
 msgstr ""
+"ผู้ให้บริการชำระเงินนี้มีไว้สำหรับข้อมูลประวัติในอดีตเท่านั้น และไม่สามารถใช้งานได้อีกต่อไป"
 
 #: pretix/base/pdf.py
 msgid "Ticket code (barcode content)"
@@ -7656,7 +7655,7 @@ msgstr "เวลาที่สิ้นสุดการใช้งาน"
 
 #: pretix/base/pdf.py pretix/control/forms/item.py
 msgid "Program times"
-msgstr ""
+msgstr "เวลาทำรายการ"
 
 #: pretix/base/pdf.py
 #, fuzzy
@@ -8006,22 +8005,22 @@ msgstr "ไม่ได้ตั้งค่า"
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative date cannot be expressed as \"before\" for \"{}\""
-msgstr ""
+msgstr "ไม่สามารถระบุวันที่แบบสัมพัทธ์เป็น \"ก่อน\" สำหรับ \"{}\" ได้"
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative date cannot be expressed as \"after\" for \"{}\""
-msgstr ""
+msgstr "ไม่สามารถระบุวันที่แบบสัมพัทธ์เป็น \"หลังจาก\" สำหรับ \"{}\" ได้"
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative time cannot be expressed as \"before\" for \"{}\""
-msgstr ""
+msgstr "ไม่สามารถระบุเวลาแบบสัมพัทธ์เป็น \"ก่อน\" สำหรับ \"{}\" ได้"
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative time cannot be expressed as \"after\" for \"{}\""
-msgstr ""
+msgstr "ไม่สามารถระบุเวลาแบบสัมพัทธ์เป็น \"หลังจาก\" สำหรับ \"{}\" ได้"
 
 #: pretix/base/secrets.py
 msgid "Random (default, works with all pretix apps)"
@@ -8041,7 +8040,7 @@ msgstr "กิจกรรมถูกยกเลิก"
 
 #: pretix/base/services/cancelevent.py
 msgid "Confirm event cancellation and bulk refund"
-msgstr ""
+msgstr "ยืนยันการยกเลิกอีเวนต์และการคืนเงินจำนวนมาก"
 
 #: pretix/base/services/cart.py pretix/base/services/modelimport.py
 #: pretix/base/services/orders.py
@@ -13243,73 +13242,76 @@ msgid ""
 "must select a specific set of products for this check-in list, only "
 "including the possible add-on products."
 msgstr ""
+"หากคุณอนุญาตให้เช็คอินตั๋วเสริมโดยการสแกนตั๋วหลัก คุณต้องเลือกกลุ่มสินค้าเฉพาะสำหรับรายการเช็คอิน"
+"นี้ โดยรวมเฉพาะสินค้าเสริมที่เป็นไปได้เท่านั้น"
 
 #: pretix/control/forms/checkin.py
 msgid "Barcode"
-msgstr ""
+msgstr "บาร์โค้ด"
 
 #: pretix/control/forms/checkin.py
 msgid "Check-in time"
-msgstr ""
+msgstr "เวลาเช็คอิน"
 
 #: pretix/control/forms/checkin.py
 msgid "Check-in type"
-msgstr ""
+msgstr "ประเภทการเช็คอิน"
 
 #: pretix/control/forms/checkin.py
 msgid "Allow check-in of unpaid order (if check-in list permits it)"
-msgstr ""
+msgstr "อนุญาตให้เช็คอินคำสั่งซื้อที่ยังไม่ได้ชำระเงิน (หากรายการเช็คอินอนุญาต)"
 
 #: pretix/control/forms/checkin.py
 msgid "Support for check-in questions"
-msgstr ""
+msgstr "รองรับคำถามขณะเช็คอิน"
 
 #: pretix/control/forms/checkin.py pretix/control/forms/filter.py
 msgid "All gates"
-msgstr ""
+msgstr "ทุกประตูทางเข้า"
 
 #: pretix/control/forms/checkin.py
 msgid "I am sure that the check-in state of the entire event should be reset."
-msgstr ""
+msgstr "ฉันแน่ใจว่าต้องการรีเซ็ตสถานะการเช็คอินของทั้งอีเวนต์"
 
 #: pretix/control/forms/event.py
 msgid "Use languages"
-msgstr ""
+msgstr "ภาษาที่ใช้งาน"
 
 #: pretix/control/forms/event.py
 msgid "Choose all languages that your event should be available in."
-msgstr ""
+msgstr "เลือกภาษาทั้งหมดที่ต้องการให้รองรับในอีเวนต์ของคุณ"
 
 #: pretix/control/forms/event.py
 msgid "This is an event series"
-msgstr ""
+msgstr "นี่คือรอบงานแบบต่อเนื่อง"
 
 #: pretix/control/forms/event.py
 msgid ""
 "You do not have a sufficient level of access on the event you selected to "
 "copy it to the desired organizer."
 msgstr ""
+"คุณไม่มีสิทธิ์การเข้าถึงเพียงพอสำหรับอีเวนต์ที่เลือก เพื่อคัดลอกไปยังผู้จัดงานที่ต้องการ"
 
 #: pretix/control/forms/event.py
 msgid ""
 "You already used this slug for a different event. Please choose a new one."
-msgstr ""
+msgstr "คุณใช้ชื่อสลัก (Slug) นี้สำหรับอีเวนต์อื่นไปแล้ว โปรดเลือกชื่อใหม่"
 
 #: pretix/control/forms/event.py
 msgid "Event timezone"
-msgstr ""
+msgstr "เขตเวลาของอีเวนต์"
 
 #: pretix/control/forms/event.py
 msgid "I don't want to specify taxes now"
-msgstr ""
+msgstr "ฉันยังไม่ต้องการระบุภาษีในตอนนี้"
 
 #: pretix/control/forms/event.py
 msgid "You can always configure tax rates later."
-msgstr ""
+msgstr "คุณสามารถตั้งค่าอัตราภาษีในภายหลังได้เสมอ"
 
 #: pretix/control/forms/event.py
 msgid "Sales tax rate"
-msgstr ""
+msgstr "อัตราภาษีขาย"
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -13317,10 +13319,13 @@ msgid ""
 "applicable tax rate here in percent. If you have a more complicated tax "
 "situation, you can add more tax rates and detailed configuration later."
 msgstr ""
+"คุณจำเป็นต้องเสียภาษีขายสำหรับตั๋วของคุณหรือไม่? ในกรณีนี้ โปรดระบุอัตราภาษีที่บังคับใช้เป็นเปอร์เซ็นต์"
+"ที่นี่ หากคุณมีเงื่อนไขทางภาษีที่ซับซ้อนกว่านี้ คุณสามารถเพิ่มอัตราภาษีและการตั้งค่าโดยละเอียดเพิ่มเติมได้"
+"ในภายหลัง"
 
 #: pretix/control/forms/event.py
 msgid "Grant access to team"
-msgstr ""
+msgstr "ให้สิทธิ์การเข้าถึงแก่ทีม"
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -13328,20 +13333,24 @@ msgid ""
 "have permission to edit all events under this organizer. Please select one "
 "of your existing teams that will be granted access to this event."
 msgstr ""
+"คุณได้รับอนุญาตให้สร้างอีเวนต์ภายใต้ผู้จัดงานนี้ แต่คุณไม่มีสิทธิ์แก้ไขทุกอีเวนต์ภายใต้ผู้จัดงานนี้ โปรดเลือก"
+"หนึ่งในทีมที่มีอยู่ของคุณเพื่อรับสิทธิ์การเข้าถึงอีเวนต์นี้"
 
 #: pretix/control/forms/event.py
 msgid "Create a new team for this event with me as the only member"
-msgstr ""
+msgstr "สร้างทีมใหม่สำหรับอีเวนต์นี้โดยมีฉันเป็นสมาชิกเพียงคนเดียว"
 
 #: pretix/control/forms/event.py
 msgid ""
 "Sample Conference Center\n"
 "Heidelberg, Germany"
 msgstr ""
+"ศูนย์การประชุมตัวอย่าง\n"
+"ไฮเดลเบิร์ก, เยอรมนี"
 
 #: pretix/control/forms/event.py
 msgid "Your default locale must be specified."
-msgstr ""
+msgstr "ต้องระบุภาษาและภูมิภาคเริ่มต้นของคุณ"
 
 #: pretix/control/forms/event.py
 #, python-brace-format
@@ -13349,52 +13358,56 @@ msgid ""
 "You have not specified a tax rate. If you do not want us to compute sales "
 "taxes, please check \"{field}\" above."
 msgstr ""
+"คุณยังไม่ได้ระบุอัตราภาษี หากคุณไม่ต้องการให้เราคำนวณภาษีขาย โปรดทำเครื่องหมายในช่อง \""
+"{field}\" ด้านบน"
 
 #: pretix/control/forms/event.py
 msgid ""
 "You cannot choose a team that would give you more access than you have on "
 "the event you are copying."
 msgstr ""
+"คุณไม่สามารถเลือกทีมที่จะให้สิทธิ์การเข้าถึงแก่คุณมากกว่าสิทธิ์ที่คุณมีในอีเวนต์ที่คุณกำลังคัดลอก"
 
 #: pretix/control/forms/event.py
 msgid "Copy configuration from"
-msgstr ""
+msgstr "คัดลอกการตั้งค่าจาก"
 
 #: pretix/control/forms/event.py pretix/control/forms/item.py
 msgid "Do not copy"
-msgstr ""
+msgstr "ไม่ต้องคัดลอก"
 
 #: pretix/control/forms/event.py
 msgid ""
 "You cannot choose an event on which you have less access than the team you "
 "selected in the previous step."
 msgstr ""
+"คุณไม่สามารถเลือกอีเวนต์ที่คุณมีสิทธิ์การเข้าถึงน้อยกว่าทีมที่คุณเลือกในขั้นตอนก่อนหน้า"
 
 #: pretix/control/forms/event.py pretix/control/forms/item.py
 #: pretix/control/forms/subevents.py
 #, python-brace-format
 msgid "Default ({value})"
-msgstr ""
+msgstr "ค่าเริ่มต้น ({value})"
 
 #: pretix/control/forms/event.py
 msgid "The currency cannot be changed because orders already exist."
-msgstr ""
+msgstr "ไม่สามารถเปลี่ยนสกุลเงินได้เนื่องจากมีคำสั่งซื้อเกิดขึ้นแล้ว"
 
 #: pretix/control/forms/event.py
 msgid "Domain"
-msgstr ""
+msgstr "โดเมน"
 
 #: pretix/control/forms/event.py
 msgid "You can configure this in your organizer settings."
-msgstr ""
+msgstr "คุณสามารถตั้งค่าส่วนนี้ได้ในการตั้งค่าผู้จัดงานของคุณ"
 
 #: pretix/control/forms/event.py
 msgid "You can add more domains in your organizer account."
-msgstr ""
+msgstr "คุณสามารถเพิ่มโดเมนเพิ่มเติมได้ในบัญชีผู้จัดงานของคุณ"
 
 #: pretix/control/forms/event.py
 msgid "Same as organizer account"
-msgstr ""
+msgstr "เหมือนกับบัญชีผู้จัดงาน"
 
 #: pretix/control/forms/event.py
 #, python-brace-format
@@ -13402,10 +13415,11 @@ msgid ""
 "A validation error has occurred on a setting that is not part of this form: "
 "{error}"
 msgstr ""
+"เกิดข้อผิดพลาดในการตรวจสอบความถูกต้องของระบบบนการตั้งค่าที่ไม่ได้อยู่ในแบบฟอร์มนี้: {error}"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 msgid "Name format"
-msgstr ""
+msgstr "รูปแบบชื่อ"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 msgid ""
@@ -13413,55 +13427,57 @@ msgid ""
 "already received orders might lead to unexpected behavior when sorting or "
 "changing names."
 msgstr ""
+"ข้อความนี้กำหนดวิธีที่ pretix จะร้องขอชื่อบุคคล การเปลี่ยนแปลงสิ่งนี้หลังจากที่คุณได้รับคำสั่งซื้อแล้ว อา"
+"จทำให้เกิดพฤติกรรมที่ไม่คาดคิดเมื่อจัดเรียงหรือเปลี่ยนชื่อ"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 msgid "Allowed titles"
-msgstr ""
+msgstr "คำนำหน้านามที่อนุญาต"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 msgid ""
 "If the naming scheme you defined above allows users to input a title, you "
 "can use this to restrict the set of selectable titles."
 msgstr ""
+"หากรูปแบบการตั้งชื่อที่คุณกำหนดไว้ด้านบนอนุญาตให้ผู้ใช้กรอกคำนำหน้านาม คุณสามารถใช้ตัวเลือกนี้เพื่อจำ"
+"กัดกลุ่มคำนำหน้านามที่เลือกได้"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
-msgstr ""
+msgstr "ถามข้อมูล {fields} และแสดงผลเหมือน {example}"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 msgid "Free text input"
-msgstr ""
+msgstr "ช่องกรอกข้อความแบบอิสระ"
 
 #: pretix/control/forms/event.py
 msgid "Do not ask"
-msgstr ""
+msgstr "ไม่ต้องถาม"
 
 #: pretix/control/forms/event.py
 msgid "Ask, but do not require input"
-msgstr ""
+msgstr "ถาม แต่ไม่บังคับกรอกข้อมูล"
 
 #: pretix/control/forms/event.py
 #: pretix/control/templates/pretixcontrol/event/settings.html
 msgid "Ask and require input"
-msgstr ""
+msgstr "ถาม และบังคับกรอกข้อมูล"
 
 #: pretix/control/forms/event.py
 #, python-brace-format
 msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
-msgstr ""
+msgstr "คุณได้ตั้งค่าให้บัตรของขวัญมีอายุใช้งาน {} ปี บวกกับปีที่ออกบัตรของขวัญ"
 
 #: pretix/control/forms/event.py
-#, fuzzy
-#| msgid "Set payment term"
 msgid "Payment term"
-msgstr "ตั้งค่าระยะเวลาชำระเงิน"
+msgstr "ระยะเวลาการชำระเงิน"
 
 #: pretix/control/forms/event.py
 msgid "same as above"
-msgstr ""
+msgstr "เหมือนกันกับด้านบน"
 
 #: pretix/control/forms/event.py
 #, fuzzy
@@ -13618,11 +13634,11 @@ msgstr ""
 
 #: pretix/control/forms/event.py
 msgid "Text sent to order contact address"
-msgstr ""
+msgstr "ข้อความที่ส่งไปยังที่อยู่ติดต่อคำสั่งซื้อ"
 
 #: pretix/control/forms/event.py
 msgid "Send an email to attendees"
-msgstr ""
+msgstr "ส่งอีเมลไปยังผู้เข้าร่วมงาน"
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -13630,206 +13646,219 @@ msgid ""
 "person who orders the tickets, the following email will be sent out to the "
 "attendees."
 msgstr ""
+"หากคำสั่งซื้อมีผู้เข้าร่วมที่มีที่อยู่อีเมลต่างจากผู้สั่งซื้อตั๋ว อีเมลต่อไปนี้จะถูกส่งไปยังผู้เข้าร่วม"
 
 #: pretix/control/forms/event.py
 msgid "Subject sent to attendees"
-msgstr ""
+msgstr "หัวข้ออีเมลที่ส่งถึงผู้เข้าร่วม"
 
 #: pretix/control/forms/event.py
 msgid "Text sent to attendees"
-msgstr ""
+msgstr "ข้อความที่ส่งถึงผู้เข้าร่วม"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 #: pretix/control/templates/pretixcontrol/event/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 msgid "Text"
-msgstr ""
+msgstr "ข้อความ"
 
 #: pretix/control/forms/event.py
 msgid "Subject (sent by admin)"
-msgstr ""
+msgstr "หัวข้อ (ส่งโดยผู้ดูแลระบบ)"
 
 #: pretix/control/forms/event.py
 msgid "Subject (sent by admin to attendee)"
-msgstr ""
+msgstr "หัวข้อ (ส่งโดยผู้ดูแลระบบถึงผู้เข้าร่วม)"
 
 #: pretix/control/forms/event.py
 msgid "Text (sent by admin)"
-msgstr ""
+msgstr "ข้อความ (ส่งโดยผู้ดูแลระบบ)"
 
 #: pretix/control/forms/event.py
 msgid "Subject (requested by user)"
-msgstr ""
+msgstr "หัวข้อ (ตามที่ผู้ใช้ร้องขอ)"
 
 #: pretix/control/forms/event.py
 msgid "Text (requested by user)"
-msgstr ""
+msgstr "ข้อความ (ตามที่ผู้ใช้ร้องขอ)"
 
 #: pretix/control/forms/event.py
 msgid "Text (if order will expire automatically)"
-msgstr ""
+msgstr "ข้อความ (กรณีคำสั่งซื้อจะหมดอายุโดยอัตโนมัติ)"
 
 #: pretix/control/forms/event.py
 msgid "Subject (if order will expire automatically)"
-msgstr ""
+msgstr "หัวข้อ (กรณีคำสั่งซื้อจะหมดอายุโดยอัตโนมัติ)"
 
 #: pretix/control/forms/event.py
 msgid "Text (if order will not expire automatically)"
-msgstr ""
+msgstr "ข้อความ (กรณีคำสั่งซื้อจะไม่หมดอายุโดยอัตโนมัติ)"
 
 #: pretix/control/forms/event.py
 msgid "Subject (if order will not expire automatically)"
-msgstr ""
+msgstr "หัวข้อ (กรณีคำสั่งซื้อจะไม่หมดอายุโดยอัตโนมัติ)"
 
 #: pretix/control/forms/event.py
 msgid "Subject (if an incomplete payment was received)"
-msgstr ""
+msgstr "หัวข้อ (กรณีได้รับการชำระเงินไม่ครบถ้วน)"
 
 #: pretix/control/forms/event.py
 msgid "Text (if an incomplete payment was received)"
-msgstr ""
+msgstr "ข้อความ (กรณีได้รับการชำระเงินไม่ครบถ้วน)"
 
 #: pretix/control/forms/event.py
 msgid ""
 "This email only applies to payment methods that can receive incomplete "
 "payments, such as bank transfer."
 msgstr ""
+"อีเมลนี้ใช้สำหรับช่องทางการชำระเงินที่สามารถรับยอดชำระไม่ครบถ้วนได้เท่านั้น เช่น การโอนเงินผ่านธ"
+"นาคาร"
 
 #: pretix/control/forms/event.py
 msgid ""
 "This will only be used if the invoice is sent to a different email address "
 "or at a different time than the order confirmation."
 msgstr ""
+"ส่วนนี้จะถูกใช้งานเฉพาะเมื่อมีการส่งใบแจ้งหนี้ไปยังที่อยู่อีเมลอื่น หรือส่งในเวลาที่แตกต่างจากการยืนยันค"
+"ำสั่งซื้อ"
 
 #: pretix/control/forms/event.py
 msgid ""
 "Formatting is not supported, as some accounting departments process mail "
 "automatically and do not handle formatted emails properly."
 msgstr ""
+"ไม่รองรับการจัดรูปแบบข้อความ เนื่องจากแผนกบัญชีบางแห่งประมวลผลเมลโดยอัตโนมัติและไม่รองรับอีเม"
+"ลที่มีการจัดรูปแบบอย่างถูกต้อง"
 
 #: pretix/control/forms/event.py
 msgid ""
 "This email will be sent out this many days before the order event starts. If "
 "the field is empty, the mail will never be sent."
 msgstr ""
+"อีเมลนี้จะถูกส่งออกเป็นจำนวนวันเท่านี้ก่อนที่อีเวนต์ของคำสั่งซื้อจะเริ่มต้น หากปล่อยช่องนี้ว่างไว้ เมลจะไ"
+"ม่ถูกส่งเลย"
 
 #: pretix/control/forms/event.py
 msgid "Subject for received order"
-msgstr ""
+msgstr "หัวข้อสำหรับคำสั่งซื้อที่ได้รับแล้ว"
 
 #: pretix/control/forms/event.py
 msgid "Text for received order"
-msgstr ""
+msgstr "ข้อความสำหรับคำสั่งซื้อที่ได้รับแล้ว"
 
 #: pretix/control/forms/event.py
 msgid "Subject for approved order"
-msgstr ""
+msgstr "หัวข้อสำหรับคำสั่งซื้อที่ได้รับการอนุมัติแล้ว"
 
 #: pretix/control/forms/event.py
 msgid "Text for approved order"
-msgstr ""
+msgstr "ข้อความสำหรับคำสั่งซื้อที่ได้รับการอนุมัติแล้ว"
 
 #: pretix/control/forms/event.py
 msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from below instead."
 msgstr ""
+"ส่วนนี้จะถูกส่งออกเฉพาะคำสั่งซื้อที่มีค่าใช้จ่ายเท่านั้น คำสั่งซื้อฟรีจะได้รับเทมเพลตสำหรับคำสั่งซื้อฟรีจากด้"
+"านล่างแทน"
 
 #: pretix/control/forms/event.py
 msgid "Subject for approved free order"
-msgstr ""
+msgstr "หัวข้อสำหรับคำสั่งซื้อฟรีที่ได้รับการอนุมัติแล้ว"
 
 #: pretix/control/forms/event.py
 msgid "Text for approved free order"
-msgstr ""
+msgstr "ข้อความสำหรับคำสั่งซื้อฟรีที่ได้รับการอนุมัติแล้ว"
 
 #: pretix/control/forms/event.py
 msgid ""
 "This will only be sent out for free orders. Non-free orders will receive the "
 "non-free order template from above instead."
 msgstr ""
+"ส่วนนี้จะถูกส่งออกเฉพาะคำสั่งซื้อฟรีเท่านั้น คำสั่งซื้อที่มีค่าใช้จ่ายจะได้รับเทมเพลตสำหรับคำสั่งซื้อที่มีค่าใช้"
+"จ่ายจากด้านบนแทน"
 
 #: pretix/control/forms/event.py
 msgid "Subject for denied order"
-msgstr ""
+msgstr "หัวข้อสำหรับคำสั่งซื้อที่ถูกปฏิเสธ"
 
 #: pretix/control/forms/event.py
 msgid "Text for denied order"
-msgstr ""
+msgstr "ข้อความสำหรับคำสั่งซื้อที่ถูกปฏิเสธ"
 
 #: pretix/control/forms/event.py
 msgid "Ticket code generator"
-msgstr ""
+msgstr "ตัวสร้างรหัสตั๋ว"
 
 #: pretix/control/forms/event.py
 msgid "For advanced users, usually does not need to be changed."
-msgstr ""
+msgstr "สำหรับผู้ใช้ระดับสูง โดยทั่วไปไม่จำเป็นต้องเปลี่ยนแปลง"
 
 #: pretix/control/forms/event.py
 msgid "Any country"
-msgstr ""
+msgstr "ทุกประเทศ"
 
 #: pretix/control/forms/event.py
 msgid "European Union"
-msgstr ""
+msgstr "สหภาพยุโรป"
 
 #: pretix/control/forms/event.py
 msgid "Any customer"
-msgstr ""
+msgstr "ลูกค้าทุกคน"
 
 #: pretix/control/forms/event.py
 msgid "Individual"
-msgstr ""
+msgstr "บุคคลธรรมดา"
 
 #: pretix/control/forms/event.py
 msgid "Business"
-msgstr ""
+msgstr "นิติบุคคล"
 
 #: pretix/control/forms/event.py
 msgid "Business with valid VAT ID"
-msgstr ""
+msgstr "นิติบุคคลที่มีหมายเลขผู้เสียภาษี (VAT ID) ถูกต้อง"
 
 #: pretix/control/forms/event.py
 msgid "Charge VAT"
-msgstr ""
+msgstr "เรียกเก็บภาษีมูลค่าเพิ่ม (VAT)"
 
 #: pretix/control/forms/event.py
 msgid "No VAT"
-msgstr ""
+msgstr "ไม่มีภาษีมูลค่าเพิ่ม (VAT)"
 
 #: pretix/control/forms/event.py
 msgid "Sale not allowed"
-msgstr ""
+msgstr "ไม่อนุญาตให้ทำการขาย"
 
 #: pretix/control/forms/event.py
 msgid "Order requires approval"
-msgstr ""
+msgstr "คำสั่งซื้อต้องได้รับการอนุมัติ"
 
 #: pretix/control/forms/event.py
 msgid "Default tax code"
-msgstr ""
+msgstr "รหัสภาษีเริ่มต้น"
 
 #: pretix/control/forms/event.py
 msgid "Deviating tax rate"
-msgstr ""
+msgstr "อัตราภาษีที่แตกต่างออกไป"
 
 #: pretix/control/forms/event.py
 msgid "Text on invoice"
-msgstr ""
+msgstr "ข้อความบนใบแจ้งหนี้"
 
 #: pretix/control/forms/event.py
 msgid ""
 "A combination of this calculation mode with a non-zero tax rate does not "
 "make sense."
-msgstr ""
+msgstr "การรวมโหมดการคำนวณนี้เข้ากับอัตราภาษีที่ไม่ใช่ศูนย์ไม่สมเหตุสมผล"
 
 #: pretix/control/forms/event.py
 msgid "This combination of calculation mode and tax code does not make sense."
-msgstr ""
+msgstr "การรวมโหมดการคำนวณและรหัสภาษีนี้ไม่สมเหตุสมผล"
 
 #: pretix/control/forms/event.py
 msgid "Pre-selected voucher"
-msgstr ""
+msgstr "เวาเชอร์ที่เลือกไว้ล่วงหน้า"
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -13838,47 +13867,52 @@ msgid ""
 "can for example be used to provide widgets that give discounts or unlock "
 "secret products."
 msgstr ""
+"หากตั้งค่าไว้ วิดเจ็ตจะแสดงสินค้าเสมือนว่าได้กรอกเวาเชอร์นี้แล้ว และเมื่อซื้อสินค้าผ่านวิดเจ็ต เวาเชอ"
+"ร์นี้จะถูกใช้งานทันที สามารถใช้เพื่อสร้างวิดเจ็ตที่มอบส่วนลดหรือปลดล็อกสินค้าลับได้ เป็นต้น"
 
 #: pretix/control/forms/event.py
 msgid "Compatibility mode"
-msgstr ""
+msgstr "โหมดความเข้ากันได้ (Compatibility mode)"
 
 #: pretix/control/forms/event.py
 msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
 msgstr ""
+"วิดเจ็ตปกติของเราอาจทำงานได้ไม่สมบูรณ์บนระบบสร้างเว็บไซต์ทุกประเภท หากคุณพบปัญหา โปรดลองใช้"
+"โหมดความเข้ากันได้นี้"
 
 #: pretix/control/forms/event.py
 msgid "The given voucher code does not exist."
-msgstr ""
+msgstr "ไม่พบรหัสเวาเชอร์ที่ระบุ"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 #: pretix/control/views/shredder.py
 msgid "The slug you entered was not correct."
-msgstr ""
+msgstr "ชื่อสลัก (Slug) ที่คุณกรอกไม่ถูกต้อง"
 
 #: pretix/control/forms/event.py
 msgid "Ticket downloads"
-msgstr ""
+msgstr "การดาวน์โหลดตั๋ว"
 
 #: pretix/control/forms/event.py
 msgid "Your customers will be able to download their tickets in PDF format."
-msgstr ""
+msgstr "ลูกค้าของคุณจะสามารถดาวน์โหลดตั๋วในรูปแบบไฟล์ PDF ได้"
 
 #: pretix/control/forms/event.py
 msgid "Require all attendees to fill in their names"
-msgstr ""
+msgstr "บังคับให้ผู้เข้าร่วมทุกคนกรอกชื่อ"
 
 #: pretix/control/forms/event.py
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
 msgstr ""
+"โดยปกติแล้ว ระบบจะสอบถามชื่อแต่ไม่บังคับกรอกข้อมูล คุณสามารถปิดฟีเจอร์นี้ได้ทั้งหมดในการตั้งค่า"
 
 #: pretix/control/forms/event.py
 msgid "Payment via Stripe"
-msgstr ""
+msgstr "การชำระเงินผ่าน Stripe"
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -13887,10 +13921,13 @@ msgid ""
 "up an account with them, which takes less than five minutes using their "
 "simple interface."
 msgstr ""
+"Stripe เป็นผู้ให้บริการประมวลผลการชำระเงินออนไลน์ที่รองรับบัตรเครดิตและตัวเลือกการชำระเงินอื่น"
+"ๆ อีกมากมาย หากต้องการรับชำระเงินผ่าน Stripe คุณจะต้องตั้งค่าบัญชีกับ Stripe ซึ่งใช้เวลาไม่ถึง "
+"5 นาทีผ่านหน้าต่างการใช้งานที่ง่ายดาย"
 
 #: pretix/control/forms/event.py
 msgid "Payment by bank transfer"
-msgstr ""
+msgstr "การชำระเงินโดยการโอนเงินผ่านธนาคาร"
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -13898,11 +13935,13 @@ msgid ""
 "then import your bank statements to process the payments within pretix, or "
 "mark them as paid manually."
 msgstr ""
+"ลูกค้าของคุณจะได้รับคำแนะนำให้โอนเงินไปยังบัญชีของคุณ จากนั้นคุณสามารถนำเข้ารายการเดินบัญชีธนาค"
+"ารเพื่อประมวลผลการชำระเงินภายใน pretix หรือทำเครื่องหมายว่าชำระเงินแล้วด้วยตนเองได้"
 
 #: pretix/control/forms/event.py
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html
 msgid "Price (optional)"
-msgstr ""
+msgstr "ราคา (ไม่จำเป็นต้องระบุ)"
 
 #: pretix/control/forms/event.py
 msgid "Free"
@@ -14270,98 +14309,98 @@ msgstr "ใช้งานได้"
 
 #: pretix/control/forms/filter.py
 msgid "Unredeemed"
-msgstr ""
+msgstr "ยังไม่ได้ใช้สิทธิ์"
 
 #: pretix/control/forms/filter.py
 msgid "Redeemed at least once"
-msgstr ""
+msgstr "ใช้สิทธิ์แล้วอย่างน้อยหนึ่งครั้ง"
 
 #: pretix/control/forms/filter.py
 msgid "Fully redeemed"
-msgstr ""
+msgstr "ใช้สิทธิ์เต็มจำนวนแล้ว"
 
 #: pretix/control/forms/filter.py
 msgid "Redeemed and checked in with ticket"
-msgstr ""
+msgstr "ใช้สิทธิ์และเช็คอินพร้อมตั๋วแล้ว"
 
 #: pretix/control/forms/filter.py
 msgid "Quota handling"
-msgstr ""
+msgstr "การจัดการโควตา"
 
 #: pretix/control/forms/filter.py
 msgid "Allow to ignore quota"
-msgstr ""
+msgstr "อนุญาตให้ละเว้นโควตา"
 
 #: pretix/control/forms/filter.py
 msgid "Filter by tag"
-msgstr ""
+msgstr "กรองตามแท็ก"
 
 #: pretix/control/forms/filter.py
 msgid "Search voucher"
-msgstr ""
+msgstr "ค้นหาเวาเชอร์"
 
 #: pretix/control/forms/filter.py pretix/control/forms/vouchers.py
 #: pretix/control/views/typeahead.py pretix/control/views/vouchers.py
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
-msgstr ""
+msgstr "สินค้าใดๆ ในโควตา \"{quota}\""
 
 #: pretix/control/forms/filter.py
 msgid "Refund status"
-msgstr ""
+msgstr "สถานะการคืนเงิน"
 
 #: pretix/control/forms/filter.py
 msgid "All open refunds"
-msgstr ""
+msgstr "รายการคืนเงินที่รอดำเนินการทั้งหมด"
 
 #: pretix/control/forms/filter.py
 msgid "All refunds"
-msgstr ""
+msgstr "รายการคืนเงินทั้งหมด"
 
 #: pretix/control/forms/filter.py pretix/plugins/reports/exporters.py
 msgid "Date filter"
-msgstr ""
+msgstr "ตัวกรองวันที่"
 
 #: pretix/control/forms/filter.py pretix/plugins/reports/exporters.py
 msgid "Filter by…"
-msgstr ""
+msgstr "กรองตาม…"
 
 #: pretix/control/forms/filter.py pretix/plugins/reports/exporters.py
 msgid "Date of last successful payment"
-msgstr ""
+msgstr "วันที่ชำระเงินสำเร็จครั้งล่าสุด"
 
 #: pretix/control/forms/filter.py
 msgid "All check-ins"
-msgstr ""
+msgstr "การเช็คอินทั้งหมด"
 
 #: pretix/control/forms/filter.py
 msgid "Successful check-ins"
-msgstr ""
+msgstr "การเช็คอินที่สำเร็จ"
 
 #: pretix/control/forms/filter.py
 msgid "Unsuccessful check-ins"
-msgstr ""
+msgstr "การเช็คอินที่ไม่สำเร็จ"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/plugins/checkinlists/exporters.py
 msgid "Scan type"
-msgstr ""
+msgstr "ประเภทการสแกน"
 
 #: pretix/control/forms/filter.py
 msgid "All directions"
-msgstr ""
+msgstr "ทุกทิศทาง (เข้า/ออก)"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 #: pretix/plugins/checkinlists/exporters.py
 msgid "Device"
-msgstr ""
+msgstr "อุปกรณ์"
 
 #: pretix/control/forms/filter.py
 msgid "All devices"
-msgstr ""
+msgstr "อุปกรณ์ทั้งหมด"
 
 #: pretix/control/forms/filter.py
 msgctxt "filter"
@@ -14375,7 +14414,7 @@ msgstr "วันที่สิ้นสุด"
 
 #: pretix/control/forms/filter.py pretix/plugins/checkinlists/exporters.py
 msgid "All check-in lists"
-msgstr ""
+msgstr "รายการเช็คอินทั้งหมด"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
@@ -14384,115 +14423,108 @@ msgstr ""
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html
 #: pretix/plugins/checkinlists/exporters.py
 msgid "Check-in list"
-msgstr ""
+msgstr "รายการเช็คอิน"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Software"
-msgstr ""
+msgstr "ซอฟต์แวร์"
 
 #: pretix/control/forms/filter.py
 msgid "Device status"
-msgstr ""
+msgstr "สถานะอุปกรณ์"
 
 #: pretix/control/forms/filter.py
 msgid "Active devices"
-msgstr ""
+msgstr "อุปกรณ์ที่เปิดใช้งานอยู่"
 
 #: pretix/control/forms/filter.py
 msgid "Revoked devices"
-msgstr ""
+msgstr "อุปกรณ์ที่ถูกยกเลิกสิทธิ์"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Require email addresses per ticket"
 msgid "Search email address or subject"
-msgstr "กำหนดให้ต้องระบุที่อยู่อีเมลแยกตามตั๋ว"
+msgstr "ค้นหาที่อยู่อีเมลหรือหัวข้อ"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/refunds.html
 msgid "Source"
-msgstr ""
+msgstr "แหล่งที่มา"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "All invoices"
 msgid "All sources"
-msgstr "ใบแจ้งหนี้ทั้งหมด"
+msgstr "แหล่งที่มาทั้งหมด"
 
 #: pretix/control/forms/filter.py
 msgid "Team actions"
-msgstr ""
+msgstr "การดำเนินการของทีม"
 
 #: pretix/control/forms/filter.py
 msgid "Customer actions"
-msgstr ""
+msgstr "การดำเนินการของลูกค้า"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Devices"
 msgid "Device actions"
-msgstr "อุปกรณ์"
+msgstr "การดำเนินการของอุปกรณ์"
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Order email"
 msgid "User email"
-msgstr "อีเมลที่ใช้สั่งซื้อ"
+msgstr "อีเมลผู้ใช้"
 
 #: pretix/control/forms/filter.py pretix/control/navigation.py
 msgid "All users"
-msgstr ""
+msgstr "ผู้ใช้ทั้งหมด"
 
 #: pretix/control/forms/global_settings.py
 msgid "Additional footer text"
-msgstr ""
+msgstr "ข้อความเพิ่มเติมในส่วนท้าย (Footer)"
 
 #: pretix/control/forms/global_settings.py
 msgid "Will be included as additional text in the footer, site-wide."
 msgstr ""
+"จะถูกรวมเป็นข้อความเพิ่มเติมในส่วนท้าย (Footer) ของทุกหน้าทั่วทั้งเว็บไซต์"
 
 #: pretix/control/forms/global_settings.py
 msgid "Additional footer link"
-msgstr ""
+msgstr "ลิงก์เพิ่มเติมในส่วนท้าย (Footer)"
 
 #: pretix/control/forms/global_settings.py
 msgid "Will be included as the link in the additional footer text."
-msgstr ""
+msgstr "จะถูกใช้เป็นลิงก์เชื่อมโยงสำหรับข้อความเพิ่มเติมในส่วนท้าย (Footer)"
 
 #: pretix/control/forms/global_settings.py
 msgid "Global message banner"
-msgstr ""
+msgstr "แบนเนอร์ประกาศแจ้งเตือนทั่วไป"
 
 #: pretix/control/forms/global_settings.py
 msgid "Global message banner detail text"
-msgstr ""
+msgstr "ข้อความรายละเอียดของแบนเนอร์ประกาศแจ้งเตือนทั่วไป"
 
 #: pretix/control/forms/global_settings.py
 msgid "OpenCage API key for geocoding"
-msgstr ""
+msgstr "คีย์ API ของ OpenCage สำหรับการแปลงพิกัดภูมิศาสตร์ (Geocoding)"
 
 #: pretix/control/forms/global_settings.py
 msgid "MapQuest API key for geocoding"
-msgstr ""
+msgstr "คีย์ API ของ MapQuest สำหรับการแปลงพิกัดภูมิศาสตร์ (Geocoding)"
 
 #: pretix/control/forms/global_settings.py
 msgid "Leaflet tiles URL pattern"
-msgstr ""
+msgstr "รูปแบบ URL สำหรับไทล์แผนที่ Leaflet"
 
 #: pretix/control/forms/global_settings.py
 #, python-brace-format
 msgid "e.g. {sample}"
-msgstr ""
+msgstr "เช่น {sample}"
 
 #: pretix/control/forms/global_settings.py
 msgid "Leaflet tiles attribution"
-msgstr ""
+msgstr "ข้อความอ้างอิงแหล่งที่มาของแผนที่ Leaflet (Attribution)"
 
 #: pretix/control/forms/global_settings.py
 msgid "ApplePay MerchantID Domain Association"
-msgstr ""
+msgstr "ไฟล์ยืนยันโดเมน ApplePay MerchantID"
 
 #: pretix/control/forms/global_settings.py
 #, python-brace-format
@@ -14500,10 +14532,12 @@ msgid ""
 "Will be served at {domain}/.well-known/apple-developer-merchantid-domain-"
 "association"
 msgstr ""
+"จะถูกให้บริการที่ URL {domain}/.well-known/apple-developer-merchantid-domain-"
+"association"
 
 #: pretix/control/forms/global_settings.py
 msgid "Perform update checks"
-msgstr ""
+msgstr "ดำเนินการตรวจสอบการอัปเดต"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
@@ -14514,10 +14548,15 @@ msgid ""
 "any IP addresses and we will not know who you are or where to find your "
 "instance. You can disable this behavior here at any time."
 msgstr ""
+"ในระหว่างการตรวจสอบการอัปเดต pretix จะรายงานหมายเลขรหัสการติดตั้งที่ไม่ระบุตัวตนและเป็นเอ"
+"กลักษณ์ เวอร์ชันปัจจุบันของ pretix และปลั๊กอินที่คุณติดตั้ง รวมถึงจำนวนอีเวนต์ที่เปิดใช้งานและไม่เปิดใ"
+"ช้งานในการติดตั้งของคุณไปยังเซิร์ฟเวอร์ที่ดูแลโดยทีมผู้พัฒนา pretix เราจะจัดเก็บเฉพาะข้อมูลที่ไม่ระบุ"
+"ตัวตนเท่านั้น และจะไม่เก็บหมายเลข IP address รวมถึงจะไม่ทราบว่าคุณเป็นใครหรือระบบของคุณอยู่ที่"
+"ใด คุณสามารถปิดการทำงานนี้ได้ที่นี่ทุกเมื่อ"
 
 #: pretix/control/forms/global_settings.py
 msgid "Email notifications"
-msgstr ""
+msgstr "การแจ้งเตือนทางอีเมล"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
@@ -14525,32 +14564,37 @@ msgid ""
 "available. This address will not be transmitted to pretix.eu, the emails "
 "will be sent by this server locally."
 msgstr ""
+"เราจะแจ้งเตือนคุณผ่านทางที่อยู่อีเมลนี้หากตรวจพบว่ามีอัปเดตใหม่ ที่อยู่อีเมลนี้จะไม่ถูกส่งไปยัง "
+"pretix.eu โดยอีเมลจะถูกส่งจากเซิร์ฟเวอร์นี้ภายในเครื่องเท่านั้น"
 
 #: pretix/control/forms/global_settings.py
 msgid "Changes to pretix"
-msgstr ""
+msgstr "การเปลี่ยนแปลง pretix"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
 "This installation of pretix is running without any custom modifications or "
 "extensions (except for installed plugins)."
 msgstr ""
+"การติดตั้ง pretix นี้ทำงานโดยไม่มีการดัดแปลงหรือส่วนขยายที่ปรับแต่งเอง (ยกเว้นปลั๊กอินที่ติดตั้งไว้)"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
-msgstr ""
+msgstr "การติดตั้ง pretix นี้มีการเปลี่ยนแปลงหรือส่วนขยายที่ทำขึ้นในซอร์สโค้ด"
 
 #: pretix/control/forms/global_settings.py
 msgid "Usage of pretix"
-msgstr ""
+msgstr "รูปแบบการใช้งาน pretix"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
 "I only use pretix to organize events which are executed by my own company or "
 "its affiliated companies, or to sell products sold by my own company."
 msgstr ""
+"ฉันใช้ pretix เพื่อจัดอีเวนต์ที่ดำเนินการโดยบริษัทของฉันเองหรือบริษัทในเครือเท่านั้น หรือเพื่อขายสินค้"
+"าที่ขายโดยบริษัทของฉันเอง"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
@@ -14558,14 +14602,16 @@ msgid ""
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
 "as-a-Service company)."
 msgstr ""
+"ฉันใช้ pretix เพื่อขายตั๋วของผู้จัดงานรายอื่น (เช่น บริษัทจำหน่ายตั๋ว) หรือฉันเสนอการทำงานของ "
+"pretix ให้ผู้อื่นใช้งาน (เช่น บริษัทให้บริการซอฟต์แวร์แบบ SaaS)"
 
 #: pretix/control/forms/global_settings.py
 msgid "I'm not sure which option applies."
-msgstr ""
+msgstr "ฉันไม่แน่ใจว่าตัวเลือกใดปรับใช้กับฉัน"
 
 #: pretix/control/forms/global_settings.py
 msgid "License choice"
-msgstr ""
+msgstr "การเลือกไลเซนส์ (สัญญาอนุญาต)"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
@@ -14573,6 +14619,8 @@ msgid ""
 "the copyright holders which allows me to not share modifications if I only "
 "use pretix internally."
 msgstr ""
+"ฉันต้องการใช้ pretix ภายใต้สิทธิ์เพิ่มเติมที่มอบให้แก่ทุกคนโดยผู้ถือลิขสิทธิ์ ซึ่งอนุญาตให้ฉันไม่ต้องแบ่งปัน"
+"โค้ดที่มีการดัดแปลงหากฉันใช้งาน pretix ภายในองค์กรเท่านั้น"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
@@ -14580,35 +14628,45 @@ msgid ""
 "restriction on the scope of usage and therefore without making use of any "
 "additional permission."
 msgstr ""
+"ฉันต้องการใช้ pretix ภายใต้เงื่อนไขของสัญญาอนุญาต AGPLv3 โดยไม่มีข้อจำกัดเกี่ยวกับขอบเขตการใ"
+"ช้งาน และด้วยเหตุนี้จึงไม่ใช้สิทธิ์เพิ่มเติมใดๆ"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
 "I have obtained a paid pretix Enterprise license which is currently valid."
 msgstr ""
+"ฉันได้รับไลเซนส์ pretix Enterprise แบบชำระเงินซึ่งยังมีผลใช้งานในปัจจุบัน"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a non-copyleft license (Apache License, MIT License, BSD license, …)."
 msgstr ""
+"การติดตั้ง pretix นี้มีปลั๊กอินที่สามารถใช้งานได้ฟรีภายใต้สัญญาอนุญาตแบบ Non-copyleft (เช่น "
+"Apache License, MIT License, BSD license, …)"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a license with strong copyleft (GPL, AGPL, …)."
 msgstr ""
+"การติดตั้ง pretix นี้มีปลั๊กอินที่สามารถใช้งานได้ฟรีภายใต้สัญญาอนุญาตที่มีข้อกำหนด Strong "
+"copyleft เข้มงวด (เช่น GPL, AGPL, …)"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
 "This installation of pretix has installed plugins which have been created "
 "internally or obtained under a proprietary license by a third party."
 msgstr ""
+"การติดตั้ง pretix นี้มีปลั๊กอินที่ถูกสร้างขึ้นภายในองค์กร หรือได้รับภายใต้สัญญาอนุญาตสิทธิ์การใช้งานแบบ"
+"คุ้มครองกรรมสิทธิ์ (Proprietary license) จากบุคคลที่สาม"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
 "This installation of pretix has installed pretix Enterprise plugins with a "
 "valid license."
 msgstr ""
+"การติดตั้ง pretix นี้มีปลั๊กอิน pretix Enterprise ที่ติดตั้งอยู่พร้อมไลเซนส์ที่ถูกต้อง"
 
 #: pretix/control/forms/global_settings.py
 msgid "Footer: \"powered by\" name (optional)"
@@ -30230,17 +30288,18 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "Secret key"
-msgstr ""
+msgstr "Secret key"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "The country in which your Stripe-account is registered in. Usually, this is "
 "your country of residence."
 msgstr ""
+"ประเทศที่บัญชี Stripe ของคุณลงทะเบียนไว้ โดยทั่วไปจะเป็นประเทศที่คุณพำนักอยู่"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Check for Apple Pay/Google Pay"
-msgstr ""
+msgstr "ตรวจสอบ Apple Pay/Google Pay"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
@@ -30250,10 +30309,14 @@ msgid ""
 "take into consideration if Google Pay/Apple Pay has been disabled in the "
 "Stripe Dashboard."
 msgstr ""
+"pretix จะพยายามตรวจสอบว่าเว็บเบราว์เซอร์ของลูกค้าล่วงหน้าว่ารองรับวิธีการชำระเงินผ่านกระเป๋า"
+"เงินอิเล็กทรอนิกส์ เช่น Apple Pay หรือ Google Pay หรือไม่ และจะแสดงผลอย่างเด่นชัดร่วมกับวิธีก"
+"ารชำระเงินด้วยบัตรเครดิต ทั้งนี้ การตรวจสอบนี้จะไม่พิจารณาว่า Google Pay/Apple Pay ถูกปิดใช้ง"
+"านใน Stripe Dashboard อยู่หรือไม่"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Statement descriptor postfix"
-msgstr ""
+msgstr "ข้อความต่อท้ายรายการแจ้งยอดชำระเงิน (Statement descriptor postfix)"
 
 #: pretix/plugins/stripe/payment.py
 #, python-brace-format
@@ -30264,10 +30327,13 @@ msgid ""
 "of characters is allowed. We do not recommend entering more than {cnt} "
 "characters into this field."
 msgstr ""
+"ค่าใดๆ ที่กรอกที่นี่จะปรากฏในใบแจ้งยอดชำระเงินผ่านบัตรเครดิตหรือรายการเดินบัญชีธนาคารของลูกค้า "
+"โดยเราจะเพิ่มรหัสคำสั่งซื้อไว้ด้านหน้าข้อความให้อัตโนมัติ ทั้งนี้ ขึ้นอยู่กับวิธีการชำระเงิน จำนวนตัวอักษร"
+"อาจถูกจำกัดไว้อย่างเคร่งครัด เราไม่แนะนำให้ระบุเกิน {cnt} ตัวอักษรในช่องนี้"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Credit card payments"
-msgstr ""
+msgstr "การชำระเงินด้วยบัตรเครดิต"
 
 #: pretix/plugins/stripe/payment.py
 msgid "iDEAL"
@@ -30278,10 +30344,12 @@ msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before they work properly."
 msgstr ""
+"วิธีการชำระเงินบางประเภทอาจจำเป็นต้องเปิดใช้งานในการตั้งค่าของบัญชี Stripe ของคุณก่อนจึงจะทำ"
+"งานได้อย่างถูกต้อง"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Alipay"
-msgstr ""
+msgstr "Alipay"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Bancontact"
@@ -30298,24 +30366,27 @@ msgid ""
 "some cases. Please only activate this payment method if your payment term "
 "allows for this lag."
 msgstr ""
+"การชำระเงินด้วย SEPA Direct Debit ผ่าน Stripe จะ<strong>ไม่</strong>ได้รับการประมวล"
+"ผลทันที แต่อาจใช้เวลาสูงสุดถึง <strong>14 วัน</strong> ในการยืนยันรายการในบางกรณี โปรดเปิ"
+"ดใช้งานวิธีการชำระเงินนี้เฉพาะเมื่อข้อกำหนดการชำระเงินของคุณรองรับระยะเวลาที่ล่าช้านี้เท่านั้น"
 
 #: pretix/plugins/stripe/payment.py
 msgid "SEPA Creditor Mandate Name"
-msgstr ""
+msgstr "ชื่อหนังสือมอบอำนาจเจ้าหนี้ SEPA (SEPA Creditor Mandate Name)"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "Please provide your SEPA Creditor Mandate Name, that will be displayed to "
 "the user."
-msgstr ""
+msgstr "โปรดระบุชื่อหนังสือมอบอำนาจเจ้าหนี้ SEPA ของคุณ ซึ่งจะแสดงให้ผู้ใช้เห็น"
 
 #: pretix/plugins/stripe/payment.py
 msgid "EPS"
-msgstr ""
+msgstr "EPS"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Multibanco"
-msgstr ""
+msgstr "Multibanco"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Przelewy24"
@@ -30323,13 +30394,15 @@ msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Pay by bank"
-msgstr ""
+msgstr "Pay by bank"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "Currently only available for charges in GBP and customers with UK bank "
 "accounts, and in private preview for France and Germany."
 msgstr ""
+"ขณะนี้เปิดให้ใช้งานเฉพาะการเรียกเก็บเงินในสกุลเงิน GBP และลูกค้าที่มีบัญชีธนาคารในสหราชอาณาจักร"
+"เท่านั้น และอยู่ในช่วงทดสอบวงปิด (Private preview) สำหรับประเทศฝรั่งเศสและเยอรมนี"
 
 #: pretix/plugins/stripe/payment.py
 msgid "WeChat Pay"
@@ -30337,39 +30410,42 @@ msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Swish"
-msgstr ""
+msgstr "Swish"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Affirm"
-msgstr ""
+msgstr "Affirm"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Only available for payments between $50 and $30,000."
-msgstr ""
+msgstr "สามารถใช้ได้สำหรับการชำระเงินระหว่าง $50 ถึง $30,000 เท่านั้น"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Klarna"
-msgstr ""
+msgstr "Klarna"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "Klarna and Stripe will decide which of the payment methods offered by Klarna "
 "are available to the user."
 msgstr ""
+"Klarna และ Stripe จะเป็นผู้พิจารณาว่าวิธีการชำระเงินใดของ Klarna ที่เปิดให้ผู้ใช้บริการใช้งานไ"
+"ด้"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "Klarna's terms of services do not allow it to be used by charities or "
 "political organizations."
 msgstr ""
+"ข้อกำหนดการให้บริการของ Klarna ไม่อนุญาตให้ใช้องค์กรการกุศลหรือองค์กรทางการเมืองใช้งาน"
 
 #: pretix/plugins/stripe/payment.py
 msgid "MobilePay"
-msgstr ""
+msgstr "MobilePay"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Destination"
-msgstr ""
+msgstr "ปลายทาง"
 
 #: pretix/plugins/stripe/payment.py
 #, python-brace-format
@@ -30378,103 +30454,109 @@ msgid ""
 ">many test cards</a> to perform a transaction. No money will actually be "
 "transferred."
 msgstr ""
+"ปลั๊กอิน Stripe กำลังทำงานในโหมดทดสอบ คุณสามารถใช้<a {args}>บัตรทดสอบหลายใบเพื่อทำรายก"
+"ารได้ โดยจะไม่มีการโอนเงินจริงเกิดขึ้น"
 
 #: pretix/plugins/stripe/payment.py
 msgid "No payment information found."
-msgstr ""
+msgstr "ไม่พบข้อมูลการชำระเงิน"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "We had trouble communicating with Stripe. Please try again and contact "
 "support if the problem persists."
 msgstr ""
+"เกิดปัญหาในการสื่อสารกับ Stripe โปรดลองใหม่อีกครั้ง และติดต่อฝ่ายสนับสนุนหากยังพบปัญหาเดิม"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Stripe returned an error"
-msgstr ""
+msgstr "Stripe แจ้งข้อผิดพลาดกลับมา"
 
 #: pretix/plugins/stripe/payment.py
 msgid "You may need to enable JavaScript for Stripe payments."
-msgstr ""
+msgstr "คุณอาจจำเป็นต้องเปิดใช้งาน JavaScript สำหรับการชำระเงินผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr ""
+msgstr "Stripe รายงานข้อผิดพลาดเกี่ยวกับบัตรของคุณ: %s"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
 msgstr ""
+"เกิดปัญหาในการสื่อสารกับ Stripe โปรดลองใหม่อีกครั้ง และติดต่อเราหากยังพบปัญหาเดิม"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"การชำระเงินของคุณอยู่ระหว่างรอการดำเนินการให้เสร็จสิ้น เราจะแจ้งให้คุณทราบทันทีที่การชำระเงินเส"
+"ร็จสมบูรณ์"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Your payment failed. Please try again."
-msgstr ""
+msgstr "การชำระเงินของคุณล้มเหลว โปรดลองอีกครั้ง"
 
 #: pretix/plugins/stripe/payment.py
 #, python-format
 msgid "Stripe reported an error: %s"
-msgstr ""
+msgstr "Stripe รายงานข้อผิดพลาด: %s"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Credit card via Stripe"
-msgstr ""
+msgstr "บัตรเครดิต ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Credit card"
-msgstr ""
+msgstr "บัตรเครดิต"
 
 #: pretix/plugins/stripe/payment.py
 #, python-brace-format
 msgid "expires {month}/{year}"
-msgstr ""
+msgstr "หมดอายุ {month}/{year}"
 
 #: pretix/plugins/stripe/payment.py
 msgid "SEPA Debit via Stripe"
-msgstr ""
+msgstr "หักบัญชีอัตโนมัติ SEPA (SEPA Debit) ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "SEPA Debit"
-msgstr ""
+msgstr "หักบัญชีอัตโนมัติ SEPA (SEPA Debit)"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Account Holder Name"
-msgstr ""
+msgstr "ชื่อเจ้าของบัญชี"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Account Holder Street"
-msgstr ""
+msgstr "ถนนของเจ้าของบัญชี"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Account Holder Postal Code"
-msgstr ""
+msgstr "รหัสไปรษณีย์ของเจ้าของบัญชี"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Account Holder City"
-msgstr ""
+msgstr "เมือง/อำเภอ ของเจ้าของบัญชี"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Account Holder Country"
-msgstr ""
+msgstr "ประเทศของเจ้าของบัญชี"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Affirm via Stripe"
-msgstr ""
+msgstr "Affirm ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Klarna via Stripe"
-msgstr ""
+msgstr "Klarna ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "giropay via Stripe"
-msgstr ""
+msgstr "giropay ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "giropay"
@@ -30486,19 +30568,21 @@ msgid ""
 "German banks, usually after one-time activation. Please keep your online "
 "banking account and login information available."
 msgstr ""
+"giropay เป็นช่องทางการชำระเงินออนไลน์สำหรับลูกค้าของธนาคารส่วนใหญ่ในประเทศเยอรมนี โดยมัก"
+"ต้องเปิดใช้งานครั้งแรกก่อน โปรดเตรียมบัญชีธนาคารออนไลน์และข้อมูลเข้าสู่ระบบของคุณให้พร้อม"
 
 #: pretix/plugins/stripe/payment.py
 msgid "unknown name"
-msgstr ""
+msgstr "ไม่ทราบชื่อ"
 
 #: pretix/plugins/stripe/payment.py
 #, python-brace-format
 msgid "Bank account at {bank}"
-msgstr ""
+msgstr "บัญชีธนาคารที่ {bank}"
 
 #: pretix/plugins/stripe/payment.py
 msgid "iDEAL via Stripe"
-msgstr ""
+msgstr "iDEAL ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "iDEAL | Wero"
@@ -30509,74 +30593,79 @@ msgid ""
 "iDEAL is an online payment method available to customers of Dutch banks. "
 "Please keep your online banking account and login information available."
 msgstr ""
+"iDEAL เป็นช่องทางการชำระเงินออนไลน์สำหรับลูกค้าธนาคารในประเทศเนเธอร์แลนด์ โปรดเตรียมบัญชี"
+"ธนาคารออนไลน์และข้อมูลเข้าสู่ระบบของคุณให้พร้อม"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Alipay via Stripe"
-msgstr ""
+msgstr "Alipay ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "This payment method is available to customers of the Chinese payment system "
 "Alipay. Please keep your login information available."
 msgstr ""
+"ช่องทางการชำระเงินนี้เปิดให้ใช้งานสำหรับลูกค้าของระบบชำระเงิน Alipay ในประเทศจีน โปรดเตรีย"
+"มข้อมูลเข้าสู่ระบบของคุณให้พร้อม"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Bancontact via Stripe"
-msgstr ""
+msgstr "Bancontact ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "SOFORT via Stripe"
-msgstr ""
+msgstr "SOFORT ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "SOFORT (instant bank transfer)"
-msgstr ""
+msgstr "SOFORT (การโอนเงินผ่านธนาคารทันที)"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Country of your bank"
-msgstr ""
+msgstr "ประเทศของธนาคารคุณ"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Germany"
-msgstr ""
+msgstr "เยอรมนี"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Austria"
-msgstr ""
+msgstr "ออสเตรีย"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Belgium"
-msgstr ""
+msgstr "เบลเยียม"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Netherlands"
-msgstr ""
+msgstr "เนเธอร์แลนด์"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Spain"
-msgstr ""
+msgstr "สเปน"
 
 #: pretix/plugins/stripe/payment.py
 #, python-brace-format
 msgid "Bank account {iban} at {bank}"
-msgstr ""
+msgstr "บัญชีธนาคาร {iban} ที่ {bank}"
 
 #: pretix/plugins/stripe/payment.py
 msgid "EPS via Stripe"
-msgstr ""
+msgstr "EPS ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Multibanco via Stripe"
-msgstr ""
+msgstr "Multibanco ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "Multibanco is a payment method available to Portuguese bank account holders."
 msgstr ""
+"Multibanco เป็นช่องทางการชำระเงินสำหรับผู้ถือบัญชีธนาคารในประเทศโปรตุเกส"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Przelewy24 via Stripe"
-msgstr ""
+msgstr "Przelewy24 ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
@@ -30584,84 +30673,100 @@ msgid ""
 "banks. Please keep your online banking account and login information "
 "available."
 msgstr ""
+"Przelewy24 เป็นช่องทางการชำระเงินออนไลน์สำหรับลูกค้าธนาคารในประเทศโปแลนด์ โปรดเตรียมบัญ"
+"ชีธนาคารออนไลน์และข้อมูลเข้าสู่ระบบของคุณให้พร้อม"
 
 #: pretix/plugins/stripe/payment.py
 msgid "WeChat Pay via Stripe"
-msgstr ""
+msgstr "WeChat Pay ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "This payment method is available to users of the Chinese app WeChat. Please "
 "keep your login information available."
 msgstr ""
+"ช่องทางการชำระเงินนี้เปิดให้ใช้งานสำหรับผู้ใช้แอป WeChat ของจีน โปรดเตรียมข้อมูลเข้าสู่ระบบของคุ"
+"ณให้พร้อม"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Revolut Pay via Stripe"
-msgstr ""
+msgstr "Revolut Pay ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Revolut Pay"
-msgstr ""
+msgstr "Revolut Pay"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "This payment method is available to users of the Revolut app. Please keep "
 "your login information available."
 msgstr ""
+"ช่องทางการชำระเงินนี้เปิดให้ใช้งานสำหรับผู้ใช้แอป Revolut โปรดเตรียมข้อมูลเข้าสู่ระบบของคุณให้พร้"
+"อม"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Pay by bank via Stripe"
-msgstr ""
+msgstr "Pay by bank ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "Pay by bank allows you to authorize a secure Open Banking payment from your "
 "banking app. Currently available only with a UK bank account."
 msgstr ""
+"Pay by bank ช่วยให้คุณอนุมัติการชำระเงินแบบ Open Banking ที่ปลอดภัยจากแอปธนาคารของคุณได้ "
+"ขณะนี้เปิดใช้งานเฉพาะกับบัญชีธนาคารในสหราชอาณาจักรเท่านั้น"
 
 #: pretix/plugins/stripe/payment.py
 msgid "PayPal via Stripe"
-msgstr ""
+msgstr "PayPal ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Swish via Stripe"
-msgstr ""
+msgstr "Swish ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "This payment method is available to users of the Swedish apps Swish and "
 "BankID. Please have your app ready."
 msgstr ""
+"ช่องทางการชำระเงินนี้เปิดให้ใช้งานสำหรับผู้ใช้แอป Swish และ BankID ในประเทศสวีเดน โปรดเตรี"
+"ยมแอปของคุณให้พร้อม"
 
 #: pretix/plugins/stripe/payment.py
 msgid "PromptPay via Stripe"
-msgstr ""
+msgstr "PromptPay (พร้อมเพย์) ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "This payment method is available to PromptPay users in Thailand. Please have "
 "your app ready."
 msgstr ""
+"ช่องทางการชำระเงินนี้เปิดให้ใช้งานสำหรับผู้ใช้พร้อมเพย์ (PromptPay) ในประเทศไทย โปรดเตรียมแ"
+"อปของคุณให้พร้อม"
 
 #: pretix/plugins/stripe/payment.py
 msgid "TWINT via Stripe"
-msgstr ""
+msgstr "TWINT ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "This payment method is available to users of the Swiss app TWINT. Please "
 "have your app ready."
 msgstr ""
+"ช่องทางการชำระเงินนี้เปิดให้ใช้งานสำหรับผู้ใช้แอป TWINT ในประเทศสวิตเซอร์แลนด์ โปรดเตรียมแอป"
+"ของคุณให้พร้อม"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "This payment method is available to MobilePay app users in Denmark and "
 "Finland. Please have your app ready."
 msgstr ""
+"ช่องทางการชำระเงินนี้เปิดให้ใช้งานสำหรับผู้ใช้แอป MobilePay ในประเทศเดนมาร์กและฟินแลนด์ โปร"
+"ดเตรียมแอปของคุณให้พร้อม"
 
 #: pretix/plugins/stripe/payment.py
 msgid "WERO via Stripe"
-msgstr ""
+msgstr "WERO ผ่าน Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
@@ -30669,79 +30774,81 @@ msgid ""
 "banking institutions support WERO either through their native banking apps "
 "or through the WERO wallet app. Please have you app ready."
 msgstr ""
+"ช่องทางการชำระเงินนี้เปิดให้ใช้งานสำหรับผู้ใช้ระบบธนาคารออนไลน์ในยุโรปที่สถาบันการเงินรองรับ "
+"WERO ผ่านทางแอปธนาคารหลักหรือแอป WERO wallet โปรดเตรียมแอปของคุณให้พร้อม"
 
 #: pretix/plugins/stripe/signals.py
 msgid "Charge succeeded."
-msgstr ""
+msgstr "เรียกเก็บเงินสำเร็จ"
 
 #: pretix/plugins/stripe/signals.py
 msgid "Charge refunded."
-msgstr ""
+msgstr "คืนเงินรายการเรียกเก็บแล้ว"
 
 #: pretix/plugins/stripe/signals.py
 msgid "Charge updated."
-msgstr ""
+msgstr "อัปเดตรายการเรียกเก็บเงินแล้ว"
 
 #: pretix/plugins/stripe/signals.py
 msgid "Charge pending"
-msgstr ""
+msgstr "รายการเรียกเก็บเงินอยู่ระหว่างดำเนินการ"
 
 #: pretix/plugins/stripe/signals.py
 msgid "Payment authorized."
-msgstr ""
+msgstr "ได้รับการอนุมัติวงเงินชำระเงินแล้ว"
 
 #: pretix/plugins/stripe/signals.py
 msgid "Payment authorization canceled."
-msgstr ""
+msgstr "ยกเลิกการอนุมัติวงเงินชำระเงินแล้ว"
 
 #: pretix/plugins/stripe/signals.py
 msgid "Payment authorization failed."
-msgstr ""
+msgstr "การอนุมัติวงเงินชำระเงินล้มเหลว"
 
 #: pretix/plugins/stripe/signals.py
 #, python-brace-format
 msgid "Charge failed. Reason: {}"
-msgstr ""
+msgstr "การเรียกเก็บเงินล้มเหลว สาเหตุ: {}"
 
 #: pretix/plugins/stripe/signals.py
 #, python-brace-format
 msgid "Dispute created. Reason: {}"
-msgstr ""
+msgstr "สร้างการโต้แย้งรายการชำระเงินแล้ว สาเหตุ: {}"
 
 #: pretix/plugins/stripe/signals.py
 #, python-brace-format
 msgid "Dispute updated. Reason: {}"
-msgstr ""
+msgstr "อัปเดตการโต้แย้งรายการชำระเงินแล้ว สาเหตุ: {}"
 
 #: pretix/plugins/stripe/signals.py
 #, python-brace-format
 msgid "Dispute closed. Status: {}"
-msgstr ""
+msgstr "ปิดการโต้แย้งรายการชำระเงินแล้ว สถานะ: {}"
 
 #: pretix/plugins/stripe/signals.py
 #, python-brace-format
 msgid "Stripe reported an event: {}"
-msgstr ""
+msgstr "Stripe รายงานเหตุการณ์: {}"
 
 #: pretix/plugins/stripe/signals.py
 msgid "Stripe Connect: Client ID"
-msgstr ""
+msgstr "Stripe Connect: Client ID"
 
 #: pretix/plugins/stripe/signals.py
 msgid "Stripe Connect: Secret key"
-msgstr ""
+msgstr "Stripe Connect: Secret key"
 
 #: pretix/plugins/stripe/signals.py
 msgid "Stripe Connect: Publishable key"
-msgstr ""
+msgstr "Stripe Connect: Publishable key"
 
 #: pretix/plugins/stripe/signals.py
 msgid "Stripe Connect: Secret key (test)"
-msgstr ""
+msgstr "Stripe Connect: Secret key (ทดสอบ)"
 
 #: pretix/plugins/stripe/signals.py
 msgid "Stripe Connect: Publishable key (test)"
-msgstr ""
+msgstr "Stripe Connect: Publishable key (ทดสอบ)"
 
 #: pretix/plugins/stripe/signals.py
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html
@@ -31157,7 +31264,7 @@ msgstr "เว็บเช็คอิน (Web Check-in)"
 #: pretix/presale/checkoutflow.py
 msgctxt "checkoutflow"
 msgid "Step"
-msgstr ""
+msgstr "ขั้นตอน"
 
 #: pretix/presale/checkoutflow.py
 msgctxt "checkoutflow"
@@ -31166,28 +31273,29 @@ msgstr "บัญชีลูกค้า"
 
 #: pretix/presale/checkoutflow.py
 msgid "We failed to process your authentication request, please try again."
-msgstr ""
+msgstr "ล้มเหลวในการประมวลผลคำขอยืนยันตัวตนของคุณ โปรดลองอีกครั้ง"
 
 #: pretix/presale/checkoutflow.py
 msgctxt "checkoutflow"
 msgid "Membership"
-msgstr ""
+msgstr "สมาชิกภาพ"
 
 #: pretix/presale/checkoutflow.py
 msgid ""
 "Your cart includes a product that requires an active membership to be "
 "selected."
 msgstr ""
+"ตะกร้าสินค้าของคุณมีรายการที่ต้องระบุสถานะสมาชิกที่ยังเปิดใช้งานอยู่จึงจะเลือกได้"
 
 #: pretix/presale/checkoutflow.py
 msgctxt "checkoutflow"
 msgid "Add-on products"
-msgstr ""
+msgstr "สินค้าเสริม"
 
 #: pretix/presale/checkoutflow.py pretix/presale/views/cart.py
 #: pretix/presale/views/order.py
 msgid "Please enter numbers only."
-msgstr ""
+msgstr "โปรดระบุตัวเลขเท่านั้น"
 
 #: pretix/presale/checkoutflow.py
 msgctxt "checkoutflow"
@@ -31454,23 +31562,23 @@ msgstr "สิ้นสุด: {datetime}"
 #: pretix/presale/templates/pretixpresale/base.html
 msgctxt "skip-to-main-nav"
 msgid "Skip link"
-msgstr ""
+msgstr "ลิงก์ข้าม (Skip link)"
 
 #: pretix/presale/templates/pretixpresale/base.html
 msgid "Skip to main content"
-msgstr ""
+msgstr "ข้ามไปที่เนื้อหาหลัก"
 
 #: pretix/presale/templates/pretixpresale/base.html
 msgid "Footer Navigation"
-msgstr ""
+msgstr "การนำทางส่วนท้าย (Footer Navigation)"
 
 #: pretix/presale/templates/pretixpresale/event/base.html
 msgid "This shop is currently only visible to you and your team."
-msgstr ""
+msgstr "ขณะนี้ร้านค้านี้มองเห็นได้เฉพาะคุณและทีมงานของคุณเท่านั้น"
 
 #: pretix/presale/templates/pretixpresale/event/base.html
 msgid "Take it live now"
-msgstr ""
+msgstr "เปิดใช้งานจริงทันที"
 
 #: pretix/presale/templates/pretixpresale/event/base.html
 #: pretix/presale/templates/pretixpresale/organizers/base.html
@@ -31751,17 +31859,22 @@ msgid ""
 "will be able to access the details and status of your order any time through "
 "the secret link we will send you via email once the order is complete."
 msgstr ""
+"คุณไม่จำเป็นต้องสร้างบัญชี หากคุณดำเนินการต่อในฐานะผู้ใช้งานทั่วไป (Guest) คุณจะสามารถเข้าถึงรา"
+"ยละเอียดและสถานะของคำสั่งซื้อของคุณได้ตลอดเวลาผ่านลิงก์ลับที่เราจะส่งให้คุณทางอีเมลเมื่อทำรายการ"
+"สั่งซื้อเสร็จสมบูรณ์"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html
 msgid ""
 "Some of the products in your cart can only be purchased if there is an "
 "active membership on your account."
 msgstr ""
+"สินค้าบางรายการในตะกร้าของคุณสามารถซื้อได้เฉพาะเมื่อบัญชีของคุณมีสถานะสมาชิกที่ยังเปิดใช้งานอยู่เท่"
+"านั้น"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html
 msgid "Selected add-ons"
-msgstr ""
+msgstr "สินค้าเสริมที่เลือก"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html
 msgid ""
@@ -31769,59 +31882,63 @@ msgid ""
 "account that includes a valid membership or authorization for this type of "
 "product."
 msgstr ""
+"สินค้านี้สามารถซื้อได้เมื่อคุณเข้าสู่ระบบด้วยบัญชีลูกค้าที่มีสถานะสมาชิกที่ถูกต้องหรือได้รับสิทธิ์สำหรับสินค้าปร"
+"ะเภทนี้เท่านั้น"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html
 msgid "You already selected the following payment methods:"
-msgstr ""
+msgstr "คุณได้เลือกช่องทางการชำระเงินต่อไปนี้ไว้แล้ว:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid "Remove payment"
-msgstr ""
+msgstr "ลบการชำระเงิน"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid "Remaining balance"
-msgstr ""
+msgstr "ยอดคงเหลือที่ต้องชำระ"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid "Please select a payment method below."
-msgstr ""
+msgstr "โปรดเลือกช่องทางการชำระเงินด้านล่าง"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid "Please select how you want to pay the remaining balance:"
-msgstr ""
+msgstr "โปรดเลือกวิธีที่คุณต้องการชำระยอดคงเหลือ:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html
 #, python-format
 msgid "(%(count)s available)"
 msgid_plural "(%(count)s available)"
-msgstr[0] ""
+msgstr[0] "(มีว่างอยู่ %(count)s รายการ)"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid "This sales channel does not provide support for test mode."
-msgstr ""
+msgstr "ช่องทางการขายนี้ไม่รองรับโหมดทดสอบ"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid "If you continue, you might pay an actual order with non-existing money!"
 msgstr ""
+"หากคุณดำเนินการต่อ คุณอาจกำลังชำระเงินสำหรับคำสั่งซื้อจริงด้วยเงินที่ไม่มีอยู่จริง!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid "This payment provider does not provide support for test mode."
-msgstr ""
+msgstr "ผู้ให้บริการชำระเงินรายนี้ไม่รองรับโหมดทดสอบ"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid "If you continue, actual money might be transferred."
-msgstr ""
+msgstr "หากคุณดำเนินการต่อ อาจมีการโอนเงินจริงเกิดขึ้น"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid "There are no payment providers enabled."
-msgstr ""
+msgstr "ไม่มีการเปิดใช้งานผู้ให้บริการชำระเงินใดๆ"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid ""
 "Please go to the payment settings and activate one or more payment providers."
 msgstr ""
+"โปรดไปที่การตั้งค่าการชำระเงินและเปิดใช้งานผู้ให้บริการชำระเงินอย่างน้อยหนึ่งราย"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html
 msgid "Before we continue, we need you to answer some questions."
@@ -32053,48 +32170,47 @@ msgstr "ที่นั่ง:"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgctxt "subevent"
 msgid "Date:"
-msgstr ""
+msgstr "วันที่:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Location:"
-msgstr ""
+msgstr "สถานที่:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Show full location"
-msgstr ""
+msgstr "แสดงสถานที่ทั้งหมด"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Membership:"
-msgstr ""
+msgstr "สมาชิกภาพ:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "This ticket is blocked."
-msgstr ""
+msgstr "ตั๋วใบนี้ถูกระงับการใช้งาน"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgctxt "ticket_checkins"
 msgid "Usage:"
-msgstr ""
+msgstr "การใช้งาน:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, python-format
 msgid "This ticket has been used once."
 msgid_plural "This ticket has been used %(count)s times."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ตั๋วใบนี้ถูกใช้งานแล้ว %(count)s ครั้ง"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "No attendee name provided"
-msgstr ""
+msgstr "ไม่ได้ระบุชื่อผู้เข้าร่วม"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "The price of this product was reduced because of an automatic discount."
-msgstr ""
+msgstr "ราคาสินค้านี้ลดลงเนื่องจากได้รับส่วนลดอัตโนมัติ"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, python-format
 msgid "%(percent)s %% Discount"
-msgstr ""
+msgstr "ส่วนลด %(percent)s %%"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Discounted"
@@ -32250,22 +32366,23 @@ msgstr "เปลี่ยนลำดับที่ #%(positionid)s จาก 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html
 #, python-format
 msgid "Add-on product to position #%(positionid)s"
-msgstr ""
+msgstr "สินค้าเสริมสำหรับตำแหน่ง #%(positionid)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html
 #, python-format
 msgid "Change date of position #%(positionid)s from \"%(old)s\" to \"%(new)s\""
 msgstr ""
+"เปลี่ยนวันที่ของตำแหน่ง #%(positionid)s จาก \"%(old)s\" เป็น \"%(new)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html
 #, python-format
 msgid "Change price of position #%(positionid)s from %(old)s to %(new)s"
-msgstr ""
+msgstr "เปลี่ยนราคาของตำแหน่ง #%(positionid)s จาก %(old)s เป็น %(new)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html
 #, python-format
 msgid "Add position (%(item)s – %(variation)s)"
-msgstr ""
+msgstr "เพิ่มตำแหน่ง (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html
 #, python-format
@@ -32477,7 +32594,7 @@ msgstr "แสดงรูปภาพขนาดเต็มของ %(item)s
 #, python-format
 msgid "%(amount)s× in your cart"
 msgid_plural "%(amount)s× in your cart"
-msgstr[0] ""
+msgstr[0] "%(amount)s× ในตะกร้าของคุณ"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 #: pretix/presale/templates/pretixpresale/event/voucher.html
@@ -33128,14 +33245,16 @@ msgid ""
 "Please select the desired changes to your ticket. Note that you can only "
 "perform changes that do not change the total price of the ticket."
 msgstr ""
+"โปรดเลือกรายการเปลี่ยนแปลงที่คุณต้องการสำหรับตั๋วของคุณ โปรดทราบว่าคุณสามารถทำการเปลี่ยนแปลง"
+"ที่ไม่กระทบต่อราคารวมของตั๋วได้เท่านั้น"
 
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html
 msgid "Please confirm the following changes to your ticket."
-msgstr ""
+msgstr "โปรดยืนยันการเปลี่ยนแปลงต่อไปนี้สำหรับตั๋วของคุณ"
 
 #: pretix/presale/templates/pretixpresale/event/position_modify.html
 msgid "Modify ticket"
-msgstr ""
+msgstr "แก้ไขข้อมูลตั๋ว"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html
 msgid ""
@@ -33143,18 +33262,20 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
+"หากคุณทำลิงก์ไปยังคำสั่งซื้อสูญหาย โปรดระบุที่อยู่อีเมลที่คุณใช้ในการสั่งซื้อ เราจะส่งอีเมลพร้อมลิงก์ไปยัง"
+"คำสั่งซื้อทั้งหมดที่คุณทำรายการโดยใช้อีเมลนี้"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html
 msgid "Send links"
-msgstr ""
+msgstr "ส่งลิงก์"
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html
 msgid "Time machine"
-msgstr ""
+msgstr "เครื่องย้อนเวลา (Time Machine)"
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html
 msgid "Test your shop as if it were a different date and time."
-msgstr ""
+msgstr "ทดสอบร้านค้าของคุณเสมือนว่าเป็นวันที่และเวลาอื่น"
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html
 msgid ""
@@ -33162,51 +33283,55 @@ msgid ""
 "the shop that affect quotas, such as the validity period of carts and "
 "vouchers."
 msgstr ""
+"โปรดทราบว่าเวลาที่เปลี่ยนแปลงจะไม่ถูกนำมาพิจารณาสำหรับองค์ประกอบของร้านค้าที่มีผลต่อโควตา เช่"
+"น ระยะเวลาการใช้งานของตะกร้าสินค้าและเวาเชอร์"
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html
 msgid "Enable time machine"
-msgstr ""
+msgstr "เปิดใช้งาน Time Machine"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html
 msgid "Voucher redemption"
-msgstr ""
+msgstr "การใช้สิทธิ์เวาเชอร์"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "This voucher is valid only for the following specific date and time."
-msgstr ""
+msgstr "เวาเชอร์นี้สามารถใช้งานได้เฉพาะวันและเวลาที่ระบุไว้ต่อไปนี้เท่านั้น"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid ""
 "For the selected date, there are currently no products available that can be "
 "bought with this voucher. Please try a different date or a different voucher."
 msgstr ""
+"สำหรับวันที่เลือก ขณะนี้ไม่มีสินค้าที่สามารถซื้อด้วยเวาเชอร์นี้ได้ โปรดลองเลือกวันที่อื่นหรือใช้เวาเชอร์อื่น"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid ""
 "There are currently no products available that can be bought with this "
 "voucher."
-msgstr ""
+msgstr "ขณะนี้ไม่มีสินค้าที่สามารถซื้อด้วยเวาเชอร์นี้ได้"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
 msgstr ""
+"คุณได้กรอกรหัสเวาเชอร์ที่ให้สิทธิ์คุณในการซื้อหนึ่งในสินค้าต่อไปนี้ตามราคาที่ระบุ:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
 msgid "from %(minprice)s"
-msgstr ""
+msgstr "เริ่มต้นที่ %(minprice)s"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
 msgid "You need to select at least %(number)s products."
-msgstr ""
+msgstr "คุณต้องเลือกสินค้าอย่างน้อย %(number)s รายการ"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html
 msgid "Add me to the waiting list"
-msgstr ""
+msgstr "เพิ่มฉันเข้าในรายการรอคิว"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html
 #, python-format
@@ -33215,6 +33340,8 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
+"หากมีตั๋วว่างอีกครั้ง เราจะแจ้งบุคคลแรกๆ ในรายการรอคิว หากเราแจ้งเตือนคุณ คุณจะมีเวลา %"
+"(hours)s ชั่วโมงในการซื้อตั๋วก่อนที่เราจะสิทธิ์ตั๋วให้บุคคลถัดไปในรายการ"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html
 msgid ""
@@ -33222,6 +33349,8 @@ msgid ""
 "you need to add yourself to the waiting list multiple times. There is no "
 "guarantee that you will receive a certain number of tickets."
 msgstr ""
+"โปรดทราบว่าคุณจะได้รับตั๋วเพียงใบเดียวเท่านั้น หากคุณต้องการตั๋วหลายใบ คุณต้องเพิ่มชื่อลงในรายการร"
+"อคิวหลายครั้ง ไม่มีหลักประกันว่าคุณจะได้รับตั๋วตามจำนวนที่แน่นอน"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html
 msgid ""
@@ -33230,6 +33359,8 @@ msgid ""
 "email addresses. There is no guarantee that you will receive a certain "
 "number of tickets."
 msgstr ""
+"โปรดทราบว่าคุณจะได้รับตั๋วเพียงใบเดียวเท่านั้น หากคุณต้องการตั๋วหลายใบ คุณต้องเพิ่มชื่อลงในรายการร"
+"อคิวหลายครั้งโดยใช้อีเมลที่แตกต่างกัน ไม่มีหลักประกันว่าคุณจะได้รับตั๋วตามจำนวนที่แน่นอน"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html
 msgid ""
@@ -33237,14 +33368,16 @@ msgid ""
 "been added to the waiting list. We will only contact you once a spot opens "
 "up."
 msgstr ""
+"คุณจะ<strong>ไม่</strong>ได้รับอีเมลยืนยันหลังจากถูกเพิ่มลงในรายการรอคิวแล้ว เราจะติดต่อคุณเฉ"
+"พาะเมื่อมีที่ว่างเปิดขึ้นเท่านั้น"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html
 msgid "Add me to the list"
-msgstr ""
+msgstr "เพิ่มฉันลงในรายการ"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html
 msgid "Remove me from the waiting list"
-msgstr ""
+msgstr "ลบฉันออกจากรายการรอคิว"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html
 msgid ""
@@ -33252,33 +33385,33 @@ msgid ""
 "need the ticket any more, please be so kind and remove your ticket from the "
 "list so we can pass it on to the next person waiting as quickly as possible!"
 msgstr ""
+"คุณได้รับการคัดเลือกจากรายการรอคิวของเราให้สามารถซื้อตั๋วได้ หากคุณไม่ต้องการตั๋วนี้แล้ว กรุณาลบสิท"
+"ธิ์ตั๋วของคุณออกจากรายการเพื่อที่เราจะได้ส่งต่อสิทธิ์ให้แก่คนถัดไปที่กำลังรออยู่ได้โดยเร็วที่สุด!"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html
 msgctxt "waitinglist"
 msgid "Yes, remove my ticket"
-msgstr ""
+msgstr "ใช่ ลบสิทธิ์ตั๋วของฉันออก"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 msgid "Calendar"
-msgstr ""
+msgstr "ปฏิทิน"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 #, python-format
 msgid "%(count)s event"
 msgid_plural "%(count)s events"
-msgstr[0] ""
+msgstr[0] "%(count)s อีเวนต์"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
-#, fuzzy
-#| msgid "No effect"
 msgid "No events"
-msgstr "ไม่มีผลการเปลี่ยนแปลง"
+msgstr "ไม่มีอีเวนต์"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html
 msgid "(continued)"
-msgstr ""
+msgstr "(ต่อ)"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html
@@ -33286,7 +33419,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html
 #: pretix/presale/views/widget.py
 msgid "Few tickets left"
-msgstr ""
+msgstr "เหลือตั๋วอีกไม่มาก"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html
@@ -33295,7 +33428,7 @@ msgstr ""
 #: pretix/presale/views/widget.py
 msgctxt "available_event_in_list"
 msgid "Buy now"
-msgstr ""
+msgstr "ซื้อเลย"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html
@@ -33303,7 +33436,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html
 #: pretix/presale/views/widget.py
 msgid "Book now"
-msgstr ""
+msgstr "จองเลย"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html
@@ -33311,7 +33444,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html
 #: pretix/presale/views/widget.py
 msgid "Fully booked"
-msgstr ""
+msgstr "ถูกจองเต็มแล้ว"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 #, python-format
@@ -33320,24 +33453,27 @@ msgid ""
 "                                                        from %(start_date)s\n"
 "                                                    "
 msgstr ""
+"\n"
+"                                                        ตั้งแต่ %(start_date)s\n"
+"                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html
 msgid "Event overview by month, week, etc."
-msgstr ""
+msgstr "ภาพรวมอีเวนต์ตามเดือน สัปดาห์ ฯลฯ"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html
 msgid "iCal"
-msgstr ""
+msgstr "iCal"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html
 msgctxt "day calendar"
 msgid "Single events"
-msgstr ""
+msgstr "อีเวนต์เดี่ยว"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html
 msgctxt "timerange"
 msgid "to"
-msgstr ""
+msgstr "ถึง"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html
 #, python-format
@@ -33346,15 +33482,18 @@ msgid ""
 "                                    from %(start_date)s\n"
 "                                "
 msgstr ""
+"\n"
+"                                    ตั้งแต่ %(start_date)s\n"
+"                                "
 
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html
 msgid "Not yet on sale"
-msgstr ""
+msgstr "ยังไม่เปิดจำหน่าย"
 
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html
 #, python-format
 msgid "Sale starts %(date)s"
-msgstr ""
+msgstr "เริ่มเปิดจำหน่าย %(date)s"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html
 msgid "customer account"
@@ -33362,24 +33501,25 @@ msgstr "บัญชีลูกค้า"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html
 msgid "View customer account"
-msgstr ""
+msgstr "ดูบัญชีลูกค้า"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgid "We've started the requested process in a new window."
-msgstr ""
+msgstr "เราได้เริ่มกระบวนการที่คุณร้องขอในหน้าต่างใหม่แล้ว"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgid "If you do not see the new window, we can help you launch it again."
-msgstr ""
+msgstr "หากคุณไม่เห็นหน้าต่างใหม่ เราสามารถช่วยคุณเปิดหน้าต่างใหม่อีกครั้งได้"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgid "Open window again"
-msgstr ""
+msgstr "เปิดหน้าต่างใหม่อีกครั้ง"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgid ""
 "Once the process in the new window has been completed, you can continue here."
 msgstr ""
+"เมื่อกระบวนการในหน้าต่างใหม่เสร็จสมบูรณ์แล้ว คุณสามารถดำเนินการต่อที่นี่ได้"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgid "Close"
@@ -33387,37 +33527,39 @@ msgstr "ปิด"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgid "Adjust settings in detail"
-msgstr ""
+msgstr "ปรับแต่งการตั้งค่าโดยละเอียด"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgid "Required cookies"
-msgstr ""
+msgstr "คุกกี้ที่จำเป็น"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
 msgstr ""
+"คุกกี้เพื่อการทำงานของเว็บไซต์ (เช่น ตะกร้าสินค้า, การเข้าสู่ระบบ, การชำระเงิน, ภาษาที่เลือก) แ"
+"ละคุกกี้ทางเทคนิค (เช่น เพื่อวัตถุประสงค์ด้านความปลอดภัย)"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgctxt "cookie_usage"
 msgid "Functionality"
-msgstr ""
+msgstr "เพื่อการใช้งาน"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgctxt "cookie_usage"
 msgid "Analytics"
-msgstr ""
+msgstr "เพื่อการวิเคราะห์"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgctxt "cookie_usage"
 msgid "Marketing"
-msgstr ""
+msgstr "เพื่อการตลาด"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgctxt "cookie_usage"
 msgid "Social features"
-msgstr ""
+msgstr "ฟีเจอร์โซเชียล"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgid "Save selection"
@@ -33441,6 +33583,9 @@ msgid ""
 "                                        from %(start_date)s\n"
 "                                    "
 msgstr ""
+"\n"
+"                                        ตั้งแต่ %(start_date)s\n"
+"                                    "
 
 #: pretix/presale/templates/pretixpresale/giftcard/checkout.html
 msgid "The following gift cards are available in your customer account:"
@@ -34108,7 +34253,7 @@ msgstr "วันที่เลือกไม่มีอยู่ในรอ
 
 #: pretix/presale/views/widget.py
 msgid "This is not an event series."
-msgstr ""
+msgstr "นี่ไม่ใช่รอบงานแบบต่อเนื่อง"
 
 #: pretix/presale/views/widget.py
 #, python-format
