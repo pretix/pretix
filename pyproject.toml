@@ -80,7 +80,7 @@ dependencies = [
   "Pillow==12.3.*",
   "pretix-plugin-build",
   "protobuf==7.36.*",
-  "psycopg2-binary",
+  "psycopg[binary,pool]",
   "pycountry",
   "pycparser==3.0",
   "pycryptodome==3.23.*",
