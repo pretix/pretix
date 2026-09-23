@@ -349,20 +349,20 @@ class UserSettings2FATest(SoupTest):
 
     def test_delete_u2f(self):
         d = U2FDevice.objects.create(user=self.user, name='Test')
-        self.client.get('/control/settings/2fa/u2f/{}/delete'.format(d.pk))
-        self.client.post('/control/settings/2fa/u2f/{}/delete'.format(d.pk))
+        self.client.get('/control/settings/2fa/pretixbase.u2fdevice/{}/delete'.format(d.pk))
+        self.client.post('/control/settings/2fa/pretixbase.u2fdevice/{}/delete'.format(d.pk))
         assert not U2FDevice.objects.exists()
 
     def test_delete_webauthn(self):
         d = WebAuthnDevice.objects.create(user=self.user, name='Test')
-        self.client.get('/control/settings/2fa/webauthn/{}/delete'.format(d.pk))
-        self.client.post('/control/settings/2fa/webauthn/{}/delete'.format(d.pk))
+        self.client.get('/control/settings/2fa/pretixbase.webauthndevice/{}/delete'.format(d.pk))
+        self.client.post('/control/settings/2fa/pretixbase.webauthndevice/{}/delete'.format(d.pk))
         assert not WebAuthnDevice.objects.exists()
 
     def test_delete_totp(self):
         d = TOTPDevice.objects.create(user=self.user, name='Test')
-        self.client.get('/control/settings/2fa/totp/{}/delete'.format(d.pk))
-        self.client.post('/control/settings/2fa/totp/{}/delete'.format(d.pk))
+        self.client.get('/control/settings/2fa/otp_totp.totpdevice/{}/delete'.format(d.pk))
+        self.client.post('/control/settings/2fa/otp_totp.totpdevice/{}/delete'.format(d.pk))
         assert not TOTPDevice.objects.exists()
 
     def test_create_webauthn_require_https(self):
