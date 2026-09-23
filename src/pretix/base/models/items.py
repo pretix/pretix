@@ -889,7 +889,6 @@ class Item(LoggedModel):
         check_quotas = set(getattr(
             self, '_subevent_quotas',  # Utilize cache in product list
             self.quotas.filter(subevent=subevent).select_related('subevent')
-            if subevent else self.quotas.all()
         ))
         if ignored_quotas:
             check_quotas -= set(ignored_quotas)
@@ -1298,7 +1297,6 @@ class ItemVariation(models.Model):
         check_quotas = set(getattr(
             self, '_subevent_quotas',  # Utilize cache in product list
             self.quotas.filter(subevent=subevent).select_related('subevent')
-            if subevent else self.quotas.all()
         ))
         if ignored_quotas:
             check_quotas -= set(ignored_quotas)

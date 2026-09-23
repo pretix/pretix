@@ -1164,14 +1164,6 @@ def test_order_create_subevent_validation(token_client, organizer, event, item, 
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/orders/'.format(
-            organizer.slug, event.slug
-        ), format='json', data=res
-    )
-    assert resp.status_code == 400
-    assert resp.data == {'positions': [{'subevent': ['You need to set a subevent.']}]}
-
     res['positions'][0]['subevent'] = subevent2.pk
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(

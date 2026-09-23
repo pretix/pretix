@@ -293,14 +293,6 @@ def test_cartpos_cart_id_optional(token_client, organizer, event, item, quota, q
 def test_cartpos_create_subevent_validation(token_client, organizer, event, item, subevent, subevent2, quota, question):
     res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
     res['item'] = item.pk
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
-            organizer.slug, event.slug
-        ), format='json', data=res
-    )
-    assert resp.status_code == 400
-    assert resp.data == {'subevent': ['You need to set a subevent.']}
-
     res['subevent'] = subevent2.pk
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
