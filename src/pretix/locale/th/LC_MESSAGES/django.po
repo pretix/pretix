@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-09-23 09:29+0000\n"
+"PO-Revision-Date: 2026-09-23 09:33+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -8322,7 +8322,8 @@ msgid_plural ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr[0] ""
-msgstr[1] ""
+"คุณต้องเลือกสินค้าเพิ่มเติมอย่างน้อย %(min)s รายการ จากหมวดหมู่ %(cat)s สำหรับสินค้า %(base)"
+"s"
 
 #: pretix/base/services/cart.py pretix/base/services/orders.py
 #, python-format
@@ -8538,13 +8539,14 @@ msgstr "คุณต้องตอบคำถามเพื่อดำเน
 
 #: pretix/base/services/checkin.py
 msgid "Ticket needs to be exchanged to a suitable medium."
-msgstr ""
+msgstr "จำเป็นต้องแลกเปลี่ยนตั๋วเป็นสื่อบันทึก"
 
 #: pretix/base/services/checkin.py
 msgid ""
 "This ticket has already been exchanged for a reusable medium that now needs "
 "to be used instead."
 msgstr ""
+"ตั๋วนี้ถูกแลกเปลี่ยนเป็นสื่อบันทึกแบบใช้ซ้ำได้แล้ว ซึ่งต้องนำสื่อบันทึกนั้นมาใช้งานแทน"
 
 #: pretix/base/services/checkin.py
 msgid "This ticket has already been redeemed."
@@ -8703,54 +8705,44 @@ msgid "You are receiving this email because you placed an order for {event}."
 msgstr "คุณได้รับอีเมลนี้เนื่องจากคุณได้ทำการสั่งซื้อสำหรับ {event}"
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "Invalid input type."
 msgid "Invalid medium type."
-msgstr "ประเภทข้อมูลที่กรอกไม่ถูกต้อง"
+msgstr "ประเภทสื่อบันทึกไม่ถูกต้อง"
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid "Medium type is not enabled for organizer."
-msgstr "ประเภทสื่อที่เลือกยังไม่ได้ถูกเปิดใช้งานในการตั้งค่าผู้จัดงานของคุณ"
+msgstr "ประเภทสื่อบันทึกยังไม่ได้เปิดใช้งานสำหรับผู้จัดงานนี้"
 
 #: pretix/base/services/media.py
 msgid "Incorrect medium type for product."
-msgstr ""
+msgstr "ประเภทสื่อบันทึกไม่ถูกต้องสำหรับสินค้า/บัตรรายการนี้"
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "This ticket has already been redeemed."
 msgid "Ticket is already exchanged for reusable medium."
-msgstr "ตั๋วนี้ถูกใช้งานไปแล้ว"
+msgstr "ตั๋วถูกแลกเปลี่ยนเป็นสื่อบันทึกแบบใช้ซ้ำได้แล้ว"
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "Reusable Medium ID"
 msgid "Reusable medium not found."
-msgstr "รหัสสื่อบันทึกที่ใช้ซ้ำได้ (เช่น บัตร NFC/RFID)"
+msgstr "ไม่พบสื่อบันทึกแบบใช้ซ้ำได้"
 
 #: pretix/base/services/media.py
 msgid "Reusable medium is inactive or expired."
-msgstr ""
+msgstr "สื่อบันทึกแบบใช้ซ้ำได้ปิดใช้งานอยู่หรือหมดอายุแล้ว"
 
 #: pretix/base/services/media.py
 msgid "Reusable medium not found and could not be created."
-msgstr ""
+msgstr "ไม่พบสื่อบันทึกแบบใช้ซ้ำได้และไม่สามารถสร้างขึ้นใหม่ได้"
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "Reusable media type"
 msgid "Reusable medium already exists."
-msgstr "ประเภทสื่อแบบใช้ซ้ำได้"
+msgstr "มีสื่อบันทึกแบบใช้ซ้ำได้นี้อยู่ในระบบแล้ว"
 
 #: pretix/base/services/media.py
 msgid "Reusable medium could not be created."
-msgstr ""
+msgstr "ไม่สามารถสร้างสื่อบันทึกแบบใช้ซ้ำได้"
 
 #: pretix/base/services/media.py
 msgid "Product does not support medium exchange."
-msgstr ""
+msgstr "สินค้า/บัตรรายการนี้ไม่รองรับการแลกเปลี่ยนสื่อบันทึก"
 
 #: pretix/base/services/memberships.py
 #, python-brace-format
@@ -8896,7 +8888,7 @@ msgstr "ไม่สามารถสร้างเวาเชอร์โด
 #, python-brace-format
 msgid ""
 "Voucher codes must be unique. Code \"{code}\" already exists in this import."
-msgstr ""
+msgstr "รหัสวอเชอร์ต้องไม่ซ้ำกัน รหัส \"{code}\" มีอยู่แล้วในไฟล์นำเข้านี้"
 
 #: pretix/base/services/modelimport.py
 #, python-brace-format
@@ -8905,12 +8897,14 @@ msgid ""
 msgid_plural ""
 "Voucher codes must be unique. Import contains existing voucher codes {code}."
 msgstr[0] ""
+"รหัสวอเชอร์ต้องไม่ซ้ำกัน ไฟล์นำเข้ามีรหัสวอเชอร์ {code} ซึ่งมีอยู่แล้วในระบบ"
 
 #: pretix/base/services/modelimport.py
 msgid ""
 "Vouchers could not be imported, probably due to a voucher code already being "
 "in use."
 msgstr ""
+"รหัสวอเชอร์ต้องไม่ซ้ำกัน ไฟล์นำเข้ามีรหัสวอเชอร์ {code} ซึ่งมีอยู่แล้วในระบบ"
 
 #: pretix/base/services/orders.py
 msgid ""
