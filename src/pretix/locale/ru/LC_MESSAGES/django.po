@@ -18962,10 +18962,6 @@ msgid "Authorize an application"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-msgid "Authorize"
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #, python-format
 msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
@@ -19387,7 +19383,6 @@ msgstr[0] "Вы можете отменить этот заказ, исполь�
 msgstr[1] "Вы можете отменить этот заказ, используя следующую кнопку."
 msgstr[2] "Вы можете отменить этот заказ, используя следующую кнопку."
 
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html

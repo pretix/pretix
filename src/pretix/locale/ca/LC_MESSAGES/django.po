@@ -19678,10 +19678,6 @@ msgid "Authorize an application"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-msgid "Authorize"
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #, python-format
 msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
@@ -20107,7 +20103,6 @@ msgid_plural ""
 msgstr[0] "Segur que voleu esborrar el val <strong>%(voucher)s</strong> ?"
 msgstr[1] "Segur que voleu esborrar el val <strong>%(voucher)s</strong> ?"
 
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html

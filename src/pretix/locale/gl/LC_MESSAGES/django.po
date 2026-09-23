@@ -20220,7 +20220,6 @@ msgstr[1] ""
 "¿Está seguro de que desea eliminar la lista de registro <strong>%(name)s</"
 "strong>?"
 
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html

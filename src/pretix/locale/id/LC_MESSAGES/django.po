@@ -19326,10 +19326,6 @@ msgid "Authorize an application"
 msgstr "Otorisasi aplikasi"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-msgid "Authorize"
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #, python-format
 msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
@@ -19762,7 +19758,6 @@ msgid_plural ""
 msgstr[0] ""
 "Apakah Anda yakin ingin menghapus daftar check-in <strong>%(name)s</strong>?"
 
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html

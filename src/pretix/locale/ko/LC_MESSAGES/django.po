@@ -19023,7 +19023,6 @@ msgstr[0] ""
 "복수형\n"
 "<strong>%(카운트) 티켓 </strong>의 체크인을 영구적으로 삭제하시겠습니까?"
 
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html

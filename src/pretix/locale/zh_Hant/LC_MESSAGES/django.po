@@ -18112,10 +18112,6 @@ msgid "Authorize an application"
 msgstr "授權應用程式"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-msgid "Authorize"
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #, python-format
 msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
@@ -18522,7 +18518,6 @@ msgid_plural ""
 "<strong>%(count)s tickets</strong>?"
 msgstr[0] "你確定要永久刪除<strong>%(count)s 張票</strong>的報到紀錄嗎？"
 
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html

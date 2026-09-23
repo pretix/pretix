@@ -18436,10 +18436,6 @@ msgid "Authorize an application"
 msgstr "アプリケーションを認可"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-msgid "Authorize"
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #, python-format
 msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
@@ -18858,7 +18854,6 @@ msgstr[0] ""
 "<strong>%(count)s 枚のチケット</strong>について、チェックインを永久に削除して"
 "も構いませんか？"
 
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html

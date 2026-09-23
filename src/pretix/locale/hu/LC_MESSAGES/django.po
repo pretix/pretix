@@ -18910,10 +18910,6 @@ msgid "Authorize an application"
 msgstr "Alkalmazás engedélyezése"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-msgid "Authorize"
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #, python-format
 msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
@@ -19336,7 +19332,6 @@ msgstr[0] "Biztosan véglegesen törli <strong>egy jegy</strong> beléptetéseit
 msgstr[1] ""
 "Biztosan véglegesen törli <strong>%(count)s jegy</strong> beléptetéseit?"
 
-#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
