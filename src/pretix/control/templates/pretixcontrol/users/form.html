@@ -77,13 +77,13 @@
                                     {% for d in devices %}
                                     <tr>
                                         <td>
-                                            {% if d.devicetype == 'totp' %}
+                                            {% if d.model_label == 'otp_totp.totpdevice' %}
                                                 TOTP
-                                            {% elif d.devicetype == 'u2f' %}
+                                            {% elif d.model_label == 'pretixbase.u2fdevice' %}
                                                 U2F
-                                            {% elif d.devicetype == 'webauthn' %}
+                                            {% elif d.model_label == 'pretixbase.webauthndevice' %}
                                                 WebAuthn
-                                            {% elif d.devicetype == 'emergency' %}
+                                            {% elif d.model_label == 'otp_static.staticdevice' %}
                                                 {% trans "Emergency tokens" %}
                                             {% endif %}
                                             {% if d.confirmed %}
@@ -112,7 +112,7 @@
                                                 </strong>
                                                 <br>
                                             {% endif %}
-                                            {% if d.devicetype == 'totp' %}
+                                            {% if d.model_label == 'otp_totp.totpdevice' %}
                                                 <small>
                                                     <code>step = {{ d.step }},
                                                     t0 = {{ d.t0 }},
@@ -121,11 +121,11 @@
                                                     drift = {{ d.drift }},
                                                     last_t = {{ d.last_t }}</code>
                                                 </small>
-                                            {% elif d.devicetype == 'u2f' %}
+                                            {% elif d.model_label == 'pretixbase.u2fdevice' %}
                                                 <small>
                                                     <code>sign_count = {{ d.sign_count }}</code>
                                                 </small>
-                                            {% elif d.devicetype == 'emergency' %}
+                                            {% elif d.model_label == 'otp_static.staticdevice' %}
                                                 <small>
                                                     <code>token_count = {{ d.token_set.count }}</code>
                                                 </small>

@@ -367,7 +367,7 @@ class UserSettings2FATest(SoupTest):
 
     def test_create_webauthn_require_https(self):
         r = self.client.post('/control/settings/2fa/add', {
-            'devicetype': 'webauthn',
+            'devicetype': 'pretixbase.webauthndevice',
             'name': 'Foo'
         })
         assert 'alert-danger' in r.content.decode()
@@ -376,7 +376,7 @@ class UserSettings2FATest(SoupTest):
         with mocker_context() as mocker:
             mocker.patch('django.http.request.HttpRequest.is_secure')
             self.client.post('/control/settings/2fa/add', {
-                'devicetype': 'webauthn',
+                'devicetype': 'pretixbase.webauthndevice',
                 'name': 'Foo'
             })
             d = WebAuthnDevice.objects.first()
@@ -385,7 +385,7 @@ class UserSettings2FATest(SoupTest):
 
     def test_create_totp(self):
         self.client.post('/control/settings/2fa/add', {
-            'devicetype': 'totp',
+            'devicetype': 'otp_totp.totpdevice',
             'name': 'Foo'
         })
         d = TOTPDevice.objects.first()
@@ -393,7 +393,7 @@ class UserSettings2FATest(SoupTest):
 
     def test_confirm_totp(self):
         self.client.post('/control/settings/2fa/add', {
-            'devicetype': 'totp',
+            'devicetype': 'otp_totp.totpdevice',
             'name': 'Foo'
         }, follow=True)
         d = TOTPDevice.objects.first()
@@ -411,7 +411,7 @@ class UserSettings2FATest(SoupTest):
 
     def test_confirm_totp_failed(self):
         self.client.post('/control/settings/2fa/add', {
-            'devicetype': 'totp',
+            'devicetype': 'otp_totp.totpdevice',
             'name': 'Foo'
         }, follow=True)
         d = TOTPDevice.objects.first()
@@ -428,7 +428,7 @@ class UserSettings2FATest(SoupTest):
         with mocker_context() as mocker:
             mocker.patch('django.http.request.HttpRequest.is_secure')
             self.client.post('/control/settings/2fa/add', {
-                'devicetype': 'webauthn',
+                'devicetype': 'pretixbase.webauthndevice',
                 'name': 'Foo'
             }, follow=True)
         d = WebAuthnDevice.objects.first()
@@ -443,7 +443,7 @@ class UserSettings2FATest(SoupTest):
         with mocker_context() as mocker:
             mocker.patch('django.http.request.HttpRequest.is_secure')
             self.client.post('/control/settings/2fa/add', {
-                'devicetype': 'webauthn',
+                'devicetype': 'pretixbase.webauthndevice',
                 'name': 'Foo'
             }, follow=True)
 

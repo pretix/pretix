@@ -59,6 +59,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import FormView, ListView, TemplateView, UpdateView
+from django_otp import devices_for_user
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from django_scopes import scopes_disabled
@@ -85,7 +86,6 @@ from pretix.helpers.ratelimit import rate_limit, rate_limit_reset
 from pretix.helpers.security import session_reauth
 from pretix.helpers.u2f import websafe_encode
 
-REAL_DEVICE_TYPES = (TOTPDevice, WebAuthnDevice, U2FDevice)
 logger = logging.getLogger(__name__)
 
 
@@ -313,17 +313,7 @@ class User2FAMainView(RecentAuthenticationRequiredMixin, TemplateView):
         except StaticDevice.DoesNotExist:
             ctx['static_tokens_device'] = None
 
-        ctx['devices'] = []
-        for dt in REAL_DEVICE_TYPES:
-            objs = list(dt.objects.filter(user=self.request.user, confirmed=True))
-            for obj in objs:
-                if dt == TOTPDevice:
-                    obj.devicetype = 'totp'
-                elif dt == U2FDevice:
-                    obj.devicetype = 'u2f'
-                elif dt == WebAuthnDevice:
-                    obj.devicetype = 'webauthn'
-            ctx['devices'] += objs
+        ctx['devices'] = [d for d in devices_for_user(self.request.user) if not isinstance(d, StaticDevice)]
 
         ctx['obligatory'] = None
         if settings.PRETIX_OBLIGATORY_2FA is True:
@@ -342,9 +332,9 @@ class User2FADeviceAddView(RecentAuthenticationRequiredMixin, FormView):
     template_name = 'pretixcontrol/user/2fa_add.html'
 
     def form_valid(self, form):
-        if form.cleaned_data['devicetype'] == 'totp':
+        if form.cleaned_data['devicetype'] == 'otp_totp.totpdevice':
             dev = TOTPDevice.objects.create(user=self.request.user, confirmed=False, name=form.cleaned_data['name'])
-        elif form.cleaned_data['devicetype'] == 'webauthn':
+        elif form.cleaned_data['devicetype'] == 'pretixbase.webauthndevice':
             if not self.request.is_secure():
                 messages.error(self.request,
                                _('Security devices are only available if pretix is served via HTTPS.'))
@@ -364,11 +354,11 @@ class User2FADeviceDeleteView(RecentAuthenticationRequiredMixin, TemplateView):
 
     @cached_property
     def device(self):
-        if self.kwargs['devicetype'] == 'totp':
+        if self.kwargs['devicetype'] == 'otp_totp.totpdevice':
             return get_object_or_404(TOTPDevice, user=self.request.user, pk=self.kwargs['device'], confirmed=True)
-        elif self.kwargs['devicetype'] == 'webauthn':
+        elif self.kwargs['devicetype'] == 'pretixbase.webauthndevice':
             return get_object_or_404(WebAuthnDevice, user=self.request.user, pk=self.kwargs['device'], confirmed=True)
-        elif self.kwargs['devicetype'] == 'u2f':
+        elif self.kwargs['devicetype'] == 'pretixbase.u2fdevice':
             return get_object_or_404(U2FDevice, user=self.request.user, pk=self.kwargs['device'], confirmed=True)
 
     def get_context_data(self, **kwargs):
@@ -386,7 +376,7 @@ class User2FADeviceDeleteView(RecentAuthenticationRequiredMixin, TemplateView):
         msgs = [
             _('A two-factor authentication device has been removed from your account.')
         ]
-        if not any(dt.objects.filter(user=self.request.user, confirmed=True) for dt in REAL_DEVICE_TYPES):
+        if not any(d.confirmed for d in devices_for_user(self.request.user) if not isinstance(d, StaticDevice)):
             self.request.user.require_2fa = False
             self.request.user.save()
             self.request.user.log_action('pretix.user.settings.2fa.disabled', user=self.request.user)
@@ -461,7 +451,7 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
             ).first()
             if credential_id_exists:
                 messages.error(request, _('This security device is already registered.'))
-                return redirect(reverse('control:user.settings.2fa.confirm.webauthn', kwargs={
+                return redirect(reverse('control:user.settings.2fa.confirm.pretixbase.webauthndevice', kwargs={
                     'device': self.device.pk
                 }))
 
@@ -475,7 +465,7 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
             self.device.save()
             self.request.user.log_action('pretix.user.settings.2fa.device.added', user=self.request.user, data={
                 'id': self.device.pk,
-                'devicetype': 'u2f',
+                'devicetype': 'pretixbase.webauthndevice',
                 'name': self.device.name,
             })
             notices = [
@@ -503,7 +493,7 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
         except Exception:
             messages.error(request, _('The registration could not be completed. Please try again.'))
             logger.exception('WebAuthn registration failed')
-            return redirect(reverse('control:user.settings.2fa.confirm.webauthn', kwargs={
+            return redirect(reverse('control:user.settings.2fa.confirm.pretixbase.webauthndevice', kwargs={
                 'device': self.device.pk
             }))
 
@@ -537,7 +527,7 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
             self.request.user.log_action('pretix.user.settings.2fa.device.added', user=self.request.user, data={
                 'id': self.device.pk,
                 'name': self.device.name,
-                'devicetype': 'totp'
+                'devicetype': 'otp_totp.totpdevice'
             })
             notices = [
                 _('A new two-factor authentication device has been added to your account.')
@@ -563,7 +553,7 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
         else:
             messages.error(request, _('The code you entered was not valid. If this problem persists, please check '
                                       'that the date and time of your phone are configured correctly.'))
-            return redirect(reverse('control:user.settings.2fa.confirm.totp', kwargs={
+            return redirect(reverse('control:user.settings.2fa.confirm.otp_totp.totpdevice', kwargs={
                 'device': self.device.pk
             }))
 
@@ -594,7 +584,7 @@ class User2FAEnableView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_enable.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if not any(dt.objects.filter(user=self.request.user, confirmed=True) for dt in REAL_DEVICE_TYPES):
+        if not any(d.confirmed for d in devices_for_user(self.request.user) if not isinstance(d, StaticDevice)):
             messages.error(request, _('Please configure at least one device before enabling two-factor '
                                       'authentication.'))
             return redirect(reverse('control:user.settings.2fa'))
