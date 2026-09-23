@@ -1333,10 +1333,8 @@ class SSOClientForm(I18nModelForm):
         self.initial['disp_base_url'] = eventreverse_absolute(organizer, 'presale:organizer.index', {}).strip('/')
         if self.instance and self.instance.pk:
             self.initial['disp_client_id'] = self.instance.client_id
-            self.initial['disp_client_secret'] = '****'
         else:
             self.initial['disp_client_id'] = _('(will be generated)')
-            self.initial['disp_client_secret'] = _('(will be generated)')
             del self.fields['regenerate_client_secret']
 
 
