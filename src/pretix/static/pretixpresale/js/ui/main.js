@@ -109,7 +109,30 @@ let form_handlers = function (el) {
 		}
 		$(this).datetimepicker(opts)
 	})
-
+    el.find("button[data-wait-seconds-enable], input[data-wait-seconds-enable]").each(function(i, input) {
+        var s = parseInt(input.getAttribute("data-wait-seconds-enable")) || 0;
+        var time = $("time", input) || $("time").appendTo(input);
+        // for a11y do not disable input, but do not allow submit
+        function disable_submit(e) {
+            e.preventDefault();
+        }
+        if (s) {
+            input.addEventListener("click", disable_submit);
+        }
+        function wait() {
+            time.attr("datetime", s+"s");
+            if (s > 0) {
+                time.text("(" + s + "s)");
+                window.setTimeout(wait, 1000);
+                s--;
+            } else {
+                time.remove();
+                input.disabled = false;
+                input.removeEventListener("click", disable_submit);
+            }
+        }
+        wait();
+    });
 	el.find('.input-item-count-dec, .input-item-count-inc').on('click', function (e) {
 		e.preventDefault()
 		let step = parseFloat(this.getAttribute('data-step'))
