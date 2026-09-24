@@ -129,6 +129,7 @@ dev = [
   "pytest==9.1.*",
   "playwright",
   "responses",
+	"django-stubs-ext"
 ]
 
 [project.entry-points."distutils.commands"]

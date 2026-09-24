@@ -57,6 +57,9 @@ from pretix.base.models import (
     Organizer, Question, Quota, ScheduledEventExport, SeatingPlan, User,
     Voucher, WaitingListEntry,
 )
+from pretix.base.models.cancellation import (
+    CheckTypes, FeeType, ProcessCancellationRule,
+)
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
     ItemBundle, SubEventItem, SubEventItemVariation,
@@ -1561,18 +1564,17 @@ class OrderTestCase(BaseQuotaTestCase):
 
     @classscope(attr='o')
     def test_user_cancel_absolute_deadline_unpaid_no_subevents(self):
-        assert self.order.user_cancel_deadline is None
-        self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
-            now() + timedelta(days=1)
-        ))
+        r = ProcessCancellationRule(event=self.event, type=CheckTypes.PROCESS,
+                                    allowed_until=RelativeDateWrapper(now() + timedelta(days=1)),
+                                    fee_mode=FeeType.MINIMUM, fee_cancellation_process=Decimal("0.00"))
+
         self.order = Order.objects.get(pk=self.order.pk)
-        assert self.order.user_cancel_deadline > now()
         assert self.order.user_cancel_allowed
-        self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
-            now() - timedelta(days=1)
-        ))
+
+        r.allowed_until = RelativeDateWrapper(now() - timedelta(days=1))
+        r.save()
+
         self.order = Order.objects.get(pk=self.order.pk)
-        assert self.order.user_cancel_deadline < now()
         assert not self.order.user_cancel_allowed
 
     @classscope(attr='o')
@@ -1580,18 +1582,19 @@ class OrderTestCase(BaseQuotaTestCase):
         self.event.date_from = now() + timedelta(days=3)
         self.event.save()
 
-        assert self.order.user_cancel_deadline is None
-        self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
+        r = ProcessCancellationRule(event=self.event, type=CheckTypes.PROCESS, allowed_until=RelativeDateWrapper(
             RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='event__date_from', minutes=None)
-        ))
+        ), fee_mode=FeeType.MINIMUM, fee_cancellation_process=Decimal("0.00"))
+
         self.order = Order.objects.get(pk=self.order.pk)
-        assert self.order.user_cancel_deadline > now()
         assert self.order.user_cancel_allowed
-        self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days=4, time=datetime.time(14, 0, 0), base_date_name='event__date_from', minutes=None)
-        ))
+
+        r.allowed_until = RelativeDateWrapper(
+            RelativeDate(days=4, time=datetime.time(14, 0, 0), base_date_name='event__date_from',
+                         minutes=None))
+        r.save()
+
         self.order = Order.objects.get(pk=self.order.pk)
-        assert self.order.user_cancel_deadline < now()
         assert not self.order.user_cancel_allowed
 
     @classscope(attr='o')
@@ -1606,15 +1609,18 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.subevent = se2
         self.op2.save()
 
-        self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
+        r = ProcessCancellationRule(event=self.event, allowed_until=RelativeDateWrapper(
             RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='event__date_from', minutes=None)
-        ))
+        ), fee_mode=FeeType.MINIMUM, fee_cancellation_process=Decimal("0.00"))
+        r.save()
+
         self.order = Order.objects.get(pk=self.order.pk)
-        assert self.order.user_cancel_deadline < now()
+        assert not self.order.user_cancel_allowed
+
         self.op2.subevent = se1
         self.op2.save()
         self.order = Order.objects.get(pk=self.order.pk)
-        assert self.order.user_cancel_deadline > now()
+        assert self.order.user_cancel_allowed
 
     @classscope(attr='o')
     def test_user_cancel_fee(self):
