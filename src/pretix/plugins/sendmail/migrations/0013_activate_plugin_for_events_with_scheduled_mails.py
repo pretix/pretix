@@ -24,7 +24,7 @@ def activate_plugin(apps, schema_editor):
 
     only_completed_rules = Rule.objects.exclude(event__plugins__icontains="pretix.plugins.sendmail",
                                                 enabled=False).filter(
-        ~Exists(ScheduledMail.objects.filter(rule=OuterRef('pk')).exclude(state='completed'))
+        ~Exists(ScheduledMail.objects.filter(rule=OuterRef('pk')).exclude(state__in=['completed', 'missed']))
     )
     only_completed_rules.update(enabled=False)
 
