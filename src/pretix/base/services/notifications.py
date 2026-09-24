@@ -34,7 +34,9 @@ from pretix.base.models import (
 from pretix.base.notifications import Notification, get_all_notification_types
 from pretix.base.services.mail import mail_send_task
 from pretix.base.services.tasks import ProfiledTask, TransactionAwareTask
-from pretix.base.signals import notification
+from pretix.base.signals import (
+    event_notification_sent, organizer_notification_sent,
+)
 from pretix.celery_app import app
 from pretix.helpers.celery import get_task_priority
 from pretix.helpers.urls import mainreverse_absolute
@@ -118,8 +120,9 @@ def notify(logentry_ids: list):
                 )
 
         if logentry.event:
-            # FIXME: Signal is currently event-only
-            notification.send(logentry.event, logentry_id=logentry.id, notification_type=notification_type.action_type)
+            event_notification_sent.send(logentry.event, logentry_id=logentry.id, notification_type=notification_type.action_type)
+        elif logentry.organizer:
+            organizer_notification_sent.send(logentry.organizer, logentry_id=logentry.id, notification_type=notification_type.action_type)
 
 
 @app.task(base=ProfiledTask, acks_late=True, max_retries=9, default_retry_delay=900)

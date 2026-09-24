@@ -627,13 +627,22 @@ This signal is sent out to get all known permissions. Receivers should return an
 instance of pretix.base.permissions.PermissionGroup or a list of such instances.
 """
 
-notification = EventPluginSignal()
+event_notification_sent = EventPluginSignal()
 """
 Arguments: ``logentry_id``, ``notification_type``
 
 This signal is sent out when a notification is sent.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+organizer_notification_sent = OrganizerPluginSignal()
+"""
+Arguments: ``logentry_id``, ``notification_type``
+
+This signal is sent out when a notification is sent.
+
+As with all organizer-plugin signals, the ``sender`` keyword argument will contain the organizer.
 """
 
 register_sales_channel_types = GlobalSignal()
