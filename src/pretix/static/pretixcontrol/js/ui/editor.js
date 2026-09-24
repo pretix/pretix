@@ -448,6 +448,7 @@ var editor = {
 			var d = data[i], o
 			editor._add_from_data(d)
 		}
+		editor.fabric.discardActiveObject()
 		editor.fabric.renderAll()
 		editor._update_toolbox_values()
 	},
