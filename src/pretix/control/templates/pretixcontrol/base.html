@@ -99,14 +99,28 @@
             data-select2-locale="{{ select2locale }}" data-longdateformat="{{ js_long_date_format }}" class="nojs">
         <div id="wrapper">
             <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+
+
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle"
-                            data-toggle="collapse" data-target=".navbar-nav-collapse">
-                        <span class="sr-only">{% trans "Toggle navigation" %}</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+                    <a class="navbar-brand" href="{% url "control:index" %}">
+                        <img src="{% static "pretixbase/img/pretix-icon-white-mini.svg" %}" />
+                        {% if not request.event and not request.organizer %}
+                            <span>
+                                {{ settings.PRETIX_INSTANCE_NAME }}
+                            </span>
+                        {% endif %}
+                    </a>
+                    {% if request.organizer %}
+                        <a class="navbar-context-breadcrumb" href="{% url "control:organizer" organizer=request.organizer.slug %}">
+                            {{ request.organizer.slug }}
+                        </a>
+                    {% endif %}
+                    {% if request.event %}
+                        <a class="navbar-context-breadcrumb" href="{% url "control:event.index" organizer=request.organizer.slug event=request.event.slug %}">
+                            {{ request.event.slug }}
+                        </a>
+                    {% endif %}
+
                     {% if request.event %}
                         {% if has_domain and not request.event.live %}
                             <form action="{% eventurl request.event "presale:event.auth" %}" method="post"
@@ -128,13 +142,18 @@
                             <i class="fa fa-eye"></i>
                         </a>
                     {% endif %}
-                    <a class="navbar-brand" href="{% url "control:index" %}">
-                        <img src="{% static "pretixbase/img/pretix-icon-white-mini.svg" %}" />
-                        <span>
-                            {{ settings.PRETIX_INSTANCE_NAME }}
-                        </span>
-                    </a>
+
+                    <button type="button" class="navbar-toggle"
+                            data-toggle="collapse" data-target=".navbar-nav-collapse">
+                        <span class="sr-only">{% trans "Toggle navigation" %}</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
                 </div>
+
+
                 <ul class="nav navbar-nav navbar-top-links navbar-left flip hidden-xs">
                     {% if request.event %}
                         <li>
@@ -178,6 +197,9 @@
                             </a>
                             {% if nav.children %}
                                 <ul class="dropdown-menu" role="menu">
+                                    <li class="dropdown-mobile-header visible-xs">
+                                        <strong>{{ nav.title }}</strong>
+                                    </li>
                                     {% for item in nav.children %}
                                         {% if item.separator %}
                                             <li role="separator" class="divider"></li>
@@ -221,16 +243,32 @@
                             </a>
                         </li>
                     {% endif %}
-                    <li>
-                        <a href="{% url 'control:user.settings' %}" title="{% trans "Account Settings" %}" >
+                    <li class="dropdown">
+                        <a href="{% url 'control:user.settings' %}" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user"></i> {{ request.user.get_full_name }}
                         </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}">
-                            <i class="fa fa-sign-out"></i>
-                            <span class="visible-xs-inline">{% trans "Log out" %}</span>
-                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-mobile-header visible-xs">
+                                <strong>{{ request.user.get_full_name }}</strong><br>
+                                {{ request.user.email }}
+                            </li>
+                            <li>
+                                <a href="{% url 'control:organizers' %}">
+                                    <i class="fa fa-fw fa-group"></i> {% trans "My organizer accounts" %}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'control:user.settings' %}">
+                                    <i class="fa fa-fw fa-cog"></i> {% trans "Account settings" %}
+                                </a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}">
+                                    <i class="fa fa-fw fa-sign-out"></i> {% trans "Log out" %}
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
                 <div class="navbar-default sidebar" role="navigation">
