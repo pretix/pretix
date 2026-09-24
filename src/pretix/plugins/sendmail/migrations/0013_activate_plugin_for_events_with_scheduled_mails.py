@@ -12,7 +12,8 @@ def activate_plugin(apps, schema_editor):
         .exclude(plugins__icontains="pretix.plugins.sendmail")
         .filter(
             Exists(
-                ScheduledMail.objects.filter(event=OuterRef('pk'), rule__enabled=True).exclude(state='completed')
+                ScheduledMail.objects.filter(event=OuterRef('pk'), rule__enabled=True).exclude(
+                    state__in=['completed', 'missed'])
             )
         )
     )
