@@ -956,6 +956,7 @@ var editor = {
 			mtr: true
 		})
 		editor.fabric.add(text)
+		editor.fabric.setActiveObject(text)
 		editor._create_savepoint()
 		return text
 	},
@@ -972,6 +973,7 @@ var editor = {
 		rect.scaleToHeight(126)
 		rect.setControlsVisibility({ mtr: false, mb: false, mt: false, mr: false, ml: false })
 		editor.fabric.add(rect)
+		editor.fabric.setActiveObject(rect)
 		editor._create_savepoint()
 		return rect
 	},
@@ -1009,6 +1011,7 @@ var editor = {
 			mtr: true
 		})
 		editor.fabric.add(rect)
+		editor.fabric.setActiveObject(rect)
 		editor._create_savepoint()
 		$('#version-notice').show()
 		return rect
@@ -1026,6 +1029,7 @@ var editor = {
 		})
 		rect.setControlsVisibility({ mtr: false })
 		editor.fabric.add(rect)
+		editor.fabric.setActiveObject(rect)
 		editor._create_savepoint()
 		return rect
 	},
@@ -1044,6 +1048,7 @@ var editor = {
 		})
 		rect.setControlsVisibility({ mtr: false, mb: false, mt: false, mr: false, ml: false })
 		editor.fabric.add(rect)
+		editor.fabric.setActiveObject(rect)
 		editor._create_savepoint()
 		return rect
 	},
