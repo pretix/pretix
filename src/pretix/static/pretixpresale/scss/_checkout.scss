@@ -157,6 +157,11 @@
 .profile-scope:last-child .profile-save-container {
   margin-bottom: -15px;
 }
+
+fieldset:not(:last-child) .profile-scope:last-child .profile-save-container {
+  margin-bottom: 0;
+}
+
 .profile-save-container .help-block {
   margin-bottom: 0;
 }
