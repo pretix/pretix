@@ -163,6 +163,7 @@
                     {% for nav in nav_topbar %}
                         <li {% if nav.children %}class="dropdown"{% endif %}>
                             <a href="{{ nav.url }}" title="{{ nav.title }}" {% if nav.active %}class="active"{% endif %}
+                                    {% if nav.external %}target="_blank"{% endif %}
                                     {% if nav.children %}class="dropdown-toggle" data-toggle="dropdown"{% endif %}>
                                 {% if nav.icon %}
                                     {% if "<svg" in nav.icon %}
@@ -178,15 +179,19 @@
                             {% if nav.children %}
                                 <ul class="dropdown-menu" role="menu">
                                     {% for item in nav.children %}
-                                        <li>
-                                            <a {% if item.url %}href="{{ item.url }}"{% endif %}
-                                                    {% if item.external %}target="_blank"{% endif %}
-                                                    {% if item.active %}class="active"{% endif %}>
-                                                {% if item.icon %}
-                                                    <span class="fa fa-fw fa-{{ item.icon }}"></span>
-                                                {% endif %}
-                                                {{ item.label|safe }}</a>
-                                        </li>
+                                        {% if item.separator %}
+                                            <li role="separator" class="divider"></li>
+                                        {% else %}
+                                            <li>
+                                                <a {% if item.url %}href="{{ item.url }}"{% endif %}
+                                                        {% if item.external %}target="_blank"{% endif %}
+                                                        {% if item.active %}class="active"{% endif %}>
+                                                    {% if item.icon %}
+                                                        <span class="fa fa-fw fa-{{ item.icon }}"></span>
+                                                    {% endif %}
+                                                    {{ item.label|safe }}</a>
+                                            </li>
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
                             {% endif %}
