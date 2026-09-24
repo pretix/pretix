@@ -99,8 +99,6 @@
             data-select2-locale="{{ select2locale }}" data-longdateformat="{{ js_long_date_format }}" class="nojs">
         <div id="wrapper">
             <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-
-
                 <div class="navbar-header">
                     <a class="navbar-brand" href="{% url "control:index" %}">
                         <img src="{% static "pretixbase/img/pretix-icon-white-mini.svg" %}" />
@@ -148,9 +146,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-
                 </div>
-
 
                 <ul class="nav navbar-nav navbar-top-links navbar-left flip hidden-xs">
                     {% if request.event %}
@@ -198,6 +194,7 @@
                                     <li class="dropdown-mobile-header visible-xs">
                                         <strong>{{ nav.title }}</strong>
                                     </li>
+                                    <li role="separator" class="divider visible-xs"></li>
                                     {% for item in nav.children %}
                                         {% if item.separator %}
                                             <li role="separator" class="divider"></li>
@@ -246,10 +243,11 @@
                             <i class="fa fa-user"></i> {{ request.user.get_full_name }}
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            <li class="dropdown-mobile-header visible-xs">
+                            <li class="dropdown-mobile-header dropdown-header">
                                 <strong>{{ request.user.get_full_name }}</strong><br>
                                 {{ request.user.email }}
                             </li>
+                            <li role="separator" class="divider"></li>
                             <li>
                                 <a href="{% url 'control:organizers' %}">
                                     <i class="fa fa-fw fa-group"></i> {% trans "My organizer accounts" %}

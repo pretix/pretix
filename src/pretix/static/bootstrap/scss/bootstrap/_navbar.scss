@@ -250,12 +250,12 @@
         padding: 12px 15px 12px 25px;
       }
       .dropdown-header, .dropdown-mobile-header, .divider {
-        margin-left: 25px; margin-right: 15px;
+        margin-left: 25px; margin-right: 15px; padding-left: 0; padding-right: 0;
       }
       .dropdown-mobile-header {
-        padding: 20px 0 21px 0; font-size: 14px; border-bottom: 1px solid $dropdown-divider-bg; margin-bottom: 9px;
-        min-height: 70px;
-        * { color: black; background: transparent; font-size: 14px; }
+        padding: 20px 0 10px 0; font-size: 14px;
+        color: #333; white-space: inherit;
+        strong { font-size: 120%; }
       }
       > li > a {
         line-height: $line-height-computed;
