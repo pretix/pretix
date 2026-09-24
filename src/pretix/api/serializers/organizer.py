@@ -653,7 +653,7 @@ class MetaPropertyListField(serializers.ListField):
                 return
             keys = [c.get("key") for c in choices]
             if len(set(keys)) < len(keys):
-                raise ValidationError("The key for each meta property must be unique.")
+                raise ValidationError("The key for each meta property value option must be unique.")
 
         kwargs["validators"].append(
             validate_keys_unique
@@ -679,13 +679,13 @@ class MetaPropertyDictField(serializers.DictField):
 
     def to_internal_value(self, data):
         if not isinstance(data, dict):
-            raise ValidationError("Meta properties must be a dict.")
+            raise ValidationError("Meta property value options must be a dict.")
 
         if not isinstance(data.get("key"), str):
-            raise ValidationError("Meta properties must have a key of type string.")
+            raise ValidationError("Meta property value options must have a key of type string.")
 
         if any(k not in {"key", "label"} for k in data.keys()):
-            raise ValidationError("Meta properties may only have a key and optionally a label.")
+            raise ValidationError("Meta property value options may only have a key and optionally a label.")
 
         if "label" in data:
             try:

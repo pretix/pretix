@@ -95,10 +95,10 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
-    assert str(resp.data["choices"][0][0]) == "Meta properties must have a key of type string."
-    assert str(resp.data["choices"][1][0]) == "Meta properties must be a dict."
-    assert str(resp.data["choices"][2][0]) == "Meta properties must have a key of type string."
-    assert str(resp.data["choices"][3][0]) == "Meta properties may only have a key and optionally a label."
+    assert str(resp.data["choices"][0][0]) == "Meta property value options must have a key of type string."
+    assert str(resp.data["choices"][1][0]) == "Meta property value options must be a dict."
+    assert str(resp.data["choices"][2][0]) == "Meta property value options must have a key of type string."
+    assert str(resp.data["choices"][3][0]) == "Meta property value options may only have a key and optionally a label."
 
     resp = token_client.post(
         '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
@@ -127,7 +127,7 @@ def test_meta_property_create(token_client, organizer):
         }
     )
     assert resp.status_code == 400
-    assert str(resp.data["choices"][0]) == "The key for each meta property must be unique."
+    assert str(resp.data["choices"][0]) == "The key for each meta property value option must be unique."
 
     choices = [
         {"key": "r", "label": "Red"},
