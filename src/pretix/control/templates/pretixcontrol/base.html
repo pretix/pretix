@@ -104,11 +104,9 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" href="{% url "control:index" %}">
                         <img src="{% static "pretixbase/img/pretix-icon-white-mini.svg" %}" />
-                        {% if not request.event and not request.organizer %}
-                            <span>
-                                {{ settings.PRETIX_INSTANCE_NAME }}
-                            </span>
-                        {% endif %}
+                        <span class="{% if request.event or request.organizer %}visible-lg-inline-block{% endif %}">
+                            {{ settings.PRETIX_INSTANCE_NAME }}
+                        </span>
                     </a>
                     {% if request.organizer %}
                         <a class="navbar-context-breadcrumb" href="{% url "control:organizer" organizer=request.organizer.slug %}">

@@ -40,6 +40,9 @@ nav.navbar {
         margin: 0 0 0 10px;
         .navbar-brand {
             position: relative;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
             padding-bottom: 10px;
             padding-top: 10px;
             padding-left: 10px;
@@ -51,7 +54,7 @@ nav.navbar {
                 vertical-align: top;
             }
             span {
-                padding: 4px 8px 6px; // Optical alignment next to logo
+                padding: 5px 0 6px 8px; // Optical alignment next to logo
                 display: inline-block;
             }
         }
