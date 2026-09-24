@@ -57,8 +57,7 @@ TEST_TYPE_RES = {
 def test_meta_property_list(token_client, organizer, event_meta_property):
     res = dict(TEST_TYPE_RES)
 
-    resp = token_client.get('/api/v1/organizers/{}/event_meta_properties/'
-                            .format(organizer.slug))
+    resp = token_client.get('/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug))
     assert resp.status_code == 200
     event_meta_property.refresh_from_db()
     res["id"] = event_meta_property.pk
@@ -69,8 +68,7 @@ def test_meta_property_list(token_client, organizer, event_meta_property):
 @pytest.mark.django_db
 def test_meta_property_detail(token_client, organizer, event_meta_property):
     res = TEST_TYPE_RES
-    resp = token_client.get('/api/v1/organizers/{}/event_meta_properties/{}/'
-                            .format(organizer.slug, event_meta_property.pk))
+    resp = token_client.get('/api/v1/organizers/{}/event_meta_properties/{}/'.format(organizer.slug, event_meta_property.pk))
     assert resp.status_code == 200
     event_meta_property.refresh_from_db()
     res["id"] = event_meta_property.pk
@@ -79,8 +77,9 @@ def test_meta_property_detail(token_client, organizer, event_meta_property):
 
 @pytest.mark.django_db
 def test_meta_property_create(token_client, organizer):
+    url = '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug)
     resp = token_client.post(
-        '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
+        url,
         format='json',
         data={
             "name": "Color",
@@ -101,7 +100,7 @@ def test_meta_property_create(token_client, organizer):
     assert str(resp.data["choices"][3][0]) == "Meta property value options may only have a key and optionally a label."
 
     resp = token_client.post(
-        '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
+        url,
         format='json',
         data={
             "name": "Color",
@@ -114,7 +113,7 @@ def test_meta_property_create(token_client, organizer):
     assert str(resp.data["choices"][0]) == 'Expected a list of items but got type "dict".'
 
     resp = token_client.post(
-        '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
+        url,
         format='json',
         data={
             "name": "Color",
@@ -135,7 +134,7 @@ def test_meta_property_create(token_client, organizer):
         {"key": "b", "label": "Blue"},
     ]
     resp = token_client.post(
-        '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
+        url,
         format='json',
         data={
             "name": "Color",
@@ -148,7 +147,7 @@ def test_meta_property_create(token_client, organizer):
     assert str(resp.data["non_field_errors"][0]) == "You cannot set a default value that is not a valid value."
 
     resp = token_client.post(
-        '/api/v1/organizers/{}/event_meta_properties/'.format(organizer.slug),
+        url,
         format='json',
         data={
             "name": "Color",
@@ -169,9 +168,9 @@ def test_meta_property_create(token_client, organizer):
 
 @pytest.mark.django_db
 def test_meta_property_patch(token_client, organizer, event_meta_property):
+    url = '/api/v1/organizers/{}/event_meta_properties/{}/'.format(organizer.slug, event_meta_property.pk)
     resp = token_client.patch(
-        '/api/v1/organizers/{}/event_meta_properties/{}/'
-        .format(organizer.slug, event_meta_property.pk),
+        url,
         format='json',
         data={
             # existing default is not in choices
@@ -197,8 +196,7 @@ def test_meta_property_patch(token_client, organizer, event_meta_property):
     assert str(resp.data["choices"][1]["label"][0]) == "All entries must be strings."
 
     resp = token_client.patch(
-        '/api/v1/organizers/{}/event_meta_properties/{}/'
-        .format(organizer.slug, event_meta_property.pk),
+        url,
         format='json',
         data={
             "choices": [],
@@ -209,8 +207,7 @@ def test_meta_property_patch(token_client, organizer, event_meta_property):
     assert event_meta_property.choices is None
 
     resp = token_client.patch(
-        '/api/v1/organizers/{}/event_meta_properties/{}/'
-        .format(organizer.slug, event_meta_property.pk),
+        url,
         format='json',
         data={
             "required": True,
@@ -226,8 +223,7 @@ def test_meta_property_patch(token_client, organizer, event_meta_property):
 @pytest.mark.django_db
 def test_meta_property_delete(token_client, organizer, event_meta_property):
     resp = token_client.delete(
-        '/api/v1/organizers/{}/event_meta_properties/{}/'
-        .format(organizer.slug, event_meta_property.pk),
+        '/api/v1/organizers/{}/event_meta_properties/{}/'.format(organizer.slug, event_meta_property.pk),
     )
     assert resp.status_code == 204
     assert len(organizer.meta_properties.all()) == 0
