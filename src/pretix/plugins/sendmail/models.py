@@ -55,7 +55,7 @@ class ScheduledMail(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     rule = models.ForeignKey("Rule", on_delete=models.CASCADE)
-    subevent = models.ForeignKey(SubEvent, null=True, on_delete=models.CASCADE)
+    subevent = models.ForeignKey(SubEvent, null=True, on_delete=models.CASCADE)  # must be set in a series, other case unsupported
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
     last_computed = models.DateTimeField(auto_now_add=True)

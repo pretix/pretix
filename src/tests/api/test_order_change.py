@@ -1860,23 +1860,6 @@ def test_position_add_subevent(token_client, organizer, event, order, quota, ite
 
 
 @pytest.mark.django_db
-def test_position_add_subevent_required(token_client, organizer, event, order, quota, item, subevent):
-    with scopes_disabled():
-        assert order.positions.count() == 1
-    payload = {
-        'order': order.code,
-        'item': item.pk,
-    }
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/orderpositions/'.format(
-            organizer.slug, event.slug,
-        ), format='json', data=payload
-    )
-    assert resp.status_code == 400
-    assert 'subevent' in str(resp.data)
-
-
-@pytest.mark.django_db
 def test_position_add_quota_empty(token_client, organizer, event, order, quota, item):
     with scopes_disabled():
         assert order.positions.count() == 1

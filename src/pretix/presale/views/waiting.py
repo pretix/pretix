@@ -29,7 +29,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _, pgettext_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, TemplateView
 
 from pretix.base.models import Quota, SubEvent
@@ -158,8 +158,7 @@ class WaitingView(EventViewMixin, FormView):
                 except ValueError:
                     raise Http404()
             else:
-                messages.error(request, pgettext_lazy('subevent', "You need to select a date."))
-                return redirect(self.get_index_url())
+                self.subevent = None
 
         if not (self.subevent or self.request.event).waiting_list_active:
             messages.error(request, _("Waiting lists are disabled for this event."))

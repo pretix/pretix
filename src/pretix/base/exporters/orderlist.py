@@ -207,6 +207,7 @@ class OrderListExporter(MultiSheetListExporter):
 
         if form_data.get('event_date_range'):
             dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['event_date_range'], self.timezone)
+            # Subevent-less positions in a series will never be found when this filter is set but that seems like a valid way to do this
             if dt_start:
                 annotations['event_date_max'] = Case(
                     When(**{f'{rel}event__has_subevents': True}, then=Max(f'{rel}all_positions__subevent__date_from')),

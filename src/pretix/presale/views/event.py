@@ -194,55 +194,54 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         context['allow_waitinglist'] = context['ev'].waiting_list_active and context['ev'].presale_is_running
 
-        if not self.request.event.has_subevents or self.subevent:
-            # Fetch all items
-            items, display_add_to_cart = prepare_item_list_for_shop(
-                self.request.event,
-                subevent=self.subevent,
-                filter_items=self.request.GET.getlist('item'),
-                filter_categories=self.request.GET.getlist('category'),
-                require_seat=None,
-                channel=self.request.sales_channel,
-                memberships=(
-                    self.request.customer.usable_memberships(
-                        for_event=self.subevent or self.request.event,
-                        testmode=self.request.event.testmode
-                    ) if getattr(self.request, 'customer', None) else None
-                ),
-            )
+        # Fetch all items
+        items, display_add_to_cart = prepare_item_list_for_shop(
+            self.request.event,
+            subevent=self.subevent,
+            filter_items=self.request.GET.getlist('item'),
+            filter_categories=self.request.GET.getlist('category'),
+            require_seat=None,
+            channel=self.request.sales_channel,
+            memberships=(
+                self.request.customer.usable_memberships(
+                    for_event=self.subevent or self.request.event,
+                    testmode=self.request.event.testmode
+                ) if getattr(self.request, 'customer', None) else None
+            ),
+        )
 
-            context['waitinglist_seated'] = False
-            if context['allow_waitinglist']:
-                for i in items:
-                    if not i.allow_waitinglist or not i.requires_seat:
-                        continue
+        context['waitinglist_seated'] = False
+        if context['allow_waitinglist']:
+            for i in items:
+                if not i.allow_waitinglist or not i.requires_seat:
+                    continue
 
-                    if i.has_variations:
-                        for v in i.available_variations:
-                            if v.cached_availability[0] != Quota.AVAILABILITY_OK:
-                                context['waitinglist_seated'] = True
-                                break
-                    else:
-                        if i.cached_availability[0] != Quota.AVAILABILITY_OK:
+                if i.has_variations:
+                    for v in i.available_variations:
+                        if v.cached_availability[0] != Quota.AVAILABILITY_OK:
                             context['waitinglist_seated'] = True
                             break
+                else:
+                    if i.cached_availability[0] != Quota.AVAILABILITY_OK:
+                        context['waitinglist_seated'] = True
+                        break
 
-            items = [i for i in items if not i.requires_seat]
-            context['itemnum'] = len(items)
-            context['allfree'] = all(
-                item.display_price.gross == Decimal('0.00') and not item.mandatory_priced_addons
-                for item in items if not item.has_variations
-            ) and all(
-                all(
-                    var.display_price.gross == Decimal('0.00')
-                    for var in item.available_variations
-                ) and not item.mandatory_priced_addons
-                for item in items if item.has_variations
-            )
+        items = [i for i in items if not i.requires_seat]
+        context['itemnum'] = len(items)
+        context['allfree'] = all(
+            item.display_price.gross == Decimal('0.00') and not item.mandatory_priced_addons
+            for item in items if not item.has_variations
+        ) and all(
+            all(
+                var.display_price.gross == Decimal('0.00')
+                for var in item.available_variations
+            ) and not item.mandatory_priced_addons
+            for item in items if item.has_variations
+        )
 
-            # Regroup those by category
-            context['items_by_category'] = item_group_by_category(items)
-            context['display_add_to_cart'] = display_add_to_cart
+        # Regroup those by category
+        context['items_by_category'] = item_group_by_category(items)
+        context['display_add_to_cart'] = display_add_to_cart
 
         context['cart'] = self.get_cart()
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
