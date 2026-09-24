@@ -27,7 +27,7 @@ from decimal import Decimal
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
 from django.db import IntegrityError
-from django.db.models import Prefetch, QuerySet
+from django.db.models import Prefetch, Q, QuerySet
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 
@@ -37,7 +37,7 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, Question, QuestionAnswer,
-    QuestionOption,
+    Questionnaire, QuestionnaireChild, QuestionOption,
 )
 from pretix.base.models.customers import AttendeeProfile
 from pretix.base.models.orders import CheckoutSession, Order
@@ -119,8 +119,8 @@ class BaseQuestionsViewMixin:
             override_sets = self.get_question_override_sets(cr, idx)
             for overrides in override_sets:
                 for question_name, question_field in form.fields.items():
-                    if hasattr(question_field, 'question'):
-                        src = overrides.get(question_field.question.identifier)
+                    if hasattr(question_field, 'datafield'):
+                        src = overrides.get(question_field.datafield.identifier)
                     else:
                         src = overrides.get(question_name)
                     if not src:
@@ -184,7 +184,7 @@ class BaseQuestionsViewMixin:
                                 field, v,
                                 checkoutsession=checkoutsession,
                                 order=order,
-                                question=field.question,
+                                question=field.datafield,
                             )
 
         for form in self.forms:
@@ -246,7 +246,7 @@ class BaseQuestionsViewMixin:
                                 field, v,
                                 cartposition=cartposition,
                                 orderposition=orderposition,
-                                question=field.question,
+                                question=field.datafield,
                             )
 
                             answer_dict = self._build_answer_dict(field, answer, k)
@@ -331,8 +331,8 @@ class BaseQuestionsViewMixin:
             'field_name': k,
             'field_label': str(field.label),
             'value': answer_value,
-            'question_type': field.question.type,
-            'question_identifier': field.question.identifier,
+            'question_type': field.datafield.type,
+            'question_identifier': field.datafield.identifier,
         }
 
 
@@ -348,27 +348,37 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
 
     @cached_property
     def positions(self):
-        qqs = self.request.event.questions.all()
+        qqs = self.request.event.questionnaires.all()
         if self.only_user_visible:
-            qqs = qqs.filter(ask_during_checkin=False, hidden=False, container_type=Question.ContainerType.ORDERPOSITION)
+            qqs = qqs.filter(type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE)
+        else:
+            qqs = qqs.filter(type__startswith='P')
+        qqs = qqs.filter(
+            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.order.sales_channel.identifier)
+        )
         return list(self.order.positions.select_related(
             'item', 'variation'
         ).prefetch_related(
             Prefetch('answers',
                      QuestionAnswer.objects.prefetch_related('options'),
                      to_attr='answerlist'),
-            Prefetch('item__questions',
+            Prefetch('item__questionnaires',
                      qqs.prefetch_related(
-                         Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
-                             # This prefetch statement is utter bullshit, but it actually prevents Django from doing
-                             # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
-                             # a prefetch lookup on this query...
-                             'question',
-                             Question.objects.none(),
-                             to_attr='dummy'
-                         )))
-                     ).select_related('dependency_question'),
-                     to_attr='questions_to_ask')
+                         Prefetch('children', QuestionnaireChild.objects.prefetch_related(
+                             Prefetch('user_datafield', Question.objects.prefetch_related(
+                                 Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
+                                     # This prefetch statement is utter bullshit, but it actually prevents Django from doing
+                                     # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
+                                     # a prefetch lookup on this query...
+                                     'question',
+                                     Question.objects.none(),
+                                     to_attr='dummy'
+                                 )))
+                             ))
+                         ),
+                         to_attr='childlist')
+                     ),
+                     to_attr='relevant_questionnaires')
         ))
 
     @cached_property

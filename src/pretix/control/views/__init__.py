@@ -21,10 +21,15 @@
 #
 import collections.abc
 import warnings
+from errno import EMSGSIZE
 
+from django.contrib import messages
 from django.core.paginator import (
     EmptyPage, PageNotAnInteger, UnorderedObjectListWarning,
 )
+from django.http.response import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import edit
 
@@ -38,7 +43,22 @@ class EventBasedFormMixin:
         return kwargs
 
 
-class CreateView(EventBasedFormMixin, edit.CreateView):
+class TellParentFormMixin:
+
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        if self.request.GET.get('notify_parent') and isinstance(result, HttpResponseRedirect):
+            message_store = messages.get_messages(self.request)
+            msgs = [{'level': msg.level_tag, 'message': msg.message} for msg in message_store]
+            #message_store._queued_messages = []
+            return render(self.request, 'pretixcontrol/notify_parent.html', {
+                'notify_info': {'object': self.object.pk, 'object_str': str(self.object), 'redirect_url': result.url, 'messages': msgs},
+            })
+        else:
+            return result
+
+
+class CreateView(EventBasedFormMixin, TellParentFormMixin, edit.CreateView):
     """
     Like Django's default CreateView, but passes the optional event
     argument to the form. This is necessary for I18nModelForms to work
@@ -47,7 +67,7 @@ class CreateView(EventBasedFormMixin, edit.CreateView):
     pass
 
 
-class UpdateView(EventBasedFormMixin, edit.UpdateView):
+class UpdateView(EventBasedFormMixin, TellParentFormMixin, edit.UpdateView):
     """
     Like Django's default UpdateView, but passes the optional event
     argument to the form. This is necessary for I18nModelForms to work

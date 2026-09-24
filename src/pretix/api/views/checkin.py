@@ -54,7 +54,7 @@ from pretix.api.serializers.checkin import (
     CheckinListSerializer, CheckinRPCAnnulInputSerializer,
     CheckinRPCRedeemInputSerializer, MiniCheckinListSerializer,
 )
-from pretix.api.serializers.item import QuestionSerializer
+from pretix.api.serializers.item import DatafieldSerializer
 from pretix.api.serializers.order import (
     CheckinListOrderPositionSerializer, CheckinSerializer,
     FailedCheckinSerializer,
@@ -866,7 +866,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'checkin_texts': op.checkin_texts,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'questions': [
-                    QuestionSerializer(q).data for q in e.questions
+                    DatafieldSerializer(q).data for q in e.questions  # TODO(questionnaires)
                 ],
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)

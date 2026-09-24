@@ -33,7 +33,10 @@
 # License for the specific language governing permissions and limitations under the License.
 import os.path
 from decimal import Decimal
+from itertools import zip_longest
+import logging
 
+import rest_framework
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -53,6 +56,10 @@ from pretix.base.models import (
     ItemVariation, ItemVariationMetaValue, Question, QuestionOption, Quota,
     SalesChannel,
 )
+from pretix.base.models.items import Questionnaire, QuestionnaireChild
+from pretix.base.templatetags.rich_text import rich_text
+
+logger = logging.getLogger(__name__)
 
 
 class InlineItemVariationSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
@@ -539,18 +546,18 @@ class LegacyDependencyValueField(serializers.CharField):
         return [data] if data else []
 
 
-class QuestionSerializer(I18nAwareModelSerializer):
+class DatafieldSerializer(I18nAwareModelSerializer):
     options = InlineQuestionOptionSerializer(many=True, required=False)
     identifier = serializers.CharField(allow_null=True)
-    dependency_value = LegacyDependencyValueField(source='dependency_values', required=False, allow_null=True)
+    internal_name = serializers.CharField(allow_null=True, source='question', read_only=True)
 
     class Meta:
         model = Question
-        fields = ('id', 'question', 'type', 'required', 'items', 'options', 'position',
-                  'ask_during_checkin', 'show_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
-                  'hidden', 'dependency_value', 'print_on_invoice', 'help_text', 'valid_number_min',
+        fields = ('id', 'question', 'type', 'options',
+                  'show_during_checkin', 'identifier',
+                  'hidden', 'print_on_invoice', 'valid_number_min',
                   'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
-                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait')
+                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait', 'internal_name',)
 
     def validate_identifier(self, value):
         Question._clean_identifier(self.context['event'], value, self.instance)
@@ -559,14 +566,6 @@ class QuestionSerializer(I18nAwareModelSerializer):
     def validate_type(self, value):
         if self.instance:
             self.instance.clean_type_change(self.instance.type, value)
-        return value
-
-    def validate_dependency_question(self, value):
-        if value:
-            if value.type not in (Question.TYPE_CHOICE, Question.TYPE_BOOLEAN, Question.TYPE_CHOICE_MULTIPLE):
-                raise ValidationError('Question dependencies can only be set to boolean or choice questions.')
-            if value == self.instance:
-                raise ValidationError('A question cannot depend on itself.')
         return value
 
     def validate(self, data):
@@ -579,21 +578,6 @@ class QuestionSerializer(I18nAwareModelSerializer):
 
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
         full_data.update(data)
-
-        if full_data.get('ask_during_checkin') and full_data.get('dependency_question'):
-            raise ValidationError('Dependencies are not supported during check-in.')
-
-        dep = full_data.get('dependency_question')
-        if dep:
-            if dep.ask_during_checkin:
-                raise ValidationError(_('Question cannot depend on a question asked during check-in.'))
-
-            seen_ids = {self.instance.pk} if self.instance else set()
-            while dep:
-                if dep.pk in seen_ids:
-                    raise ValidationError(_('Circular dependency between questions detected.'))
-                seen_ids.add(dep.pk)
-                dep = dep.dependency_question
 
         if full_data.get('ask_during_checkin') and full_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
             raise ValidationError(_('This type of question cannot be asked during check-in.'))
@@ -624,6 +608,160 @@ class QuestionSerializer(I18nAwareModelSerializer):
         for opt_data in options_data:
             QuestionOption.objects.create(question=question, **opt_data)
         return question
+
+
+class QuestionRefField(serializers.PrimaryKeyRelatedField):
+    default_error_messages = {
+        'invalid_choice': _('"{input}" is not a valid choice.')
+    }
+    def to_representation(self, qc):
+        if not qc:
+            return None
+        elif qc.system_datafield:
+            return qc.system_datafield
+        elif qc.user_datafield_id:
+            return qc.user_datafield_id
+        else:
+            return None
+
+    def to_internal_value(self, data):
+        if type(data) == int:
+            return {'user_datafield': super().to_internal_value(data), 'system_datafield': None}
+        elif type(data) == str:
+            if data not in QuestionnaireChild.SystemQuestion.values:
+                self.fail("invalid_choice", input=data)
+            return {'user_datafield': None, 'system_datafield': data}
+        elif data is None:
+            return {'user_datafield': None, 'system_datafield': None}
+        else:
+            self.fail('incorrect_type', data_type=type(data).__name__)
+
+    def use_pk_only_optimization(self):
+        return self.source == '*'
+
+
+class RenderedMarkdownField(serializers.CharField):
+    def to_representation(self, value):
+        return rich_text(value)
+
+
+class InlineQuestionnaireChildSerializer(I18nAwareModelSerializer):
+    question = QuestionRefField(allow_null=True, source='*', queryset=Question.objects.none())
+    dependency_question = QuestionRefField(allow_null=True, required=False, queryset=Question.objects.none())
+    rendered_help_text = RenderedMarkdownField(read_only=True, source='help_text')
+
+    class Meta:
+        model = QuestionnaireChild
+        fields = ('question', 'required', 'label', 'help_text', 'dependency_question', 'dependency_values', 'rendered_help_text')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["question"].queryset = self.context["event"].questions.all()
+        self.fields["dependency_question"].queryset = self.context["event"].questions.all()
+
+    def validate_dependency_question(self, value):
+        if value:
+            if value['user_datafield']:
+                if value['user_datafield'].type not in (Question.TYPE_CHOICE, Question.TYPE_BOOLEAN, Question.TYPE_CHOICE_MULTIPLE):
+                    raise ValidationError('Question dependencies can only be set to boolean or choice questions.')
+        return value
+
+
+class QuestionnaireSerializer(I18nAwareModelSerializer):
+    limit_sales_channels = serializers.SlugRelatedField(
+        slug_field="identifier",
+        queryset=SalesChannel.objects.none(),
+        required=False,
+        allow_empty=True,
+        many=True,
+    )
+
+    class Meta:
+        model = Questionnaire
+        fields = ('id', 'type', 'internal_name', 'items', 'position', 'all_sales_channels', 'limit_sales_channels', 'children')
+
+    def __init__(self, *args, **kwargs):
+        self.fields['children'] = InlineQuestionnaireChildSerializer(many=True, required=True, context=kwargs['context'], partial=False)
+        self.fields['limit_sales_channels'].child_relation.queryset = kwargs['context']['event'].organizer.sales_channels.all()
+        super().__init__(*args, **kwargs)
+
+    def validate(self, data):
+        data = super().validate(data)
+
+        try:
+            full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+            full_data.update(data)
+        except rest_framework.exceptions.ValidationError as e:
+            # we already have invalid state in the database, what should we do? hope it gets better after saving?
+            logger.exception("Invalid state in database, ignoring some validations!")
+        else:
+            #if full_data.get('ask_during_checkin') and full_data.get('dependency_question'):
+            #    raise ValidationError('Dependencies are not supported during check-in.')
+
+            #if full_data.get('ask_during_checkin') and full_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
+            #    raise ValidationError(_('This type of question cannot be asked during check-in.'))
+
+            #if full_data.get('show_during_checkin') and full_data.get('type') in Question.SHOW_DURING_CHECKIN_UNSUPPORTED:
+            #    raise ValidationError(_('This type of question cannot be shown during check-in.'))
+
+            #Question.clean_items(event, full_data.get('items') or [])
+
+            if (full_data.get('type') == Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
+                    and any(c['dependency_question'] for c in full_data['children'])):
+                raise ValidationError('Dependencies are not supported during check-in.')
+
+            if (not full_data.get('type').startswith('P')
+                    and any(c['system_datafield'] for c in full_data['children'])):
+                raise ValidationError('System data fields are only supported on order positions.')
+
+            system_fields = set(c['system_datafield'] for c in full_data['children'])
+            if ('zipcode' in system_fields or 'state' in system_fields or 'street' in system_fields or 'city' in system_fields) and 'country' not in system_fields:
+                raise ValidationError('The system data fields "street", "zip code", "city", and "state" can only be used in combination with the "country" field.')
+
+        return data
+
+    @transaction.atomic
+    def create(self, validated_data):
+        children_data = validated_data.pop('children') if 'children' in validated_data else []
+        questionnaire = super().create(validated_data)
+        self.set_children(questionnaire, children_data)
+        return questionnaire
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        children_data = validated_data.pop('children', None)
+        questionnaire = super().update(instance, validated_data)
+        if children_data is not None:
+            self.set_children(questionnaire, children_data)
+        return questionnaire
+
+    def set_children(self, questionnaire, new_data):
+        result = {}
+        child_serializer = self.fields['children'].child
+        existing_children = questionnaire.children.all()
+        def q(qc):
+            return qc['user_datafield'] or qc['system_datafield']
+        for i, d in enumerate(new_data):
+            d['questionnaire'] = questionnaire
+            d['position'] = i + 1
+            d.setdefault('required', False)
+            d.setdefault('help_text', None)
+            d.setdefault('dependency_question', None)
+            d.setdefault('dependency_values', None)
+        for existing, update_data in zip_longest(existing_children, new_data):
+            if update_data:
+                if update_data.get('dependency_question'):
+                    try:
+                        update_data['dependency_question'] = result[q(update_data['dependency_question'])]
+                    except KeyError:
+                        raise ValidationError('A question can only depend on a previous question from the same questionnaire.')
+                if existing:
+                    result[q(update_data)] = child_serializer.update(existing, update_data)
+                else:
+                    result[q(update_data)] = child_serializer.create(update_data)
+            else:
+                existing.delete()
+        return result
 
 
 class QuotaSerializer(I18nAwareModelSerializer):

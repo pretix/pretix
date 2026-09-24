@@ -153,53 +153,10 @@ class QuestionForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance.container_type == Question.ContainerType.ORDERPOSITION:
-            self.fields['items'].queryset = self.instance.event.items.all()
-            self.fields['items'].required = True
-        else:
-            del self.fields['items']
-            del self.fields['ask_during_checkin']
+        if self.instance.container_type != Question.ContainerType.ORDERPOSITION:
             del self.fields['show_during_checkin']
             del self.fields['print_on_invoice']
-        self.fields['dependency_question'].widget.attrs['data-container-type'] = self.instance.container_type
-        self.fields['dependency_question'].queryset = self.instance.event.questions.filter(
-            type__in=(Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE),
-            ask_during_checkin=False,
-            container_type=self.instance.container_type,
-        )
-        if self.instance.pk:
-            self.fields['dependency_question'].queryset = self.fields['dependency_question'].queryset.exclude(
-                pk=self.instance.pk
-            )
         self.fields['identifier'].required = False
-        self.fields['dependency_values'].required = False
-        self.fields['help_text'].widget.attrs['rows'] = 3
-
-    def clean_dependency_values(self):
-        val = self.data.getlist('dependency_values')
-        return val
-
-    def clean_dependency_question(self):
-        dep = val = self.cleaned_data.get('dependency_question')
-        if dep:
-            if dep.ask_during_checkin:
-                raise ValidationError(_('Question cannot depend on a question asked during check-in.'))
-
-            seen_ids = {self.instance.pk} if self.instance else set()
-            while dep:
-                if dep.pk in seen_ids:
-                    raise ValidationError(_('Circular dependency between questions detected.'))
-                seen_ids.add(dep.pk)
-                dep = dep.dependency_question
-        return val
-
-    def clean_ask_during_checkin(self):
-        val = self.cleaned_data.get('ask_during_checkin')
-
-        if val and self.cleaned_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
-            raise ValidationError(_('This type of question cannot be asked during check-in.'))
-
-        return val
 
     def clean_show_during_checkin(self):
         val = self.cleaned_data.get('show_during_checkin')
@@ -233,16 +190,10 @@ class QuestionForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'question',
-            'help_text',
             'type',
-            'required',
-            'ask_during_checkin',
             'show_during_checkin',
             'hidden',
             'identifier',
-            'items',
-            'dependency_question',
-            'dependency_values',
             'print_on_invoice',
             'valid_number_min',
             'valid_number_max',
@@ -259,17 +210,11 @@ class QuestionForm(I18nModelForm):
             'valid_datetime_max': SplitDateTimePickerWidget(without_seconds=True),
             'valid_date_min': DatePickerWidget(),
             'valid_date_max': DatePickerWidget(),
-            'items': forms.CheckboxSelectMultiple(
-                attrs={'class': 'scrolling-multiple-choice'}
-            ),
-            'dependency_values': forms.SelectMultiple,
             'help_text': I18nMarkdownTextarea,
         }
         field_classes = {
             'valid_datetime_min': SplitDateTimeField,
             'valid_datetime_max': SplitDateTimeField,
-            'items': ItemMultipleChoiceField,
-            'dependency_question': SafeModelChoiceField,
         }
 
 
@@ -1197,6 +1142,10 @@ class ItemAddOnForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['addon_category'].queryset = self.event.categories.all()
+        self.fields['addon_category'].help_text = format_html('<a href="{}" data-iframe-dialog="true" data-iframe-dialog-target="<[name$=addon_category]" target="_blank">{}</a>', reverse('control:event.items.categories.add', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                }), _("Create a new category"))
         self.fields['addon_category'].widget = Select2(
             attrs={
                 'data-model-select2': 'generic',
