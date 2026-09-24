@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-09-23 18:00+0000\n"
+"PO-Revision-Date: 2026-09-24 16:00+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -13648,23 +13648,23 @@ msgstr "ระยะเวลาชำระเงิน (นาที)"
 
 #: pretix/control/forms/event.py
 msgid "Prices including tax"
-msgstr ""
+msgstr "ราคารวมภาษีแล้ว"
 
 #: pretix/control/forms/event.py
 msgid "Recommended if you sell tickets at least partly to consumers."
-msgstr ""
+msgstr "แนะนำหากคุณขายตั๋วให้แก่ผู้บริโภคทั่วไปไม่ว่าทั้งหมดหรือบางส่วน"
 
 #: pretix/control/forms/event.py
 msgid "Prices excluding tax"
-msgstr ""
+msgstr "ราคาไม่รวมภาษี"
 
 #: pretix/control/forms/event.py
 msgid "Recommended only if you sell tickets primarily to business customers."
-msgstr ""
+msgstr "แนะนำเฉพาะในกรณีที่คุณขายตั๋วให้แก่ลูกค้าองค์กร/ธุรกิจเป็นหลักเท่านั้น"
 
 #: pretix/control/forms/event.py
 msgid "Prices shown to customer"
-msgstr ""
+msgstr "ราคาที่แสดงแก่ลูกค้า"
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -13673,6 +13673,9 @@ msgid ""
 "product, the total tax amount can differ from when it would be computed from "
 "the order total."
 msgstr ""
+"แนะนำเมื่อไม่จำเป็นต้องใช้ใบแจ้งหนี้อิเล็กทรอนิกส์ (e-invoicing) สินค้าแต่ละรายการจะถูกขายด้วยร"
+"าคาสุทธิและราคารวมภาษีตามที่โฆษณาไว้ อย่างไรก็ตาม ในคำสั่งซื้อที่มีสินค้ามากกว่าหนึ่งรายการ ยอดรว"
+"มภาษีอาจแตกต่างจากการคำนวณจากยอดรวมของคำสั่งซื้อ"
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -13681,6 +13684,9 @@ msgid ""
 "may be changed to ensure correct rounding, while the net prices will be kept "
 "as configured. This may cause the actual payment amount to differ."
 msgstr ""
+"แนะนำสำหรับใบแจ้งหนี้อิเล็กทรอนิกส์ (e-invoicing) เมื่อคุณขายให้แก่ลูกค้าองค์กร/ธุรกิจเป็นหลักและ"
+"แสดงราคาแบบไม่รวมภาษี ราคารวมภาษีของสินค้าบางรายการอาจถูกปรับเปลี่ยนเพื่อให้การปัดเศษถูกต้อ"
+"ง ในขณะที่ราคาสุทธิจะยังคงเดิมตามที่ตั้งค่าไว้ ซึ่งอาจทำให้ยอดชำระจริงแตกต่างไปจากเดิม"
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -13689,6 +13695,9 @@ msgid ""
 "business customers and consumers do not receive invoices. This can cause the "
 "payment amount to change when the invoice address is changed."
 msgstr ""
+"เหมือนกับข้อความข้างต้น แต่บังคับใช้เฉพาะกับลูกค้าองค์กร/ธุรกิจเท่านั้น การปัดเศษแยกตามรายการจะถู"
+"กใช้สำหรับผู้บริโภคทั่วไป แนะนำเมื่อใช้ใบแจ้งหนี้อิเล็กทรอนิกส์เฉพาะกับลูกค้าองค์กร/ธุรกิจ และผู้บริโภค"
+"ทั่วไปไม่ได้รับใบแจ้งหนี้ กรณีนี้อาจทำให้ยอดชำระเงินเปลี่ยนแปลงเมื่อมีการแก้ไขที่อยู่สำหรับออกใบแจ้งหนี้"
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -13698,28 +13707,34 @@ msgid ""
 "configured whenever possible. Gross prices may still change if they are "
 "impossible to derive from a rounded net price."
 msgstr ""
+"แนะนำสำหรับใบแจ้งหนี้อิเล็กทรอนิกส์ (e-invoicing) เมื่อคุณขายให้แก่ผู้บริโภคทั่วไปเป็นหลัก ราคารว"
+"มภาษีหรือราคาสุทธิของสินค้าบางรายการอาจถูกปรับเปลี่ยนโดยอัตโนมัติเพื่อให้การปัดเศษของยอดรวมคำสั่"
+"งซื้อถูกต้อง ระบบจะพยายามรักษาราคารวมภาษีตามที่ตั้งค่าไว้ให้มากที่สุดเท่าที่เป็นไปได้ แต่ราคารวมภาษี"
+"อาจยังคงเปลี่ยนแปลงหากไม่สามารถคำนวณย้อนกลับจากราคาสุทธิที่ปัดเศษแล้วได้"
 
 #: pretix/control/forms/event.py
 msgid "Generate invoices for Sales channels"
-msgstr ""
+msgstr "ออกใบแจ้งหนี้/ใบกำกับภาษีสำหรับช่องทางการขาย"
 
 #: pretix/control/forms/event.py
 msgid ""
 "If you have enabled invoice generation in the previous setting, you can "
 "limit it here to specific sales channels."
 msgstr ""
+"หากคุณได้เปิดใช้งานการออกใบแจ้งหนี้ในการตั้งค่าก่อนหน้า คุณสามารถจำกัดการใช้งานเฉพาะช่องทางกา"
+"รขายที่กำหนดได้ที่นี่"
 
 #: pretix/control/forms/event.py
 msgid "Invoice style"
-msgstr ""
+msgstr "รูปแบบใบแจ้งหนี้"
 
 #: pretix/control/forms/event.py
 msgid "Invoice language"
-msgstr ""
+msgstr "ภาษาของใบแจ้งหนี้"
 
 #: pretix/control/forms/event.py
 msgid "The user's language"
-msgstr ""
+msgstr "ภาษาของผู้ใช้งาน"
 
 #: pretix/control/forms/event.py
 #, python-brace-format
@@ -13727,65 +13742,71 @@ msgid ""
 "An invoice will be issued before payment if the customer selects one of the "
 "following payment methods: {list}"
 msgstr ""
+"ใบแจ้งหนี้/ใบกำกับภาษีจะถูกออกก่อนการชำระเงิน หากลูกค้าเลือกใช้วิธีการชำระเงินวิธีใดวิธีหนึ่งดังต่อไ"
+"ปนี้: {list}"
 
 #: pretix/control/forms/event.py
 msgid ""
 "None of the currently configured payment methods will cause an invoice to be "
 "issued before payment."
 msgstr ""
+"ไม่มีวิธีการชำระเงินที่ตั้งค่าไว้ในปัจจุบันที่จะส่งผลให้มีการออกใบแจ้งหนี้ก่อนการชำระเงิน"
 
 #: pretix/control/forms/event.py
 msgid "Recommended"
-msgstr ""
+msgstr "แนะนำ"
 
 #: pretix/control/forms/event.py
 msgid "The online shop must be selected to receive these emails."
-msgstr ""
+msgstr "ต้องเลือก ร้านค้าออนไลน์ เพื่อรับอีเมลเหล่านี้"
 
 #: pretix/control/forms/event.py
 msgid "Sales channels for checkout emails"
-msgstr ""
+msgstr "ช่องทางการขายสำหรับอีเมลขั้นตอนการชำระเงิน"
 
 #: pretix/control/forms/event.py
 msgid ""
 "The order placed and paid emails will only be send to orders from these "
 "sales channels. The online shop must be enabled."
 msgstr ""
+"อีเมลแจ้งเตือนเมื่อสร้างและชำระเงินคำสั่งซื้อจะถูกจัดส่งเฉพาะคำสั่งซื้อจากช่องทางการขายเหล่านี้เท่านั้"
+"น และต้องเปิดใช้งานร้านค้าออนไลน์"
 
 #: pretix/control/forms/event.py
 msgid ""
 "This email will only be send to orders from these sales channels. The online "
 "shop must be enabled."
 msgstr ""
+"อีเมลนี้จะถูกจัดส่งเฉพาะคำสั่งซื้อจากช่องทางการขายเหล่านี้เท่านั้น และต้องเปิดใช้งานร้านค้าออนไลน์"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 msgid "Bcc address"
-msgstr ""
+msgstr "ที่อยู่อีเมล Bcc"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 msgid "All emails will be sent to this address as a Bcc copy."
-msgstr ""
+msgstr "อีเมลทั้งหมดจะถูกส่งไปยังที่อยู่อีเมลนี้ในรูปแบบสำเนาซ่อน (Bcc)"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 msgid "Signature"
-msgstr ""
+msgstr "ลายเซ็นท้ายอีเมล"
 
 #: pretix/control/forms/event.py
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
-msgstr ""
+msgstr "ข้อความนี้จะถูกแนบท้ายในอีเมลทุกฉบับ ตัวแทนข้อความที่ใช้ได้: {event}"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 msgid "e.g. your contact details"
-msgstr ""
+msgstr "ตัวอย่างเช่น ข้อมูลการติดต่อของคุณ"
 
 #: pretix/control/forms/event.py
 msgid "HTML mail renderer"
-msgstr ""
+msgstr "เครื่องมือแสดงผลอีเมลรูปแบบ HTML"
 
 #: pretix/control/forms/event.py
 msgid "Subject sent to order contact address"
-msgstr ""
+msgstr "หัวข้ออีเมลที่จัดส่งไปยังที่อยู่อีเมลติดต่อของคำสั่งซื้อ"
 
 #: pretix/control/forms/event.py
 msgid "Text sent to order contact address"
@@ -14104,31 +14125,31 @@ msgstr "ฟรี"
 
 #: pretix/control/forms/event.py
 msgid "Quantity available"
-msgstr ""
+msgstr "จำนวนที่มีอยู่"
 
 #: pretix/control/forms/exports.py
 msgid "Please enter less than 25 recipients."
-msgstr ""
+msgstr "โปรดระบุผู้รับน้อยกว่า 25 รายชื่อ"
 
 #: pretix/control/forms/filter.py
 msgid "Search for…"
-msgstr ""
+msgstr "ค้นหา…"
 
 #: pretix/control/forms/filter.py pretix/control/navigation.py
 msgid "All orders"
-msgstr ""
+msgstr "คำสั่งซื้อทั้งหมด"
 
 #: pretix/control/forms/filter.py
 msgid "Valid orders"
-msgstr ""
+msgstr "คำสั่งซื้อที่สมบูรณ์"
 
 #: pretix/control/forms/filter.py pretix/plugins/sendmail/forms.py
 msgid "Paid (or canceled with paid fee)"
-msgstr ""
+msgstr "ชำระเงินแล้ว (หรือยกเลิกโดยมีค่าธรรมเนียมที่ชำระแล้ว)"
 
 #: pretix/control/forms/filter.py
 msgid "Paid or confirmed"
-msgstr ""
+msgstr "ชำระเงินแล้วหรือยืนยันแล้ว"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
@@ -14136,75 +14157,75 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 #: pretix/plugins/reports/exporters.py
 msgid "Pending"
-msgstr ""
+msgstr "รอดำเนินการ"
 
 #: pretix/control/forms/filter.py
 msgid "Pending or paid"
-msgstr ""
+msgstr "รอดำเนินการหรือชำระเงินแล้ว"
 
 #: pretix/control/forms/filter.py
 msgid "Cancellations"
-msgstr ""
+msgstr "รายการยกเลิก"
 
 #: pretix/control/forms/filter.py pretix/plugins/sendmail/forms.py
 msgid "Canceled (fully)"
-msgstr ""
+msgstr "ยกเลิกแล้ว (เต็มจำนวน)"
 
 #: pretix/control/forms/filter.py
 msgid "Canceled (fully or with paid fee)"
-msgstr ""
+msgstr "ยกเลิกแล้ว (เต็มจำนวนหรือมีค่าธรรมเนียมที่ชำระแล้ว)"
 
 #: pretix/control/forms/filter.py
 msgid "Canceled (at least one position)"
-msgstr ""
+msgstr "ยกเลิกแล้ว (อย่างน้อยหนึ่งรายการ)"
 
 #: pretix/control/forms/filter.py
 msgid "Cancellation requested"
-msgstr ""
+msgstr "ร้องขอการยกเลิก"
 
 #: pretix/control/forms/filter.py
 msgid "Fully canceled but invoice not canceled"
-msgstr ""
+msgstr "ยกเลิกเต็มจำนวนแล้ว แต่ใบแจ้งหนี้ยังไม่ถูกยกเลิก"
 
 #: pretix/control/forms/filter.py
 msgid "Payment process"
-msgstr ""
+msgstr "ขั้นตอนการชำระเงิน"
 
 #: pretix/control/forms/filter.py
 msgid "Pending or expired"
-msgstr ""
+msgstr "รอดำเนินการหรือหมดอายุ"
 
 #: pretix/control/forms/filter.py
 msgid "Pending (overdue)"
-msgstr ""
+msgstr "รอดำเนินการ (เกินกำหนดชำระ)"
 
 #: pretix/control/forms/filter.py
 msgid "Overpaid"
-msgstr ""
+msgstr "ชำระเงินเกิน"
 
 #: pretix/control/forms/filter.py
 msgid "Partially paid"
-msgstr ""
+msgstr "ชำระเงินบางส่วน"
 
 #: pretix/control/forms/filter.py
 msgid "Underpaid (but confirmed)"
-msgstr ""
+msgstr "ชำระเงินไม่ครบ (แต่ยืนยันแล้ว)"
 
 #: pretix/control/forms/filter.py
 msgid "Pending (but fully paid)"
-msgstr ""
+msgstr "รอดำเนินการ (แต่ชำระเงินครบแล้ว)"
 
 #: pretix/control/forms/filter.py
 msgid "Pending (but no current payment)"
-msgstr ""
+msgstr "รอดำเนินการ (แต่ยังไม่มีการชำระเงินในปัจจุบัน)"
 
 #: pretix/control/forms/filter.py
 msgid "Approval process"
-msgstr ""
+msgstr "ขั้นตอนการอนุมัติ"
 
 #: pretix/control/forms/filter.py
 msgid "Approved, payment pending"
-msgstr ""
+msgstr "อนุมัติแล้ว รอดำเนินการชำระเงิน"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html
@@ -14216,89 +14237,89 @@ msgstr "รอการอนุมัติ"
 
 #: pretix/control/forms/filter.py
 msgid "Follow-up configured"
-msgstr ""
+msgstr "ตั้งค่าการติดตามผลแล้ว"
 
 #: pretix/control/forms/filter.py
 msgid "Follow-up due"
-msgstr ""
+msgstr "ถึงกำหนดการติดตามผล"
 
 #: pretix/control/forms/filter.py pretix/control/forms/vouchers.py
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 #: pretix/plugins/sendmail/models.py
 msgid "All products"
-msgstr ""
+msgstr "สินค้าทั้งหมด"
 
 #: pretix/control/forms/filter.py pretix/control/forms/vouchers.py
 #: pretix/control/views/typeahead.py
 #, python-brace-format
 msgid "{product} – Any variation"
-msgstr ""
+msgstr "{product} – ทุกแบบสินค้าย่อย"
 
 #: pretix/control/forms/filter.py pretix/control/forms/orders.py
 msgctxt "subevent"
 msgid "All dates starting at or after"
-msgstr ""
+msgstr "วันที่ทั้งหมดที่เริ่มต้น ณ หรือหลังจาก"
 
 #: pretix/control/forms/filter.py pretix/control/forms/orders.py
 msgctxt "subevent"
 msgid "All dates starting before"
-msgstr ""
+msgstr "วันที่ทั้งหมดที่เริ่มต้นก่อน"
 
 #: pretix/control/forms/filter.py
 msgid "Order placed at or after"
-msgstr ""
+msgstr "คำสั่งซื้อถูกสร้าง ณ หรือหลังจาก"
 
 #: pretix/control/forms/filter.py
 msgid "Order placed before"
-msgstr ""
+msgstr "คำสั่งซื้อถูกสร้างก่อน"
 
 #: pretix/control/forms/filter.py
 msgid "Minimal sum of payments and refunds"
-msgstr ""
+msgstr "ยอดรวมขั้นต่ำของการชำระเงินและการคืนเงิน"
 
 #: pretix/control/forms/filter.py
 msgid "Maximal sum of payments and refunds"
-msgstr ""
+msgstr "ยอดรวมสูงสุดของการชำระเงินและการคืนเงิน"
 
 #: pretix/control/forms/filter.py
 msgid "At least one ticket with check-in"
-msgstr ""
+msgstr "มีตั๋วอย่างน้อยหนึ่งใบที่มีการเช็คอิน"
 
 #: pretix/control/forms/filter.py
 msgid "Affected quota"
-msgstr ""
+msgstr "โควตาที่ได้รับผลกระทบ"
 
 #: pretix/control/forms/filter.py
 msgid "Exact matches only"
-msgstr ""
+msgstr "แสดงผลเฉพาะที่ตรงกันทุกประการเท่านั้น"
 
 #: pretix/control/forms/filter.py
 msgid "All organizers"
-msgstr ""
+msgstr "ผู้จัดงานทั้งหมด"
 
 #: pretix/control/forms/filter.py
 msgid "All events"
-msgstr ""
+msgstr "อีเวนต์/กิจกรรมทั้งหมด"
 
 #: pretix/control/forms/filter.py
 msgid "All payments"
-msgstr ""
+msgstr "การชำระเงินทั้งหมด"
 
 #: pretix/control/forms/filter.py
 msgid "Payment created from"
-msgstr ""
+msgstr "การชำระเงินถูกสร้างตั้งแต่วันที่"
 
 #: pretix/control/forms/filter.py
 msgid "Payment created until"
-msgstr ""
+msgstr "การชำระเงินถูกสร้างถึงวันที่"
 
 #: pretix/control/forms/filter.py
 msgid "Paid from"
-msgstr ""
+msgstr "ชำระเงินแล้วตั้งแต่วันที่"
 
 #: pretix/control/forms/filter.py
 msgid "Paid until"
-msgstr ""
+msgstr "ชำระเงินแล้วตั้งแต่วันที่"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html
@@ -14306,20 +14327,20 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html
 msgid "Paid"
-msgstr ""
+msgstr "ชำระเงินแล้ว"
 
 #: pretix/control/forms/filter.py
 msgctxt "subevent"
 msgid "Date doesn't start in selected date range."
-msgstr ""
+msgstr "วันที่ไม่ได้เริ่มต้นในช่วงวันที่ที่เลือก"
 
 #: pretix/control/forms/filter.py
 msgid "Shop live and presale running"
-msgstr ""
+msgstr "ร้านค้าเปิดใช้งานและกำลังเปิดขายล่วงหน้า"
 
 #: pretix/control/forms/filter.py
 msgid "Inactive"
-msgstr ""
+msgstr "ปิดใช้งาน"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/events/index.html
@@ -14327,7 +14348,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 #: pretix/control/templates/pretixcontrol/subevents/index.html
 msgid "Presale not started"
-msgstr ""
+msgstr "ยังไม่เริ่มการขายล่วงหน้า"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/events/index.html
@@ -14335,28 +14356,28 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 #: pretix/control/templates/pretixcontrol/subevents/index.html
 msgid "Presale over"
-msgstr ""
+msgstr "สิ้นสุดการขายล่วงหน้าแล้ว"
 
 #: pretix/control/forms/filter.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html
 msgid "Date from"
-msgstr ""
+msgstr "จากวันที่"
 
 #: pretix/control/forms/filter.py
 msgid "Date until"
-msgstr ""
+msgstr "ถึงวันที่"
 
 #: pretix/control/forms/filter.py
 msgid "Start time from"
-msgstr ""
+msgstr "เวลาเริ่มต้น ตั้งแต่"
 
 #: pretix/control/forms/filter.py
 msgid "Start time until"
-msgstr ""
+msgstr "เวลาเริ่มต้น ถึง"
 
 #: pretix/control/forms/filter.py pretix/control/forms/rrule.py
 msgid "Weekday"
-msgstr ""
+msgstr "วันในสัปดาห์"
 
 #: pretix/control/forms/filter.py
 msgid "Search query"
@@ -14372,47 +14393,47 @@ msgstr "เปิดใช้งาน"
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 msgid "not yet activated"
-msgstr ""
+msgstr "ยังไม่ได้เปิดใช้งาน"
 
 #: pretix/control/forms/filter.py
 msgid "Has no memberships"
-msgstr ""
+msgstr "ไม่มีสมาชิกภาพ"
 
 #: pretix/control/forms/filter.py
 msgid "Has any membership"
-msgstr ""
+msgstr "มีสมาชิกภาพใดๆ"
 
 #: pretix/control/forms/filter.py
 msgid "Has valid membership"
-msgstr ""
+msgstr "มีสมาชิกภาพที่มีผลใช้งานได้"
 
 #: pretix/control/forms/filter.py
 msgid "Shop live"
-msgstr ""
+msgstr "ร้านค้าเปิดใช้งานออนไลน์"
 
 #: pretix/control/forms/filter.py
 msgid "Shop not live"
-msgstr ""
+msgstr "ร้านค้ายังไม่เปิดใช้งานออนไลน์"
 
 #: pretix/control/forms/filter.py
 msgid "Single event running or in the future"
-msgstr ""
+msgstr "อีเวนต์เดี่ยวที่กำลังดำเนินอยู่หรือจะจัดขึ้นในอนาคต"
 
 #: pretix/control/forms/filter.py
 msgid "Single event in the past"
-msgstr ""
+msgstr "อีเวนต์เดี่ยวในอดีต"
 
 #: pretix/control/forms/filter.py
 msgid "Search attendee…"
-msgstr ""
+msgstr "ค้นหาผู้เข้าร่วมงาน…"
 
 #: pretix/control/forms/filter.py pretix/plugins/checkinlists/exporters.py
 msgid "Check-in status"
-msgstr ""
+msgstr "สถานะการเช็คอิน"
 
 #: pretix/control/forms/filter.py pretix/plugins/checkinlists/exporters.py
 msgid "All attendees"
-msgstr ""
+msgstr "ผู้เข้าร่วมงานทั้งหมด"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/checkin/index.html
@@ -14420,7 +14441,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 #: pretix/plugins/checkinlists/exporters.py
 msgid "Checked in"
-msgstr ""
+msgstr "เช็คอินแล้ว"
 
 #: pretix/control/forms/filter.py pretix/plugins/checkinlists/exporters.py
 msgctxt "checkin state"
@@ -14430,32 +14451,32 @@ msgstr "มา"
 #: pretix/control/forms/filter.py pretix/plugins/checkinlists/exporters.py
 msgctxt "checkin state"
 msgid "Checked in but left"
-msgstr ""
+msgstr "เช็คอินแล้ว"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/plugins/checkinlists/exporters.py
 msgid "Not checked in"
-msgstr ""
+msgstr "ยังไม่ได้เช็คอิน"
 
 #: pretix/control/forms/filter.py
 msgctxt "subevent"
 msgid "Date start from"
-msgstr ""
+msgstr "วันที่เริ่มต้น ตั้งแต่"
 
 #: pretix/control/forms/filter.py
 msgctxt "subevent"
 msgid "Date start until"
-msgstr ""
+msgstr "วันที่เริ่มต้น ถึง"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/users/index.html
 msgid "Administrator"
-msgstr ""
+msgstr "ผู้ดูแลระบบ"
 
 #: pretix/control/forms/filter.py
 msgid "No administrator"
-msgstr ""
+msgstr "ไม่มีผู้ดูแลระบบ"
 
 #: pretix/control/forms/filter.py
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html
@@ -14825,7 +14846,7 @@ msgstr ""
 
 #: pretix/control/forms/global_settings.py
 msgid "Footer: \"powered by\" name (optional)"
-msgstr ""
+msgstr "ส่วนท้าย: ชื่อในข้อความ \"powered by\" (ไม่บังคับ)"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
@@ -14833,19 +14854,22 @@ msgid ""
 "name of your company or organization (if you made any changes to pretix), "
 "set the name here."
 msgstr ""
+"หากคุณต้องการให้ข้อความ \"powered by\" ในส่วนท้ายของหน้าเว็บรวมชื่อบริษัทหรือองค์กรของคุณ (ก"
+"รณีที่คุณมีการปรับเปลี่ยนซอฟต์แวร์ pretix) โปรดระบุชื่อที่นี่"
 
 #: pretix/control/forms/global_settings.py
 msgid "Link for powered by name"
-msgstr ""
+msgstr "ลิงก์สำหรับชื่อในข้อความ powered by"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
 "If you used the previous option, you can set an URL to link to in the footer."
 msgstr ""
+"หากคุณใช้ตัวเลือกก่อนหน้านี้ คุณสามารถตั้งค่า URL ที่จะเชื่อมโยงไปในส่วนท้ายของหน้าเว็บได้"
 
 #: pretix/control/forms/global_settings.py
 msgid "Source code instructions"
-msgstr ""
+msgstr "คำแนะนำเกี่ยวกับการดาวน์โหลดซอร์สโค้ด"
 
 #: pretix/control/forms/global_settings.py
 msgid ""
@@ -14853,11 +14877,14 @@ msgid ""
 "current source code of the site including all modifications and installed "
 "plugins. This will be publicly available. Make sure to keep it up to date!"
 msgstr ""
+"หากคุณใช้ pretix ภายใต้เงื่อนไขสิทธิ์ใช้งาน AGPLv3 โปรดอธิบายขั้นตอนอย่างละเอียดในการดาวน์โห"
+"ลดซอร์สโค้ดปัจจุบันของเว็บไซต์ รวมถึงส่วนปรับปรุงแก้ไขทั้งหมดและปลั๊กอินที่ติดตั้ง ข้อมูลนี้จะเปิดเผยต่อส"
+"าธารณะ โปรดตรวจสอบให้แน่ใจว่าข้อมูลเป็นปัจจุบันอยู่เสมอ!"
 
 #: pretix/control/forms/item.py
 msgid ""
 "Products in this category are regular products displayed on the front page."
-msgstr ""
+msgstr "สินค้าในหมวดหมู่นี้เป็นสินค้าทั่วไปที่จัดแสดงในหน้าแรกของเว็บไซต์"
 
 #: pretix/control/forms/item.py
 msgid "Add-on product category"
@@ -14929,56 +14956,56 @@ msgstr "ไม่คิดภาษี"
 
 #: pretix/control/forms/item.py
 msgid "Do not add to a quota now"
-msgstr ""
+msgstr "ยังไม่เพิ่มไปยังโควตาในขณะนี้"
 
 #: pretix/control/forms/item.py
 msgid "Add product to an existing quota"
-msgstr ""
+msgstr "เพิ่มสินค้าไปยังโควตาที่มีอยู่แล้ว"
 
 #: pretix/control/forms/item.py
 msgid "Create a new quota for this product"
-msgstr ""
+msgstr "สร้างโควตาใหม่สำหรับสินค้านี้"
 
 #: pretix/control/forms/item.py
 msgid "Quota options"
-msgstr ""
+msgstr "ตัวเลือกโควตา"
 
 #: pretix/control/forms/item.py
 msgid "Add to existing quota"
-msgstr ""
+msgstr "เพิ่มไปยังโควตาที่มีอยู่"
 
 #: pretix/control/forms/item.py
 msgid "New quota name"
-msgstr ""
+msgstr "ชื่อโควตาใหม่"
 
 #: pretix/control/forms/item.py
 msgid "Size"
-msgstr ""
+msgstr "จำนวน"
 
 #: pretix/control/forms/item.py
 msgid "Number of tickets"
-msgstr ""
+msgstr "จำนวนตั๋ว"
 
 #: pretix/control/forms/item.py
 msgid "Quota name is required."
-msgstr ""
+msgstr "จำเป็นต้องระบุชื่อโควตา"
 
 #: pretix/control/forms/item.py
 msgid "Please select a quota."
-msgstr ""
+msgstr "โปรดเลือกโควตา"
 
 #: pretix/control/forms/item.py pretix/plugins/badges/forms.py
 #: pretix/plugins/ticketoutputpdf/forms.py
 msgid "(Event default)"
-msgstr ""
+msgstr "(ค่าเริ่มต้นของอีเวนต์)"
 
 #: pretix/control/forms/item.py
 msgid "Choose automatically depending on event settings"
-msgstr ""
+msgstr "เลือกโดยอัตโนมัติตามการตั้งค่าของอีเวนต์"
 
 #: pretix/control/forms/item.py
 msgid "Yes, if ticket generation is enabled in general"
-msgstr ""
+msgstr "ใช่ หากเปิดใช้งานการสร้างตั๋วโดยทั่วไป"
 
 #: pretix/control/forms/item.py
 msgid ""
@@ -14986,30 +15013,36 @@ msgid ""
 "people over 65. This ticket includes access to all parts of the event, "
 "except the VIP area."
 msgstr ""
+"ตัวอย่างเช่น ราคาส่วนลดนี้สำหรับนักเรียน/นักศึกษาสาขาภาคปกติ ผู้ว่างงาน และผู้ที่มีอายุเกิน 65 ปี ตั๋ว"
+"นี้รวมสิทธิ์เข้าชมทุกส่วนของงาน ยกเว้นโซน VIP"
 
 #: pretix/control/forms/item.py
 msgid ""
 "This option is deprecated. For new products, use the newer option below that "
 "refers to another product instead of a quota."
 msgstr ""
+"ตัวเลือกนี้ถูกเลิกใช้งานแล้ว (Deprecated) สำหรับสินค้าใหม่ โปรดใช้ตัวเลือกใหม่ด้านล่างที่อ้างอิงถึงสิ"
+"นค้าอื่นแทนการอ้างอิงโควตา"
 
 #: pretix/control/forms/item.py
 msgid "Shown independently of other products"
-msgstr ""
+msgstr "แสดงผลอย่างเป็นอิสระไม่ขึ้นกับสินค้าอื่น"
 
 #: pretix/control/forms/item.py
 msgid "Date chosen by customer"
-msgstr ""
+msgstr "วันที่เลือกโดยลูกค้า"
 
 #: pretix/control/forms/item.py
 msgid "No membership granted"
-msgstr ""
+msgstr "ไม่ได้รับสิทธิ์สมาชิกภาพ"
 
 #: pretix/control/forms/item.py
 msgid ""
 "Gift card products should use a tax rule with a rate of 0 percent since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"สินค้าประเภทบัตรของขวัญควรใช้อัตราภาษี 0 เปอร์เซ็นต์ เนื่องจากภาษีขายจะถูกเรียกเก็บเมื่อมีการนำบั"
+"ตรของขวัญมาใช้งาน (ไถ่ถอน)"
 
 #: pretix/control/forms/item.py
 msgid ""
@@ -15017,12 +15050,15 @@ msgid ""
 "restrict the validity of the gift card. A validity of gift cards can be set "
 "in your organizer settings."
 msgstr ""
+"ไม่ควรกำหนดระยะเวลาการใช้งานเฉพาะสำหรับสินค้าบัตรของขวัญเนื่องจากจะไม่จำกัดอายุการใช้งานขอ"
+"งบัตร คุณสามารถตั้งค่าอายุการใช้งานของบัตรของขวัญได้ในการตั้งค่าผู้จัดงาน"
 
 #: pretix/control/forms/item.py
 msgid ""
 "If a valid membership is required, at least one valid membership type needs "
 "to be selected."
 msgstr ""
+"หากจำเป็นต้องมีสมาชิกภาพที่มีผลใช้งานได้ ต้องเลือกประเภทสมาชิกภาพที่มีผลอย่างน้อยหนึ่งประเภท"
 
 #: pretix/control/forms/item.py
 msgid ""
@@ -15031,16 +15067,21 @@ msgid ""
 "the membership later. If you want the membership to be non-personalized, set "
 "the membership type to be transferable."
 msgstr ""
+"สินค้าของคุณมอบสิทธิ์สมาชิกภาพที่ไม่สามารถโอนให้ผู้อื่นได้ จึงควรตั้งค่าให้เป็นตั๋วเข้างานแบบระบุชื่อบุคค"
+"ล มิฉะนั้น ลูกค้าอาจไม่สามารถใช้สิทธิ์สมาชิกภาพได้ในภายหลัง หากคุณต้องการให้สมาชิกภาพไม่ระบุชื่อ ใ"
+"ห้ตั้งค่าประเภทสมาชิกภาพเป็นแบบโอนสิทธิ์ได้"
 
 #: pretix/control/forms/item.py
 msgid "The start of validity must be before the end of validity."
-msgstr ""
+msgstr "วันเริ่มต้นระยะเวลาใช้งานต้องเกิดขึ้นก่อนวันสิ้นสุดระยะเวลาใช้งาน"
 
 #: pretix/control/forms/item.py
 msgid ""
 "You have selected dynamic validity but have not entered a time period. This "
 "would render the tickets unusable."
 msgstr ""
+"คุณเลือกการกำหนดระยะเวลาใช้งานแบบไดนามิกแต่ยังไม่ได้ระบุช่วงเวลา ซึ่งจะส่งผลให้ตั๋วไม่สามารถใช้"
+"งานได้"
 
 #: pretix/control/forms/item.py
 #, python-format
@@ -15049,57 +15090,61 @@ msgid ""
 "by a user or currently is in a user's cart. Please set the variation as "
 "\"inactive\" instead."
 msgstr ""
+"ไม่สามารถลบแบบสินค้าย่อย \"%s\" ได้ เนื่องจากมีการสั่งซื้อแล้วหรืออยู่ในตะกร้าสินค้าของผู้ใช้ในขณะ"
+"นี้ โปรดตั้งค่าแบบสินค้าย่อยเป็น \"ปิดใช้งาน\" แทน"
 
 #: pretix/control/forms/item.py
 msgid "Use value from product"
-msgstr ""
+msgstr "ใช้ค่าจากสินค้าหลัก"
 
 #: pretix/control/forms/item.py
 msgid "Add-ons"
-msgstr ""
+msgstr "สินค้าเพิ่มเติม (Add-ons)"
 
 #: pretix/control/forms/item.py
 msgid "You added the same add-on category twice"
-msgstr ""
+msgstr "คุณเพิ่มหมวดหมู่สินค้าเพิ่มเติมเดียวกันซ้ำสองครั้ง"
 
 #: pretix/control/forms/item.py
 msgid ""
 "Be aware that setting a minimal number makes it impossible to buy this "
 "product if all available add-ons are sold out."
 msgstr ""
+"โปรดทราบว่าการกำหนดจำนวนขั้นต่ำจะทำให้ไม่สามารถซื้อสินค้านี้ได้หากสินค้าเพิ่มเติมทั้งหมดถูกขายจนหม"
+"ด"
 
 #: pretix/control/forms/item.py
 msgid "Bundled products"
-msgstr ""
+msgstr "สินค้ารวมชุด (Bundled products)"
 
 #: pretix/control/forms/item.py
 msgid "You added the same bundled product twice."
-msgstr ""
+msgstr "คุณเพิ่มสินค้ารวมชุดเดียวกันซ้ำสองครั้ง"
 
 #: pretix/control/forms/item.py
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html
 msgid "Bundled product"
-msgstr ""
+msgstr "สินค้ารวมชุด"
 
 #: pretix/control/forms/item.py pretix/control/forms/orders.py
 msgid "inactive"
-msgstr ""
+msgstr "ปิดใช้งาน"
 
 #: pretix/control/forms/item.py
 msgid "Sample Conference Center, Heidelberg, Germany"
-msgstr ""
+msgstr "ศูนย์การประชุมตัวอย่าง, ไฮเดลเบิร์ก, เยอรมนี"
 
 #: pretix/control/forms/mailsetup.py
 msgid "Hostname"
-msgstr ""
+msgstr "ชื่อโฮสต์ (Hostname)"
 
 #: pretix/control/forms/mailsetup.py
 msgid "Port"
-msgstr ""
+msgstr "พอร์ต (Port)"
 
 #: pretix/control/forms/mailsetup.py
 msgid "Username"
-msgstr ""
+msgstr "ชื่อผู้ใช้"
 
 #: pretix/control/forms/mailsetup.py
 #, python-brace-format
@@ -15108,104 +15153,112 @@ msgid ""
 "only use characters A-Z, a-z, 0-9, and common special characters "
 "({characters})."
 msgstr ""
+"รหัสผ่านมีตัวอักษรที่ไม่รองรับโดยระบบอีเมลของเรา โปรดใช้เฉพาะตัวอักษร A-Z, a-z, 0-9 และอักข"
+"ระพิเศษทั่วไป ({characters}) เท่านั้น"
 
 #: pretix/control/forms/mailsetup.py
 msgid "Use STARTTLS"
-msgstr ""
+msgstr "ใช้ STARTTLS"
 
 #: pretix/control/forms/mailsetup.py
 msgid "Commonly enabled on port 587."
-msgstr ""
+msgstr "มักเปิดใช้งานบนพอร์ต 587"
 
 #: pretix/control/forms/mailsetup.py
 msgid "Use SSL"
-msgstr ""
+msgstr "ใช้ SSL"
 
 #: pretix/control/forms/mailsetup.py
 msgid "Commonly enabled on port 465."
-msgstr ""
+msgstr "มักเปิดใช้งานบนพอร์ต 465"
 
 #: pretix/control/forms/mailsetup.py
 msgid ""
 "You can activate either SSL or STARTTLS security, but not both at the same "
 "time."
 msgstr ""
+"คุณสามารถเปิดใช้งานความปลอดภัยอย่างใดอย่างหนึ่งระหว่าง SSL หรือ STARTTLS ได้ แต่ไม่สามารถเ"
+"ปิดใช้งานทั้งสองอย่างพร้อมกันได้"
 
 #: pretix/control/forms/mailsetup.py
 msgid ""
 "You are not allowed to use this mail server, please choose one with a public "
 "IP address instead."
 msgstr ""
+"คุณไม่อนุญาตให้ใช้เซิร์ฟเวอร์อีเมลนี้ โปรดเลือกเซิร์ฟเวอร์ที่มีที่อยู่ Public IP แทน"
 
 #: pretix/control/forms/mailsetup.py
 msgid "We were unable to resolve this hostname."
 msgstr ""
+"เราไม่สามารถค้นหาที่อยู่ IP จากชื่อโฮสต์นี้ได้ (Unable to resolve hostname)"
 
 #: pretix/control/forms/mapping.py
 msgid "Overwrite"
-msgstr ""
+msgstr "เขียนทับ"
 
 #: pretix/control/forms/mapping.py
 msgid "Fill if new"
-msgstr ""
+msgstr "กรอกข้อมูลหากเป็นรายการใหม่"
 
 #: pretix/control/forms/mapping.py
 msgid "Fill if empty"
-msgstr ""
+msgstr "กรอกข้อมูลหากยังว่างอยู่"
 
 #: pretix/control/forms/mapping.py
 msgid "Add to list"
-msgstr ""
+msgstr "เพิ่มลงในรายการ"
 
 #: pretix/control/forms/mapping.py
 msgid "pretix field"
-msgstr ""
+msgstr "ฟิลด์ pretix"
 
 #: pretix/control/forms/modelimport.py
 #, python-brace-format
 msgid "CSV column: \"{name}\""
-msgstr ""
+msgstr "คอลัมน์ CSV: \"{name}\""
 
 #: pretix/control/forms/modelimport.py
 msgid "Import mode"
-msgstr ""
+msgstr "โหมดการนำเข้าข้อมูล"
 
 #: pretix/control/forms/modelimport.py
 msgid "Create a separate order for each line"
-msgstr ""
+msgstr "สร้างคำสั่งซื้อแยกตามแต่ละบรรทัด"
 
 #: pretix/control/forms/modelimport.py
 msgid "Create one order with one position per line"
-msgstr ""
+msgstr "สร้างคำสั่งซื้อเดียวโดยมีหนึ่งรายการต่อบรรทัด"
 
 #: pretix/control/forms/modelimport.py
 msgid ""
 "Group multiple lines together into the same order based on a grouping column"
 msgstr ""
+"จัดกลุ่มหลายบรรทัดเข้าด้วยกันในคำสั่งซื้อเดียวกันโดยอ้างอิงจากคอลัมน์การจัดกลุ่ม"
 
 #: pretix/control/forms/modelimport.py
 msgid "Create orders as fully paid"
-msgstr ""
+msgstr "สร้างคำสั่งซื้อในสถานะชำระเงินเต็มจำนวนแล้ว"
 
 #: pretix/control/forms/modelimport.py
 msgid "Create orders as pending and still require payment"
-msgstr ""
+msgstr "สร้างคำสั่งซื้อในสถานะรอดำเนินการและยังต้องชำระเงิน"
 
 #: pretix/control/forms/modelimport.py
 msgid "Create orders as test mode orders"
-msgstr ""
+msgstr "สร้างคำสั่งซื้อในรูปแบบคำสั่งซื้อโหมดทดลอง (Test mode)"
 
 #: pretix/control/forms/modelimport.py
 msgid "Orders not created in test mode cannot be deleted again after import."
 msgstr ""
+"คำสั่งซื้อที่ไม่ได้สร้างในโหมดทดลองจะไม่สามารถลบออกได้อีกหลังจากนำเข้าข้อมูลแล้ว"
 
 #: pretix/control/forms/modelimport.py
 msgid "A grouping cannot be specified for this import mode."
-msgstr ""
+msgstr "ไม่สามารถระบุการจัดกลุ่มสำหรับโหมดการนำเข้านี้ได้"
 
 #: pretix/control/forms/modelimport.py
 msgid "A grouping needs to be specified for this import mode."
-msgstr ""
+msgstr "จำเป็นต้องระบุการจัดกลุ่มสำหรับโหมดการนำเข้านี้"
 
 #: pretix/control/forms/orders.py
 msgid "Confirm order regardless of payment"
@@ -15413,64 +15466,68 @@ msgstr "คุณไม่สามารถเลือกที่นั่ง
 
 #: pretix/control/forms/orders.py
 msgid "(Unchanged)"
-msgstr ""
+msgstr "(ไม่มีการเปลี่ยนแปลง)"
 
 #: pretix/control/forms/orders.py
 msgid "New price (gross)"
-msgstr ""
+msgstr "ราคาใหม่ (รวมภาษี)"
 
 #: pretix/control/forms/orders.py
 msgid "Ticket is blocked"
-msgstr ""
+msgstr "ตั๋วถูกระงับใช้งาน"
 
 #: pretix/control/forms/orders.py
 msgid "Validity start"
-msgstr ""
+msgstr "เริ่มต้นระยะเวลาใช้งาน"
 
 #: pretix/control/forms/orders.py
 msgid "Validity end"
-msgstr ""
+msgstr "สิ้นสุดระยะเวลาใช้งาน"
 
 #: pretix/control/forms/orders.py
 msgid "Generate a new secret"
-msgstr ""
+msgstr "สร้างรหัสลับใหม่ (Secret)"
 
 #: pretix/control/forms/orders.py
 msgid ""
 "This affects both the ticket secret (often used as a QR code) as well as the "
 "link used to individually access the ticket."
 msgstr ""
+"การดำเนินการนี้จะส่งผลทั้งต่อรหัสลับของตั๋ว (มักใช้ในรูปแบบ QR code) และลิงก์ที่ใช้สำหรับเข้าถึงตั๋วข"
+"องแต่ละบุคคล"
 
 #: pretix/control/forms/orders.py
 msgid "Cancel this position"
-msgstr ""
+msgstr "ยกเลิกรายการนี้"
 
 #: pretix/control/forms/orders.py
 msgid "Split into new order"
-msgstr ""
+msgstr "แยกออกเป็นคำสั่งซื้อใหม่"
 
 #: pretix/control/forms/orders.py
 msgid "(No membership)"
-msgstr ""
+msgstr "(ไม่มีสมาชิกภาพ)"
 
 #: pretix/control/forms/orders.py
 msgid "Remove this fee"
-msgstr ""
+msgstr "ลบค่าธรรมเนียมนี้"
 
 #: pretix/control/forms/orders.py
 msgid ""
 "Note that payment fees have a special semantic and might automatically be "
 "changed if the payment method of the order is changed."
 msgstr ""
+"โปรดทราบว่าค่าธรรมเนียมการชำระเงินมีเงื่อนไขเฉพาะและอาจถูกปรับเปลี่ยนโดยอัตโนมัติหากมีการเปลี่"
+"ยนแปลงวิธีการชำระเงินของคำสั่งซื้อ"
 
 #: pretix/control/forms/orders.py
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid "including all taxes"
-msgstr ""
+msgstr "รวมภาษีทั้งหมดแล้ว"
 
 #: pretix/control/forms/orders.py
 msgid "Invalidate secrets"
-msgstr ""
+msgstr "ยกเลิกรหัสลับเดิม"
 
 #: pretix/control/forms/orders.py
 msgid ""
@@ -15478,10 +15535,12 @@ msgid ""
 "to the order page to the user and the user will need to download his tickets "
 "again. The old versions will be invalid."
 msgstr ""
+"ระบบจะสร้างรหัสลับของคำสั่งซื้อและตั๋วขึ้นมาใหม่ คุณจะต้องส่งลิงก์หน้าคำสั่งซื้อให้แก่ผู้ใช้อีกครั้ง และผู้ใช้"
+"จำเป็นต้องดาวน์โหลดตั๋วใหม่อีกครั้ง ตั๋วเวอร์ชันเดิมจะไม่สามารถใช้งานได้"
 
 #: pretix/control/forms/orders.py pretix/plugins/sendmail/forms.py
 msgid "Attach tickets"
-msgstr ""
+msgstr "แนบไฟล์ตั๋ว"
 
 #: pretix/control/forms/orders.py pretix/plugins/sendmail/forms.py
 msgid ""
