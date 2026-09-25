@@ -161,6 +161,7 @@ class LoggingMixin:
                 '_pass',
                 'secret',
             ]
+
             def clean_dict_recursive(d):
                 data = {}
                 for k, v in d.items():
