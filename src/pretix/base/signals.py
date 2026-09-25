@@ -605,15 +605,14 @@ subclass of pretix.base.ticketoutput.BaseTicketOutput
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_notification_types = EventPluginSignal()
+register_notification_types = GlobalSignal()
 """
 This signal is sent out to get all known notification types. Receivers should return an
 instance of a subclass of pretix.base.notifications.NotificationType or a list of such
 instances.
 
-As with all event-plugin signals, the ``sender`` keyword argument will contain the event,
-however for this signal, the ``sender`` **may also be None** to allow creating the general
-notification settings!
+When called for actually sending notifications, ``sender`` will be the event or organizer,
+depending on context.
 """
 
 register_event_permission_groups = GlobalSignal()
@@ -628,13 +627,22 @@ This signal is sent out to get all known permissions. Receivers should return an
 instance of pretix.base.permissions.PermissionGroup or a list of such instances.
 """
 
-notification = EventPluginSignal()
+event_notification_sent = EventPluginSignal()
 """
 Arguments: ``logentry_id``, ``notification_type``
 
 This signal is sent out when a notification is sent.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+organizer_notification_sent = OrganizerPluginSignal()
+"""
+Arguments: ``logentry_id``, ``notification_type``
+
+This signal is sent out when a notification is sent.
+
+As with all organizer-plugin signals, the ``sender`` keyword argument will contain the organizer.
 """
 
 register_sales_channel_types = GlobalSignal()
