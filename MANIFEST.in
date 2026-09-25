@@ -42,6 +42,7 @@ recursive-include src *.py
 recursive-include src *.svg
 recursive-include src *.txt
 recursive-include src Makefile
+recursive-include src *.pdf
 
 recursive-exclude doc *
 recursive-exclude deployment *
