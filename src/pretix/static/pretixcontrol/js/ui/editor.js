@@ -590,6 +590,10 @@ var editor = {
 		if (editor._window_loaded) {
 			editor._ready()
 		}
+
+		editor.fabric.on('object:added', function(e) {
+			editor.fabric.setActiveObject(e.target);
+		})
 	},
 
 	_window_load_event: function () {
