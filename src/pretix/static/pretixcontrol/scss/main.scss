@@ -574,6 +574,7 @@ table td ul:last-child {
         rgba(255, 255, 255, .5) 24px);
 }
 
+.panel-default.admin-only > .panel-heading.admin-only { background-color: rgba(161, 161, 161, 0.42); }
 
 .danger.admin-only {
     background-image: repeating-linear-gradient(135deg, 
