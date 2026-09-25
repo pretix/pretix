@@ -31,6 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+import logging
 from datetime import datetime
 
 from django.db.models import Exists, OuterRef, Q
@@ -42,6 +43,8 @@ from pretix.base.models import Checkin, Event, InvoiceAddress, Order, User
 from pretix.base.services.mail import mail
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
+
+logger = logging.getLogger(__name__)
 
 
 def _chunks(lst, n):
@@ -70,6 +73,8 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
         except InvoiceAddress.DoesNotExist:
             ia = InvoiceAddress(order=o)
 
+        parent_op = None
+        sent_to_positions = set()
         if recipients in ('both', 'attendees'):
             for p in o.positions.annotate(
                 any_checkins=Exists(
@@ -85,10 +90,16 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                     )
                 ),
             ).prefetch_related('addons', 'subevent'):
-                if p.addon_to_id is not None:
+
+                if p.addon_to_id is None:
+                    parent_op = p
+                elif not parent_op or p.addon_to_id != parent_op.id:
+                    # this op is an add-on, but not to the current parent_op
+                    # something got mixed up as add-ons should always come directly after their parent
+                    logger.warning(f"Add-ons are mixed up for position #{p.positionid} in order {o.full_code}")
                     continue
 
-                if p.item_id not in items and not any(a.item_id in items for a in p.addons.all()):
+                if p.item_id not in items:
                     continue
 
                 if filter_checkins:
@@ -99,13 +110,8 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                     if not allowed:
                         continue
 
-                if not p.attendee_email:
-                    if recipients == 'attendees':
-                        send_to_order = True
-                    continue
-
-                if p.attendee_email == o.email and send_to_order:
-                    continue
+                if not p.attendee_email and p.addon_to_id:
+                    p = parent_op
 
                 if subevent and p.subevent_id != subevent:
                     continue
@@ -114,6 +120,22 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                     continue
 
                 if subevents_to and p.subevent.date_from >= subevents_to:
+                    continue
+
+                if not p.attendee_email:
+                    send_to_order = True
+                    continue
+
+                if p.addon_to_id and p.attendee_email == parent_op.attendee_email:
+                    # if op is add-on and parent's email match => send to parent
+                    p = parent_op
+
+                if p.pk in sent_to_positions:
+                    # this position already got an email
+                    continue
+
+                if p.attendee_email == o.email:
+                    send_to_order = True
                     continue
 
                 with language(o.locale, event.settings.region):
@@ -137,6 +159,7 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                             user=user,
                             data=outgoing_mail.log_data(),
                         )
+                    sent_to_positions.add(p.pk)
 
         if send_to_order and o.email:
             with language(o.locale, event.settings.region):
