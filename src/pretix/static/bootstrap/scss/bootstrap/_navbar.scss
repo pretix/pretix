@@ -532,7 +532,7 @@
   }
 
   .navbar-nav {
-    > li > a {
+    > li > a, > li > form > button {
       color: $navbar-inverse-link-color;
 
       &:hover,
@@ -541,7 +541,7 @@
         background-color: $navbar-inverse-link-hover-bg;
       }
     }
-    > .active > a {
+    > .active > a, > li.active > form > button {
       &,
       &:hover,
       &:focus {

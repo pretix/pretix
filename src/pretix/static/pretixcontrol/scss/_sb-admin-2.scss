@@ -89,6 +89,13 @@ body {
     left: auto;
 }
 
+.nav li a div[lang] {
+    padding-top: 0px;
+    background-position-y: 4px;
+    min-height: inherit;
+    white-space: inherit;
+}
+
 // --Sidebar
 
 .sidebar {
