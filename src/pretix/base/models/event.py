@@ -1480,16 +1480,21 @@ class Event(EventMixin, LoggedModel):
         return get_all_plugins_map(event=self, only_visible=True)
 
     def set_active_plugins(self, modules, allow_restricted=frozenset()):
-        plugins_active = self.get_plugins()
         plugins_available = self.get_available_plugins()
+        plugins_current = set(self.get_plugins())
+        plugins_new = set(modules)
 
-        enable = [m for m in modules if m not in plugins_active and m in plugins_available]
-
-        for module in enable:
+        for module in plugins_new - plugins_current:
+            if module not in plugins_available:
+                continue
             if getattr(plugins_available[module].app, 'restricted', False) and module not in allow_restricted:
                 modules.remove(module)
             elif hasattr(plugins_available[module].app, 'installed'):
                 getattr(plugins_available[module].app, 'installed')(self)
+
+        for module in plugins_current - plugins_new:
+            if module in plugins_available and hasattr(plugins_available[module].app, 'uninstalled'):
+                getattr(plugins_available[module].app, 'uninstalled')(self)
 
         self.plugins = ",".join(modules)
 
@@ -1505,17 +1510,13 @@ class Event(EventMixin, LoggedModel):
 
     def disable_plugin(self, module):
         """
-        Adds a plugin to the list of plugins, calling its ``uninstalled`` hook (if available).
+        Removes a plugin from the list of plugins, calling its ``uninstalled`` hook (if available).
         It is the caller's responsibility to save the event object.
         """
         plugins_active = self.get_plugins()
         if module in plugins_active:
             plugins_active.remove(module)
             self.set_active_plugins(plugins_active)
-
-            plugins_available = self.get_available_plugins()
-            if module in plugins_available and hasattr(plugins_available[module].app, 'uninstalled'):
-                getattr(plugins_available[module].app, 'uninstalled')(self)
 
     @staticmethod
     def clean_has_subevents(event, has_subevents):
