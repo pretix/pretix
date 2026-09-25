@@ -27,6 +27,7 @@ from http import cookies
 
 from django.conf import settings
 from django.core.exceptions import SuspiciousFileOperation
+from django.middleware.csrf import CsrfViewMiddleware as BaseCsrfMiddleware
 from PIL import Image
 from requests.adapters import HTTPAdapter
 from urllib3.connection import HTTPConnection, HTTPSConnection
@@ -42,6 +43,7 @@ from urllib3.util.timeout import _DEFAULT_TIMEOUT
 
 from pretix.helpers.reportlab import ThumbnailingImageReader
 from pretix.helpers.ssrf import should_block_access
+from pretix.multidomain.middlewares import CsrfViewMiddleware
 
 
 def monkeypatch_vobject_performance():
@@ -242,6 +244,13 @@ def monkeypatch_reportlab_imagereader():
     utils.ImageReader.__init__ = new_init
 
 
+def monkeypatch_csrf_middleware():
+    # Some views from django or plugins use the middleware or the derived decorators directly,
+    # so we have to also patch the stock middleware
+    BaseCsrfMiddleware._get_secret = CsrfViewMiddleware._get_secret
+    BaseCsrfMiddleware._set_csrf_cookie = CsrfViewMiddleware._set_csrf_cookie
+
+
 def monkeypatch_all_at_ready():
     monkeypatch_vobject_performance()
     monkeypatch_pillow_safer()
@@ -249,3 +258,4 @@ def monkeypatch_all_at_ready():
     monkeypatch_urllib3_ssrf_protection()
     monkeypatch_cookie_morsel()
     monkeypatch_reportlab_imagereader()
+    monkeypatch_csrf_middleware()

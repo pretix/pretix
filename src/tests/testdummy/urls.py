@@ -21,6 +21,7 @@
 #
 from django.http import HttpResponse
 from django.urls import path
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 
 def view(request):
@@ -33,6 +34,7 @@ urlpatterns = [
         view,
         name="view",
     ),
+    path('ensure_csrf_cookie/', ensure_csrf_cookie(view)),
 ]
 
 organizer_patterns = [
