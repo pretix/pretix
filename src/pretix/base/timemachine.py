@@ -21,9 +21,11 @@
 #
 import contextvars
 from contextlib import contextmanager
+from datetime import datetime
 
-from dateutil.parser import parse
+from django.contrib import messages
 from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.auth import has_event_access_permission
 
@@ -34,8 +36,17 @@ timemachine_now_var = contextvars.ContextVar('timemachine_now', default=None)
 def time_machine_now_assigned_from_request(request):
     if hasattr(request, 'event') and f'timemachine_now_dt:{request.event.pk}' in request.session and \
             request.event.testmode and has_event_access_permission(request):
-        request.now_dt = parse(request.session[f'timemachine_now_dt:{request.event.pk}'])
-        request.now_dt_is_fake = True
+        try:
+            request.now_dt = datetime.fromisoformat(request.session[f'timemachine_now_dt:{request.event.pk}'])
+            request.now_dt_is_fake = True
+        except ValueError:
+            del request.session[f'timemachine_now_dt:{request.event.pk}']
+            messages.error(
+                request, _('Invalid date.')
+            )
+            request.now_dt = now()
+            request.now_dt_is_fake = False
+
     else:
         request.now_dt = now()
         request.now_dt_is_fake = False
