@@ -432,7 +432,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        plugins_available = self.object.get_available_plugins()
+        plugins_available = self.object.get_available_plugins(filter_restricted=True)
         plugin_enabled = None
 
         with transaction.atomic():
@@ -442,10 +442,6 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                     module = key.split(":")[1]
                     if value == "enable" and module in plugins_available:
                         pluginmeta = plugins_available[module]
-                        if getattr(pluginmeta, 'restricted', False):
-                            if module not in request.event.settings.allowed_restricted_plugins:
-                                continue
-
                         if getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT) not in (PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
                             continue
 

@@ -269,16 +269,13 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
 
     def validate_plugins(self, value):
         current_plugins = self.instance.get_plugins() if self.instance and self.instance.pk else []
-        settings_holder = self.instance if self.instance and self.instance.pk else self.context['organizer']
-        plugins_available = settings_holder.get_available_plugins()
+        obj = self.instance if self.instance and self.instance.pk else self.context['organizer']
+        plugins_available = obj.get_available_plugins(filter_restricted=True)
 
         allowed_levels = (PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID)
         for plugin in value.get('plugins'):
             if plugin not in plugins_available:
-                raise ValidationError(_('Unknown plugin: \'{name}\'.').format(name=plugin))
-            if getattr(plugins_available[plugin], 'restricted', False):
-                if plugin not in settings_holder.settings.allowed_restricted_plugins:
-                    raise ValidationError(_('Restricted plugin: \'{name}\'.').format(name=plugin))
+                raise ValidationError(_('Unknown or restricted plugin: \'{name}\'.').format(name=plugin))
             level = getattr(plugins_available[plugin], 'level', PLUGIN_LEVEL_EVENT)
             if level not in allowed_levels:
                 raise ValidationError('Plugin cannot be enabled on this level: \'{name}\'.'.format(name=plugin))

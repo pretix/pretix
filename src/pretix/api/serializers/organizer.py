@@ -80,16 +80,12 @@ class OrganizerSerializer(I18nAwareModelSerializer):
         fields = ('name', 'slug', 'public_url', 'plugins')
 
     def validate_plugins(self, value):
-        plugins_available = self.instance.get_available_plugins()
-        settings_holder = self.instance
+        plugins_available = self.instance.get_available_plugins(filter_restricted=True)
 
         allowed_levels = (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID)
         for plugin in value.get('plugins'):
             if plugin not in plugins_available:
-                raise ValidationError(_('Unknown plugin: \'{name}\'.').format(name=plugin))
-            if getattr(plugins_available[plugin], 'restricted', False):
-                if plugin not in settings_holder.settings.allowed_restricted_plugins:
-                    raise ValidationError(_('Restricted plugin: \'{name}\'.').format(name=plugin))
+                raise ValidationError(_('Unknown or restricted plugin: \'{name}\'.').format(name=plugin))
             if getattr(plugins_available[plugin], 'level', PLUGIN_LEVEL_EVENT) not in allowed_levels:
                 raise ValidationError('Plugin cannot be enabled on this level: \'{name}\'.'.format(name=plugin))
 

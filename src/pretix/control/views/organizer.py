@@ -676,7 +676,7 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        plugins_available = self.object.get_available_plugins()
+        plugins_available = self.object.get_available_plugins(filter_restricted=True)
         choose_events_next = False
         with transaction.atomic():
             for key, value in request.POST.items():
@@ -684,10 +684,6 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
                     module = key.split(":")[1]
                     if value == "enable" and module in plugins_available:
                         pluginmeta = plugins_available[module]
-                        if getattr(pluginmeta, 'restricted', False):
-                            if module not in request.organizer.settings.allowed_restricted_plugins:
-                                continue
-
                         level = getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT)
                         if level not in (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
                             continue

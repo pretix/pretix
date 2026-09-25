@@ -1466,10 +1466,10 @@ class Event(PluginsMixin, EventMixin, LoggedModel):
         self.items.all().delete()
         self.subevents.all().delete()
 
-    def get_available_plugins(self):
-        from pretix.base.plugins import get_all_plugins_map
+    def get_available_plugins(self, filter_restricted=False):
+        from pretix.base.plugins import get_all_plugins_map, ALLOW_ALL
 
-        return get_all_plugins_map(event=self, only_visible=True)
+        return get_all_plugins_map(event=self, only_visible=True, allow_restricted=self.settings.allowed_restricted_plugins if filter_restricted else ALLOW_ALL)
 
     @staticmethod
     def clean_has_subevents(event, has_subevents):

@@ -37,6 +37,10 @@ PLUGIN_LEVEL_ORGANIZER = 'organizer'
 PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID = 'event_organizer'
 
 
+class ALLOW_ALL:
+    pass
+
+
 class PluginType(Enum):
     """
     Plugin type classification. THIS IS DEPRECATED, DO NOT USE ANY MORE.
@@ -49,8 +53,11 @@ class PluginType(Enum):
     EXPORT = 4
 
 
-def plugin_is_available(meta, event=None, organizer=None, only_visible=False):
+def plugin_is_available(meta, event=None, organizer=None, only_visible=False, allow_restricted: type[ALLOW_ALL] | List[str]=ALLOW_ALL):
     if only_visible and (meta.name.startswith('.') or not getattr(meta, 'visible', True)):
+        return False
+
+    if allow_restricted is not ALLOW_ALL and getattr(meta, 'restricted', False) and meta.module not in allow_restricted:
         return False
 
     if not hasattr(meta.app, 'is_available'):
@@ -90,15 +97,15 @@ def get_plugin_meta_from_app_config(app):
     return meta
 
 
-def iter_all_plugins(*, event=None, organizer=None, only_visible=False) -> Iterable[type]:
+def iter_all_plugins(*, event=None, organizer=None, only_visible=False, allow_restricted: type[ALLOW_ALL] | List[str]=ALLOW_ALL) -> Iterable[type]:
     assert not event or not organizer
     for app in apps.get_app_configs():
         if meta := get_plugin_meta_from_app_config(app):
-            if plugin_is_available(meta, event, organizer, only_visible):
+            if plugin_is_available(meta, event, organizer, only_visible, allow_restricted):
                 yield meta
 
 
-def get_all_plugins(*, event=None, organizer=None, only_visible=False) -> List[type]:
+def get_all_plugins(*, event=None, organizer=None, only_visible=False, allow_restricted: type[ALLOW_ALL] | List[str]=ALLOW_ALL) -> List[type]:
     """
     Returns the PretixPluginMeta classes of all plugins found in the installed Django apps.
 
@@ -106,14 +113,14 @@ def get_all_plugins(*, event=None, organizer=None, only_visible=False) -> List[t
     calling `is_available`, not for filtering by plugin level.
     """
     return sorted(
-        iter_all_plugins(event=event, organizer=organizer, only_visible=only_visible),
+        iter_all_plugins(event=event, organizer=organizer, only_visible=only_visible, allow_restricted=allow_restricted),
         key=lambda m: (0 if m.module.startswith('pretix.') else 1, str(m.name).lower().replace('pretix ', ''))
     )
 
 
-def get_all_plugins_map(*, event=None, organizer=None, only_visible=False) -> dict[str, type]:
+def get_all_plugins_map(*, event=None, organizer=None, only_visible=False, allow_restricted: type[ALLOW_ALL] | List[str]=ALLOW_ALL) -> dict[str, type]:
     return {
-        p.module: p for p in iter_all_plugins(event=event, organizer=organizer, only_visible=only_visible)
+        p.module: p for p in iter_all_plugins(event=event, organizer=organizer, only_visible=only_visible, allow_restricted=allow_restricted)
     }
 
 
