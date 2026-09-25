@@ -318,6 +318,15 @@
                                 </li>
                             </ul>
                         </div>
+                        <div class="side-header">
+                            {% if request.event %}
+                                {% trans "Global and user menu" %}
+                            {% elif request.organizer %}
+                                {% trans "Organizer account menu" %}
+                            {% else %}
+                                {% trans "Event menu" %}
+                            {% endif %}
+                        </div>
                         <ul class="nav" id="side-menu">
                             {% if request.event and request.event.testmode %}
                                 <li class="testmode">

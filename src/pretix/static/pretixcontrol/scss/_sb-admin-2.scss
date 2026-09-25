@@ -193,6 +193,14 @@ body {
             font-size: 11px;
         }
     }
+
+}
+.side-header {
+    padding: 25px 15px 5px;
+    border-bottom: 2px solid #eee;
+    color: #aaa;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 @media(min-width:768px) {
