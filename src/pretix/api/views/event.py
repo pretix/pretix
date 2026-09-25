@@ -342,6 +342,23 @@ class EventViewSet(viewsets.ModelViewSet):
             raise PermissionDenied('The event could not be deleted as some constraints (e.g. data created by plug-ins) '
                                    'do not allow it.')
 
+    @action(detail=True, methods=['GET'])
+    def available_plugins(self, *args, **kwargs):
+        from pretix.base.plugins import get_all_plugins, PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID
+        plugins_available = [
+            {
+                "plugin": p.module,
+                "name": p.name,
+                "level": getattr(p, "level", PLUGIN_LEVEL_EVENT),
+                "restricted": ("allowed" if p.module in self.request.event.settings.allowed_restricted_plugins else "restricted") if getattr(p, "restricted", False) else "no",
+            }
+            for p in get_all_plugins(event=self.request.event, only_visible=True)
+            if getattr(p, "level", PLUGIN_LEVEL_EVENT) in (PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID, PLUGIN_LEVEL_EVENT)
+        ]
+        return Response({
+            'results': plugins_available,
+        })
+
 
 class CloneEventViewSet(viewsets.ModelViewSet):
     serializer_class = CloneEventSerializer

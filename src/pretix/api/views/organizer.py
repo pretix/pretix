@@ -145,6 +145,22 @@ class OrganizerViewSet(mixins.UpdateModelMixin, viewsets.ReadOnlyModelViewSet):
                     data={'plugin': module}
                 )
 
+    @action(detail=True, methods=['GET'])
+    def available_plugins(self, *args, **kwargs):
+        from pretix.base.plugins import get_all_plugins
+        plugins_available = [
+            {
+                "plugin": p.module,
+                "name": p.name,
+                "level": getattr(p, "level", PLUGIN_LEVEL_EVENT),
+                "restricted": ("allowed" if p.module in self.request.organizer.settings.allowed_restricted_plugins else "restricted") if getattr(p, "restricted", False) else "no",
+            }
+            for p in get_all_plugins(organizer=self.request.organizer, only_visible=True)
+        ]
+        return Response({
+            'results': plugins_available
+        })
+
 
 class SeatingPlanViewSet(viewsets.ModelViewSet):
     serializer_class = SeatingPlanSerializer
