@@ -136,17 +136,17 @@ def compare_pdfs(pdf_dir: Path, inp_a: Path | bytes, inp_b: Path | bytes):
     pdf_b = pypdfium2.PdfDocument(inp_b)
 
     pdf_a.save(pdf_dir / "a.pdf")
-    pdf_a.save(pdf_dir / "b.pdf")
+    pdf_b.save(pdf_dir / "b.pdf")
 
     assert len(pdf_a) == len(pdf_b)
 
-    for i, (expected_page, output_page) in enumerate(zip(pdf_a, pdf_b)):
-        expected_render = expected_page.render()
-        output_render = output_page.render()
-        assert expected_render.height == output_render.height
-        assert expected_render.width == output_render.width
+    for i, (page_a, page_b) in enumerate(zip(pdf_a, pdf_b)):
+        render_a = page_a.render()
+        render_b = page_b.render()
+        assert render_a.height == render_b.height
+        assert render_a.width == render_b.width
 
-        diff = ImageChops.difference(expected_render.to_pil(), output_render.to_pil())
+        diff = ImageChops.difference(render_a.to_pil(), render_b.to_pil())
         if diff.getbbox():
             diff.save(pdf_dir / f"{i}.png")
             assert not diff.getbbox(), f"Page {i} differs."
