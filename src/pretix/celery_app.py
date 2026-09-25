@@ -28,6 +28,10 @@ from django.dispatch import receiver
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pretix.settings")
 logger = logging.getLogger(__name__)
 
+from pretix.settings import LOGGING
+
+LOGGING['formatters']['default']['format'] = '[%(asctime)s: %(levelname)s/%(processName)s] RequestId=%(request_id)s %(name)s %(module)s %(message)s'
+
 from django.conf import settings
 
 app = Celery('pretix')
