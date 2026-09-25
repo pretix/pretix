@@ -31,9 +31,7 @@
 .navbar-header {
   @include clearfix;
 
-  @media (min-width: $grid-float-breakpoint) {
-    float: left;
-  }
+  display: flex;
 }
 
 
@@ -159,7 +157,6 @@
 // Brand/project name
 
 .navbar-brand {
-  float: left;
   height: $navbar-height;
   padding: $navbar-padding-vertical $navbar-padding-horizontal;
   font-size: $font-size-large;
@@ -236,19 +233,52 @@
     line-height: $line-height-computed;
   }
 
-  @media (max-width: $grid-float-breakpoint-max) {
-    // Dropdowns get custom display when collapsed
-    .open .dropdown-menu {
-      position: static;
+  display: flex;
+  margin: 0;
+  max-width: 100%;
+
+  > li {
+    min-width: 0;
+    > a {
+      padding-top: $navbar-padding-vertical;
+      padding-bottom: $navbar-padding-vertical;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 100%;
+      flex: 0 1 10px;
+      min-width: 0;
+    }
+  }
+}
+
+@media (max-width: $grid-float-breakpoint-max) {
+  .navbar-default.sidebar > .sidebar-nav {
+    display: none;
+  }
+  // Dropdowns get custom display when collapsed
+  .navbar-nav .open, .navbar-default.sidebar.open {
+    & > .dropdown-menu, & > .sidebar-nav {
+      position: fixed; display: block;
       float: none;
       width: auto;
+      width: 80%; top: 0; left: inherit; right: 0; bottom: 0; background: white; z-index: 2;
       margin-top: 0;
-      background-color: transparent;
-      border: 0;
-      box-shadow: none;
-      > li > a,
-      .dropdown-header {
-        padding: 5px 15px 5px 25px;
+      padding: 50px 0 10px 0;
+      overflow-y: auto; overflow-x: hidden;
+      border: 0; border-left: 1px solid #666;
+      box-shadow: 0 0 70px #222; border-radius: 0;
+      background: white linear-gradient(140deg, white 0%, white 40%, #faf4fe 60%, #e8cefb 85% , #ddb8fa 100%);
+      > li > a {
+        padding: 12px 15px 12px 25px;
+      }
+      .dropdown-header, .dropdown-mobile-header, .divider {
+        margin-left: 25px; margin-right: 15px; padding-left: 0; padding-right: 0;
+      }
+      .dropdown-mobile-header {
+        padding: 20px 0 10px 0; font-size: 14px;
+        color: #333; white-space: inherit;
+        strong { font-size: 120%; }
       }
       > li > a {
         line-height: $line-height-computed;
@@ -258,19 +288,8 @@
         }
       }
     }
-  }
-
-  // Uncollapse the nav
-  @media (min-width: $grid-float-breakpoint) {
-    float: left;
-    margin: 0;
-
-    > li {
-      float: left;
-      > a {
-        padding-top: $navbar-padding-vertical;
-        padding-bottom: $navbar-padding-vertical;
-      }
+    &::before {
+      position: fixed; content: " "; background: rgba(0,0,0,0.2); top: 0; left: 0; bottom: 0; right: 0; z-index: -1;
     }
   }
 }
@@ -374,12 +393,12 @@
 // Declared after the navbar components to ensure more specificity on the margins.
 
 @media (min-width: $grid-float-breakpoint) {
+  .navbar { display: flex; flex-direction: row; }
   .navbar-left {
-    float: left !important;
+    flex: 1;
   }
   .navbar-right {
-    float: right !important;
-  margin-right: -$navbar-padding-horizontal;
+    margin-right: -$navbar-padding-horizontal;
 
     ~ .navbar-right {
       margin-right: 0;
@@ -447,35 +466,6 @@
       }
     }
 
-    @media (max-width: $grid-float-breakpoint-max) {
-      // Dropdowns get custom display when collapsed
-      .open .dropdown-menu {
-        > li > a {
-          color: $navbar-default-link-color;
-          &:hover,
-          &:focus {
-            color: $navbar-default-link-hover-color;
-            background-color: $navbar-default-link-hover-bg;
-          }
-        }
-        > .active > a {
-          &,
-          &:hover,
-          &:focus {
-            color: $navbar-default-link-active-color;
-            background-color: $navbar-default-link-active-bg;
-          }
-        }
-        > .disabled > a {
-          &,
-          &:hover,
-          &:focus {
-            color: $navbar-default-link-disabled-color;
-            background-color: $navbar-default-link-disabled-bg;
-          }
-        }
-      }
-    }
   }
 
   .navbar-toggle {
@@ -542,7 +532,7 @@
   }
 
   .navbar-nav {
-    > li > a {
+    > li > a, > li > form > button {
       color: $navbar-inverse-link-color;
 
       &:hover,
@@ -551,7 +541,7 @@
         background-color: $navbar-inverse-link-hover-bg;
       }
     }
-    > .active > a {
+    > .active > a, > li.active > form > button {
       &,
       &:hover,
       &:focus {
@@ -578,41 +568,6 @@
       }
     }
 
-    @media (max-width: $grid-float-breakpoint-max) {
-      // Dropdowns get custom display
-      .open .dropdown-menu {
-        > .dropdown-header {
-          border-color: $navbar-inverse-border;
-        }
-        .divider {
-          background-color: $navbar-inverse-border;
-        }
-        > li > a {
-          color: $navbar-inverse-link-color;
-          &:hover,
-          &:focus {
-            color: $navbar-inverse-link-hover-color;
-            background-color: $navbar-inverse-link-hover-bg;
-          }
-        }
-        > .active > a {
-          &,
-          &:hover,
-          &:focus {
-            color: $navbar-inverse-link-active-color;
-            background-color: $navbar-inverse-link-active-bg;
-          }
-        }
-        > .disabled > a {
-          &,
-          &:hover,
-          &:focus {
-            color: $navbar-inverse-link-disabled-color;
-            background-color: $navbar-inverse-link-disabled-bg;
-          }
-        }
-      }
-    }
   }
 
   // Darken the responsive nav toggle
