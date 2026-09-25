@@ -165,10 +165,9 @@ class LoggingMixin:
             def clean_dict_recursive(d):
                 data = {}
                 for k, v in d.items():
-                    print(k, v)
                     if not v:
                         pass
-                    elif any([sensitivekey in k for sensitivekey in sensitivekeys]):
+                    elif any([sensitivekey in str(k) for sensitivekey in sensitivekeys]):
                         v = "********"
                     elif isinstance(v, dict):
                         v = clean_dict_recursive(v)
