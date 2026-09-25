@@ -70,7 +70,7 @@ from pretix.helpers.http import redirect_to_url
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.productlist import (
-    item_group_by_category, prepare_item_list_for_shop,
+    get_item_option_count, item_group_by_category, prepare_item_list_for_shop,
 )
 from pretix.presale.views import (
     CartMixin, EventViewMixin, allow_cors_if_namespaced,
@@ -239,9 +239,9 @@ def _items_from_post_data(request, warn_if_empty=True):
 
     # Compatibility patch that makes the frontend code a lot easier
     req_items = list(request.POST.lists())
-    if '_voucher_item' in request.POST and '_voucher_code' in request.POST:
+    if '_selected_item' in request.POST:
         req_items.append((
-            '%s' % request.POST['_voucher_item'], ('1',)
+            '%s' % request.POST['_selected_item'], ('1',)
         ))
         pass
 
@@ -669,7 +669,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
         context = super().get_context_data(**kwargs)
 
         context['voucher'] = self.voucher
-        context['max_times'] = self.voucher.max_usages - self.voucher.redeemed
+        context['max_choices'] = self.voucher.max_usages - self.voucher.redeemed
 
         # Fetch all items
         items, display_add_to_cart = prepare_item_list_for_shop(
@@ -687,8 +687,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
 
         # Calculate how many options the user still has. If there is only one option, we can
         # check the box right away ;)
-        context['options'] = sum([(len(item.available_variations) if item.has_variations else 1)
-                                  for item in items])
+        context['itemnum'] = get_item_option_count(items)
 
         context['allfree'] = all(
             item.display_price.gross == Decimal('0.00') and not item.mandatory_priced_addons

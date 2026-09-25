@@ -31,7 +31,7 @@
     {% endif %}
         {% for item in items %}
             {% if item.has_variations %}
-                <article aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="{{ form_prefix }}item-{{ item.pk }}-description"{% endif %} class="item-with-variations{% if event.settings.show_variations_expanded %} details-open{% endif %}" id="{{ form_prefix }}item-{{ item.pk }}">
+                <article aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="{{ form_prefix }}item-{{ item.pk }}-description"{% endif %} class="item-with-variations{% if event.settings.show_variations_expanded or always_show_open %} details-open{% endif %}" id="{{ form_prefix }}item-{{ item.pk }}">
                     <div class="row product-row headline">
                         <div class="col-md-8 col-sm-6 col-xs-12">
                             {% if item.picture %}
@@ -85,7 +85,7 @@
                             {% endif %}
                         </div>
                         <div class="col-md-2 col-sm-3 col-xs-6 availability-box">
-                            {% if not event.settings.show_variations_expanded %}
+                            {% if not event.settings.show_variations_expanded and not always_show_open %}
                                 {% if item.best_variation_availability <= 10 %}
                                     {% if not item.min_price %}
                                         <strong class="gone">{% trans "FULLY BOOKED" %}</strong>
@@ -116,7 +116,7 @@
                         </div>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="variations {% if not event.settings.show_variations_expanded %}variations-collapsed{% endif %}" id="{{ form_prefix }}item-{{ item.pk }}-variations">
+                    <div class="variations {% if not event.settings.show_variations_expanded and not always_show_open %}variations-collapsed{% endif %}" id="{{ form_prefix }}item-{{ item.pk }}-variations">
                         {% for var in item.available_variations %}
                             <article aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend"{% if var.description %} aria-describedby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %} class="row product-row variation" id="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}"
                             {% if not item.free_price %}
@@ -222,37 +222,53 @@
                                 </div>
                                 {% if var.cached_availability.0 == 100 and not item.current_unavailability_reason and not var.current_unavailability_reason %}
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
-										{% if var.order_max == 1 %}
-                                            <label class="btn btn-default btn-checkbox{% if not ev.presale_is_running %} disabled{% endif %}">
-                                                <input type="checkbox" value="1"
-                                                    {% if item.free_price %}
-                                                       data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
-                                                    {% endif %}
-                                                       {% if not ev.presale_is_running %}disabled{% endif %}
-                                                       id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
-                                                       name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
-                                                       aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend {{ form_prefix }}item-{{ item.pk }}-legend"
-                                                       {% if var.description %} aria-describedby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
-                                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                                {% trans "Select" context "checkbox" %}
+                                        {% if max_choices == 1 %}
+                                            <label>
+                                                <input type="radio" name="_selected_item"
+                                                        {% if itemnum == 1 %}checked="checked"{% endif %}
+                                                        {% if not ev.presale_is_running %}disabled{% endif %}
+                                                        id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
+                                                        value="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
+                                                        aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend"
+                                                        {% if var.description %}aria-describedby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}
+                                                        {% if item.free_price %}data-checked-onchange="{{ form_prefix }}price-variation-{{ item.pk }}-{{ var.pk }}"{% endif %}
+                                                    >
                                             </label>
                                         {% else %}
-                                            <fieldset class="input-item-count-group">
-                                                <legend class="sr-only">{% trans "Quantity" %}</legend>
-                                                <button type="button" data-step="-1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}, {{ var }}: {% trans "Decrease quantity" %}"
-                                                    {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
-                                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                       {% if not ev.presale_is_running %}disabled{% endif %}
+                                            {% if var.order_max == 1 %}
+                                                <label class="btn btn-default btn-checkbox{% if not ev.presale_is_running %} disabled{% endif %}">
+                                                    <input type="checkbox" value="1"
                                                         {% if item.free_price %}
-                                                           data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
+                                                        data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
                                                         {% endif %}
-                                                       max="{{ var.order_max }}"
-                                                       id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
-                                                       name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
-                                                       aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend {{ form_prefix }}item-{{ item.pk }}-legend">
-                                                <button type="button" data-step="1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}, {{ var }}: {% trans "Increase quantity" %}"
-                                                    {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
-                                            </fieldset>
+                                                        {% if not ev.presale_is_running %}disabled{% endif %}
+                                                        {% if itemnum == 1 %}checked="checked"{% endif %}
+                                                        id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
+                                                        name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
+                                                        aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend {{ form_prefix }}item-{{ item.pk }}-legend"
+                                                        {% if var.description %}aria-describedby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
+                                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                                    {% trans "Select" context "checkbox" %}
+                                                </label>
+                                            {% else %}
+                                                <fieldset class="input-item-count-group">
+                                                    <legend class="sr-only">{% trans "Quantity" %}</legend>
+                                                    <button type="button" data-step="-1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}, {{ var }}: {% trans "Decrease quantity" %}"
+                                                        {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
+                                                    <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                        {% if not ev.presale_is_running %}disabled{% endif %}
+                                                            {% if item.free_price %}
+                                                            data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
+                                                            {% endif %}
+                                                        max="{{ var.order_max }}"
+                                                        {% if itemnum == 1 %}checked="checked"{% endif %}
+                                                        id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
+                                                        name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
+                                                        aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend {{ form_prefix }}item-{{ item.pk }}-legend">
+                                                    <button type="button" data-step="1" data-controls="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}, {{ var }}: {% trans "Increase quantity" %}"
+                                                        {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
+                                                </fieldset>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                 {% else %}
@@ -387,37 +403,51 @@
                     </div>
                     {% if item.cached_availability.0 == 100 and not item.current_unavailability_reason %}
                         <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
-							{% if item.order_max == 1 %}
-                                <label class="btn btn-default btn-checkbox{% if not ev.presale_is_running %} disabled{% endif %}">
-                                    <input type="checkbox" value="1" {% if itemnum == 1 %}checked{% endif %}
-                                        {% if item.free_price %}
-                                           data-checked-onchange="price-item-{{ item.pk }}"
-                                        {% endif %}
-                                           {% if not ev.presale_is_running %}disabled{% endif %}
-                                           name="{{ form_prefix }}item_{{ item.id }}" id="{{ form_prefix }}item_{{ item.id }}"
-                                           aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend"
-                                           {% if item.description %} aria-describedby="{{ form_prefix }}item-{{ item.id }}-description"{% endif %}>
-                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                        {% trans "Select" context "checkbox" %}
+                            {% if max_choices == 1 %}
+                                <label>
+                                    <input type="radio" name="_selected_item"
+                                        {% if itemnum == 1 %}checked="checked"{% endif %}
+                                        {% if not ev.presale_is_running %}disabled{% endif %}
+                                        id="{{ form_prefix }}item_{{ item.id }}"
+                                        value="{{ form_prefix }}item_{{ item.id }}"
+                                        aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend"
+                                        {% if item.description %}aria-describedby="{{ form_prefix }}item-{{ item.id }}-description"{% endif %}
+                                        {% if item.free_price %}data-checked-onchange="{{ form_prefix }}price-item-{{ item.pk }}"{% endif %}
+                                    >
                                 </label>
                             {% else %}
-                                <fieldset class="input-item-count-group">
-                                    <legend class="sr-only">{% trans "Quantity" %}</legend>
-                                    <button type="button" data-step="-1" data-controls="{{ form_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}: {% trans "Decrease quantity" %}"
-                                        {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
-                                    <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                           {% if not ev.presale_is_running %}disabled{% endif %}
-                                           {% if itemnum == 1 %}value="1"{% endif %}
+                                {% if item.order_max == 1 %}
+                                    <label class="btn btn-default btn-checkbox{% if not ev.presale_is_running %} disabled{% endif %}">
+                                        <input type="checkbox" value="1" {% if itemnum == 1 %}checked{% endif %}
                                             {% if item.free_price %}
-                                               data-checked-onchange="price-item-{{ item.pk }}"
+                                            data-checked-onchange="price-item-{{ item.pk }}"
                                             {% endif %}
-                                           max="{{ item.order_max }}"
-                                           name="{{ form_prefix }}item_{{ item.id }}"
-                                           id="{{ form_prefix }}item_{{ item.id }}"
-                                           aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend">
-                                    <button type="button" data-step="1" data-controls="{{ form_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}: {% trans "Increase quantity" %}"
-                                        {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
-                                </fieldset>
+                                            {% if not ev.presale_is_running %}disabled{% endif %}
+                                            name="{{ form_prefix }}item_{{ item.id }}" id="{{ form_prefix }}item_{{ item.id }}"
+                                            aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend"
+                                            {% if item.description %}aria-describedby="{{ form_prefix }}item-{{ item.id }}-description"{% endif %}>
+                                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                            {% trans "Select" context "checkbox" %}
+                                    </label>
+                                {% else %}
+                                    <fieldset class="input-item-count-group">
+                                        <legend class="sr-only">{% trans "Quantity" %}</legend>
+                                        <button type="button" data-step="-1" data-controls="{{ form_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}: {% trans "Decrease quantity" %}"
+                                            {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
+                                        <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                            {% if not ev.presale_is_running %}disabled{% endif %}
+                                            {% if itemnum == 1 %}value="1"{% endif %}
+                                                {% if item.free_price %}
+                                                data-checked-onchange="price-item-{{ item.pk }}"
+                                                {% endif %}
+                                            max="{{ item.order_max }}"
+                                            name="{{ form_prefix }}item_{{ item.id }}"
+                                            id="{{ form_prefix }}item_{{ item.id }}"
+                                            aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend">
+                                        <button type="button" data-step="1" data-controls="{{ form_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}: {% trans "Increase quantity" %}"
+                                            {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
+                                    </fieldset>
+                                {% endif %}
                             {% endif %}
                         </div>
                     {% else %}
