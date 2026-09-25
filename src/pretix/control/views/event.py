@@ -363,12 +363,6 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
     def get_object(self, queryset=None) -> Event:
         return self.request.event
 
-    def available_plugins(self, event):
-        from pretix.base.plugins import get_all_plugins
-
-        return (p for p in get_all_plugins(event=event) if not p.name.startswith('.')
-                and getattr(p, 'visible', True))
-
     def prepare_links(self, pluginmeta, key):
         links = getattr(pluginmeta, key, [])
         try:
@@ -391,14 +385,13 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
             return []
 
     def get_context_data(self, *args, **kwargs) -> dict:
-        from pretix.base.plugins import CATEGORY_LABELS, CATEGORY_ORDER
+        from pretix.base.plugins import iter_all_plugins, CATEGORY_LABELS, CATEGORY_ORDER
 
         context = super().get_context_data(*args, **kwargs)
-        plugins = list(self.available_plugins(self.object))
 
         plugins_grouped = groupby(
             sorted(
-                plugins,
+                iter_all_plugins(event=self.object, only_visible=True),
                 key=lambda p: (
                     str(getattr(p, 'category', _('Other'))),
                     (0 if getattr(p, 'featured', False) else 1),
@@ -439,9 +432,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        plugins_available = {
-            p.module: p for p in self.available_plugins(self.object)
-        }
+        plugins_available = self.object.get_available_plugins()
         plugin_enabled = None
 
         with transaction.atomic():

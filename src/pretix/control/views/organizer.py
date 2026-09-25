@@ -596,13 +596,6 @@ class OrganizerCreate(CreateView):
         })
 
 
-def available_plugins(organizer):
-    from pretix.base.plugins import get_all_plugins
-
-    return (p for p in get_all_plugins(organizer=organizer) if not p.name.startswith('.')
-            and getattr(p, 'visible', True))
-
-
 class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Organizer
     context_object_name = 'organizer'
@@ -634,10 +627,9 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
             return []
 
     def get_context_data(self, *args, **kwargs) -> dict:
-        from pretix.base.plugins import CATEGORY_LABELS, CATEGORY_ORDER
+        from pretix.base.plugins import iter_all_plugins, CATEGORY_LABELS, CATEGORY_ORDER
 
         context = super().get_context_data(*args, **kwargs)
-        plugins = list(available_plugins(self.object))
 
         active_counter = Counter()
         events_total = 0
@@ -647,7 +639,7 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
                 active_counter[p] += 1
         plugins_grouped = groupby(
             sorted(
-                plugins,
+                iter_all_plugins(organizer=self.object, only_visible=True),
                 key=lambda p: (
                     str(getattr(p, 'category', _('Other'))),
                     (0 if getattr(p, 'featured', False) else 1),
@@ -684,9 +676,7 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-        plugins_available = {
-            p.module: p for p in available_plugins(self.object)
-        }
+        plugins_available = self.object.get_available_plugins()
         choose_events_next = False
         with transaction.atomic():
             for key, value in request.POST.items():
