@@ -233,13 +233,36 @@
     line-height: $line-height-computed;
   }
 
-  @media (max-width: $grid-float-breakpoint-max) {
-    // Dropdowns get custom display when collapsed
-    .open .dropdown-menu {
-      position: fixed;
+  display: flex;
+  margin: 0;
+  max-width: 100%;
+
+  > li {
+    min-width: 0;
+    > a {
+      padding-top: $navbar-padding-vertical;
+      padding-bottom: $navbar-padding-vertical;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 100%;
+      flex: 0 1 10px;
+      min-width: 0;
+    }
+  }
+}
+
+@media (max-width: $grid-float-breakpoint-max) {
+  .navbar-default.sidebar > .sidebar-nav {
+    display: none;
+  }
+  // Dropdowns get custom display when collapsed
+  .navbar-nav .open, .navbar-default.sidebar.open {
+    & > .dropdown-menu, & > .sidebar-nav {
+      position: fixed; display: block;
       float: none;
       width: auto;
-      width: 80%; top: 0; left: inherit; right: 0; bottom: 0; background: white;
+      width: 80%; top: 0; left: inherit; right: 0; bottom: 0; background: white; z-index: 2;
       margin-top: 0;
       padding: 50px 0 10px 0;
       overflow-y: auto; overflow-x: hidden;
@@ -265,25 +288,8 @@
         }
       }
     }
-  }
-
-  display: flex;
-  //overflow: hidden;
-  margin: 0;
-  max-width: 100%;
-
-  > li {
-    //overflow: hidden;
-    min-width: 0;
-    > a {
-      padding-top: $navbar-padding-vertical;
-      padding-bottom: $navbar-padding-vertical;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      max-width: 100%;
-      flex: 0 1 10px;
-      min-width: 0;
+    &::before {
+      position: fixed; content: " "; background: rgba(0,0,0,0.2); top: 0; left: 0; bottom: 0; right: 0; z-index: -1;
     }
   }
 }
