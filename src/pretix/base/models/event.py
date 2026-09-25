@@ -67,7 +67,7 @@ from django.utils.translation import gettext, gettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.fields import I18nCharField, I18nTextField
 
-from pretix.base.models.base import LoggedModel
+from pretix.base.models.base import LoggedModel, PluginsMixin
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.timemachine import time_machine_now
 from pretix.base.validators import EventSlugBanlistValidator
@@ -563,7 +563,7 @@ def default_sales_channels():  # kept for legacy migration
 
 
 @settings_hierarkey.add(parent_field='organizer', cache_namespace='event')
-class Event(EventMixin, LoggedModel):
+class Event(PluginsMixin, EventMixin, LoggedModel):
     """
     This model represents an event. An event is anything you can buy
     tickets for.
@@ -799,14 +799,6 @@ class Event(EventMixin, LoggedModel):
         obj = super().save(*args, **kwargs)
         self.cache.clear()
         return obj
-
-    def get_plugins(self):
-        """
-        Returns the names of the plugins activated for this event as a list.
-        """
-        if self.plugins is None:
-            return []
-        return self.plugins.split(",")
 
     def get_cache(self):
         """
@@ -1478,45 +1470,6 @@ class Event(EventMixin, LoggedModel):
         from pretix.base.plugins import get_all_plugins_map
 
         return get_all_plugins_map(event=self, only_visible=True)
-
-    def set_active_plugins(self, modules, allow_restricted=frozenset()):
-        plugins_available = self.get_available_plugins()
-        plugins_current = set(self.get_plugins())
-        plugins_new = set(modules)
-
-        for module in plugins_new - plugins_current:
-            if module not in plugins_available:
-                continue
-            if getattr(plugins_available[module].app, 'restricted', False) and module not in allow_restricted:
-                modules.remove(module)
-            elif hasattr(plugins_available[module].app, 'installed'):
-                getattr(plugins_available[module].app, 'installed')(self)
-
-        for module in plugins_current - plugins_new:
-            if module in plugins_available and hasattr(plugins_available[module].app, 'uninstalled'):
-                getattr(plugins_available[module].app, 'uninstalled')(self)
-
-        self.plugins = ",".join(modules)
-
-    def enable_plugin(self, module, allow_restricted=frozenset()):
-        """
-        Adds a plugin to the list of plugins, calling its ``installed`` hook (if available).
-        It is the caller's responsibility to save the event object.
-        """
-        plugins_active = self.get_plugins()
-        if module not in plugins_active:
-            plugins_active.append(module)
-            self.set_active_plugins(plugins_active, allow_restricted=allow_restricted)
-
-    def disable_plugin(self, module):
-        """
-        Removes a plugin from the list of plugins, calling its ``uninstalled`` hook (if available).
-        It is the caller's responsibility to save the event object.
-        """
-        plugins_active = self.get_plugins()
-        if module in plugins_active:
-            plugins_active.remove(module)
-            self.set_active_plugins(plugins_active)
 
     @staticmethod
     def clean_has_subevents(event, has_subevents):

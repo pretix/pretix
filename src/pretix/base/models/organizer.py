@@ -52,7 +52,7 @@ from django_scopes import ScopedManager, scope
 from i18nfield.fields import I18nCharField
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.models.base import LoggedModel
+from pretix.base.models.base import LoggedModel, PluginsMixin
 from pretix.base.validators import OrganizerSlugBanlistValidator
 
 from ...helpers.permission_migration import (
@@ -67,7 +67,7 @@ if TYPE_CHECKING:
 
 
 @settings_hierarkey.add(cache_namespace='organizer')
-class Organizer(LoggedModel):
+class Organizer(PluginsMixin, LoggedModel):
     """
     This model represents an entity organizing events, e.g. a company, institution,
     charity, person, …
@@ -166,58 +166,10 @@ class Organizer(LoggedModel):
 
         return ObjectRelatedCache(self)
 
-    def get_plugins(self):
-        """
-        Returns the names of the plugins activated for this organizer as a list.
-        """
-        if not self.plugins:
-            return []
-        return self.plugins.split(",")
-
     def get_available_plugins(self):
         from pretix.base.plugins import get_all_plugins_map
 
         return get_all_plugins_map(organizer=self, only_visible=True)
-
-    def set_active_plugins(self, modules, allow_restricted=frozenset()):
-        plugins_available = self.get_available_plugins()
-        plugins_current = set(self.get_plugins())
-        plugins_new = set(modules)
-
-        for module in plugins_new - plugins_current:
-            if module not in plugins_available:
-                continue
-            if getattr(plugins_available[module].app, 'restricted', False) and module not in allow_restricted:
-                modules.remove(module)
-            elif hasattr(plugins_available[module].app, 'installed'):
-                getattr(plugins_available[module].app, 'installed')(self)
-
-        for module in plugins_current - plugins_new:
-            if module in plugins_available and hasattr(plugins_available[module].app, 'uninstalled'):
-                getattr(plugins_available[module].app, 'uninstalled')(self)
-
-        self.plugins = ",".join(modules)
-
-    def enable_plugin(self, module, allow_restricted=frozenset()):
-        """
-        Adds a plugin to the list of plugins, calling its ``installed`` hook (if available).
-        It is the caller's responsibility to save the organizer object.
-        """
-        plugins_active = self.get_plugins()
-        if module not in plugins_active:
-            plugins_active.append(module)
-            self.set_active_plugins(plugins_active, allow_restricted=allow_restricted)
-
-    def disable_plugin(self, module):
-        """
-        Removes a plugin from the list of plugins, calling its ``uninstalled`` hook (if available).
-        It is the caller's responsibility to save the organizer object and, in case of a hybrid organizer-event plugin,
-        to remove it from all events.
-        """
-        plugins_active = self.get_plugins()
-        if module in plugins_active:
-            plugins_active.remove(module)
-            self.set_active_plugins(plugins_active)
 
     @property
     def timezone(self):
