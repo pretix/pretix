@@ -175,12 +175,9 @@ class Organizer(LoggedModel):
         return self.plugins.split(",")
 
     def get_available_plugins(self):
-        from pretix.base.plugins import get_all_plugins
+        from pretix.base.plugins import get_all_plugins_map
 
-        return {
-            p.module: p for p in get_all_plugins(organizer=self)
-            if not p.name.startswith('.') and getattr(p, 'visible', True)
-        }
+        return get_all_plugins_map(organizer=self, only_visible=True)
 
     def set_active_plugins(self, modules, allow_restricted=frozenset()):
         plugins_active = self.get_plugins()

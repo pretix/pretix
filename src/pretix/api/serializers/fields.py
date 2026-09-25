@@ -114,11 +114,11 @@ class UploadedFileField(serializers.Field):
 class PluginsField(serializers.Field):
 
     def to_representation(self, obj):
-        from pretix.base.plugins import get_all_plugins
+        from pretix.base.plugins import iter_all_plugins
         active_plugins = set(obj.get_plugins())
         return sorted([
-            p.module for p in get_all_plugins()
-            if not p.name.startswith('.') and getattr(p, 'visible', True) and p.module in active_plugins
+            p.module for p in iter_all_plugins(only_visible=True)
+            if p.module in active_plugins
         ])
 
     def to_internal_value(self, data):

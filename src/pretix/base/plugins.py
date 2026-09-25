@@ -22,7 +22,7 @@
 import os
 import sys
 from enum import Enum
-from typing import List
+from typing import Iterable, List
 
 import importlib_metadata as metadata
 from django.apps import AppConfig, apps
@@ -49,7 +49,10 @@ class PluginType(Enum):
     EXPORT = 4
 
 
-def plugin_is_available(meta, event=None, organizer=None):
+def plugin_is_available(meta, event=None, organizer=None, only_visible=False):
+    if only_visible and (meta.name.startswith('.') or not getattr(meta, 'visible', True)):
+        return False
+
     if not hasattr(meta.app, 'is_available'):
         return True
 
@@ -76,28 +79,42 @@ def plugin_is_available(meta, event=None, organizer=None):
     return True
 
 
-def get_all_plugins(*, event=None, organizer=None) -> List[type]:
+def get_plugin_meta_from_app_config(app):
+    if not hasattr(app, 'PretixPluginMeta'):
+        return None
+    meta = app.PretixPluginMeta
+    meta.module = app.name
+    meta.app = app
+    if app.name in settings.PRETIX_PLUGINS_EXCLUDE:
+        return None
+    return meta
+
+
+def iter_all_plugins(*, event=None, organizer=None, only_visible=False) -> Iterable[type]:
+    assert not event or not organizer
+    for app in apps.get_app_configs():
+        if meta := get_plugin_meta_from_app_config(app):
+            if plugin_is_available(meta, event, organizer, only_visible):
+                yield meta
+
+
+def get_all_plugins(*, event=None, organizer=None, only_visible=False) -> List[type]:
     """
     Returns the PretixPluginMeta classes of all plugins found in the installed Django apps.
+
+    Of the `event` and `organizer` params, at most one may be filled, and they are only used for
+    calling `is_available`, not for filtering by plugin level.
     """
-    assert not event or not organizer
-    plugins = []
-    for app in apps.get_app_configs():
-        if hasattr(app, 'PretixPluginMeta'):
-            meta = app.PretixPluginMeta
-            meta.module = app.name
-            meta.app = app
-            if app.name in settings.PRETIX_PLUGINS_EXCLUDE:
-                continue
-
-            if not plugin_is_available(meta, event, organizer):
-                continue
-
-            plugins.append(meta)
     return sorted(
-        plugins,
+        iter_all_plugins(event=event, organizer=organizer, only_visible=only_visible),
         key=lambda m: (0 if m.module.startswith('pretix.') else 1, str(m.name).lower().replace('pretix ', ''))
     )
+
+
+def get_all_plugins_map(*, event=None, organizer=None, only_visible=False) -> dict[str, type]:
+    return {
+        p.module: p for p in iter_all_plugins(event=event, organizer=organizer, only_visible=only_visible)
+    }
 
 
 class PluginConfigMeta(type):

@@ -268,14 +268,9 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         return {'seat_category_mapping': result}
 
     def validate_plugins(self, value):
-        from pretix.base.plugins import get_all_plugins
-
-        plugins_available = {
-            p.module: p for p in get_all_plugins(event=self.instance)
-            if not p.name.startswith('.') and getattr(p, 'visible', True)
-        }
         current_plugins = self.instance.get_plugins() if self.instance and self.instance.pk else []
         settings_holder = self.instance if self.instance and self.instance.pk else self.context['organizer']
+        plugins_available = settings_holder.get_available_plugins()
 
         allowed_levels = (PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID)
         for plugin in value.get('plugins'):

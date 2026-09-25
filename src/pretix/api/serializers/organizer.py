@@ -80,12 +80,7 @@ class OrganizerSerializer(I18nAwareModelSerializer):
         fields = ('name', 'slug', 'public_url', 'plugins')
 
     def validate_plugins(self, value):
-        from pretix.base.plugins import get_all_plugins
-
-        plugins_available = {
-            p.module: p for p in get_all_plugins(organizer=self.instance)
-            if not p.name.startswith('.') and getattr(p, 'visible', True)
-        }
+        plugins_available = self.instance.get_available_plugins()
         settings_holder = self.instance
 
         allowed_levels = (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID)

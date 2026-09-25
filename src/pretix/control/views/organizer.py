@@ -793,9 +793,8 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
         )
 
     def dispatch(self, request, *args, **kwargs):
-        try:
-            self.plugin = next(p for p in available_plugins(self.request.organizer) if p.module == kwargs["plugin"])
-        except StopIteration:
+        self.plugin = self.request.organizer.get_available_plugins().get(kwargs["plugin"])
+        if not self.plugin:
             raise Http404(_("Unknown plugin."))
         level = getattr(self.plugin, "level", PLUGIN_LEVEL_EVENT)
         if level == PLUGIN_LEVEL_ORGANIZER:

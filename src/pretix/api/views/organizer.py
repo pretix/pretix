@@ -92,8 +92,6 @@ class OrganizerViewSet(mixins.UpdateModelMixin, viewsets.ReadOnlyModelViewSet):
 
     @transaction.atomic()
     def perform_update(self, serializer):
-        from pretix.base.plugins import get_all_plugins
-
         original_data = self.get_serializer(instance=serializer.instance).data
 
         current_plugins_value = serializer.instance.get_plugins()
@@ -111,11 +109,7 @@ class OrganizerViewSet(mixins.UpdateModelMixin, viewsets.ReadOnlyModelViewSet):
             disabled = {m: 'disabled' for m in current_plugins_value if m not in updated_plugins_value}
             changed = merge_dicts(enabled, disabled)
 
-            plugins_available = {
-                p.module: p
-                for p in get_all_plugins(organizer=serializer.instance)
-                if not p.name.startswith('.') and getattr(p, 'visible', True)
-            }
+            plugins_available = serializer.instance.get_available_plugins()
             qs = []
             for module in disabled:
                 pluginmeta = plugins_available[module]

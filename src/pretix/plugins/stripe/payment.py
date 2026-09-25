@@ -69,7 +69,7 @@ from pretix.base.models import (
 from pretix.base.payment import (
     BasePaymentProvider, PaymentException, WalletQueries,
 )
-from pretix.base.plugins import get_all_plugins
+from pretix.base.plugins import get_all_plugins_map
 from pretix.base.settings import SettingsSandbox
 from pretix.base.views.redirect import safelink
 from pretix.helpers import OF_SELF
@@ -234,7 +234,7 @@ class StripeSettingsHolder(BasePaymentProvider):
 
     @property
     def settings_form_fields(self):
-        if 'pretix_resellers' in [p.module for p in get_all_plugins()]:
+        if 'pretix_resellers' in get_all_plugins_map():
             moto_settings = [
                 ('reseller_moto',
                  forms.BooleanField(
