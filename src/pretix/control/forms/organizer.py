@@ -1394,16 +1394,27 @@ class SalesChannelForm(I18nModelForm):
 
 
 class OrganizerPluginEventsForm(forms.Form):
+    active_on_organizer = forms.BooleanField(
+        label=_("Active on organizer-level"),
+        help_text=_("Enables or disables the organizer-wide features of this plugin."),
+        required=False,
+    )
     events = SafeEventMultipleChoiceField(
         queryset=Event.objects.none(),
         widget=forms.CheckboxSelectMultiple(attrs={
             'class': 'scrolling-multiple-choice scrolling-multiple-choice-large',
+            'data-checkbox-dependency': '#id_active_on_organizer'
         }),
         label=_("Events with active plugin"),
         required=False,
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, hybrid, **kwargs):
         events = kwargs.pop('events')
         super().__init__(*args, **kwargs)
+        if not hybrid:
+            del self.fields['active_on_organizer']
+            self.fields['events'].widget = forms.CheckboxSelectMultiple(attrs={
+                'class': 'scrolling-multiple-choice scrolling-multiple-choice-large',
+            })
         self.fields['events'].queryset = events

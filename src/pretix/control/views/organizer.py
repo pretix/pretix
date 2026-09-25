@@ -715,26 +715,8 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
                     elif value == "disable" and module in plugins_available:
                         pluginmeta = plugins_available[module]
                         level = getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT)
-                        if level not in (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
+                        if level != PLUGIN_LEVEL_ORGANIZER:
                             continue
-
-                        if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
-                            events_to_disable = set(self.request.organizer.events.filter(
-                                plugins__regex='(^|,)' + module + '(,|$)'
-                            ).values_list("pk", flat=True))
-                            logentries_to_save = []
-                            events_to_save = []
-
-                            for e in self.request.organizer.events.filter(pk__in=events_to_disable):
-                                logentries_to_save.append(
-                                    e.log_action('pretix.event.plugins.disabled', user=self.request.user,
-                                                 data={'plugin': module}, save=False)
-                                )
-                                e.disable_plugin(module)
-                                events_to_save.append(e)
-
-                            Event.objects.bulk_update(events_to_save, fields=["plugins"])
-                            LogEntry.objects.bulk_create(logentries_to_save)
 
                         self.object.log_action('pretix.organizer.plugins.disabled', user=self.request.user,
                                                data={'plugin': module})
@@ -767,7 +749,9 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
         # Assumption: Who has access to modify organizer settings may see all events and disable/enable plugins
         # for them. Otherwise, inconsistent situations occur.
         kwargs["events"] = self.request.organizer.events.all()
+        kwargs["hybrid"] = self.plugin_level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID
         kwargs["initial"] = {
+            "active_on_organizer": self.plugin.module in self.request.organizer.get_plugins(),
             "events": self.request.organizer.events.filter(plugins__regex='(^|,)' + self.plugin.module + '(,|$)')
         }
         return kwargs
@@ -779,19 +763,12 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
         )
 
     def dispatch(self, request, *args, **kwargs):
-        self.plugin = self.request.organizer.get_available_plugins().get(kwargs["plugin"])
+        self.plugin = self.request.organizer.get_available_plugins(filter_restricted=True).get(kwargs["plugin"])
+        self.plugin_level = getattr(self.plugin, "level", PLUGIN_LEVEL_EVENT)
         if not self.plugin:
             raise Http404(_("Unknown plugin."))
-        level = getattr(self.plugin, "level", PLUGIN_LEVEL_EVENT)
-        if level == PLUGIN_LEVEL_ORGANIZER:
+        if self.plugin_level == PLUGIN_LEVEL_ORGANIZER:
             raise Http404(_("This plugin can only be enabled for the entire organizer account."))
-        if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID and self.plugin.module not in self.request.organizer.get_plugins():
-            raise Http404(_("This plugin is currently not active on the organizer account."))
-
-        if getattr(self.plugin, 'restricted', False):
-            if self.plugin.module not in request.organizer.settings.allowed_restricted_plugins:
-                raise Http404(_("This plugin is currently not allowed for this organizer account."))
-
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self) -> str:
@@ -801,27 +778,43 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     @transaction.atomic()
     def form_valid(self, form):
+        organizer = self.request.organizer
         enabled_events_before = set(
-            self.request.organizer.events.filter(plugins__regex='(^|,)' + self.plugin.module + '(,|$)').values_list("pk", flat=True)
+            organizer.events.filter(plugins__regex='(^|,)' + self.plugin.module + '(,|$)').values_list("pk", flat=True)
         )
         enabled_events_now = {e.pk for e in form.cleaned_data["events"]}
+
+        if self.plugin_level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+            if not form.cleaned_data["active_on_organizer"]:
+                enabled_events_now = set()
+                if self.plugin.module in organizer.get_plugins():
+                    organizer.log_action('pretix.organizer.plugins.disabled', user=self.request.user,
+                                           data={'plugin': self.plugin.module})
+                    organizer.disable_plugin(self.plugin.module)
+                    organizer.save()
+            else:
+                if self.plugin.module not in organizer.get_plugins():
+                    organizer.log_action('pretix.organizer.plugins.enabled', user=self.request.user,
+                                           data={'plugin': self.plugin.module})
+                    organizer.enable_plugin(self.plugin.module)
+                    organizer.save()
 
         events_to_enable = enabled_events_now - enabled_events_before
         events_to_disable = enabled_events_before - enabled_events_now
         events_to_save = []
         logentries_to_save = []
 
-        for e in self.request.organizer.events.filter(pk__in=events_to_enable):
-            if not plugin_is_available(self.plugin, organizer=self.request.organizer, event=e):
+        for e in organizer.events.filter(pk__in=events_to_enable):
+            if not plugin_is_available(self.plugin, organizer=organizer, event=e):
                 messages.warning(self.request, _("This plugin cannot be activated for event {}.").format(e.name))
                 continue
             logentries_to_save.append(
                 e.log_action('pretix.event.plugins.enabled', user=self.request.user, data={'plugin': self.plugin.module}, save=False)
             )
-            e.enable_plugin(self.plugin.module, allow_restricted=self.request.organizer.settings.allowed_restricted_plugins)
+            e.enable_plugin(self.plugin.module, allow_restricted=organizer.settings.allowed_restricted_plugins)
             events_to_save.append(e)
 
-        for e in self.request.organizer.events.filter(pk__in=events_to_disable):
+        for e in organizer.events.filter(pk__in=events_to_disable):
             logentries_to_save.append(
                 e.log_action('pretix.event.plugins.disabled', user=self.request.user, data={'plugin': self.plugin.module}, save=False)
             )

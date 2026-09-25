@@ -43,7 +43,7 @@
                     <legend>{{ catlabel }}</legend>
                     <div class="plugin-list">
                         {% for plugin, is_active, settings_links, navigation_links, events_counter in plist %}
-                            <div class="plugin-container {% if plugin.featured %}featured-plugin{% endif %}" id="plugin_{{ plugin.module }}" data-plugin-module="{{ plugin.module }}" data-plugin-name="{{ plugin.name }}">
+                            <div class="plugin-container {% if plugin.featured %}featured-plugin{% endif %}" id="plugin_{{ plugin.module }}" data-plugin-module="{{ plugin.module }}" data-plugin-name="{{ plugin.name }}" data-plugin-level="{{ plugin.level }}">
                             {% if plugin.featured %}
                                <div class="panel panel-default">
                                     <div class="panel-body">
@@ -89,8 +89,8 @@
                                                                 Active ({{ count }} events)
                                                             {% endblocktrans %}
                                                         </span>
-                                                    {% elif level == "event_organizer" %}
-                                                        <span class="label label-info" data-is-active>
+                                                    {% elif plugin.level == "event_organizer" %}
+                                                        <span class="label label-success" data-is-active>
                                                             <span class="fa fa-check" aria-hidden="true"></span>
                                                             {% blocktrans trimmed count count=0 %}
                                                                 Active ({{ count }} event)
@@ -143,13 +143,14 @@
                                                         </ul>
                                                     </div>
                                                 {% endif %}
-                                                <button class="btn btn-default{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
-                                                        value="disable">{% trans "Disable" %}</button>
                                                 {% if plugin.level == "event_organizer" %}
                                                     <a class="btn btn-default {% if plugin.featured %} btn-lg{% endif %}"
                                                         href="{% url "control:organizer.settings.plugin-events" organizer=request.organizer.slug plugin=plugin.module %}">
-                                                        {% trans "Manage events" %}
+                                                        {% trans "Manage plugin and events ..." %}
                                                     </a>
+                                                {% else %}
+                                                    <button class="btn btn-default{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
+                                                            value="disable">{% trans "Disable" %}</button>
                                                 {% endif %}
                                             </div>
                                         {% else %}
