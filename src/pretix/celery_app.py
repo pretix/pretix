@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+import multiprocessing
 import os
 
 from celery import Celery, signals
@@ -52,6 +53,21 @@ def on_task_received(sender, request, **kwargs):
     trace = request._request_dict.get("X-Pretix-Trace")
     if trace:
         logger.info(f"Task {request.id} has trace {trace}")
+
+
+@receiver(signals.after_setup_task_logger)
+def on_after_setup_task_logger(sender, logger, loglevel, logfile, format, colorize, **kwargs):
+    # This hack seems to be required to get celery to log internal events from eg billiard/pool.py such as
+    # "worker killed because it used too much memory"
+    # You can test that it is working by starting a celery worker with a low value like
+    # --max-memory-per-child 300000
+    # and then trigger a task. Result should look like this:
+    # [2026-09-23 10:42:26,234: WARNING/ForkPoolWorker-16]: [???:???] child process exiting after exceeding memory limit (394540KiB / 300000KiB)
+    # The ???:??? are likely because by copying the handlers, we are also copying the format, but I was unable to find
+    # a better compatible way.
+    multi_logger = multiprocessing.get_logger()
+    multi_logger.setLevel(logging.WARNING)
+    multi_logger.handlers = logger.handlers
 
 
 @receiver(signals.task_prerun)
