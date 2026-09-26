@@ -556,8 +556,6 @@ var editor = {
 		editor.$fcv.get(0).height = editor.pdf_viewport.height
 		editor.fabric = new fabric.Canvas('fabric-canvas')
 
-		editor.fabric.on('object:modified', editor._create_savepoint)
-		editor.fabric.on('object:added', editor._create_savepoint)
 		editor.fabric.on('selection:cleared', editor._update_toolbox)
 		editor.fabric.on('selection:created', editor._update_toolbox)
 		editor.fabric.on('selection:updated', editor._update_toolbox)
@@ -590,6 +588,12 @@ var editor = {
 		if (editor._window_loaded) {
 			editor._ready()
 		}
+
+		editor.fabric.on('object:modified', editor._create_savepoint)
+		editor.fabric.on('object:added', editor._create_savepoint)
+		editor.fabric.on('object:added', function(e) {
+			editor.fabric.setActiveObject(e.target);
+		})
 	},
 
 	_window_load_event: function () {
@@ -956,7 +960,6 @@ var editor = {
 			mtr: true
 		})
 		editor.fabric.add(text)
-		editor._create_savepoint()
 		return text
 	},
 
@@ -972,7 +975,6 @@ var editor = {
 		rect.scaleToHeight(126)
 		rect.setControlsVisibility({ mtr: false, mb: false, mt: false, mr: false, ml: false })
 		editor.fabric.add(rect)
-		editor._create_savepoint()
 		return rect
 	},
 
@@ -1009,7 +1011,6 @@ var editor = {
 			mtr: true
 		})
 		editor.fabric.add(rect)
-		editor._create_savepoint()
 		$('#version-notice').show()
 		return rect
 	},
@@ -1026,7 +1027,6 @@ var editor = {
 		})
 		rect.setControlsVisibility({ mtr: false })
 		editor.fabric.add(rect)
-		editor._create_savepoint()
 		return rect
 	},
 
@@ -1044,7 +1044,6 @@ var editor = {
 		})
 		rect.setControlsVisibility({ mtr: false, mb: false, mt: false, mr: false, ml: false })
 		editor.fabric.add(rect)
-		editor._create_savepoint()
 		return rect
 	},
 
