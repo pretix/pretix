@@ -145,12 +145,19 @@ let form_handlers = function (el) {
 		).find('canvas').attr('role', 'img').attr('aria-label', this.getAttribute('data-desc'))
 	})
 
-	el.find('fieldset[data-addon-max-count]').each(function () {
-		// usually addons are only allowed once one per item
-		let multipleAllowed = this.hasAttribute('data-addon-multi-allowed')
+	el.find('fieldset[data-max-count]').each(function() {
+		let multipleAllowed = this.hasAttribute('data-multi-allowed')
+		let countInCart = this.hasAttribute('data-count-in-cart')
 		let $inputs = $('.availability-box input', this)
-		let max = parseInt(this.getAttribute('data-addon-max-count'))
-		let desc = $('.addon-count-desc', this).text().trim()
+		let max = parseInt(this.getAttribute('data-max-count'))
+		let desc = $('.count-desc', this).text().trim()
+
+		let showToolTip = function (element) {
+			$(element).trigger('change').closest('.availability-box').tooltip({
+				'title': desc,
+			}).tooltip('show')
+		}
+
 		this.addEventListener('change', function (e) {
 			let variations = e.target.closest('.variations')
 			if (variations && !multipleAllowed && e.target.checked) {
@@ -158,27 +165,44 @@ let form_handlers = function (el) {
 				$('.availability-box input:checked', variations).not(e.target).prop('checked', false).trigger('change')
 			}
 
+			let totalSelected = $inputs.toArray().reduce(function(a, e) {
+				return a + (e.type == 'checkbox' ? (e.checked ? parseInt(e.value) : 0) : parseInt(e.value) || 0)
+			}, 0)
+			let totalInCart = countInCart ? $inputs.toArray().reduce(function(a, e) {
+				return a + parseInt(e.getAttribute('already-in-cart') || 0)
+			}, 0) : 0
+			let total = totalSelected + totalInCart
 			if (max === 1) {
 				if (e.target.checked) {
-					$inputs.filter(':checked').not(e.target).prop('checked', false).trigger('change')
+					if (totalInCart > 0) {
+						e.target.checked = false
+						// We don't care destroying this, since the only action that can be done is to remove the element from the cart, 
+						//  which triggers a page reload anyway
+						showToolTip(e.target)
+						e.preventDefault()
+					} else {
+						$inputs.filter(':checked').not(e.target).prop('checked', false).trigger('change')
+					}
 				}
 				return
 			}
-			let total = $inputs.toArray().reduce(function (a, e) {
-				return a + (e.type == 'checkbox' ? (e.checked ? parseInt(e.value) : 0) : parseInt(e.value) || 0)
-			}, 0)
 			if (total > max) {
 				if (e.target.type == 'checkbox') {
 					e.target.checked = false
 				} else {
 					e.target.value = e.target.value - (total - max)
 				}
-				$(e.target).trigger('change').closest('.availability-box').tooltip({
-					title: desc,
-				}).tooltip('show')
+				showToolTip(e.target)
 				e.preventDefault()
 			} else {
 				$('.availability-box', this).tooltip('destroy')
+			}
+
+			// This MUST be done after the tooltip, otherwise the total calculation would never show it in some cases (IE all other items = 0, this being increased using the + button)
+			let maxSelection = parseInt(e.target.getAttribute('max-selection')) || max
+			let value = parseInt(e.target.value) || 0
+			if (value > maxSelection) {
+				e.target.value = maxSelection
 			}
 		})
 	})

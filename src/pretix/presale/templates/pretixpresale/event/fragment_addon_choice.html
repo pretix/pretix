@@ -7,13 +7,13 @@
 {% load rich_text %}
 {% for c in form.categories %}
     {% with category_idx=forloop.counter %}
-    <fieldset data-addon-max-count="{{ c.max_count }}"{% if c.multi_allowed %} data-addon-multi-allowed{% endif %}>
+    <fieldset data-max-count="{{ c.max_count }}"{% if c.multi_allowed %} data-multi-allowed{% endif %}>
         <legend>{{ c.category.name }}</legend>
         {% if c.category.description %}
             {{ c.category.description|rich_text }}
         {% endif %}
         {% if c.min_count == c.max_count %}
-            <p class="addon-count-desc" id="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
+            <p class="count-desc" id="c-{{ form.pos.pk }}-{{ category_idx }}-count-desc">
                 {% blocktrans trimmed count min_count=c.min_count %}
                     You need to choose exactly one option from this category.
                 {% plural %}
@@ -22,7 +22,7 @@
             </p>
         {% elif c.min_count == 0 and c.max_count >= c.items|length and not c.multi_allowed %}
         {% elif c.min_count == 0 %}
-            <p class="addon-count-desc" id="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
+            <p class="count-desc" id="c-{{ form.pos.pk }}-{{ category_idx }}-count-desc">
                 {% blocktrans trimmed count max_count=c.max_count %}
                     You can choose one option from this category.
                 {% plural %}
@@ -30,7 +30,7 @@
                 {% endblocktrans %}
             </p>
         {% else %}
-            <p class="addon-count-desc" id="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
+            <p class="count-desc" id="c-{{ form.pos.pk }}-{{ category_idx }}-count-desc">
                 {% blocktrans trimmed with min_count=c.min_count max_count=c.max_count %}
                     You can choose between {{ min_count }} and {{ max_count }} options from
                     this category.
@@ -198,12 +198,12 @@
                                                         id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                         name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                         aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-{{ var.pk }}-legend cp-{{ form.pos.pk }}-item-{{ item.pk }}-legend"
-                                                        aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
+                                                        aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-count-desc">
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                 {% trans "Select" context "checkbox" %}
                                             </label>
                                         {% else %}
-                                            <fieldset class="input-item-count-group" aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc cp-{{ form.pos.pk }}-item-{{ item.pk }}-min-order">
+                                            <fieldset class="input-item-count-group" aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-count-desc cp-{{ form.pos.pk }}-item-{{ item.pk }}-min-order">
                                                 <legend class="sr-only">{% trans "Quantity" %}</legend>
                                                 <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}, {{ var }}: {% trans "Decrease quantity" %}">-</button>
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
@@ -211,7 +211,7 @@
                                                     {% if item.free_price %}
                                                        data-checked-onchange="price-variation-{{form.pos.pk}}-{{ item.pk }}-{{ var.pk }}"
                                                     {% endif %}
-                                                    max="{{ c.max_count }}"
+                                                    max-selection="{{ c.max_count }}"
                                                     id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                     name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                     aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-{{ var.pk }}-legend cp-{{ form.pos.pk }}-item-{{ item.pk }}-legend">
@@ -344,19 +344,19 @@
                                             name="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-legend"
-                                            aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
+                                            aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-count-desc">
                                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                             {% trans "Select" context "checkbox" %}
                                 </label>
                             {% else %}
-                                <fieldset class="input-item-count-group" aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc cp-{{ form.pos.pk }}-item-{{ item.pk }}-min-order">
+                                <fieldset class="input-item-count-group" aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-count-desc cp-{{ form.pos.pk }}-item-{{ item.pk }}-min-order">
                                     <legend class="sr-only">{% trans "Quantity" %}</legend>
                                     <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}: {% trans "Decrease quantity" %}">-</button>
                                     <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                         {% if item.free_price %}
                                            data-checked-onchange="price-item-{{ form.pos.pk }}-{{ item.pk }}"
                                         {% endif %}
-                                        max="{{ c.max_count }}"
+                                        max-selection="{{ c.max_count }}"
                                         {% if item.initial %}value="{{ item.initial }}"{% endif %}
                                         name="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                         id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
