@@ -656,8 +656,8 @@ class Order(LockModel, LoggedModel):
                 terms = [
                     until.datetime(se)
                     for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
-                ]
-                return min(terms) if terms else None
+                ] or [until.datetime(self.event)]  # use event settings only if there is no subevent in the cart
+                return min(terms)
             else:
                 return until.datetime(self.event)
 
@@ -672,8 +672,8 @@ class Order(LockModel, LoggedModel):
                 terms = [
                     until.datetime(se)
                     for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
-                ]
-                return min(terms) if terms else None
+                ] or [until.datetime(self.event)]  # use event settings only if there is no subevent in the cart
+                return min(terms)
             else:
                 return until.datetime(self.event)
 
@@ -890,8 +890,8 @@ class Order(LockModel, LoggedModel):
             dates = [
                 modify_deadline.datetime(se)
                 for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
-            ]
-            return min(dates) if dates else None
+            ] or [modify_deadline.datetime(self.event)]  # use event settings only if there is no subevent in the cart
+            return min(dates)
         elif modify_deadline:
             return modify_deadline.datetime(self.event)
         return None
@@ -953,8 +953,8 @@ class Order(LockModel, LoggedModel):
                 dates = [
                     dl_date.datetime(se)
                     for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
-                ]
-                dl_date = min(dates) if dates else None
+                ] or [dl_date.datetime(self.event)]  # use event settings only if there is no subevent in the cart
+                dl_date = min(dates)
             else:
                 dl_date = dl_date.datetime(self.event)
         return dl_date
@@ -983,7 +983,7 @@ class Order(LockModel, LoggedModel):
                 terms = [
                     term_last.datetime(se).date()
                     for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
-                ]
+                ] or [term_last.datetime(self.event)]  # use event settings only if there is no subevent in the cart
                 if terms:
                     term_last = min(terms)
                 else:

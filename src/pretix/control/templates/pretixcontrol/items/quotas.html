@@ -150,7 +150,11 @@
                             </td>
                             {% if request.event.has_subevents %}
                                 <td>
-                                    {{ q.subevent.name }} – {{ q.subevent.get_date_range_display_with_times }}
+                                    {% if q.subevent %}
+                                        {{ q.subevent.name }} – {{ q.subevent.get_date_range_display_with_times }}
+                                    {% else %}
+                                        –
+                                    {% endif %}
                                 </td>
                             {% endif %}
                             <td>{% if q.size == None %}Unlimited{% else %}{{ q.size }}{% endif %}</td>

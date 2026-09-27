@@ -793,9 +793,7 @@ class CartManager:
         operations = []
 
         for i in items:
-            if self.event.has_subevents:
-                if not i.get('subevent') or int(i.get('subevent')) not in self._subevents_cache:
-                    raise CartError(error_messages['subevent_required'])
+            if self.event.has_subevents and i.get('subevent'):
                 subevent = self._subevents_cache[int(i.get('subevent'))]
             else:
                 subevent = None

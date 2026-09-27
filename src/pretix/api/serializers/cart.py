@@ -77,11 +77,7 @@ class BaseCartPositionCreateSerializer(I18nAwareModelSerializer):
 
     def validate_subevent(self, subevent):
         if self.context['event'].has_subevents:
-            if not subevent:
-                raise ValidationError(
-                    'You need to set a subevent.'
-                )
-            if subevent.event != self.context['event']:
+            if subevent and subevent.event != self.context['event']:
                 raise ValidationError(
                     'The specified subevent does not belong to this event.'
                 )

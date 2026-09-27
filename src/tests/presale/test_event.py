@@ -1303,6 +1303,8 @@ class WaitingListTest(EventTestMixin, SoupTest):
         self.event.save()
         with scopes_disabled():
             se1 = self.event.subevents.create(name="Foo", date_from=now(), active=False)
+            self.q.subevent = se1
+            self.q.save()
         response = self.client.get(
             '/%s/%s/waitinglist/?item=%d' % (self.orga.slug, self.event.slug, self.item.pk)
         )

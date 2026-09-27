@@ -637,6 +637,7 @@ class BasePaymentProvider:
     def _absolute_availability_date(self, rel_date, cart_id=None, order=None, aggregate_fn=min):
         if not rel_date:
             return None
+
         if self.event.has_subevents and cart_id:
             dates = [
                 rel_date.datetime(se).date()
@@ -645,16 +646,16 @@ class BasePaymentProvider:
                         cart_id=cart_id, event=self.event
                     ).values_list('subevent', flat=True)
                 )
-            ]
-            return aggregate_fn(dates) if dates else None
+            ] or [rel_date.datetime(self.event).date()]  # Use event dates only on carts with no subevents
+            return aggregate_fn(dates)
         elif self.event.has_subevents and order:
             dates = [
                 rel_date.datetime(se).date()
                 for se in self.event.subevents.filter(
                     id__in=order.positions.values_list('subevent', flat=True)
                 )
-            ]
-            return aggregate_fn(dates) if dates else None
+            ] or [rel_date.datetime(self.event).date()]  # Use event dates only on carts with no subevents
+            return aggregate_fn(dates)
         elif self.event.has_subevents:
             raise NotImplementedError('Payment provider is not subevent-ready.')
         else:

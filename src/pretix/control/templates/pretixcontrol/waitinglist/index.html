@@ -209,7 +209,13 @@
                             {% endif %}
                         </td>
                         {% if request.event.has_subevents %}
-                            <td>{{ e.subevent }}</td>
+                            <td>
+                                {% if e.subevent %}
+                                    {{ e.subevent }}
+                                {% else %}
+                                    –
+                                {% endif %}
+                            </td>
                         {% endif %}
                         <td>
                             {{ e.created|date:"SHORT_DATETIME_FORMAT" }}

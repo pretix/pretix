@@ -289,7 +289,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
                     answ.to_string_i18n()
                 )
 
-            if invoice.event.has_subevents:
+            if invoice.event.has_subevents and p.subevent_id:
                 desc += "<br />" + pgettext("subevent", "Date: {}").format(p.subevent)
 
             if invoice.event.settings.invoice_event_location and location and len(locations) > 1:
@@ -423,8 +423,7 @@ def _service_period_for_position(invoice, position, invoice_dt):
                 period_start = position.subevent.date_from
                 period_end = position.subevent.date_to
             else:
-                # Currently impossible case, but might not be in the future and never makes
-                # sense to use the event date here
+                # Does not make sense to use the parent event date here
                 period_start = invoice_dt
                 period_end = invoice_dt
         elif invoice.event.settings.invoice_period == "auto_no_event":

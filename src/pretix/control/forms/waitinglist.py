@@ -59,7 +59,7 @@ class WaitingListEntryEditForm(I18nModelForm):
 
         super().__init__(*args, **kwargs)
 
-        if self.event.has_subevents:
+        if self.event.has_subevents and self.instance.subevent_id:
             self.fields['subevent'].required = True
             self.fields['subevent'].queryset = self.event.subevents.all()
             self.fields['subevent'].widget = Select2(

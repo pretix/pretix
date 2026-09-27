@@ -2467,13 +2467,6 @@ class OrderChangeManagerTests(BaseOrderChangeManagerTestCase, TestCase):
             self.ocm.add_position(self.shirt, None, Decimal('13.00'), None)
 
     @classscope(attr='o')
-    def test_add_item_subevent_required(self):
-        self.event.has_subevents = True
-        self.event.save()
-        with self.assertRaises(OrderError):
-            self.ocm.add_position(self.ticket, None, None, None)
-
-    @classscope(attr='o')
     def test_add_item_subevent_price(self):
         self.event.has_subevents = True
         self.event.save()

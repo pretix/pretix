@@ -814,7 +814,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
             if hasattr(self, 'voucher') and self.voucher.subevent:
                 self.subevent = self.voucher.subevent
 
-            if not err and not self.subevent:
+            if not err and not self.subevent:  # TODO
                 return redirect_to_url(
                     eventreverse(
                         self.request.event, 'presale:event.index',

@@ -418,7 +418,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
                 money_filter(op.price, self.event.currency),
             )
-            if self.event.has_subevents and not cl.subevent:
+            if self.event.has_subevents and op.subevent and not cl.subevent:
                 item += '\n{} ({})'.format(
                     op.subevent.name,
                     date_format(op.subevent.date_from.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
@@ -612,13 +612,18 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 row.append(op.attendee_email or (op.addon_to.attendee_email if op.addon_to else '') or op.order.email or '')
                 row.append(str(op.order.phone) if op.order.phone else '')
                 if self.event.has_subevents:
-                    row.append(str(op.subevent.name))
-                    row.append(date_format(op.subevent.date_from.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT'))
-                    if op.subevent.date_to:
-                        row.append(
-                            date_format(op.subevent.date_to.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
-                        )
+                    if op.subevent:
+                        row.append(str(op.subevent.name))
+                        row.append(date_format(op.subevent.date_from.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT'))
+                        if op.subevent.date_to:
+                            row.append(
+                                date_format(op.subevent.date_to.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
+                            )
+                        else:
+                            row.append('')
                     else:
+                        row.append('')
+                        row.append('')
                         row.append('')
                 acache = {}
                 if op.addon_to:
@@ -722,13 +727,18 @@ class CSVCheckinCodeList(CheckInListMixin, ListExporter):
                 _('Yes') if op.order.status == Order.STATUS_PAID else _('No'),
             ]
             if self.event.has_subevents:
-                row.append(str(op.subevent.name))
-                row.append(date_format(op.subevent.date_from.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT'))
-                if op.subevent.date_to:
-                    row.append(
-                        date_format(op.subevent.date_to.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
-                    )
+                if op.subevent:
+                    row.append(str(op.subevent.name))
+                    row.append(date_format(op.subevent.date_from.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT'))
+                    if op.subevent.date_to:
+                        row.append(
+                            date_format(op.subevent.date_to.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
+                        )
+                    else:
+                        row.append('')
                 else:
+                    row.append('')
+                    row.append('')
                     row.append('')
 
             row += [

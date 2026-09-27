@@ -342,7 +342,6 @@ class QuotaForm(I18nModelForm):
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
-            self.fields['subevent'].required = True
         else:
             del self.fields['subevent']
 

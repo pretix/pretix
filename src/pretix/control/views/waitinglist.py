@@ -358,7 +358,7 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
                 str(w.priority)
             ]
             if self.request.event.has_subevents:
-                row.append(str(w.subevent))
+                row.append(str(w.subevent) if w.subevent else '')
             writer.writerow(row)
 
         r = HttpResponse(output.getvalue().encode("utf-8"), content_type='text/csv')

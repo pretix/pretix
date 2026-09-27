@@ -362,7 +362,7 @@ class OrderPositionAddForm(forms.Form):
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
         label=pgettext_lazy('subevent', 'Date'),
-        required=True,
+        required=False,
         empty_label=None
     )
 
@@ -416,7 +416,6 @@ class OrderPositionAddForm(forms.Form):
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
-            self.fields['subevent'].required = True
         else:
             del self.fields['subevent']
         change_decimal_field(self.fields['price'], order.event.currency)

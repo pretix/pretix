@@ -300,9 +300,7 @@ class WaitingListEntry(LoggedModel):
     @staticmethod
     def clean_subevent(event, subevent):
         if event.has_subevents:
-            if not subevent:
-                raise ValidationError(_('Subevent cannot be null for event series.'))
-            if event != subevent.event:
+            if subevent and event != subevent.event:
                 raise ValidationError(_('The subevent does not belong to this event.'))
         else:
             if subevent:

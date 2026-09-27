@@ -275,11 +275,15 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
 
     def validate_subevent(self, subevent):
         if self.context['event'].has_subevents:
-            if not subevent:
+            if self.instance.subevent_id and not subevent:
                 raise ValidationError(
                     'You need to set a subevent.'
                 )
-            if subevent.event != self.context['event']:
+            if not self.instance.subevent_id and subevent:
+                raise ValidationError(
+                    'You cannot set a subevent if none was set previously.'
+                )
+            if subevent and subevent.event != self.context['event']:
                 raise ValidationError(
                     'The specified subevent does not belong to this event.'
                 )

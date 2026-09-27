@@ -323,6 +323,8 @@ class CartTest(CartTestMixin, TestCase):
             se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
             self.quota_tickets.subevent = se
             self.quota_tickets.save()
+            self.quota_all.subevent = se
+            self.quota_all.save()
             q = se.quotas.create(name="foo", size=None, event=self.event)
         q.items.add(self.ticket)
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {

@@ -58,9 +58,9 @@ class CrossSellingService:
             result = (
                 (DummyCategory(category, subevent),
                  self._prepare_items(subevent, items_qs, discount_info),
-                 f'subevent_{subevent.pk}_')
+                 f'subevent_{subevent.pk}_' if subevent else '')
                 for subevent in subevents
-                for (category, items_qs, discount_info) in self._applicable_categories(subevent.pk)
+                for (category, items_qs, discount_info) in self._applicable_categories(subevent.pk if subevent else 0)
             )
         else:
             result = (
