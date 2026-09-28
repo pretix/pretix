@@ -109,7 +109,6 @@ class PaypalSettingsHolder(BasePaymentProvider):
                 ('client_id',
                  forms.CharField(
                      label=_('Client ID'),
-                     max_length=80,
                      min_length=80,
                      help_text=format_html(
                          '<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>',
