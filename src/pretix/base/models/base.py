@@ -154,8 +154,7 @@ class LoggingMixin:
             # sensitivekeys are matched whether contained, not exactly
             sensitivekeys = [
                 'token',
-                'apikey',
-                '_key',
+                'key',
                 'password',
                 'Password',
                 '_pass',
