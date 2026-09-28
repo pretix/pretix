@@ -23,6 +23,7 @@ import json
 from datetime import timedelta
 
 import pytest
+from django.dispatch import receiver
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
@@ -30,6 +31,7 @@ from pretix.base.models import (
     Event, Item, Order, OrderPayment, OrderPosition, OrderRefund, Organizer,
     Quota, Team, User,
 )
+from pretix.base.signals import order_paid
 from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction
 
 
@@ -38,7 +40,7 @@ def env():
     o = Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=now(), plugins='pretix.plugins.banktransfer'
+        date_from=now(), plugins='pretix.plugins.banktransfer,testplugin'
     )
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     t = Team.objects.create(organizer=event.organizer, all_event_permissions=True)
@@ -376,3 +378,44 @@ def test_retry_refund_complete(env, client):
     assert ref.amount == 23
     assert ref.payment is None
     assert ref.state == OrderRefund.REFUND_STATE_DONE
+
+
+def _receiver_with_fake_plugin_name(signal, obj, plugin_name):
+    class App:
+        name = plugin_name
+
+        class PretixPluginMeta:
+            pass
+
+    obj.__mocked_app = App
+    receiver(signal)(obj)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_assign_order_atomic(env, client):
+    job = BankImportJob.objects.create(event=env[0])
+    trans = BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
+                                           state=BankTransaction.STATE_NOMATCH,
+                                           amount=23, date='unknown')
+
+    def fail_order_paid(*args, **kwargs):
+        raise Exception()
+    _receiver_with_fake_plugin_name(order_paid, fail_order_paid, 'testplugin')
+
+    assert env[2].payments.count() == 0
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    try:
+        r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
+            'action_{}'.format(trans.pk): 'assign:{}'.format(env[2].code),
+        }).content.decode('utf-8'))
+        assert r['status'] == 'ok'
+    except:
+        pass
+
+    trans.refresh_from_db()
+    assert trans.state == BankTransaction.STATE_NOMATCH
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PENDING
+    assert env[2].payments.count() == 0
