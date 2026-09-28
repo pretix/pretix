@@ -51,7 +51,9 @@ from django.views.decorators.http import require_POST
 from django.views.generic import FormView
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Event, Order, OrderPayment, Organizer, Quota
+from pretix.base.models import (
+    Event, Order, OrderPayment, OrderRefund, Organizer, Quota,
+)
 from pretix.base.payment import PaymentException
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.settings import GlobalSettingsObject
@@ -193,6 +195,12 @@ def webhook(request, *args, **kwargs):
         func = charge_webhook
         objid = event_json['data']['object']['charge']
         lookup_ids = [objid]
+    elif event_json['data']['object']['object'] == "refund" and event_json['data']['object'].get('charge'):
+        # e.g. refund.updated / refund.failed / charge.refund.updated, which Stripe sends when a
+        # refund fails or is canceled after it initially succeeded
+        func = charge_webhook
+        objid = event_json['data']['object']['charge']
+        lookup_ids = [objid, event_json['data']['object'].get('payment_intent')]
     elif event_json['data']['object']['object'] == "source":
         func = source_webhook
         objid = event_json['data']['object']['id']
@@ -311,6 +319,29 @@ def charge_webhook(event, event_json, charge_id, rso):
             for r in charge['refunds']['data']:
                 a = prov._amount_to_decimal(r['amount'])
                 if r['status'] in ('failed', 'canceled'):
+                    # A refund can fail or be canceled after Stripe reported it as successful, e.g. if the card has been closed
+                    for local_refund in payment.refunds.filter(state__in=(OrderRefund.REFUND_STATE_CREATED,
+                                                                          OrderRefund.REFUND_STATE_TRANSIT,
+                                                                          OrderRefund.REFUND_STATE_EXTERNAL,
+                                                                          OrderRefund.REFUND_STATE_DONE)):
+                        if local_refund.info_data.get('id') != r['id']:
+                            continue
+                        if r['status'] == 'canceled':
+                            local_refund.state = OrderRefund.REFUND_STATE_CANCELED
+                            action = 'pretix.event.order.refund.canceled'
+                        else:
+                            local_refund.state = OrderRefund.REFUND_STATE_FAILED
+                            action = 'pretix.event.order.refund.failed'
+                        local_refund.save(update_fields=['state'])
+                        order.log_action(action, {
+                            'local_id': local_refund.local_id,
+                            'provider': local_refund.provider,
+                            'error': r.get('failure_reason') or r['status'],
+                        })
+                        if payment.state == OrderPayment.PAYMENT_STATE_REFUNDED and \
+                                payment.refunded_amount < payment.amount:
+                            payment.state = OrderPayment.PAYMENT_STATE_CONFIRMED
+                            payment.save(update_fields=['state'])
                     continue
 
                 if a in migrated_refund_amounts:
