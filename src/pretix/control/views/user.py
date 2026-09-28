@@ -946,7 +946,7 @@ class UserEmailConfirmView(FormView):
 
     @transaction.atomic()
     def form_valid(self, form):
-        reason = self.request.GET['reason']
+        reason = self.request.GET.get('reason')
         if reason not in ('email_change', 'email_verify'):
             raise PermissionDenied
         try:
