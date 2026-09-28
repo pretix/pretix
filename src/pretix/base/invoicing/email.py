@@ -71,8 +71,8 @@ class EmailTransmissionType(TransmissionType):
 
     def transmission_info_to_form_data(self, transmission_info: dict) -> dict:
         return {
-            "transmission_email_other": bool(transmission_info.get("transmission_email_address")),
-            "transmission_email_address": transmission_info.get("transmission_email_address"),
+            "transmission_email_other": bool(transmission_info.get("transmission_email_address")) if transmission_info else False,
+            "transmission_email_address": transmission_info.get("transmission_email_address") if transmission_info else "",
         }
 
     def form_data_to_transmission_info(self, form_data: dict) -> dict:
