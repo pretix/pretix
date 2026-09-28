@@ -74,7 +74,6 @@ $(function () {
 			$results.append(gettext('No results'))
 		}
 	}
-	search() // if pre-filled by browser (e.g. after reload)
 	$('#plugin_search_input').on('input', search)
 	$('input[name=plugin_state_filter]').on('change', search)
 	$results_box.find('button.close').on('click', function () {
@@ -84,7 +83,8 @@ $(function () {
 	if (location.search) {
 		const search_params = new URLSearchParams(location.search)
 		if (search_params.has('q')) {
-			$('#plugin_search_input').val(search_params.get('q')).trigger('input')
+			$('#plugin_search_input').val(search_params.get('q'))
 		}
 	}
+	search() // if pre-filled by browser (e.g. after reload)
 })
