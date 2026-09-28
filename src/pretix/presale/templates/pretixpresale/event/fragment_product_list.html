@@ -222,9 +222,10 @@
                                 </div>
                                 {% if var.cached_availability.0 == 100 and not item.current_unavailability_reason and not var.current_unavailability_reason %}
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
-                                        {% if max_choices == 1 %}
+                                        {% if max_choices == 1 and not form_prefix %}
+                                            {# items_from_post_data which parses _selected_item does not support form_prefix at the moment #}
                                             <label>
-                                                <input type="radio" name="_selected_item"
+                                                <input type="radio" name="{{ form_prefix }}_selected_item"
                                                         {% if itemnum == 1 %}checked="checked"{% endif %}
                                                         {% if not ev.presale_is_running %}disabled{% endif %}
                                                         id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
@@ -403,9 +404,10 @@
                     </div>
                     {% if item.cached_availability.0 == 100 and not item.current_unavailability_reason %}
                         <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
-                            {% if max_choices == 1 %}
+                            {% if max_choices == 1 and not form_prefix %}
+                                {# items_from_post_data which parses _selected_item does not support form_prefix at the moment #}
                                 <label>
-                                    <input type="radio" name="_selected_item"
+                                    <input type="radio" name="{{ form_prefix }}_selected_item"
                                         {% if itemnum == 1 %}checked="checked"{% endif %}
                                         {% if not ev.presale_is_running %}disabled{% endif %}
                                         id="{{ form_prefix }}item_{{ item.id }}"
