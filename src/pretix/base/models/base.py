@@ -153,8 +153,9 @@ class LoggingMixin:
         if isinstance(data, dict):
             # sensitivekeys are matched whether contained, not exactly
             sensitivekeys = [
-                'token',
+                'auth',
                 'key',
+                'token',
                 'password',
                 'Password',
                 '_pass',
