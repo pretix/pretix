@@ -6102,3 +6102,14 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
         response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
         assert 'Gift card' in response.content.decode()
         assert '(1 available)' in response.content.decode()
+
+    def test_validation_bypass_error_async_id_is_fixed(self):
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=0, listed_price=0, price_after_voucher=0, expires=now() + timedelta(minutes=10)
+            )
+
+        response = self.client.post('/%s/%s/checkout/confirm/?async_id=1' % (self.orga.slug, self.event.slug), follow=False)
+        self.assertRedirects(response, '/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
