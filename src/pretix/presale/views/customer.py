@@ -902,7 +902,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                 popup_origin
             )
 
-        customer_signed_in.send(customer.organizer, customer=customer)
+        customer_signed_in.send(customer.organizer, customer=customer, profile=profile)
 
         if popup_origin:
             return render(self.request, 'pretixpresale/postmessage.html', {
