@@ -41,7 +41,6 @@ from importlib import import_module
 from urllib.parse import urlencode
 
 import isoweek
-from dateutil import parser
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -589,7 +588,9 @@ class EventAuth(View):
 class TimemachineForm(forms.Form):
     now_dt = forms.SplitDateTimeField(
         label=_('Fake date time'),
-        widget=SplitDateTimePickerWidget(),
+        widget=SplitDateTimePickerWidget(
+            min_date=date(2000, 1, 1),
+        ),
         initial=lambda: now().astimezone(get_current_timezone()),
     )
 
@@ -603,12 +604,14 @@ class EventTimeMachine(EventViewMixin, TemplateView):
             raise PermissionDenied(_('You are not allowed to access time machine mode.'))
         if not request.event.testmode:
             raise PermissionDenied(_('This feature is only available in test mode.'))
+
+        initial = {}
+        if now_dt := request.session.get(f'timemachine_now_dt:{request.event.pk}', None):
+            initial['now_dt'] = datetime.fromisoformat(now_dt)
+
         self.timemachine_form = TimemachineForm(
             data=request.method == 'POST' and request.POST or None,
-            initial=(
-                {'now_dt': parser.parse(request.session.get(f'timemachine_now_dt:{request.event.pk}', None))}
-                if request.session.get(f'timemachine_now_dt:{request.event.pk}', None) else {}
-            )
+            initial=initial
         )
 
     def get_context_data(self, **kwargs):
@@ -622,7 +625,7 @@ class EventTimeMachine(EventViewMixin, TemplateView):
             messages.success(self.request, _('Time machine disabled!'))
             return redirect(self.get_success_url())
         elif self.timemachine_form.is_valid():
-            request.session[f'timemachine_now_dt:{request.event.pk}'] = str(self.timemachine_form.cleaned_data['now_dt'])
+            request.session[f'timemachine_now_dt:{request.event.pk}'] = self.timemachine_form.cleaned_data['now_dt'].isoformat()
             return redirect(eventreverse(request.event, "presale:event.index"))
         else:
             return self.get(request)
