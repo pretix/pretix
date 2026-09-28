@@ -913,7 +913,7 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         self.q.size = 0
         self.q.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
-        assert "_voucher_item" not in html.rendered_content
+        assert "_selected_item" not in html.rendered_content
 
     def test_sold_out_blocking(self):
         self.q.size = 0
@@ -921,7 +921,7 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         self.v.block_quota = True
         self.v.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
-        assert "_voucher_item" in html.rendered_content
+        assert "_selected_item" in html.rendered_content
 
     def test_sold_out_ignore(self):
         self.q.size = 0
@@ -929,7 +929,7 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         self.v.allow_ignore_quota = True
         self.v.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
-        assert "_voucher_item" in html.rendered_content
+        assert "_selected_item" in html.rendered_content
 
     def test_variations_sold_out(self):
         with scopes_disabled():
@@ -940,7 +940,7 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         self.q.size = 0
         self.q.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
-        assert "_voucher_item" not in html.rendered_content
+        assert "_selected_item" not in html.rendered_content
 
     def test_variations_sold_out_blocking(self):
         with scopes_disabled():
@@ -953,7 +953,27 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         self.v.block_quota = True
         self.v.save()
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
-        assert "_voucher_item" in html.rendered_content
+        assert "_selected_item" in html.rendered_content
+
+    def test_variation_not_available(self):
+        with scopes_disabled():
+            var1 = ItemVariation.objects.create(item=self.item, value='Red', position=1)
+            var2 = ItemVariation.objects.create(item=self.item, value='Black', position=2, available_from=now() + datetime.timedelta(days=2))
+            var3 = ItemVariation.objects.create(item=self.item, value='Purple', position=3,
+                                                available_from=now() + datetime.timedelta(days=2), available_from_mode=Item.UNAVAIL_MODE_INFO)
+            self.q.variations.add(var1)
+            self.q.variations.add(var2)
+            self.q.variations.add(var3)
+        self.q.size = 0
+        self.q.save()
+        self.v.block_quota = True
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
+        assert "_selected_item" in html.rendered_content
+        assert "Black" not in html.rendered_content
+        assert "Red" in html.rendered_content
+        assert "Purple" in html.rendered_content
+        assert "Not available yet" in html.rendered_content
 
     def test_voucher_price(self):
         self.v.value = Decimal("10.00")
