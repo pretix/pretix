@@ -588,7 +588,9 @@ class EventAuth(View):
 class TimemachineForm(forms.Form):
     now_dt = forms.SplitDateTimeField(
         label=_('Fake date time'),
-        widget=SplitDateTimePickerWidget(),
+        widget=SplitDateTimePickerWidget(
+            min_date=date(2000, 1, 1),
+        ),
         initial=lambda: now().astimezone(get_current_timezone()),
     )
 
