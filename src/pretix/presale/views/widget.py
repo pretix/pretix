@@ -226,7 +226,7 @@ def get_widget_js(version, lang, force_regenerate=False):
     else:
         fname = gs.settings.get(settings_key)
 
-    data = generate_widget_js(version, lang, use_vite=use_vite).encode()
+    data = generate_widget_js(version, lang).encode()
     checksum = hashlib.sha1(data).hexdigest()
     should_save = (
         not fname
