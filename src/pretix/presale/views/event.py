@@ -604,11 +604,8 @@ class EventTimeMachine(EventViewMixin, TemplateView):
             raise PermissionDenied(_('This feature is only available in test mode.'))
 
         initial = {}
-        if request.session.get(f'timemachine_now_dt:{request.event.pk}', None):
-            try:
-                initial['now_dt'] = datetime.fromisoformat(request.session.get(f'timemachine_now_dt:{request.event.pk}', None))
-            except ValueError:
-                pass
+        if now_dt := request.session.get(f'timemachine_now_dt:{request.event.pk}', None):
+            initial['now_dt'] = datetime.fromisoformat(now_dt)
 
         self.timemachine_form = TimemachineForm(
             data=request.method == 'POST' and request.POST or None,
