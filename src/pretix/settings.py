@@ -913,7 +913,6 @@ VITE_DEV_SERVER_PORT = 5173
 VITE_DEV_SERVER = f"http://localhost:{VITE_DEV_SERVER_PORT}"
 VITE_DEV_MODE = DEBUG
 VITE_IGNORE = False  # Used to ignore `collectstatic`/`rebuild`
-PRETIX_WIDGET_VUE = os.environ.get('PRETIX_WIDGET_VUE', '') not in ('', '0')
 
 if DEBUG:
     # Reload if settings file changes
