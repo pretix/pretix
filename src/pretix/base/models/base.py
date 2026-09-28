@@ -159,6 +159,7 @@ class LoggingMixin:
                 'password',
                 'Password',
                 '_pass',
+                'salt',
                 'secret',
             ]
 
