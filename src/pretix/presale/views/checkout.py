@@ -23,6 +23,7 @@ from urllib.parse import quote, urlencode
 
 from django.conf import settings
 from django.contrib import messages
+from django.core.exceptions import SuspiciousOperation
 from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
@@ -86,10 +87,12 @@ class CheckoutView(View):
                 return self.redirect(step.get_step_url(request) + '?' + urlencode(utm_params))
             is_selected = (step.identifier == kwargs.get('step', ''))
 
-            is_valid_asyncaction_call = is_asyncaction_call and isinstance(step, AsyncAction)
-            if not is_valid_asyncaction_call and not is_selected and not step.is_completed(request, warn=not is_selected):
+            if not is_asyncaction_call and not is_selected and not step.is_completed(request, warn=not is_selected):
                 return self.redirect(step.get_step_url(request))
             if is_selected:
+                if is_asyncaction_call and not isinstance(step, AsyncAction):
+                    # This could be used to circumvent validation otherwise
+                    raise SuspiciousOperation("Received ?async_id for a step that is not an AsyncAction")
                 if request.method.lower() in self.http_method_names:
                     handler = getattr(step, request.method.lower(), self.http_method_not_allowed)
                 else:
