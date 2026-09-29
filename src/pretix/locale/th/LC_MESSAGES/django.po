@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-09-24 16:00+0000\n"
+"PO-Revision-Date: 2026-09-29 08:14+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -15547,53 +15547,57 @@ msgid ""
 "Will be ignored if tickets exceed a given size limit to ensure email "
 "deliverability."
 msgstr ""
+"จะถูกข้ามหากไฟล์ตั๋วมีขนาดเกินขีดจำกัดที่กำหนด เพื่อรับประกันความสามารถในการส่งอีเมล"
 
 #: pretix/control/forms/orders.py
 msgid "Attach invoices"
-msgstr ""
+msgstr "แนบใบแจ้งหนี้"
 
 #: pretix/control/forms/orders.py
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 msgid "Recipient"
-msgstr ""
+msgstr "ผู้รับ"
 
 #: pretix/control/forms/orders.py
 #, python-brace-format
 msgid "Attach {file}"
-msgstr ""
+msgstr "แนบไฟล์ {file}"
 
 #: pretix/control/forms/orders.py
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
 msgstr ""
+"ยกเลิกคำสั่งซื้อ ตั๋วทั้งหมดจะไม่สามารถใช้งานได้อีกต่อไป การดำเนินการนี้ไม่สามารถย้อนคืนได้"
 
 #: pretix/control/forms/orders.py
 msgid ""
 "Mark the order as pending and allow the user to pay the open amount with "
 "another payment method."
 msgstr ""
+"ทำเครื่องหมายคำสั่งซื้อเป็นรอดำเนินการ และอนุญาตให้ผู้ใช้ชำระเงินตามยอดที่เหลือด้วยวิธีการชำระเงิน"
+"อื่น"
 
 #: pretix/control/forms/orders.py
 msgid "Do nothing and keep the order as it is."
-msgstr ""
+msgstr "ไม่ดำเนินการใดๆ และคงสถานะคำสั่งซื้อไว้ตามเดิม"
 
 #: pretix/control/forms/orders.py
 #, python-brace-format
 msgid "The refund amount needs to be positive and less than {}."
-msgstr ""
+msgstr "จำนวนเงินคืนต้องเป็นจำนวนบวกและน้อยกว่า {}"
 
 #: pretix/control/forms/orders.py
 msgid "You need to specify an amount for a partial refund."
-msgstr ""
+msgstr "คุณต้องระบุจำนวนเงินสำหรับการคืนเงินบางส่วน"
 
 #: pretix/control/forms/orders.py
 msgid "Cancel all dates"
-msgstr ""
+msgstr "ยกเลิกวันจัดงานทั้งหมด"
 
 #: pretix/control/forms/orders.py
 msgid "Automatically refund money if possible"
-msgstr ""
+msgstr "คืนเงินโดยอัตโนมัติหากสามารถทำได้"
 
 #: pretix/control/forms/orders.py
 msgid ""
@@ -15601,10 +15605,12 @@ msgid ""
 "that have been blocked (manually or by a plugin) are not auto-canceled and "
 "you will need to deal with them manually."
 msgstr ""
+"ใช้ได้เฉพาะกับวิธีการชำระเงินที่รองรับการคืนเงินอัตโนมัติเท่านั้น ตั๋วที่ถูกระงับไว้ (โดยผู้ใช้หรือโดยปลั๊ก"
+"อิน) จะไม่ถูกยกเลิกโดยอัตโนมัติ และคุณจำเป็นต้องจัดการด้วยตนเอง"
 
 #: pretix/control/forms/orders.py
 msgid "Create refund in the manual refund to-do list"
-msgstr ""
+msgstr "สร้างรายการคืนเงินในรายการงานต้องทำสำหรับการคืนเงินด้วยตนเอง"
 
 #: pretix/control/forms/orders.py
 msgid ""
@@ -15614,28 +15620,33 @@ msgid ""
 "manual refund to-do list. Do not check if you want to refund some of the "
 "orders by offsetting with different orders or issuing gift cards."
 msgstr ""
+"ระบบจะสร้างรายการคืนเงินด้วยตนเองซึ่งจะแสดงอยู่ในรายการงานต้องทำสำหรับการคืนเงินด้วยตนเอง "
+"เมื่อใช้ร่วมกับฟังก์ชันการคืนเงินอัตโนมัติ เฉพาะการชำระเงินผ่านวิธีที่ไม่รองรับการคืนเงินอัตโนมัติเท่านั้น"
+"ที่จะปรากฏในรายการงานต้องทำ ไม่ต้องทำเครื่องหมายเลือกหากคุณต้องการคืนเงินสำหรับบางคำสั่งซื้อโด"
+"ยการหักกลบลบหนี้กับคำสั่งซื้ออื่นหรือการออกบัตรของขวัญ"
 
 #: pretix/control/forms/orders.py
 msgid ""
 "Refund order value to a gift card instead instead of the original payment "
 "method"
 msgstr ""
+"คืนเงินตามมูลค่าคำสั่งซื้อเป็นบัตรของขวัญแทนการคืนเงินผ่านช่องทางการชำระเงินเดิม"
 
 #: pretix/control/forms/orders.py
 msgid "Gift card validity"
-msgstr ""
+msgstr "ระยะเวลาใช้งานของบัตรของขวัญ"
 
 #: pretix/control/forms/orders.py
 msgid "Keep a fixed cancellation fee per ticket"
-msgstr ""
+msgstr "หักค่าธรรมเนียมการยกเลิกคงที่ต่อตั๋วหนึ่งใบ"
 
 #: pretix/control/forms/orders.py
 msgid "Free tickets and add-on products are not counted"
-msgstr ""
+msgstr "ไม่นับรวมตั๋วฟรีและสินค้าเพิ่มเติม (Add-ons)"
 
 #: pretix/control/forms/orders.py
 msgid "Keep fees"
-msgstr ""
+msgstr "หักค่าธรรมเนียมไว้ (ไม่คืนค่าธรรมเนียม)"
 
 #: pretix/control/forms/orders.py
 msgid ""
@@ -15644,19 +15655,22 @@ msgid ""
 "series is only partially canceled since it consists of tickets for multiple "
 "dates."
 msgstr ""
+"ประเภทค่าธรรมเนียมที่เลือกจะไม่ได้รับเงินคืน แต่จะถูกนำไปรวมกับค่าธรรมเนียมการยกเลิกแทน ค่าธรร"
+"มเนียมจะไม่ได้รับการคืนเงินในกรณีที่มีการยกเลิกคำสั่งซื้อในซีรีส์อีเวนต์เพียงบางส่วน เนื่องจากคำสั่งซื้อป"
+"ระกอบด้วยตั๋วสำหรับหลายวันจัดงาน"
 
 #: pretix/control/forms/orders.py
 msgid "Send information via email"
-msgstr ""
+msgstr "ส่งข้อมูลแจ้งเตือนทางอีเมล"
 
 #: pretix/control/forms/orders.py
 msgid "Send information to waiting list"
-msgstr ""
+msgstr "ส่งข้อมูลแจ้งเตือนไปยังรายชื่อสำรอง (Waiting list)"
 
 #: pretix/control/forms/orders.py
 #, python-brace-format
 msgid "Canceled: {event}"
-msgstr ""
+msgstr "ยกเลิกแล้ว: {event}"
 
 #: pretix/control/forms/orders.py
 #, python-brace-format
@@ -15675,6 +15689,19 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เราเสียใจที่ต้องแจ้งให้คุณทราบผ่านอีเมลฉบับนี้ว่า {event} ได้ถูกยกเลิกแล้ว\n"
+"\n"
+"เราจะดำเนินการคืนเงินจำนวน {refund_amount} กลับไปยังช่องทางการชำระเงินเดิมของคุณ\n"
+"\n"
+"คุณสามารถตรวจสอบสถานะปัจจุบันของคำสั่งซื้อของคุณได้ที่นี่:\n"
+"\n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพอย่างสูง\n"
+"\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/control/forms/orders.py
 #, python-brace-format
@@ -15689,159 +15716,176 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เราเสียใจที่ต้องแจ้งให้คุณทราบผ่านอีเมลฉบับนี้ว่า {event} ได้ถูกยกเลิกแล้ว\n"
+"\n"
+"ดังนั้นคุณจะไม่ได้รับตั๋วจากรายการรอสำรอง\n"
+"\n"
+"ด้วยความเคารพอย่างสูง\n"
+"\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/control/forms/orders.py pretix/plugins/sendmail/forms.py
 msgctxt "subevent"
 msgid "Please either select a specific date or a date range, not both."
 msgstr ""
+"โปรดเลือกวันที่เฉพาะเจาะจง หรือ ช่วงวันที่ อย่างใดอย่างหนึ่งเท่านั้น อย่าเลือกทั้งสองอย่าง"
 
 #: pretix/control/forms/orders.py
 msgctxt "subevent"
 msgid "Please either select all dates or a date range, not both."
 msgstr ""
+"โปรดเลือกทุกวันที่ หรือ ช่วงวันที่ อย่างใดอย่างหนึ่งเท่านั้น อย่าเลือกทั้งสองอย่าง"
 
 #: pretix/control/forms/orders.py pretix/plugins/sendmail/forms.py
 msgctxt "subevent"
 msgid "If you set a date range, please set both a start and an end."
-msgstr ""
+msgstr "หากคุณกำหนดช่วงวันที่ โปรดระบุทั้งวันเริ่มต้นและวันสิ้นสุด"
 
 #: pretix/control/forms/orders.py
 msgid "Please confirm that you want to cancel ALL dates in this event series."
-msgstr ""
+msgstr "โปรดยืนยันว่าคุณต้องการยกเลิกวันจัดงานทั้งหมดในซีรีส์อีเวนต์นี้"
 
 #: pretix/control/forms/orders.py
 msgid "I understand that this is not reversible and want to continue"
-msgstr ""
+msgstr "ฉันเข้าใจว่าการดำเนินการนี้ไม่สามารถย้อนคืนได้ และต้องการดำเนินการต่อ"
 
 #: pretix/control/forms/orders.py
 msgid ""
 "We have just emailed you a confirmation code to enter to confirm this action"
 msgstr ""
+"เราได้ส่งรหัสยืนยันไปยังอีเมลของคุณแล้ว โปรดกรอกรหัสดังกล่าวเพื่อยืนยันการดำเนินการนี้"
 
 #: pretix/control/forms/orders.py
 msgid "The confirmation code is incorrect."
-msgstr ""
+msgstr "รหัสยืนยันไม่ถูกต้อง"
 
 #: pretix/control/forms/organizer.py
 msgid "This slug is already in use. Please choose a different one."
-msgstr ""
+msgstr "Slug นี้ถูกใช้งานแล้ว โปรดเลือก Slug อื่น"
 
 #: pretix/control/forms/organizer.py
 msgid "You cannot choose the base domain of this installation."
-msgstr ""
+msgstr "คุณไม่สามารถใช้โดเมนหลักของการติดตั้งนี้ได้"
 
 #: pretix/control/forms/organizer.py
 msgid "This domain is already in use for a different event or organizer."
-msgstr ""
+msgstr "โดเมนนี้ถูกใช้งานแล้วสำหรับอีเวนต์หรือผู้จัดงานอื่น"
 
 #: pretix/control/forms/organizer.py
 msgid "Do not choose an event for this mode."
-msgstr ""
+msgstr "ไม่ต้องเลือกอีเวนต์สำหรับโหมดนี้"
 
 #: pretix/control/forms/organizer.py
 msgid ""
 "Do not choose an event for this mode. You can assign events to this domain "
 "in event settings."
 msgstr ""
+"ไม่ต้องเลือกอีเวนต์สำหรับโหมดนี้ คุณสามารถกำหนดอีเวนต์ให้กับโดเมนนี้ได้ในการตั้งค่าอีเวนต์"
 
 #: pretix/control/forms/organizer.py
 msgid "You need to choose an event."
-msgstr ""
+msgstr "คุณจำเป็นต้องเลือกอีเวนต์"
 
 #: pretix/control/forms/organizer.py
 msgid "You may set only one organizer domain."
-msgstr ""
+msgstr "คุณสามารถตั้งค่าโดเมนของผู้จัดงานได้เพียงโดเมนเดียวเท่านั้น"
 
 #: pretix/control/forms/organizer.py
 msgid "Provided by a plugin"
-msgstr ""
+msgstr "ให้บริการโดยปลั๊กอิน"
 
 #: pretix/control/forms/organizer.py
 msgid ""
 "The changes could not be saved because there would be no remaining team with "
 "the permission to change teams and permissions."
 msgstr ""
+"ไม่สามารถบันทึกการเปลี่ยนแปลงได้ เนื่องจากจะไม่มีทีมเหลืออยู่ที่มีสิทธิ์ในการจัดการทีมและกำหนดสิทธิ์"
 
 #: pretix/control/forms/organizer.py
 msgid ""
 "Your device will not have access to anything, please select some events."
 msgstr ""
+"อุปกรณ์ของคุณจะไม่มีสิทธิ์เข้าถึงใดๆ โปรดเลือกอีเวนต์อย่างน้อยหนึ่งรายการ"
 
 #: pretix/control/forms/organizer.py pretix/plugins/stripe/payment.py
 msgid "experimental"
-msgstr ""
+msgstr "ทดลองใช้งาน (Experimental)"
 
 #: pretix/control/forms/organizer.py
 msgid ""
 "This feature is currently in an experimental stage. It only supports very "
 "limited use cases and might change at any point."
 msgstr ""
+"ฟีเจอร์นี้อยู่ในช่วงทดลองใช้งาน รองรับการใช้งานเฉพาะกรณีที่จำกัดมากเท่านั้น และอาจเกิดการเปลี่ยนแ"
+"ปลงได้ตลอดเวลา"
 
 #: pretix/control/forms/organizer.py
 msgid "Sensitive emails like password resets will not be sent in Bcc."
-msgstr ""
+msgstr "อีเมลที่มีข้อมูลสำคัญ เช่น การรีเซ็ตรหัสผ่าน จะไม่ถูกจัดส่งในรูปแบบ Bcc"
 
 #: pretix/control/forms/organizer.py
 msgid "This will be attached to every email."
-msgstr ""
+msgstr "ข้อความนี้จะถูกแนบท้ายในอีเมลทุกฉบับ"
 
 #: pretix/control/forms/organizer.py pretix/control/logdisplay.py
 #: pretix/control/views/user.py pretix/presale/views/customer.py
 msgid "Your password has been changed."
-msgstr ""
+msgstr "รหัสผ่านของคุณถูกเปลี่ยนเรียบร้อยแล้ว"
 
 #: pretix/control/forms/organizer.py
 msgctxt "webhooks"
 msgid "Event types"
-msgstr ""
+msgstr "ประเภทของเหตุการณ์ (Event types)"
 
 #: pretix/control/forms/organizer.py
 msgid "Gift card value"
-msgstr ""
+msgstr "มูลค่าบัตรของขวัญ"
 
 #: pretix/control/forms/organizer.py
 msgid "An medium with this type and identifier is already registered."
-msgstr ""
+msgstr "มีสื่อที่มีประเภทและรหัสระบุนี้ถูกลงทะเบียนไว้ในระบบแล้ว"
 
 #: pretix/control/forms/organizer.py
 msgid "An account with this customer ID is already registered."
-msgstr ""
+msgstr "มีบัญชีที่มีรหัสลูกค้า (Customer ID) นี้ลงทะเบียนไว้ในระบบแล้ว"
 
 #: pretix/control/forms/organizer.py
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/presale/forms/customer.py
 msgid "Phone"
-msgstr ""
+msgstr "เบอร์โทรศัพท์"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
 msgid "Base URL"
-msgstr ""
+msgstr "URL พื้นฐาน (Base URL)"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
 msgid "Client ID"
-msgstr ""
+msgstr "Client ID"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
 msgid "Client secret"
-msgstr ""
+msgstr "Client secret"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
 msgid "Scope"
-msgstr ""
+msgstr "ขอบเขตสิทธิ์ (Scope)"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
 msgid "Multiple scopes separated with spaces."
-msgstr ""
+msgstr "ระบุหลายขอบเขตสิทธิ์โดยแยกด้วยการเว้นวรรค"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
 msgid "User ID field"
-msgstr ""
+msgstr "ฟิลด์รหัสผู้ใช้ (User ID field)"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
@@ -15849,11 +15893,13 @@ msgid ""
 "We will assume that the contents of the user ID fields are unique and can "
 "never change for a user."
 msgstr ""
+"ระบบจะสันนิษฐานว่าข้อมูลในฟิลด์รหัสผู้ใช้มีความไม่ซ้ำกัน (Unique) และจะไม่เปลี่ยนแปลงสำหรับผู้ใช้รา"
+"ยเดิม"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
 msgid "Email field"
-msgstr ""
+msgstr "ฟิลด์อีเมล (Email field)"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
@@ -15862,16 +15908,18 @@ msgid ""
 "verified to really belong the the user. If this can't be guaranteed, "
 "security issues might arise."
 msgstr ""
+"ระบบจะสันนิษฐานว่าที่อยู่อีเมลทั้งหมดที่ได้รับจากผู้ให้บริการ SSO ได้รับการยืนยันแล้วว่าเป็นของผู้ใช้จริง "
+"หากไม่สามารถรับประกันสิ่งนี้ได้ อาจเกิดปัญหาด้านความปลอดภัยขึ้นได้"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
 msgid "Phone field"
-msgstr ""
+msgstr "ฟิลด์เบอร์โทรศัพท์ (Phone field)"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
 msgid "Query parameters"
-msgstr ""
+msgstr "พารามิเตอร์การคิวรี (Query parameters)"
 
 #: pretix/control/forms/organizer.py
 #, python-brace-format
@@ -15880,18 +15928,20 @@ msgid ""
 "Optional query parameters, that will be added to calls to the authorization "
 "endpoint. Enter as: {example}"
 msgstr ""
+"พารามิเตอร์การคิวรีเสริม ที่จะถูกเพิ่มเข้าไปในการเรียกใช้ Authorization endpoint ระบุในรูปแบ"
+"บ: {example}"
 
 #: pretix/control/forms/organizer.py
 msgid "Invalidate old client secret and generate a new one"
-msgstr ""
+msgstr "ยกเลิก Client secret เดิมและสร้างใหม่"
 
 #: pretix/control/forms/organizer.py
 msgid "Organizer short name"
-msgstr ""
+msgstr "ชื่อย่อผู้จัดงาน"
 
 #: pretix/control/forms/organizer.py
 msgid "Allow access to reusable media"
-msgstr ""
+msgstr "อนุญาตให้เข้าถึงสื่อที่นำกลับมาใช้ใหม่ได้"
 
 #: pretix/control/forms/organizer.py
 msgid ""
@@ -15901,28 +15951,32 @@ msgid ""
 "will grant the other organizer access to cryptographic key material required "
 "to interact with the media type."
 msgstr ""
+"จำเป็นต้องเปิดใช้งานตัวเลือกนี้หากคุณต้องการให้อีเวนต์หรือผู้จัดงานอื่นเข้าร่วมในระบบที่ใช้งานร่วมกัน เ"
+"ช่น ชิปชำระเงิน NFC คุณควรใช้ตัวเลือกนี้กับผู้จัดงานที่คุณไว้วางใจเท่านั้น เนื่องจาก (ขึ้นอยู่กับประเภทสื่"
+"อที่เปิดใช้งาน) การดำเนินการนี้จะให้สิทธิ์ผู้จัดงานอื่นในการเข้าถึงคีย์เข้ารหัสที่จำเป็นสำหรับการโต้ตอบกั"
+"บประเภทสื่อดังกล่าว"
 
 #: pretix/control/forms/organizer.py
 msgid "The selected organizer does not exist or cannot be invited."
-msgstr ""
+msgstr "ไม่พบผู้จัดงานที่เลือก หรือไม่สามารถเชิญผู้จัดงานนี้ได้"
 
 #: pretix/control/forms/organizer.py
 msgid "The selected organizer has already been invited."
-msgstr ""
+msgstr "ผู้จัดงานที่เลือกถูกเชิญเรียบร้อยแล้ว"
 
 #: pretix/control/forms/organizer.py
 msgid "A sales channel with the same identifier already exists."
-msgstr ""
+msgstr "มีช่องทางการขายที่มีรหัสระบุนี้อยู่ในระบบแล้ว"
 
 #: pretix/control/forms/organizer.py
 msgid "Events with active plugin"
-msgstr ""
+msgstr "อีเวนต์ที่มีการเปิดใช้งานปลั๊กอิน"
 
 #: pretix/control/forms/renderers.py
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 msgctxt "form"
 msgid "Optional"
-msgstr ""
+msgstr "ไม่บังคับระบุ (Optional)"
 
 #: pretix/control/forms/renderers.py
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html
@@ -15930,69 +15984,69 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 msgctxt "form_bulk"
 msgid "change"
-msgstr ""
+msgstr "เปลี่ยนแปลง"
 
 #: pretix/control/forms/rrule.py
 msgid "year(s)"
-msgstr ""
+msgstr "ปี"
 
 #: pretix/control/forms/rrule.py
 msgid "month(s)"
-msgstr ""
+msgstr "เดือน"
 
 #: pretix/control/forms/rrule.py
 msgid "week(s)"
-msgstr ""
+msgstr "สัปดาห์"
 
 #: pretix/control/forms/rrule.py
 msgid "day(s)"
-msgstr ""
+msgstr "วัน"
 
 #: pretix/control/forms/rrule.py
 msgid "Interval"
-msgstr ""
+msgstr "ช่วงระยะเวลา"
 
 #: pretix/control/forms/rrule.py
 msgid "Number of repetitions"
-msgstr ""
+msgstr "จำนวนการทำซ้ำ"
 
 #: pretix/control/forms/rrule.py
 msgid "Last date"
-msgstr ""
+msgstr "วันที่สุดท้าย"
 
 #: pretix/control/forms/rrule.py
 msgctxt "rrule"
 msgid "first"
-msgstr ""
+msgstr "ลำดับแรก (ลำดับที่ 1)"
 
 #: pretix/control/forms/rrule.py
 msgctxt "rrule"
 msgid "second"
-msgstr ""
+msgstr "ลำดับที่สอง (ลำดับที่ 2)"
 
 #: pretix/control/forms/rrule.py
 msgctxt "rrule"
 msgid "third"
-msgstr ""
+msgstr "ลำดับที่สาม (ลำดับที่ 3)"
 
 #: pretix/control/forms/rrule.py
 msgctxt "rrule"
 msgid "last"
-msgstr ""
+msgstr "ลำดับสุดท้าย"
 
 #: pretix/control/forms/rrule.py
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html
 msgid "Day"
-msgstr ""
+msgstr "วัน"
 
 #: pretix/control/forms/rrule.py
 msgid "Weekend day"
-msgstr ""
+msgstr "วันเสาร์-อาทิตย์ (วันหยุดสุดสัปดาห์)"
 
 #: pretix/control/forms/subevents.py
 msgctxt "subevent"
 msgid "Skip dates that overlap with any existing date"
-msgstr ""
+msgstr "ข้ามวันที่ซ้อนทับกับวันที่ที่มีอยู่แล้ว"
 
 #: pretix/control/forms/subevents.py
 msgctxt "subevent"
@@ -16002,44 +16056,49 @@ msgid ""
 "This respects even inactive dates and works best if all dates have both a "
 "start and end time."
 msgstr ""
+"ตัวเลือกนี้มีประโยชน์หากทุกวันจัดงานเกิดขึ้นในสถานที่เดียวกัน และไม่ควรสร้างวันที่ซ้ำซ้อนกันจนเกิดข้อขัด"
+"แย้งกับอีเวนต์พิเศษที่มีอยู่ ตัวเลือกนี้ครอบคลุมแม้กระทั่งวันที่ถูกปิดใช้งาน และจะทำงานได้ดีที่สุดหากทุกวันจั"
+"ดงานมีการระบุทั้งเวลาเริ่มต้นและเวลาสิ้นสุด"
 
 #: pretix/control/forms/subevents.py
 msgid "Keep the current values"
-msgstr ""
+msgstr "คงค่าปัจจุบันไว้"
 
 #: pretix/control/forms/subevents.py
 msgid "Selection contains various values"
-msgstr ""
+msgstr "รายการที่เลือกมีค่าหลากหลายแตกต่างกัน"
 
 #: pretix/control/forms/subevents.py
 msgid "The end of availability should be after the start of availability."
 msgstr ""
+"วันสิ้นสุดการเปิดให้ใช้สิทธิ์ควรเกิดขึ้นหลังวันเริ่มต้นการเปิดให้ใช้สิทธิ์"
 
 #: pretix/control/forms/subevents.py
 msgid "Available_until"
-msgstr ""
+msgstr "เปิดใช้งานได้ถึงวันที่"
 
 #: pretix/control/forms/subevents.py
 msgid "Exclude these dates instead of adding them."
-msgstr ""
+msgstr "ยกเว้นวันที่เหล่านี้แทนการเพิ่มเข้าไป"
 
 #: pretix/control/forms/users.py pretix/control/views/user.py
 msgid "Your changes could not be saved. See below for details."
-msgstr ""
+msgstr "ไม่สามารถบันทึกการเปลี่ยนแปลงของคุณได้ โปรดดูรายละเอียดด้านล่าง"
 
 #: pretix/control/forms/vouchers.py
 msgid "Specific seat ID"
-msgstr ""
+msgstr "รหัสระบุที่นั่งเฉพาะ (Seat ID)"
 
 #: pretix/control/forms/vouchers.py pretix/presale/forms/waitinglist.py
 msgid "Invalid product selected."
-msgstr ""
+msgstr "เลือกสินค้าไม่ถูกต้อง"
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "The voucher only matches hidden products but you have not selected that it "
 "should show them."
 msgstr ""
+"บัตรกำนัล (Voucher) นี้ตรงกับสินค้าที่ถูกซ่อนไว้เท่านั้น แต่คุณไม่ได้เลือกให้แสดงสินค้าดังกล่าว"
 
 #: pretix/control/forms/vouchers.py
 #, python-format
@@ -16048,38 +16107,30 @@ msgid ""
 "because at least one of the selected vouchers has already been redeemed "
 "%(max_redeemed)s times."
 msgstr ""
+"คุณไม่สามารถลดจำนวนการสิทธิ์ใช้สูงสุดลงเหลือ %(max_usages)s ได้ เนื่องจากมีบัตรกำนัลที่เลือกอย่า"
+"งน้อยหนึ่งใบถูกใช้งานไปแล้ว %(max_redeemed)s ครั้ง"
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid ""
-#| "You cannot create a voucher that blocks quota as the selected product or "
-#| "quota is currently sold out or completely reserved."
 msgid ""
 "You cannot create a voucher that allows selection of a quota but has no date "
 "selected."
 msgstr ""
-"คุณไม่สามารถสร้างเวาเชอร์ที่ล็อกโควตาได้ "
-"เนื่องจากสินค้าหรือโควตาที่เลือกถูกขายหมดหรือถูกจองไว้เต็มแล้ว"
+"คุณไม่สามารถสร้างบัตรกำนัลที่อนุญาตให้เลือกโควตาแต่ไม่มีการเลือกวันที่จัดงานได้"
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid "The selected product does not allow to select a seat."
 msgid "The selected quota does not match the selected subevent."
-msgstr "สินค้าที่เลือกไม่สามารถระบุที่นั่งได้"
+msgstr "โควตาที่เลือกไม่ตรงกับกิจกรรมย่อยที่เลือก"
 
 #: pretix/control/forms/vouchers.py
-#, fuzzy
-#| msgid ""
-#| "There is not enough quota available on quota \"{}\" to perform the "
-#| "operation."
 msgid "There is no sufficient quota available to perform this change."
-msgstr "โควตา \"{}\" มีไม่เพียงพอสำหรับการดำเนินการนี้"
+msgstr "โควตาที่เลือกไม่ตรงกับกิจกรรมย่อยที่เลือก"
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "Changing the maximum number of usages in bulk is not supported if any of the "
 "selected vouchers is assigned a seat."
 msgstr ""
+"ไม่รองรับการแก้ไขจำนวนการใช้งานสูงสุดแบบกลุ่ม หากมีบัตรกำนัลใดในรายการที่เลือกถูกกำหนดที่นั่งไว้"
 
 #: pretix/control/forms/vouchers.py
 msgctxt "subevent"
@@ -16087,37 +16138,42 @@ msgid ""
 "Changing the date in bulk is not supported if any of the selected vouchers "
 "is assigned a seat."
 msgstr ""
+"ไม่รองรับการแก้ไขวันที่แบบกลุ่ม หากมีบัตรกำนัลใดในรายการที่เลือกถูกกำหนดที่นั่งไว้"
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "Changing the product to a quota is not supported if any of the selected "
 "vouchers is assigned a seat."
 msgstr ""
+"ไม่รองรับการเปลี่ยนสินค้าเป็นโควตา หากมีบัตรกำนัลใดในรายการที่เลือกถูกกำหนดที่นั่งไว้"
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "This change cannot be completed because not all assigned seats of the "
 "vouchers are still available"
 msgstr ""
+"ไม่สามารถดำเนินการเปลี่ยนแปลงนี้ให้เสร็จสมบูรณ์ได้ เนื่องจากที่นั่งที่กำหนดไว้สำหรับบัตรกำนัลบางส่วนไ"
+"ม่ได้ว่างอีกต่อไป"
 
 #: pretix/control/forms/vouchers.py
 msgid "Codes"
-msgstr ""
+msgstr "รหัสบัตรกำนัล"
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "Add one voucher code per line. We suggest that you copy this list and save "
 "it into a file."
 msgstr ""
+"เพิ่มรหัสบัตรกำนัลหนึ่งรหัสต่อหนึ่งบรรทัด เราแนะนำให้คุณคัดลอกรายการนี้และบันทึกไว้ในไฟล์"
 
 #: pretix/control/forms/vouchers.py
 msgid "Send vouchers via email"
-msgstr ""
+msgstr "ส่งบัตรกำนัลทางอีเมล"
 
 #: pretix/control/forms/vouchers.py
 #, python-brace-format
 msgid "Your voucher for {event}"
-msgstr ""
+msgstr "บัตรกำนัลของคุณสำหรับ {event}"
 
 #: pretix/control/forms/vouchers.py
 #, python-brace-format
@@ -16135,6 +16191,18 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เราได้จัดส่งบัตรกำนัลสำหรับ {event} ให้แก่คุณผ่านอีเมลฉบับนี้:\n"
+"\n"
+"{voucher_list}\n"
+"\n"
+"คุณสามารถนำรหัสไปใช้สิทธิ์ได้ที่ร้านค้าตั๋วของเราที่นี่:\n"
+"\n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพอย่างสูง\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/control/forms/vouchers.py
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
@@ -16142,11 +16210,11 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html
 msgid "Recipients"
-msgstr ""
+msgstr "ผู้รับ"
 
 #: pretix/control/forms/vouchers.py
 msgid "or"
-msgstr ""
+msgstr "หรือ"
 
 #: pretix/control/forms/vouchers.py
 msgid ""
@@ -16154,57 +16222,61 @@ msgid ""
 "line, or the contents of a CSV file with a title row and one or more of the "
 "columns \"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
+"คุณสามารถระบุรายการที่อยู่อีเมลโดยใส่หนึ่งอีเมลต่อหนึ่งบรรทัด หรือใช้ข้อมูลจากไฟล์ CSV ที่มีแถวหัวข้อแ"
+"ละมีคอลัมน์ \"email\", \"number\", \"name\" หรือ \"tag\" อย่างน้อยหนึ่งคอลัมน์"
 
 #: pretix/control/forms/vouchers.py
 msgid "Maximum usages per voucher"
-msgstr ""
+msgstr "จำนวนการเปิดใช้สิทธิ์สูงสุดต่อบัตรกำนัล"
 
 #: pretix/control/forms/vouchers.py
 msgid "Number of times times EACH of these vouchers can be redeemed."
-msgstr ""
+msgstr "จำนวนครั้งที่บัตรกำนัลแต่ละใบสามารถนำไปแลกรับสิทธิ์ได้"
 
 #: pretix/control/forms/vouchers.py
 msgid "Specific seat IDs"
-msgstr ""
+msgstr "รหัสระบุที่นั่งเฉพาะ (Seat IDs)"
 
 #: pretix/control/forms/vouchers.py
 msgid "CSV input needs to contain a header row in the first line."
-msgstr ""
+msgstr "ข้อมูลนำเข้า CSV จำเป็นต้องมีแถวหัวข้อในบรรทัดแรก"
 
 #: pretix/control/forms/vouchers.py
 #, python-brace-format
 msgid "CSV parsing failed: {error}."
-msgstr ""
+msgstr "การประมวลผลไฟล์ CSV ล้มเหลว: {error}"
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "CSV input was not recognized to have multiple columns, maybe you have some "
 "invalid quoted field in your input."
 msgstr ""
+"ระบบไม่พบหลายคอลัมน์ในข้อมูลนำเข้า CSV อาจมีช่องข้อมูลที่ใช้เครื่องหมายอัญประกาศไม่ถูกต้องในข้อมูล"
+"ของคุณ"
 
 #: pretix/control/forms/vouchers.py
 #, python-brace-format
 msgid "CSV input needs to contain a field with the header \"{header}\"."
-msgstr ""
+msgstr "ข้อมูลนำเข้า CSV จำเป็นต้องมีฟิลด์ที่มีหัวข้อ \"{header}\""
 
 #: pretix/control/forms/vouchers.py
 #, python-brace-format
 msgid "CSV input contains an unknown field with the header \"{header}\"."
-msgstr ""
+msgstr "ข้อมูลนำเข้า CSV มีฟิลด์ที่ไม่รู้จักที่มีหัวข้อ \"{header}\""
 
 #: pretix/control/forms/vouchers.py
 #, python-brace-format
 msgid "{value} is not a valid email address."
-msgstr ""
+msgstr "{value} ไม่ใช่ที่อยู่อีเมลที่ถูกต้อง"
 
 #: pretix/control/forms/vouchers.py
 #, python-brace-format
 msgid "Invalid value in row {number}."
-msgstr ""
+msgstr "ค่าไม่ถูกต้องในแถวที่ {number}"
 
 #: pretix/control/forms/vouchers.py
 msgid "A voucher with one of these codes already exists."
-msgstr ""
+msgstr "มีบัตรกำนัลที่มีรหัสนี้อยู่ในระบบแล้ว"
 
 #: pretix/control/forms/vouchers.py
 #, python-brace-format
@@ -16212,54 +16284,50 @@ msgid ""
 "The voucher code {code} is too short. Make sure all voucher codes are at "
 "least {min_length} characters long."
 msgstr ""
+"รหัสบัตรกำนัล {code} สั้นเกินไป โปรดตรวจสอบให้แน่ใจว่ารหัสบัตรกำนัลทั้งหมดมีความยาวอย่างน้อย "
+"{min_length} ตัวอักษร"
 
 #: pretix/control/forms/vouchers.py
 #, python-brace-format
 msgid "The voucher code {code} appears in your list twice."
-msgstr ""
+msgstr "รหัสบัตรกำนัล {code} ปรากฏซ้ำกันสองครั้งในรายการของคุณ"
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "If vouchers should be sent by email, subject, message and recipients need to "
 "be specified."
 msgstr ""
+"หากต้องการจัดส่งบัตรกำนัลทางอีเมล จำเป็นต้องระบุหัวข้ออีเมล ข้อความ และผู้รับให้ครบถ้วน"
 
 #: pretix/control/forms/vouchers.py
 #, python-brace-format
 msgid ""
 "You generated {codes} vouchers, but entered recipients for {recp} vouchers."
-msgstr ""
+msgstr "คุณสร้างบัตรกำนัลจำนวน {codes} ใบ แต่ระบุผู้รับเพียง {recp} ราย"
 
 #: pretix/control/forms/vouchers.py
 msgid "You need to specify as many seats as voucher codes."
-msgstr ""
+msgstr "คุณจำเป็นต้องระบุจำนวนที่นั่งให้เท่ากับจำนวนรหัสบัตรกำนัล"
 
 #: pretix/control/forms/waitinglist.py
-#, fuzzy
-#| msgid "Please select a valid seat."
 msgid "Select a valid choice."
-msgstr "โปรดเลือกที่นั่งที่ถูกต้อง"
+msgstr "โปรดเลือกตัวเลือกที่ถูกต้อง"
 
 #: pretix/control/forms/waitinglist.py
 msgid "Only includes active products."
-msgstr ""
+msgstr "รวมเฉพาะสินค้าที่เปิดใช้งานอยู่เท่านั้น"
 
 #: pretix/control/forms/waitinglist.py
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "A voucher for this waiting list entry was already sent out."
-msgstr "มีเวาเชอร์ที่ใช้รหัสนี้อยู่แล้วในระบบ"
+msgstr "จัดส่งบัตรกำนัลสำหรับรายการในรายการรอสำรองนี้เรียบร้อยแล้ว"
 
 #: pretix/control/forms/waitinglist.py
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected event date is not active."
 msgid "The selected product is not active."
-msgstr "วันที่จัดกิจกรรมที่เลือกยังไม่เปิดให้ใช้งาน"
+msgstr "สินค้าที่เลือกไม่ได้เปิดใช้งานอยู่"
 
 #: pretix/control/logdisplay.py
 msgid "The order has been changed:"
-msgstr ""
+msgstr "คำสั่งซื้อมีการเปลี่ยนแปลง:"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16267,16 +16335,18 @@ msgid ""
 "Position #{posid}: {old_item} ({old_price}) changed to {new_item} "
 "({new_price})."
 msgstr ""
+"รายการที่ #{posid}: เปลี่ยน {old_item} ({old_price}) เป็น {new_item} ({new_price})"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Position #{posid}: Used membership changed."
-msgstr ""
+msgstr "รายการที่ #{posid}: สิทธิประโยชน์สมาชิกที่ใช้ถูกเปลี่ยนแปลง"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Position #{posid}: Seat \"{old_seat}\" changed to \"{new_seat}\"."
 msgstr ""
+"รายการที่ #{posid}: เปลี่ยนที่นั่งจาก \"{old_seat}\" เป็น \"{new_seat}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16284,44 +16354,46 @@ msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
+"รายการที่ #{posid}: เปลี่ยนวันที่จัดงานจาก \"{old_event}\" ({old_price}) เป็น \""
+"{new_event}\" ({new_price})"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
-msgstr ""
+msgstr "ราคาของรายการที่ #{posid} เปลี่ยนจาก {old_price} เป็น {new_price}"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Tax rule of position #{posid} changed from {old_rule} to {new_rule}."
-msgstr ""
+msgstr "กฎภาษีของรายการที่ #{posid} เปลี่ยนจาก {old_rule} เป็น {new_rule}"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Tax rule of fee #{fee} changed from {old_rule} to {new_rule}."
-msgstr ""
+msgstr "กฎภาษีของค่าธรรมเนียม #{fee} เปลี่ยนจาก {old_rule} เป็น {new_rule}"
 
 #: pretix/control/logdisplay.py
 msgid "A fee has been added"
-msgstr ""
+msgstr "เพิ่มค่าธรรมเนียมแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Taxes and rounding have been recomputed"
-msgstr ""
+msgstr "คำนวณภาษีและการปัดเศษใหม่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "A fee was changed from {old_price} to {new_price}."
-msgstr ""
+msgstr "ค่าธรรมเนียมถูกเปลี่ยนจาก {old_price} เป็น {new_price}"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "A fee of {old_price} was removed."
-msgstr ""
+msgstr "ค่าธรรมเนียมจำนวน {old_price} ถูกลบออกแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Position #{posid} ({old_item}, {old_price}) canceled."
-msgstr ""
+msgstr "รายการที่ #{posid} ({old_item}, {old_price}) ถูกยกเลิกแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16329,49 +16401,52 @@ msgid ""
 "Position #{posid} created: {item} ({price}) as an add-on to position "
 "#{addon_to}."
 msgstr ""
+"สร้างรายการที่ #{posid}: {item} ({price}) เป็นสินค้าเพิ่มเติมสำหรับรายการที่ #{addon_to}"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Position #{posid} created: {item} ({price})."
-msgstr ""
+msgstr "สร้างรายการที่ #{posid}: {item} ({price})"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "A new secret has been generated for position #{posid}."
-msgstr ""
+msgstr "สร้างรหัสลับใหม่สำหรับรายการที่ #{posid} เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid ""
 "The validity start date for position #{posid} has been changed to {value}."
 msgstr ""
+"วันเริ่มต้นระยะเวลาใช้งานสำหรับรายการที่ #{posid} ถูกเปลี่ยนเป็น {value}"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid ""
 "The validity end date for position #{posid} has been changed to {value}."
-msgstr ""
+msgstr "วันสิ้นสุดระยะเวลาใช้งานสำหรับรายการที่ #{posid} ถูกเปลี่ยนเป็น {value}"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "A block has been added for position #{posid}."
-msgstr ""
+msgstr "เพิ่มการระงับใช้งานสำหรับรายการที่ #{posid} เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "A block has been removed for position #{posid}."
-msgstr ""
+msgstr "ยกเลิกการระงับใช้งานสำหรับรายการที่ #{posid} เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
+"รายการที่ #{posid} ({old_item}, {old_price}) ถูกแยกออกไปยังคำสั่งซื้อใหม่: {order}"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "This order has been created by splitting the order {order}"
-msgstr ""
+msgstr "คำสั่งซื้อนี้ถูกสร้างขึ้นจากการแยกคำสั่งซื้อ {order}"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16379,12 +16454,15 @@ msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
+"การสแกนที่ไม่รู้จักของรหัส \"{barcode}…\" เมื่อเวลา {datetime} สำหรับรายการ \"{list}\" "
+"ประเภท \"{type}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" for list \"{list}\", type \"{type}\"."
 msgstr ""
+"การสแกนที่ไม่รู้จักของรหัส \"{barcode}…\" สำหรับรายการ \"{list}\" ประเภท \"{type}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16392,6 +16470,8 @@ msgid ""
 "Scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\", was uploaded."
 msgstr ""
+"อัปโหลดการสแกนรหัสที่ถูกเพิกถอน \"{barcode}…\" เมื่อเวลา {datetime} สำหรับรายการ \""
+"{list}\" ประเภท \"{type}\" แล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16399,6 +16479,8 @@ msgid ""
 "Scan of revoked code \"{barcode}\" for list \"{list}\", type \"{type}\", was "
 "uploaded."
 msgstr ""
+"อัปโหลดการสแกนรหัสที่ถูกเพิกถอน \"{barcode}\" สำหรับรายการ \"{list}\" ประเภท \""
+"{type}\" แล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16406,6 +16488,8 @@ msgid ""
 "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\", error code \"{errorcode}\"."
 msgstr ""
+"ปฏิเสธการสแกนรายการที่ #{posid} เมื่อเวลา {datetime} สำหรับรายการ \"{list}\" ประเภ"
+"ท \"{type}\" รหัสข้อผิดพลาด \"{errorcode}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16413,6 +16497,8 @@ msgid ""
 "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", error "
 "code \"{errorcode}\"."
 msgstr ""
+"ปฏิเสธการสแกนรายการที่ #{posid} สำหรับรายการ \"{list}\" ประเภท \"{type}\" รหัสข้อผิด"
+"พลาด \"{errorcode}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16420,12 +16506,15 @@ msgid ""
 "Annulled scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
+"ยกเลิกผลการสแกนรายการที่ #{posid} เมื่อเวลา {datetime} สำหรับรายการ \"{list}\" ประเ"
+"ภท \"{type}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid ""
 "Annulled scan of position #{posid} for list \"{list}\", type \"{type}\"."
 msgstr ""
+"ยกเลิกผลการสแกนรายการที่ #{posid} สำหรับรายการ \"{list}\" ประเภท \"{type}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16433,43 +16522,49 @@ msgid ""
 "Ignored annulment of position #{posid} at {datetime} for list \"{list}\", "
 "type \"{type}\"."
 msgstr ""
+"ข้ามการยกเลิกผลสแกนรายการที่ #{posid} เมื่อเวลา {datetime} สำหรับรายการ \"{list}\" ป"
+"ระเภท \"{type}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} for list \"{list}\", type \"{type}\"."
 msgstr ""
+"ข้ามการยกเลิกผลสแกนรายการที่ #{posid} สำหรับรายการ \"{list}\" ประเภท \"{type}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
 msgstr ""
+"ย้อนคืนสถานะการเช็กอินของรายการที่ #{posid} ในรายการ \"{list}\" เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "(unknown)"
-msgstr ""
+msgstr "(ไม่ทราบข้อมูล)"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked out at {datetime} for list \"{list}\"."
 msgstr ""
+"รายการที่ #{posid} ทำการเช็กเอาต์แล้ว เมื่อเวลา {datetime} สำหรับรายการ \"{list}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Position #{posid} has been checked out for list \"{list}\"."
-msgstr ""
+msgstr "รายการที่ #{posid} ทำการเช็กเอาต์แล้ว สำหรับรายการ \"{list}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
 msgstr ""
+"รายการที่ #{posid} ทำการเช็กอินแล้ว เมื่อเวลา {datetime} สำหรับรายการ \"{list}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Position #{posid} has been checked in for list \"{list}\"."
-msgstr ""
+msgstr "รายการที่ #{posid} ทำการเช็กอินแล้ว สำหรับรายการ \"{list}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16477,6 +16572,8 @@ msgid ""
 "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
 "uploaded even though it has been scanned already."
 msgstr ""
+"มีการอัปโหลดข้อมูลการสแกนของรายการที่ #{posid} เมื่อเวลา {datetime} สำหรับรายการ \""
+"{list}\" แม้ว่าจะถูกสแกนไปแล้วก็ตาม"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16484,31 +16581,34 @@ msgid ""
 "Position #{posid} has been scanned and rejected because it has already been "
 "scanned before on list \"{list}\"."
 msgstr ""
+"รายการที่ #{posid} ถูกสแกนและปฏิเสธเนื่องจากเคยถูกสแกนไปแล้วก่อนหน้านี้ในรายการ \"{list}"
+"\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The user confirmed the following message: \"{}\""
-msgstr ""
+msgstr "ผู้ใช้ยืนยันข้อความต่อไปนี้: \"{}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The order has been canceled (comment: \"{comment}\")."
-msgstr ""
+msgstr "คำสั่งซื้อถูกยกเลิกแล้ว (ความคิดเห็น: \"{comment}\")"
 
 #: pretix/control/logdisplay.py pretix/control/views/orders.py
 #: pretix/presale/views/order.py
 msgid "The order has been canceled."
-msgstr ""
+msgstr "คำสั่งซื้อถูกยกเลิกแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Position #{posid} has been printed at {datetime} with type \"{type}\"."
 msgstr ""
+"รายการที่ #{posid} พิมพ์เสร็จสิ้นเมื่อเวลา {datetime} ด้วยประเภท \"{type}\""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Data successfully transferred to {provider_display_name}."
-msgstr ""
+msgstr "ส่งโอนข้อมูลไปยัง {provider_display_name} สำเร็จแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16516,6 +16616,7 @@ msgid ""
 "Transferring data to {provider_display_name} failed due to invalid "
 "configuration:"
 msgstr ""
+"การส่งโอนข้อมูลไปยัง {provider_display_name} ล้มเหลวเนื่องจากการตั้งค่าไม่ถูกต้อง:"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16523,156 +16624,158 @@ msgid ""
 "Maximum number of retries exceeded while transferring data to "
 "{provider_display_name}:"
 msgstr ""
+"จำนวนครั้งการลองใหม่เกินขีดจำกัดสูงสุดขณะส่งโอนข้อมูลไปยัง {provider_display_name}:"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Error while transferring data to {provider_display_name}:"
-msgstr ""
+msgstr "เกิดข้อผิดพลาดขณะส่งโอนข้อมูลไปยัง {provider_display_name}:"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Internal error while transferring data to {provider_display_name}."
-msgstr ""
+msgstr "เกิดข้อผิดพลาดภายในระบบขณะส่งโอนข้อมูลไปยัง {provider_display_name}"
 
 #: pretix/control/logdisplay.py
 msgid "The settings of a payment provider have been changed."
-msgstr ""
+msgstr "การตั้งค่าของผู้ให้บริการชำระเงินถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The settings of a ticket output provider have been changed."
-msgstr ""
+msgstr "การตั้งค่าของผู้ให้บริการออกตั๋วถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Blocked manually"
-msgstr ""
+msgstr "ถูกระงับใช้งานด้วยตนเอง"
 
 #: pretix/control/logdisplay.py
 msgid "Blocked because of an API integration"
-msgstr ""
+msgstr "ถูกระงับใช้งานเนื่องจากการเชื่อมต่อ API"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The test mode order {code} has been deleted."
-msgstr ""
+msgstr "คำสั่งซื้อในโหมดทดลอง {code} ถูกลบเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The order details have been changed."
-msgstr ""
+msgstr "รายละเอียดคำสั่งซื้อถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The order has been marked as unpaid."
-msgstr ""
+msgstr "คำสั่งซื้อถูกทำเครื่องหมายเป็นยังไม่ได้ชำระเงิน"
 
 #: pretix/control/logdisplay.py
 msgid "The order's secret has been changed."
-msgstr ""
+msgstr "รหัสลับของคำสั่งซื้อถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The order's expiry date has been changed."
-msgstr ""
+msgstr "วันหมดอายุของคำสั่งซื้อถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The order has been set to be usable before it is paid."
-msgstr ""
+msgstr "คำสั่งซื้อถูกตั้งค่าให้สามารถใช้งานได้ก่อนการชำระเงิน"
 
 #: pretix/control/logdisplay.py
 msgid "The order has been set to require payment before use."
-msgstr ""
+msgstr "คำสั่งซื้อถูกตั้งค่าให้ต้องชำระเงินก่อนการใช้งาน"
 
 #: pretix/control/logdisplay.py pretix/control/views/orders.py
 msgid "The order has been marked as expired."
-msgstr ""
+msgstr "คำสั่งซื้อถูกทำเครื่องหมายเป็นหมดอายุแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/orders.py
 msgid "The order has been marked as paid."
-msgstr ""
+msgstr "คำสั่งซื้อถูกทำเครื่องหมายเป็นชำระเงินแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The cancellation request has been deleted."
-msgstr ""
+msgstr "คำขอยกเลิกถูกลบเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The order has been refunded."
-msgstr ""
+msgstr "คำสั่งซื้อถูกคืนเงินเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/orders.py
 msgid "The order has been reactivated."
-msgstr ""
+msgstr "คำสั่งซื้อถูกเปิดกลับมาใช้งานอีกครั้งแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The order has been created."
-msgstr ""
+msgstr "คำสั่งซื้อถูกสร้างเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The order requires approval before it can continue to be processed."
-msgstr ""
+msgstr "คำสั่งซื้อต้องได้รับการอนุมัติก่อนที่จะสามารถดำเนินการต่อได้"
 
 #: pretix/control/logdisplay.py pretix/control/views/orders.py
 msgid "The order has been approved."
-msgstr ""
+msgstr "คำสั่งซื้อได้รับการอนุมัติเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The order has been denied (comment: \"{comment}\")."
-msgstr ""
+msgstr "คำสั่งซื้อถูกปฏิเสธ (ความคิดเห็น: \"{comment}\")"
 
 #: pretix/control/logdisplay.py
 msgid "The customer VAT ID has been verified."
-msgstr ""
+msgstr "หมายเลขประจำตัวผู้เสียภาษีของลูกค้าได้รับการตรวจสอบยืนยันแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid ""
 "The email address has been changed from \"{old_email}\" to \"{new_email}\"."
-msgstr ""
+msgstr "ที่อยู่อีเมลถูกเปลี่ยนจาก \"{old_email}\" เป็น \"{new_email}\""
 
 #: pretix/control/logdisplay.py
 msgid ""
 "The email address has been confirmed to be working (the user clicked on a "
 "link in the email for the first time)."
 msgstr ""
+"ยืนยันแล้วว่าที่อยู่อีเมลสามารถใช้งานได้จริง (ผู้ใช้คลิกลิงก์ในอีเมลเป็นครั้งแรก)"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid ""
 "The phone number has been changed from \"{old_phone}\" to \"{new_phone}\"."
-msgstr ""
+msgstr "เบอร์โทรศัพท์ถูกเปลี่ยนจาก \"{old_phone}\" เป็น \"{new_phone}\""
 
 #: pretix/control/logdisplay.py
 msgid "The customer account has been changed."
-msgstr ""
+msgstr "บัญชีลูกค้าถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The order locale has been changed."
-msgstr ""
+msgstr "ภาษา/ภูมิภาคของคำสั่งซื้อถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/orders.py
 #: pretix/presale/views/order.py
 msgid "The invoice has been generated."
-msgstr ""
+msgstr "ออกใบแจ้งหนี้/ใบกำกับภาษีเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The invoice could not be generated."
-msgstr ""
+msgstr "ไม่สามารถออกใบแจ้งหนี้/ใบกำกับภาษีได้"
 
 #: pretix/control/logdisplay.py pretix/control/views/orders.py
 msgid "The invoice has been regenerated."
-msgstr ""
+msgstr "สร้างใบแจ้งหนี้/ใบกำกับภาษีใหม่อีกครั้งเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/orders.py
 #: pretix/presale/views/order.py
 msgid "The invoice has been reissued."
-msgstr ""
+msgstr "ออกใบแจ้งหนี้/ใบกำกับภาษีฉบับใหม่แทนฉบับเดิมเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The invoice {full_invoice_no} has been sent."
-msgstr ""
+msgstr "ส่งใบแจ้งหนี้/ใบกำกับภาษี {full_invoice_no} เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The transmission of invoice {full_invoice_no} has failed."
-msgstr ""
+msgstr "การจัดส่งใบแจ้งหนี้/ใบกำกับภาษี {full_invoice_no} ล้มเหลว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -16680,453 +16783,452 @@ msgid ""
 "Invoice {full_invoice_no} has not been transmitted because the transmission "
 "provider does not support test mode invoices."
 msgstr ""
+"ไม่ได้จัดส่งใบแจ้งหนี้/ใบกำกับภาษี {full_invoice_no} เนื่องจากผู้ให้บริการจัดส่งไม่รองรับใบแจ้งหนี้"
+"ในโหมดทดลอง"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The invoice {full_invoice_no} has been scheduled for retransmission."
 msgstr ""
+"กำหนดเวลาจัดส่งใบแจ้งหนี้/ใบกำกับภาษี {full_invoice_no} ใหม่อีกครั้งเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The order's internal comment has been updated."
-msgstr ""
+msgstr "อัปเดตความคิดเห็นภายในสำหรับคำสั่งซื้อเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The order's follow-up date has been updated."
-msgstr ""
+msgstr "อัปเดตวันติดตามผลสำหรับคำสั่งซื้อเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The order's flag to require attention at check-in has been toggled."
-msgstr ""
+msgstr "เปลี่ยนสถานะธงแจ้งเตือนให้ตรวจทานเมื่อเช็กอินเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The order's check-in text has been changed."
-msgstr ""
+msgstr "ข้อความสำหรับการเช็กอินของคำสั่งซื้อถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "The order's flag to be considered valid even if unpaid has been toggled."
-msgstr ""
+msgstr "เปลี่ยนสถานะธงอนุญาตให้ตั๋วใช้งานได้แม้ยังไม่ได้ชำระเงินเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "A new payment {local_id} has been started instead of the previous one."
-msgstr ""
+msgstr "เริ่มต้นรายการชำระเงินใหม่ {local_id} แทนที่รายการก่อนหน้าเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An unidentified type email has been sent."
-msgstr ""
+msgstr "ส่งอีเมลที่ไม่ระบุประเภทเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Sending of an email has failed."
-msgstr ""
+msgstr "การส่งอีเมลล้มเหลว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "The email has been sent without attached tickets since they would have been "
 "too large to be likely to arrive."
 msgstr ""
+"ส่งอีเมลโดยไม่ได้แนบไฟล์ตั๋ว เนื่องจากไฟล์มีขนาดใหญ่เกินไปและอาจทำให้การจัดส่งไม่สำเร็จ"
 
 #: pretix/control/logdisplay.py
 msgid "An invoice email has been sent."
-msgstr ""
+msgstr "ส่งอีเมลใบแจ้งหนี้/ใบกำกับภาษีเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A custom email has been sent."
-msgstr ""
+msgstr "ส่งอีเมลแบบกำหนดเองเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A custom email has been sent to an attendee."
-msgstr ""
+msgstr "ส่งอีเมลแบบกำหนดเองไปยังผู้เข้าร่วมงานเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "An email has been sent with a reminder that the ticket is available for "
 "download."
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนว่าตั๋วพร้อมสำหรับการดาวน์โหลดแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "An email has been sent with a warning that the order is about to expire."
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนว่าคำสั่งซื้อกำลังจะหมดอายุแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "An email has been sent to notify the user that the order has been canceled."
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนผู้ใช้ว่าคำสั่งซื้อถูกยกเลิกแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "An email has been sent to notify the user that the event has been canceled."
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนผู้ใช้ว่าอีเวนต์ถูกยกเลิกแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "An email has been sent to notify the user that the order has been changed."
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนผู้ใช้ว่าคำสั่งซื้อถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "An email has been sent to notify the user that the order has been received."
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนผู้ใช้ว่าได้รับคำสั่งซื้อแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "An email has been sent to notify the user that payment has been received."
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนผู้ใช้ว่าได้รับชำระเงินเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "An email has been sent to notify the user that the order has been denied."
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนผู้ใช้ว่าคำสั่งซื้อถูกปฏิเสธแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "An email has been sent to notify the user that the order has been approved."
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนผู้ใช้ว่าคำสั่งซื้อได้รับการอนุมัติแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires payment."
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนผู้ใช้ว่าได้รับคำสั่งซื้อแล้วและต้องชำระเงิน"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires approval."
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนผู้ใช้ว่าได้รับคำสั่งซื้อแล้วและรอการอนุมัติ"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "An email with a link to the order detail page has been resent to the user."
 msgstr ""
+"ส่งอีเมลพร้อมลิงก์ไปยังหน้ารายละเอียดคำสั่งซื้อให้ผู้ใช้อีกครั้งเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An email has been sent to notify the user that the payment failed."
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือนผู้ใช้ว่าการชำระเงินล้มเหลวเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The voucher has been created."
-msgstr ""
+msgstr "สร้างบัตรกำนัลเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
 msgstr ""
+"กำหนดให้บัตรกำนัลหมดอายุ เนื่องจากผู้รับได้ถอนชื่อตนเองออกจากรายการรอสำรองแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The voucher has been changed."
-msgstr ""
+msgstr "บัตรกำนัลถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The voucher has been deleted."
-msgstr ""
+msgstr "บัตรกำนัลถูกลบเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Cart positions including the voucher have been deleted."
-msgstr ""
+msgstr "รายการในตะกร้าสินค้าที่ใช้บัตรกำนัลนี้ถูกลบเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The voucher has been assigned to {email} through the waiting list."
-msgstr ""
+msgstr "มอบสิทธิ์บัตรกำนัลให้แก่ {email} ผ่านรายการรอสำรองเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The voucher has been redeemed in order {order_code}."
-msgstr ""
+msgstr "บัตรกำนัลถูกนำไปใช้สิทธิ์แล้วในคำสั่งซื้อ {order_code}"
 
 #: pretix/control/logdisplay.py
 msgid "The category has been added."
-msgstr ""
+msgstr "เพิ่มหมวดหมู่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The category has been deleted."
-msgstr ""
+msgstr "ลบหมวดหมู่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The category has been changed."
-msgstr ""
+msgstr "หมวดหมู่ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The category has been reordered."
-msgstr ""
+msgstr "เรียงลำดับหมวดหมู่ใหม่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The tax rule has been added."
-msgstr ""
+msgstr "เพิ่มกฎภาษีเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The tax rule has been deleted."
-msgstr ""
+msgstr "ลบกฎภาษีเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The tax rule has been changed."
-msgstr ""
+msgstr "กฎภาษีถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "{user} has been added to the team."
-msgstr ""
+msgstr "เพิ่ม {user} เข้าร่วมทีมเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "{user} has been removed from the team."
-msgstr ""
+msgstr "นำ {user} ออกจากทีมเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "{user} has been invited to the team."
-msgstr ""
+msgstr "ส่งคำเชิญ {user} เข้าร่วมทีมเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
-#, fuzzy, python-brace-format
-#| msgid "An invoice has been generated."
+#, python-brace-format
 msgid "Invite for {user} has been deleted."
-msgstr "ออกใบแจ้งหนี้เรียบร้อยแล้ว"
+msgstr "คำเชิญสำหรับ {user} ถูกลบเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Invite for {user} has been resent."
-msgstr ""
+msgstr "ส่งคำเชิญสำหรับ {user} ให้อีกครั้งเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
-msgstr ""
+msgstr "{user} เข้าร่วมทีมเรียบร้อยแล้วโดยใช้คำเชิญที่ส่งไปที่ {email}"
 
 #: pretix/control/logdisplay.py
 msgid "Your account settings have been changed."
-msgstr ""
+msgstr "การตั้งค่าบัญชีของคุณถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/user.py
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
-msgstr ""
+msgstr "ที่อยู่อีเมลของคุณถูกเปลี่ยนเป็น {email} แล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Your account has been enabled."
-msgstr ""
+msgstr "บัญชีของคุณถูกเปิดใช้งานเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Your account has been disabled."
-msgstr ""
+msgstr "บัญชีของคุณถูกปิดใช้งานเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py pretix/presale/views/customer.py
 #, python-brace-format
 msgid "Your email address has been changed from {old_email} to {email}."
-msgstr ""
+msgstr "ที่อยู่อีเมลของคุณถูกเปลี่ยนจาก {old_email} เป็น {email} แล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Your email address {email} has been confirmed."
-msgstr ""
+msgstr "ยืนยันที่อยู่อีเมล {email} ของคุณเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "You impersonated {}."
-msgstr ""
+msgstr "คุณเข้าสวมรอยเป็นผู้ใช้ {} เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "You stopped impersonating {}."
-msgstr ""
+msgstr "คุณยกเลิกการสวมรอยเป็นผู้ใช้ {} เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "This object has been created by cloning."
-msgstr ""
+msgstr "วัตถุนี้ถูกสร้างขึ้นมาจากการจำลอง (Cloning)"
 
 #: pretix/control/logdisplay.py
 msgid "The organizer has been changed."
-msgstr ""
+msgstr "ผู้จัดงานถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The organizer settings have been changed."
-msgstr ""
+msgstr "การตั้งค่าผู้จัดงานถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The footer links have been changed."
-msgstr ""
+msgstr "ลิงก์ส่วนท้ายหน้า (Footer links) ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A scheduled export has been added."
-msgstr ""
+msgstr "เพิ่มกำหนดการส่งออกข้อมูลเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A scheduled export has been changed."
-msgstr ""
+msgstr "กำหนดการส่งออกข้อมูลถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A scheduled export has been deleted."
-msgstr ""
+msgstr "ลบกำหนดการส่งออกข้อมูลเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A scheduled export has been executed."
-msgstr ""
+msgstr "ดำเนินการส่งออกข้อมูลตามกำหนดการเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "A scheduled export has failed: {reason}."
-msgstr ""
+msgstr "การส่งออกข้อมูลตามกำหนดการล้มเหลว: {reason}"
 
 #: pretix/control/logdisplay.py
 msgid "Failed emails have been scheduled to be retried."
-msgstr ""
+msgstr "กำหนดเวลาลองส่งอีเมลที่ไม่สำเร็จใหม่อีกครั้งเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "Your email address has been updated."
 msgid "Queued emails have been aborted."
-msgstr "อัปเดตที่อยู่อีเมลของคุณเรียบร้อยแล้ว"
+msgstr "ยกเลิกอีเมลที่อยู่ในคิวเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Gift card acceptance for another organizer has been added."
-msgstr ""
+msgstr "เพิ่มการยอมรับบัตรของขวัญสำหรับผู้จัดงานอื่นเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Gift card acceptance for another organizer has been removed."
-msgstr ""
+msgstr "ยกเลิกการยอมรับบัตรของขวัญสำหรับผู้จัดงานอื่นเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A new gift card acceptor has been invited."
-msgstr ""
+msgstr "ส่งคำเชิญผู้รับบัตรของขวัญรายใหม่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A gift card acceptor has been removed."
-msgstr ""
+msgstr "นำผู้รับบัตรของขวัญออกเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A gift card issuer has been removed or declined."
-msgstr ""
+msgstr "นำผู้ออกบัตรของขวัญออกหรือปฏิเสธคำขอเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A new gift card issuer has been accepted."
-msgstr ""
+msgstr "ตอบรับผู้ออกบัตรของขวัญรายใหม่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The webhook has been created."
-msgstr ""
+msgstr "สร้าง Webhook เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The webhook has been changed."
-msgstr ""
+msgstr "Webhook ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The webhook call retry jobs have been manually expedited."
-msgstr ""
+msgstr "เร่งด่วนการทำงานลองส่งข้อมูล Webhook ซ้ำด้วยตนเองเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The webhook call retry jobs have been dropped."
-msgstr ""
+msgstr "ยกเลิกการทำงานลองส่งข้อมูล Webhook ซ้ำเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The SSO provider has been created."
-msgstr ""
+msgstr "สร้างผู้ให้บริการ SSO เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The SSO provider has been changed."
-msgstr ""
+msgstr "ผู้ให้บริการ SSO ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The SSO provider has been deleted."
-msgstr ""
+msgstr "ลบผู้ให้บริการ SSO เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The SSO client has been created."
-msgstr ""
+msgstr "สร้าง SSO Client เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The SSO client has been changed."
-msgstr ""
+msgstr "SSO Client ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The SSO client has been deleted."
-msgstr ""
+msgstr "ลบ SSO Client เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/organizer.py
 msgid "The membership type has been created."
-msgstr ""
+msgstr "สร้างประเภทสมาชิกเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The membership type has been changed."
-msgstr ""
+msgstr "ประเภทสมาชิกถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The membership type has been deleted."
-msgstr ""
+msgstr "ลบประเภทสมาชิกเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/organizer.py
 msgid "The sales channel has been created."
-msgstr ""
+msgstr "สร้างช่องทางการขายเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The sales channel has been changed."
-msgstr ""
+msgstr "ช่องทางการขายถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The sales channel has been deleted."
-msgstr ""
+msgstr "ลบช่องทางการขายเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The account has been created."
-msgstr ""
+msgstr "สร้างบัญชีเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The account has been changed."
-msgstr ""
+msgstr "บัญชีถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A membership for this account has been added."
-msgstr ""
+msgstr "เพิ่มการเป็นสมาชิกสำหรับบัญชีนี้เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A membership of this account has been changed."
-msgstr ""
+msgstr "การเป็นสมาชิกของบัญชีนี้ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A membership of this account has been deleted."
-msgstr ""
+msgstr "ลบการเป็นสมาชิกของบัญชีนี้เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The account has been disabled and anonymized."
-msgstr ""
+msgstr "บัญชีถูกปิดใช้งานและลบข้อมูลระบุตัวตน (Anonymized) เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A new password has been requested."
-msgstr ""
+msgstr "มีการร้องขอรหัสผ่านใหม่"
 
 #: pretix/control/logdisplay.py
 msgid "A new password has been set."
-msgstr ""
+msgstr "ตั้งรหัสผ่านใหม่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The reusable medium has been created."
-msgstr ""
+msgstr "สร้างสื่อบันทึกที่ใช้ซ้ำได้ เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The reusable medium has been created automatically."
-msgstr ""
+msgstr "สร้างสื่อบันทึกที่ใช้ซ้ำได้แบบอัตโนมัติเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The reusable medium has been changed."
-msgstr ""
+msgstr "สื่อบันทึกที่ใช้ซ้ำได้ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "The new ticket layout has been created."
 msgid "A new ticket has been added to the medium."
-msgstr "สร้างรูปแบบตั๋วใหม่เรียบร้อยแล้ว"
+msgstr "เพิ่มตั๋วใบใหม่ลงในสื่อบันทึกเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "This ticket has already been redeemed."
 msgid "A ticket has been removed from the medium."
-msgstr "ตั๋วนี้ถูกใช้งานไปแล้ว"
+msgstr "นำตั๋วออกจากสื่อบันทึกเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The medium has been connected to a new ticket."
-msgstr ""
+msgstr "เชื่อมต่อสื่อบันทึกเข้ากับตั๋วใบใหม่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -17134,34 +17236,35 @@ msgid ""
 "The ticket #{positionid} was exchanged for reusable medium "
 "{medium_identifier}."
 msgstr ""
+"แลกเปลี่ยนตั๋ว #{positionid} เป็นสื่อบันทึกที่ใช้ซ้ำได้ {medium_identifier} เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The medium has been connected to a new gift card."
-msgstr ""
+msgstr "เชื่อมต่อสื่อบันทึกเข้ากับบัตรของขวัญใบใหม่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The event's internal comment has been updated."
-msgstr ""
+msgstr "อัปเดตความคิดเห็นภายในสำหรับอีเวนต์เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The event has been canceled."
-msgstr ""
+msgstr "อีเวนต์ถูกยกเลิกแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An event has been deleted."
-msgstr ""
+msgstr "ลบอีเวนต์เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A removal process for personal data has been started."
-msgstr ""
+msgstr "เริ่มต้นกระบวนการลบข้อมูลส่วนบุคคลแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A removal process for personal data has been completed."
-msgstr ""
+msgstr "กระบวนการลบข้อมูลส่วนบุคคลเสร็จสมบูรณ์แล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The user has been created."
-msgstr ""
+msgstr "สร้างผู้ใช้เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -17169,22 +17272,24 @@ msgid ""
 "A first login using {agent_type} on {os_type} from {country} has been "
 "detected."
 msgstr ""
+"ตรวจพบการเข้าสู่ระบบครั้งแรกโดยใช้ {agent_type} บน {os_type} จาก {country}"
 
 #: pretix/control/logdisplay.py pretix/control/views/user.py
 msgid "Two-factor authentication has been enabled."
-msgstr ""
+msgstr "เปิดใช้งานการยืนยันตัวตนแบบสองปัจจัย (2FA) เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/user.py
 msgid "Two-factor authentication has been disabled."
-msgstr ""
+msgstr "ปิดใช้งานการยืนยันตัวตนแบบสองปัจจัย (2FA) เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/user.py
 msgid "Your two-factor emergency codes have been regenerated."
 msgstr ""
+"สร้างรหัสฉุกเฉินสำหรับการยืนยันตัวตนแบบสองปัจจัยของคุณใหม่อีกครั้งเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A two-factor emergency code has been generated."
-msgstr ""
+msgstr "สร้างรหัสฉุกเฉินสำหรับการยืนยันตัวตนแบบสองปัจจัยเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -17192,6 +17297,7 @@ msgid ""
 "A new two-factor authentication device \"{name}\" has been added to your "
 "account."
 msgstr ""
+"เพิ่มอุปกรณ์ยืนยันตัวตนแบบสองปัจจัยชิ้นใหม่ \"{name}\" เข้าไปในบัญชีของคุณเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -17199,144 +17305,147 @@ msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
 msgstr ""
+"นำอุปกรณ์ยืนยันตัวตนแบบสองปัจจัย \"{name}\" ออกจากบัญชีของคุณเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Notifications have been enabled."
-msgstr ""
+msgstr "เปิดการแจ้งเตือนเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Notifications have been disabled."
-msgstr ""
+msgstr "ปิดการแจ้งเตือนเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Your notification settings have been changed."
-msgstr ""
+msgstr "การตั้งค่าการแจ้งเตือนของคุณถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "This user has been anonymized."
-msgstr ""
+msgstr "ผู้ใช้นี้ถูกลบข้อมูลระบุตัวตน (Anonymized) เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Password reset mail sent."
-msgstr ""
+msgstr "ส่งอีเมลสำหรับตั้งรหัสผ่านใหม่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The password has been reset."
-msgstr ""
+msgstr "ตั้งรหัสผ่านใหม่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid ""
 "A repeated password reset has been denied, as the last request was less than "
 "24 hours ago."
 msgstr ""
+"ปฏิเสธการตั้งรหัสผ่านใหม่ซ้ำ เนื่องจากคำขอล่าสุดเกิดขึ้นน้อยกว่า 24 ชั่วโมงที่ผ่านมา"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The organizer \"{name}\" has been deleted."
-msgstr ""
+msgstr "ลบผู้จัดงาน \"{name}\" เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr ""
+msgstr "ส่งบัตรกำนัลไปยังบุคคลในรายการรอสำรองเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An entry has been transferred to another waiting list."
-msgstr ""
+msgstr "โอนย้ายรายการไปยังรายการรอสำรองอื่นเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The team has been created."
-msgstr ""
+msgstr "สร้างทีมเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The team settings have been changed."
-msgstr ""
+msgstr "การตั้งค่าทีมถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The team has been deleted."
-msgstr ""
+msgstr "ลบทิมเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/organizer.py
 msgid "The gate has been created."
-msgstr ""
+msgstr "สร้างประตูทางเข้า (Gate) เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The gate has been changed."
-msgstr ""
+msgstr "ประตูทางเข้า (Gate) ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The gate has been deleted."
-msgstr ""
+msgstr "ลบประตูทางเข้า (Gate) เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgctxt "subevent"
 msgid "The event date has been deleted."
-msgstr ""
+msgstr "ลบรอบการจัดงาน เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgctxt "subevent"
 msgid "The event date has been canceled."
-msgstr ""
+msgstr "ยกเลิกรอบการจัดงาน เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgctxt "subevent"
 msgid "The event date has been changed."
-msgstr ""
+msgstr "รอบการจัดงาน ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgctxt "subevent"
 msgid "The event date has been created."
-msgstr ""
+msgstr "สร้างรอบการจัดงาน เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgctxt "subevent"
 msgid "A quota has been added to the event date."
-msgstr ""
+msgstr "เพิ่มโควตาสำหรับรอบการจัดงานเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgctxt "subevent"
 msgid "A quota has been changed on the event date."
-msgstr ""
+msgstr "โควตสำหรับรอบการจัดงาน ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgctxt "subevent"
 msgid "A quota has been removed from the event date."
-msgstr ""
+msgstr "นำโควตาออกจากรอบการจัดงาน เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The device has been created."
-msgstr ""
+msgstr "สร้างอุปกรณ์เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The device has been changed."
-msgstr ""
+msgstr "อุปกรณ์ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "Access of the device has been revoked."
-msgstr ""
+msgstr "เพิกถอนสิทธิ์การเข้าถึงของอุปกรณ์เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The device has been initialized."
-msgstr ""
+msgstr "เริ่มต้นใช้งานอุปกรณ์ (Initialized) เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The access token of the device has been regenerated."
-msgstr ""
+msgstr "สร้างโทเคนการเข้าถึง (Access token) ของอุปกรณ์ใหม่อีกครั้งเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The device has notified the server of an hardware or software update."
 msgstr ""
+"อุปกรณ์ได้แจ้งเตือนเซิร์ฟเวอร์เกี่ยวกับการอัปเดตฮาร์ดแวร์หรือซอฟต์แวร์เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The gift card has been created."
-msgstr ""
+msgstr "สร้างบัตรของขวัญเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/organizer.py
 msgid "The gift card has been changed."
-msgstr ""
+msgstr "บัตรของขวัญถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A manual transaction has been performed."
-msgstr ""
+msgstr "ดำเนินการทำธุรกรรมด้วยตนเองเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, fuzzy
@@ -17353,297 +17462,297 @@ msgstr "ออกใบแจ้งหนี้เรียบร้อยแล
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
-msgstr ""
+msgstr "สร้างโทเคน \"{name}\" เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
-msgstr ""
+msgstr "เพิกถอนโทเคน \"{name}\" เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The check-in and print log state has been reset."
-msgstr ""
+msgstr "รีเซ็ตสถานะประวัติการเช็กอินและการพิมพ์เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The plugin has been enabled."
-msgstr ""
+msgstr "เปิดใช้งานปลั๊กอินเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/event.py
 #: pretix/control/views/organizer.py
 msgid "The plugin has been disabled."
-msgstr ""
+msgstr "ปิดใช้งานปลั๊กอินเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Plugin {val}"
-msgstr ""
+msgstr "ปลั๊กอิน {val}"
 
 #: pretix/control/logdisplay.py
 msgid "A meta property has been added to this event."
-msgstr ""
+msgstr "เพิ่มคุณสมบัติเมตา (Meta property) สำหรับอีเวนต์นี้เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A meta property has been removed from this event."
-msgstr ""
+msgstr "นำคุณสมบัติเมตา (Meta property) ออกจากอีเวนต์นี้เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A meta property has been changed on this event."
-msgstr ""
+msgstr "คุณสมบัติเมตา (Meta property) ของอีเวนต์นี้ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The event settings have been changed."
-msgstr ""
+msgstr "การตั้งค่าอีเวนต์ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The ticket download settings have been changed."
-msgstr ""
+msgstr "การตั้งค่าดาวน์โหลดตั๋วถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The shop has been taken live."
-msgstr ""
+msgstr "เปิดใช้งานร้านค้าจริง (Live mode) เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The shop has been taken offline."
-msgstr ""
+msgstr "ปิดให้บริการร้านค้าชั่วคราว (Offline mode) เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The shop has been taken into test mode."
-msgstr ""
+msgstr "เปลี่ยนร้านค้าเข้าสู่โหมดทดลอง (Test mode) เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The test mode has been disabled."
-msgstr ""
+msgstr "ปิดใช้งานโหมดทดลองเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The event has been created."
-msgstr ""
+msgstr "สร้างอีเวนต์เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The event details have been changed."
-msgstr ""
+msgstr "รายละเอียดอีเวนต์ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An answer option has been added to the question."
-msgstr ""
+msgstr "เพิ่มตัวเลือกคำตอบสำหรับคำถามเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An answer option has been removed from the question."
-msgstr ""
+msgstr "นำตัวเลือกคำตอบออกจากคำถามเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An answer option has been changed."
-msgstr ""
+msgstr "ตัวเลือกคำตอบถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A user has been added to the event team."
-msgstr ""
+msgstr "เพิ่มผู้ใช้เข้าร่วมทีมอีเวนต์เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A user has been invited to the event team."
-msgstr ""
+msgstr "ส่งคำเชิญผู้ใช้เข้าร่วมทีมอีเวนต์เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A user's permissions have been changed."
-msgstr ""
+msgstr "สิทธิ์การใช้งานของผู้ใช้ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A user has been removed from the event team."
-msgstr ""
+msgstr "นำผู้ใช้ออกจากทีมอีเวนต์เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The check-in list has been added."
-msgstr ""
+msgstr "เพิ่มรายการเช็กอินเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The check-in list has been deleted."
-msgstr ""
+msgstr "ลบรายการเช็กอินเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The check-in list has been changed."
-msgstr ""
+msgstr "รายการเช็กอินถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Check-in list {val}"
-msgstr ""
+msgstr "รายการเช็กอิน {val}"
 
 #: pretix/control/logdisplay.py
 msgid "The product has been created."
-msgstr ""
+msgstr "สร้างสินค้าเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The product has been changed."
-msgstr ""
+msgstr "สินค้าถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The product has been reordered."
-msgstr ""
+msgstr "เรียงลำดับสินค้าใหม่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The product has been deleted."
-msgstr ""
+msgstr "ลบสินค้าเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An add-on has been added to this product."
-msgstr ""
+msgstr "เพิ่มสินค้าเสริม (Add-on) ให้กับสินค้านี้เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An add-on has been removed from this product."
-msgstr ""
+msgstr "นำสินค้าเสริม (Add-on) ออกจากสินค้านี้เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An add-on has been changed on this product."
-msgstr ""
+msgstr "สินค้าเสริม (Add-on) ของสินค้านี้ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A bundled item has been added to this product."
-msgstr ""
+msgstr "เพิ่มรายการมัดรวม (Bundled item) ให้กับสินค้านี้เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A bundled item has been removed from this product."
-msgstr ""
+msgstr "นำรายการมัดรวม (Bundled item) ออกจากสินค้านี้เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A bundled item has been changed on this product."
-msgstr ""
+msgstr "รายการมัดรวม (Bundled item) ของสินค้านี้ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A program time has been added to this product."
-msgstr ""
+msgstr "เพิ่มเวลาโปรแกรมกิจกรรมสำหรับสินค้านี้เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A program time has been changed on this product."
-msgstr ""
+msgstr "เวลาโปรแกรมกิจกรรมของสินค้านี้ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "A program time has been removed from this product."
-msgstr ""
+msgstr "นำเวลาโปรแกรมกิจกรรมออกจากสินค้านี้เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The variation \"{value}\" has been created."
-msgstr ""
+msgstr "สร้างแบบย่อย (Variation) \"{value}\" เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The variation \"{value}\" has been deleted."
-msgstr ""
+msgstr "ลบแบบย่อย (Variation) \"{value}\" เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
-msgstr ""
+msgstr "แบบย่อย (Variation) \"{value}\" ถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Payment {local_id} has been confirmed."
-msgstr ""
+msgstr "การชำระเงิน {local_id} ได้รับการยืนยันเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Payment {local_id} has been canceled."
-msgstr ""
+msgstr "การชำระเงิน {local_id} ถูกยกเลิกแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Canceling payment {local_id} has failed."
-msgstr ""
+msgstr "การยกเลิกรายการชำระเงิน {local_id} ล้มเหลว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Payment {local_id} has been started."
-msgstr ""
+msgstr "เริ่มต้นรายการชำระเงิน {local_id} เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Payment {local_id} has failed."
-msgstr ""
+msgstr "การชำระเงิน {local_id} ล้มเหลว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "The order could not be marked as paid: {message}"
-msgstr ""
+msgstr "ไม่สามารถทำเครื่องหมายคำสั่งซื้อว่าชำระเงินแล้วได้: {message}"
 
 #: pretix/control/logdisplay.py
 msgid "The order has been overpaid."
-msgstr ""
+msgstr "คำสั่งซื้อมีการชำระเงินเกินจำนวน"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Refund {local_id} has been created."
-msgstr ""
+msgstr "สร้างรายการคืนเงิน {local_id} เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Refund {local_id} has been created by an external entity."
-msgstr ""
+msgstr "รายการคืนเงิน {local_id} ถูกสร้างขึ้นโดยระบบหรือบุคคลภายนอก"
 
 #: pretix/control/logdisplay.py
 msgid "The customer requested you to issue a refund."
-msgstr ""
+msgstr "ลูกค้าร้องขอให้คุณดำเนินการคืนเงิน"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Refund {local_id} has been completed."
-msgstr ""
+msgstr "การคืนเงิน {local_id} เสร็จสมบูรณ์แล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Refund {local_id} has been canceled."
-msgstr ""
+msgstr "รายการคืนเงิน {local_id} ถูกยกเลิกแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid "Refund {local_id} has failed."
-msgstr ""
+msgstr "การคืนเงิน {local_id} ล้มเหลว"
 
 #: pretix/control/logdisplay.py
 msgid "The quota has been added."
-msgstr ""
+msgstr "เพิ่มโควตาเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The quota has been deleted."
-msgstr ""
+msgstr "ลบโควตาเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The quota has been changed."
-msgstr ""
+msgstr "โควตาถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The quota has closed."
-msgstr ""
+msgstr "โควตาปิดรับแล้ว"
 
 #: pretix/control/logdisplay.py pretix/control/views/item.py
 msgid "The quota has been re-opened."
-msgstr ""
+msgstr "เปิดรับโควตาใหม่อีกครั้งเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The question has been added."
-msgstr ""
+msgstr "เพิ่มคำถามเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The question has been deleted."
-msgstr ""
+msgstr "ลบคำถามเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The question has been changed."
-msgstr ""
+msgstr "คำถามถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The question has been reordered."
-msgstr ""
+msgstr "เรียงลำดับคำถามใหม่เรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The discount has been added."
-msgstr ""
+msgstr "เพิ่มส่วนลดเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The discount has been deleted."
-msgstr ""
+msgstr "ลบส่วนลดเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "The discount has been changed."
-msgstr ""
+msgstr "ส่วนลดถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -17651,36 +17760,40 @@ msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list \"{list}"
 "\"."
 msgstr ""
+"เช็กอินตำแหน่งรายการ #{posid} ด้วยตนเองเมื่อ {datetime} ในรายการ \"{list}\" เรียบร้อย"
+"แล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
+"เช็กอินตำแหน่งรายการ #{posid} ซ้ำอีกครั้งเมื่อ {datetime} ในรายการ \"{list}\" เรียบร้อยแ"
+"ล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An entry has been removed from the waiting list."
-msgstr ""
+msgstr "นำรายการอยู่ออกจากรายการรอสำรองเรียบร้อยแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An entry has been changed on the waiting list."
-msgstr ""
+msgstr "รายการในรายการรอสำรองถูกเปลี่ยนแปลงแล้ว"
 
 #: pretix/control/logdisplay.py
 msgid "An entry has been added to the waiting list."
-msgstr ""
+msgstr "เพิ่มรายการลงในรายการรอสำรองเรียบร้อยแล้ว"
 
 #: pretix/control/middleware.py
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
-msgstr ""
+msgstr "ไม่พบอีเวนต์ที่เลือก หรือคุณไม่มีสิทธิ์ในการบริหารจัดการ"
 
 #: pretix/control/middleware.py
 msgid ""
 "The selected organizer was not found or you have no permission to "
 "administrate it."
-msgstr ""
+msgstr "ไม่พบผู้จัดงานที่เลือก หรือคุณไม่มีสิทธิ์ในการบริหารจัดการ"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/dashboard.html
@@ -17737,24 +17850,24 @@ msgstr "การออกใบแจ้งหนี้"
 #: pretix/control/navigation.py
 msgctxt "action"
 msgid "Cancellation"
-msgstr ""
+msgstr "การยกเลิก"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/event/widget.html
 msgid "Widget"
-msgstr ""
+msgstr "วิดเจ็ต"
 
 #: pretix/control/navigation.py
 msgid "Categories"
-msgstr ""
+msgstr "หมวดหมู่"
 
 #: pretix/control/navigation.py
 msgid "Discounts"
-msgstr ""
+msgstr "ส่วนลด"
 
 #: pretix/control/navigation.py
 msgid "Overview"
-msgstr ""
+msgstr "ภาพรวม"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/order/index.html
@@ -17762,29 +17875,29 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Refunds"
-msgstr ""
+msgstr "การคืนเงิน"
 
 #: pretix/control/navigation.py
 msgid "Import"
-msgstr ""
+msgstr "นำเข้าข้อมูล"
 
 #: pretix/control/navigation.py
 msgid "All vouchers"
-msgstr ""
+msgstr "บัตรกำนัลทั้งหมด"
 
 #: pretix/control/navigation.py
 msgid "Tags"
-msgstr ""
+msgstr "แท็ก"
 
 #: pretix/control/navigation.py
 msgctxt "navigation"
 msgid "Check-in"
-msgstr ""
+msgstr "การเช็กอิน"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 msgid "Check-in history"
-msgstr ""
+msgstr "ประวัติการเช็กอิน"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/event/plugins.html
@@ -17792,101 +17905,101 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "Search"
-msgstr ""
+msgstr "ค้นหา"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/plugins/reports/accountingreport.py
 msgid "Payments"
-msgstr ""
+msgstr "การชำระเงิน"
 
 #: pretix/control/navigation.py
 msgid "User settings"
-msgstr ""
+msgstr "ตั้งค่าผู้ใช้งาน"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/user/settings.html
 msgid "Notifications"
-msgstr ""
+msgstr "การแจ้งเตือน"
 
 #: pretix/control/navigation.py
 msgid "2FA"
-msgstr ""
+msgstr "การยืนยันตัวตนแบบสองปัจจัย (2FA)"
 
 #: pretix/control/navigation.py
 msgid "Authorized apps"
-msgstr ""
+msgstr "แอปพลิเคชันที่ได้รับอนุญาต"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/user/history.html
 #: pretix/control/templates/pretixcontrol/user/settings.html
 msgid "Account history"
-msgstr ""
+msgstr "ประวัติบัญชี"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html
 msgid "Admin sessions"
-msgstr ""
+msgstr "เซสชันผู้ดูแลระบบ"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/global_settings_base.html
 msgid "Global settings"
-msgstr ""
+msgstr "การตั้งค่าส่วนกลาง"
 
 #: pretix/control/navigation.py
 msgid "Update check"
-msgstr ""
+msgstr "ตรวจสอบการอัปเดต"
 
 #: pretix/control/navigation.py
 msgid "License check"
-msgstr ""
+msgstr "ตรวจสอบใบอนุญาตใช้งาน"
 
 #: pretix/control/navigation.py
 msgid "System report"
-msgstr ""
+msgstr "รายงานระบบ"
 
 #: pretix/control/navigation.py
 msgid "Data sync problems"
-msgstr ""
+msgstr "ปัญหาการซิงค์ข้อมูล"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/organizers/properties.html
 msgid "Event metadata"
-msgstr ""
+msgstr "เมตาข้อมูลอีเวนต์ (Metadata)"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html
 msgid "Webhooks"
-msgstr ""
+msgstr "เว็บฮุก (Webhooks)"
 
 #: pretix/control/navigation.py
 msgid "Acceptance"
-msgstr ""
+msgstr "การตอบรับ"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 msgid "SSO clients"
-msgstr ""
+msgstr "SSO Clients"
 
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 msgid "SSO providers"
-msgstr ""
+msgstr "ผู้ให้บริการ SSO (SSO Providers)"
 
 #: pretix/control/permissions.py
 msgid "You do not have permission to view this content."
-msgstr ""
+msgstr "คุณไม่มีสิทธิ์ในการดูเนื้อหานี้"
 
 #: pretix/control/templates/pretixcontrol/auth/base.html
 #: pretix/control/templates/pretixcontrol/base.html
 #, python-format
 msgid "You are currently working on behalf of %(user)s."
-msgstr ""
+msgstr "ปัจจุบันคุณกำลังปฏิบัติงานในนามของ %(user)s"
 
 #: pretix/control/templates/pretixcontrol/auth/base.html
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "Stop impersonating"
-msgstr ""
+msgstr "ยกเลิกการสวมรอย"
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html
 msgid "Password recovery"
@@ -17894,11 +18007,11 @@ msgstr "การกู้คืนรหัสผ่าน"
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html
 msgid "Send recovery information"
-msgstr ""
+msgstr "ส่งข้อมูลการกู้คืนบัญชี"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html
 msgid "Accept an invitation"
-msgstr ""
+msgstr "ยอมรับคำเชิญ"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html
 #, python-format
@@ -17907,11 +18020,13 @@ msgid ""
 "you can <a %(login_href)s>log in</a> first and then click this link again to "
 "accept the invitation with your existing account."
 msgstr ""
+"หากคุณมีบัญชีในระบบนี้ด้วยอีเมลอื่นอยู่แล้ว คุณสามารถ <a %(login_href)s>เข้าสู่ระบบ ก่อน จากนั้นค"
+"ลิกลิงก์นี้อีกครั้งเพื่อยอมรับคำเชิญด้วยบัญชีที่มีอยู่ของคุณ"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html
 #: pretix/control/templates/pretixcontrol/auth/register.html
 msgid "Login"
-msgstr ""
+msgstr "เข้าสู่ระบบ"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html
 #: pretix/control/templates/pretixcontrol/auth/login.html
@@ -17925,32 +18040,35 @@ msgid ""
 "in repeatedly. Please check if your browser is set to block cookies, or "
 "delete all existing cookies and retry."
 msgstr ""
+"ดูเหมือนว่าเบราว์เซอร์ของคุณจะไม่ยอมรับคุกกี้ของเรา ทำให้คุณต้องเข้าสู่ระบบซ้ำๆ กรุณาตรวจสอบว่าเบ"
+"ราว์เซอร์ตั้งค่าบล็อกคุกกี้ไว้หรือไม่ หรือลบคุกกี้ที่มีทั้งหมดแล้วลองใหม่อีกครั้ง"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html
 msgid "Log in"
-msgstr ""
+msgstr "เข้าสู่ระบบ"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html
 msgid "Lost password?"
-msgstr ""
+msgstr "ลืมรหัสผ่าน?"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html
 #: pretix/control/templates/pretixcontrol/user/reauth.html
 msgid "Welcome back!"
-msgstr ""
+msgstr "ยินดีต้อนรับกลับมา!"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html
 msgid ""
 "You configured your account to require authentication with a second medium, "
 "e.g. your phone. Please enter your verification code here:"
 msgstr ""
+"คุณได้ตั้งค่าบัญชีให้ต้องยืนยันตัวตนด้วยสื่อตัวที่สอง เช่น โทรศัพท์ของคุณ กรุณากรอกรหัสยืนยันที่นี่:"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html
 msgid "Token"
-msgstr ""
+msgstr "รหัสโทเคน"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html
 #: pretix/control/templates/pretixcontrol/user/reauth.html
@@ -17958,12 +18076,16 @@ msgid ""
 "WebAuthn failed. Check that the correct authentication device is correctly "
 "plugged in."
 msgstr ""
+"การยืนยันตัวตนด้วย WebAuthn ล้มเหลว กรุณาตรวจสอบว่าเชื่อมต่ออุปกรณ์ยืนยันตัวตนที่ถูกต้องเรียบร้อยแ"
+"ล้ว"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html
 msgid ""
 "Alternatively, connect your WebAuthn device. If it has a button, touch it "
 "now. You might have to unplug the device and plug it back in again."
 msgstr ""
+"หรือเชื่อมต่ออุปกรณ์ WebAuthn ของคุณ หากอุปกรณ์มีปุ่ม ให้กดปุ่มทันที คุณอาจต้องถอดอุปกรณ์ออกแล้วเสีย"
+"บกลับเข้าไปใหม่อีกครั้ง"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html
 #: pretix/control/templates/pretixcontrol/email_setup.html
@@ -17993,7 +18115,7 @@ msgstr "ดำเนินการต่อ"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 msgid "Authorize an application"
-msgstr ""
+msgstr "อนุญาตแอปพลิเคชัน"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #, python-format
@@ -18001,34 +18123,38 @@ msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
 "access to your pretix account?"
 msgstr ""
+"คุณต้องการอนุญาตให้แอปพลิเคชัน <strong>%(application)s</strong> เข้าถึงบัญชี pretix ของ"
+"คุณใช่หรือไม่?"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 #, python-format
 msgid "You are currently logged in as <strong>%(user)s</strong>."
-msgstr ""
+msgstr "ปัจจุบันคุณเข้าสู่ระบบในชื่อ <strong>%(user)s</strong>"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 msgid "The application requires the following permissions:"
-msgstr ""
+msgstr "แอปพลิเคชันต้องการสิทธิ์การใช้งานดังต่อไปนี้:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 msgid ""
 "Please select the organizer accounts this application should get access to:"
-msgstr ""
+msgstr "กรุณาเลือกบัญชีผู้จัดงานที่ต้องการให้แอปพลิเคชันนี้เข้าถึง:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 msgid ""
 "This application has <strong>not</strong> been reviewed by the pretix team. "
 "Granting access to your pretix account happens at your own risk."
 msgstr ""
+"แอปพลิเคชันนี้ยัง<strong>ไม่</strong>ผ่านการตรวจสอบโดยทีมงาน pretix การให้สิทธิ์เข้าถึงบัญชี "
+"pretix ของคุณถือเป็นความเสี่ยงของคุณเอง"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 msgid "Error:"
-msgstr ""
+msgstr "ข้อผิดพลาด:"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html
 msgid "Set new password"
-msgstr ""
+msgstr "ตั้งรหัสผ่านใหม่"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
@@ -18105,51 +18231,51 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html
 msgid "Save"
-msgstr ""
+msgstr "บันทึก"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html
 msgid "Create a new account"
-msgstr ""
+msgstr "สร้างบัญชีใหม่"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "Toggle navigation"
-msgstr ""
+msgstr "สลับแถบเมนูนำทาง"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "Go to shop"
-msgstr ""
+msgstr "ไปยังร้านค้า"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "Public profile"
-msgstr ""
+msgstr "โปรไฟล์สาธารณะ"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "End admin session"
-msgstr ""
+msgstr "สิ้นสุดเซสชันผู้ดูแลระบบ"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "Account Settings"
-msgstr ""
+msgstr "ตั้งค่าบัญชี"
 
 #: pretix/control/templates/pretixcontrol/base.html
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html
 msgid "Log out"
-msgstr ""
+msgstr "ออกจากระบบ"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "Organizer account"
-msgstr ""
+msgstr "บัญชีผู้จัดงาน"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "Search for events"
-msgstr ""
+msgstr "ค้นหาอีเวนต์"
 
 #: pretix/control/templates/pretixcontrol/base.html
 #: pretix/presale/templates/pretixpresale/base.html
 msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
 "strong>."
-msgstr ""
+msgstr "เราตรวจพบว่าคุณกำลังใช้งาน <strong>Microsoft Internet Explorer</strong>"
 
 #: pretix/control/templates/pretixcontrol/base.html
 #: pretix/presale/templates/pretixpresale/base.html
@@ -18157,6 +18283,8 @@ msgid ""
 "Internet Explorer is an old browser that does not support lots of recent web-"
 "based technologies and is no longer supported by this website."
 msgstr ""
+"Internet Explorer เป็นเบราว์เซอร์เก่าที่ไม่รองรับเทคโนโลยีเว็บสมัยใหม่จำนวนมาก และไม่ได้รับก"
+"ารสนับสนุนโดยเว็บไซต์นี้อีกต่อไป"
 
 #: pretix/control/templates/pretixcontrol/base.html
 #: pretix/presale/templates/pretixpresale/base.html
@@ -18164,15 +18292,18 @@ msgid ""
 "We kindly ask you to move to one of our supported browsers, such as "
 "Microsoft Edge, Mozilla Firefox, Google Chrome, or Safari."
 msgstr ""
+"ขอความกรุณาเปลี่ยนไปใช้งานหนึ่งในเบราว์เซอร์ที่เรารองรับ เช่น Microsoft Edge, Mozilla "
+"Firefox, Google Chrome หรือ Safari"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr ""
+"กรุณาใส่ความคิดเห็นสั้นๆ เกี่ยวกับสิ่งที่คุณได้ดำเนินการในเซสชันผู้ดูแลระบบต่อไปนี้:"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "Read more"
-msgstr ""
+msgstr "อ่านเพิ่มเติม"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid ""
@@ -18181,10 +18312,13 @@ msgid ""
 "to make sure they do not show up in your reports and statistics and block "
 "people from actually buying tickets."
 msgstr ""
+"อีเวนต์ของคุณมี คำสั่งซื้อใน<strong>โหมดทดลอง</strong> แม้ว่า <strong>โหมดทดลองจะถูกปิด</"
+"strong>ใช้งานแล้ว คุณควรลบคำสั่งซื้อเหล่านั้นออก เพื่อให้แน่ใจว่าจะไม่แสดงในรายงานและสถิติของคุ"
+"ณ รวมถึงไม่บล็อกผู้ใช้อื่นจากการซื้อตั๋วจริง"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "Show all test mode orders"
-msgstr ""
+msgstr "แสดงคำสั่งซื้อในโหมดทดลองทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid ""
@@ -18194,12 +18328,18 @@ msgid ""
 "disable this feature or enter your email address to get notified via email "
 "if a new update arrives. This message will disappear once you clicked it."
 msgstr ""
+"ตั้งแต่เวอร์ชัน 1.2.0 เป็นต้นไป pretix จะตรวจสอบการอัปเดตเบื้องหลังโดยอัตโนมัติ ในระหว่างการ"
+"ตรวจสอบนี้ ข้อมูลไม่ระบุตัวตนจะถูกส่งไปยังเซิร์ฟเวอร์ที่ดำเนินการโดยผู้พัฒนา pretix คลิกที่ข้อความนี้เ"
+"พื่อดูข้อมูลเพิ่มเติม ปิดใช้งานฟีเจอร์นี้ หรือกรอกที่อยู่อีเมลของคุณเพื่อรับการแจ้งเตือนทางอีเมลเมื่อมีการอั"
+"ปเดตใหม่ ข้อความนี้จะหายไปเมื่อคุณคลิก"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid ""
 "Click here to do a license compliance check to make sure your usage of "
 "pretix is in line with pretix' license."
 msgstr ""
+"คลิกที่นี่เพื่อตรวจสอบการปฏิบัติตามข้อกำหนดใบอนุญาตใช้งาน เพื่อให้แน่ใจว่าการใช้งาน pretix ของคุณ"
+"สอดคล้องกับใบอนุญาตของ pretix"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid ""
@@ -18207,27 +18347,33 @@ msgid ""
 "check that you have completed all installation steps and your cronjob is "
 "executed correctly."
 msgstr ""
+"ส่วนประกอบ Cronjob ของ pretix ไม่ได้ทำงานในช่วงไม่กี่ชั่วโมงที่ผ่านมา กรุณาตรวจสอบว่าคุณได้ดำ"
+"เนินการตามขั้นตอนการติดตั้งทั้งหมดเสร็จสิ้น และ Cronjob ของคุณทำงานอย่างถูกต้อง"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid ""
 "pretix is running in debug mode. For security reasons, please never run "
 "debug mode on a production instance."
 msgstr ""
+"pretix กำลังทำงานในโหมดแก้ไขข้อผิดพลาด (Debug mode) เพื่อเหตุผลด้านความปลอดภัย โปรดอย่า"
+"รันโหมดแก้ไขข้อผิดพลาดบนระบบที่ใช้งานจริง (Production instance) โดยเด็ดขาด"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid ""
 "For security reasons, please change your password before you continue. "
 "Afterwards you will be redirected to your original destination."
 msgstr ""
+"เพื่อเหตุผลด้านความปลอดภัย กรุณาเปลี่ยนรหัสผ่านของคุณก่อนดำเนินการต่อ หลังจากนั้นคุณจะถูกนำไปยังห"
+"น้าปลายทางเดิมของคุณ"
 
 #: pretix/control/templates/pretixcontrol/base.html
 #, python-format
 msgid "Times displayed in %(tz)s"
-msgstr ""
+msgstr "เวลาแสดงในเขตเวลา %(tz)s"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "running in development mode"
-msgstr ""
+msgstr "กำลังทำงานในโหมดการพัฒนา (Development mode)"
 
 #: pretix/control/templates/pretixcontrol/base.html
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
@@ -18239,138 +18385,138 @@ msgstr "หากใช้เวลานานกว่าสองสามน
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Device ID"
-msgstr ""
+msgstr "รหัสอุปกรณ์ (Device ID)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Receipt ID"
-msgstr ""
+msgstr "รหัสใบเสร็จ (Receipt ID)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 msgid "ID"
-msgstr ""
+msgstr "รหัส (ID)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "ZVT Terminal"
-msgstr ""
+msgstr "เครื่องรูดบัตร ZVT (ZVT Terminal)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgctxt "terminal_zvt"
 msgid "Confirmation mode"
-msgstr ""
+msgstr "โหมดการยืนยัน"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgctxt "terminal_zvt"
 msgid "Trace number"
-msgstr ""
+msgstr "หมายเลขอ้างอิงรายการ (Trace number)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgctxt "terminal_zvt"
 msgid "Payment type"
-msgstr ""
+msgstr "ประเภทการชำระเงิน"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgctxt "terminal_zvt"
 msgid "Additional text"
-msgstr ""
+msgstr "ข้อความเพิ่มเติม"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgctxt "terminal_zvt"
 msgid "Turnover number"
-msgstr ""
+msgstr "หมายเลขรอบการทำรายการ (Turnover number)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgctxt "terminal_zvt"
 msgid "Receipt number"
-msgstr ""
+msgstr "หมายเลขใบเสร็จ"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgctxt "terminal_zvt"
 msgid "Card type"
-msgstr ""
+msgstr "ประเภทบัตร"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Unknown"
-msgstr ""
+msgstr "ไม่ทราบ"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgctxt "terminal_zvt"
 msgid "Card expiration"
-msgstr ""
+msgstr "วันหมดอายุบัตร"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Transaction Code"
-msgstr ""
+msgstr "รหัสธุรกรรม (Transaction Code)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Merchant Code"
-msgstr ""
+msgstr "รหัสร้านค้า (Merchant Code)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Card Entry Mode"
-msgstr ""
+msgstr "วิธีการอ่านข้อมูลบัตร (Card Entry Mode)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html
 msgid "Card number"
-msgstr ""
+msgstr "หมายเลขบัตร"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Client Transaction Code"
-msgstr ""
+msgstr "รหัสธุรกรรมฝั่งไคลเอ็นต์ (Client Transaction Code)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Server Transaction Code"
-msgstr ""
+msgstr "รหัสธุรกรรมฝั่งเซิร์ฟเวอร์ (Server Transaction Code)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Payment reference"
-msgstr ""
+msgstr "ข้อมูลอ้างอิงการชำระเงิน"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Payment Application"
-msgstr ""
+msgstr "แอปพลิเคชันชำระเงิน"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Authorization Code"
-msgstr ""
+msgstr "รหัสอนุมัติ (Authorization Code)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Transaction ID"
-msgstr ""
+msgstr "รหัสธุรกรรม (Transaction ID)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 #: pretix/plugins/banktransfer/payment.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html
 msgid "Reference"
-msgstr ""
+msgstr "ข้อมูลอ้างอิง"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Terminal ID"
-msgstr ""
+msgstr "รหัสเครื่อง EDC/เทอร์มินัล (Terminal ID)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Card holder"
-msgstr ""
+msgstr "ชื่อผู้ถือบัตร"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Card expiration"
-msgstr ""
+msgstr "วันหมดอายุบัตร"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Result Code"
-msgstr ""
+msgstr "รหัสผลลัพธ์ (Result Code)"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html
 msgid "Cash"
-msgstr ""
+msgstr "เงินสด"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 msgid "Delete check-ins"
-msgstr ""
+msgstr "ลบประวัติการเช็กอิน"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #, python-format
@@ -18381,6 +18527,8 @@ msgid_plural ""
 "Are you sure you want to permanently delete the check-ins of "
 "<strong>%(count)s tickets</strong>?"
 msgstr[0] ""
+"คุณแน่ใจหรือไม่ว่าต้องการลบประวัติการเช็กอินของ <strong>ตั๋ว %(count)s ใบ</strong> อย่างถา"
+"วร?"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
@@ -18503,7 +18651,7 @@ msgstr "ยกเลิก"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_profiles.html
 msgid "Delete"
-msgstr ""
+msgstr "ลบ"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/checkin/index.html
@@ -18537,15 +18685,15 @@ msgstr "กรอง"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 msgid "Your search did not match any check-ins."
-msgstr ""
+msgstr "ไม่พบประวัติการเช็กอินที่ตรงกับการค้นหาของคุณ"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 msgid "You haven't scanned any tickets yet."
-msgstr ""
+msgstr "คุณยังไม่ได้สแกนตั๋วใดๆ"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 msgid "Time of scan"
-msgstr ""
+msgstr "เวลาที่สแกน"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
@@ -18558,78 +18706,78 @@ msgstr "ผลลัพธ์"
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
 msgid "Automatically marked not present: %(date)s"
-msgstr ""
+msgstr "ทำเครื่องหมายว่าไม่อยู่ในงานโดยอัตโนมัติเมื่อ: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
 msgid "Additional entry scan: %(date)s"
-msgstr ""
+msgstr "สแกนเข้างานเพิ่มเติมเมื่อ: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #, python-format
 msgid "Offline scan. Upload time: %(date)s"
-msgstr ""
+msgstr "สแกนแบบออฟไลน์ เวลาที่อัปโหลด: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
 msgid "Automatically checked in: %(date)s"
-msgstr ""
+msgstr "เช็กอินโดยอัตโนมัติเมื่อ: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 msgid "Failed in offline mode"
-msgstr ""
+msgstr "ล้มเหลวในโหมดออฟไลน์"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 msgctxt "checkin_result"
 msgid "Successful"
-msgstr ""
+msgstr "สำเร็จ"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 msgctxt "checkin_result"
 msgid "Denied"
-msgstr ""
+msgstr "ปฏิเสธ"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/event/index.html
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "คัดลอกไปยังคลิปบอร์ด"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 #, python-format
 msgid "Check-in list: %(name)s"
-msgstr ""
+msgstr "รายการเช็กอิน: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 msgid "Edit list configuration"
-msgstr ""
+msgstr "แก้ไขการตั้งค่ารายการ"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 msgid "Check-in simulator"
-msgstr ""
+msgstr "ระบบจำลองการเช็กอิน (Simulator)"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 msgid "No attendee record was found."
-msgstr ""
+msgstr "ไม่พบข้อมูลผู้เข้าร่วมงาน"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
@@ -18641,12 +18789,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/index.html
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "select all rows for batch-operation"
-msgstr ""
+msgstr "เลือกทุกแถวเพื่อดำเนินการเป็นกลุ่ม (Batch operation)"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html
 msgid "Timestamp"
-msgstr ""
+msgstr "ประทับเวลา (Timestamp)"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #: pretix/control/templates/pretixcontrol/items/quotas.html
@@ -18657,46 +18805,46 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/index.html
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "Select all results on other pages as well"
-msgstr ""
+msgstr "เลือกผลลัพธ์ทั้งหมดในหน้าอื่นด้วย"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 msgid "unpaid"
-msgstr ""
+msgstr "ยังไม่ชำระเงิน"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 msgid "Checked in but left"
-msgstr ""
+msgstr "เช็กอินแล้วแต่ไม่อยู่ในงาน (สแกนออกแล้ว)"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 msgid "Checked in automatically"
-msgstr ""
+msgstr "เช็กอินโดยอัตโนมัติ"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 #, python-format
 msgid "Exit: %(date)s"
-msgstr ""
+msgstr "สแกนออกเมื่อ: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 msgid "Check-In selected attendees"
-msgstr ""
+msgstr "เช็กอินผู้เข้าร่วมงานที่เลือก"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 msgid "Check-Out selected attendees"
-msgstr ""
+msgstr "เช็กเอาต์ผู้เข้าร่วมงานที่เลือก"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html
 msgid "Delete all check-ins of selected attendees"
-msgstr ""
+msgstr "ลบประวัติการเช็กอินทั้งหมดของผู้เข้าร่วมงานที่เลือก"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 msgid "Delete check-in list"
-msgstr ""
+msgstr "ลบรายการเช็กอิน"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #, python-format
 msgid ""
 "Are you sure you want to delete the check-in list <strong>%(name)s</strong>?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบรายการเช็กอิน <strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 #, python-format
@@ -18704,17 +18852,19 @@ msgid ""
 "This will delete the information of <strong>%(num)s</strong> check-ins as "
 "well."
 msgstr ""
+"การดำเนินการนี้จะลบข้อมูลประวัติการเช็กอินจำนวน <strong>%(num)s</strong> รายการด้วยเช่นกั"
+"น"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
 msgid "Delete list and all check-ins"
-msgstr ""
+msgstr "ลบรายการและประวัติการเช็กอินทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
 #: pretix/control/templates/pretixcontrol/event/payment.html
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 msgid "Advanced"
-msgstr ""
+msgstr "ขั้นสูง"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
 msgid ""
@@ -18722,22 +18872,28 @@ msgid ""
 "specific check-in situations. Please reach out to support if you have "
 "questions about setting this up."
 msgstr ""
+"การตั้งค่าในหน้านี้มีไว้สำหรับผู้ใช้ระดับมืออาชีพที่มีสถานการณ์การเช็กอินเฉพาะเจาะจงมาก กรุณาติดต่อฝ่า"
+"ยสนับสนุนหากคุณมีข้อสงสัยเกี่ยวกับการตั้งค่านี้"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
 msgid ""
 "Make sure to always use the latest version of our scanning apps for these "
 "options to work."
 msgstr ""
+"โปรดตรวจสอบให้แน่ใจว่าได้ใช้งานแอปพลิเคชันสแกนเวอร์ชันล่าสุดเสมอ เพื่อให้ตัวเลือกเหล่านี้ทำงานได้"
+"อย่างถูกต้อง"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
 msgid ""
 "If you make use of these advanced options, we recommend using our Android "
 "and Desktop apps."
 msgstr ""
+"หากคุณใช้งานตัวเลือกขั้นสูงเหล่านี้ เราขอแนะนำให้ใช้งานผ่านแอปพลิเคชัน Android และ Desktop ข"
+"องเรา"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html
 msgid "Custom check-in rule"
-msgstr ""
+msgstr "กฎการเช็กอินแบบกำหนดเอง"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 msgid ""
@@ -18746,6 +18902,9 @@ msgid ""
 "do this process by printing out the list on paper, using this web interface "
 "or by using one of our mobile or desktop apps to automatically scan tickets."
 msgstr ""
+"คุณสามารถสร้างรายการเช็กอินเพื่อใช้งานบริเวณทางเข้างานของคุณ ตัวอย่างเช่น เพื่อติดตามว่าใครเข้า"
+"ร่วมงานบ้าง และได้ซื้อตั๋วถูกต้องหรือไม่ คุณสามารถทำกระบวนการนี้ได้โดยการพิมพ์รายการลงบนกระดา"
+"ษ ใช้ผ่านหน้าเว็บอินเทอร์เฟซนี้ หรือใช้แอปพลิเคชันมือถือหรือเดสก์ท็อปของเราเพื่อสแกนตั๋วโดยอัตโนมัติ"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 msgid ""
@@ -18756,6 +18915,11 @@ msgid ""
 "festival with festival passes that allow access to every or multiple "
 "performances as well as tickets only valid for single performances."
 msgstr ""
+"คุณสามารถสร้างรายการเช็กอินหลายรายการเพื่อแยกพื้นที่ส่วนต่างๆ ของงานได้ ตัวอย่างเช่น หากคุณมีทา"
+"งเข้าแยกสำหรับตั๋วหลายประเภท รายการเช็กอินที่ต่างกันจะทำงานแยกจากกันโดยสิ้นเชิง: หากตั๋วปรากฏ"
+"อยู่ในสองรายการ ตั๋วนั้นจะสามารถใช้งานได้หนึ่งครั้งต่อหนึ่งรายการ ซึ่งจะมีประโยชน์หากคุณจัดเทศกาลที่"
+"มีบัตรผ่านเทศกาล (Festival pass) ที่สามารถเข้าชมได้ทุกการแสดงหรือหลายการแสดง ร่วมกับตั๋วที่ใ"
+"ช้ได้เฉพาะการแสดงเดียว"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 msgid ""
@@ -18764,28 +18928,31 @@ msgid ""
 "are connected on the organizer level, you do not have to create a new device "
 "for every event but can reuse them over and over again."
 msgstr ""
+"หากคุณมีสิทธิ์การใช้งานในระดับผู้จัดงาน (Organizer level) ที่เหมาะสม คุณสามารถเชื่อมต่ออุปกรณ์ใ"
+"หม่เข้ากับบัญชีของคุณและใช้ตรวจสอบความถูกต้องของตั๋วได้ เนื่องจากอุปกรณ์ถูกเชื่อมต่อในระดับผู้จัดงาน "
+"คุณจึงไม่จำเป็นต้องสร้างอุปกรณ์ใหม่สำหรับทุกๆ อีเวนต์ แต่สามารถนำกลับมาใช้งานซ้ำได้เรื่อยๆ"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 msgid "Your search did not match any check-in lists."
-msgstr ""
+msgstr "ไม่พบรายการเช็กอินที่ตรงกับการค้นหาของคุณ"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 msgid "You haven't created any check-in lists yet."
-msgstr ""
+msgstr "คุณยังไม่ได้สร้างรายการเช็กอินใดๆ"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 msgid "Create a new check-in list"
-msgstr ""
+msgstr "สร้างรายการเช็กอินใหม่"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Connected devices"
-msgstr ""
+msgstr "อุปกรณ์ที่เชื่อมต่อแล้ว"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
 msgid "Reset check-in"
-msgstr ""
+msgstr "รีเซ็ตการเช็กอิน"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
 #: pretix/control/templates/pretixcontrol/items/categories.html
@@ -18797,7 +18964,7 @@ msgstr ""
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html
 msgid "Clone"
-msgstr ""
+msgstr "คัดลอก (Clone)"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
 msgid ""
@@ -18807,6 +18974,10 @@ msgid ""
 "hardware setup but only before your event started, and you admitted any real "
 "attendees or printed any real badges or tickets."
 msgstr ""
+"ฟีเจอร์นี้จะช่วยให้คุณสามารถรีเซ็ตสถานะการเช็กอินทั้งหมดของอีเวนต์ได้ การดำเนินการนี้จะลบประวัติกา"
+"รเช็กอินทั้งหมด รวมถึงประวัติการพิมพ์ตั๋วหรือป้ายชื่อ (Badge) ทั้งหมด เราขอแนะนำให้ใช้ฟีเจอร์นี้หลังจ"
+"ากทดสอบการตั้งค่าอุปกรณ์ฮาร์ดแวร์ แต่ต้องเป็นช่วงเวลาก่อนที่อีเวนต์จะเริ่มต้นขึ้น และก่อนที่คุณจะอนุญาต"
+"ให้ผู้เข้าร่วมงานจริงเข้างาน หรือพิมพ์ป้ายชื่อหรือตั๋วจริงเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
 #, python-format
@@ -18814,6 +18985,7 @@ msgid "This will permanently delete <strong>1 check-in</strong>."
 msgid_plural ""
 "This will permanently delete <strong>%(count)s check-ins</strong>."
 msgstr[0] ""
+"การดำเนินการนี้จะลบ ประวัติการเช็กอิน <strong>%(count)s รายการ</strong> อย่างถาวร"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
 #, python-format
@@ -18821,20 +18993,23 @@ msgid "Additionally, <strong>1 print log</strong> will be deleted."
 msgid_plural ""
 "Additionally, <strong>%(count)s print logs</strong> will be deleted."
 msgstr[0] ""
+"นอกจากนี้ ประวัติการพิมพ์ <strong>%(count)s รายการ</strong> จะถูกลบออกด้วย"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
 msgid "This cannot be reverted!"
-msgstr ""
+msgstr "การดำเนินการนี้ไม่สามารถย้อนกลับได้!"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
 msgid ""
 "The deleted entries will still show up in the \"Order history\" section, but "
 "for all other purposes the system will behave as if they never existed."
 msgstr ""
+"รายการที่ถูกลบจะยังคงแสดงอยู่ในส่วน \"ประวัติคำสั่งซื้อ\" แต่สำหรับวัตถุประสงค์อื่นๆ ทั้งหมด ระบบจะ"
+"ทำงานเสมือนว่ารายการเหล่านี้ไม่เคยมีอยู่มาก่อน"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html
 msgid "Proceed with reset"
-msgstr ""
+msgstr "ดำเนินการรีเซ็ต"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 msgid ""
@@ -18843,14 +19018,17 @@ msgid ""
 "the check-in list. No actual check-in will be performed and no modification "
 "to the system state is made."
 msgstr ""
+"เครื่องมือนี้ช่วยให้คุณตรวจสอบความถูกต้องของการตั้งค่าการเช็กอิน คุณสามารถกรอกบาร์โค้ดพร้อมพารามิ"
+"เตอร์เสริม แล้วระบบจะแสดงผลการตอบรับของรายการเช็กอินให้เห็น โดยจะไม่เกิดการเช็กอินจริง และ"
+"ไม่มีการแก้ไขเปลี่ยนแปลงสถานะของระบบ"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 msgid "Simulate"
-msgstr ""
+msgstr "จำลองการทำงาน"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 msgid "Valid check-in"
-msgstr ""
+msgstr "การเช็กอินถูกต้อง"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 msgid "Additional information required"
@@ -18859,13 +19037,11 @@ msgstr "ต้องการข้อมูลเพิ่มเติม"
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 msgid ""
 "The following questions must be answered before check-in can be completed:"
-msgstr ""
+msgstr "ต้องตอบคำถามต่อไปนี้ก่อน จึงจะสามารถเสร็จสิ้นการเช็กอินได้:"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
-#, fuzzy
-#| msgid "Can change orders"
 msgid "Media exchange required"
-msgstr "สามารถแก้ไขคำสั่งซื้อได้"
+msgstr "จำเป็นต้องเปลี่ยนสื่อบันทึกข้อมูล"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 #, python-format
@@ -18873,96 +19049,98 @@ msgid ""
 "This ticket needs to be exchanged into a <strong>%(media_type)s</strong> "
 "reusable medium. <strong>%(media_policy)s</strong>."
 msgstr ""
+"ตั๋วใบนี้จำเป็นต้องนำไปแลกเปลี่ยนเป็นสื่อบันทึกที่ใช้ซ้ำได้ชนิด <strong>%(media_type)s</strong> "
+"<strong>%(media_policy)s</strong>"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 msgid "Special attention required"
-msgstr ""
+msgstr "จำเป็นต้องได้รับความสนใจเป็นพิเศษ"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html
 msgid "Go to event"
-msgstr ""
+msgstr "ไปยังอีเวนต์"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html
 msgid "Your upcoming events"
-msgstr ""
+msgstr "อีเวนต์ที่กำลังจะมาถึงของคุณ"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html
 #: pretix/control/templates/pretixcontrol/events/create_base.html
 #: pretix/control/templates/pretixcontrol/events/index.html
 #: pretix/control/templates/pretixcontrol/organizers/detail.html
 msgid "Create a new event"
-msgstr ""
+msgstr "สร้างอีเวนต์ใหม่"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html
 msgid "View all upcoming events"
-msgstr ""
+msgstr "ดูอีเวนต์ที่กำลังจะมาถึงทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html
 msgid "Your most recent events"
-msgstr ""
+msgstr "อีเวนต์ล่าสุดของคุณ"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html
 msgid "View all recent events"
-msgstr ""
+msgstr "ดูอีเวนต์ล่าสุดทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html
 msgid "Your event series"
-msgstr ""
+msgstr "ซีรีส์อีเวนต์ของคุณ"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html
 msgid "View all event series"
-msgstr ""
+msgstr "ดูซีรีส์อีเวนต์ทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html
 msgid "Other features"
-msgstr ""
+msgstr "ฟีเจอร์อื่นๆ"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
 msgid "Data transfer to external systems"
-msgstr ""
+msgstr "การถ่ายโอนข้อมูลไปยังระบบภายนอก"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 msgid "Retry now"
-msgstr ""
+msgstr "ลองใหม่อีกครั้ง"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
 msgid "Sync now"
-msgstr ""
+msgstr "ซิงค์ข้อมูลทันที"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 msgid "Error"
-msgstr ""
+msgstr "ข้อผิดพลาด"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
 #, python-format
 msgid "Error. Retry %(num)s of %(max)s."
-msgstr ""
+msgstr "เกิดข้อผิดพลาด ลองใหม่อีกครั้งเป็นครั้งที่ %(num)s จาก %(max)s"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
 #, python-format
 msgid "Waiting until %(datetime)s"
-msgstr ""
+msgstr "กำลังรอจนกว่าจะถึง %(datetime)s"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
 #, python-format
 msgid "triggered at %(datetime)s"
-msgstr ""
+msgstr "เปิดทำงานเมื่อ %(datetime)s"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
 msgid "identified by"
-msgstr ""
+msgstr "ระบุโดย"
 
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
 msgid "No data transmitted."
-msgstr ""
+msgstr "ไม่มีข้อมูลถูกส่งออก"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 msgid "Sync problems"
-msgstr ""
+msgstr "ปัญหาการซิงค์ข้อมูล"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 msgid ""
@@ -18970,40 +19148,42 @@ msgid ""
 "external system has failed. You can start another attempt to sync them "
 "manually."
 msgstr ""
+"ในหน้านี้ เราจะแสดงรายการคำสั่งซื้อที่การซิงค์ข้อมูลไปยังระบบภายนอกล้มเหลว คุณสามารถเริ่มต้นลองซิ"
+"งค์ข้อมูลด้วยตนเองอีกครั้งได้"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 msgid "Sync provider"
-msgstr ""
+msgstr "ผู้ให้บริการการซิงค์ข้อมูล"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 msgid "Failure mode"
-msgstr ""
+msgstr "รูปแบบความล้มเหลว (Failure mode)"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 #, python-format
 msgid "Temporary error, will retry after %(datetime)s"
-msgstr ""
+msgstr "ข้อผิดพลาดชั่วคราว ระบบจะลองใหม่อีกครั้งหลังจาก %(datetime)s"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 msgid "No problems."
-msgstr ""
+msgstr "ไม่พบปัญหา"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 msgid "Retry selected"
-msgstr ""
+msgstr "ลองใหม่อีกครั้งกับรายการที่เลือก"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html
 msgid "Cancel selected"
-msgstr ""
+msgstr "ยกเลิกรายการที่เลือก"
 
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html
 msgid "Edit value mapping"
-msgstr ""
+msgstr "แก้ไขการจับคู่ค่า (Value mapping)"
 
 #: pretix/control/templates/pretixcontrol/datasync/property_mappings_formset.html
 #: pretix/control/templates/pretixcontrol/event/settings.html
 msgid "Add property"
-msgstr ""
+msgstr "เพิ่มคุณสมบัติ (Property)"
 
 #: pretix/control/templates/pretixcontrol/email/confirmation_code.txt
 #, python-format
@@ -19022,6 +19202,18 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team\n"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"%(reason)s\n"
+"\n"
+"%(code)s\n"
+"\n"
+"อย่าแชร์รหัสนี้ให้ใคร ทราบ ทีมงาน %(instance)s จะไม่ถามรหัสนี้จากคุณโดยเด็ดขาด\n"
+"\n"
+"หากคุณไม่ได้ร้องขอรหัสนี้ กรุณาติดต่อเราทันที\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีมงาน %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/email_setup.txt
 #, python-format
@@ -19045,6 +19237,22 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team\n"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"มีผู้ร้องขอใช้ %(address)s เป็นที่อยู่อีเมลผู้ส่งบน %(instance)s เมื่อได้รับการยืนยันแล้ว อีเมลที่ส่งจ"
+"าก %(instance)s จะสามารถแสดงที่อยู่นี้เป็นผู้ส่งได้\n"
+"\n"
+"หากการดำเนินการนี้เป็นของคุณ กรอกรหัสต่อไปนี้ในแบบฟอร์มการตั้งค่า:\n"
+"\n"
+"%(code)s\n"
+"\n"
+"อย่าแชร์รหัสนี้ให้ใคร เว้นแต่คุณต้องการมอบอำนาจให้พวกเขาสามารถใช้ที่อยู่นี้เพื่อวัตถุประสงค์ดังกล่าว ที"
+"มงาน %(instance)s จะไม่ถามรหัสนี้จากคุณโดยเด็ดขาด\n"
+"\n"
+"หากคุณไม่ได้ร้องขอกรณีนี้ คุณสามารถเพิกเฉยต่ออีเมลนี้ได้อย่างปลอดภัย\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีมงาน %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/forgot.txt
 #, python-format
@@ -19062,6 +19270,18 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team\n"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เราได้รับคำร้องขอให้รีเซ็ตรหัสผ่านสำหรับบัญชี %(instance)s ของคุณ หากต้องการเลือกรหัสผ่านใหม่ "
+"กรุณาไปที่ลิงก์ด้านล่างนี้:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"หากคุณไม่ได้ร้องขอกรณีนี้ คุณสามารถเพิกเฉยต่ออีเมลนี้ได้อย่างปลอดภัย โดยรหัสผ่านของคุณจะไม่มีการเป"
+"ลี่ยนแปลงใดๆ\n"
+"\n"
+"ขอแสดงความนับถือ\n"
+"ทีมงาน %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt
 #, python-format
