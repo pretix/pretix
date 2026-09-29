@@ -9,7 +9,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
 "PO-Revision-Date: 2026-09-30 06:00+0000\n"
-"Last-Translator: Ыукпун <sergey.udsgame@yandex.ru>\n"
+"Last-Translator: Translate pretix user 594 "
+"<ivagvr@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
 "Language: ru\n"
@@ -94,7 +95,7 @@ msgstr "Иврит"
 
 #: pretix/_base_settings.py
 msgid "Hungarian"
-msgstr ""
+msgstr "Венгерский"
 
 #: pretix/_base_settings.py
 msgid "Indonesian"
@@ -154,7 +155,7 @@ msgstr "Spanish (Latin America)"
 
 #: pretix/_base_settings.py
 msgid "Thai"
-msgstr ""
+msgstr "Тайский"
 
 #: pretix/_base_settings.py
 msgid "Turkish"
@@ -736,7 +737,7 @@ msgstr "Код подарочного сертификата"
 #: pretix/control/forms/subevents.py pretix/plugins/banktransfer/payment.py
 #: pretix/presale/forms/customer.py
 msgid "This field is required."
-msgstr ""
+msgstr "Это поле обязательно к заполнению."
 
 #: pretix/base/addressvalidation.py
 msgid "Enter a postal code in the format XXX."
@@ -749,7 +750,7 @@ msgstr ""
 #: pretix/base/auth.py
 #, python-brace-format
 msgid "{system} User"
-msgstr ""
+msgstr "{system} Пользователь"
 
 #: pretix/base/auth.py pretix/base/exporters/customers.py
 #: pretix/base/exporters/orderlist.py pretix/base/exporters/waitinglist.py
@@ -780,17 +781,17 @@ msgstr "Пароль"
 
 #: pretix/base/auth.py
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr ""
+msgstr "Пароль должен содержать цифровые и буквенные символы."
 
 #: pretix/base/auth.py
-#, python-format
+#, fuzzy, python-format
 msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ваш пароль не может совпадать с предыдущим"
+msgstr[1] "Ваш пароль не может совпадать с предыдущими %(history_length) паролями"
+msgstr[2] "Ваш пароль не может совпадать с предыдущими %(history_length) паролями"
 
 #: pretix/base/channels.py
 msgid "Online shop"
@@ -798,7 +799,7 @@ msgstr "Интернет-магазин"
 
 #: pretix/base/channels.py
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: pretix/base/channels.py
 msgid ""
@@ -836,12 +837,12 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
-msgstr ""
+msgstr "Не удалось получить конфигурацию \"{url}\". Ошибка: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py
 #, python-brace-format
 msgid "Incompatible SSO provider: \"{error}\"."
-msgstr ""
+msgstr "Несовместимый поставщик SSO: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py
 #, fuzzy, python-brace-format
@@ -859,6 +860,9 @@ msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
 msgstr ""
+"Адрес электронной почты, привязанный к этой учетной записи, еще не "
+"подтвержден. Пожалуйста, сначала подтвердите адрес электронной почты в своей "
+"учетной записи клиента."
 
 #: pretix/base/datasync/datasync.py
 #, python-brace-format
@@ -897,7 +901,7 @@ msgstr "Адрес электронной почты посетителя"
 #: pretix/base/models/items.py pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Questions"
-msgstr ""
+msgstr "Вопросы"
 
 #: pretix/base/datasync/sourcefields.py
 #, fuzzy
@@ -1120,7 +1124,7 @@ msgstr "Начальная дата мероприятия"
 #: pretix/control/templates/pretixcontrol/events/index.html
 #: pretix/control/templates/pretixcontrol/organizers/detail.html
 msgid "Event name"
-msgstr ""
+msgstr "Название события"
 
 #: pretix/base/datasync/sourcefields.py pretix/base/exporters/invoices.py
 msgid "Event start date"
@@ -1156,7 +1160,7 @@ msgstr "Дизайн билета"
 #: pretix/base/datasync/sourcefields.py pretix/base/notifications.py
 #: pretix/control/forms/filter.py pretix/control/forms/modelimport.py
 msgid "Order status"
-msgstr ""
+msgstr "Статус заказа"
 
 #: pretix/base/datasync/sourcefields.py
 #, fuzzy
@@ -1230,11 +1234,11 @@ msgstr "Фамилия"
 #: pretix/plugins/ticketoutputpdf/models.py
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html
 msgid "Default"
-msgstr ""
+msgstr "По умолчанию"
 
 #: pretix/base/email.py
 msgid "Simple with logo"
-msgstr ""
+msgstr "Простой с логотипом"
 
 #: pretix/base/exporter.py
 msgid "Export format"
@@ -1280,6 +1284,8 @@ msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
 msgstr ""
+"Скачайте ZIP-архив, содержащий все файлы, которые ваши клиенты загрузили при "
+"оформлении заказа."
 
 #: pretix/base/exporters/answers.py pretix/base/exporters/orderlist.py
 #: pretix/base/models/checkin.py pretix/base/models/items.py
@@ -1312,7 +1318,7 @@ msgstr "Дата"
 #: pretix/plugins/sendmail/forms.py
 msgctxt "subevent"
 msgid "All dates"
-msgstr ""
+msgstr "Все даты"
 
 #: pretix/base/exporters/customers.py pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
@@ -1393,7 +1399,7 @@ msgstr "Номер телефона"
 #: pretix/base/settings.py
 #: pretix/control/templates/pretixcontrol/users/index.html
 msgid "Full name"
-msgstr ""
+msgstr "Полное имя"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/invoices.py
 #: pretix/base/exporters/orderlist.py pretix/base/exporters/waitinglist.py
@@ -1448,7 +1454,7 @@ msgstr "Адрес электронной почты посетителя"
 #: pretix/base/exporters/customers.py pretix/base/models/customers.py
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 msgid "Last login"
-msgstr ""
+msgstr "Последний вход в систему"
 
 #: pretix/base/exporters/customers.py pretix/base/models/customers.py
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
@@ -1470,7 +1476,7 @@ msgstr "Язык"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html
 msgid "Notes"
-msgstr ""
+msgstr "Заметки"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/events.py
 #: pretix/base/exporters/invoices.py pretix/base/exporters/items.py
@@ -1497,7 +1503,7 @@ msgstr "Нет"
 #: pretix/base/models/memberships.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/event/live.html
 msgid "Test mode"
-msgstr ""
+msgstr "Тестовый режим"
 
 #: pretix/base/exporters/customers.py pretix/base/models/memberships.py
 #: pretix/control/forms/filter.py
@@ -1618,7 +1624,7 @@ msgstr "Дата мероприятия"
 msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
-msgstr ""
+msgstr "Загрузка таблицы с информацией о всех событиях организатора."
 
 #: pretix/base/exporters/events.py pretix/base/models/event.py
 #: pretix/base/models/organizer.py
@@ -1644,33 +1650,33 @@ msgstr "Часовой пояс"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 msgid "Event start time"
-msgstr ""
+msgstr "Время начала события"
 
 #: pretix/base/exporters/events.py pretix/base/models/event.py
 #: pretix/base/pdf.py pretix/control/forms/subevents.py
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 msgid "Event end time"
-msgstr ""
+msgstr "Время окончания события"
 
 #: pretix/base/exporters/events.py pretix/base/models/event.py
 #: pretix/control/forms/subevents.py
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 msgid "Admission time"
-msgstr ""
+msgstr "Время начала входа"
 
 #: pretix/base/exporters/events.py pretix/base/models/event.py
 #: pretix/control/forms/subevents.py
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 msgid "Start of presale"
-msgstr ""
+msgstr "Начало предпродажи"
 
 #: pretix/base/exporters/events.py pretix/base/models/event.py
 #: pretix/control/forms/subevents.py
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 msgid "End of presale"
-msgstr ""
+msgstr "Конец предпродажи"
 
 #: pretix/base/exporters/events.py pretix/base/exporters/invoices.py
 #: pretix/base/models/event.py pretix/base/models/items.py
@@ -1696,7 +1702,7 @@ msgstr "Долгота"
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 msgid "Internal comment"
-msgstr ""
+msgstr "Внутренний комментарий"
 
 #: pretix/base/exporters/invoices.py pretix/base/models/orders.py
 #: pretix/control/forms/filter.py
@@ -1994,7 +2000,7 @@ msgstr "Вариант"
 #: pretix/base/pdf.py
 #: pretix/control/templates/pretixcontrol/items/category.html
 msgid "Product category"
-msgstr ""
+msgstr "Категория продукта"
 
 #: pretix/base/exporters/items.py pretix/base/models/discount.py
 #: pretix/base/models/items.py pretix/base/models/tax.py
@@ -2032,7 +2038,7 @@ msgstr ""
 #: pretix/plugins/autocheckin/models.py
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html
 msgid "Sales channels"
-msgstr ""
+msgstr "Канал продаж"
 
 #: pretix/base/exporters/items.py pretix/base/models/items.py
 #: pretix/control/templates/pretixcontrol/items/index.html
@@ -2363,7 +2369,7 @@ msgstr "Номера счетов"
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Sales channel"
-msgstr ""
+msgstr "Канал продаж"
 
 #: pretix/base/exporters/orderlist.py pretix/base/models/orders.py
 #: pretix/control/forms/filter.py
@@ -2643,7 +2649,7 @@ msgstr "Данные заказа"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 #: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "Quantity"
-msgstr ""
+msgstr "Количество"
 
 #: pretix/base/exporters/orderlist.py
 #, fuzzy
@@ -3015,7 +3021,7 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py pretix/control/forms/orders.py
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Особые условия"
 
 #: pretix/base/exporters/orderlist.py
 #: pretix/control/templates/pretixcontrol/order/change.html
@@ -3023,7 +3029,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
 msgid "Current value"
-msgstr ""
+msgstr "Текущее значение"
 
 #: pretix/base/exporters/orderlist.py
 #, fuzzy
@@ -3161,12 +3167,12 @@ msgstr "Дата"
 
 #: pretix/base/exporters/waitinglist.py pretix/control/views/waitinglist.py
 msgid "Priority"
-msgstr ""
+msgstr "Приоритет"
 
 #: pretix/base/forms/__init__.py
 #, python-brace-format
 msgid "You can use {markup_name} in this field."
-msgstr ""
+msgstr "Вы можте использовать {markup_name}в этом поле."
 
 #: pretix/base/forms/__init__.py
 #, python-format
@@ -3202,7 +3208,7 @@ msgstr ""
 #: pretix/base/forms/auth.py pretix/base/forms/user.py
 #: pretix/control/forms/users.py pretix/presale/forms/customer.py
 msgid "Please enter the same password twice"
-msgstr ""
+msgstr "Повторите пароль"
 
 #: pretix/base/forms/auth.py pretix/presale/forms/customer.py
 msgid "Repeat password"
@@ -3217,7 +3223,7 @@ msgstr "Адрес электронной почты"
 #: pretix/base/forms/auth.py pretix/control/forms/orders.py
 #: pretix/control/templates/pretixcontrol/shredder/download.html
 msgid "Confirmation code"
-msgstr ""
+msgstr "Код подтверждения"
 
 #: pretix/base/forms/questions.py
 #, fuzzy
@@ -3255,7 +3261,7 @@ msgstr "Внутренняя ссылка"
 #: pretix/base/forms/questions.py
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr ""
+msgstr "Номер телефона (без кода страны)"
 
 #: pretix/base/forms/questions.py
 msgid ""
@@ -3394,7 +3400,7 @@ msgstr ""
 #: pretix/base/forms/user.py pretix/control/forms/organizer.py
 #: pretix/control/forms/users.py
 msgid "Default timezone"
-msgstr ""
+msgstr "Часовой пояс по умолчанию"
 
 #: pretix/base/forms/user.py pretix/control/forms/users.py
 msgid ""
@@ -3431,7 +3437,7 @@ msgstr ""
 
 #: pretix/base/forms/user.py
 msgid "Please choose a password different to your current one."
-msgstr ""
+msgstr "Введите пароль отличный от текущего."
 
 #: pretix/base/forms/user.py pretix/presale/forms/customer.py
 msgid "Your current password"
@@ -3440,11 +3446,11 @@ msgstr "Ваш текущий пароль"
 #: pretix/base/forms/user.py pretix/control/forms/users.py
 #: pretix/presale/forms/customer.py
 msgid "New password"
-msgstr ""
+msgstr "Новый пароль"
 
 #: pretix/base/forms/user.py pretix/control/forms/users.py
 msgid "Repeat new password"
-msgstr ""
+msgstr "Повторить новый пароль"
 
 #: pretix/base/forms/user.py pretix/control/forms/users.py
 msgid ""
@@ -3527,7 +3533,7 @@ msgstr "Адрес электронной почты подтверждён"
 
 #: pretix/base/invoicing/email.py
 msgid "PDF via email"
-msgstr ""
+msgstr "PDF на электронную почту"
 
 #: pretix/base/invoicing/national.py
 msgctxt "italian_invoice"
@@ -3635,6 +3641,8 @@ msgid ""
 "{from_date}\n"
 "until {to_date}"
 msgstr ""
+"{from_date}\n"
+"до {to_date}"
 
 #: pretix/base/invoicing/pdf.py pretix/base/services/mail.py
 #, python-brace-format
@@ -3882,6 +3890,8 @@ msgid ""
 "The relevant plugin is currently not active. To activate it, click here to "
 "go to the plugin settings."
 msgstr ""
+"Соответствующий плагин в данный момент неактивен. Чтобы активировать его, "
+"нажмите здесь для перехода к настройкам плагина."
 
 #: pretix/base/logentrytype_registry.py
 #, fuzzy
@@ -3944,7 +3954,7 @@ msgstr "Налоговое правило {val}"
 
 #: pretix/base/media.py
 msgid "Barcode / QR-Code"
-msgstr ""
+msgstr "Штрих-код / QR-код"
 
 #: pretix/base/media.py
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
@@ -3958,7 +3968,7 @@ msgstr "Список по умолчанию"
 
 #: pretix/base/modelimport.py
 msgid "Keep empty"
-msgstr ""
+msgstr "Оставить пустым"
 
 #: pretix/base/modelimport.py
 #, python-brace-format
@@ -3977,7 +3987,7 @@ msgstr ""
 
 #: pretix/base/modelimport.py pretix/control/views/orders.py
 msgid "You entered an invalid number."
-msgstr ""
+msgstr "Вы ввели неверный номер."
 
 #: pretix/base/modelimport.py
 #, fuzzy
@@ -3989,11 +3999,11 @@ msgstr "Архивные события не найдены."
 #: pretix/base/modelimport.py
 msgctxt "subevent"
 msgid "Multiple matching dates were found."
-msgstr ""
+msgstr "Найдено несколько совпадающих дат."
 
 #: pretix/base/modelimport_orders.py
 msgid "Grouping"
-msgstr ""
+msgstr "Группировка"
 
 #: pretix/base/modelimport_orders.py
 msgid ""
@@ -4178,7 +4188,7 @@ msgstr "Вам необходимо выбрать конкретное мест
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Question"
-msgstr ""
+msgstr "Вопрос"
 
 #: pretix/base/modelimport_orders.py pretix/base/models/items.py
 msgid "Invalid option selected."
@@ -4266,7 +4276,7 @@ msgstr ""
 #: pretix/base/models/vouchers.py
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
 msgid "Quota"
-msgstr ""
+msgstr "Квота"
 
 #: pretix/base/modelimport_vouchers.py
 #, fuzzy
@@ -4304,7 +4314,7 @@ msgstr "Вам нужно выбрать подмероприятие для н�
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html
 #: pretix/control/views/vouchers.py
 msgid "Tag"
-msgstr ""
+msgstr "Тег"
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 msgid "Shows hidden products that match this voucher"
@@ -4477,7 +4487,7 @@ msgstr ""
 
 #: pretix/base/models/checkin.py
 msgid "Allow multiple entries per ticket"
-msgstr ""
+msgstr "Разрешить множественные проходы по одному билету"
 
 #: pretix/base/models/checkin.py
 msgid ""
@@ -4496,7 +4506,7 @@ msgstr "Страна"
 
 #: pretix/base/models/checkin.py
 msgid "Exit"
-msgstr ""
+msgstr "Выход"
 
 #: pretix/base/models/checkin.py
 #, fuzzy
@@ -4633,7 +4643,7 @@ msgstr "Магазин отключен"
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py
 msgid "Company name"
-msgstr ""
+msgstr "Название компании"
 
 #: pretix/base/models/customers.py pretix/base/models/orders.py
 #: pretix/base/settings.py pretix/plugins/stripe/payment.py
@@ -4643,7 +4653,7 @@ msgstr "Выбрать страну"
 #: pretix/base/models/customers.py
 msgctxt "openidconnect"
 msgid "Confidential"
-msgstr ""
+msgstr "Конфиденциально"
 
 #: pretix/base/models/customers.py
 msgctxt "openidconnect"
@@ -4714,7 +4724,7 @@ msgstr ""
 
 #: pretix/base/models/datasync.py
 msgid "System error, needs manual intervention"
-msgstr ""
+msgstr "Системная ошибка, требуется ручное вмешательство"
 
 #: pretix/base/models/devices.py pretix/base/models/items.py
 msgid "Internal identifier"
@@ -4730,12 +4740,12 @@ msgstr "Этот идентификатор уже используется дл
 #: pretix/control/templates/pretixcontrol/organizers/gates.html
 #: pretix/plugins/checkinlists/exporters.py
 msgid "Gate"
-msgstr ""
+msgstr "Входная группа"
 
 #: pretix/base/models/devices.py
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Setup date"
-msgstr ""
+msgstr "Дата установки"
 
 #: pretix/base/models/devices.py
 msgid "Initialization date"
@@ -4978,7 +4988,7 @@ msgstr ""
 #: pretix/base/models/event.py pretix/base/models/organizer.py
 #: pretix/control/navigation.py
 msgid "Plugins"
-msgstr ""
+msgstr "Плагины"
 
 #: pretix/base/models/event.py pretix/base/pdf.py pretix/control/forms/event.py
 #: pretix/control/forms/filter.py
@@ -4994,7 +5004,7 @@ msgstr "Серия мероприятий"
 
 #: pretix/base/models/event.py
 msgid "Seating plan"
-msgstr ""
+msgstr "Схема зала"
 
 #: pretix/base/models/event.py pretix/base/models/items.py
 #, fuzzy
@@ -5015,7 +5025,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html
 #: pretix/control/views/organizer.py pretix/plugins/reports/accountingreport.py
 msgid "Events"
-msgstr ""
+msgstr "События"
 
 #: pretix/base/models/event.py
 msgid ""
@@ -5091,7 +5101,7 @@ msgstr ""
 
 #: pretix/base/models/event.py pretix/base/settings.py
 msgid "Frontpage text"
-msgstr ""
+msgstr "Текст главной страницы"
 
 #: pretix/base/models/event.py
 msgid "Date in event series"
@@ -5200,7 +5210,7 @@ msgstr ""
 
 #: pretix/base/models/exports.py pretix/control/navigation.py
 msgid "Export"
-msgstr ""
+msgstr "Экспорт"
 
 #: pretix/base/models/exports.py
 #, fuzzy
@@ -5232,13 +5242,13 @@ msgstr "Дополнительный сбор"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/models.py
 msgid "Subject"
-msgstr ""
+msgstr "Тема"
 
 #: pretix/base/models/exports.py pretix/control/forms/orders.py
 #: pretix/control/forms/vouchers.py pretix/plugins/sendmail/forms.py
 #: pretix/plugins/sendmail/models.py
 msgid "Message"
-msgstr ""
+msgstr "Сообщение"
 
 #: pretix/base/models/exports.py
 #, fuzzy
@@ -5279,7 +5289,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 msgctxt "giftcard"
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Особые условия"
 
 #: pretix/base/models/giftcards.py
 msgid "Manual transaction"
@@ -5412,7 +5422,7 @@ msgstr ""
 #: pretix/base/models/items.py
 #, python-brace-format
 msgid "{category} ({category_type})"
-msgstr ""
+msgstr "{category} ({category_type})"
 
 #: pretix/base/models/items.py
 #, fuzzy
@@ -5495,7 +5505,7 @@ msgstr ""
 
 #: pretix/base/models/items.py
 msgid "Category"
-msgstr ""
+msgstr "Категория"
 
 #: pretix/base/models/items.py
 msgid ""
@@ -5586,7 +5596,7 @@ msgstr ""
 #: pretix/base/models/items.py pretix/base/settings.py
 #: pretix/control/forms/event.py
 msgid "Show number of tickets left"
-msgstr ""
+msgstr "Показать оставшееся количество билетов"
 
 #: pretix/base/models/items.py
 msgid "Publicly show how many tickets are still available."
@@ -5828,11 +5838,11 @@ msgstr "дней назад"
 
 #: pretix/base/models/items.py
 msgid "Hours"
-msgstr ""
+msgstr "Часы"
 
 #: pretix/base/models/items.py
 msgid "Days"
-msgstr ""
+msgstr "Дни"
 
 #: pretix/base/models/items.py
 #, fuzzy
@@ -6129,7 +6139,7 @@ msgstr "Позиция заказа"
 
 #: pretix/base/models/items.py
 msgid "Number"
-msgstr ""
+msgstr "Номер"
 
 #: pretix/base/models/items.py
 msgid "Text (one line)"
@@ -6191,7 +6201,7 @@ msgstr "Тип вопроса"
 #: pretix/base/models/items.py
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Required question"
-msgstr ""
+msgstr "Обязательный вопрос"
 
 #: pretix/base/models/items.py
 msgid "This question will be asked to buyers of the selected products"
@@ -6334,7 +6344,7 @@ msgstr ""
 #: pretix/base/models/items.py
 #: pretix/control/templates/pretixcontrol/items/question.html
 msgid "Answer"
-msgstr ""
+msgstr "Ответ"
 
 #: pretix/base/models/items.py
 #, python-brace-format
@@ -6353,7 +6363,7 @@ msgstr "Варианты вопроса"
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 msgid "Total capacity"
-msgstr ""
+msgstr "Общая вместимость"
 
 #: pretix/base/models/items.py pretix/control/forms/item.py
 msgid "Leave empty for an unlimited number of tickets."
@@ -6419,7 +6429,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 #: pretix/control/templates/pretixcontrol/subevents/edit.html
 msgid "Quotas"
-msgstr ""
+msgstr "Квоты"
 
 #: pretix/base/models/items.py
 msgid "All variations must belong to an item contained in the items list."
@@ -6464,7 +6474,7 @@ msgstr "Дата начала"
 
 #: pretix/base/models/items.py pretix/plugins/reports/accountingreport.py
 msgid "End"
-msgstr ""
+msgstr "Конец"
 
 #: pretix/base/models/mail.py
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
@@ -21770,10 +21780,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
-#, fuzzy
-#| msgid "Event date"
 msgid "Event type"
-msgstr "Дата мероприятия"
+msgstr "Тип события"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
 msgid "Singular event or non-event shop"
@@ -21784,6 +21792,8 @@ msgid ""
 "An event with individual configuration. If you create more events later, you "
 "can copy the event to save yourself some work."
 msgstr ""
+"Событие с индивидуальной настройкой. Если впоследствии вы создадите другие "
+"события, то сможете скопировать это событие, чтобы сэкономить время."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
 msgid ""
@@ -21876,7 +21886,7 @@ msgstr "Дата не выбрана."
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html
 msgid "Quota:"
-msgstr ""
+msgstr "Квота:"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html
 #, python-format
@@ -21918,7 +21928,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid "License settings and check"
-msgstr ""
+msgstr "Настройки и проверка лицензии"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 #, fuzzy
@@ -21938,16 +21948,12 @@ msgid "Public information"
 msgstr "Ваша информация"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
-#, fuzzy
-#| msgid "Save changes"
 msgid "Save and check"
-msgstr "Сохранить изменения"
+msgstr "Сохранить и проверить"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
-#, fuzzy
-#| msgid "Checkout"
 msgid "Check results"
-msgstr "Оформить заказ"
+msgstr "Проверить результат"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid "The automated license check did not identify any issues."
@@ -21955,7 +21961,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_message.html
 msgid "System message"
-msgstr ""
+msgstr "Системные сообщения"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid ""
@@ -21977,11 +21983,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "January"
-msgstr ""
+msgstr "Январь"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "February"
-msgstr ""
+msgstr "Февраль"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 #, fuzzy
@@ -22032,10 +22038,8 @@ msgid "December"
 msgstr "Место {number}"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Generate report"
-msgstr "Генерировать билеты"
+msgstr "Создать отчет"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "Update check results"
@@ -22079,19 +22083,19 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "Component"
-msgstr ""
+msgstr "Компонент"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "Installed version"
-msgstr ""
+msgstr "Установленная версия"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "Latest version"
-msgstr ""
+msgstr "Последняя версия"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "Update check settings"
-msgstr ""
+msgstr "Настройка проверки обновлений"
 
 #: pretix/control/templates/pretixcontrol/includes/logs.html
 msgid "View full log"
@@ -22126,7 +22130,7 @@ msgstr "Вопрос: {question}"
 #: pretix/control/templates/pretixcontrol/item/include_variations.html
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 msgid "Create a new quota"
-msgstr ""
+msgstr "Новая квота"
 
 #: pretix/control/templates/pretixcontrol/item/base.html
 msgid ""
@@ -22148,10 +22152,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
-#, fuzzy
-#| msgid "Product picture"
 msgid "Product type"
-msgstr "Изображение продукта"
+msgstr "Тип продукта"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
