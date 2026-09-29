@@ -205,6 +205,7 @@ class ActionView(View):
             'plain': comment,
         })
 
+    @transaction.atomic()
     def post(self, request, *args, **kwargs):
         for k, v in request.POST.items():
             if not k.startswith('action_'):
