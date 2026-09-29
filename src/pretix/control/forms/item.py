@@ -60,7 +60,7 @@ from pretix.base.models import (
     Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
     QuestionOption, Quota,
 )
-from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
+from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue, Questionnaire
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
     ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,
@@ -392,13 +392,20 @@ class ItemCreateForm(I18nModelForm):
                                         help_text=_('Select this option e.g. for t-shirts that come in multiple sizes. '
                                                     'You can select the variations in the next step.'),
                                         required=False)
+    questionnaires = SafeModelMultipleChoiceField(
+        queryset=Questionnaire.objects.none(),
+        required=False,
+        label=_('Questionnaires'),
+        widget=forms.CheckboxSelectMultiple(attrs={
+            'class': 'scrolling-multiple-choice'
+        }),
+    )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs['event']
         self.user = kwargs.pop('user')
         kwargs.setdefault('initial', {})
         kwargs['initial'].setdefault('admission', True)
-        kwargs['initial'].setdefault('personalized', True)
         super().__init__(*args, **kwargs)
 
         self.fields['category'].queryset = self.instance.event.categories.all()
@@ -413,6 +420,8 @@ class ItemCreateForm(I18nModelForm):
             }
         )
         self.fields['category'].widget.choices = self.fields['category'].choices
+
+        self.fields['questionnaires'].queryset = self.instance.event.questionnaires.all()
 
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
         change_decimal_field(self.fields['default_price'], self.instance.event.currency)
@@ -520,9 +529,14 @@ class ItemCreateForm(I18nModelForm):
                 self.instance.picture.save(os.path.basename(src.picture.name), src.picture)
 
         self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
-        if not self.instance.admission:
-            self.instance.personalized = False
         instance = super().save(*args, **kwargs)
+
+        instance.questionnaires.clear()
+        instance.questionnaires.add(*self.cleaned_data['questionnaires'])
+        try:
+            Questionnaire.check_constraints(self.event)
+        except ValidationError as exc:
+            raise ValidationError({'questionnaires': exc})
 
         if not self.event.has_subevents and not self.cleaned_data.get('has_variations'):
             if self.cleaned_data.get('quota_option') == self.EXISTING and self.cleaned_data.get('quota_add_existing') is not None:
@@ -647,6 +661,14 @@ class ItemUpdateForm(I18nModelForm):
         max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
         required=False,
     )
+    questionnaires = SafeModelMultipleChoiceField(
+        queryset=Questionnaire.objects.none(),
+        required=False,
+        label=_('Questionnaires'),
+        widget=forms.CheckboxSelectMultiple(attrs={
+            'class': 'scrolling-multiple-choice'
+        }),
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -742,6 +764,9 @@ class ItemUpdateForm(I18nModelForm):
         )
         self.fields['category'].widget.choices = self.fields['category'].choices
 
+        self.fields['questionnaires'].queryset = self.instance.event.questionnaires.all()
+        self.initial['questionnaires'] = self.instance.questionnaires.values_list('pk', flat=True)
+
         self.fields['free_price_suggestion'].widget.attrs['data-display-dependency'] = '#id_free_price'
 
         self.fields['validity_dynamic_start_choice'] = forms.TypedChoiceField(
@@ -836,6 +861,16 @@ class ItemUpdateForm(I18nModelForm):
 
         return d
 
+    def save(self, *args, **kwargs):
+        instance = super().save(*args, **kwargs)
+        instance.questionnaires.clear()
+        instance.questionnaires.add(*self.cleaned_data['questionnaires'])
+        try:
+            Questionnaire.check_constraints(self.event)
+        except ValidationError as exc:
+            raise ValidationError({'questionnaires': exc})
+        return instance
+
     class Meta:
         model = Item
         localized_fields = '__all__'
@@ -847,7 +882,6 @@ class ItemUpdateForm(I18nModelForm):
             'all_sales_channels',
             'limit_sales_channels',
             'admission',
-            'personalized',
             'description',
             'picture',
             'default_price',

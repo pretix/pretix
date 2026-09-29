@@ -39,7 +39,7 @@ from itertools import groupby
 from json.decoder import JSONDecodeError
 
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
 from django.db import models, transaction
 from django.db.models import (
@@ -1335,9 +1335,10 @@ class ItemCreate(EventPermissionRequiredMixin, MetaDataEditorMixin, CreateView):
             initial['tax_rule'] = trs[0]
 
         if self.copy_from:
-            fields = ('name', 'internal_name', 'category', 'admission', 'personalized', 'default_price', 'tax_rule')
+            fields = ('name', 'internal_name', 'category', 'admission', 'default_price', 'tax_rule')
             for f in fields:
                 initial[f] = getattr(self.copy_from, f)
+            initial['questionnaires'] = self.copy_from.questionnaires.values_list('pk', flat=True)
             initial['copy_from'] = self.copy_from
             initial['has_variations'] = self.copy_from.variations.exists()
 
@@ -1371,7 +1372,7 @@ class ItemCreate(EventPermissionRequiredMixin, MetaDataEditorMixin, CreateView):
         return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data()
+        ctx = super().get_context_data(**kwargs)
         ctx['meta_forms'] = self.meta_forms
         return ctx
 
@@ -1379,9 +1380,11 @@ class ItemCreate(EventPermissionRequiredMixin, MetaDataEditorMixin, CreateView):
         self.object = None
         form = self.get_form()
         if form.is_valid() and all([f.is_valid() for f in self.meta_forms]):
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+            try:
+                return self.form_valid(form)
+            except ValidationError as e:
+                form.add_error(None, e)
+        return self.form_invalid(form)
 
 
 class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataEditorMixin, UpdateView):
@@ -1445,9 +1448,11 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
         self.get_object()
         form = self.get_form()
         if self.is_valid(form) and all([f.is_valid() for f in self.meta_forms]):
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+            try:
+                return self.form_valid(form)
+            except ValidationError as exc:
+                form.add_error(None, exc)
+        return self.form_invalid(form)
 
     def save_formset(self, key, log_base, attr='item', order=True, serializer=None,
                      rm_verb='removed'):
@@ -1496,7 +1501,6 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
     @transaction.atomic
     def form_valid(self, form):
         self.save_meta()
-        messages.success(self.request, _('Your changes have been saved.'))
 
         change_data = {
             k: form.cleaned_data.get(k)
@@ -1556,7 +1560,9 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
             else:
                 v.save()
 
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        messages.success(self.request, _('Your changes have been saved.'))
+        return response
 
     def form_invalid(self, form):
         messages.error(self.request, _('We could not save your changes. See below for details.'))
@@ -1569,7 +1575,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
         return o
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data()
+        ctx = super().get_context_data(**kwargs)
         ctx['plugin_forms'] = self.plugin_forms
         ctx['meta_forms'] = self.meta_forms
         ctx['formsets'] = self.formsets

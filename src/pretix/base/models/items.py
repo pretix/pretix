@@ -2052,9 +2052,10 @@ class Questionnaire(LoggedModel):
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
 
-    def check_constraints(self):
+    @staticmethod
+    def check_constraints(event):
         errors = set()
-        all_questionnaires = Questionnaire.objects.filter(event=self.event).prefetch_related('children', 'items')
+        all_questionnaires = Questionnaire.objects.filter(event=event).prefetch_related('children', 'items')
         for (type, item_id, sdf, udf), fields in groupby(sorted(
             (q.type, item.id, c.system_datafield or '', c.user_datafield_id or 0, q, item)
             for q in all_questionnaires
