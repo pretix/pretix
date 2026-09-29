@@ -40,6 +40,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
+from rest_framework.serializers import ListSerializer
 
 from pretix.api.auth.utils import get_session_key_for_api_request
 from pretix.api.serializers import CompatDecimalField, CompatibleJSONField
@@ -47,7 +48,7 @@ from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
-    InlineItemVariationSerializer, ItemSerializer, DatafieldSerializer,
+    InlineItemVariationSerializer, ItemSerializer, DatafieldSerializer, cook_id, system_datafield_numbers, uncook_id,
 )
 from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
@@ -57,7 +58,7 @@ from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
     CachedFile, Checkin, Customer, Device, GiftCard, Invoice, InvoiceAddress,
     InvoiceLine, Item, ItemVariation, Order, OrderPosition, Question,
-    QuestionAnswer, ReusableMedium, SalesChannel, Seat, SubEvent, TaxRule,
+    QuestionAnswer, QuestionnaireChild, ReusableMedium, SalesChannel, Seat, SubEvent, TaxRule,
     Voucher,
 )
 from pretix.base.models.orders import (
@@ -227,6 +228,50 @@ class InlineSeatSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Seat
         fields = ('id', 'name', 'seat_guid', 'zone_name', 'row_name', 'row_label', 'seat_label', 'seat_number')
+
+
+class MixedAnswerListSerializer(ListSerializer):
+    def __init__(self, instance=None, *args, **kwargs):
+        self.parent_instance = instance
+        super().__init__(instance.answers if instance else None, *args, **kwargs)
+
+    def get_value(self, dictionary):
+        return dictionary
+
+    def to_representation(self, instance):
+        answers = super().to_representation(instance.answers)
+        for qc in QuestionnaireChild.objects.filter(questionnaire__items__id=instance.item_id, system_datafield__isnull=False):
+            answers.append({
+                "question": cook_id(qc),
+                "answer": instance.get_system_answer(qc.system_datafield),
+                "question_identifier": f'@{qc.system_datafield}',
+                "options": [],
+                "option_identifiers": [],
+                "questionnaire_id": qc.questionnaire_id,
+                "system_datafield": qc.system_datafield,
+            })
+        return {
+            "answers": answers,
+        }
+
+    def to_internal_value(self, data):
+        result = {}
+        answers = []
+        for answer in data["answers"]:
+            try:
+                qid, dfid, sys_df = uncook_id(answer["question"])
+            except ValueError:
+                if type(answer["question"]) is str and answer["question"].lstrip("@") in system_datafield_numbers:
+                    qid, dfid, sys_df = None, None, answer["question"].lstrip("@")
+                else:
+                    raise
+            if dfid:
+                answer["question"] = dfid
+                answers.append(answer)
+            else:
+                result[sys_df] = Country(answer["answer"]) if sys_df == "country" else answer["answer"]
+        result["answers"] = super().to_internal_value(answers)
+        return result
 
 
 class AnswerSerializer(I18nAwareModelSerializer):
@@ -591,7 +636,7 @@ class OrderPositionPluginDataField(serializers.Field):
 class OrderPositionSerializer(I18nAwareModelSerializer):
     checkins = InlineCheckinSerializer(many=True, read_only=True)
     print_logs = PrintLogSerializer(many=True, read_only=True)
-    answers = AnswerSerializer(many=True)
+    answers = MixedAnswerListSerializer(child=AnswerSerializer(), source='*')
     downloads = PositionDownloadsField(source='*', read_only=True)
     order = serializers.SlugRelatedField(slug_field='code', read_only=True)
     pdf_data = PdfDataSerializer(source='*', read_only=True)
@@ -1041,7 +1086,7 @@ class OrderFeeCreateSerializer(I18nAwareModelSerializer):
 
 
 class OrderPositionCreateSerializer(I18nAwareModelSerializer):
-    answers = AnswerCreateSerializer(many=True, required=False)
+    answers = MixedAnswerListSerializer(child=AnswerCreateSerializer(required=False), source='*', required=False)
     addon_to = serializers.IntegerField(required=False, allow_null=True)
     secret = serializers.CharField(required=False)
     attendee_name = serializers.CharField(required=False, allow_null=True)

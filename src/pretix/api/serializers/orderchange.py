@@ -30,7 +30,7 @@ from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.order import (
     AnswerCreateSerializer, AnswerSerializer, CompatibleCountryField,
-    OrderFeeCreateSerializer, OrderPositionCreateSerializer,
+    MixedAnswerListSerializer, OrderFeeCreateSerializer, OrderPositionCreateSerializer,
 )
 from pretix.base.models import ItemVariation, Order, OrderFee, OrderPosition
 from pretix.base.services.orders import OrderChangeManager, OrderError
@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerializer):
     order = serializers.SlugRelatedField(slug_field='code', queryset=Order.objects.none(), required=True, allow_null=False)
-    answers = AnswerCreateSerializer(many=True, required=False)
+    answers = MixedAnswerListSerializer(child=AnswerCreateSerializer(required=False), source='*', required=False)
     addon_to = serializers.IntegerField(required=False, allow_null=True)
     secret = serializers.CharField(required=False)
     attendee_name = serializers.CharField(required=False, allow_null=True)
@@ -154,7 +154,7 @@ class OrderFeeCreateForExistingOrderSerializer(OrderFeeCreateSerializer):
 
 
 class OrderPositionInfoPatchSerializer(serializers.ModelSerializer):
-    answers = AnswerSerializer(many=True)
+    answers = MixedAnswerListSerializer(child=AnswerSerializer(), source='*')
     country = CompatibleCountryField(source='*')
     attendee_name = serializers.CharField(required=False)
 

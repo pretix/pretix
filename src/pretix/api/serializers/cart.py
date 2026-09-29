@@ -31,7 +31,7 @@ from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import (
-    AnswerCreateSerializer, AnswerSerializer, InlineSeatSerializer,
+    AnswerCreateSerializer, AnswerSerializer, InlineSeatSerializer, MixedAnswerListSerializer,
 )
 from pretix.base.models import SalesChannel, Seat, Voucher
 from pretix.base.models.orders import CartPosition
@@ -43,7 +43,7 @@ class TaxIncludedField(serializers.Field):
 
 
 class CartPositionSerializer(I18nAwareModelSerializer):
-    answers = AnswerSerializer(many=True)
+    answers = MixedAnswerListSerializer(child=AnswerSerializer(), source='*')
     seat = InlineSeatSerializer()
     includes_tax = TaxIncludedField(source='*')
 
@@ -55,7 +55,7 @@ class CartPositionSerializer(I18nAwareModelSerializer):
 
 
 class BaseCartPositionCreateSerializer(I18nAwareModelSerializer):
-    answers = AnswerCreateSerializer(many=True, required=False)
+    answers = MixedAnswerListSerializer(child=AnswerCreateSerializer(required=False), source='*', required=False)
     attendee_name = serializers.CharField(required=False, allow_null=True)
     includes_tax = serializers.BooleanField(required=False, allow_null=True)
 
