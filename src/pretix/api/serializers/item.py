@@ -33,6 +33,8 @@
 # License for the specific language governing permissions and limitations under the License.
 import os.path
 from decimal import Decimal
+
+from i18nfield.rest_framework import I18nField
 from itertools import zip_longest
 import logging
 
@@ -44,6 +46,8 @@ from django.db.models import QuerySet
 from django.utils.functional import cached_property, lazy
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError as DrfValidationError
+from rest_framework.serializers import as_serializer_error
 
 from pretix.api.serializers import (
     CompatDecimalField, SalesChannelMigrationMixin,
@@ -546,6 +550,100 @@ class LegacyDependencyValueField(serializers.CharField):
         return [data] if data else []
 
 
+
+system_datafield_numbers = [
+    QuestionnaireChild.SystemQuestion.ATTENDEE_NAME_PARTS.value,
+    QuestionnaireChild.SystemQuestion.ATTENDEE_EMAIL.value,
+    QuestionnaireChild.SystemQuestion.COMPANY.value,
+    QuestionnaireChild.SystemQuestion.STREET.value,
+    QuestionnaireChild.SystemQuestion.ZIPCODE.value,
+    QuestionnaireChild.SystemQuestion.CITY.value,
+    QuestionnaireChild.SystemQuestion.STATE.value,
+    QuestionnaireChild.SystemQuestion.COUNTRY.value,
+]
+
+
+def cook_id(questionnaire_child):
+    df_id = questionnaire_child.user_datafield_id + 100 if questionnaire_child.user_datafield_id else system_datafield_numbers.index(questionnaire_child.system_datafield)
+    assert questionnaire_child.questionnaire_id < 1000000000
+    return questionnaire_child.questionnaire_id * 1000000000 + df_id
+
+
+def uncook_id(id):
+    id = int(id)
+    if id > 1000000000:
+        qid, dfid = divmod(id, 1000000000)
+        if dfid >= 100:
+            return qid, dfid - 100, None
+        else:
+            return qid, None, system_datafield_numbers[dfid]
+    else:
+        return None, id, None
+
+
+class CompatQuestionSerializer(I18nAwareModelSerializer):
+    id = serializers.SerializerMethodField('cook_id', read_only=True)
+    question = I18nField(source='label', allow_null=True)
+    type = serializers.CharField(source='user_datafield.type', allow_null=True, default=Question.FieldType.TEXT)
+    #identifier = serializers.CharField(source='user_datafield.identifier', allow_null=True)
+    identifier = serializers.SerializerMethodField('get_identifier', read_only=True)
+    show_during_checkin = serializers.BooleanField(source='user_datafield.show_during_checkin', allow_null=True, default=False)
+    ask_during_checkin = serializers.SerializerMethodField('get_ask_during_checkin', read_only=True)
+    hidden = serializers.SerializerMethodField('get_hidden', read_only=True)
+    print_on_invoice = serializers.BooleanField(source='user_datafield.print_on_invoice', allow_null=True, default=False)
+    valid_number_min = serializers.IntegerField(source='user_datafield.valid_number_min', allow_null=True)
+    valid_number_max = serializers.IntegerField(source='user_datafield.valid_number_max', allow_null=True)
+    valid_date_min = serializers.DateField(source='user_datafield.valid_date_min', allow_null=True)
+    valid_date_max = serializers.DateField(source='user_datafield.valid_date_max', allow_null=True)
+    valid_datetime_min = serializers.DateTimeField(source='user_datafield.valid_datetime_min', allow_null=True)
+    valid_datetime_max = serializers.DateTimeField(source='user_datafield.valid_datetime_max', allow_null=True)
+    valid_string_length_max = serializers.IntegerField(source='user_datafield.valid_string_length_max', allow_null=True)
+    valid_string_length_min = serializers.IntegerField(source='user_datafield.valid_string_length_min', allow_null=True)
+    valid_file_portrait = serializers.BooleanField(source='user_datafield.valid_file_portrait', allow_null=True)
+    dependency_question = serializers.SerializerMethodField('cook_dependency_question_id', read_only=True)
+    dependency_value = serializers.SerializerMethodField('empty', read_only=True)
+    position = serializers.SerializerMethodField('get_position', read_only=True)
+    items = serializers.PrimaryKeyRelatedField(source='questionnaire.items', many=True, queryset=Item.objects.none(), allow_null=True, required=False)
+
+    options = InlineQuestionOptionSerializer(source='user_datafield.options', many=True, required=False, default=[])
+
+    class Meta:
+        model = QuestionnaireChild
+        fields = ('id', 'question', 'type', 'required', 'items', 'options', 'position',
+                  'ask_during_checkin', 'show_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
+                  'hidden', 'dependency_value', 'print_on_invoice', 'help_text', 'valid_number_min',
+                  'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
+                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait')
+
+    def __init__(self, *args, **kwargs):
+        self.fields['items'].child_relation.queryset = kwargs['context']['event'].items.all()
+        super().__init__(*args, **kwargs)
+
+    def cook_id(self, qc):
+        return cook_id(qc)
+
+    def cook_dependency_question_id(self, qc):
+        if qc.dependency_question:
+            return cook_id(qc.dependency_question)
+        else:
+            return None
+
+    def get_ask_during_checkin(self, qc):
+        return qc.questionnaire.type == Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
+
+    def get_hidden(self, qc):
+        return qc.questionnaire.type == Questionnaire.QuestionnaireType.ORDER_POSITION_HIDDEN
+
+    def get_identifier(self, qc):
+        return qc.user_datafield.identifier if qc.user_datafield else f'@{qc.system_datafield}'
+
+    def empty(self, qc):
+        return None
+
+    def get_position(self, qc):
+        return qc.questionnaire.position * 1000000000 + qc.position
+
+
 class DatafieldSerializer(I18nAwareModelSerializer):
     options = InlineQuestionOptionSerializer(many=True, required=False)
     identifier = serializers.CharField(allow_null=True)
@@ -553,7 +651,7 @@ class DatafieldSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'question', 'type', 'options',
+        fields = ('id', 'type', 'options',
                   'show_during_checkin', 'identifier',
                   'hidden', 'print_on_invoice', 'valid_number_min',
                   'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
@@ -649,10 +747,11 @@ class InlineQuestionnaireChildSerializer(I18nAwareModelSerializer):
     question = QuestionRefField(allow_null=True, source='*', queryset=Question.objects.none())
     dependency_question = QuestionRefField(allow_null=True, required=False, queryset=Question.objects.none())
     rendered_help_text = RenderedMarkdownField(read_only=True, source='help_text')
+    cooked_id = serializers.SerializerMethodField('cook_id', read_only=True)
 
     class Meta:
         model = QuestionnaireChild
-        fields = ('question', 'required', 'label', 'help_text', 'dependency_question', 'dependency_values', 'rendered_help_text')
+        fields = ('question', 'required', 'label', 'help_text', 'dependency_question', 'dependency_values', 'rendered_help_text', 'cooked_id')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -665,6 +764,9 @@ class InlineQuestionnaireChildSerializer(I18nAwareModelSerializer):
                 if value['user_datafield'].type not in (Question.TYPE_CHOICE, Question.TYPE_BOOLEAN, Question.TYPE_CHOICE_MULTIPLE):
                     raise ValidationError('Question dependencies can only be set to boolean or choice questions.')
         return value
+
+    def cook_id(self, qc):
+        return cook_id(qc)
 
 
 class QuestionnaireSerializer(I18nAwareModelSerializer):
@@ -728,7 +830,7 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
         questionnaire = super().create(validated_data)
         self.set_children(questionnaire, children_data)
         try:
-            questionnaire.check_constraints()
+            Questionnaire.check_constraints(questionnaire.event)
         except ValidationError as e:
             raise DrfValidationError(as_serializer_error(e))
         return questionnaire
@@ -740,7 +842,7 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
         if children_data is not None:
             self.set_children(questionnaire, children_data)
         try:
-            questionnaire.check_constraints()
+            Questionnaire.check_constraints(questionnaire.event)
         except ValidationError as e:
             raise DrfValidationError(as_serializer_error(e))
         return questionnaire

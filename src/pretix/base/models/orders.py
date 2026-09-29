@@ -1675,7 +1675,7 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
         elif system_datafield_name == 'state':
             return self.state
         elif system_datafield_name == 'country':
-            return self.country
+            return str(self.country)
         else:
             raise ValueError('Unknown system question name')
 

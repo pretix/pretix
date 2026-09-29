@@ -46,17 +46,17 @@ from rest_framework.response import Response
 
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.item import (
-    ItemAddOnSerializer, ItemBundleSerializer, ItemCategorySerializer,
+    CompatQuestionSerializer, ItemAddOnSerializer, ItemBundleSerializer, ItemCategorySerializer,
     ItemProgramTimeSerializer, ItemSerializer, ItemVariationSerializer,
     QuestionnaireSerializer, QuestionOptionSerializer, DatafieldSerializer,
-    QuotaSerializer,
+    QuotaSerializer, uncook_id,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
     CartPosition, Item, ItemAddOn, ItemBundle, ItemCategory, ItemProgramTime,
     ItemVariation, Question, QuestionOption, Quota,
 )
-from pretix.base.models.items import Questionnaire
+from pretix.base.models.items import Questionnaire, QuestionnaireChild
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.i18n import i18ncomp
@@ -460,7 +460,113 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
 
 
 with scopes_disabled():
-    class QuestionFilter(FilterSet):
+    class CompatQuestionFilter(FilterSet):
+        identifier = django_filters.CharFilter(field_name='question__identifier')
+        ask_during_checkin = django_filters.BooleanFilter(method='ask_during_checkin_qs')
+        sales_channel = django_filters.CharFilter(method='sales_channel_qs')
+
+        class Meta:
+            model = QuestionnaireChild
+            fields = ['required']
+
+        def ask_during_checkin_qs(self, qs, name, value):
+            return qs.filter(
+                questionnaire__type=Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN if value else Questionnaire.QuestionnaireType.ORDER_POSITION_SALE
+            )
+
+        def sales_channel_qs(self, qs, name, value):
+            return qs.filter(
+                Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels__identifier=value)
+            )
+
+
+class CompatQuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
+    serializer_class = CompatQuestionSerializer
+    queryset = QuestionnaireChild.objects.none()
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
+    filterset_class = CompatQuestionFilter
+    ordering_fields = ('questionnaire__position', 'position', 'id')
+    ordering = ('questionnaire__position', 'position', 'id')
+    permission = None
+    write_permission = 'event.items:write'
+
+    def get_queryset(self):
+        return QuestionnaireChild.objects.filter(
+            questionnaire__event=self.request.event,
+            # legacy compat only for position-level questions
+            questionnaire__type__startswith='P',
+        ).prefetch_related('user_datafield', 'user_datafield__options', 'questionnaire').all()
+
+    def get_object(self):
+        """
+        Returns the object the view is displaying.
+
+        You may want to override this if you need to provide non-standard
+        queryset lookups.  Eg if objects are referenced using multiple
+        keyword arguments in the url conf.
+        """
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Perform the lookup filtering.
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+
+        assert lookup_url_kwarg in self.kwargs, (
+            'Expected view %s to be called with a URL keyword argument '
+            'named "%s". Fix your URL conf, or set the `.lookup_field` '
+            'attribute on the view correctly.' %
+            (self.__class__.__name__, lookup_url_kwarg)
+        )
+
+        qid, dfid, sys_df = uncook_id(self.kwargs[lookup_url_kwarg])
+        if qid and sys_df:
+            obj = get_object_or_404(queryset, questionnaire__pk=qid, system_datafield=sys_df)
+        elif qid and dfid:
+            obj = get_object_or_404(queryset, questionnaire__pk=qid, user_datafield__pk=dfid)
+        else:
+            obj = get_object_or_404(queryset, user_datafield__pk=dfid)
+
+        # May raise a permission denied
+        self.check_object_permissions(self.request, obj)
+
+        return obj
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.question.added',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.question.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    @transaction.atomic()
+    def perform_destroy(self, instance):
+        instance.log_action(
+            'pretix.event.question.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
+        )
+        super().perform_destroy(instance)
+
+
+with scopes_disabled():
+    class DatafieldFilter(FilterSet):
         class Meta:
             model = Question
             fields = ['identifier']
@@ -470,7 +576,7 @@ class DatafieldViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = DatafieldSerializer
     queryset = Question.objects.none()
     filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
-    filterset_class = QuestionFilter
+    filterset_class = DatafieldFilter
     ordering_fields = ('id')
     ordering = ('id')
     permission = None
@@ -570,9 +676,16 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
 
 with scopes_disabled():
     class QuestionnaireFilter(FilterSet):
+        sales_channel = django_filters.CharFilter(method='sales_channel_qs')
+
         class Meta:
             model = Questionnaire
-            fields = ['type']
+            fields = ['type', 'items', 'sales_channel']
+
+        def sales_channel_qs(self, qs, name, value):
+            return qs.filter(
+                Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=value)
+            )
 
 
 class QuestionnaireViewSet(ConditionalListView, viewsets.ModelViewSet):
