@@ -23,6 +23,7 @@ import json
 import zoneinfo
 from datetime import date, datetime, timedelta
 from decimal import Decimal
+from unittest import mock
 from zoneinfo import ZoneInfo
 
 import pytest
@@ -36,6 +37,7 @@ from django_countries.fields import Country
 from django_scopes import scope
 from freezegun import freeze_time
 from i18nfield.strings import LazyI18nString
+from kombu.exceptions import OperationalError
 from tests.testdummy.signals import FoobazSalesChannel
 
 from pretix.base.decimal import round_decimal
@@ -54,9 +56,9 @@ from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
 )
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, _create_order, approve_order, cancel_order,
-    deny_order, expire_orders, reactivate_order, send_download_reminders,
-    send_expiry_warnings,
+    OrderChangeManager, OrderError, _create_order, _perform_order,
+    approve_order, cancel_order, deny_order, expire_orders, reactivate_order,
+    send_download_reminders, send_expiry_warnings,
 )
 from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.testutils.mock import mocker_context
@@ -349,6 +351,66 @@ def test_expiring(event):
     assert o1.transactions.count() == 1
     assert o2.transactions.count() == 2
     assert o2.transactions.aggregate(s=Sum(F('price') * F('count')))['s'] == Decimal('0.00')
+
+
+BROKER_REFUSES = mock.patch(
+    'celery.app.task.Task.apply_async', side_effect=OperationalError('[Errno 111] Connection refused')
+)
+
+
+# The payment commits as confirmed and the order is marked paid in a second transaction, so a failure between
+# them (here the broker refusing the publish of the confirmation's notification) leaves the order pending.
+@pytest.mark.xfail(strict=True, reason='the order of a confirmed payment is expired')
+@pytest.mark.django_db(transaction=True)
+def test_expiring_does_not_expire_the_order_of_a_confirmed_payment(event):
+    o = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING, locale='en',
+        datetime=now(), expires=now() + timedelta(days=5),
+        total=12,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
+    )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('12.00'), admission=True)
+    event.quotas.create(name='Q', size=None).items.add(ticket)
+    OrderPosition.objects.create(
+        order=o, item=ticket, variation=None,
+        price=Decimal("12.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
+    )
+    payment = o.payments.create(provider='manual', amount=o.total)
+    with BROKER_REFUSES, pytest.raises(OperationalError):
+        payment.confirm()
+    payment.refresh_from_db()
+    assert payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+
+    with freeze_time(now() + timedelta(days=30)):
+        expire_orders(None)
+
+    o.refresh_from_db()
+    assert o.status != Order.STATUS_EXPIRED
+
+
+# The order commits and its confirmation follows outside any transaction, so a failure there (here the broker
+# refusing the publish) leaves a customer with an order they were never told about.
+@pytest.mark.xfail(strict=True, reason='the customer of a placed order gets no confirmation')
+@pytest.mark.django_db(transaction=True)
+def test_a_placed_order_is_confirmed_when_the_broker_refuses_a_publish(event):
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    event.quotas.create(name='Q', size=None).items.add(ticket)
+    cp = CartPosition.objects.create(
+        event=event, cart_id='cart', item=ticket, price=23, expires=now() + timedelta(minutes=10)
+    )
+    payments = [{
+        'id': 'test1', 'provider': 'manual', 'max_value': None, 'min_value': None,
+        'multi_use_supported': False, 'info_data': {},
+    }]
+    djmail.outbox = []
+    with BROKER_REFUSES, pytest.raises(OperationalError):
+        _perform_order(event, payments, [cp.pk], 'admin@example.org', 'en', None, {}, 'web')
+
+    assert Order.objects.filter(email='admin@example.org').exists()
+    assert len(djmail.outbox) == 1
 
 
 @pytest.mark.django_db

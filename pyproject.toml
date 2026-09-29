@@ -112,6 +112,8 @@ dev = [
   "aiohttp==3.14.*",
   "coverage",
   "coveralls",
+  # src/tests/due_work: needs Python 3.12 or later, and is skipped below it.
+  "due-work-harness>=0.5.1; python_version >= '3.12'",
   "fakeredis==2.38.*",
   "flake8==7.3.*",
   "freezegun",
@@ -129,7 +131,8 @@ dev = [
   "pytest==9.1.*",
   "playwright",
   "responses",
-  "pypdfium2"
+  "pypdfium2",
+  "time-machine; python_version >= '3.12'",
 ]
 
 [project.entry-points."distutils.commands"]
