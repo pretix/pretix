@@ -221,7 +221,7 @@ PAYMENT_CONTRACT = DueWorkContract(
             'confirm() commits the payment as confirmed, then marks the order paid in a second transaction: a '
             'death between them, or a failing after-commit callback or refused publish (the notification of the '
             'confirmation is published in between), leaves the payment confirmed and the order pending, and '
-            'expire_orders later expires it'
+            'expire_orders later expires it (https://github.com/pretix/pretix/issues/6611)'
         ),
     },
 )
@@ -304,7 +304,8 @@ PLACEMENT_CONTRACT = DueWorkContract(
         'place an order': (
             'the order commits, then its confirmation, invoice and notifications follow outside any '
             'transaction: a death, a failing after-commit callback or a refused publish there leaves an order '
-            'that holds tickets, whose customer never receives its confirmation'
+            'that holds tickets, whose customer never receives its confirmation '
+            '(https://github.com/pretix/pretix/issues/6612)'
         ),
     },
 )

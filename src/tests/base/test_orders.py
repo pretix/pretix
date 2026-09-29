@@ -360,7 +360,7 @@ BROKER_REFUSES = mock.patch(
 
 # The payment commits as confirmed and the order is marked paid in a second transaction, so a failure between
 # them (here the broker refusing the publish of the confirmation's notification) leaves the order pending.
-@pytest.mark.xfail(strict=True, reason='the order of a confirmed payment is expired')
+@pytest.mark.xfail(strict=True, reason='https://github.com/pretix/pretix/issues/6611')
 @pytest.mark.django_db(transaction=True)
 def test_expiring_does_not_expire_the_order_of_a_confirmed_payment(event):
     o = Order.objects.create(
@@ -392,7 +392,7 @@ def test_expiring_does_not_expire_the_order_of_a_confirmed_payment(event):
 
 # The order commits and its confirmation follows outside any transaction, so a failure there (here the broker
 # refusing the publish) leaves a customer with an order they were never told about.
-@pytest.mark.xfail(strict=True, reason='the customer of a placed order gets no confirmation')
+@pytest.mark.xfail(strict=True, reason='https://github.com/pretix/pretix/issues/6612')
 @pytest.mark.django_db(transaction=True)
 def test_a_placed_order_is_confirmed_when_the_broker_refuses_a_publish(event):
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
