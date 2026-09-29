@@ -112,6 +112,7 @@ let form_handlers = function (el) {
     el.find("button[data-wait-seconds-enable], input[data-wait-seconds-enable]").each(function(i, input) {
         var s = parseInt(input.getAttribute("data-wait-seconds-enable")) || 0;
         var time = $("time", input) || $("time").appendTo(input);
+        var reltf = new Intl.RelativeTimeFormat($('body').attr('data-datetimelocale'), { style: "narrow" });
         // for a11y do not disable input, but do not allow submit
         function disable_submit(e) {
             e.preventDefault();
@@ -122,7 +123,7 @@ let form_handlers = function (el) {
         function wait() {
             time.attr("datetime", s+"s");
             if (s > 0) {
-                time.text("(" + s + "s)");
+                time.text("(" + reltf.format(s, "seconds") + ")");
                 window.setTimeout(wait, 1000);
                 s--;
             } else {
