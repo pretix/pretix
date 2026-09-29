@@ -2202,7 +2202,7 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
                 owner=self.request.user,
                 timezone=str(get_current_timezone()),
             )
-        if not self.scheduled:
+        if not self.scheduled and not self.scheduled_copy_from:
             initial = {
                 "mail_subject": gettext("Export: {title}").format(title=self.exporter.verbose_name),
                 "mail_template": gettext(
