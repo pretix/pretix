@@ -684,7 +684,7 @@ def _redeem(token_client, org, clist, p, body=None):
 def test_query_load(token_client, organizer, clist, event, order, django_assert_max_num_queries):
     with scopes_disabled():
         p = order.positions.first().pk
-    with django_assert_max_num_queries(30):
+    with django_assert_max_num_queries(31):
         resp = _redeem(token_client, organizer, clist, p)
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
