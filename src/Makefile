@@ -30,3 +30,5 @@ npminstall:
 npmbuild:
 	npm run build
 
+licenseheaders:
+	licenseheaders -t ../.licenseheader -E .py -x "*/migrations/*.py"
