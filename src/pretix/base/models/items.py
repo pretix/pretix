@@ -2087,6 +2087,7 @@ class QuestionnaireChild(LoggedModel):
         STREET = 'street', _('Street')
         ZIPCODE = 'zipcode', _('ZIP code')
         CITY = 'city', _('City')
+        STATE = 'state', _('State')
         COUNTRY = 'country', _('Country')
 
     questionnaire = models.ForeignKey(
