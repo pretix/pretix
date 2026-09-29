@@ -42,7 +42,7 @@ function addExistingDatafield (field) {
 		_cid: useId(),
 		question: field.id,
 		required: false,
-		label: field.question,
+		label: field.question ?? {en: field.internal_name},
 		help_text: {},
 		dependency_question: null,
 		dependency_values: [],
@@ -112,7 +112,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
     <summary class="questionnaire-panel-heading">
 			<div class=" editor-row">
 				<div class="editor-preview-area">
-					<input type="checkbox" @change="e => {setListState(props.questionnaire.items, selected_product, e.target.checked); emit('update')}" v-if="selected_product && !preview_mode" :checked="!isHidden">
+					<input type="checkbox" @change="e => {setListState(props.questionnaire.items, e.target.checked, selected_product); emit('update')}" v-if="selected_product && !preview_mode" :checked="!isHidden">
 					{{ props.questionnaire.internal_name }}
 					<span class="fa fa-warning" v-if="questionnaire._err_mes"></span>
 					<span class="fa fa-cog fa-spin" v-if="questionnaire._loading"></span>
@@ -125,7 +125,15 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 			</div>
     </summary>
     <div class="questionnaire-panel-body" v-if="!isHidden">
-			<div class="alert alert-warning" v-if="questionnaire._err_mes">{{ questionnaire._err_mes }}</div>
+			<div class="alert alert-warning" v-if="questionnaire._err_mes">
+        <dl v-if="questionnaire._err_mes.api_error">
+          <template v-for="(messages, key) in questionnaire._err_mes.api_error">
+            <dt>{{ key }}</dt>
+            <dd><ul><li v-for="message in messages">{{ message }}</li></ul></dd>
+          </template>
+        </dl>
+        <p v-else>{{ questionnaire._err_mes }}</p>
+      </div>
       <div class="form-horizontal" :id="`questionListParent${props.questionnaire.id}`">
 				<SlickList axis="y" v-model:list="props.questionnaire.children" useDragHandle :appendTo="`#questionListParent${props.questionnaire.id}`" @update:list="emit('update')">
 					<SlickItem v-for="(child, index) in props.questionnaire.children" :key="child._cid" :index="index">
@@ -167,7 +175,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
                   :title="gettext('Add existing data field')">
 
 				<div class="list-group">
-					<a href="javascript:" @click="addExistingDatafield(field)" v-for="field in datafields" class="list-group-item">{{ i18n_any(field.question) }}</a>
+					<a href="javascript:" @click="addExistingDatafield(field)" v-for="field in datafields" class="list-group-item">{{ field.internal_name ?? i18n_any(field.question) }}</a>
 				</div>
 
         <button @click="dlgAddExisting.close()" class="btn btn-default pull-right">{{ gettext('Cancel') }}</button>

@@ -668,6 +668,7 @@ class InlineQuestionnaireChildSerializer(I18nAwareModelSerializer):
 
 
 class QuestionnaireSerializer(I18nAwareModelSerializer):
+    items = serializers.PrimaryKeyRelatedField(many=True, queryset=Item.objects.none(), allow_null=True, required=False)
     limit_sales_channels = serializers.SlugRelatedField(
         slug_field="identifier",
         queryset=SalesChannel.objects.none(),
@@ -682,6 +683,7 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         self.fields['children'] = InlineQuestionnaireChildSerializer(many=True, required=True, context=kwargs['context'], partial=False)
+        self.fields['items'].child_relation.queryset = kwargs['context']['event'].items.all()
         self.fields['limit_sales_channels'].child_relation.queryset = kwargs['context']['event'].organizer.sales_channels.all()
         super().__init__(*args, **kwargs)
 
@@ -725,6 +727,10 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
         children_data = validated_data.pop('children') if 'children' in validated_data else []
         questionnaire = super().create(validated_data)
         self.set_children(questionnaire, children_data)
+        try:
+            questionnaire.check_constraints()
+        except ValidationError as e:
+            raise DrfValidationError(as_serializer_error(e))
         return questionnaire
 
     @transaction.atomic
@@ -733,6 +739,10 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
         questionnaire = super().update(instance, validated_data)
         if children_data is not None:
             self.set_children(questionnaire, children_data)
+        try:
+            questionnaire.check_constraints()
+        except ValidationError as e:
+            raise DrfValidationError(as_serializer_error(e))
         return questionnaire
 
     def set_children(self, questionnaire, new_data):
