@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-09-29 09:51+0000\n"
+"PO-Revision-Date: 2026-09-29 10:27+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -20757,28 +20757,30 @@ msgstr "ไม่รวม %(rate)s%%"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html
 msgid "with custom rules"
-msgstr ""
+msgstr "พร้อมกฎกำหนดเอง"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html
 msgid "Delete tax rule"
-msgstr ""
+msgstr "ลบกฎภาษี"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html
 #, python-format
 msgid ""
 "Are you sure you want to delete the tax rule <strong>%(taxrule)s</strong>?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบกฎภาษี <strong>%(taxrule)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html
 msgid ""
 "You cannot delete a tax rule that is in use for a product, has been in use "
 "for any existing orders, or is the default tax rule of the event."
 msgstr ""
+"คุณไม่สามารถลบกฎภาษีที่กำลังถูกใช้งานโดยสินค้า เคยถูกใช้งานในคำสั่งซื้อที่มีอยู่ หรือเป็นกฎภาษีเริ่มต้นข"
+"องอีเวนต์ได้"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
 #, python-format
 msgid "Tax rule: %(name)s"
-msgstr ""
+msgstr "กฎภาษี: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
 #, python-format
@@ -20788,10 +20790,13 @@ msgid ""
 "not responsible for the correct handling of taxes in your ticket shop. If in "
 "doubt, please contact a lawyer or tax consultant."
 msgstr ""
+"การตั้งค่าเหล่านี้จัดทำขึ้นสำหรับผู้ใช้ระดับสูง โปรดอ่าน<a href=\"%(docs)s\">เอกสารคู่มือการใช้งา"
+"น</a>เพื่อดูข้อมูลเพิ่มเติม โปรดทราบว่าเราจะไม่รับผิดชอบต่อความถูกต้องในการจัดการภาษีในร้านค้าตั๋ว"
+"ของคุณ หากมีข้อสงสัย โปรดปรึกษาทนายความหรือที่ปรึกษาด้านภาษี"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
 msgid "Custom rules"
-msgstr ""
+msgstr "กฎกำหนดเอง"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
 msgid ""
@@ -20801,28 +20806,32 @@ msgid ""
 "the first rule matches the order, it will be used and all further rules will "
 "be ignored. If no rule matches, tax will be charged."
 msgstr ""
+"การตั้งค่าเหล่านี้จัดทำขึ้นสำหรับผู้ใช้ระดับมืออาชีพที่มีสถานการณ์ทางภาษีเฉพาะเจาะจง หากคุณสร้างกฎใน"
+"ส่วนนี้ การตั้งค่าภาระภาษีย้อนกลับ (Reverse charge) ด้านบนจะถูกข้ามไป กฎจะถูกตรวจสอบตามลำดั"
+"บ และเมื่อมีกฎแรกที่ตรงกับคำสั่งซื้อ กฎนั้นจะถูกปรับใช้และกฎถัดไปทั้งหมดจะถูกข้ามไป หากไม่มีกฎใดตรง"
+"กัน ระบบจะทำการคิดภาษีตามปกติ"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
 msgid "All of these rules will only apply if an invoice address is set."
-msgstr ""
+msgstr "กฎทั้งหมดนี้จะถูกปรับใช้ก็ต่อเมื่อมีการระบุที่อยู่ใบแจ้งหนี้เท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
 msgid "Condition"
-msgstr ""
+msgstr "เงื่อนไข"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
 msgid "Calculation"
-msgstr ""
+msgstr "การคำนวณ"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 msgid "Add a new rule"
-msgstr ""
+msgstr "เพิ่มกฎใหม่"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "Change history"
-msgstr ""
+msgstr "ประวัติการเปลี่ยนแปลง"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
@@ -20832,17 +20841,19 @@ msgstr "ดาวน์โหลดตั๋ว"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html
 msgid "Download settings"
-msgstr ""
+msgstr "การตั้งค่าการดาวน์โหลด"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html
 msgid ""
 "You activated ticket downloads but no output provider is enabled. Be sure to "
 "enable a plugin and activate an output provider."
 msgstr ""
+"คุณเปิดใช้งานการดาวน์โหลดตั๋วแล้ว แต่ยังไม่ได้เปิดใช้งานผู้ให้บริการส่งออกข้อมูล (Output "
+"provider) โปรดตรวจสอบให้แน่ใจว่าได้เปิดใช้งานปลั๊กอินและเปิดใช้ผู้ให้บริการส่งออกข้อมูลแล้ว"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html
 msgid "Download formats"
-msgstr ""
+msgstr "รูปแบบการดาวน์โหลด"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html
 #, python-format
@@ -20851,14 +20862,16 @@ msgid ""
 "%(plugin_settings_href)s>plugin settings</a> and activate one or more ticket "
 "output plugins."
 msgstr ""
+"ไม่มีรูปแบบการส่งออกตั๋วที่พร้อมใช้งาน โปรดไปยัง <a %(plugin_settings_href)s>การตั้งค่าปลั๊กอิ"
+"น</a> และเปิดใช้งานปลั๊กอินการส่งออกตั๋วอย่างน้อยหนึ่งปลั๊กอิน"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html
 msgid "Download time"
-msgstr ""
+msgstr "เวลาดาวน์โหลด"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html
 msgid "Ticket codes"
-msgstr ""
+msgstr "รหัสตั๋ว"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html
 msgid ""
@@ -20866,18 +20879,23 @@ msgid ""
 "website. This way, your visitors can buy their ticket right away without "
 "leaving your website."
 msgstr ""
+"วิดเจ็ต pretix เป็นวิธีฝังร้านค้าตั๋วของคุณลงในเว็บไซต์อีเวนต์ ด้วยวิธีนี้ ผู้เข้าชมจะสามารถซื้อตั๋วได้ทัน"
+"ทีโดยไม่ต้องออกจากเว็บไซต์ของคุณ"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html
 msgid ""
 "To embed the widget onto your website, simply copy the following code to the "
 "<code>&lt;head&gt;</code> section of your website:"
 msgstr ""
+"ในการฝังวิดเจ็ตลงในเว็บไซต์ของคุณ เพียงคัดลอกโค้ดต่อไปนี้ไปวางในส่วน <code>&lt;head&gt;</"
+"code>  ของเว็บไซต์ของคุณ:"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html
 msgid ""
 "Then, copy the following code to the place of your website where you want "
 "the widget to show up:"
 msgstr ""
+"จากนั้น คัดลอกโค้ดต่อไปนี้ไปวางในตำแหน่งบนเว็บไซต์ที่คุณต้องการให้วิดเจ็ตแสดงผล:"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html
 #, python-format
@@ -20885,38 +20903,42 @@ msgid ""
 "JavaScript is disabled in your browser. To access our ticket shop without "
 "JavaScript, please &lt;a %(a_attr)s&gt;click here&lt;/a&gt;."
 msgstr ""
+"จาวาสคริปต์ (JavaScript) ในเบราว์เซอร์ของคุณถูกปิดใช้งาน หากต้องการเข้าสู่ร้านค้าตั๋วโดยไม่ใช้จ"
+"าวาสคริปต์ โปรด &lt;a <a %(a_attr)s>&gt;คลิกที่นี่&lt;/a&gt;."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html
 #: pretix/plugins/returnurl/templates/returnurl/settings.html
 msgid "Read our documentation for more information"
-msgstr ""
+msgstr "อ่านเอกสารคู่มือการใช้งานของเราเพื่อดูข้อมูลเพิ่มเติม"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html
 msgid ""
 "Using this form, you can generate a code to copy and paste to your website "
 "source."
 msgstr ""
+"คุณสามารถใช้แบบฟอร์มนี้เพื่อสร้างโค้ดสำหรับคัดลอกและวางลงในซอร์สโค้ดของเว็บไซต์คุณได้"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html
 msgid "Generate widget code"
-msgstr ""
+msgstr "สร้างโค้ดวิดเจ็ต"
 
 #: pretix/control/templates/pretixcontrol/events/create_base.html
 #, python-format
 msgid "Step %(step)s"
-msgstr ""
+msgstr "ขั้นตอนที่ %(step)s"
 
 #: pretix/control/templates/pretixcontrol/events/create_base.html
 msgid ""
 "Every event needs to be created as part of an organizer account. Currently, "
 "you do not have access to any organizer accounts."
 msgstr ""
+"ทุกอีเวนต์จำเป็นต้องถูกสร้างขึ้นภายใต้บัญชีผู้จัดงาน ในขณะนี้ คุณยังไม่มีสิทธิ์เข้าถึงบัญชีผู้จัดงานใดๆ"
 
 #: pretix/control/templates/pretixcontrol/events/create_base.html
 #: pretix/control/templates/pretixcontrol/organizers/create.html
 #: pretix/control/templates/pretixcontrol/organizers/index.html
 msgid "Create a new organizer"
-msgstr ""
+msgstr "สร้างผู้จัดงานใหม่"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
 #: pretix/control/templates/pretixcontrol/item/create.html
@@ -20931,11 +20953,11 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 #: pretix/control/templates/pretixcontrol/subevents/edit.html
 msgid "General information"
-msgstr ""
+msgstr "ข้อมูลทั่วไป"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
 msgid "Set to random"
-msgstr ""
+msgstr "ตั้งค่าแบบสุ่ม"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
 msgid ""
