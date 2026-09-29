@@ -30,7 +30,6 @@ from django.contrib.auth.password_validation import (
 )
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core import signing
-from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField

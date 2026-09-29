@@ -267,4 +267,3 @@ def monkeypatch_all_at_ready():
     monkeypatch_reportlab_imagereader()
     monkeypatch_csrf_middleware()
     monkeypatch_json_constants()
-
