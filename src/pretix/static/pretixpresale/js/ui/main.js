@@ -128,6 +128,7 @@ let form_handlers = function (el) {
             } else {
                 time.remove();
                 input.disabled = false;
+	        	input.classList.remove("disabled");
                 input.removeEventListener("click", disable_submit);
             }
         }
