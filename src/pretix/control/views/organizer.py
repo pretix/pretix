@@ -40,6 +40,8 @@ from collections import Counter
 from datetime import time, timedelta
 from decimal import Decimal
 from hashlib import sha1
+
+from django_scopes.forms import SafeModelChoiceField
 from itertools import groupby
 from json import JSONDecodeError
 
@@ -180,6 +182,11 @@ class InviteForm(forms.Form):
 
 class TokenForm(forms.Form):
     name = forms.CharField(required=False, label=_('Token name'))
+    sales_channel = SafeModelChoiceField(required=False, label=_('Sales channel'), queryset=SalesChannel.objects.none())
+
+    def __init__(self, organizer, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["sales_channel"].queryset = organizer.sales_channels.all()
 
 
 class OrganizerDetailViewMixin:
@@ -1019,7 +1026,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
     @cached_property
     def add_token_form(self):
         return TokenForm(data=(self.request.POST
-                               if self.request.method == "POST" and "name" in self.request.POST else None))
+                               if self.request.method == "POST" and "name" in self.request.POST else None), organizer=self.request.organizer)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -1164,10 +1171,14 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                 return redirect(self.get_success_url())
 
         elif "name" in self.request.POST and self.add_token_form.is_valid() and self.add_token_form.has_changed():
-            token = self.object.tokens.create(name=self.add_token_form.cleaned_data['name'])
+            token = self.object.tokens.create(
+                name=self.add_token_form.cleaned_data['name'],
+                sales_channel=self.add_token_form.cleaned_data['sales_channel']
+            )
             self.object.log_action(
                 'pretix.team.token.created', user=self.request.user, data={
                     'name': self.add_token_form.cleaned_data['name'],
+                    'sales_channel': self.add_token_form.cleaned_data['sales_channel'],
                     'id': token.pk
                 }
             )

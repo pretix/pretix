@@ -98,6 +98,7 @@
             <thead>
             <tr>
                 <th>{% trans "Name" %}</th>
+                <th>{% trans "Sales channel" %}</th>
                 <th width="150"></th>
             </tr>
             </thead>
@@ -111,6 +112,13 @@
                         {{ t.name }}
                         {% if not t.active %}
                             </del>
+                        {% endif %}
+                    </td>
+                    <td class="text-muted">
+                        {% if t.sales_channel %}
+                            {{ t.sales_channel }}
+                        {% else %}
+                            -
                         {% endif %}
                     </td>
                     <td class="text-right flip">
@@ -128,6 +136,9 @@
             <tr>
                 <td>
                     {% bootstrap_field add_token_form.name layout='inline' %}<br>
+                </td>
+                <td>
+                    {% bootstrap_field add_token_form.sales_channel layout='inline' %}<br>
                 </td>
                 <td class="text-right flip">
                     <button type="submit" class="btn btn-primary btn-sm btn-block">

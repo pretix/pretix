@@ -7,10 +7,10 @@
     <p>
         {% trans "The list below shows all teams that exist within this organizer." %}
     </p>
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <details class="panel panel-default" open data-stateful="organizers_teams_filter">
+        <summary class="panel-heading">
             <h3 class="panel-title">{% trans "Filter" %}</h3>
-        </div>
+        </summary>
         <form class="panel-body filter-form" action="" method="get">
             <div class="row">
                 <div class="col-xs-12">
@@ -24,7 +24,7 @@
                 </button>
             </div>
         </form>
-    </div>
+    </details>
     <a href="{% url "control:organizer.team.add" organizer=request.organizer.slug %}" class="btn btn-default">
         <span class="fa fa-plus"></span>
         {% trans "Create a new team" %}
@@ -65,11 +65,11 @@
                 </td>
                 <td class="text-right flip">
                     <a href="{% url "control:organizer.team" organizer=request.organizer.slug team=t.id %}"
-                            class="btn btn-default btn-sm"><i class="fa fa-list"></i></a>
+                            class="btn btn-default btn-sm" title="{% trans "Team members" %}"><i class="fa fa-list"></i></a>
                     <a href="{% url "control:organizer.team.edit" organizer=request.organizer.slug team=t.id %}"
-                            class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                            class="btn btn-default btn-sm" title="{% trans "Edit" %}"><i class="fa fa-edit"></i></a>
                     <a href="{% url "control:organizer.team.delete" organizer=request.organizer.slug team=t.id %}"
-                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                            class="btn btn-danger btn-sm" title="{% trans "Delete" %}"><i class="fa fa-trash"></i></a>
                 </td>
             </tr>
         {% endfor %}

@@ -489,6 +489,7 @@ class DeviceForm(forms.ModelForm):
             help_text=self.fields['security_profile'].help_text,
             choices=[(k, v.verbose_name) for k, v in get_all_security_profiles().items()],
         )
+        self.fields["sales_channel"].queryset = organizer.sales_channels.all()
 
     def clean(self):
         d = super().clean()
@@ -499,7 +500,7 @@ class DeviceForm(forms.ModelForm):
 
     class Meta:
         model = Device
-        fields = ['name', 'all_events', 'limit_events', 'security_profile', 'gate']
+        fields = ['name', 'all_events', 'limit_events', 'security_profile', 'gate', 'sales_channel']
         widgets = {
             'limit_events': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '#id_all_events',
@@ -507,7 +508,8 @@ class DeviceForm(forms.ModelForm):
             }),
         }
         field_classes = {
-            'limit_events': SafeEventMultipleChoiceField
+            'limit_events': SafeEventMultipleChoiceField,
+            "sales_channel": SafeModelChoiceField,
         }
 
 
