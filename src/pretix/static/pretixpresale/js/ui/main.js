@@ -730,6 +730,17 @@ $(function () {
 		// Prevent double-submit, see also https://github.com/pretix/pretix/issues/5836
 		$(this).addClass('disabled')
 	})
+	document.querySelectorAll('button[data-confirmation-text]').forEach((element) => {
+		element.addEventListener('click', (evt) => {
+			evt.preventDefault();
+			const onConfirm = () => evt.target.form.submit();
+			const confirmationModal = document.getElementById("confirmationmodal");
+			confirmationModal.querySelector("#confirmationmodal-description").innerHTML = element.dataset.confirmationText
+			confirmationModal.querySelector("#confirmationmodal-confirm").addEventListener('click', onConfirm, {'once': true})
+			confirmationModal.addEventListener('close', () => confirmationModal.removeEventListener('click', onConfirm))
+			confirmationModal.showModal()
+		})
+	})
 })
 
 function copy_answers (elements, answers) {
