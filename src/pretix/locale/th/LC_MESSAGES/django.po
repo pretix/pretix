@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-09-29 10:27+0000\n"
+"PO-Revision-Date: 2026-09-30 06:00+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -20967,21 +20967,28 @@ msgid ""
 "less than 10 characters that can be easily remembered, but you can also "
 "choose to use a random value."
 msgstr ""
+"นี่คือที่อยู่ URL ที่ผู้ใช้สามารถซื้อตั๋วของคุณได้ ควรมีความยาวสั้น ประกอบด้วยอักษรภาษาอังกฤษตัวพิมพ์เล็"
+"ก ตัวเลข จุด และเครื่องหมายยัติภังค์ (แดช) เท่านั้น และต้องไม่ซ้ำกับอีเวนต์อื่นของคุณ เราขอแนะนำใ"
+"ห้ใช้อักษรย่อหรือวันที่ที่มีความยาวน้อยกว่า 10 ตัวอักษรเพื่อให้จดจำได้ง่าย แต่คุณสามารถเลือกใช้ค่าแบบสุ่"
+"มได้เช่นกัน"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
 msgid ""
 "We will also use this in some places like order codes, invoice numbers or "
 "bank transfer references as an abbreviation to reference this event."
 msgstr ""
+"เราจะใช้ส่วนนี้ในบางตำแหน่งด้วย เช่น รหัสคำสั่งซื้อ เลขที่ใบแจ้งหนี้ หรือข้อมูลอ้างอิงการโอนเงินผ่านธ"
+"นาคาร เพื่อเป็นตัวย่ออ้างอิงถึงอีเวนต์นี้"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
 msgid ""
 "We strongly recommend against using short forms of more then 16 characters."
 msgstr ""
+"เราขอแนะนำอย่างยิ่งให้หลีกเลี่ยงการใช้รูปแบบย่อที่มีความยาวมากกว่า 16 ตัวอักษร"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
 msgid "Display settings"
-msgstr ""
+msgstr "การตั้งค่าการแสดงผล"
 
 #: pretix/control/templates/pretixcontrol/events/create_copy.html
 msgid ""
@@ -20989,6 +20996,8 @@ msgid ""
 "copy all products, categories, quotas, and questions as well as general "
 "event settings."
 msgstr ""
+"คุณต้องการคัดลอกการตั้งค่าจากอีเวนต์อื่นหรือไม่? ระบบจะคัดลอกสินค้า หมวดหมู่ โควตา และคำถามทั้งห"
+"มด รวมถึงการตั้งค่าทั่วไปของอีเวนต์"
 
 #: pretix/control/templates/pretixcontrol/events/create_copy.html
 msgid ""
@@ -20996,36 +21005,44 @@ msgid ""
 "need to change some settings manually, e.g. date and time settings and texts "
 "that contain the event name."
 msgstr ""
+"โปรดตรวจสอบการตั้งค่าทั้งหมดอย่างถี่ถ้วน คุณอาจยังคงต้องปรับเปลี่ยนการตั้งค่าบางรายการด้วยตนเอง "
+"เช่น การตั้งค่าวันที่และเวลา และข้อความที่มีชื่ออีเวนต์"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
 msgid "Event type"
-msgstr ""
+msgstr "ประเภทอีเวนต์"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
 msgid "Singular event or non-event shop"
-msgstr ""
+msgstr "อีเวนต์เดี่ยว หรือร้านค้าแบบไม่อิงอีเวนต์"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
 msgid ""
 "An event with individual configuration. If you create more events later, you "
 "can copy the event to save yourself some work."
 msgstr ""
+"อีเวนต์ที่มีการตั้งค่าเฉพาะตัว หากคุณสร้างอีเวนต์เพิ่มเติมในภายหลัง คุณสามารถคัดลอกอีเวนต์นี้เพื่อทุ่นแร"
+"งได้"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
 msgid ""
 "Examples: Conferences, workshops, trade fairs, one-off concerts, sale of "
 "digital content, multi-day events with combination tickets."
 msgstr ""
+"ตัวอย่าง: งานประชุมวิชาการ, เวิร์กช็อป, งานแสดงสินค้า, คอนเสิร์ตรอบเดียว, การขายเนื้อหาดิจิทั"
+"ล, อีเวนต์หลายวันที่มีตั๋วแบบแพ็กเกจรวม"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
 msgid "Event series or time slot booking"
-msgstr ""
+msgstr "ซีรีส์อีเวนต์ หรือการจองตามรอบเวลา"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
 msgid ""
 "A series of events that share the same configuration. They can still be "
 "different in their dates, locations, prices, and capacities."
 msgstr ""
+"ชุดอีเวนต์ที่ใช้การตั้งค่าเดียวกัน โดยยังสามารถมีความแตกต่างกันในเรื่องของวันที่ สถานที่ ราคา และจำ"
+"นวนตั๋วสูงสุดที่รับได้"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
 msgid ""
@@ -21033,46 +21050,51 @@ msgid ""
 "locations, museums, libraries, or swimming pools, events that need to be "
 "booked together in one cart."
 msgstr ""
+"ตัวอย่าง: การแสดงเดียวกันหลายรอบ, คอนเสิร์ตเดียวกันในหลายสถานที่, พิพิธภัณฑ์, หอสมุด, สระว่าย"
+"น้ำ หรืออีเวนต์ที่ต้องจองร่วมกันในตระกร้าสินค้าเดียว"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
 msgid ""
 "Please note that you will only be able to delete your event until the first "
 "order has been created."
 msgstr ""
+"โปรดทราบว่าคุณจะสามารถลบอีเวนต์ได้เฉพาะก่อนที่จะมีการสร้างคำสั่งซื้อแรกขึ้นเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/events/index.html
 msgid ""
 "The list below shows all events you have administrative access to. Click on "
 "the event name to access event details."
 msgstr ""
+"รายการด้านล่างแสดงอีเวนต์ทั้งหมดที่คุณมีสิทธิ์เข้าถึงในระดับผู้ดูแลระบบ คลิกที่ชื่ออีเวนต์เพื่อเข้าถึงรายละ"
+"เอียดอีเวนต์"
 
 #: pretix/control/templates/pretixcontrol/events/index.html
 #: pretix/control/templates/pretixcontrol/organizers/detail.html
 msgid "You currently do not have access to any events."
-msgstr ""
+msgstr "ในขณะนี้ คุณยังไม่มีสิทธิ์เข้าถึงอีเวนต์ใดๆ"
 
 #: pretix/control/templates/pretixcontrol/events/index.html
 #: pretix/control/templates/pretixcontrol/subevents/index.html
 msgid "Paid tickets per quota"
-msgstr ""
+msgstr "ตั๋วที่ชำระเงินแล้วตามโควตา"
 
 #: pretix/control/templates/pretixcontrol/events/index.html
 #: pretix/control/templates/pretixcontrol/organizers/detail.html
 #: pretix/control/views/dashboards.py pretix/control/views/typeahead.py
 msgctxt "subevent"
 msgid "No dates"
-msgstr ""
+msgstr "ยังไม่มีการกำหนดวันที่"
 
 #: pretix/control/templates/pretixcontrol/events/index.html
 #: pretix/control/templates/pretixcontrol/subevents/index.html
 msgid "More quotas"
-msgstr ""
+msgstr "โควตาเพิ่มเติม"
 
 #: pretix/control/templates/pretixcontrol/events/index.html
 #: pretix/control/templates/pretixcontrol/organizers/detail.html
 #: pretix/control/views/dashboards.py
 msgid "Shop disabled"
-msgstr ""
+msgstr "ปิดใช้งานร้านค้าแล้ว"
 
 #: pretix/control/templates/pretixcontrol/events/index.html
 #: pretix/control/templates/pretixcontrol/organizers/detail.html
@@ -21080,17 +21102,17 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/index.html
 #: pretix/control/views/dashboards.py
 msgid "On sale"
-msgstr ""
+msgstr "กำลังเปิดจำหน่าย"
 
 #: pretix/control/templates/pretixcontrol/events/index.html
 #: pretix/control/templates/pretixcontrol/organizers/detail.html
 msgid "Open event dashboard"
-msgstr ""
+msgstr "เปิดแดชบอร์ดอีเวนต์"
 
 #: pretix/control/templates/pretixcontrol/font_option.html
 msgctxt "typography"
 msgid "The quick brown fox jumps over the lazy dog."
-msgstr ""
+msgstr "เป็นมนุษย์สุดประเสริฐเลิศคุณค่า กว่าบรรดาฝูงสัตว์เดรัจฉาน"
 
 #: pretix/control/templates/pretixcontrol/fragment_log_filter_form.html
 #, fuzzy
@@ -21101,22 +21123,23 @@ msgstr "ระบุที่นั่งเฉพาะ"
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html
 msgid "Quota:"
-msgstr ""
+msgstr "โควตา:"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box.html
 #, python-format
 msgid "Numbers as of %(date)s"
-msgstr ""
+msgstr "ตัวเลข ณ วันที่ %(date)s"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html
 #, python-format
 msgid "Currently available: %(num)s"
-msgstr ""
+msgstr "จำนวนที่พร้อมใช้งานในปัจจุบัน: %(num)s"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid ""
 "This page is intended to help you use pretix in compliance with its license."
 msgstr ""
+"หน้านี้จัดทำขึ้นเพื่อช่วยให้คุณใช้งาน pretix ได้อย่างถูกต้องตามข้อกำหนดสิทธิ์การใช้งาน (License)"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid ""
@@ -21124,54 +21147,62 @@ msgid ""
 "page does not guarantee you are within the license. Only the original "
 "license text is legally binding."
 msgstr ""
+"ข้อความและผลลัพธ์ในหน้านี้ไม่มีผลผูกพันทางกฎหมาย และการกรอกข้อมูลในหน้านี้ไม่ได้การันตีว่าคุณปฏิบัติต"
+"ามข้อกำหนดสิทธิ์การใช้งานอย่างถูกต้อง มีเพียงข้อความสิทธิ์การใช้งานต้นฉบับเท่านั้นที่มีผลผูกพันทางกฎหม"
+"าย"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid ""
 "You should have received a copy of pretix' license together with your copy "
 "of pretix. You can also view the current version of the license file here:"
 msgstr ""
+"คุณควรได้รับสำเนาข้อกำหนดสิทธิ์การใช้งานของ pretix พร้อมกับซอฟต์แวร์ pretix ของคุณ คุณสามาร"
+"ถดูไฟล์สิทธิ์การใช้งานเวอร์ชันปัจจุบันได้ที่นี่:"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid "Answers to common questions about the license can be found here:"
 msgstr ""
+"คุณสามารถค้นหาคำตอบสำหรับคำถามที่พบบ่อยเกี่ยวกับข้อกำหนดสิทธิ์การใช้งานได้ที่นี่:"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid ""
 "For more information or to obtain a paid pretix Enterprise license, contact "
 "support@pretix.eu."
 msgstr ""
+"หากต้องการข้อมูลเพิ่มเติมหรือสั่งซื้อสิทธิ์การใช้งาน pretix Enterprise แบบชำระเงิน โปรดติดต่อ "
+"support@pretix.eu"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid "License settings and check"
-msgstr ""
+msgstr "การตั้งค่าและการตรวจสอบสิทธิ์การใช้งาน (License)"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid "Installation details"
-msgstr ""
+msgstr "รายละเอียดการติดตั้ง"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid "Installed plugins"
-msgstr ""
+msgstr "ปลั๊กอินที่ติดตั้งแล้ว"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid "Public information"
-msgstr ""
+msgstr "ข้อมูลสาธารณะ"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid "Save and check"
-msgstr ""
+msgstr "บันทึกและตรวจสอบ"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid "Check results"
-msgstr ""
+msgstr "ผลการตรวจสอบ"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid "The automated license check did not identify any issues."
-msgstr ""
+msgstr "การตรวจสอบสิทธิ์การใช้งานอัตโนมัติไม่พบปัญหาใดๆ"
 
 #: pretix/control/templates/pretixcontrol/global_message.html
 msgid "System message"
-msgstr ""
+msgstr "ข้อความจากระบบ"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid ""
@@ -21179,6 +21210,9 @@ msgid ""
 "pretix support when your license renews. It may also be requested by pretix "
 "support to aid debugging of problems."
 msgstr ""
+"หากคุณมีสิทธิ์การใช้งาน pretix Enterprise รายงานนี้จะต้องถูกนำส่งไปยังฝ่ายสนับสนุนของ "
+"pretix เมื่อคุณต่ออายุสิทธิ์การใช้งาน นอกจากนี้ ฝ่ายสนับสนุนของ pretix อาจขอรายงานนี้เพื่อช่วยใน"
+"การแก้ไขปัญหา (Debugging)"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid ""
@@ -21186,10 +21220,13 @@ msgid ""
 "debugging problems in your pretix installation, and verifying that your "
 "usage of pretix is in compliance with the Enterprise license you purchased."
 msgstr ""
+"รายงานนี้มีวัตถุประสงค์สองประการ คือ รวบรวมข้อมูลที่เป็นประโยชน์ซึ่งอาจช่วยแก้ไขปัญหาในการติดตั้ง "
+"pretix ของคุณ และตรวจสอบว่าการใช้งาน pretix ของคุณถูกต้องตามข้อกำหนดสิทธิ์การใช้งาน "
+"Enterprise ที่คุณสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "First month of license term:"
-msgstr ""
+msgstr "เดือนแรกของระยะเวลาสิทธิ์การใช้งาน:"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "January"
@@ -21241,15 +21278,15 @@ msgstr "ธันวาคม"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "Generate report"
-msgstr ""
+msgstr "สร้างรายงาน"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "Update check results"
-msgstr ""
+msgstr "ผลการตรวจสอบการอัปเดต"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "Update checks are disabled."
-msgstr ""
+msgstr "ปิดใช้งานการตรวจสอบการอัปเดตอยู่"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid ""
@@ -21257,108 +21294,119 @@ msgid ""
 "installation. Update checks are performed on a daily basis if your cronjob "
 "is set up properly."
 msgstr ""
+"ยังไม่มีการตรวจสอบการอัปเดตตั้งแต่การอัปเดตครั้งล่าสุดของระบบนี้ การตรวจสอบการอัปเดตจะดำเนินก"
+"ารเป็นประจำทุกวันหากตั้งค่าคิวงานอัตโนมัติ (Cronjob) อย่างถูกต้อง"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "Check for updates now"
-msgstr ""
+msgstr "ตรวจสอบการอัปเดตทันที"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "The last update check was not successful."
-msgstr ""
+msgstr "การตรวจสอบการอัปเดตครั้งล่าสุดไม่สำเร็จ"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "The pretix.eu server returned an error code."
-msgstr ""
+msgstr "เซิร์ฟเวอร์ pretix.eu ส่งคืนรหัสข้อผิดพลาด"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "The pretix.eu server could not be reached."
-msgstr ""
+msgstr "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ pretix.eu ได้"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "This installation appears to be a development installation."
 msgstr ""
+"ดูเหมือนว่าระบบนี้จะเป็นระบบสำหรับสภาพแวดล้อมการพัฒนา (Development installation)"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 #, python-format
 msgid "Last updated: %(date)s"
-msgstr ""
+msgstr "อัปเดตล่าสุดเมื่อ: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "Component"
-msgstr ""
+msgstr "คอมโพเนนต์ (Component)"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "Installed version"
-msgstr ""
+msgstr "เวอร์ชันที่ติดตั้งอยู่"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "Latest version"
-msgstr ""
+msgstr "เวอร์ชันล่าสุด"
 
 #: pretix/control/templates/pretixcontrol/global_update.html
 msgid "Update check settings"
-msgstr ""
+msgstr "การตั้งค่าการตรวจสอบการอัปเดต"
 
 #: pretix/control/templates/pretixcontrol/includes/logs.html
 msgid "View full log"
-msgstr ""
+msgstr "ดูบันทึกประวัติทั้งหมด (Full log)"
 
 #: pretix/control/templates/pretixcontrol/item/base.html
 msgid "Modify product:"
-msgstr ""
+msgstr "แก้ไขสินค้า:"
 
 #: pretix/control/templates/pretixcontrol/item/base.html
 msgid "Create product"
-msgstr ""
+msgstr "สร้างสินค้า"
 
 #: pretix/control/templates/pretixcontrol/item/base.html
 msgid "You will be able to adjust further settings in the next step."
-msgstr ""
+msgstr "คุณจะสามารถปรับแต่งการตั้งค่าอื่นๆ เพิ่มเติมได้ในขั้นตอนถัดไป"
 
 #: pretix/control/templates/pretixcontrol/item/base.html
 msgid ""
 "Please note that your product will <strong>not</strong> be available for "
 "sale until you have added your item to an existing or newly created quota."
 msgstr ""
+"โปรดทราบว่าสินค้าของคุณจะยัง<strong>ไม่</strong>เปิดจำหน่ายจนกว่าคุณจะเพิ่มสินค้านี้ไปยังโควตา"
+"ที่มีอยู่หรือโควตาที่สร้างขึ้นใหม่"
 
 #: pretix/control/templates/pretixcontrol/item/base.html
 #: pretix/control/templates/pretixcontrol/item/include_variations.html
 msgid "Manage quotas"
-msgstr ""
+msgstr "จัดการโควตา"
 
 #: pretix/control/templates/pretixcontrol/item/base.html
 #: pretix/control/templates/pretixcontrol/item/include_variations.html
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 msgid "Create a new quota"
-msgstr ""
+msgstr "สร้างโควตาใหม่"
 
 #: pretix/control/templates/pretixcontrol/item/base.html
 msgid ""
 "This product is currently not being sold since you configured below that it "
 "should only be available in a certain timeframe."
 msgstr ""
+"สินค้านี้ยังไม่เปิดจำหน่ายในขณะนี้ เนื่องจากคุณตั้งค่าไว้ด้านล่างว่าสินค้าจะพร้อมใช้งานเฉพาะในกรอบเวล"
+"าที่กำหนดเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/item/base.html
 msgid ""
 "This product is currently not being shown since you configured below that it "
 "should only be visible if a certain other quota is already sold out."
 msgstr ""
+"สินค้านี้ยังไม่แสดงผลในขณะนี้ เนื่องจากคุณตั้งค่าไว้ด้านล่างว่าจะแสดงผลก็ต่อเมื่อโควตาอื่นที่กำหนดขายหม"
+"ดแล้วเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/item/base.html
 msgid ""
 "This product is currently not being shown since you configured below that it "
 "should only be visible if a certain other product is already sold out."
 msgstr ""
+"สินค้านี้ยังไม่แสดงผลในขณะนี้ เนื่องจากคุณตั้งค่าไว้ด้านล่างว่าจะแสดงผลก็ต่อเมื่อสินค้าอื่นที่กำหนดขายหมด"
+"แล้วเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
 msgid "Product type"
-msgstr ""
+msgstr "ประเภทสินค้า"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
 msgid "Admission product"
-msgstr ""
+msgstr "สินค้าตั๋วเข้างาน"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
@@ -21367,6 +21415,8 @@ msgid ""
 "your event. By default, we will only offer ticket downloads for these "
 "products."
 msgstr ""
+"การซื้อสินค้านี้ทุกครั้งหมายถึงสิทธิ์ในการเข้างานสำหรับบุคคลหนึ่งคน โดยค่าเริ่มต้น ระบบจะอนุญาตให้ดาว"
+"น์โหลดตั๋วเฉพาะสินค้าประเภทนี้เท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
@@ -21374,6 +21424,8 @@ msgid ""
 "Only purchases of such products will be considered \"attendees\" for most "
 "statistical purposes or within some plugins."
 msgstr ""
+"เฉพาะการซื้อสินค้าประเภทนี้เท่านั้นที่จะถูกนับว่าเป็น \"ผู้เข้าร่วมงาน\" สำหรับวัตถุประสงค์ด้านสถิติส่วน"
+"ใหญ่หรือภายในปลั๊กอินบางตัว"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
@@ -21383,11 +21435,14 @@ msgid ""
 "except if the add-on products or bundled products represent additional "
 "people (e.g. group bundles)."
 msgstr ""
+"ตัวเลือกนี้ควรตั้งค่าไว้สำหรับรายการส่วนใหญ่ที่คุณเรียกว่า \"ตั๋ว\" สำหรับสินค้าเสริมหรือสินค้าแบบแพ็กเ"
+"กจ ควรตั้งค่าตัวเลือกนี้ที่ตั๋วหลัก เว้นแต่ว่าสินค้าเสริมหรือสินค้าในแพ็กเกจนั้นจะแทนจำนวนผู้เข้าร่วมงานเ"
+"พิ่มเติม (เช่น แพ็กเกจกลุ่ม)"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
 msgid "Non-admission product"
-msgstr ""
+msgstr "สินค้าที่ไม่ใช่ตั๋วเข้างาน"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
@@ -21396,16 +21451,19 @@ msgid ""
 "ticket downloads (but you can still enable ticket downloads in event "
 "settings or product settings)."
 msgstr ""
+"สินค้าที่ไม่ไดัแทนสิทธิ์ของบุคคล โดยค่าเริ่มต้น ระบบจะไม่เสนอตัวเลือกดาวน์โหลดตั๋ว (แต่คุณยังคงสามาร"
+"ถเปิดใช้งานการดาวน์โหลดตั๋วได้ในการตั้งค่าอีเวนต์หรือการตั้งค่าสินค้า)"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
 msgid "Examples: Merchandise, donations, gift cards, add-ons to a main ticket."
 msgstr ""
+"ตัวอย่าง: สินค้าที่ระลึก (Merchandise), เงินบริจาค, บัตรของขวัญ, สินค้าเสริมของตั๋วหลัก"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
 msgid "Personalization"
-msgstr ""
+msgstr "การระบุตัวบุคคล (Personalization)"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
@@ -21413,6 +21471,7 @@ msgid ""
 "When this ticket is purchased, the system will ask for a name or other "
 "details according to your event settings."
 msgstr ""
+"เมื่อมีการซื้อตั๋วนี้ ระบบจะขอให้กรอกชื่อหรือรายละเอียดอื่นๆ ตามการตั้งค่าอีเวนต์ของคุณ"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
@@ -21420,16 +21479,17 @@ msgid ""
 "This will currently have no effect since all data fields are turned off in "
 "event settings."
 msgstr ""
+"ตัวเลือกนี้จะยังไม่มีผลในขณะนี้ เนื่องจากฟิลด์ข้อมูลทั้งหมดถูกปิดใช้งานอยู่ในการตั้งค่าอีเวนต์"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
 msgid "Change settings"
-msgstr ""
+msgstr "เปลี่ยนการตั้งค่า"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
 msgid "Non-personalized ticket"
-msgstr ""
+msgstr "ตั๋วไม่ระบุชื่อบุคคล"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
@@ -21437,14 +21497,16 @@ msgid ""
 "The system will not ask for a name or other attendee details. This only "
 "affects system-provided fields, you can still add your own questions."
 msgstr ""
+"ระบบจะไม่ถามหาชื่อหรือรายละเอียดอื่นๆ ของผู้เข้าร่วมงาน โดยจะส่งผลเฉพาะฟิลด์ข้อมูลเริ่มต้นของระบ"
+"บเท่านั้น คุณยังคงสามารถเพิ่มคำถามของคุณเองได้"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 msgid "Product without variations"
-msgstr ""
+msgstr "สินค้าไม่มีรายการย่อย"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 msgid "Product with multiple variations"
-msgstr ""
+msgstr "สินค้าที่มีหลายรายการย่อย"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 msgid ""
@@ -21452,6 +21514,8 @@ msgid ""
 "their name, price, quota, or description. All other settings need to be the "
 "same."
 msgstr ""
+"สินค้านี้มีหลายรายการย่อยซึ่งมีความแตกต่างกันในด้านชื่อ ราคา โควตา หรือคำอธิบาย ส่วนการตั้งค่าอื่น"
+"ๆ ทั้งหมดจะยังคงเหมือนกัน"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 msgid ""
@@ -21459,22 +21523,24 @@ msgid ""
 "\"reduced\", merchandise with variations for different sizes, workshop add-"
 "on with variations for simultaneous workshops."
 msgstr ""
+"ตัวอย่าง: หมวดหมู่ตั๋วที่มีรายการย่อยเป็น \"ราคาเต็ม\" และ \"ส่วนลด\", สินค้าที่ระลึกที่มีรายการย่อ"
+"ยเป็นขนาดต่างๆ, สินค้าเสริมเวิร์กช็อปที่มีรายการย่อยเป็นเวิร์กช็อปที่จัดขึ้นพร้อมกัน"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 msgid "Quota settings"
-msgstr ""
+msgstr "การตั้งค่าโควตา"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 msgid "Price settings"
-msgstr ""
+msgstr "การตั้งค่าราคา"
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 msgid "Save and continue with more settings"
-msgstr ""
+msgstr "บันทึกและดำเนินการตั้งค่าเพิ่มเติม"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html
 msgid "Delete product"
-msgstr ""
+msgstr "ลบสินค้า"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html
 #, python-format
@@ -21482,24 +21548,24 @@ msgid ""
 "You cannot delete the product <strong>%(item)s</strong> because it already "
 "has been ordered."
 msgstr ""
+"คุณไม่สามารถลบสินค้า <strong>%(item)s</strong> ได้ เนื่องจากมีการสั่งซื้อสินค้านี้ไปแล้ว"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html
 #, python-format
 msgid "Are you sure you want to delete the product <strong>%(item)s</strong>?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบสินค้า <strong>%(item)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html
 #, python-format
 msgid "That will cause %(count)s voucher to be unusable."
 msgid_plural "That will cause %(count)s voucher to be unusable."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "การดำเนินการนี้จะทำให้คูปองจำนวน %(count)s ใบไม่สามารถใช้งานได้"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html
 msgid "Show affected vouchers"
-msgstr ""
+msgstr "แสดงคูปองที่ได้รับผลกระทบ"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html
 #, python-format
@@ -21507,11 +21573,13 @@ msgid ""
 "You cannot delete the product <strong>%(item)s</strong> because it already "
 "has been ordered, but you can deactivate it."
 msgstr ""
+"คุณไม่สามารถลบสินค้า <strong>%(item)s</strong> ได้ เนื่องจากมีการสั่งซื้อสินค้านี้ไปแล้ว แต่คุณส"
+"ามารถปิดใช้งานสินค้านี้ได้"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html
 msgid "Deactivate"
-msgstr ""
+msgstr "ปิดใช้งาน"
 
 #: pretix/control/templates/pretixcontrol/item/include_addons.html
 msgid ""
@@ -21642,52 +21710,56 @@ msgid ""
 "if you enter \"1 day\", the ticket will be valid until the end of the day it "
 "starts on."
 msgstr ""
+"หากคุณเลือกระยะเวลาเป็นวัน เดือน หรือปี อายุการใช้งานจะสิ้นสุด ณ เวลาสิ้นสุดของวันเต็มวันเสมอ "
+"(เที่ยงคืน) บวกด้วยจำนวนนาทีและชั่วโมงที่เลือกไว้ด้านบน วันที่เริ่มต้นจะถูกนับรวมในการคำนวณด้วย ดัง"
+"นั้นหากคุณระบุ \"1 วัน\" ตั๋วจะสามารถใช้งานได้จนถึงสิ้นสุดของวันที่เริ่มต้น"
 
 #: pretix/control/templates/pretixcontrol/item/index.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 #: pretix/control/templates/pretixcontrol/subevents/edit.html
 msgid "Additional settings"
-msgstr ""
+msgstr "การตั้งค่าเพิ่มเติม"
 
 #: pretix/control/templates/pretixcontrol/item/index.html
 msgid "Membership duration after purchase"
-msgstr ""
+msgstr "ระยะเวลาสมาชิกหลังการสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/item/index.html
 msgid "Product history"
-msgstr ""
+msgstr "ประวัติสินค้า"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html
 msgid ""
 "You can use categories to group multiple products together in an organized "
 "way."
 msgstr ""
+"คุณสามารถใช้หมวดหมู่เพื่อจัดกลุ่มสินค้าหลายรายการเข้าด้วยกันอย่างเป็นระเบียบได้"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html
 msgid "You haven't created any categories yet."
-msgstr ""
+msgstr "คุณยังไม่ได้สร้างหมวดหมู่ใดๆ"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html
 msgid "Create a new category"
-msgstr ""
+msgstr "สร้างหมวดหมู่ใหม่"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html
 msgid "Category type"
-msgstr ""
+msgstr "ประเภทหมวดหมู่"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 #: pretix/control/templates/pretixcontrol/items/index.html
 #: pretix/control/templates/pretixcontrol/organizers/properties.html
 msgid "Move up"
-msgstr ""
+msgstr "เลื่อนขึ้น"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 #: pretix/control/templates/pretixcontrol/items/index.html
 #: pretix/control/templates/pretixcontrol/organizers/properties.html
 msgid "Move down"
-msgstr ""
+msgstr "เลื่อนลง"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html
 #: pretix/control/templates/pretixcontrol/items/discounts.html
@@ -21697,6 +21769,7 @@ msgid ""
 "Click and drag this button to reorder. Double click to show buttons for "
 "reordering."
 msgstr ""
+"คลิกและลากปุ่มนี้เพื่อจัดลำดับใหม่ ดับเบิลคลิกเพื่อแสดงปุ่มสำหรับการจัดลำดับใหม่"
 
 #: pretix/control/templates/pretixcontrol/items/category.html
 msgid ""
@@ -21704,50 +21777,53 @@ msgid ""
 "feature and are not suitable for strictly ensuring that products are only "
 "available in certain combinations."
 msgstr ""
+"โปรดทราบว่าหมวดหมู่สินค้าขายเกี่ยวเนื่อง (Cross-selling) จัดทำขึ้นเพื่อเป็นฟีเจอร์ทางการตลาดเท่"
+"านั้น และไม่เหมาะสำหรับการบังคับให้สินค้าจำหน่ายได้เฉพาะในรูปแบบการรวมรายการที่กำหนดอย่างเคร่"
+"งครัด"
 
 #: pretix/control/templates/pretixcontrol/items/category.html
 msgid "Category history"
-msgstr ""
+msgstr "ประวัติหมวดหมู่"
 
 #: pretix/control/templates/pretixcontrol/items/category_delete.html
 msgid "Delete product category"
-msgstr ""
+msgstr "ลบหมวดหมู่สินค้า"
 
 #: pretix/control/templates/pretixcontrol/items/category_delete.html
 #, python-format
 msgid "Are you sure you want to delete the category <strong>%(name)s</strong>?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ <strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html
 msgid "Automatic discount"
-msgstr ""
+msgstr "ส่วนลดอัตโนมัติ"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html
 msgctxt "discount"
 msgid "Condition"
-msgstr ""
+msgstr "เงื่อนไข"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html
 msgid "Minimum cart content"
-msgstr ""
+msgstr "จำนวนรายการขั้นต่ำในตระกร้าสินค้า"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html
 msgid "OR"
-msgstr ""
+msgstr "หรือ"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html
 msgctxt "discount"
 msgid "Benefit"
-msgstr ""
+msgstr "สิทธิประโยชน์"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html
 msgid "Discount history"
-msgstr ""
+msgstr "ประวัติส่วนลด"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html
 msgid "Delete discount"
-msgstr ""
+msgstr "ลบส่วนลด"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html
 #, python-format
@@ -21756,11 +21832,13 @@ msgid ""
 "already has\n"
 "                been used as part of an order."
 msgstr ""
+"คุณไม่สามารถลบส่วนลด <strong>%(discount)s</strong> ได้\n"
+"เนื่องจากส่วนลดนี้ถูกใช้งานไปแล้วในคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html
 #, python-format
 msgid "Are you sure you want to delete the discount <strong>%(name)s</strong>?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบส่วนลด <strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html
 #, python-format
@@ -21768,10 +21846,12 @@ msgid ""
 "You cannot delete the discount <strong>%(name)s</strong> because it already "
 "has been used as part of an order, but you can deactivate it."
 msgstr ""
+"คุณไม่สามารถลบส่วนลด <strong>%(name)s</strong> ได้ เนื่องจากส่วนลดนี้ถูกใช้งานไปแล้วในคำสั่"
+"งซื้อ แต่คุณสามารถปิดใช้งานส่วนลดนี้ได้"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 msgid "Automatic discounts"
-msgstr ""
+msgstr "ส่วนลดอัตโนมัติ"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 #, python-format
@@ -21781,6 +21861,9 @@ msgid ""
 "can create group discounts like \"get 20%% off if you buy 3 or more "
 "tickets\" or \"buy 2 tickets, get 1 free\"."
 msgstr ""
+"ด้วยส่วนลดอัตโนมัติ คุณสามารถมอบส่วนลดสำหรับการสั่งซื้อของลูกค้าได้โดยอัตโนมัติตามเงื่อนไขที่กำหนด "
+"ตัวอย่างเช่น คุณสามารถสร้างส่วนลดกลุ่ม เช่น \"รับส่วนลด 20%% เมื่อซื้อตั๋วตั้งแต่ 3 ใบขึ้นไป\" หรือ "
+"\"ซื้อตั๋ว 2 ใบ แถมฟรี 1 ใบ\""
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 msgid ""
@@ -21790,6 +21873,10 @@ msgid ""
 "purchases (\"buy a package of 10 you can turn into individual tickets "
 "later\"), you can use customer accounts and memberships instead."
 msgstr ""
+"ส่วนลดอัตโนมัติจะเปิดใช้งานให้แก่ลูกค้าทุกคนตราบใดที่ส่วนลดนั้นยังมีผลอยู่ หากคุณต้องการมอบราคาสุดพิเ"
+"ศษให้แก่ลูกค้าเฉพาะกลุ่ม คุณสามารถใช้คูปองแทนได้ หากคุณต้องการมอบส่วนลดครอบคลุมการสั่งซื้อหลายค"
+"รั้ง (\"ซื้อแพ็กเกจ 10 ใบเพื่อนำไปแลกเป็นตั๋วรายใบในภายหลัง\") คุณสามารถใช้บัญชีลูกค้าและระบบส"
+"มาชิกแทนได้"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 msgid ""
@@ -21797,6 +21884,8 @@ msgid ""
 "are not applied if an existing order is changed through any of the available "
 "options."
 msgstr ""
+"ส่วนลดจะถูกปรับใช้โดยอัตโนมัติเฉพาะในการสั่งซื้อครั้งแรกเท่านั้น จะไม่ถูกปรับใช้หากคำสั่งซื้อที่มีอยู่แล้วถู"
+"กเปลี่ยนแปลงผ่านตัวเลือกใดๆ ก็ตามที่เปิดให้ใช้งาน"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 msgid ""
@@ -21804,45 +21893,47 @@ msgid ""
 "overlapping discounts, the first one in the order of the list below will "
 "apply."
 msgstr ""
+"สินค้าแต่ละรายการในตระกร้าสามารถรับส่วนลดได้เพียงหนึ่งรายการเท่านั้น หากคุณมีส่วนลดที่ซ้อนทับกัน ส่"
+"วนลดรายการแรกตามลำดับในรายการด้านล่างจะมีผลใช้งาน"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 msgid "You haven't created any discounts yet."
-msgstr ""
+msgstr "คุณยังไม่ได้สร้างส่วนลดใดๆ"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 msgid "Create a new discount"
-msgstr ""
+msgstr "สร้างส่วนลดใหม่"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 #: pretix/control/templates/pretixcontrol/items/index.html
 msgid ""
 "Currently unavailable since a limited timeframe for this product has been set"
-msgstr ""
+msgstr "ไม่พร้อมใช้งานในขณะนี้ เนื่องจากมีการกำหนดกรอบเวลาสำหรับสินค้านี้ไว้"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 msgid "Condition:"
-msgstr ""
+msgstr "เงื่อนไข:"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 msgid "Applies to:"
-msgstr ""
+msgstr "นำไปใช้กับ:"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html
 msgid "Closed"
-msgstr ""
+msgstr "ปิดรับการสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html
 msgid "Sold out (pending orders)"
-msgstr ""
+msgstr "ขายหมดแล้ว (รอการชำระเงิน)"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html
 #, python-format
 msgid "%(num)s available"
-msgstr ""
+msgstr "มีพร้อมจำหน่าย %(num)s รายการ"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html
 msgid "Fully reserved"
-msgstr ""
+msgstr "ถูกจองเต็มจำนวนแล้ว"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
@@ -21857,7 +21948,7 @@ msgstr "ขายหมดแล้ว"
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "taxes"
-msgstr ""
+msgstr "ภาษี"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 msgid ""
@@ -21866,83 +21957,85 @@ msgid ""
 "the right to change the order of products or move products to a different "
 "category."
 msgstr ""
+"ด้านล่างนี้คือรายการสินค้าทั้งหมดที่มีอยู่ คุณสามารถคลิกที่ชื่อสินค้าเพื่อตรวจสอบและแก้ไขรายละเอียดสินค้า"
+"ได้ นอกจากนี้ คุณยังสามารถใช้ปุ่มทางขวามือเพื่อเปลี่ยนลำดับของสินค้า หรือย้ายสินค้าไปยังหมวดหมู่อื่นได้"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 msgid "You haven't created any products yet."
-msgstr ""
+msgstr "คุณยังไม่ได้สร้างสินค้าใดๆ"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 msgid "Create a new product"
-msgstr ""
+msgstr "สร้างสินค้าใหม่"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 msgid "Personalized admission ticket"
-msgstr ""
+msgstr "ตั๋วเข้างานแบบระบุชื่อบุคคล"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 msgid "Admission ticket without personalization"
-msgstr ""
+msgstr "ตั๋วเข้างานแบบไม่ระบุชื่อบุคคล"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 msgid "Product with variations"
-msgstr ""
+msgstr "สินค้าที่มีหลายรายการย่อย"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 msgctxt "subevent"
 msgid "Product assigned to seating plan for one or more dates"
-msgstr ""
+msgstr "สินค้าถูกผูกไว้กับผังที่นั่งสำหรับหนึ่งวันที่หรือมากกว่า"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 msgid "Product assigned to seating plan"
-msgstr ""
+msgstr "สินค้าถูกผูกไว้กับผังที่นั่ง"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 msgid "Only available as an add-on product"
-msgstr ""
+msgstr "สามารถซื้อเป็นสินค้าเสริมได้เท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 msgid "Only available as part of a bundle"
-msgstr ""
+msgstr "สามารถซื้อเป็นส่วนหนึ่งของแพ็กเกจเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 msgid "Can only be bought using a voucher"
-msgstr ""
+msgstr "สามารถซื้อได้โดยใช้คูปองเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(taxname)s"
-msgstr ""
+msgstr "<strong>บวกเพิ่ม</strong> %(taxname)s %(rate)s%%"
 
 #: pretix/control/templates/pretixcontrol/items/index.html
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
-msgstr ""
+msgstr "รวม %(taxname)s %(rate)s%%"
 
 #: pretix/control/templates/pretixcontrol/items/question.html
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 #, python-format
 msgid "Question: %(name)s"
-msgstr ""
+msgstr "คำถาม: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/items/question.html
 msgid "Edit question"
-msgstr ""
+msgstr "แก้ไขคำถาม"
 
 #: pretix/control/templates/pretixcontrol/items/question.html
 msgid "No permission to view answers."
-msgstr ""
+msgstr "ไม่มีสิทธิ์ในการดูคำตอบ"
 
 #: pretix/control/templates/pretixcontrol/items/question.html
 msgid "No matching answers found."
-msgstr ""
+msgstr "ไม่พบคำตอบที่ตรงกัน"
 
 #: pretix/control/templates/pretixcontrol/items/question.html
 msgid "You need to assign the question to a product to collect answers."
-msgstr ""
+msgstr "คุณจำเป็นต้องผูกคำถามนี้เข้ากับสินค้าเพื่อเริ่มเก็บคำตอบ"
 
 #: pretix/control/templates/pretixcontrol/items/question.html
 msgid "Count"
@@ -21951,38 +22044,39 @@ msgstr "จำนวน"
 #: pretix/control/templates/pretixcontrol/items/question.html
 #, python-format
 msgid "%% of answers"
-msgstr ""
+msgstr "%% ของคำตอบทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/items/question.html
 #, python-format
 msgid "%% of tickets"
-msgstr ""
+msgstr "%% ของตั๋วทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/items/question.html
 #: pretix/control/templates/pretixcontrol/order/transactions.html
 #: pretix/plugins/reports/accountingreport.py
 msgid "Sum"
-msgstr ""
+msgstr "ผลรวม"
 
 #: pretix/control/templates/pretixcontrol/items/question.html
 msgid "Question history"
-msgstr ""
+msgstr "ประวัติคำถาม"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html
 msgid "Delete question"
-msgstr ""
+msgstr "ลบคำถาม"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html
 #, python-format
 msgid ""
 "Are you sure you want to delete the question <strong>%(question)s</strong>?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบคำถาม <strong>%(question)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html
 msgid ""
 "All answers to the question given by the buyers of the following products "
 "will be <strong>lost</strong>."
 msgstr ""
+"คำตอบทั้งหมดสำหรับคำถามนี้จากผู้ซื้อสินค้าต่อไปนี้จะ<strong>สูญหาย</strong>"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html
 #, python-format
@@ -21990,10 +22084,12 @@ msgid ""
 "If you want to keep the answers, <a href=\"%(url)s\">edit the question</a> "
 "and set it to hidden."
 msgstr ""
+"หากคุณต้องการเก็บรักษาคำตอบไว้ <a href=\"%(url)s\">โปรดแก้ไขคำถาม</a>และตั้งค่าเป็นซ่อนไ"
+"ว้"
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html
 msgid "Delete question and all answers"
-msgstr ""
+msgstr "ลบคำถามและคำตอบทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 msgid ""
@@ -22001,14 +22097,18 @@ msgid ""
 "select Yes and No is not accepted. If you want to allow both options, do not "
 "make this field required."
 msgstr ""
+"หากคุณทำเครื่องหมายให้คำถามประเภท ใช่/ไม่ใช่ เป็นฟิลด์ที่ต้องระบุ (Required) นั่นหมายความว่าผู้ใ"
+"ช้จำเป็นต้องเลือก \"ใช่\" เท่านั้น และระบบจะไม่ยอมรับตัวเลือก \"ไม่ใช่\" หากคุณต้องการอนุญาตให้"
+"เลือกได้ทั้งสองตัวเลือก อย่าตั้งค่าฟิลด์นี้เป็นฟิลด์ที่ต้องระบุ"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 msgid "Answer options"
-msgstr ""
+msgstr "ตัวเลือกคำตอบ"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 msgid "Only applicable if you choose 'Choose one/multiple from a list' above."
 msgstr ""
+"ใช้ได้เฉพาะกรณีที่คุณเลือก 'เลือกหนึ่งตัวเลือก/หลายตัวเลือกจากรายการ' ด้านบนเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 msgid ""
@@ -22016,23 +22116,25 @@ msgid ""
 "statistical data on customers who previously selected this option, and when "
 "such customers edit their answers, they need to select a different option."
 msgstr ""
+"หากคุณลบตัวเลือกคำตอบ คุณจะไม่สามารถดูข้อมูลทางสถิติของลูกค้าที่เคยเลือกตัวเลือกนี้ได้อีกต่อไป และเ"
+"มื่อลูกค้าเหล่านั้นแก้ไขคำตอบ พวกเขาจะต้องเลือกตัวเลือกอื่น"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 #, python-format
 msgid "Answer option %(id)s"
-msgstr ""
+msgstr "ตัวเลือกคำตอบ %(id)s"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 msgid "New answer option"
-msgstr ""
+msgstr "ตัวเลือกคำตอบใหม่"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 msgid "Add a new option"
-msgstr ""
+msgstr "เพิ่มตัวเลือกใหม่"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html
 msgid "Question dependency"
-msgstr ""
+msgstr "เงื่อนไขความเชื่อมโยงของคำถาม (Question dependency)"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid ""
@@ -22040,14 +22142,16 @@ msgid ""
 "ticket. If you provide food, one example might be to ask your users about "
 "dietary requirements."
 msgstr ""
+"คำถามช่วยให้ผู้เข้าร่วมงานของคุณสามารถกรอกข้อมูลเพิ่มเติมเกี่ยวกับตั๋วของตนเองได้ ตัวอย่างเช่น หาก"
+"คุณมีอาหารรับรอง คุณอาจถามผู้ใช้เกี่ยวกับข้อจำกัดด้านอาหาร"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new per-ticket question"
-msgstr ""
+msgstr "สร้างคำถามใหม่ระดับตั๋ว (Per-ticket)"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new order-level question"
-msgstr ""
+msgstr "สร้างคำถามใหม่ระดับคำสั่งซื้อ (Order-level)"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 #, fuzzy
@@ -22060,22 +22164,23 @@ msgid ""
 "These questions are asked for every ticket, so possibly multiple times in "
 "the same order."
 msgstr ""
+"คำถามเหล่านี้จะถูกถามสำหรับตั๋วทุกใบ ดังนั้นอาจถูกถามหลายครั้งภายในคำสั่งซื้อเดียวกัน"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new question"
-msgstr ""
+msgstr "สร้างคำถามใหม่"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "System question"
-msgstr ""
+msgstr "คำถามของระบบ"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Ask during check-in"
-msgstr ""
+msgstr "ถามระหว่างการลงทะเบียนเข้างาน (Check-in)"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "All personalized products"
-msgstr ""
+msgstr "สินค้าแบบระบุชื่อบุคคลทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 #, fuzzy
@@ -22088,12 +22193,14 @@ msgid ""
 "This functionality is in active development and expected to change "
 "significantly over the coming months."
 msgstr ""
+"ฟังก์ชันนี้อยู่ในระหว่างการพัฒนาอย่างต่อเนื่อง และคาดว่าจะมีการเปลี่ยนแปลงอย่างมีนัยสำคัญในอีกไม่กี่เดื"
+"อนข้างหน้า"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid ""
 "Per-order questions are currently not supported and will not be displayed in "
 "pretixPOS."
-msgstr ""
+msgstr "คำถามระดับคำสั่งซื้อยังไม่รองรับในขณะนี้ และจะไม่ถูกแสดงผลใน pretixPOS"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 #, fuzzy
@@ -22105,15 +22212,15 @@ msgstr "กำหนดให้ต้องระบุหมายเลขโ
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
 #, python-format
 msgid "Quota: %(name)s"
-msgstr ""
+msgstr "โควตา: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 msgid "Edit quota"
-msgstr ""
+msgstr "แก้ไขโควตา"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 msgid "Open quota and disable closing"
-msgstr ""
+msgstr "เปิดโควตาและปิดใช้งานการปิดโควตาอัตโนมัติ"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 msgid ""
@@ -22121,10 +22228,12 @@ msgid ""
 "through cancellations, they will not become available again unless you "
 "manually re-open the quota on this page."
 msgstr ""
+"โควตานี้ขายหมดแล้วและถูกปิดอยู่ แม้ว่าจะมีตั๋วว่างกลับมา เช่น ผ่านการยกเลิก ตั๋วเหล่านั้นก็จะไม่เปิดจำ"
+"หน่ายอีกครั้งจนกว่าคุณจะเปิดโควตานี้ใหม่ด้วยตนเองในหน้านี้"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 msgid "Open quota"
-msgstr ""
+msgstr "เปิดโควตา"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 msgid ""
@@ -22132,35 +22241,40 @@ msgid ""
 "theoretically available, but will not be sold unless you manually re-open "
 "the quota."
 msgstr ""
+"โควตานี้ถูกปิดเนื่องจากเคยขายหมดมาก่อน โดยหลักการแล้วตั๋วยังมีอยู่ แต่จะไม่ถูกนำมาขายจนกว่าคุณจะเ"
+"ปิดโควตานี้ใหม่ด้วยตนเอง"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 msgid "Usage overview"
-msgstr ""
+msgstr "ภาพรวมการใช้งาน"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 msgid "Availability calculation"
-msgstr ""
+msgstr "การคำนวณจำนวนตั๋วที่พร้อมใช้งาน"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 msgid ""
 "A plugin is active that might modify the actual result of this quota from "
 "what you see here."
 msgstr ""
+"มีปลั๊กอินเปิดใช้งานอยู่อาจส่งผลให้ผลลัพธ์จริงของโควตานี้แตกต่างจากที่แสดงที่นี่"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 #, python-format
 msgid "This quota is currently overbooked by %(num)s tickets."
-msgstr ""
+msgstr "โควตานี้มียอดจองเกิน (Overbooked) อยู่ %(num)s ใบในขณะนี้"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 msgid ""
 "Your event contains vouchers that affect products covered by this quota and "
 "that allow a user to buy products even if this quota is sold out."
 msgstr ""
+"อีเวนต์ของคุณมีคูปองที่ส่งผลต่อสินค้าในโควตานี้ และอนุญาตให้ผู้ใช้ซื้อสินค้าได้แม้ว่าโควตานี้จะขายหมดแล้ว"
+"ก็ตาม"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html
 msgid "Quota history"
-msgstr ""
+msgstr "ประวัติโควตา"
 
 #: pretix/control/templates/pretixcontrol/items/quota_bulk_edit.html
 #, fuzzy
@@ -22174,12 +22288,12 @@ msgstr "เลือกได้หลายรายการจากราย
 #: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #, python-format
 msgid "%(number)s selected"
-msgstr ""
+msgstr "เลือกแล้ว %(number)s รายการ"
 
 #: pretix/control/templates/pretixcontrol/items/quota_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
 msgid "Items"
-msgstr ""
+msgstr "รายการสินค้า"
 
 #: pretix/control/templates/pretixcontrol/items/quota_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
@@ -22188,28 +22302,31 @@ msgid ""
 "applied to. If you apply two quotas to the same product, it will only be "
 "available if <strong>both</strong> quotas have capacity left."
 msgstr ""
+"โปรดเลือกสินค้าหรือรายการย่อยของสินค้าที่ต้องการนำโควตานี้ไปใช้ หากคุณใช้โควตาสองรายการกับสินค้"
+"าเดียวกัน สินค้านั้นจะพร้อมจำหน่ายก็ต่อเมื่อโควตาทั้ง<strong>สอง</strong>ยังมีจำนวนคงเหลือเท่านั้"
+"น"
 
 #: pretix/control/templates/pretixcontrol/items/quota_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html
 msgid "Advanced options"
-msgstr ""
+msgstr "การตั้งค่าระดับสูง"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html
 msgid "Delete quota"
-msgstr ""
+msgstr "ลบโควตา"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html
 #, python-format
 msgid "Are you sure you want to delete the quota <strong>%(quota)s</strong>?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบโควตา <strong>%(quota)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html
 msgid "The following products might be no longer available for sale:"
-msgstr ""
+msgstr "สินค้าต่อไปนี้อาจไม่พร้อมจำหน่ายอีกต่อไป:"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete_bulk.html
 msgid "Delete quotas"
-msgstr ""
+msgstr "ลบโควตาหลายรายการ"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete_bulk.html
 #, fuzzy, python-format
@@ -22229,15 +22346,20 @@ msgid ""
 "total number of tickets sold and the number of a specific ticket type at the "
 "same time."
 msgstr ""
+"เพื่อให้สินค้าของคุณสามารถเปิดจำหน่ายได้จริง คุณจำเป็นต้องกำหนดโควตาด้วย โควตาจะเป็นตัวกำหนดจ"
+"ำนวนสินค้าที่ pretix จะเปิดขาย ด้วยวิธีนี้ คุณสามารถตั้งค่าได้ว่าอีเวนต์ของคุณสามารถรองรับผู้เข้าร่วม"
+"งานได้ไม่จำกัดจำนวน หรือจำกัดจำนวนผู้เข้าร่วมงานไว้ คุณสามารถผูกสินค้าหนึ่งรายการเข้ากับหลายโคว"
+"ตาเพื่อตอบสนองความต้องการที่ซับซ้อนยิ่งขึ้นได้ เช่น หากคุณต้องการจำกัดจำนวนตั๋วรวมที่ขายได้ทั้งหมด ไ"
+"ปพร้อมๆ กับการจำกัดจำนวนตั๋วเฉพาะประเภท"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 msgid "You haven't created any quotas yet."
-msgstr ""
+msgstr "คุณยังไม่ได้สร้างโควตาใดๆ"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 #: pretix/control/templates/pretixcontrol/subevents/detail.html
 msgid "Capacity left"
-msgstr ""
+msgstr "ความจุคงเหลือ"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 #: pretix/control/templates/pretixcontrol/orders/index.html
@@ -22247,7 +22369,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/index.html
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "select row for batch-operation"
-msgstr ""
+msgstr "เลือกแถวสำหรับการดำเนินการแบบกลุ่ม (Batch)"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 #: pretix/control/templates/pretixcontrol/subevents/index.html
@@ -22261,7 +22383,7 @@ msgstr "ลบรายการที่เลือก"
 #: pretix/control/templates/pretixcontrol/subevents/index.html
 #: pretix/control/templates/pretixcontrol/vouchers/index.html
 msgid "Edit selected"
-msgstr ""
+msgstr "แก้ไขรายการที่เลือก"
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html
 msgid ""
@@ -22269,10 +22391,12 @@ msgid ""
 "including most plugins. Even a low value might be enough if you only use "
 "specific features. Untranslated texts will show up in English."
 msgstr ""
+"เปอร์เซ็นต์ข้อความนี้ถูกแปลแล้วในทุกส่วนของระบบ รวมถึงปลั๊กอินส่วนใหญ่ แม้ว่าจะมีค่าต่ำก็อาจเพียงพอห"
+"ากคุณใช้งานเฉพาะฟีเจอร์บางอย่างเท่านั้น ข้อความที่ยังไม่ได้แปลจะแสดงผลเป็นภาษาอังกฤษ"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html
 msgid "Disable application"
-msgstr ""
+msgstr "ปิดใช้งานแอปพลิเคชัน"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html
 #, python-format
@@ -22280,27 +22404,29 @@ msgid ""
 "Are you sure you want to disable the application <strong>%(application)s</"
 "strong> permanently?"
 msgstr ""
+"คุณแน่ใจหรือไม่ว่าต้องการปิดใช้งานแอปพลิเคชัน <strong>%(application)s</strong> อย่างถาว"
+"ร?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html
 msgid "Your applications"
-msgstr ""
+msgstr "แอปพลิเคชันของคุณ"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html
 msgid "Create new application"
-msgstr ""
+msgstr "สร้างแอปพลิเคชันใหม่"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html
 msgid "No applications registered yet."
-msgstr ""
+msgstr "ยังไม่มีการลงทะเบียนแอปพลิเคชันใดๆ"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html
 #: pretix/control/templates/pretixcontrol/oauth/app_register.html
 msgid "Register a new application"
-msgstr ""
+msgstr "ลงทะเบียนแอปพลิเคชันใหม่"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html
 msgid "Generate new application secret"
-msgstr ""
+msgstr "สร้างรหัสความลับแอปพลิเคชัน (Application secret) ใหม่"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html
 #, python-format
@@ -22308,20 +22434,22 @@ msgid ""
 "Are you sure you want to generate a new client secret for the application "
 "<strong>%(application)s</strong>?"
 msgstr ""
+"คุณแน่ใจหรือไม่ว่าต้องการสร้าง Client Secret ใหม่สำหรับแอปพลิเคชัน <strong>%"
+"(application)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html
 msgid "Roll secret"
-msgstr ""
+msgstr "หมุนเวียนรหัสความลับ (Roll secret)"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_update.html
 msgid "Update an application"
-msgstr ""
+msgstr "อัปเดตแอปพลิเคชัน"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Revoke access"
-msgstr ""
+msgstr "เพิกถอนสิทธิ์การเข้าถึง"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html
 #, python-format
@@ -22329,20 +22457,22 @@ msgid ""
 "Are you sure you want to revoke access to your account for the application "
 "<strong>%(application)s</strong>?"
 msgstr ""
+"คุณแน่ใจหรือไม่ว่าต้องการเพิกถอนสิทธิ์การเข้าถึงบัญชีของคุณสำหรับแอปพลิเคชัน <strong>%"
+"(application)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html
 msgid "Revoke"
-msgstr ""
+msgstr "เพิกถอนสิทธิ์"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html
 #: pretix/control/templates/pretixcontrol/user/settings.html
 msgid "Authorized applications"
-msgstr ""
+msgstr "แอปพลิเคชันที่ได้รับอนุญาต"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html
 msgid "Manage your own apps"
-msgstr ""
+msgstr "จัดการแอปของคุณเอง"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html
 msgid "Permissions"
@@ -22426,14 +22556,14 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html
 msgid "Yes, delete request"
-msgstr ""
+msgstr "ใช่ ยืนยันการลบคำขอ"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 #: pretix/presale/templates/pretixpresale/event/order_change.html
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html
 #, python-format
 msgid "Change order: %(code)s"
-msgstr ""
+msgstr "เปลี่ยนแปลงคำสั่งซื้อ: %(code)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 #: pretix/control/templates/pretixcontrol/order/change_contact.html
@@ -22452,7 +22582,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/transactions.html
 #, python-format
 msgid "Back to order %(order)s"
-msgstr ""
+msgstr "ย้อนกลับไปที่คำสั่งซื้อ %(order)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
@@ -22461,24 +22591,33 @@ msgid ""
 "implications, e.g. the payment method fee might change or additional "
 "questions can be added to the order that need to be answered by the user."
 msgstr ""
+"คุณสามารถใช้เครื่องมือนี้เพื่อเปลี่ยนแปลงสินค้าที่สั่งซื้อหรือยกเลิกคำสั่งซื้อบางส่วน โปรดทราบว่าการเปลี่ย"
+"นแปลงคำสั่งซื้ออาจส่งผลกระทบหลายประการ เช่น ค่าธรรมเนียมช่องทางการชำระเงินอาจเปลี่ยนแปลง "
+"หรืออาจมีการเพิ่มคำถามเพิ่มเติมในคำสั่งซื้อที่ผู้ใช้จำเป็นต้องตอบ"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
 "The user will receive a notification about the change but in the case of new "
 "required questions, the user will not be forced to answer them."
 msgstr ""
+"ผู้ใช้จะได้รับการแจ้งเตือนเกี่ยวกับการเปลี่ยนแปลง แต่ในกรณีที่มีคำถามบังคับตอบใหม่ ผู้ใช้จะไม่ถูกบังคับใ"
+"ห้ตอบคำถามเหล่านั้น"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
 "If an invoice is attached to the order, a cancellation will be created "
 "together with a new invoice."
 msgstr ""
+"หากมีใบแจ้งหนี้แนบอยู่กับคำสั่งซื้อ เอกสารยกเลิก (Cancellation) จะถูกสร้างขึ้นพร้อมกับใบแจ้งหนี้ใบ"
+"ใหม่"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
 "If you chose \"split into new order\" for multiple positions, they will be "
 "all split in one second order together, not multiple orders."
 msgstr ""
+"หากคุณเลือก \"แยกเป็นคำสั่งซื้อใหม่\" สำหรับหลายรายการ รายการเหล่านั้นทั้งหมดจะถูกแยกออกไปรว"
+"มกันในคำสั่งซื้อที่สองเพียงคำสั่งซื้อเดียว ไม่ได้แยกเป็นหลายคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
@@ -22488,11 +22627,15 @@ msgid ""
 "not be able to exist otherwise. In most cases it is easier to cancel the "
 "order completely and create a new one."
 msgstr ""
+"โปรดใช้เครื่องมือนี้ด้วยความระมัดระวัง การเปลี่ยนแปลงที่คุณทำที่นี่ไม่สามารถย้อนกลับได้ นอกจากนี้ หาก"
+"คุณเปลี่ยนแปลงคำสั่งซื้อด้วยตนเอง ข้อจำกัดบางประการ (เช่น สินค้าเสริมบังคับ) จะไม่ถูกตรวจสอบ ดัง"
+"นั้น คุณอาจสร้างคำสั่งซื้อที่ตามปกติแล้วไม่สามารถเกิดขึ้นได้ ในกรณีส่วนใหญ่ การยกเลิกคำสั่งซื้อทั้งหมดแล้"
+"วสร้างคำสั่งซื้อใหม่จะทำได้ง่ายกว่า"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 #, python-format
 msgid "Add-On to position #%(posid)s"
-msgstr ""
+msgstr "สินค้าเสริมสำหรับรายการลำดับที่ #%(posid)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
@@ -22500,16 +22643,20 @@ msgid ""
 "change the price or item, the discount will still be calculated from the "
 "original price at the time of purchase."
 msgstr ""
+"รายการนี้ถูกสร้างขึ้นด้วยคูปองที่มีงบประมาณจำกัด หากคุณเปลี่ยนแปลงราคาหรือสินค้า ส่วนลดจะยังคงคำน"
+"วณจากราคาเดิม ณ เวลาที่ทำการสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid "Change to"
-msgstr ""
+msgstr "เปลี่ยนเป็น"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
 "If you change this, it might cause a new ticket QR code to be generated and "
 "the old one to be invalidated."
 msgstr ""
+"หากคุณเปลี่ยนแปลงส่วนนี้ อาจทำให้เกิดการสร้าง QR Code ของตั๋วใบใหม่ และยกเลิกการใช้งาน QR "
+"Code ใบเดิม"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
@@ -22517,44 +22664,46 @@ msgid ""
 "will not affect the membership. Memberships can be managed in the customer "
 "account."
 msgstr ""
+"การขายรายการนี้ได้สร้างการเป็นสมาชิกขึ้น การเปลี่ยนแปลงสินค้าที่นี่จะส่งผลต่อการเป็นสมาชิก คุณสามา"
+"รถจัดการการเป็นสมาชิกได้ในบัญชีลูกค้า"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid "Ticket block"
-msgstr ""
+msgstr "การระงับตั๋ว (Ticket block)"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid "Blocked due to external constraints"
-msgstr ""
+msgstr "ถูกระงับเนื่องจากข้อจำกัดภายนอก"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid "Not blocked"
-msgstr ""
+msgstr "ไม่ถูกระงับ"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid "Validity time"
-msgstr ""
+msgstr "ระยะเวลาที่ใช้งานได้"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, python-format
 msgid "Valid from %(datetime)s"
-msgstr ""
+msgstr "ใช้งานได้ตั้งแต่วันที่ %(datetime)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, python-format
 msgid "Valid until %(datetime)s"
-msgstr ""
+msgstr "ใช้งานได้ถึงวันที่ %(datetime)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid "Unconstrained"
-msgstr ""
+msgstr "ไม่จำกัดเงื่อนไข"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid "–"
-msgstr ""
+msgstr "–"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
@@ -22562,6 +22711,8 @@ msgid ""
 "ticket here will not affect the membership. Memberships can be managed in "
 "the customer account."
 msgstr ""
+"การขายรายการนี้ได้สร้างการเป็นสมาชิกขึ้น การเปลี่ยนแปลงระยะเวลาใช้งานของตั๋วที่นี่จะไม่ส่งผลต่อกา"
+"รเป็นสมาชิก คุณสามารถจัดการการเป็นสมาชิกได้ในบัญชีลูกค้า"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 #: pretix/control/views/orders.py
@@ -22569,16 +22720,19 @@ msgid ""
 "Ticket secrets of order positions that have been used to issue a gift card "
 "can not be changed. Only the link will be changed in this case."
 msgstr ""
+"รหัสความลับของตั๋ว (Ticket secrets) สำหรับรายการคำสั่งซื้อที่ถูกนำไปใช้สิทธิ์ออกบัตรของขวัญแล้ว "
+"จะไม่สามารถเปลี่ยนแปลงได้ ในกรณีนี้จะสามารถเปลี่ยนแปลงได้เฉพาะลิงก์เท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
 "Removing or splitting this position will also remove or split all add-ons to "
 "this position."
 msgstr ""
+"การลบหรือการแยกรายการนี้ จะเป็นการลบหรือแยกสินค้าเสริมทั้งหมดที่ผูกกับรายการนี้ออกไปด้วย"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid "Add product"
-msgstr ""
+msgstr "เพิ่มสินค้า"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid ""
@@ -22586,15 +22740,17 @@ msgid ""
 "automatically be updated on subsequent order changes or when choosing a "
 "different payment method."
 msgstr ""
+"ไม่แนะนำให้แก้ไขค่าธรรมเนียมการชำระเงินด้วยตนเอง เนื่องจากค่าธรรมเนียมอาจถูกอัปเดตโดยอัตโนมั"
+"ติเมื่อมีการเปลี่ยนแปลงคำสั่งซื้อในภายหลัง หรือเมื่อเลือกช่องทางการชำระเงินอื่น"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 msgid "Add fee"
-msgstr ""
+msgstr "เพิ่มค่าธรรมเนียม"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 #: pretix/control/templates/pretixcontrol/order/change_questions.html
 msgid "Other operations"
-msgstr ""
+msgstr "การดำเนินการอื่นๆ"
 
 #: pretix/control/templates/pretixcontrol/order/change.html
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html
@@ -22660,33 +22816,33 @@ msgstr "ใช่, ลบคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html
 msgid "Deny order"
-msgstr ""
+msgstr "ปฏิเสธคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html
 msgid "Yes, deny order"
-msgstr ""
+msgstr "ใช่ ปฏิเสธคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/extend.html
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Extend payment term"
-msgstr ""
+msgstr "ขยายระยะเวลาการชำระเงิน"
 
 #: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
 msgid ""
 "This file has been uploaded by a user and could contain viruses or other "
 "malicious content."
-msgstr ""
+msgstr "ไฟล์นี้ถูกอัปโหลดโดยผู้ใช้ และอาจมีไวรัสหรือเนื้อหาที่เป็นอันตรายอื่นๆ"
 
 #: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
 msgid "UNSAFE"
-msgstr ""
+msgstr "ไม่ปลอดภัย"
 
 #: pretix/control/templates/pretixcontrol/order/fragment_question_answer.html
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
 msgid "not answered"
-msgstr ""
+msgstr "ยังไม่ได้ตอบ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
@@ -22697,39 +22853,39 @@ msgstr "รายละเอียดการสั่งซื้อ: %(code)
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/views/orders.py
 msgid "Approve"
-msgstr ""
+msgstr "อนุมัติ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/views/orders.py
 msgid "Deny"
-msgstr ""
+msgstr "ปฏิเสธ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html
 msgid "Mark as paid"
-msgstr ""
+msgstr "ทำเครื่องหมายว่าชำระเงินแล้ว"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/order/reactivate.html
 msgid "Reactivate order"
-msgstr ""
+msgstr "ทำเครื่องหมายว่าชำระเงินแล้ว"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "View order as user"
-msgstr ""
+msgstr "ดูคำสั่งซื้อในมุมมองของผู้ใช้"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "View email history"
-msgstr ""
+msgstr "ดูประวัติการส่งอีเมล"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "View transaction history"
-msgstr ""
+msgstr "ดูประวัติการทำธุรกรรม"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Expire order"
-msgstr ""
+msgstr "ปรับสถานะคำสั่งซื้อเป็นหมดอายุ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid ""
@@ -22737,21 +22893,23 @@ msgid ""
 "orders automatically. To free quota capacity, you can mark it as expired "
 "manually."
 msgstr ""
+"การชำระเงินสำหรับคำสั่งซื้อนี้เกินกำหนดชำระแล้ว แต่คุณได้ตั้งค่าไม่ให้คำสั่งซื้อหมดอายุโดยอัตโนมัติ หาก"
+"ต้องการคืนจำนวนโควตาที่ถูกจองไว้ คุณสามารถปรับสถานะเป็นหมดอายุได้ด้วยตนเอง"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/views/orders.py
 msgid "Refund for overpayment"
-msgstr ""
+msgstr "คืนเงินสำหรับการชำระเงินส่วนเกิน"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
 msgid "This order is currently overpaid by %(amount)s."
-msgstr ""
+msgstr "คำสั่งซื้อนี้มีการชำระเงินส่วนเกินอยู่ %(amount)s ในขณะนี้"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
 msgid "Initiate a refund of %(amount)s"
-msgstr ""
+msgstr "ดำเนินการคืนเงินจำนวน %(amount)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
@@ -22760,6 +22918,8 @@ msgid ""
 "can choose to refund the money below or reactivate it by extending the "
 "payment deadline."
 msgstr ""
+"คำสั่งซื้อนี้หมดอายุแล้วแม้ว่าจะได้รับชำระเงินจำนวน %(amount)s คุณสามารถเลือกที่จะคืนเงินด้านล่าง "
+"หรือเปิดใช้งานคำสั่งซื้ออีกครั้งโดยการขยายขอบเขตเวลาชำระเงิน"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid ""
@@ -22769,6 +22929,9 @@ msgid ""
 "generated once the customer pays the invoice or selects a payment method "
 "that requires an invoice."
 msgstr ""
+"คำสั่งซื้อนี้ถูกเปลี่ยนแปลงหลังจากที่มีการสร้างใบแจ้งหนี้ล่าสุด ใบแจ้งหนี้ใบใหม่ยังไม่ได้ถูกสร้างขึ้น เนื่องจ"
+"ากตั้งค่าไว้ให้สร้างใบแจ้งหนี้เมื่อมีการชำระเงินหรือเมื่อจำเป็นตามช่องทางการชำระเงิน ใบแจ้งหนี้ใหม่จ"
+"ะถูกสร้างขึ้นเมื่อลูกค้าชำระเงินหรือเลือกช่องทางการชำระเงินที่ต้องใช้ใบแจ้งหนี้"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, fuzzy
@@ -22778,121 +22941,127 @@ msgstr "กำหนดให้ต้องระบุที่อยู่ส
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Generate invoice"
-msgstr ""
+msgstr "ออกใบแจ้งหนี้"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Cancellation request"
-msgstr ""
+msgstr "คำขอขอยกเลิกคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "The customer asked you to cancel the order with the following settings:"
-msgstr ""
+msgstr "ลูกค้าได้ส่งคำขอให้คุณยกเลิกคำสั่งซื้อด้วยการตั้งค่าต่อไปนี้:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Original payment method"
-msgstr ""
+msgstr "ช่องทางการชำระเงินเดิม"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Delete request"
-msgstr ""
+msgstr "ลบคำขอ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Cancellation date"
-msgstr ""
+msgstr "วันที่ยกเลิก"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid ""
 "This order will not expire automatically since it is already confirmed and "
 "can be used."
 msgstr ""
+"คำสั่งซื้อนี้จะไม่หมดอายุโดยอัตโนมัติ เนื่องจากได้รับการยืนยันแล้วและสามารถใช้งานได้"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid ""
 "This order will not expire automatically as it has an open cancellation fee."
 msgstr ""
+"คำสั่งซื้อนี้จะไม่หมดอายุโดยอัตโนมัติ เนื่องจากมีค่าธรรมเนียมการยกเลิกที่ค้างชำระอยู่"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Contact email"
-msgstr ""
+msgstr "อีเมลติดต่อ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid ""
 "We know that this email address works because the user clicked a link we "
 "sent them."
 msgstr ""
+"เรารู้ว่าอีเมลนี้ใช้งานได้จริง เนื่องจากผู้ใช้ได้คลิกลิงก์ที่เราส่งให้แล้ว"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid ""
 "We don't know if this invoice was emailed to the customer since it was "
 "created before our system tracked this information"
 msgstr ""
+"เราไม่ทราบว่าใบแจ้งหนี้นี้ถูกส่งทางอีเมลไปยังลูกค้าแล้วหรือยัง เนื่องจากถูกสร้างขึ้นก่อนที่ระบบของเราจ"
+"ะเริ่มบันทึกข้อมูลนี้"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Invoice was emailed to customer"
-msgstr ""
+msgstr "ส่งใบแจ้งหนี้ไปยังลูกค้าทางอีเมลแล้ว"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Invoice was not yet emailed to customer"
-msgstr ""
+msgstr "ยังไม่ได้ส่งใบแจ้งหนี้ไปยังลูกค้าทางอีเมล"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Invoice is scheduled to be transmitted"
-msgstr ""
+msgstr "กำหนดส่งใบแจ้งหนี้อยู่ในระบบแล้ว"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Invoice is not yet transmitted"
-msgstr ""
+msgstr "ยังไม่ได้นำส่งใบแจ้งหนี้"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Invoice is currently in transmission"
-msgstr ""
+msgstr "กำลังดำเนินการนำส่งใบแจ้งหนี้"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Invoice not transmitted in test mode"
-msgstr ""
+msgstr "ใบแจ้งหนี้ไม่ถูกนำส่งในโหมดทดสอบ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Invoice transmission failed"
-msgstr ""
+msgstr "การนำส่งใบแจ้งหนี้ล้มเหลว"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Invoice has been transmitted"
-msgstr ""
+msgstr "นำส่งใบแจ้งหนี้เรียบร้อยแล้ว"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Transmit"
-msgstr ""
+msgstr "นำส่ง"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Retransmit"
-msgstr ""
+msgstr "ส่งอีกครั้ง"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Rebuild the invoice with updated data but the same invoice number."
-msgstr ""
+msgstr "สร้างใบแจ้งหนี้ใหม่ด้วยข้อมูลที่อัปเดต โดยใช้เลขที่ใบแจ้งหนี้เดิม"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html
 msgid "Regenerate"
-msgstr ""
+msgstr "สร้างใหม่"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid ""
 "Generate a cancellation document for this invoice and create a new invoice "
 "with a new invoice number."
 msgstr ""
+"สร้างเอกสารยกเลิกสำหรับใบแจ้งหนี้นี้ และสร้างใบแจ้งหนี้ใหม่ด้วยเลขที่ใบแจ้งหนี้ใหม่"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Generate cancellation"
-msgstr ""
+msgstr "สร้างเอกสารยกเลิก"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Cancel and reissue"
-msgstr ""
+msgstr "ยกเลิกและออกใบแจ้งหนี้ใหม่"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Change answers"
-msgstr ""
+msgstr "เปลี่ยนแปลงคำตอบ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Change products"
@@ -22921,12 +23090,12 @@ msgstr "สแกนขาเข้า: %(date)s"
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Voucher code used:"
-msgstr ""
+msgstr "รหัสคูปองที่ใช้:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, python-format
 msgid "Used %(amount)s discount from budget"
-msgstr ""
+msgstr "ใช้ส่วนลด %(amount)s จากงบประมาณ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid ""
@@ -22934,20 +23103,22 @@ msgid ""
 "this product was part of the discount calculation for a different product in "
 "this order."
 msgstr ""
+"ราคาสินค้านี้ถูกปรับลดลงเนื่องจากส่วนลดอัตโนมัติ หรือสินค้านี้เป็นส่วนหนึ่งของการคำนวณส่วนลดสำหรับสิน"
+"ค้าอื่นในคำสั่งซื้อนี้"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, python-format
 msgid "Valid %(datetime_range)s"
-msgstr ""
+msgstr "ใช้งานได้ %(datetime_range)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Ticket page"
-msgstr ""
+msgstr "หน้าตั๋ว"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "This question will be asked during check-in."
-msgstr ""
+msgstr "คำถามนี้จะถูกถามระหว่างการลงทะเบียนเข้างาน (Check-in)"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/overview.html
@@ -22960,17 +23131,17 @@ msgstr "ยอดรวม"
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Successful payments"
-msgstr ""
+msgstr "การชำระเงินที่สำเร็จ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/order.html
 msgid "Pending total"
-msgstr ""
+msgstr "ยอดรวมที่รอการชำระเงิน"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/search/payments.html
 msgid "Confirmation date"
-msgstr ""
+msgstr "วันที่ยืนยัน"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/search/payments.html
@@ -22978,50 +23149,51 @@ msgid ""
 "This payment was created with an older version of pretix, therefore accurate "
 "data might not be available."
 msgstr ""
+"การชำระเงินนี้ถูกสร้างขึ้นด้วย pretix เวอร์ชันเก่า ดังนั้นข้อมูลที่ถูกต้องและครบถ้วนอาจไม่พร้อมใช้งาน"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/search/payments.html
 msgid "MIGRATED"
-msgstr ""
+msgstr "ย้ายข้อมูลแล้ว (MIGRATED)"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html
 msgid "Cancel payment"
-msgstr ""
+msgstr "ยกเลิกการชำระเงิน"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Confirm as paid"
-msgstr ""
+msgstr "ยืนยันว่าชำระเงินแล้ว"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Create a refund"
-msgstr ""
+msgstr "ดำเนินการคืนเงิน"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Cancel transfer"
-msgstr ""
+msgstr "ยกเลิกการโอนเงิน"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/refunds.html
 msgid "Confirm as done"
-msgstr ""
+msgstr "ยืนยันว่าดำเนินการเสร็จสิ้น"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/orders/refunds.html
 msgid "Ignore"
-msgstr ""
+msgstr "ละเว้น"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/order/refund_process.html
 #: pretix/control/templates/pretixcontrol/orders/refunds.html
 msgid "Process refund"
-msgstr ""
+msgstr "ดำเนินการคืนเงิน"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/base.html
 #: pretix/presale/templates/pretixpresale/event/timemachine.html
 msgid "Change"
-msgstr ""
+msgstr "เปลี่ยนแปลง"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html
@@ -23031,65 +23203,67 @@ msgstr "รหัสไปรษณีย์ และชื่อเมือ�
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Valid EU VAT ID"
-msgstr ""
+msgstr "หมายเลขภาษีมูลค่าเพิ่มสหภาพยุโรป (EU VAT ID) ที่ถูกต้อง"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Check"
-msgstr ""
+msgstr "ตรวจสอบ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Order history"
-msgstr ""
+msgstr "ประวัติคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html
 #: pretix/plugins/sendmail/signals.py
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html
 msgid "Email history"
-msgstr ""
+msgstr "ประวัติการส่งอีเมล"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html
 msgid ""
 "This email has been sent with an older version of pretix. We are therefore "
 "not able to display it here accurately."
 msgstr ""
+"อีเมลนี้ถูกส่งด้วย pretix เวอร์ชันเก่า จึงไม่สามารถแสดงผลข้อความอย่างถูกต้องและครบถ้วนที่นี่ได้"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html
 msgid "Subject:"
-msgstr ""
+msgstr "หัวข้อ:"
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html
 msgid "Calendar invite"
-msgstr ""
+msgstr "คำเชิญปฏิทิน"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html
 msgid "Mark order as paid"
-msgstr ""
+msgstr "ทำเครื่องหมายคำสั่งซื้อว่าชำระเงินแล้ว"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html
 msgid "Do you really want to create a manual payment for this order?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการสร้างการชำระเงินด้วยตนเองสำหรับคำสั่งซื้อนี้?"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html
 msgid "Create payment"
-msgstr ""
+msgstr "สร้างการชำระเงิน"
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html
 msgid ""
 "Do you really want to cancel this payment? You cannot revert this action."
 msgstr ""
+"คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการชำระเงินนี้? คุณไม่สามารถย้อนกลับการดำเนินการนี้ได้"
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html
 msgid "Yes, cancel payment"
-msgstr ""
+msgstr "ใช่ ยืนยันการยกเลิกการชำระเงิน"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html
 msgid "Mark payment as complete"
-msgstr ""
+msgstr "ทำเครื่องหมายการชำระเงินว่าเสร็จสมบูรณ์"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html
 msgid "Do you really want to mark this payment as complete?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการทำเครื่องหมายการชำระเงินนี้ว่าเสร็จสมบูรณ์?"
 
 #: pretix/control/templates/pretixcontrol/order/reactivate.html
 msgid ""
@@ -23098,10 +23272,13 @@ msgid ""
 "products in the order are still available. If the order is pending payment, "
 "the expiry date will be reset."
 msgstr ""
+"การเปิดใช้งานคำสั่งซื้ออีกครั้ง จะเป็นการยกเลิกการยกเลิกเดิม และเปลี่ยนสถานะกลับเป็นคำสั่งซื้อที่รอก"
+"ารชำระเงินหรือชำระเงินแล้ว การดำเนินการนี้จะทำได้ต่อเมื่อสินค้าทั้งหมดในคำสั่งซื้อยังมีโควตาพร้อมจำ"
+"หน่ายเท่านั้น หากคำสั่งซื้ออยู่ในสถานะรอการชำระเงิน วันที่หมดอายุจะถูกรีเซ็ตใหม่"
 
 #: pretix/control/templates/pretixcontrol/order/reactivate.html
 msgid "Reactivate"
-msgstr ""
+msgstr "เปิดใช้งานอีกครั้ง"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html
 msgid "Cancel refund"
@@ -23182,38 +23359,38 @@ msgstr "โอนไปยังคำสั่งซื้ออื่น"
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_create.html
 msgid "Create a new gift card"
-msgstr ""
+msgstr "สร้างบัตรของขวัญใหม่"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid ""
 "The gift card can be used to buy tickets for all events of this organizer."
-msgstr ""
+msgstr "บัตรของขวัญนี้สามารถใช้ซื้อตั๋วสำหรับทุกอีเวนต์ของผู้จัดรายนี้ได้"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid "Manual refund"
-msgstr ""
+msgstr "คืนเงินด้วยตนเอง (Manual refund)"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid "Keep transfer as to do"
-msgstr ""
+msgstr "คงสถานะการโอนเงินเป็นรายการที่ต้องดำเนินการ (To do)"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 #: pretix/control/templates/pretixcontrol/order/refund_done.html
 #: pretix/control/templates/pretixcontrol/order/refund_process.html
 msgid "Mark refund as done"
-msgstr ""
+msgstr "ทำเครื่องหมายการคืนเงินว่าเสร็จสิ้น"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html
 msgid "Perform refund"
-msgstr ""
+msgstr "ดำเนินการคืนเงิน"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html
 msgid "Do you really want to mark this refund as complete?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการทำเครื่องหมายการคืนเงินนี้ว่าเสร็จสมบูรณ์?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html
 msgid "Mark as done"
-msgstr ""
+msgstr "ทำเครื่องหมายว่าเสร็จสิ้น"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html
 #, python-format
@@ -23223,94 +23400,101 @@ msgid ""
 "underpaid by <strong>%(pending)s</strong>. The order total is "
 "<strong>%(total)s</strong>."
 msgstr ""
+"เราได้รับแจ้งว่ามีการคืนเงินจำนวน <strong>%(amount)s</strong> ผ่านช่องทาง <strong>%"
+"(method)s</strong> หากดำเนินการคืนเงินนี้ คำสั่งซื้อจะมียอดชำระขาดอยู่ <strong>%(pending)"
+"s</strong> จากยอดรวมคำสั่งซื้อทั้งหมด <strong>%(total)s</strong>"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html
 msgid "Since the order is already canceled, this will not affect its state."
 msgstr ""
+"เนื่องจากคำสั่งซื้อนี้ถูกยกเลิกไปแล้ว การดำเนินการนี้จะไม่ส่งผลต่อสถานะของคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html
 msgid "What should happen to the ticket order?"
-msgstr ""
+msgstr "คุณต้องการให้ดำเนินการอย่างไรกับคำสั่งซื้อตั๋วนี้?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html
 msgid ""
 "Mark the order as unpaid and allow the customer to pay again with another "
 "payment method."
 msgstr ""
+"ปรับสถานะคำสั่งซื้อเป็นยังไม่ได้ชำระเงิน และอนุญาตให้ลูกค้าชำระเงินอีกครั้งด้วยช่องทางการชำระเงินอื่"
+"น"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html
 msgid "Cancel the order irrevocably."
-msgstr ""
+msgstr "ยกเลิกคำสั่งซื้ออย่างถาวรโดยไม่สามารถย้อนกลับได้"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html
 msgid "How much do you want to refund?"
-msgstr ""
+msgstr "คุณต้องการคืนเงินเป็นจำนวนเท่าใด?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html
 msgid "Refund full paid amount"
-msgstr ""
+msgstr "คืนเงินเต็มจำนวนที่ชำระมา"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html
 msgid "Refund only"
-msgstr ""
+msgstr "คืนเงินเฉพาะจำนวนที่ระบุ"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html
 msgid "What should happen to the order?"
-msgstr ""
+msgstr "คุณต้องการให้ดำเนินการอย่างไรกับคำสั่งซื้อ?"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html
 #: pretix/plugins/sendmail/signals.py
 msgid "Send email"
-msgstr ""
+msgstr "ส่งอีเมล"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html
 msgid "Email preview"
-msgstr ""
+msgstr "ตัวอย่างอีเมล"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html
 msgid "Preview email"
-msgstr ""
+msgstr "แสดงตัวอย่างอีเมล"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html
 msgid "Send"
-msgstr ""
+msgstr "ส่ง"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html
 msgid "Transaction history"
-msgstr ""
+msgstr "ประวัติการทำธุรกรรม"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html
 msgid "Single price"
-msgstr ""
+msgstr "ราคาต่อหน่วย"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html
 msgid "Total tax value"
-msgstr ""
+msgstr "มูลค่าภาษีรวม"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html
 msgid "Total price"
-msgstr ""
+msgstr "ราคารวม"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html
 msgid ""
 "This order was created before we introduced this table, therefore this data "
 "might be inaccurate."
 msgstr ""
+"คำสั่งซื้อนี้ถูกสร้างขึ้นก่อนที่เราจะเริ่มใช้ตารางนี้ ดังนั้นข้อมูลนี้อาจไม่ถูกต้องแม่นยำ"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html
 #, python-format
 msgid "incl. %(amount)s rounding correction"
-msgstr ""
+msgstr "รวมการปรับเศษทศนิยม %(amount)s"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html
 msgid "Modify orders"
-msgstr ""
+msgstr "แก้ไขคำสั่งซื้อหลายรายการ"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html
 #, python-format
@@ -23319,14 +23503,16 @@ msgid ""
 "<strong>%(allowed)s</strong> of the selected <strong>%(total)s</strong> "
 "orders."
 msgstr ""
+"การดำเนินการ <strong>%(label)s</strong> สามารถนำไปใช้กับคำสั่งซื้อจำนวน <strong>%"
+"(allowed)s</strong> จากที่เลือกไว้ทั้งหมด <strong>%(total)s</strong> รายการ"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html
 msgid "Do you want to continue?"
-msgstr ""
+msgstr "คุณต้องการดำเนินการต่อหรือไม่?"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html
 msgid "This operation cannot be reversed."
-msgstr ""
+msgstr "การดำเนินการนี้ไม่สามารถย้อนกลับได้"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgid ""
@@ -23335,27 +23521,34 @@ msgid ""
 "orders can be created. Make sure that you check afterwards for any overpaid "
 "orders or pending refunds that you need to take care of manually."
 msgstr ""
+"คุณสามารถใช้หน้านี้เพื่อยกเลิกและคืนเงินคำสั่งซื้อทั้งหมดในครั้งเดียว หากคุณจำเป็นต้องยกเลิกการจัดงาน"
+"อีเวนต์ของคุณ การดำเนินการนี้จะปิดใช้งานสินค้าทั้งหมดด้วย เพื่อไม่ให้สามารถสร้างคำสั่งซื้อใหม่ได้ ตรว"
+"จสอบให้แน่ใจว่าได้ตรวจสอบคำสั่งซื้อที่มีการชำระเงินเกินหรือรายการคืนเงินที่ค้างอยู่หลังจากนี้ เพื่อจัดกา"
+"รด้วยตนเองต่อไป"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgid ""
 "After starting this operation, depending on the size of your event, it might "
 "take a few minutes or longer until all orders are processed."
 msgstr ""
+"หลังจากเริ่มดำเนินการแล้ว ระบบอาจใช้เวลาสองสามนาทีหรือนานกว่านั้นในการประมวลผลคำสั่งซื้อทั้งหม"
+"ด ทั้งนี้ขึ้นอยู่กับขนาดของอีเวนต์ของคุณ"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgid ""
 "All actions performed on this page are irreversible. If in doubt, please "
 "contact support before using it."
 msgstr ""
+"การดำเนินการทั้งหมดในหน้านี้ไม่สามารถย้อนกลับได้ หากมีข้อสงสัย โปรดติดต่อฝ่ายสนับสนุนก่อนใช้งาน"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgctxt "subevents"
 msgid "Select date"
-msgstr ""
+msgstr "เลือกวันที่"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgid "Refund options"
-msgstr ""
+msgstr "ตัวเลือกการคืนเงิน"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
@@ -23363,7 +23556,7 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/index.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html
 msgid "Send out emails"
-msgstr ""
+msgstr "ส่งอีเมลแจ้งเตือน"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgid ""
@@ -23372,6 +23565,9 @@ msgid ""
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
+"เนื่องจากคุณกำลังดำเนินการคืนเงินคำสั่งซื้อของลูกค้าในรูปแบบบัตรของขวัญ คุณควรอธิบายให้ทราบถึงวิธีเ"
+"ข้าถึงบัตรของขวัญดังกล่าว วิธีที่ง่ายที่สุดคือการใส่อธิบายพร้อมแนบลิงก์ไปยังคำสั่งซื้อของพวกเขา โดยใช้ฟั"
+"งก์ชันการส่งอีเมลที่มีให้ที่นี่"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgid ""
@@ -23379,119 +23575,126 @@ msgid ""
 "new tickets due to the products being disabled. You can choose to inform "
 "people on the waiting list by using this option."
 msgstr ""
+"รายชื่อในรายการรอ (Waiting list) ของคุณจะไม่ถูกลบโดยอัตโนมัติ แต่จะไม่ได้รับการจัดสรรตั๋วใหม่"
+"เนื่องจากสินค้าถูกปิดใช้งานแล้ว คุณสามารถเลือกแจ้งให้ผู้ที่อยู่ในรายการรอทราบได้โดยใช้ตัวเลือกนี้"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgid ""
 "You should not execute this function multiple times for the same event, or "
 "everyone on the waiting list will get multiple emails."
 msgstr ""
+"คุณไม่ควรเรียกใช้งานฟังก์ชันนี้ซ้ำหลายครั้งสำหรับอีเวนต์เดียวกัน มิฉะนั้นทุกคนในรายการรอจะได้รับอีเมล"
+"ซ้ำหลายฉบับ"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgid "Preview refund amount"
-msgstr ""
+msgstr "แสดงตัวอย่างยอดเงินคืน"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html
 msgid "Cancel all orders"
-msgstr ""
+msgstr "ยกเลิกคำสั่งซื้อทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html
 msgid "If you proceed, the system will do the following:"
-msgstr ""
+msgstr "หากคุณดำเนินการต่อ ระบบจะทำรายการดังต่อไปนี้:"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html
 #, python-format
 msgid "%(count)s order will be canceled fully"
 msgid_plural "%(count)s orders will be canceled fully"
-msgstr[0] ""
+msgstr[0] "คำสั่งซื้อจำนวน %(count)s รายการจะถูกยกเลิกเต็มจำนวน"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html
 #, python-format
 msgid "%(count)s order will be canceled partially"
 msgid_plural "%(count)s orders will be canceled partially"
-msgstr[0] ""
+msgstr[0] "คำสั่งซื้อจำนวน %(count)s รายการจะถูกยกเลิกบางส่วน"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html
 #, python-format
 msgid "%(amount)s are eligible for refunds."
-msgstr ""
+msgstr "มีจำนวน %(amount)s ที่เข้าข่ายได้รับเงินคืน"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html
 msgid ""
 "The system will attempt to refund the money automatically if supported by "
 "the payment method."
-msgstr ""
+msgstr "ระบบจะพยายามคืนเงินโดยอัตโนมัติหากช่องทางการชำระเงินรองรับ"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html
 msgid "The system will create manual refunds that you need to execute."
 msgstr ""
+"ระบบจะสร้างรายการคืนเงินด้วยตนเอง (Manual refund) ที่คุณจำเป็นต้องดำเนินการต่อ"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html
 msgid "Refunds will not happen automatically."
-msgstr ""
+msgstr "การคืนเงินจะไม่เกิดขึ้นโดยอัตโนมัติ"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html
 msgid "Inform all customers via email."
-msgstr ""
+msgstr "แจ้งให้ลูกค้าทุกคนทราบทางอีเมล"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html
 msgid "Inform all waiting list contacts via email."
-msgstr ""
+msgstr "แจ้งผู้ติดต่อทุกคนในรายการรอ (Waiting list) ทราบทางอีเมล"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html
 msgid ""
 "These numbers are estimates and may change if the data in your event "
 "recently changed."
 msgstr ""
+"ตัวเลขเหล่านี้เป็นเพียงการประมาณการ และอาจเปลี่ยนแปลงหากข้อมูลในอีเวนต์ของคุณมีการเปลี่ยนแปลง"
+"เมื่อเร็วๆ นี้"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html
 #, python-format
 msgid "Proceed and refund approx. %(amount)s"
-msgstr ""
+msgstr "ดำเนินการต่อและคืนเงินประมาณ %(amount)s"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html
 msgid "Proceed and cancel orders"
-msgstr ""
+msgstr "ดำเนินการต่อและยกเลิกคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 #: pretix/control/templates/pretixcontrol/orders/export_form.html
 #: pretix/control/templates/pretixcontrol/organizers/export.html
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html
 msgid "Data export"
-msgstr ""
+msgstr "การส่งออกข้อมูล (Data export)"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 #: pretix/control/templates/pretixcontrol/organizers/export.html
 msgid "Scheduled exports"
-msgstr ""
+msgstr "การส่งออกข้อมูลตามกำหนดเวลา"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 #: pretix/control/templates/pretixcontrol/organizers/export.html
 msgid "Next run:"
-msgstr ""
+msgstr "การทำงานรอบถัดไป:"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 #: pretix/control/templates/pretixcontrol/organizers/export.html
 msgid "No next run scheduled"
-msgstr ""
+msgstr "ไม่มีกำหนดการทำงานรอบถัดไป"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 #: pretix/control/templates/pretixcontrol/organizers/export.html
 msgid "Exporter not found or no permission"
-msgstr ""
+msgstr "ไม่พบตัวส่งออกข้อมูลหรือไม่มีสิทธิ์การใช้งาน"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 #: pretix/control/templates/pretixcontrol/organizers/export.html
 msgid "Disabled due to multiple failures"
-msgstr ""
+msgstr "ปิดใช้งานเนื่องจากล้มเหลวหลายครั้ง"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 #: pretix/control/templates/pretixcontrol/organizers/export.html
 msgid "Failed recently"
-msgstr ""
+msgstr "ล้มเหลวเมื่อเร็วๆ นี้"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 msgid "Run export now"
-msgstr ""
+msgstr "ส่งออกข้อมูลทันที"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 #: pretix/control/templates/pretixcontrol/organizers/export.html
@@ -23499,32 +23702,33 @@ msgid ""
 "Run export and send via email now. This will not change the next scheduled "
 "execution."
 msgstr ""
+"ส่งออกข้อมูลและส่งทางอีเมลทันที การดำเนินการนี้จะไม่กระทบต่อรอบการส่งออกตามกำหนดเวลาถัดไป"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 #: pretix/control/templates/pretixcontrol/organizers/export.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "Copy"
-msgstr ""
+msgstr "คัดลอก"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 #: pretix/control/templates/pretixcontrol/organizers/export.html
 msgid "Other exports"
-msgstr ""
+msgstr "การส่งออกข้อมูลอื่นๆ"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 #: pretix/control/templates/pretixcontrol/organizers/export.html
 msgid "Recommended for new users"
-msgstr ""
+msgstr "แนะนำสำหรับผู้ใช้ใหม่"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html
 #: pretix/control/templates/pretixcontrol/organizers/export.html
 msgid "There are no exporters available for you."
-msgstr ""
+msgstr "ไม่มีตัวส่งออกข้อมูลที่พร้อมใช้งานสำหรับคุณ"
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html
 msgid "Delete scheduled export"
-msgstr ""
+msgstr "ลบกำหนดการส่งออกข้อมูล"
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html
@@ -23533,11 +23737,12 @@ msgid ""
 "Are you sure you want to delete the scheduled export <strong>%(export)s</"
 "strong>?"
 msgstr ""
+"คุณแน่ใจหรือไม่ว่าต้องการลบกำหนดการส่งออกข้อมูล <strong>%(export)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html
 msgid "Export options"
-msgstr ""
+msgstr "ตัวเลือกการส่งออกข้อมูล"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html
@@ -23545,81 +23750,83 @@ msgid ""
 "Your generated Excel file will have <strong>multiple sheets</strong>. Some "
 "data you are looking for might not be on the first sheet."
 msgstr ""
+"ไฟล์ Excel ที่สร้างขึ้นจะมี <strong>หลายชีต (Sheets)</strong> ข้อมูลบางส่วนที่คุณกำลังมองหาอ"
+"าจไม่ได้อยู่ในชีตแรก"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html
 msgid "Save copy"
-msgstr ""
+msgstr "บันทึกสำเนา"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html
 msgid "Start export"
-msgstr ""
+msgstr "เริ่มการส่งออกข้อมูล"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html
 msgid "Schedule export"
-msgstr ""
+msgstr "ตั้งกำหนดการส่งออกข้อมูล"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid "Schedule"
-msgstr ""
+msgstr "กำหนดเวลา"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid "Repetition schedule"
-msgstr ""
+msgstr "กำหนดเวลาการทำซ้ำ"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s"
-msgstr ""
+msgstr "ทำซ้ำทุกๆ %(interval)s %(freq)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 msgid "At the same date every year"
-msgstr ""
+msgstr "ในวันที่เดียวกันของทุกปี"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 #, python-format
 msgid "On the %(setpos)s %(weekday)s of %(month)s"
-msgstr ""
+msgstr "ใน%(weekday)sที่ %(setpos)s ของ%(month)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 msgid "At the same date every month"
-msgstr ""
+msgstr "ในวันที่เดียวกันของทุกเดือน"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 #, python-format
 msgid "On the %(setpos)s %(weekday)s"
-msgstr ""
+msgstr "ใน%(weekday)sที่ %(setpos)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 #, python-format
 msgid "Repeat for %(count)s times"
-msgstr ""
+msgstr "ทำซ้ำจำนวน %(count)s ครั้ง"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 #, python-format
 msgid "Repeat until %(until)s"
-msgstr ""
+msgstr "ทำซ้ำจนถึงวันที่ %(until)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid "Forever"
-msgstr ""
+msgstr "ตลอดไป"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid ""
 "Every time your schedule is executed, the report will be sent via email."
-msgstr ""
+msgstr "ทุกครั้งที่มีการทำงานตามกำหนดเวลาของคุณ รายงานจะถูกส่งทางอีเมล"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid "Please note the following limitations:"
-msgstr ""
+msgstr "โปรดระบุข้อจำกัดดังต่อไปนี้:"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid ""
@@ -23627,38 +23834,45 @@ msgid ""
 "exports that output e.g. statistical data, not for reports that include "
 "sensitive personal data."
 msgstr ""
+"อีเมลไม่ใช่สื่อที่มีการเข้ารหัสที่แน่นหนา เราแนะนำให้ใช้ตัวเลือกนี้สำหรับการส่งออกข้อมูล เช่น ข้อมูลสถิ"
+"ติ เท่านั้น ไม่แนะนำสำหรับรายงานที่มีข้อมูลส่วนบุคคลที่ละเอียดอ่อน"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid ""
 "Email is not made for large files. If your export ends up to be larger than "
 "20 megabytes, it will not be sent."
 msgstr ""
+"อีเมลไม่ได้ถูกออกแบบมาสำหรับไฟล์ขนาดใหญ่ หากไฟล์ที่ส่งออกของคุณมีขนาดใหญ่กว่า 20 เมกะไบต์ ไฟล์"
+"นั้นจะไม่ถูกส่ง"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid "Owner"
-msgstr ""
+msgstr "เจ้าของรายงาน"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid ""
 "The export will be performed using the owner's permission level, i.e. if the "
 "owner loses access to the data, the report will stop."
 msgstr ""
+"การส่งออกข้อมูลจะดำเนินการโดยใช้ระดับสิทธิ์ของเจ้าของรายงาน กล่าวคือ หากเจ้าของรายงานสูญเสีย"
+"สิทธิ์การเข้าถึงข้อมูล รายงานจะหยุดทำงาน"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid "The owner will receive the result as well as any error messages."
-msgstr ""
+msgstr "เจ้าของรายงานจะได้รับผลลัพธ์ รวมถึงข้อความแจ้งข้อผิดพลาดใดๆ"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid ""
 "The additional recipients you add below will only receive an email if the "
 "report was successful."
 msgstr ""
+"ผู้รับเพิ่มเติมที่คุณระบุไว้ด้านล่างจะได้รับอีเมลก็ต่อเมื่อการส่งออกรายงานสำเร็จเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid ""
 "All recipients of the export will be able to see who the owner of the report "
 "is."
-msgstr ""
+msgstr "ผู้รับการส่งออกข้อมูลทุกคนจะสามารถเห็นได้ว่าใครเป็นเจ้าของรายงานนี้"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html
 msgctxt "order state"
@@ -23673,17 +23887,17 @@ msgstr "ยกเลิกแล้ว (ชำระค่าธรรมเน�
 #: pretix/control/templates/pretixcontrol/orders/import_process.html
 #: pretix/control/templates/pretixcontrol/orders/import_start.html
 msgid "Import attendees"
-msgstr ""
+msgstr "นำเข้าข้อมูลผู้เข้าร่วมงาน"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html
 msgid "Data preview"
-msgstr ""
+msgstr "แสดงตัวอย่างข้อมูล"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html
 msgid "Import settings"
-msgstr ""
+msgstr "ตั้งค่าการนำเข้าข้อมูล"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html
@@ -23691,17 +23905,19 @@ msgid ""
 "The import will be performed regardless of your quotas, so it will be "
 "possible to overbook your event using this option."
 msgstr ""
+"การนำเข้าข้อมูลจะดำเนินการโดยไม่คำนึงถึงโควตาของคุณ ดังนั้น ตัวเลือกนี้อาจทำให้เกิดการจองเกินจำ"
+"นวน (Overbook) ในอีเวนต์ของคุณได้"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html
 msgid "Perform import"
-msgstr ""
+msgstr "ดำเนินการนำเข้าข้อมูล"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html
 msgid "Upload a new file"
-msgstr ""
+msgstr "อัปโหลดไฟล์ใหม่"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html
@@ -23709,66 +23925,68 @@ msgid ""
 "The uploaded file should be a CSV file with a header row. You will be able "
 "to assign the meanings of the different columns in the next step."
 msgstr ""
+"ไฟล์ที่อัปโหลดควรเป็นไฟล์ CSV ที่มีแถวหัวข้อ (Header row) โดยคุณจะสามารถจับคู่ความหมายของคอลั"
+"มน์ต่างๆ ได้ในขั้นตอนถัดไป"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html
 msgid "Import file"
-msgstr ""
+msgstr "นำเข้าไฟล์"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html
 msgid "Character set"
-msgstr ""
+msgstr "รหัสชุดตัวอักษร (Character set)"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html
 msgid "Detect automatically"
-msgstr ""
+msgstr "ตรวจหาโดยอัตโนมัติ"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html
 msgid "Start import"
-msgstr ""
+msgstr "เริ่มนำเข้าข้อมูล"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid "Nobody ordered a ticket yet."
-msgstr ""
+msgstr "ยังไม่มีผู้สั่งซื้อตั๋ว"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid "Take your shop live"
-msgstr ""
+msgstr "เปิดใช้งานร้านค้าจริง (Go live)"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid "Go to the ticket shop"
-msgstr ""
+msgstr "ไปยังร้านขายตั๋ว"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid "Search query:"
-msgstr ""
+msgstr "ข้อความค้นหา:"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/templates/pretixcontrol/vouchers/index.html
 msgid "Go!"
-msgstr ""
+msgstr "ค้นหา"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid "Advanced search"
-msgstr ""
+msgstr "ค้นหาขั้นสูง"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #, python-format
 msgid "List filtered by answers to question \"%(question)s\"."
-msgstr ""
+msgstr "กรองรายการตามคำตอบของคำถาม \"%(question)s\""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid "Remove filter"
-msgstr ""
+msgstr "ลบตัวกรอง"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 msgid "Order paid / total"
-msgstr ""
+msgstr "คำสั่งซื้อที่ชำระแล้ว / ทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/templates/pretixcontrol/search/orders.html
@@ -23776,93 +23994,94 @@ msgstr ""
 #, python-format
 msgctxt "followup"
 msgid "TODO %(date)s"
-msgstr ""
+msgstr "รายการที่ต้องทำ %(date)s"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/search/orders.html
 msgid "CANCELLATION REQUESTED"
-msgstr ""
+msgstr "ร้องขอยกเลิก"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/search/orders.html
 msgid "REFUND PENDING"
-msgstr ""
+msgstr "รอการคืนเงิน"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/search/orders.html
 msgid "OVERPAID"
-msgstr ""
+msgstr "ชำระเงินเกิน"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/search/orders.html
 msgid "UNDERPAID"
-msgstr ""
+msgstr "ชำระเงินขาด"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/search/orders.html
 msgid "FULLY PAID"
-msgstr ""
+msgstr "ชำระเงินครบถ้วน"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 msgid "INVOICE NOT CANCELED"
-msgstr ""
+msgstr "ใบแจ้งหนี้ยังไม่ถูกยกเลิก"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid "Sum over all pages"
-msgstr ""
+msgstr "ยอดรวมทุกหน้า"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #, python-format
 msgid "1 order"
 msgid_plural "%(s)s orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "คำสั่งซื้อ %(s)s รายการ"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid ""
 "This sum includes canceled orders. For your ticket revenue, look at the "
 "\"order overview\"."
 msgstr ""
+"ยอดรวมนี้รวมคำสั่งซื้อที่ถูกยกเลิกด้วย หากต้องการดูรายได้จากการขายตั๋วของคุณ โปรดดูที่ \"ภาพรวมคำ"
+"สั่งซื้อ\""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid "Select action"
-msgstr ""
+msgstr "เลือกการดำเนินการ"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/views/orders.py
 msgid "Refund overpaid amount"
-msgstr ""
+msgstr "คืนเงินจำนวนที่ชำระเกิน"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 #: pretix/control/views/orders.py
 msgid "Mark as expired if overdue"
-msgstr ""
+msgstr "ปรับสถานะเป็นหมดอายุหากเกินกำหนดชำระ"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html
 msgid "Delete (test mode only)"
-msgstr ""
+msgstr "ลบ (โหมดทดสอบเท่านั้น)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 msgid "Order overview"
-msgstr ""
+msgstr "ภาพรวมคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 msgid "Sales"
-msgstr ""
+msgstr "ยอดขาย"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 msgid "Revenue (gross)"
-msgstr ""
+msgstr "รายได้รวมภาษี (Gross revenue)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 msgid "Revenue (net)"
-msgstr ""
+msgstr "รายได้สุทธิก่อนภาษี (Net revenue)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 #: pretix/plugins/reports/exporters.py
@@ -23873,6 +24092,9 @@ msgid ""
 "be removed in the future. Use the \"Accounting report\" in the export "
 "section instead."
 msgstr ""
+"ไม่แนะนำให้กรองรายงานนี้ตามวันที่ เนื่องจากอาจนำไปสู่ข้อมูลที่ไม่ถูกต้อง เนื่องจากรายงานนี้แสดงเฉพา"
+"ะสถานะปัจจุบันของคำสั่งซื้อเท่านั้น ไม่ได้แสดงถึงการเปลี่ยนแปลงที่มีก่อนหน้า ตัวกรองวันที่นี้อาจถูกถอดออ"
+"กในอนาคต โปรดใช้ \"รายงานทางบัญชี\" ในส่วนการส่งออกข้อมูลแทน"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 msgctxt "subevent"
@@ -23880,54 +24102,58 @@ msgid ""
 "If you select a single date, fees will not be listed here as it might not be "
 "clear which date they belong to."
 msgstr ""
+"หากคุณเลือกวันที่เพียงวันเดียว ค่าธรรมเนียมจะไม่ถูกระบุในหน้านี้ เนื่องจากอาจไม่ชัดเจนว่าค่าธรรมเนีย"
+"มดังกล่าวเป็นของวันที่ใด"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html
 #: pretix/plugins/reports/exporters.py
 msgid "Purchased"
-msgstr ""
+msgstr "ชำระเงิน/สั่งซื้อสำเร็จแล้ว"
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html
 msgid "No refunds are currently open."
-msgstr ""
+msgstr "ไม่มีรายการคืนเงินที่ค้างดำเนินการในขณะนี้"
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
 msgid "Actions"
-msgstr ""
+msgstr "การดำเนินการ"
 
 #: pretix/control/templates/pretixcontrol/orders/search.html
 #: pretix/control/templates/pretixcontrol/search/orders.html
 msgid "Order search"
-msgstr ""
+msgstr "ค้นหาคำสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_add.html
 #: pretix/control/templates/pretixcontrol/organizers/channel_add_choice.html
 msgid "Add sales channel"
-msgstr ""
+msgstr "เพิ่มช่องทางการขาย"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_add.html
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/channels.html
 msgid "Channel type"
-msgstr ""
+msgstr "ประเภทช่องทางการขาย"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html
 msgid "Delete sales channel:"
-msgstr ""
+msgstr "ลบช่องทางการขาย:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html
 msgid "Are you sure you want to delete this sales channel?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบช่องทางการขายนี้?"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html
 msgid ""
 "This sales channel cannot be deleted since it has already been used to sell "
 "orders or because it is a core element of the system."
 msgstr ""
+"ช่องทางการขายนี้ไม่สามารถลบได้ เนื่องจากถูกใช้ในการขายคำสั่งซื้อไปแล้ว หรือเป็นส่วนประกอบหลักขอ"
+"งระบบ"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html
 msgid "Sales channel:"
-msgstr ""
+msgstr "ช่องทางการขาย:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html
 msgid ""
@@ -23935,123 +24161,132 @@ msgid ""
 "through. This is useful to unlock new revenue streams or to separate revenue "
 "between different sources for reporting purchases."
 msgstr ""
+"ในหน้านี้ คุณสามารถจัดการช่องทางต่างๆ ที่สามารถขายตั๋วของคุณได้ ซึ่งมีประโยชน์ในการเปิดรับรายได้ช่"
+"องทางใหม่ๆ หรือแยกรายได้ตามแหล่งที่มาต่างๆ สำหรับการรายงานการสั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html
 msgid "Add a new channel"
-msgstr ""
+msgstr "เพิ่มช่องทางใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html
 msgid "Channel"
-msgstr ""
+msgstr "ช่องทาง"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html
 #, python-format
 msgid "Customer #%(id)s"
-msgstr ""
+msgstr "ลูกค้า #%(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 msgid "Send password reset link"
-msgstr ""
+msgstr "ส่งลิงก์รีเซ็ตรหัสผ่าน"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 msgid "This includes all paid orders by this customer across all your events."
 msgstr ""
+"ข้อมูลนี้รวมคำสั่งซื้อที่ชำระเงินแล้วทั้งหมดของลูกค้ารายนี้จากทุกอีเวนต์ของคุณ"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 msgid "Lifetime spending"
-msgstr ""
+msgstr "ยอดใช้จ่ายสะสมรวม (Lifetime spending)"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html
 #: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Anonymize"
-msgstr ""
+msgstr "ปกปิดข้อมูลระบุตัวตน (Anonymize)"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
 msgid "Usages"
-msgstr ""
+msgstr "ประวัติการใช้งาน"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 msgid "Add membership"
-msgstr ""
+msgstr "เพิ่มสมาชิก"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html
 msgid "Matched to the account based on the email address."
-msgstr ""
+msgstr "จับคู่กับบัญชีผู้ใช้ตามที่อยู่อีเมล"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
 msgid "Last transaction"
-msgstr ""
+msgstr "ธุรกรรมล่าสุด"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 msgid "Customer history"
-msgstr ""
+msgstr "ประวัติลูกค้า"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html
 #, python-format
 msgid "Anonymize customer #%(id)s"
-msgstr ""
+msgstr "ปกปิดข้อมูลระบุตัวตนของลูกค้า #%(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html
 msgid "Are you sure you want to anonymize this customer account?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการปกปิดข้อมูลระบุตัวตนของบัญชีลูกค้านี้?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html
 msgid "All orders will be disconnected from this customer account."
-msgstr ""
+msgstr "คำสั่งซื้อทั้งหมดจะถูกยกเลิกการเชื่อมโยงจากบัญชีลูกค้านี้"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html
 msgid ""
 "The orders themselves will not be anonymized and can still contain personal "
 "information!"
 msgstr ""
+"ตัวคำสั่งซื้อเองจะไม่ถูกปกปิดข้อมูลระบุตัวตน และยังอาจมีข้อมูลส่วนบุคคลอยู่!"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html
 msgid ""
 "The customer will no longer be able to log in and will lose access to any "
 "membership benefits."
 msgstr ""
+"ลูกค้าจะไม่สามารถเข้าสู่ระบบได้อีกต่อไป และจะสูญเสียสิทธิ์ในการรับสิทธิประโยชน์สมาชิกทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html
 msgid "This action is irreversible."
-msgstr ""
+msgstr "การดำเนินการนี้ไม่สามารถย้อนกลับได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html
 msgid "New customer"
-msgstr ""
+msgstr "ลูกค้าใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html
 msgid "Are you sure you want to delete this membership?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบการเป็นสมาชิกนี้?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html
 msgid ""
 "This membership cannot be deleted since it has been used in an order. Change "
 "its end date to the past instead."
 msgstr ""
+"ไม่สามารถลบการเป็นสมาชิกนี้ได้ เนื่องจากถูกใช้งานในคำสั่งซื้อไปแล้ว โปรดเปลี่ยนวันที่สิ้นสุดให้เป็นอดีต"
+"แทน"
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html
 msgid "No customer accounts have been created yet."
-msgstr ""
+msgstr "ยังไม่มีการสร้างบัญชีลูกค้า"
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html
 msgid "Create a new customer"
-msgstr ""
+msgstr "สร้างลูกค้าใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html
 msgid "Delete organizer"
-msgstr ""
+msgstr "ลบผู้จัดงาน"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html
 msgid ""
 "This operation will destroy this organizer including all events, "
 "configuration, products, quotas, questions, vouchers, lists, etc."
 msgstr ""
+"การดำเนินการนี้จะทำลายผู้จัดงานรายนี้ รวมถึงอีเวนต์ การตั้งค่า สินค้า โควตา คำถาม คูปอง รายชื่อ "
+"และอื่นๆ ทั้งหมด"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html
 #, python-format
@@ -24059,21 +24294,23 @@ msgid ""
 "To confirm you really want this, please type out the organizer's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
+"เพื่อยืนยันว่าคุณต้องการดำเนินการนี้จริงๆ โปรดพิมพ์ชื่อย่อของผู้จัดงาน (\"%(slug)s\") ที่นี่:"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html
 msgid ""
 "This organizer account can not be deleted as it already contains orders, "
 "invoices, or devices."
 msgstr ""
+"ไม่สามารถลบบัญชีผู้จัดงานนี้ได้ เนื่องจากมีคำสั่งซื้อ ใบแจ้งหนี้ หรืออุปกรณ์อยู่ในระบบแล้ว"
 
 #: pretix/control/templates/pretixcontrol/organizers/detail.html
 #, python-format
 msgid "Organizer: %(name)s"
-msgstr ""
+msgstr "ผู้จัดงาน: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html
 msgid "Change multiple devices"
-msgstr ""
+msgstr "แก้ไขอุปกรณ์หลายรายการ"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html
@@ -24081,89 +24318,96 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "Advanced settings"
-msgstr ""
+msgstr "การตั้งค่าขั้นสูง"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html
 msgid "Connect to device:"
-msgstr ""
+msgstr "เชื่อมต่อกับอุปกรณ์:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html
 msgid ""
 "Download an app that is compatible with pretix. For example, our check-in "
 "app <strong>pretixSCAN</strong> is available on all major platforms."
 msgstr ""
+"ดาวน์โหลดแอปพลิเคชันที่รองรับ pretix เช่น แอปพลิเคชันลงทะเบียนเข้างาน <strong>"
+"pretixSCAN</strong> ของเรา มีให้ใช้งานในทุกแพลตฟอร์มหลัก"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html
 msgid "Download pretixSCAN"
-msgstr ""
+msgstr "ดาวน์โหลด pretixSCAN"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html
 msgid ""
 "Open the app that you want to connect and optionally reset it to the "
 "original state."
 msgstr ""
+"เปิดแอปพลิเคชันที่คุณต้องการเชื่อมต่อ และเลือกคืนค่าเป็นสถานะเริ่มต้น (หากต้องการ)"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html
 msgid "Scan the following configuration code:"
-msgstr ""
+msgstr "สแกนรหัสการตั้งค่าต่อไปนี้:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html
 msgid ""
 "If your app/device does not support scanning a QR code, you can also enter "
 "the following information:"
 msgstr ""
+"หากแอปพลิเคชัน/อุปกรณ์ของคุณไม่รองรับการสแกน QR code คุณยังสามารถระบุข้อมูลต่อไปนี้ได้:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html
 msgid "System URL:"
-msgstr ""
+msgstr "URL ของระบบ:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html
 msgid "Token:"
-msgstr ""
+msgstr "โทเคน (Token):"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html
 msgid "Device overview"
-msgstr ""
+msgstr "ภาพรวมอุปกรณ์"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html
 msgid "Device:"
-msgstr ""
+msgstr "อุปกรณ์:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html
 msgid "Connect a new device"
-msgstr ""
+msgstr "เชื่อมต่ออุปกรณ์ใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html
 msgid "Device history"
-msgstr ""
+msgstr "ประวัติอุปกรณ์"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html
 msgid "Device logs"
-msgstr ""
+msgstr "บันทึกการทำงานของอุปกรณ์ (Device logs)"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html
 msgid "Revoke device access:"
-msgstr ""
+msgstr "เพิกถอนการสิทธิ์เข้าถึงของอุปกรณ์:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html
 msgid "Are you sure you want remove access for this device?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการยกเลิกสิทธิ์การเข้าถึงสำหรับอุปกรณ์นี้?"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html
 msgid ""
 "All data of this device will stay available, but you can't use the device "
 "any more."
 msgstr ""
+"ข้อมูลทั้งหมดของอุปกรณ์นี้จะยังคงอยู่ แต่คุณจะไม่สามารถใช้อุปกรณ์นี้ได้อีกต่อไป"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html
 msgid "All data uploaded by this device will stay available online."
-msgstr ""
+msgstr "ข้อมูลทั้งหมดที่อัปโหลดโดยอุปกรณ์นี้จะยังคงใช้งานได้ทางออนไลน์"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html
 msgid ""
 "If data (e.g. POS transactions or check-ins) has been created on this device "
 "and has not been uploaded, you will no longer be able to upload it."
 msgstr ""
+"หากมีข้อมูล (เช่น ธุรกรรม POS หรือการลงทะเบียนเข้างาน) ที่สร้างขึ้นบนอุปกรณ์นี้และยังไม่ได้อัปโหล"
+"ด คุณจะไม่สามารถอัปโหลดข้อมูลนั้นได้อีกต่อไป"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html
 msgid ""
@@ -24172,24 +24416,29 @@ msgid ""
 "data such as event metadata and POS transactions will persist until you "
 "uninstall or reset the software manually."
 msgstr ""
+"หากซอฟต์แวร์ของอุปกรณ์รองรับ ข้อมูลส่วนบุคคล เช่น คำสั่งซื้อ จะถูกลบออกจากอุปกรณ์ในการพยายามซิง"
+"ค์ข้อมูลครั้งถัดไป ข้อมูลที่ไม่ใช่ข้อมูลส่วนบุคคล เช่น ข้อมูลอธิบายอีเวนต์ (Metadata) และธุรกรรม "
+"POS จะยังคงอยู่จนกว่าคุณจะถอนการติดตั้งหรือคืนค่าซอฟต์แวร์ด้วยตนเอง"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid ""
 "This menu allows you to connect hardware devices such as box office "
 "terminals or scanning terminals to your account."
 msgstr ""
+"เมนูนี้ช่วยให้คุณสามารถเชื่อมต่ออุปกรณ์ฮาร์ดแวร์ เช่น เครื่องจำหน่ายตั๋วหน้างาน (Box office) หรือเ"
+"ครื่องสแกน เข้ากับบัญชีของคุณได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "You haven't connected any hardware devices yet."
-msgstr ""
+msgstr "คุณยังไม่ได้เชื่อมต่ออุปกรณ์ฮาร์ดแวร์ใดๆ"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Connect a device"
-msgstr ""
+msgstr "เชื่อมต่ออุปกรณ์"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Hardware model"
-msgstr ""
+msgstr "รุ่นฮาร์ดแวร์"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 #, fuzzy, python-format
@@ -24199,36 +24448,36 @@ msgstr "เริ่มงาน: %(time)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "No recent contact"
-msgstr ""
+msgstr "ไม่มีสัญญาณการติดต่อเมื่อเร็วๆ นี้"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Not yet initialized"
-msgstr ""
+msgstr "ยังไม่ได้เริ่มการตั้งค่าเริ่มต้น (Not initialized)"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Revoked"
-msgstr ""
+msgstr "สิทธิ์ถูกเพิกถอนแล้ว"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Connect"
-msgstr ""
+msgstr "เชื่อมต่อ"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html
 msgid "Logs"
-msgstr ""
+msgstr "บันทึกการทำงาน (Logs)"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "Organizer settings"
-msgstr ""
+msgstr "การตั้งค่าผู้จัดงาน"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "Organizer page"
-msgstr ""
+msgstr "หน้าผู้จัดงาน"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "The links you configure here will also be shown on all of your events."
-msgstr ""
+msgstr "ลิงก์ที่คุณตั้งค่าไว้ที่นี่จะถูกแสดงในทุกอีเวนต์ของคุณด้วยเช่นกัน"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
@@ -24236,10 +24485,12 @@ msgid ""
 "default settings for all events in this account that do not have their own "
 "design settings."
 msgstr ""
+"การตั้งค่าเหล่านี้จะถูกนำไปใช้กับหน้าผู้จัดงาน รวมถึงเป็นค่าเริ่มต้นสำหรับทุกอีเวนต์ในบัญชีนี้ที่ไม่ได้ตั้งค่าก"
+"ารออกแบบของตัวเองไว้"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "Privacy"
-msgstr ""
+msgstr "ความเป็นส่วนตัว"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
@@ -24247,6 +24498,9 @@ msgid ""
 "before you are allowed to use cookies or similar technology for analytics, "
 "tracking, payment, or similar purposes."
 msgstr ""
+"เขตอำนาจศาลบางแห่ง รวมถึงสหภาพยุโรป กำหนดให้ต้องได้รับความยินยอมจากผู้ใช้ก่อนที่คุณจะได้รับอนุญ"
+"าตให้ใช้คุกกี้หรือเทคโนโลยีที่คล้ายกันเพื่อการวิเคราะห์ การติดตาม การชำระเงิน หรือวัตถุประสงค์อื่นที่ค"
+"ล้ายกัน"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
@@ -24255,6 +24509,9 @@ msgid ""
 "security. Therefore, cookies set by pretix itself do not require consent in "
 "all jurisdictions that we are aware of."
 msgstr ""
+"ตัวระบบ pretix เองจะติดตั้งเฉพาะคุกกี้ที่จำเป็นต่อการให้บริการตามที่ผู้ใช้ร้องขอ หรือเพื่อรักษาระดับค"
+"วามปลอดภัยที่เหมาะสมเท่านั้น ดังนั้น คุกกี้ที่ถูกติดตั้งโดย pretix เองจึงไม่จำเป็นต้องขอความยินยอมใน"
+"ทุกเขตอำนาจศาลที่เราทราบ"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
@@ -24262,6 +24519,9 @@ msgid ""
 "affect if you use <strong>plugins</strong> that require additional cookies "
 "<strong>and</strong> participate in our cookie consent mechanism."
 msgstr ""
+"ดังนั้น การตั้งค่าในหน้านี้จะส่งผล<strong>เฉพาะก</strong>รณีที่คุณใช้<strong>ปลั๊กอิน (Plugins)"
+"</strong> ที่จำเป็นต้องใช้คุกกี้เพิ่มเติม <strong>และ</strong>เข้าร่วมกลไกการขอความยินยอมใช้"
+"งานคุกกี้ของเราเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
@@ -24271,10 +24531,14 @@ msgid ""
 "usage, the legal details in your specific jurisdiction, or the agreements "
 "you have with third parties such as payment or tracking providers."
 msgstr ""
+"ท้ายที่สุดแล้ว เป็นหน้าที่และความรับผิดชอบของคุณในการปฏิบัติตามกฎหมายที่เกี่ยวข้องทั้งหมด เราพยายาม"
+"ช่วยเหลือโดยจัดให้มีการตั้งค่าเหล่านี้ แต่เราไม่สามารถรับผิดชอบต่อความเสียหายใดๆ ได้ เนื่องจากเรา"
+"ไม่ทราบถึงการตั้งค่าการใช้งาน pretix ที่แน่นอนของคุณ รายละเอียดทางกฎหมายในเขตอำนาจศาลเฉพ"
+"าะของคุณ หรือข้อตกลงที่คุณมีกับบุคคลที่สาม เช่น ผู้ให้บริการชำระเงินหรือผู้ให้บริการติดตามผล"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "Accessibility"
-msgstr ""
+msgstr "การเข้าถึงและการอำนวยความสะดวก (Accessibility)"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
@@ -24283,16 +24547,21 @@ msgid ""
 "template in <a href=\"https://docs.pretix.eu/trust/accessibility/\" "
 "target=\"_blank\">our documentation</a>."
 msgstr ""
+"เขตอำนาจศาลบางแห่ง รวมถึงสหภาพยุโรป กำหนดให้คุณต้องเผยแพร่ข้อมูลเกี่ยวกับการเข้าถึงและการอำ"
+"นวยความสะดวกของร้านขายตั๋วของคุณ คุณสามารถดูแม่แบบตัวอย่างได้ใน <a href=\"https://"
+"docs.pretix.eu/trust/accessibility/\" target=\"_blank\">เอกสารคู่มือของเรา</a>"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
 "Instead of an URL, you can also configure a text that will be shown within "
 "pretix. This will be ignored if a URL is configured."
 msgstr ""
+"นอกเหนือจากการระบุ URL คุณยังสามารถตั้งค่าข้อความที่จะแสดงภายใน pretix ได้ด้วย ทั้งนี้ ข้อความ"
+"ดังกล่าวจะถูกข้ามไปหากมีการตั้งค่า URL ไว้"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "Barcode media"
-msgstr ""
+msgstr "สื่อบาร์โค้ด (Barcode media)"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
@@ -24302,32 +24571,41 @@ msgid ""
 "layout that includes the \"Reusable Medium ID\" as a QR code. Later, the "
 "same barcode may be re-used during the sale of a different product."
 msgstr ""
+"\"สื่อบาร์โค้ด\" หมายถึง รูปแบบบาร์โค้ดสิ่งพิมพ์หรือดิจิทัลใดๆ โดยสื่อจะถูกสร้างขึ้นในตอนแรกผ่านการข"
+"ายสินค้าที่มี นโยบายสื่อ (Media policy) ซึ่งกำหนดให้ต้องใช้สื่อดังกล่าว รวมถึงรูปแบบตั๋วหรือป้ายชื่อที่"
+"มี \"รหัสสื่อที่ใช้ซ้ำได้ (Reusable Medium ID)\" ในรูปแบบ QR code ในภายหลัง บาร์โค้ดเดิมนี้จะ"
+"สามารถนำกลับมาใช้ซ้ำได้ในระหว่างการขายสินค้าอื่น"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "Barcode media can currently only be connected to tickets."
-msgstr ""
+msgstr "ในปัจจุบัน สื่อบาร์โค้ดสามารถเชื่อมต่อกับตั๋วได้เท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
 "This subsequent reuse of the barcode is currently only supported during POS "
 "sales."
 msgstr ""
+"ในปัจจุบัน การนำบาร์โค้ดกลับมาใช้ซ้ำในภายหลังรองรับเฉพาะระหว่างการขายผ่านระบบ POS เท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
 "This medium type can work with almost any type of NFC chip. With this "
 "option, only the UID of the NFC chip is used for identification."
 msgstr ""
+"ประเภทสื่อนี้สามารถทำงานร่วมกับชิป NFC ได้เกือบทุกชนิด โดยตัวเลือกนี้จะใช้เฉพาะรหัส UID ของชิป "
+"NFC ในการระบุตัวตนเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "NFC media can currently only be connected to gift cards."
-msgstr ""
+msgstr "ในปัจจุบัน สื่อ NFC สามารถเชื่อมต่อกับบัตรของขวัญได้เท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
 "This method does not provide a high level of protection against abuse since "
 "it is possible for malicious users to clone someone's chip with the same UID."
 msgstr ""
+"วิธีนี้ไม่ได้ให้ระดับการป้องกันการทุจริตที่สูงนัก เนื่องจากผู้ไม่หวังดีอาจคัดลอกชิปของผู้อื่นที่มีรหัส UID เดีย"
+"วกันได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
@@ -24335,105 +24613,112 @@ msgid ""
 "made by NXP. This provides a higher level of security than other approaches, "
 "but requires all chips to be encoded prior to use."
 msgstr ""
+"ประเภทสื่อนี้ทำงานได้เฉพาะกับชิป NFC ประเภท Mifare Ultralight AES ที่ผลิตโดย NXP เท่านั้น "
+"ซึ่งให้ระดับความปลอดภัยที่สูงกว่าวิธีอื่น แต่จำเป็นต้องเข้ารหัสชิปทั้งหมดก่อนใช้งาน"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "Domains"
-msgstr ""
+msgstr "โดเมน (Domains)"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "This dialog is intended for advanced users."
-msgstr ""
+msgstr "กล่องโต้ตอบนี้มีไว้สำหรับผู้ใช้ระดับสูง"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid ""
 "The domain needs to be configured on your webserver before it can be used "
 "here."
 msgstr ""
+"จำเป็นต้องตั้งค่าโดเมนบนเว็บเซิร์ฟเวอร์ของคุณก่อน จึงจะสามารถนำมาใช้งานที่นี่ได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html
 msgid "Add domain"
-msgstr ""
+msgstr "เพิ่มโดเมน"
 
 #: pretix/control/templates/pretixcontrol/organizers/export.html
 msgid "Run export now and download result"
-msgstr ""
+msgstr "ส่งออกข้อมูลทันทีและดาวน์โหลดผลลัพธ์"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html
 msgid "Delete gate:"
-msgstr ""
+msgstr "ลบประตูทางเข้า (Gate):"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html
 msgid "Are you sure you want to delete the gate?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบประตูทางเข้านี้?"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html
 msgid "Gate:"
-msgstr ""
+msgstr "ประตูทางเข้า (Gate):"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/gates.html
 msgid "Create a new gate"
-msgstr ""
+msgstr "สร้างประตูทางเข้าใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/gates.html
 msgid "The list below shows gates that you can use to group check-in devices."
 msgstr ""
+"รายการด้านล่างแสดงประตูทางเข้าที่คุณสามารถใช้เพื่อจัดกลุ่มอุปกรณ์ลงทะเบียนเข้างานได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_edit.html
 #, python-format
 msgid "Gift card: %(card)s"
-msgstr ""
+msgstr "บัตรของขวัญ: %(card)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 msgid "Expire date"
-msgstr ""
+msgstr "วันที่หมดอายุ"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 msgid "Issued through sale"
-msgstr ""
+msgstr "ออกให้อย่างเป็นทางการผ่านการขาย"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 msgid "Transactions"
-msgstr ""
+msgstr "ประวัติรายการธุรกรรม"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html
 #: pretix/presale/templates/pretixpresale/giftcard/checkout.html
 msgid "Information"
-msgstr ""
+msgstr "ข้อมูล"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 msgid ""
 "Create a payment on the respective order that cancels out with this "
 "transaction. The order will then likely be overpaid."
 msgstr ""
+"สร้างการชำระเงินในคำสั่งซื้อที่เกี่ยวข้องเพื่อหักลบกับธุรกรรมนี้ ซึ่งจะทำให้คำสั่งซื้อมีแนวโน้มที่จะมียอดชำ"
+"ระเกิน"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 msgid "Revert"
-msgstr ""
+msgstr "ย้อนคืนรายการ"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 msgid "Gift card history"
-msgstr ""
+msgstr "ประวัติบัตรของขวัญ"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_invite.html
 msgid "Invite organizer"
-msgstr ""
+msgstr "เชิญผู้จัดงาน"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid "Gift cards acceptance"
-msgstr ""
+msgstr "การยอมรับการใช้บัตรของขวัญ"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid ""
 "This feature allows you to configure acceptance of gift cards across "
 "multiple organizer accounts."
 msgstr ""
+"ฟีเจอร์นี้ช่วยให้คุณสามารถตั้งค่าการยอมรับการใช้บัตรของขวัญข้ามบัญชีผู้จัดงานหลายรายได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid "Other organizers you accept gift cards from"
-msgstr ""
+msgstr "ผู้จัดงานรายอื่นที่คุณยอมรับบัตรของขวัญ"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid ""
@@ -24441,27 +24726,29 @@ msgid ""
 "do so, the other organizer can add you to their list and afterwards, you can "
 "confirm this here."
 msgstr ""
+"คุณยังไม่ได้ยอมรับบัตรของขวัญจากผู้จัดงานรายอื่น หากคุณต้องการทำเช่นนั้น ผู้จัดงานรายอื่นสามารถเพิ่มคุ"
+"ณลงในรายการของพวกเขา และหลังจากนั้นคุณสามารถยืนยันได้ที่นี่"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid "invited"
-msgstr ""
+msgstr "คำเชิญถูกส่งแล้ว (Invited)"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html
 msgid "Remove"
-msgstr ""
+msgstr "ลบออก"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid "Accept"
-msgstr ""
+msgstr "ยอมรับ"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid "Decline"
-msgstr ""
+msgstr "ปฏิเสธ"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid "Other organizers accepting gift cards from you"
-msgstr ""
+msgstr "ผู้จัดงานรายอื่นที่ยอมรับบัตรของขวัญจากคุณ"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid ""
@@ -24472,6 +24759,10 @@ msgid ""
 "responsibility to handle the exchange of money to offset the transactions "
 "between the two organizers."
 msgstr ""
+"คุณสามารถเชิญผู้จัดงานรายอื่นให้ยอมรับบัตรของขวัญของคุณได้ เมื่อดำเนินการแล้ว พวกเขาจะต้องไปที่หน้"
+"าเดียวกันนี้ในบัญชีของตนเองและยอมรับคำเชิญ โปรดทราบว่าผู้จัดงานรายอื่นจะสามารถเติมเงินลงในบัตร"
+"ของขวัญได้ด้วยเช่นกัน ซึ่งคุณจะต้องเรียกเก็บเงินส่วนนั้นจากพวกเขาเอง ทั้งนี้ เป็นความรับผิดชอบของคุณ"
+"ในการจัดการการแลกเปลี่ยนเงินเพื่อชดเชยรายการธุรกรรมระหว่างผู้จัดงานทั้งสองฝ่าย"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid ""
@@ -24479,6 +24770,8 @@ msgid ""
 "is required if you want them to participate in a shared system with e.g. NFC "
 "payment chips."
 msgstr ""
+"คุณสามารถเลือกควบคุมได้ว่าจะให้พวกเขาสามารถเข้าถึงสื่อที่ใช้ซ้ำได้ (Reusable media) ของคุณหรือ"
+"ไม่ ซึ่งจำเป็นอย่างยิ่งหากคุณต้องการให้พวกเขามีส่วนร่วมในระบบที่ใช้ร่วมกัน เช่น ชิปชำระเงิน NFC"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid ""
@@ -24486,46 +24779,52 @@ msgid ""
 "on the activated medium types) this will grant the other organizer access to "
 "cryptographic key material required to interact with the media type."
 msgstr ""
+"คุณควรใช้ตัวเลือกนี้กับผู้จัดงานที่คุณไว้วางใจเท่านั้น เนื่องจาก (ขึ้นอยู่กับประเภทสื่อที่เปิดใช้งาน) การดำ"
+"เนินการนี้จะให้สิทธิ์ผู้จัดงานรายอื่นในการเข้าถึงคีย์ถอดรหัส (Cryptographic key material) ที่จำเ"
+"ป็นในการโต้ตอบกับประเภทสื่อดังกล่าว"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid "Invite new organizer"
-msgstr ""
+msgstr "เชิญผู้จัดงานใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
 msgid "Issued gift cards"
-msgstr ""
+msgstr "บัตรของขวัญที่ออกแล้ว"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
 msgid ""
 "You haven't issued any gift cards yet. You can either set up a product in an "
 "event shop to sell gift cards, or you can manually issue gift cards."
 msgstr ""
+"คุณยังไม่ได้ออกบัตรของขวัญใดๆ คุณสามารถตั้งค่าสินค้าในร้านค้าอีเวนต์เพื่อขายบัตรของขวัญ หรือสามารถ"
+"ออกบัตรของขวัญด้วยตนเองได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
 msgid "Manually issue a gift card"
-msgstr ""
+msgstr "ออกบัตรของขวัญด้วยตนเอง"
 
 #: pretix/control/templates/pretixcontrol/organizers/index.html
 msgid ""
 "The list below shows all organizer accounts you have administrative access "
 "to."
 msgstr ""
+"รายการด้านล่างแสดงบัญชีผู้จัดงานทั้งหมดที่คุณมีสิทธิ์การเข้าถึงในระดับผู้ดูแลระบบ"
 
 #: pretix/control/templates/pretixcontrol/organizers/logs.html
 msgid "Organizer logs"
-msgstr ""
+msgstr "บันทึกการทำงานของผู้จัดงาน (Organizer logs)"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
 msgid "Customer account registration"
-msgstr ""
+msgstr "การลงทะเบียนบัญชีลูกค้า"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
 msgid "Customer account email change"
-msgstr ""
+msgstr "การเปลี่ยนอีเมลบัญชีลูกค้า"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
 msgid "Customer account password reset"
-msgstr ""
+msgstr "การรีเซ็ตรหัสผ่านบัญชีลูกค้า"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
 #, fuzzy
@@ -24535,24 +24834,24 @@ msgstr "ข้อมูลบัญชีลูกค้า"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html
 msgid "Delete membership type:"
-msgstr ""
+msgstr "ลบประเภทสมาชิก:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html
 msgid "Are you sure you want to delete this membership type?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบประเภทสมาชิกนี้?"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html
 msgid "This membership type cannot be deleted since it has already been used."
-msgstr ""
+msgstr "ไม่สามารถลบประเภทสมาชิกนี้ได้ เนื่องจากถูกใช้งานในระบบไปแล้ว"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html
 msgid "Membership type:"
-msgstr ""
+msgstr "ประเภทสมาชิก:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html
 msgid "Create a new membership type"
-msgstr ""
+msgstr "สร้างประเภทสมาชิกใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html
 msgid ""
@@ -24561,15 +24860,19 @@ msgid ""
 "in one event, and require valid memberships to allow purchases in another "
 "event."
 msgstr ""
+"คุณสามารถกำหนดประเภทสมาชิกได้ ซึ่งช่วยให้คุณสามารถเชื่อมโยงสินค้าจากอีเวนต์ต่างๆ เข้าด้วยกันได้ "
+"คุณสามารถขายการเป็นสมาชิกเป็นส่วนหนึ่งของสินค้าในอีเวนต์หนึ่ง และกำหนดให้ต้องมีสถานะสมาชิกที่ยังไ"
+"ม่หมดอายุเพื่อซื้อสินค้าในอีกอีเวนต์หนึ่งได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html
 msgid ""
 "This can be used to enable products like year passes, tickets of ten, etc."
 msgstr ""
+"ซึ่งสามารถนำมาใช้สำหรับสินค้าประเภทบัตรผ่านรายปี บัตรแพ็กเกจ 10 ใบ และอื่นๆ ได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 msgid "Outgoing email"
-msgstr ""
+msgstr "อีเมลขาออก"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 #, fuzzy
@@ -24580,24 +24883,24 @@ msgstr "ที่อยู่อีเมล"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 msgctxt "email"
 msgid "From"
-msgstr ""
+msgstr "จาก (From)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 msgctxt "email"
 msgid "To"
-msgstr ""
+msgstr "ถึง (To)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 msgctxt "email"
 msgid "Cc"
-msgstr ""
+msgstr "สำเนาถึง (Cc)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 msgctxt "email"
 msgid "Bcc"
-msgstr ""
+msgstr "สำเนาซ่อน (Bcc)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
@@ -24614,15 +24917,15 @@ msgstr "วันที่สร้างรายการ"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 msgid "Sent"
-msgstr ""
+msgstr "ส่งแล้ว"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 msgid "Next attempt (estimate)"
-msgstr ""
+msgstr "การลองครั้งถัดไป (โดยประมาณ)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 msgid "HTML content"
-msgstr ""
+msgstr "เนื้อหา HTML"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 #, fuzzy
@@ -24638,12 +24941,13 @@ msgstr "รูปภาพส่วนหัว"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 msgid "Sensitive content not shown for security reasons"
-msgstr ""
+msgstr "ซ่อนเนื้อหาที่ละเอียดอ่อนเนื่องจากเหตุผลด้านความปลอดภัย"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 msgid ""
 "Additional headers will be added by the mail server and are not visible here."
 msgstr ""
+"ส่วนหัวเพิ่มเติม (Additional headers) จะถูกเพิ่มโดยเมลเซิร์ฟเวอร์ และจะไม่แสดงให้เห็นในหน้านี้"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 #, python-format
@@ -24651,33 +24955,32 @@ msgid ""
 "This is an overview of all emails sent by your organizer account in the last "
 "%(days)s days."
 msgstr ""
+"นี่คือภาพรวมของอีเมลทั้งหมดที่ส่งโดยบัญชีผู้จัดงานของคุณในช่วง %(days)s วันที่ผ่านมา"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 msgid "You haven't sent any emails recently."
-msgstr ""
+msgstr "คุณยังไม่ได้ส่งอีเมลใดๆ เมื่อเร็วๆ นี้"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
-#, fuzzy
-#| msgid "Contact"
 msgid "Context"
-msgstr "ติดต่อ"
+msgstr "บริบทข้อมูล (Context)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 msgid "Sent:"
-msgstr ""
+msgstr "ส่งเมื่อ:"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 msgid "Retry (if failed or withheld)"
-msgstr ""
+msgstr "ลองอีกครั้ง (หากล้มเหลวหรือถูกระงับไว้)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 msgid "Abort (if queued, awaiting retry or withheld)"
-msgstr ""
+msgstr "ยกเลิกการส่ง (หากอยู่ในคิว รอการลองใหม่ หรือถูกระงับไว้)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html
 #, python-format
 msgid "Events with plugin %(name)s"
-msgstr ""
+msgstr "อีเวนต์ที่ใช้งานปลั๊กอิน %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html
 #, python-format
@@ -24685,6 +24988,7 @@ msgid ""
 "The plugin \"%(name)s\" can be enabled or disabled for every event "
 "individually."
 msgstr ""
+"ปลั๊กอิน \"%(name)s\" สามารถเปิดหรือปิดใช้งานสำหรับแต่ละอีเวนต์แยกกันได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html
 #, python-format
@@ -24692,6 +24996,8 @@ msgid ""
 "The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
+"ปลั๊กอิน \"%(name)s\" เปิดใช้งานสำหรับบัญชีผู้จัดงานของคุณแล้ว แต่ยังจำเป็นต้องเปิดใช้งานสำหรับอีเ"
+"วนต์เฉพาะที่คุณต้องการนำไปใช้ด้วย"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html
 msgid ""
@@ -24699,6 +25005,8 @@ msgid ""
 "that it might still be necessary to configure the plugin for each event "
 "individually."
 msgstr ""
+"คุณสามารถใช้แบบฟอร์มนี้เพื่อเปิดหรือปิดใช้งานสำหรับหลายอีเวนต์ได้อย่างรวดเร็ว โปรดทราบว่าอาจยังจ"
+"ำเป็นต้องตั้งค่าปลั๊กอินสำหรับแต่ละอีเวนต์แยกกันอีกครั้ง"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid ""
@@ -24706,29 +25014,32 @@ msgid ""
 "account. Plugins might bring additional software functionality, connect your "
 "events to third-party services, or apply other forms of customizations."
 msgstr ""
+"ในหน้านี้ คุณสามารถเลือกปลั๊กอินที่คุณต้องการเปิดใช้งานสำหรับบัญชีผู้จัดงานของคุณได้ ปลั๊กอินอาจเพิ่มฟังก์"
+"ชันการทำงานใหม่ๆ ของซอฟต์แวร์ เชื่อมต่ออีเวนต์ของคุณเข้ากับบริการของบุคคลที่สาม หรือปรับแต่งรูปแบ"
+"บอื่นๆ"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid "Active (all events)"
-msgstr ""
+msgstr "เปิดใช้งาน (ทุกอีเวนต์)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 #, python-format
 msgid "Active (%(count)s event)"
 msgid_plural "Active (%(count)s events)"
-msgstr[0] ""
+msgstr[0] "เปิดใช้งาน (%(count)s อีเวนต์)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid ""
 "Parts of this plugin can be enabled or disabled for events individually."
-msgstr ""
+msgstr "บางส่วนของปลั๊กอินนี้สามารถเปิดหรือปิดใช้งานสำหรับแต่ละอีเวนต์แยกกันได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid "Manage events"
-msgstr ""
+msgstr "จัดการอีเวนต์"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid "This plugin can be enabled or disabled for events individually."
-msgstr ""
+msgstr "ปลั๊กอินนี้สามารถเปิดหรือปิดใช้งานสำหรับแต่ละอีเวนต์แยกกันได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html
 msgid ""
@@ -24736,51 +25047,54 @@ msgid ""
 "can later set for your events and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of events."
 msgstr ""
+"คุณสามารถกำหนดชุดคุณสมบัติข้อมูลอธิบาย (Metadata properties หรือตัวแปร) ที่นี่ ซึ่งสามารถนำไป"
+"ตั้งค่าให้กับอีเวนต์ของคุณในภายหลังและนำกลับมาใช้ซ้ำในจุดต่างๆ เช่น รูปแบบตั๋ว ได้ วิธีนี้ช่วยประหยัดเ"
+"วลาได้อย่างมากหากคุณต้องสร้างอีเวนต์จำนวนมาก"
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html
 msgid "Create a new property"
-msgstr ""
+msgstr "สร้างคุณสมบัติใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html
 msgid "Delete property:"
-msgstr ""
+msgstr "ลบคุณสมบัติ:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html
 msgid "Are you sure you want to delete the property?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบคุณสมบัตินี้?"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html
 msgid "Property:"
-msgstr ""
+msgstr "คุณสมบัติ:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html
 msgid "Validation"
-msgstr ""
+msgstr "การตรวจสอบความถูกต้องของข้อมูล (Validation)"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html
 msgid "Allowed values"
-msgstr ""
+msgstr "ค่าที่อนุญาตให้ใช้"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html
 msgid "If you keep this empty, all input will be allowed."
-msgstr ""
+msgstr "หากคุณเว้นว่างไว้ จะอนุญาตให้ป้อนข้อมูลได้ทุกค่า"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html
 msgid "Add a new value"
-msgstr ""
+msgstr "เพิ่มค่าใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "เรียงตามลำดับอักษร"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html
 msgid "No media have been created yet."
-msgstr ""
+msgstr "ยังไม่มีการสร้างสื่อใดๆ"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html
 msgid "Create a new medium"
-msgstr ""
+msgstr "สร้างสื่อใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html
@@ -24798,45 +25112,45 @@ msgstr "ประเภทสื่อ"
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html
 msgctxt "reusable_media"
 msgid "Connections"
-msgstr ""
+msgstr "การเชื่อมต่อ"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html
 #, python-format
 msgctxt "reusable_media"
 msgid "Medium %(id)s"
-msgstr ""
+msgstr "สื่อ %(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html
 msgctxt "reusable_media"
 msgid "Medium history"
-msgstr ""
+msgstr "ประวัติสื่อ"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html
 msgctxt "reusable_media"
 msgid "New medium"
-msgstr ""
+msgstr "สื่อใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html
 msgid "Delete SSO client:"
-msgstr ""
+msgstr "ลบ SSO client:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html
 msgid "Are you sure you want to delete this SSO client?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบ SSO client นี้?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html
 msgid "This SSO client cannot be deleted since it has already been used."
-msgstr ""
+msgstr "ไม่สามารถลบ SSO client นี้ได้ เนื่องจากถูกใช้งานในระบบไปแล้ว"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
 msgid "SSO client:"
-msgstr ""
+msgstr "SSO client:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 msgid "Create a new SSO client"
-msgstr ""
+msgstr "สร้าง SSO client ใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 msgid ""
@@ -24844,72 +25158,79 @@ msgid ""
 "account credentials by setting up your other systems as a Single-Sign-On "
 "(SSO) client based on OpenID Connect."
 msgstr ""
+"คุณสามารถอนุญาตให้ลูกค้าของคุณลงชื่อเข้าใช้ระบบอื่นได้โดยใช้ข้อมูลประจำตัวของบัญชีลูกค้า โดยตั้งค่าระ"
+"บบอื่นของคุณเป็น Single-Sign-On (SSO) client ตามมาตรฐาน OpenID Connect"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html
 msgid "Delete SSO provider:"
-msgstr ""
+msgstr "ลบผู้ให้บริการ SSO:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html
 msgid "Are you sure you want to delete this SSO provider?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบผู้ให้บริการ SSO นี้?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html
 msgid "This SSO provider cannot be deleted since it has already been used."
-msgstr ""
+msgstr "ไม่สามารถลบผู้ให้บริการ SSO นี้ได้ เนื่องจากถูกใช้งานในระบบไปแล้ว"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 msgid "SSO provider:"
-msgstr ""
+msgstr "ผู้ให้บริการ SSO:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 msgid "Create a new SSO provider"
-msgstr ""
+msgstr "สร้างผู้ให้บริการ SSO ใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 msgctxt "sso"
 msgid "Redirection URL"
-msgstr ""
+msgstr "URL สำหรับเปลี่ยนเส้นทาง (Redirection URL)"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 msgid ""
 "You can connect existing Single-Sign-On (SSO) providers to allow your "
 "customers to log in using your own account system."
 msgstr ""
+"คุณสามารถเชื่อมต่อผู้ให้บริการ Single-Sign-On (SSO) ที่มีอยู่เพื่ออนุญาตให้ลูกค้าของคุณลงชื่อเข้าใช้โ"
+"ดยใช้ระบบบัญชีของคุณเองได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html
 msgid "Delete team:"
-msgstr ""
+msgstr "ลบทีม:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html
 msgid ""
 "You cannot delete the team because there would be no one left who could "
 "change team permissions afterwards."
 msgstr ""
+"คุณไม่สามารถลบทีมนี้ได้ เนื่องจากจะไม่เหลือผู้ใช้อื่นที่สามารถแก้ไขสิทธิ์ของทีมได้ในภายหลัง"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html
 msgid "Are you sure you want to delete the team?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบทีมนี้?"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html
 msgid "Team:"
-msgstr ""
+msgstr "ทีม:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/teams.html
 msgid "Create a new team"
-msgstr ""
+msgstr "สร้างทีมใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html
 msgid "You will be able to add team members in the next step."
-msgstr ""
+msgstr "คุณจะสามารถเพิ่มสมาชิกในทีมได้ในขั้นตอนถัดไป"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html
 msgid ""
 "Even if a team has no access to a certain category of data, they might still "
 "be able to see parts of this data when it is linked to data they can see."
 msgstr ""
+"แม้ว่าทีมจะไม่มีสิทธิ์เข้าถึงข้อมูลบางหมวดหมู่ แต่พวกเขาก็อาจยังมองเห็นบางส่วนของข้อมูลนั้นได้เมื่อมีการ"
+"เชื่อมโยงกับข้อมูลที่พวกเขาสามารถมองเห็นได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html
 msgid ""
@@ -24917,6 +25238,8 @@ msgid ""
 "some information about gift cards linked to a customer account, even if they "
 "generally can't see gift cards directly."
 msgstr ""
+"ตัวอย่างเช่น ผู้ที่มีสิทธิ์เข้าถึงบัญชีลูกค้าจะสามารถเห็นข้อมูลบางส่วนเกี่ยวกับบัตรของขวัญที่เชื่อมโยงกับบัญชี"
+"ลูกค้านั้นได้ แม้ว่าโดยทั่วไปจะไม่สามารถดูบัตรของขวัญโดยตรงได้ก็ตาม"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html
 msgid ""
@@ -24924,26 +25247,28 @@ msgid ""
 "information about vouchers used to create an order, even if they generally "
 "can't see vouchers directly."
 msgstr ""
+"ตัวอย่างเช่น ผู้ที่มีสิทธิ์เข้าถึงคำสั่งซื้อจะสามารถเห็นข้อมูลบางส่วนเกี่ยวกับคูปองที่ใช้ในการสร้างคำสั่งซื้อนั้"
+"นได้ แม้ว่าโดยทั่วไปจะไม่สามารถดูคูปองโดยตรงได้ก็ตาม"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html
 msgid "Member"
-msgstr ""
+msgstr "สมาชิก"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html
 msgid "Two-factor authentication enabled"
-msgstr ""
+msgstr "เปิดใช้งานการยืนยันตัวตนแบบสองปัจจัยแล้ว"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html
 msgid "Two-factor authentication disabled"
-msgstr ""
+msgstr "ปิดใช้งานการยืนยันตัวตนแบบสองปัจจัย"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html
 msgid "invited, pending response"
-msgstr ""
+msgstr "ส่งคำเชิญแล้ว อยู่ระหว่างรอการตอบรับ"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html
 msgid "resend invite"
-msgstr ""
+msgstr "ส่งคำเชิญอีกครั้ง"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html
 msgid ""
@@ -24951,59 +25276,60 @@ msgid ""
 "have a pretix account, they will immediately be added to the event. "
 "Otherwise, they will be sent an email with an invitation."
 msgstr ""
+"หากต้องการเพิ่มผู้ใช้ใหม่ คุณสามารถระบุที่อยู่อีเมลของพวกเขาที่นี่ หากพวกเขามีบัญชี pretix อยู่แล้ว พ"
+"วกเขาจะถูกเพิ่มเข้าในอีเวนต์ทันที หากยังไม่มี ระบบจะส่งอีเมลพร้อมคำเชิญไปให้"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html
 msgid "Add"
-msgstr ""
+msgstr "เพิ่ม"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html
 msgid "API tokens"
-msgstr ""
+msgstr "โทเคน API"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html
 msgid "Team history"
-msgstr ""
+msgstr "ประวัติทีม"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html
 msgid "The list below shows all teams that exist within this organizer."
-msgstr ""
+msgstr "รายการด้านล่างแสดงทีมทั้งหมดที่มีอยู่ภายในผู้จัดงานรายนี้"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html
 msgid "Members"
-msgstr ""
+msgstr "สมาชิก"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html
 #, python-format
 msgid "+ %(count)s invited"
-msgstr ""
+msgstr "+ ส่งคำเชิญแล้ว %(count)s คน"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html
 msgid "Modify webhook"
-msgstr ""
+msgstr "แก้ไข เว็บฮุก (Webhook)"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html
 msgid "Create a new webhook"
-msgstr ""
+msgstr "สร้างเว็บฮุกใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 #, python-format
 msgid "Logs for webhook %(url)s"
-msgstr ""
+msgstr "บันทึกการทำงานของเว็บฮุก %(url)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 msgid "This page shows all calls to your webhook in the past 30 days."
-msgstr ""
+msgstr "หน้านี้แสดงรายการเรียกใช้งานเว็บฮุกของคุณทั้งหมดในช่วง 30 วันที่ผ่านมา"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 #, python-format
 msgid "One webhook is scheduled to be retried."
 msgid_plural "%(count)s webhooks are scheduled to be retried."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "เว็บฮุกจำนวน %(count)s รายการมีกำหนดเวลาลองใหม่อีกครั้ง"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 msgid "Stop retrying"
-msgstr ""
+msgstr "หยุดการลองใหม่"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 #, python-format
@@ -25011,92 +25337,95 @@ msgid ""
 "Webhooks scheduled to be retried in less than %(minutes)s minutes may not be "
 "listed here and can no longer be stopped or expedited."
 msgstr ""
+"เว็บฮุกที่มีกำหนดเวลาลองใหม่อีกครั้งในเวลาไม่ถึง %(minutes)s นาที อาจไม่ปรากฏในหน้านี้ และจะไ"
+"ม่สามารถหยุดหรือเร่งดำเนินการได้อีกต่อไป"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 msgid "This webhook was retried since it previously failed."
-msgstr ""
+msgstr "เว็บฮุกนี้ถูกลองใหม่อีกครั้งเนื่องจากล้มเหลวก่อนหน้านี้"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 msgid "Failed"
-msgstr ""
+msgstr "ล้มเหลว"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 msgid "Request URL"
-msgstr ""
+msgstr "URL สำหรับการส่งคำร้องขอ (Request URL)"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 msgid "Request POST body"
-msgstr ""
+msgstr "เนื้อหาคำร้องขอแบบ POST (Request POST body)"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 msgid "Response body"
-msgstr ""
+msgstr "เนื้อหาข้อมูลตอบกลับ (Response body)"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 msgid "This webhook did not receive any events in the last 30 days."
-msgstr ""
+msgstr "เว็บฮุกนี้ไม่ได้รับเหตุการณ์ (Events) ใดๆ ในช่วง 30 วันที่ผ่านมา"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html
 msgid ""
 "This menu allows you to create webhooks to connect pretix to other online "
 "services."
 msgstr ""
+"เมนูนี้ช่วยให้คุณสามารถสร้างเว็บฮุกเพื่อเชื่อมต่อ pretix เข้ากับบริการออนไลน์อื่นๆ ได้"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html
 msgid "Read documentation"
-msgstr ""
+msgstr "อ่านเอกสารคู่มือ"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html
 msgid "You haven't created any webhooks yet."
-msgstr ""
+msgstr "คุณยังไม่ได้สร้างเว็บฮุกใดๆ"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html
 msgid "Create webhook"
-msgstr ""
+msgstr "สร้างเว็บฮุก"
 
 #: pretix/control/templates/pretixcontrol/pagination.html
 msgid "Go to page 1"
-msgstr ""
+msgstr "ไปที่หน้า 1"
 
 #: pretix/control/templates/pretixcontrol/pagination.html
 #, python-format
 msgid "Go to page %(page)s"
-msgstr ""
+msgstr "ไปที่หน้า %(page)s"
 
 #: pretix/control/templates/pretixcontrol/pagination.html
 msgid "Click to choose a page"
-msgstr ""
+msgstr "คลิกเพื่อเลือกหน้า"
 
 #: pretix/control/templates/pretixcontrol/pagination.html
 #, python-format
 msgid "Page %(page)s of %(of)s (%(count)s elements)"
-msgstr ""
+msgstr "หน้า %(page)s จาก %(of)s (ทั้งหมด %(count)s รายการ)"
 
 #: pretix/control/templates/pretixcontrol/pagination.html
 #: pretix/control/templates/pretixcontrol/pagination_huge.html
 #, python-format
 msgid "%(count)s elements"
-msgstr ""
+msgstr "%(count)s รายการ"
 
 #: pretix/control/templates/pretixcontrol/pagination.html
 #: pretix/control/templates/pretixcontrol/pagination_huge.html
 msgid "Show per page:"
-msgstr ""
+msgstr "แสดงต่อหน้า:"
 
 #: pretix/control/templates/pretixcontrol/pagination_huge.html
 #, python-format
 msgid "Page %(page)s"
-msgstr ""
+msgstr "หน้า %(page)s"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html
 msgid "PDF Editor"
-msgstr ""
+msgstr "ตัวแก้ไข PDF"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 #: pretix/plugins/banktransfer/refund_export.py
 msgid "Code"
-msgstr ""
+msgstr "รหัส"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Text box"
@@ -25104,23 +25433,23 @@ msgstr "กล่องข้อความ"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "QR Code"
-msgstr ""
+msgstr "กล่องข้อความ"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "QR code for Check-In"
-msgstr ""
+msgstr "QR Code สำหรับการลงทะเบียนเข้างาน (Check-In)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "QR code for Lead Scanning"
-msgstr ""
+msgstr "QR Code สำหรับการสแกนเก็บข้อมูลผู้ร่วมงาน (Lead Scanning)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Other QR code"
-msgstr ""
+msgstr "QR Code อื่นๆ"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Image"
-msgstr ""
+msgstr "รูปภาพ"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid ""
@@ -25128,14 +25457,16 @@ msgid ""
 "generated by plugins. If you want to embed a logo or other images, use a "
 "custom background instead."
 msgstr ""
+"คุณสามารถใช้ตัวเลือกนี้เพื่อเพิ่มรูปภาพที่ผู้ใช้ อัปโหลดจากคำถาม หรือรูปภาพที่สร้างโดยปลั๊กอินได้ หากคุณ"
+"ต้องการฝังโลโก้หรือรูปภาพอื่นๆ ให้ใช้ภาพพื้นหลังแบบกำหนดเองแทน"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Dynamic image"
-msgstr ""
+msgstr "รูปภาพแบบไดนามิก (Dynamic image)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "pretix Logo"
-msgstr ""
+msgstr "โลโก้ pretix"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Duplicate"
@@ -25143,17 +25474,19 @@ msgstr "ทำสำเนา"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Undo"
-msgstr ""
+msgstr "เลิกทำ"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Redo"
-msgstr ""
+msgstr "ทำซ้ำ"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid ""
 "This feature is only intended for advanced users. We recommend to only use "
 "it to copy and share ticket designs, not to modify the design source code."
 msgstr ""
+"ฟีเจอร์นี้มีไว้สำหรับผู้ใช้ระดับสูงเท่านั้น เราขอแนะนำให้ใช้สำหรับคัดลอกและแชร์รูปแบบตั๋วเท่านั้น ไม่แนะ"
+"นำให้แก้ไขซอร์สโค้ดของการออกแบบ"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 #: pretix/presale/templates/pretixpresale/giftcard/checkout.html
