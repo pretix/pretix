@@ -626,7 +626,7 @@ class OrderDetail(OrderView):
                 (p.item.ask_attendee_data and self.request.event.settings.attendee_emails_asked) or
                 p.item.questionnaires.all()
             )
-            p.cache_answers()
+            p.cache_answers(questionnaire_type=None, sales_channel=None)
             p.order = self.order
 
             positions.append(p)

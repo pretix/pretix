@@ -48,8 +48,7 @@ from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
-    InlineItemVariationSerializer, ItemSerializer, DatafieldSerializer, cook_id, cook_id_from_parts,
-    system_datafield_numbers, uncook_id,
+    CompatQuestionSerializer, InlineItemVariationSerializer, ItemSerializer,
 )
 from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
@@ -59,7 +58,7 @@ from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
     CachedFile, Checkin, Customer, Device, GiftCard, Invoice, InvoiceAddress,
     InvoiceLine, Item, ItemVariation, Order, OrderPosition, Question,
-    QuestionAnswer, QuestionnaireChild, ReusableMedium, SalesChannel, Seat, SubEvent, TaxRule,
+    QuestionAnswer, Questionnaire, QuestionnaireChild, ReusableMedium, SalesChannel, Seat, SubEvent, TaxRule,
     Voucher,
 )
 from pretix.base.models.orders import (
@@ -247,7 +246,7 @@ class MixedAnswerListSerializer(ListSerializer):
             if qc.user_datafield_id:
                 if answer := answers_dict.get(qc.user_datafield_id):
                     answer = dict(answer)
-                    answer["question"] = cook_id(qc)
+                    answer["question"] = qc.cooked_id
                     answer["questionnaire_id"] = qc.questionnaire_id
                     answer["user_datafield_id"] = qc.user_datafield_id
                     answers.append(answer)
@@ -270,7 +269,7 @@ class MixedAnswerListSerializer(ListSerializer):
                             except ValueError:
                                 pass
                             answers.append({
-                                "question": cook_id_from_parts(qc.questionnaire_id, None, f'{qc.system_datafield}:{k}'),
+                                "question": QuestionnaireChild.cook_id_from_parts(qc.questionnaire_id, None, f'{qc.system_datafield}:{k}'),
                                 "answer": name_parts[k],
                                 "question_identifier": f'@{qc.system_datafield}:{k}',
                                 "options": options,
@@ -279,7 +278,7 @@ class MixedAnswerListSerializer(ListSerializer):
                                 "system_datafield": f'{qc.system_datafield}:{k}',
                             })
                 answers.append({
-                    "question": cook_id(qc),
+                    "question": qc.cooked_id,
                     "answer": sys_answer,
                     "question_identifier": f'@{qc.system_datafield}',
                     "options": [],
@@ -296,9 +295,9 @@ class MixedAnswerListSerializer(ListSerializer):
         settings = self.context['event'].settings
         for answer in data["answers"]:
             try:
-                qid, dfid, sys_df = uncook_id(answer["question"])
+                qid, dfid, sys_df = QuestionnaireChild.uncook_id(answer["question"])
             except ValueError:
-                if type(answer["question"]) is str and answer["question"].lstrip("@") in system_datafield_numbers:
+                if type(answer["question"]) is str and answer["question"].lstrip("@") in QuestionnaireChild.SYSTEM_DATAFIELD_NUMBERS:
                     qid, dfid, sys_df = None, None, answer["question"].lstrip("@")
                 else:
                     raise ValidationError('Invalid question ID')
@@ -784,6 +783,7 @@ class AttendeeNamePartsField(serializers.Field):
 
 class CheckinListOrderPositionSerializer(OrderPositionSerializer):
     require_attention = RequireAttentionField(source='*')
+    answers = AnswerSerializer(many=True)
     attendee_name = AttendeeNameField(source='*')
     attendee_name_parts = AttendeeNamePartsField(source='*')
     order__status = serializers.SlugRelatedField(read_only=True, slug_field='status', source='order')
@@ -813,7 +813,7 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
             self.fields['variation'] = InlineItemVariationSerializer(read_only=True, context=self.context)
 
         if 'answers.question' in self.context['expand']:
-            self.fields['answers'].child.fields['question'] = DatafieldSerializer(read_only=True)   # TODO(questionnaires)
+            self.fields['answers'].child.fields['question'] = CompatQuestionSerializer(read_only=True)   # TODO(questionnaires)
 
         if 'addons' in self.context['expand']:
             # Experimental feature, undocumented on purpose for now in case we need to remove it again

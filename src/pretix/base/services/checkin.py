@@ -55,7 +55,7 @@ from django_scopes import scope, scopes_disabled
 
 from pretix.base.models import (
     Checkin, CheckinList, Device, Event, Gate, Item, ItemVariation, Order,
-    OrderPosition, QuestionOption,
+    OrderPosition, QuestionOption, Questionnaire, QuestionnaireChild,
 )
 from pretix.base.signals import checkin_created, periodic_task
 from pretix.helpers import OF_SELF
@@ -897,14 +897,14 @@ def _save_answers(op, answers, given_answers):
     written = False
     for q, a in given_answers.items():
         if not a:
-            if q in answers:
+            if q.id in answers:
                 written = True
-                answers[q].delete()
+                answers[q.id].delete()
             else:
                 continue
         if isinstance(a, QuestionOption):
-            if q in answers:
-                qa = answers[q]
+            if q.id in answers:
+                qa = answers[q.id]
                 qa.answer = str(a.answer)
                 qa.save()
                 written = True
@@ -913,8 +913,8 @@ def _save_answers(op, answers, given_answers):
                 qa = _create_answer(question=q, answer=str(a.answer))
             qa.options.add(a)
         elif isinstance(a, list):
-            if q in answers:
-                qa = answers[q]
+            if q.id in answers:
+                qa = answers[q.id]
                 qa.answer = ", ".join([str(o) for o in a])
                 qa.save()
                 written = True
@@ -923,8 +923,8 @@ def _save_answers(op, answers, given_answers):
                 qa = _create_answer(question=q, answer=", ".join([str(o) for o in a]))
             qa.options.add(*a)
         elif isinstance(a, File):
-            if q in answers:
-                qa = answers[q]
+            if q.id in answers:
+                qa = answers[q.id]
             else:
                 qa = _create_answer(question=q, answer=str(a))
             qa.file.save(os.path.basename(a.name), a, save=False)
@@ -932,8 +932,8 @@ def _save_answers(op, answers, given_answers):
             qa.save()
             written = True
         else:
-            if q in answers:
-                qa = answers[q]
+            if q.id in answers:
+                qa = answers[q.id]
                 qa.answer = str(a)
                 qa.save()
             else:
@@ -1033,17 +1033,19 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
 
     # Do this outside of transaction so it is saved even if the checkin fails for some other reason
     checkin_questions = list(
-        clist.event.questions.filter(ask_during_checkin=True, items__in=[op.item_id])
+        QuestionnaireChild.objects.filter(
+            questionnaire__event=clist.event, questionnaire__type=Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN,
+            questionnaire__items__in=[op.item_id],
+        ).select_related('user_datafield', 'questionnaire')
     )
     require_answers = []
     if type != Checkin.TYPE_EXIT and checkin_questions:
-        answers = {a.question: a for a in op.answers.all()}
         for q in checkin_questions:
-            if q not in given_answers and q not in answers:
+            if q.user_datafield not in given_answers and q.user_datafield_id not in op.answer_cache:
                 require_answers.append(q)
 
         if not simulate:
-            _save_answers(op, answers, given_answers)
+            _save_answers(op, op.answer_cache, given_answers)
 
     with conditional_atomic(not simulate):
         # Lock order positions, if it is an entry. We don't need it for exits, as a race condition wouldn't be problematic

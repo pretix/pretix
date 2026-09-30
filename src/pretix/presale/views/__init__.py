@@ -52,7 +52,7 @@ from pretix.base.i18n import get_language_without_region, set_region
 from pretix.base.middleware import get_supported_language
 from pretix.base.models import (
     CartPosition, Customer, InvoiceAddress, ItemAddOn, OrderFee, Question,
-    QuestionAnswer, QuestionOption, TaxRule,
+    QuestionAnswer, QuestionOption, Questionnaire, TaxRule,
 )
 from pretix.base.models.items import QuestionnaireChild
 from pretix.base.models.orders import CheckoutSession
@@ -251,7 +251,7 @@ class CartMixin:
             group.price_for_input_net = group.net_price_before_rounding + sum(a.net_price_before_rounding for a in has_addons[group.pk])
 
             if answers:
-                group.cache_answers(all=False)
+                group.cache_answers(questionnaire_type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE, sales_channel=self.request.sales_channel)
                 group.additional_answers = pos_additional_fields.get(group.pk)
             positions.append(group)
 

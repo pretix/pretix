@@ -1807,9 +1807,10 @@ class Question(LoggedModel):
         return self.sortkey < other.sortkey
 
     def clean_answer(self, answer):
-        if self.required:
-            if not answer or (self.type == Question.TYPE_BOOLEAN and answer not in ("true", "True", True)):
-                raise ValidationError(_('An answer to this question is required to proceed.'))
+        # TODO(questionnaires) - we don't have Question.required any more - do we actually need this check? if yes, pass in required from caller
+        # if self.required:
+        #     if not answer or (self.type == Question.TYPE_BOOLEAN and answer not in ("true", "True", True)):
+        #         raise ValidationError(_('An answer to this question is required to proceed.'))
         if not answer:
             if self.type == Question.TYPE_BOOLEAN:
                 return False

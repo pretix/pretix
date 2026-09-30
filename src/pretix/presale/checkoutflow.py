@@ -1103,7 +1103,7 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
                 if parentqc.dependency_question_id and not question_is_visible(parentqc.dependency_question_id, parentqc.dependency_values):
                     return False
                 answer_values = cp.get_dependency_answer_values(parentqc)
-                return any(qval in answer_values for qval in qvals)
+                return answer_values and any(qval in answer_values for qval in qvals)
 
             def question_is_required(q):
                 return (

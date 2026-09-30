@@ -95,7 +95,7 @@ from ._transactions import (
 )
 from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
-from .items import Item, ItemVariation, Question, QuestionOption, Quota
+from .items import Item, ItemVariation, Question, QuestionOption, QuestionnaireChild, Quota
 
 logger = logging.getLogger(__name__)
 
@@ -1597,7 +1597,7 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
     def meta_info_data(self, d):
         self.meta_info = json.dumps(d)
 
-    def cache_answers(self, all=True):
+    def cache_answers(self, questionnaire_type, sales_channel):
         """
         Creates a new property on the object:
         questions: a list of Question objects, extended by an 'answer' property
@@ -1605,13 +1605,16 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
         # We need to clone our question objects, otherwise we will override the cached
         # answers of other items in the same cart if the question objects have been
         # selected via prefetch_related
-        if not all:
-            if hasattr(self.item, 'relevant_questionnaires'):
-                children = list(copy.copy(qc) for qq in self.item.relevant_questionnaires for qc in qq.childlist)
-            else:
-                children = list(copy.copy(qc) for qq in self.item.questionnaires.filter(type='PS') for qc in qq.children.all())
+        if hasattr(self.item, 'relevant_questionnaires'):
+            children = list(copy.copy(qc) for qq in self.item.relevant_questionnaires for qc in qq.childlist)
         else:
-            children = list(copy.copy(qc) for qq in self.item.questionnaires.filter(type__startswith='P') for qc in qq.children.all())
+            children = QuestionnaireChild.objects.filter(questionnaire__event_id=self.item.event_id, questionnaire__items__in=[self.item.id])
+            if questionnaire_type is not None:
+                children = children.filter(questionnaire__type=questionnaire_type)
+            if sales_channel is not None:
+                children = children.filter(Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channel=sales_channel))
+
+            children = list(children)
 
         qc_cache = {
             q.pk: q for q in children
@@ -1624,28 +1627,30 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
             if parentqc.dependency_question_id and not qc_is_visible(parentqc.dependency_question_id, parentqc.dependency_values):
                 return False
             answer_values = self.get_dependency_answer_values(parentqc)
-            return any(qval in answer_values for qval in qvals)
+            return answer_values and any(qval in answer_values for qval in qvals)
 
         self.questions = []
         for qc in children:
-            if qc.user_datafield_id:
-                if qc.user_datafield_id in self.answer_cache:
-                    qc.answer = self.answer_cache[qc.user_datafield_id]
-                else:
-                    qc.answer = ""
-                #qc.answer.question = qc  # cache object
-            elif qc.system_datafield:
-                qc.answer = self.get_system_answer(qc.system_datafield)
-                #qc.answer.question = qc  # cache object
-            else:
+            try:
+                qc.answer = self.answer_cache[qc.user_datafield_id or qc.system_datafield]
+            except KeyError:
                 continue
             if not qc.dependency_question_id or qc_is_visible(qc.dependency_question_id, qc.dependency_values):
                 self.questions.append(qc)
+        return self.questions
 
     @cached_property
     def answer_cache(self):
         return {
-            aw.question_id: aw for aw in getattr(self, 'answerlist', self.answers.all())
+            "attendee_name_parts": self.attendee_name,
+            "attendee_email": self.attendee_email,
+            "company": self.company,
+            "street": self.street,
+            "zipcode": self.zipcode,
+            "city": self.city,
+            "state": self.state,
+            "country": str(self.country),
+            **{aw.question_id: aw for aw in getattr(self, 'answerlist', self.answers.all())},
         }
 
     def get_dependency_answer_values(self, qc):

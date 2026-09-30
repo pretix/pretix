@@ -55,7 +55,7 @@ from pretix.api.serializers.checkin import (
     CheckinListSerializer, CheckinRPCAnnulInputSerializer,
     CheckinRPCRedeemInputSerializer, MiniCheckinListSerializer,
 )
-from pretix.api.serializers.item import DatafieldSerializer
+from pretix.api.serializers.item import CompatQuestionSerializer
 from pretix.api.serializers.order import (
     CheckinListOrderPositionSerializer, CheckinSerializer,
     FailedCheckinSerializer,
@@ -65,7 +65,7 @@ from pretix.api.views.order import OrderPositionFilter
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Checkin, CheckinList, Device, Event, Order, OrderPosition,
-    Question, ReusableMedium, RevokedTicketSecret, TeamAPIToken,
+    Question, Questionnaire, QuestionnaireChild, ReusableMedium, RevokedTicketSecret, TeamAPIToken,
 )
 from pretix.base.models.orders import PrintLog
 from pretix.base.permissions import AnyPermissionOf
@@ -489,6 +489,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             'pdf_data': pdf_data and (
                 user if user and user.is_authenticated else auth
             ).has_event_permission(request.organizer, event, 'event.orders:read', request),
+            'preferred_questionnaire_type': Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN,
         }
 
     common_checkin_args = dict(
@@ -797,16 +798,19 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     # 5. Pre-validate all incoming answers, handle file upload
     given_answers = {}
     if answers_data:
-        for q in op.item.questions.filter(ask_during_checkin=True):
-            if str(q.pk) in answers_data:
+        for qc in QuestionnaireChild.objects.filter(
+                questionnaire__items__in=[op.item], questionnaire__type=Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
+        ):
+            if qc.user_datafield_id and (str(qc.user_datafield_id) in answers_data or str(qc.cooked_id) in answers_data):
                 try:
-                    if q.type == Question.TYPE_FILE:
-                        if answers_data[str(q.pk)]:
-                            given_answers[q] = _handle_file_upload(answers_data[str(q.pk)], user, auth)
+                    ans = answers_data.get(str(qc.user_datafield_id), answers_data[str(qc.cooked_id)])
+                    if qc.user_datafield.type == Question.TYPE_FILE:
+                        if ans:
+                            given_answers[qc.user_datafield] = _handle_file_upload(ans, user, auth)
                         else:
-                            given_answers[q] = None
+                            given_answers[qc.user_datafield] = None
                     else:
-                        given_answers[q] = q.clean_answer(answers_data[str(q.pk)])
+                        given_answers[qc.user_datafield] = qc.user_datafield.clean_answer(ans)
                 except (ValidationError, BaseValidationError):
                     pass
 
@@ -867,14 +871,13 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             else:
                 perform_checkin(**checkin_args)
         except RequiredQuestionsError as e:
+            qs = CompatQuestionSerializer(context={'event': op.order.event})
             return Response({
                 'status': 'incomplete',
                 'require_attention': op.require_checkin_attention,
                 'checkin_texts': op.checkin_texts,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
-                'questions': [
-                    DatafieldSerializer(q).data for q in e.questions  # TODO(questionnaires)
-                ],
+                'questions': CompatQuestionSerializer.mangle_results(op.order.event, (qs.to_representation(q) for q in e.questions)),  # TODO(questionnaires)
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         except RequiredMediaExchangeError as e:
@@ -973,6 +976,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         ctx['event'] = self.request.event
         ctx['expand'] = self.request.query_params.getlist('expand')
         ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
+        ctx['preferred_questionnaire_type'] = Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
         return ctx
 
     def get_filterset_kwargs(self):
