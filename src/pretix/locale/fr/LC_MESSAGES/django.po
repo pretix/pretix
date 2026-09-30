@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-24 15:35+0000\n"
-"PO-Revision-Date: 2026-08-25 00:00+0000\n"
+"PO-Revision-Date: 2026-09-30 07:25+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
 "fr/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.8.1\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -3449,7 +3449,7 @@ msgstr "Facture {num}"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr "Référence client : {reference}"
+msgstr "Référence client : {reference}"
 
 #: pretix/base/invoicing/pdf.py
 msgctxt "invoice"
@@ -3519,7 +3519,7 @@ msgstr "Prix unique : {net_price} net / {gross_price} brut"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Prix unique : {price}"
+msgstr "Prix unitaire : {price}"
 
 #: pretix/base/invoicing/pdf.py
 msgctxt "invoice"
@@ -29410,8 +29410,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py pretix/presale/views/order.py
 msgid "Unknown order code or not authorized to access this order."
-msgstr ""
-"Code de commande inconnu ou non autorisé pour accéder à cette commande."
+msgstr "Code de commande inconnu ou accès à cette commande refusé."
 
 #: pretix/control/views/orders.py pretix/presale/views/order.py
 msgid "Ticket download is not enabled for this product."
