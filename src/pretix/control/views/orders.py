@@ -600,7 +600,7 @@ class OrderDetail(OrderView):
             'item', 'variation', 'addon_to', 'tax_rule', 'used_membership', 'used_membership__membership_type',
             'discount',
         ).prefetch_related(
-            'item__questions', 'issued_gift_cards', 'owned_gift_cards', 'linked_media',  # TODO(questionnaires) : item__questions gibts nicht mehr
+            'item__questionnaires', 'issued_gift_cards', 'owned_gift_cards', 'linked_media',  # TODO(questionnaires) : item__questions gibts nicht mehr
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
             Prefetch('all_checkins', queryset=Checkin.all.select_related('list', 'gate').order_by('datetime')),
             Prefetch('print_logs', queryset=PrintLog.objects.select_related('device').order_by('datetime')),
@@ -624,7 +624,7 @@ class OrderDetail(OrderView):
                 p.additional_fields or
                 (p.item.ask_attendee_data and self.request.event.settings.attendee_names_asked) or
                 (p.item.ask_attendee_data and self.request.event.settings.attendee_emails_asked) or
-                p.item.questions.all()
+                p.item.questionnaires.all()
             )
             p.cache_answers()
             p.order = self.order
