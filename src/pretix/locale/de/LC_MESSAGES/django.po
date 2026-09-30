@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-09-14 23:00+0000\n"
+"PO-Revision-Date: 2026-09-30 07:49+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
-">\n"
+"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/"
+"de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1784,16 +1784,12 @@ msgid "Transmission type"
 msgstr "Übertragungsart"
 
 #: pretix/base/exporters/invoices.py
-#, fuzzy
-#| msgid "Transmission type"
 msgid "Transmission status"
-msgstr "Übertragungsart"
+msgstr "Übertragungsstatus"
 
 #: pretix/base/exporters/invoices.py
-#, fuzzy
-#| msgid "Transmission type"
 msgid "Transmission date"
-msgstr "Übertragungsart"
+msgstr "Übertragungsdatum"
 
 #: pretix/base/exporters/invoices.py
 msgid "Cancellation"
@@ -4443,10 +4439,8 @@ msgid "Initialization date"
 msgstr "Installationsdatum"
 
 #: pretix/base/models/devices.py
-#, fuzzy
-#| msgid "Save to profile"
 msgid "Security profile"
-msgstr "Speichern als Profil"
+msgstr "Sicherheitsprofil"
 
 #: pretix/base/models/discount.py
 msgctxt "subevent"
@@ -5889,10 +5883,8 @@ msgid "Maximum value"
 msgstr "Maximaler Wert"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Maximum length"
 msgid "Minimum length"
-msgstr "Maximale Länge"
+msgstr "Minimale Länge"
 
 #: pretix/base/models/items.py
 msgid "Maximum length"
@@ -5963,10 +5955,8 @@ msgid "The maximum value must not be lower than the minimum value."
 msgstr "Der maximale Wert darf nicht unter dem minimalen Wert liegen."
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "The maximum value must not be lower than the minimum value."
 msgid "The maximum length must not be shorter than the minimum length."
-msgstr "Der maximale Wert darf nicht unter dem minimalen Wert liegen."
+msgstr "Die maximale Länge darf nicht kürzer sein als die minimale Länge."
 
 #: pretix/base/models/items.py
 msgid ""
@@ -10576,10 +10566,8 @@ msgstr ""
 "angegebenen „letzten Zahlungsdatum“ akzeptiert."
 
 #: pretix/base/settings.py
-#, fuzzy
-#| msgid "Generate invoices for Sales channels"
 msgid "Allow postponed payment choice for sales channels"
-msgstr "Rechnungen nur für bestimmte Verkaufskanäle generieren"
+msgstr "Erlaube aufgeschobene Entscheidung der Zahlungsart für Verkaufskanäle"
 
 #: pretix/base/settings.py
 msgid ""
@@ -10587,6 +10575,10 @@ msgid ""
 "their order without selecting a payment method. This is useful whenever "
 "orders are not created by the same person who is making the payment."
 msgstr ""
+"Wenn die aufgeschobene Zahlung auf einem Kanal erlaubt ist, können Kunden "
+"ihre Bestellung ohne Auswahl einer Zahlungsart abschließen. Das ist "
+"nützlich, wenn Bestellungen nicht von der selben Person erstellt werden, die "
+"die Zahlung durchführt."
 
 #: pretix/base/settings.py
 msgid "Show start date"
@@ -16886,7 +16878,7 @@ msgstr "dritten"
 #: pretix/control/forms/rrule.py
 msgctxt "rrule"
 msgid "fourth"
-msgstr ""
+msgstr "vierten"
 
 #: pretix/control/forms/rrule.py
 msgctxt "rrule"
@@ -18004,28 +17996,20 @@ msgid "Queued emails have been aborted."
 msgstr "Wartende E-Mails wurden abgebrochen."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "The property has been created."
 msgid "An organizer meta property has been created."
-msgstr "Eine Eigenschaft wurde erstellt."
+msgstr "Eine Meta-Eigenschaft wurde erstellt."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "The selected property has been deleted."
 msgid "An organizer meta property has been deleted."
-msgstr "Die ausgewählte Eigenschaft wurde gelöscht."
+msgstr "Eine Meta-Eigenschaft wurde gelöscht."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "The organizer has been changed."
 msgid "An organizer meta property has been changed."
-msgstr "Der Veranstalter wurde geändert."
+msgstr "Eine Meta-Eigenschaft wurde geändert."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "The product has been reordered."
 msgid "An organizer meta property has been reordered."
-msgstr "Das Produkt wurde umsortiert."
+msgstr "Eine Meta-Eigenschaft wurde umsortiert."
 
 #: pretix/control/logdisplay.py
 msgid "Gift card acceptance for another organizer has been added."
@@ -18239,6 +18223,8 @@ msgstr "Ein Zwei-Faktor-Notfall-Token wurde generiert."
 #: pretix/control/logdisplay.py
 msgid "Drift and throttle values for two-factor devices have been reset."
 msgstr ""
+"Versatz- und Drosselwerte für die Zwei-Faktor-Authentifizierung wurden "
+"zurückgesetzt."
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -19185,10 +19171,8 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-#, fuzzy
-#| msgid "Authorized apps"
 msgid "Authorize"
-msgstr "Autorisierte Apps"
+msgstr "Autorisieren"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 msgid "Error:"
@@ -22063,10 +22047,6 @@ msgstr ""
 "in Bestellnummern, Rechnungsnummern und Verwendungszwecken."
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
-#, fuzzy
-#| msgid ""
-#| "We strongly recommend against using short forms of more then 16 "
-#| "characters."
 msgid ""
 "We strongly recommend against using short forms of more than 16 characters."
 msgstr ""
@@ -27949,27 +27929,23 @@ msgstr "Authentifizierungsmechanismus"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Reset drift and throttle"
-msgstr ""
+msgstr "Versatz- und Drosselwerte zurücksetzen"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
-#, fuzzy
-#| msgid "Disable two-factor authentication"
 msgid "Available two-factor authentication methods"
-msgstr "Zwei-Faktor-Authentifizierung deaktivieren"
+msgstr "Verfügbare Methoden zur Zwei-Faktor-Authentifizierung"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
-#, fuzzy, python-format
-#| msgid "Expired since %(date)s"
+#, python-format
 msgid "1 failed attempt since %(date)s"
 msgid_plural "%(cnt)s failed attempts since %(date)s"
-msgstr[0] "Abgelaufen seit %(date)s"
-msgstr[1] "Abgelaufen seit %(date)s"
+msgstr[0] "1 Fehlversuch seit  %(date)s"
+msgstr[1] "%(cnt)s Fehlversuche seit %(date)s"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
-#, fuzzy, python-format
-#| msgid "Valid until %(date)s"
+#, python-format
 msgid "Currently locked until %(date)s"
-msgstr "Gültig bis %(date)s"
+msgstr "Derzeit gesperrt bis %(date)s"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Team memberships"
@@ -28512,20 +28488,26 @@ msgid "Invalid code, please try again."
 msgstr "Ungültiger Token, bitte erneut versuchen."
 
 #: pretix/control/views/auth.py
-#, fuzzy, python-brace-format
-#| msgid "Invalid code, please try again."
+#, python-brace-format
 msgid "Invalid code. Please try again after waiting {value} minute."
 msgid_plural "Invalid code. Please try again after waiting {value} minutes."
-msgstr[0] "Ungültiger Token, bitte erneut versuchen."
-msgstr[1] "Ungültiger Token, bitte erneut versuchen."
+msgstr[0] ""
+"Ungültiger Code. Bitte versuchen Sie es erneut, nachdem Sie {value} Minute "
+"gewartet haben."
+msgstr[1] ""
+"Ungültiger Code. Bitte versuchen Sie es erneut, nachdem Sie {value} Minuten "
+"gewartet haben."
 
 #: pretix/control/views/auth.py
-#, fuzzy, python-brace-format
-#| msgid "Invalid code, please try again."
+#, python-brace-format
 msgid "Invalid code. Please try again after waiting {value} second."
 msgid_plural "Invalid code. Please try again after waiting {value} seconds."
-msgstr[0] "Ungültiger Token, bitte erneut versuchen."
-msgstr[1] "Ungültiger Token, bitte erneut versuchen."
+msgstr[0] ""
+"Ungültiger Code. Bitte versuchen Sie es erneut, nachdem Sie {value} Sekunde "
+"gewartet haben."
+msgstr[1] ""
+"Ungültiger Code. Bitte versuchen Sie es erneut, nachdem Sie {value} Sekunden "
+"gewartet haben."
 
 #: pretix/control/views/checkin.py
 msgid "The selected check-ins have been reverted."
@@ -29397,12 +29379,10 @@ msgstr ""
 "ausgewählt."
 
 #: pretix/control/views/orders.py
-#, fuzzy
-#| msgid "You entered an order in an event with a different currency."
 msgid "You entered an order in an event that you do not have access to."
 msgstr ""
-"Sie haben eine Bestellung in einer Veranstaltung mit einer anderen Währung "
-"ausgewählt."
+"Sie haben eine Bestellung in einer Veranstaltung ausgewählt, auf die Sie "
+"keinen Zugriff haben."
 
 #: pretix/control/views/orders.py
 msgid ""
@@ -30291,10 +30271,8 @@ msgstr ""
 "Token bleiben aktiv."
 
 #: pretix/control/views/users.py
-#, fuzzy
-#| msgid "The password has been reset."
 msgid "The drift values for TOTP devices have been reset."
-msgstr "Das Passwort wurde zurückgesetzt."
+msgstr "Der Versatz für TOTP-Geräte wurde zurückgesetzt."
 
 #: pretix/control/views/users.py
 msgid "The new user has been created."
@@ -30309,14 +30287,12 @@ msgid "Bypass quota"
 msgstr "Verfügbarkeit ignorieren"
 
 #: pretix/control/views/vouchers.py
-#, fuzzy
-#| msgid "Widget"
 msgid "Budget"
-msgstr "Widget"
+msgstr "Budget"
 
 #: pretix/control/views/vouchers.py
 msgid "Budget used"
-msgstr ""
+msgstr "Verbrauchtes Budget"
 
 #: pretix/control/views/vouchers.py
 msgid "The requested voucher does not exist."
@@ -34996,29 +34972,30 @@ msgid ""
 "Not sure yet? You can complete your order first and then select a payment "
 "method later."
 msgstr ""
+"Nicht sicher? Sie können erst Ihre Bestellung abschließen und später eine "
+"Zahlungsart auswählen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid ""
 "To do so, please first remove the payment methods you already selected above."
 msgstr ""
+"Um dies zu tun, entfernen Sie bitte zunächst alle bereits ausgewählten "
+"Zahlungsmethoden."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
-#, fuzzy, python-format
-#| msgid "The payment has to be completed before %(date)s."
+#, python-format
 msgid "Your payment needs to be completed within %(minutes)s minutes."
-msgstr "Die Zahlung muss bis zum %(date)s abgeschlossen sein."
+msgstr ""
+"Die Zahlung muss bis innerhalb von %(minutes)s Minuten abgeschlossen werden."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
-#, fuzzy, python-format
-#| msgid "The payment has to be completed before %(date)s."
+#, python-format
 msgid "Your payment needs to be completed by %(deadline)s."
-msgstr "Die Zahlung muss bis zum %(date)s abgeschlossen sein."
+msgstr "Die Zahlung muss bis %(deadline)s abgeschlossen werden."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
-#, fuzzy
-#| msgid "Proceed with reset"
 msgid "Proceed without selection"
-msgstr "Mit Löschung fortfahren"
+msgstr "Ohne Auswahl fortfahren"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html
 msgid "Before we continue, we need you to answer some questions."
