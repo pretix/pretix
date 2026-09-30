@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-09-30 06:00+0000\n"
+"PO-Revision-Date: 2026-09-30 17:00+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
-"Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/"
-">\n"
+"Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
+"\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1362,10 +1362,8 @@ msgid "Membership type"
 msgstr "ประเภทสมาชิกภาพ"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "Purchase time"
 msgid "Purchase ticket"
-msgstr "เวลาที่สั่งซื้อ"
+msgstr "ซื้อตั๋ว"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
 #: pretix/base/exporters/waitinglist.py pretix/base/forms/questions.py
@@ -1382,10 +1380,8 @@ msgid "Start date"
 msgstr "วันที่เริ่มต้น"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "Start date"
 msgid "Start time"
-msgstr "วันที่เริ่มต้น"
+msgstr "เวลาเริ่มต้น"
 
 #: pretix/base/exporters/customers.py pretix/base/exporters/orderlist.py
 #: pretix/base/exporters/waitinglist.py pretix/base/models/memberships.py
@@ -1398,10 +1394,8 @@ msgid "End date"
 msgstr "วันที่สิ้นสุด"
 
 #: pretix/base/exporters/customers.py
-#, fuzzy
-#| msgid "End: %(time)s"
 msgid "End time"
-msgstr "สิ้นสุดเมื่อ: %(time)s"
+msgstr "เวลาสิ้นสุด"
 
 #: pretix/base/exporters/dekodi.py pretix/base/exporters/invoices.py
 msgctxt "export_category"
@@ -1753,16 +1747,12 @@ msgid "Transmission type"
 msgstr "รูปแบบการส่งข้อมูล"
 
 #: pretix/base/exporters/invoices.py
-#, fuzzy
-#| msgid "Transmission type"
 msgid "Transmission status"
-msgstr "รูปแบบการส่งข้อมูล"
+msgstr "สถานะการส่งข้อมูล"
 
 #: pretix/base/exporters/invoices.py
-#, fuzzy
-#| msgid "Transmission type"
 msgid "Transmission date"
-msgstr "รูปแบบการส่งข้อมูล"
+msgstr "วันที่ส่งข้อมูล"
 
 #: pretix/base/exporters/invoices.py
 msgid "Cancellation"
@@ -4007,45 +3997,31 @@ msgid "Users"
 msgstr "ผู้ใช้"
 
 #: pretix/base/models/auth.py
-#, fuzzy
-#| msgid "Sign in to your account at %(org)s"
 msgid "Changes to your account"
-msgstr "เข้าสู่ระบบบัญชีของคุณที่ %(org)s"
+msgstr "การเปลี่ยนแปลงบัญชีของคุณ"
 
 #: pretix/base/models/auth.py
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "to confirm changing your email address from {old_email}\n"
-#| "to {new_email}, use the following code:"
+#, python-brace-format
 msgid ""
 "To change your email address from {old_email} to {new_email}, use the "
 "following code:"
 msgstr ""
-"หากต้องการยืนยันการเปลี่ยนอีเมลจาก {old_email}\n"
-"เป็น {new_email} โปรดใช้รหัสต่อไปนี้:"
+"หากต้องการเปลี่ยนที่อยู่อีเมลของคุณจาก {old_email} เป็น {new_email} โปรดใช้รหัสต่อไปนี้:"
 
 #: pretix/base/models/auth.py
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "to confirm changing your email address from {old_email}\n"
-#| "to {new_email}, use the following code:"
+#, python-brace-format
 msgid ""
 "To verify your email address {email} on {instance}, use the following code:"
 msgstr ""
-"หากต้องการยืนยันการเปลี่ยนอีเมลจาก {old_email}\n"
-"เป็น {new_email} โปรดใช้รหัสต่อไปนี้:"
+"หากต้องการยืนยันที่อยู่อีเมลของคุณ {email} บน {instance} โปรดใช้รหัสต่อไปนี้:"
 
 #: pretix/base/models/auth.py
-#, fuzzy
-#| msgid "pretix confirmation code"
 msgid "Your confirmation code"
-msgstr "รหัสยืนยันจาก pretix"
+msgstr "รหัสยืนยันของคุณ"
 
 #: pretix/base/models/auth.py
-#, fuzzy
-#| msgid "Repeat password"
 msgid "Reset your password"
-msgstr "ยืนยันรหัสผ่าน"
+msgstr "รีเซ็ตรหัสผ่านของคุณ"
 
 #: pretix/base/models/checkin.py
 msgid "All products (including newly created ones)"
@@ -4195,20 +4171,16 @@ msgid "Check-in annulled"
 msgstr "การเช็คอินถูกยกเลิกแล้ว"
 
 #: pretix/base/models/checkin.py
-#, fuzzy
-#| msgid "Ticket already used"
 msgid "Ticket already exchanged"
-msgstr "ตั๋วถูกใช้งานไปแล้ว"
+msgstr "ตั๋วถูกแลกเปลี่ยนไปแล้ว"
 
 #: pretix/base/models/checkin.py
 msgid "Reusable medium invalid"
 msgstr "สื่อที่ใช้ซ้ำได้ (เช่น บัตร RFID)"
 
 #: pretix/base/models/checkin.py
-#, fuzzy
-#| msgid "Reusable media type"
 msgid "Reusable medium already exists"
-msgstr "ประเภทสื่อแบบใช้ซ้ำได้"
+msgstr "มีสื่อที่ใช้ซ้ำได้นี้ในระบบอยู่แล้ว"
 
 #: pretix/base/models/customers.py
 msgid "Provider name"
@@ -4346,10 +4318,8 @@ msgid "Initialization date"
 msgstr "วันที่เริ่มต้นระบบ"
 
 #: pretix/base/models/devices.py
-#, fuzzy
-#| msgid "Save to profile"
 msgid "Security profile"
-msgstr "บันทึกลงในโปรไฟล์"
+msgstr "โปรไฟล์ความปลอดภัย"
 
 #: pretix/base/models/discount.py
 msgctxt "subevent"
@@ -4565,16 +4535,12 @@ msgid "This event is remote or partially remote."
 msgstr "กิจกรรมนี้จัดขึ้นในรูปแบบออนไลน์หรือกึ่งออนไลน์"
 
 #: pretix/base/models/event.py
-#, fuzzy
-#| msgid ""
-#| "This will be used to let users know if the event is in a different "
-#| "timezone and let’s us calculate users’ local times."
 msgid ""
 "This will be used to let users know if the event is in a different timezone, "
 "and to let us calculate the local time of a user."
 msgstr ""
-"ข้อมูลนี้จะใช้เพื่อแจ้งให้ผู้ใช้ทราบหากกิจกรรมอยู่ในเขตเวลาที่แตกต่างกัน "
-"และช่วยให้เราคำนวณเวลาท้องถิ่นของผู้ใช้ได้"
+"ข้อความนี้จะถูกใช้แจ้งให้ผู้ใช้ทราบหากอีเวนต์อยู่ในเขตเวลาที่แตกต่างกัน และช่วยให้เราสามารถคำนวณเ"
+"วลาท้องถิ่นของผู้ใช้ได้"
 
 #: pretix/base/models/event.py pretix/base/models/organizer.py
 #: pretix/control/navigation.py
@@ -4756,10 +4722,8 @@ msgstr ""
 "ไม่สามารถเลือกทั้งสองอย่างได้"
 
 #: pretix/base/models/event.py
-#, fuzzy
-#| msgid "The bundled item must belong to the same event as the item."
 msgid "Property and event must belong to the same organizer."
-msgstr "รายการสินค้าในชุดต้องอยู่ในกิจกรรมเดียวกันกับสินค้าหลัก"
+msgstr "คุณสมบัติและอีเวนต์ต้องเป็นของผู้จัดงานรายเดียวกัน"
 
 #: pretix/base/models/event.py pretix/base/models/organizer.py
 msgid "Link text"
@@ -4988,8 +4952,6 @@ msgid "Show product with info on why it’s unavailable"
 msgstr "แสดงสินค้าพร้อมระบุเหตุผลที่ไม่สามารถสั่งซื้อได้"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Don't use re-usable media, use regular one-off tickets"
 msgid "Don't use reusable media, use regular one-off tickets"
 msgstr "ไม่ใช้สื่อแบบใช้ซ้ำได้ แต่ใช้ตั๋วแบบใช้ครั้งเดียวปกติ"
 
@@ -4998,32 +4960,27 @@ msgid "Require a previously unknown medium to be newly added"
 msgstr "ต้องใช้สื่อใหม่ที่ไม่เคยลงทะเบียนมาก่อน"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Require an existing medium to be re-used"
 msgid "Require an existing medium to be reused, replacing any previous tickets"
-msgstr "ต้องใช้สื่อที่มีอยู่แล้วเพื่อนำกลับมาใช้ใหม่"
+msgstr ""
+"กำหนดให้ใช้สื่อเดิมที่มีอยู่เพื่อนำกลับมาใช้ใหม่ โดยจะแทนที่ตั๋วก่อนหน้าทั้งหมด"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Require either an existing or a new medium to be used"
 msgid ""
 "Require either an existing or a new medium to be used, replacing any "
 "previous tickets"
-msgstr "ต้องใช้สื่อ ไม่ว่าจะเป็นสื่อเดิมที่มีอยู่หรือสื่อใหม่"
+msgstr "กำหนดให้ใช้สื่อเดิมที่มีอยู่หรือสื่อใหม่ โดยจะแทนที่ตั๋วก่อนหน้าทั้งหมด"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Require an existing medium to be re-used"
 msgid "Require an existing medium to be reused, adding to any previous tickets"
-msgstr "ต้องใช้สื่อที่มีอยู่แล้วเพื่อนำกลับมาใช้ใหม่"
+msgstr ""
+"กำหนดให้ใช้สื่อเดิมที่มีอยู่เพื่อนำกลับมาใช้ใหม่ โดยจะเพิ่มเข้าไปยังตั๋วก่อนหน้าที่มีอยู่"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Require either an existing or a new medium to be used"
 msgid ""
 "Require either an existing or a new medium to be used, adding to any "
 "previous tickets"
-msgstr "ต้องใช้สื่อ ไม่ว่าจะเป็นสื่อเดิมที่มีอยู่หรือสื่อใหม่"
+msgstr ""
+"กำหนดให้ใช้สื่อเดิมที่มีอยู่หรือสื่อใหม่ โดยจะเพิ่มเข้าไปยังตั๋วก่อนหน้าที่มีอยู่"
 
 #: pretix/base/models/items.py
 msgid "Category"
@@ -5340,14 +5297,6 @@ msgid "Reusable media policy"
 msgstr "นโยบายสื่อแบบใช้ซ้ำได้"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid ""
-#| "If this product should be stored on a re-usable physical medium, you can "
-#| "attach a physical media policy. This is not required for regular tickets, "
-#| "which just use a one-time barcode, but only for products like renewable "
-#| "season tickets or re-chargeable gift card wristbands. This is an advanced "
-#| "feature that also requires specific configuration of ticketing and "
-#| "printing settings."
 msgid ""
 "If this product should be stored on a reusable physical medium, you can "
 "attach a physical media policy. This is not required for regular tickets, "
@@ -5356,10 +5305,10 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
-"หากต้องการบันทึกสินค้านี้ลงในสื่อทางกายภาพที่ใช้ซ้ำได้ คุณสามารถแนบนโยบายสื่อได้ "
-"ซึ่งไม่จำเป็นสำหรับตั๋วทั่วไปที่ใช้บาร์โค้ดแบบใช้ครั้งเดียว "
-"แต่จะใช้สำหรับสินค้าอย่างตั๋วปีที่ต่ออายุได้หรือสายรัดข้อมือบัตรของขวัญแบบเติมเงินได้เท่านั้น "
-"นี่เป็นฟีเจอร์ขั้นสูงที่ต้องมีการตั้งค่าการออกตั๋วและการพิมพ์ที่เฉพาะเจาะจงร่วมด้วย"
+"หากต้องการบันทึกสินค้านี้ลงในสื่อทางกายภาพที่ใช้ซ้ำได้ คุณสามารถแนบนโยบายสื่อได้ ซึ่งไม่จำเป็นสำหรับ"
+"ตั๋วทั่วไปที่ใช้บาร์โค้ดแบบใช้ครั้งเดียว แต่จะใช้สำหรับสินค้าอย่างตั๋วปีที่ต่ออายุได้หรือสายรัดข้อมือบัตรของข"
+"วัญแบบเติมเงินได้เท่านั้น นี่เป็นฟีเจอร์ขั้นสูงที่ต้องมีการตั้งค่าการออกตั๋วและการพิมพ์ที่เฉพาะเจาะจงร่วมด้"
+"วย"
 
 #: pretix/base/models/items.py
 msgid "Reusable media type"
@@ -5685,10 +5634,8 @@ msgid "Maximum value"
 msgstr "ค่าสูงสุด"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Maximum length"
 msgid "Minimum length"
-msgstr "ความยาวสูงสุด"
+msgstr "ความยาวขั้นต่ำ"
 
 #: pretix/base/models/items.py
 msgid "Maximum length"
@@ -5759,10 +5706,8 @@ msgid "The maximum value must not be lower than the minimum value."
 msgstr "ค่าสูงสุดต้องไม่ต่ำกว่าค่าต่ำสุด"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "The maximum value must not be lower than the minimum value."
 msgid "The maximum length must not be shorter than the minimum length."
-msgstr "ค่าสูงสุดต้องไม่ต่ำกว่าค่าต่ำสุด"
+msgstr "ความยาวสูงสุดต้องไม่น้อยกว่าความยาวขั้นต่ำ"
 
 #: pretix/base/models/items.py
 msgid ""
@@ -7227,9 +7172,6 @@ msgid "The payment for this invoice has already been received."
 msgstr "ได้รับชำระเงินสำหรับใบแจ้งหนี้นี้เรียบร้อยแล้ว"
 
 #: pretix/base/payment.py
-#, fuzzy
-#| msgid ""
-#| "This payment is already being processed and can not be canceled any more."
 msgid ""
 "This payment is already being processed and cannot be canceled any more."
 msgstr "การชำระเงินนี้อยู่ระหว่างการดำเนินการและไม่สามารถยกเลิกได้แล้ว"
@@ -7587,16 +7529,12 @@ msgid "Atlantis"
 msgstr "แอตแลนติส"
 
 #: pretix/base/pdf.py
-#, fuzzy
-#| msgid "Custom recipient field label"
 msgid "Invoice custom recipient field"
-msgstr "ชื่อเรียกฟิลด์ผู้รับแบบกำหนดเอง"
+msgstr "ฟิลด์ผู้รับใบแจ้งหนี้แบบกำหนดเอง"
 
 #: pretix/base/pdf.py
-#, fuzzy
-#| msgid "Custom recipient field label"
 msgid "Custom recipient field"
-msgstr "ชื่อเรียกฟิลด์ผู้รับแบบกำหนดเอง"
+msgstr "ฟิลด์ผู้รับแบบกำหนดเอง"
 
 #: pretix/base/pdf.py
 msgid "List of Add-Ons"
@@ -7684,19 +7622,14 @@ msgid "Program times"
 msgstr "เวลาทำรายการ"
 
 #: pretix/base/pdf.py
-#, fuzzy
-#| msgid ""
-#| "2017-05-31 10:00 – 12:00\n"
-#| "2017-05-31 14:00 – 16:00\n"
-#| "2017-05-31 14:00 – 2017-06-01 14:00"
 msgid ""
 "2017-05-31 10:00 – 12:00, Room 1\n"
 "2017-05-31 14:00 – 16:00, Room 2\n"
 "2017-05-31 14:00 – 2017-06-01 14:00, Building A"
 msgstr ""
-"2017-05-31 10:00 – 12:00\n"
-"2017-05-31 14:00 – 16:00\n"
-"2017-05-31 14:00 – 2017-06-01 14:00"
+"2017-05-31 10:00 – 12:00, ห้อง 1\n"
+"2017-05-31 14:00 – 16:00, ห้อง 2\n"
+"2017-05-31 14:00 – 2017-06-01 14:00, อาคาร A"
 
 #: pretix/base/pdf.py
 msgid "Reusable Medium ID"
@@ -7993,16 +7926,12 @@ msgid "Presale end"
 msgstr "สิ้นสุดการขายล่วงหน้า"
 
 #: pretix/base/reldate.py
-#, fuzzy
-#| msgid "Order email"
 msgid "Order creation"
-msgstr "อีเมลที่ใช้สั่งซื้อ"
+msgstr "การสร้างคำสั่งซื้อ"
 
 #: pretix/base/reldate.py
-#, fuzzy
-#| msgid "Order expired"
 msgid "Order expiry"
-msgstr "คำสั่งซื้อหมดอายุแล้ว"
+msgstr "วันหมดอายุคำสั่งซื้อ"
 
 #: pretix/base/reldate.py
 msgid "before"
@@ -8208,13 +8137,7 @@ msgid "This voucher code is not known in our database."
 msgstr "ไม่พบรหัสเวาเชอร์นี้ในฐานข้อมูลของเรา"
 
 #: pretix/base/services/cart.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products."
-#| msgid_plural ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products."
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching product."
@@ -8222,19 +8145,11 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
-"สามารถใช้โค้ดส่วนลด “%(voucher)s” ได้ก็ต่อเมื่อเลือกสินค้าที่ร่วมรายการอย่างน้อย %(number)s "
-"รายการ"
+"สามารถใช้โค้ดส่วนลด “%(voucher)s” ได้ก็ต่อเมื่อเลือกสินค้าที่ร่วมรายการอย่างน้อย %(number)s ร"
+"ายการ"
 
 #: pretix/base/services/cart.py
-#, fuzzy, python-format
-#| msgid ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products. We have therefore removed some positions "
-#| "from your cart that can no longer be purchased like this."
-#| msgid_plural ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products. We have therefore removed some positions "
-#| "from your cart that can no longer be purchased like this."
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching product. We have therefore removed some positions from "
@@ -8244,8 +8159,8 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
-"โค้ดส่วนลด “%(voucher)s” ใช้ได้เมื่อเลือกสินค้าที่เข้าเงื่อนไขอย่างน้อย %(number)s รายการ "
-"เราจึงนำบางรายการออกจากตะกร้าของคุณ เนื่องจากไม่สามารถสั่งซื้อภายใต้เงื่อนไขนี้ได้อีก"
+"โค้ดส่วนลด “%(voucher)s” ใช้ได้เมื่อเลือกสินค้าที่เข้าเงื่อนไขอย่างน้อย %(number)s รายการ เรา"
+"จึงนำบางรายการออกจากตะกร้าของคุณ เนื่องจากไม่สามารถสั่งซื้อภายใต้เงื่อนไขนี้ได้อีก"
 
 #: pretix/base/services/cart.py
 msgid ""
@@ -8586,28 +8501,22 @@ msgid "Czech National Bank"
 msgstr "ธนาคารกลางสาธารณรัฐเช็ก"
 
 #: pretix/base/services/currencies.py
-#, fuzzy
-#| msgid "Czech National Bank"
 msgid "National Bank of Poland"
-msgstr "ธนาคารกลางสาธารณรัฐเช็ก"
+msgstr "ธนาคารกลางแห่งโปแลนด์ (National Bank of Poland)"
 
 #: pretix/base/services/export.py
-#, fuzzy
-#| msgid "You do not have sufficient permission to perform this export."
 msgid ""
 "Export not found or you do not have sufficient permission to perform this "
 "export."
-msgstr "คุณไม่มีสิทธิ์เพียงพอในการส่งออกข้อมูลนี้"
+msgstr "ไม่พบไฟล์ส่งออก หรือคุณไม่มีสิทธิ์เพียงพอในการส่งออกข้อมูลนี้"
 
 #: pretix/base/services/export.py
 msgid "Your export did not contain any data."
 msgstr "ไฟล์ที่ส่งออกของคุณไม่มีข้อมูลใดๆ"
 
 #: pretix/base/services/export.py
-#, fuzzy
-#| msgid "Export failed"
 msgid "Scheduled export failed"
-msgstr "การส่งออกข้อมูลล้มเหลว"
+msgstr "การส่งออกข้อมูลตามกำหนดเวลาล้มเหลว"
 
 #: pretix/base/services/export.py
 msgid "Permission denied."
@@ -9172,14 +9081,11 @@ msgid ""
 msgstr "คุณไม่สามารถเปลี่ยนราคาของรายการที่ใช้ในการออกบัตรของขวัญไปแล้วได้"
 
 #: pretix/base/services/orders.py
-#, fuzzy
-#| msgid ""
-#| "You cannot change the price of a position that has been used to issue a "
-#| "gift card."
 msgid ""
 "You cannot change the ticket secret of a position that has been used to "
 "issue a gift card."
-msgstr "คุณไม่สามารถเปลี่ยนราคาของรายการที่ใช้ในการออกบัตรของขวัญไปแล้วได้"
+msgstr ""
+"คุณไม่สามารถเปลี่ยนรหัสลับของตั๋ว (Ticket Secret) ในรายการที่ถูกนำไปใช้ ออกบัตรของขวัญแล้วได้"
 
 #: pretix/base/services/orders.py
 #, python-brace-format
@@ -9257,10 +9163,9 @@ msgid "Something happened in your event after the export, please try again."
 msgstr "มีการเปลี่ยนแปลงข้อมูลในกิจกรรมหลังจากการส่งออกข้อมูล โปรดลองใหม่อีกครั้ง"
 
 #: pretix/base/services/shredder.py
-#, fuzzy, python-format
-#| msgid "Data shredding completed"
+#, python-format
 msgid "Data shredding completed for %(event)s"
-msgstr "การทำลายข้อมูล (Data shredding) เสร็จสมบูรณ์"
+msgstr "การทำลายข้อมูลเสร็จสิ้นสำหรับ %(event)s"
 
 #: pretix/base/services/stats.py
 msgid "Uncategorized"
@@ -9434,24 +9339,17 @@ msgstr ""
 "แม้ว่าจะไม่ได้เข้าสู่ระบบในขณะที่ทำการซื้อก็ตาม"
 
 #: pretix/base/settings.py
-#, fuzzy
-#| msgid "Activate re-usable media"
 msgid "Activate reusable media"
 msgstr "เปิดใช้งานสื่อบันทึกข้อมูลที่ใช้ซ้ำได้"
 
 #: pretix/base/settings.py
-#, fuzzy
-#| msgid ""
-#| "The re-usable media feature allows you to connect tickets and gift cards "
-#| "with physical media such as wristbands or chip cards that may be re-used "
-#| "for different tickets or gift cards later."
 msgid ""
 "The reusable media feature allows you to connect tickets and gift cards with "
 "physical media such as wristbands or chip cards that may be reused for "
 "different tickets or gift cards later."
 msgstr ""
-"ฟีเจอร์สื่อบันทึกข้อมูลที่ใช้ซ้ำได้ช่วยให้คุณสามารถเชื่อมต่อตั๋วและบัตรของขวัญเข้ากับสื่อทางกายภาพ เช่น "
-"สายรัดข้อมือหรือบัตรชิปการ์ด ซึ่งสามารถนำกลับมาใช้ใหม่กับตั๋วใบอื่นได้ในภายหลัง"
+"ฟีเจอร์สื่อบันทึกข้อมูลที่ใช้ซ้ำได้ช่วยให้คุณสามารถเชื่อมต่อตั๋วและบัตรของขวัญเข้ากับสื่อทางกายภาพ เช่น ส"
+"ายรัดข้อมือหรือบัตรชิปการ์ด ซึ่งสามารถนำกลับมาใช้ใหม่กับตั๋วใบอื่นได้ในภายหลัง"
 
 #: pretix/base/settings.py
 msgid "Enforce the usage of issued reusable media for check-in"
@@ -9672,15 +9570,12 @@ msgstr ""
 "อ้างอิงตามอัตราแลกเปลี่ยนรายวันของธนาคารแห่งชาติเช็ก เมื่อยอดในใบแจ้งหนี้ไม่ใช่สกุลเงิน CZK"
 
 #: pretix/base/settings.py
-#, fuzzy
-#| msgid ""
-#| "Based on Czech National Bank daily rates, whenever the invoice amount is "
-#| "not in CZK."
 msgid ""
 "Based on National Bank of Poland daily rates, whenever the invoice amount is "
 "not in PLN."
 msgstr ""
-"อ้างอิงตามอัตราแลกเปลี่ยนรายวันของธนาคารแห่งชาติเช็ก เมื่อยอดในใบแจ้งหนี้ไม่ใช่สกุลเงิน CZK"
+"อ้างอิงตามอัตราแลกเปลี่ยนรายวันของธนาคารกลางสาธารณรัฐเช็ก เมื่อยอดในใบแจ้งหนี้ไม่ใช่สกุลเงิน "
+"CZK"
 
 #: pretix/base/settings.py
 msgid "Require invoice address"
