@@ -1429,6 +1429,10 @@ class Event(EventMixin, LoggedModel):
 
         return issues
 
+    @property
+    def sales_channels(self):
+        return self.organizer.sales_channels if self.all_sales_channels else self.limit_sales_channels
+
     def get_users_with_any_permission(self):
         """
         Returns a queryset of users who have any permission to this event.

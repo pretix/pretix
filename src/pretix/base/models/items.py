@@ -2056,16 +2056,18 @@ class Questionnaire(LoggedModel):
     def check_constraints(event):
         errors = set()
         all_questionnaires = Questionnaire.objects.filter(event=event).prefetch_related('children', 'items')
-        for (type, item_id, sdf, udf), fields in groupby(sorted(
-            (q.type, item.id, c.system_datafield or '', c.user_datafield_id or 0, q, item)
+        all_sales_channels = event.sales_channels.all()
+        for (sales_channel, type, item_id, sdf, udf), fields in groupby(sorted(
+            (sales_channel, q.type, item.id, c.system_datafield or '', c.user_datafield_id or 0, q, item)
             for q in all_questionnaires
+            for sales_channel in (q.limit_sales_channels if not q.all_sales_channels else all_sales_channels).values_list('pk', flat=True)
             for item in q.items.all()
             for c in q.children.all()
-        ), key=lambda d: (d[0], d[1], d[2], d[3])):
+        ), key=lambda d: (d[0], d[1], d[2], d[3], d[4])):
             fields = list(fields)
             if len(fields) > 1:
-                type, item_id, sdf, udf, q, item = fields[0]
-                questionnaires = set(q for type,item,sdf,udf,q,item in fields)
+                sales_channel, type, item_id, sdf, udf, q, item = fields[0]
+                questionnaires = set(q for sc,type,item,sdf,udf,q,item in fields)
                 df_label = _('System data field') + f' "{sdf}"' if sdf else _('User-defined data field') + f' "{str(udf)}"'
                 if len(questionnaires) == 1:
                     errors.add(_('{datafield} added twice to questionnaire "{questionnaire}"').format(
