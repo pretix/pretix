@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
 "PO-Revision-Date: 2026-09-30 08:06+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Matthias Schrumpf <matthias.schrumpf@freenet.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/"
 "de/>\n"
 "Language: de\n"
@@ -2361,7 +2361,7 @@ msgstr "Sitzreihe"
 
 #: pretix/base/exporters/orderlist.py pretix/plugins/checkinlists/exporters.py
 msgid "Seat number"
-msgstr "Sitzplatz"
+msgstr "Sitzplatz-Nummer"
 
 #: pretix/base/exporters/orderlist.py
 #: pretix/control/templates/pretixcontrol/order/change.html
@@ -14758,11 +14758,11 @@ msgstr "Unternehmen mit gültiger USt-ID-Nr."
 
 #: pretix/control/forms/event.py
 msgid "Charge VAT"
-msgstr "MwSt. berechnen"
+msgstr "USt berechnen"
 
 #: pretix/control/forms/event.py
 msgid "No VAT"
-msgstr "Keine MwSt."
+msgstr "Keine USt"
 
 #: pretix/control/forms/event.py
 msgid "Sale not allowed"
@@ -24345,7 +24345,7 @@ msgstr "PLZ und Ort"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Valid EU VAT ID"
-msgstr "Gültige EU-USt-ID-Nr."
+msgstr "Gültige EU-USt-ID"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 msgid "Check"
@@ -28810,7 +28810,7 @@ msgstr "Kommentar konnte nicht gespeichert werden."
 
 #: pretix/control/views/event.py pretix/control/views/main.py
 msgid "VAT"
-msgstr "MwSt."
+msgstr "USt"
 
 #: pretix/control/views/event.py
 msgid "The new tax rule has been created."
@@ -29483,7 +29483,7 @@ msgstr "Es wurde kein Land angegeben."
 #: pretix/control/views/orders.py
 msgid "VAT ID could not be checked since this country is not supported."
 msgstr ""
-"Die USt-ID-Nr. konnte nicht geprüft werden, da dieses Land nicht unterstützt "
+"Die USt-ID konnte nicht geprüft werden, da dieses Land nicht unterstützt "
 "wird."
 
 #: pretix/control/views/orders.py
@@ -29496,7 +29496,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py
 msgid "This VAT ID is valid."
-msgstr "Die USt-ID-Nr. ist gültig."
+msgstr "Die USt-ID ist gültig."
 
 #: pretix/control/views/orders.py
 msgid "Unknown invoice."
