@@ -1612,7 +1612,7 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
             if questionnaire_type is not None:
                 children = children.filter(questionnaire__type=questionnaire_type)
             if sales_channel is not None:
-                children = children.filter(Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channel=sales_channel))
+                children = children.filter(Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels=sales_channel))
 
             children = list(children)
 
