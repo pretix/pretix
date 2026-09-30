@@ -134,7 +134,6 @@ Do
 Downloadformat
 Dr
 Drag-and-Drop-Interfaces
-Drosselwerte
 Edge
 Eingangsscan
 Einlassbuchung
@@ -482,7 +481,6 @@ TIN
 TODO
 To-Do-Liste
 TOTP
-TOTP-Geräte
 Trace-Nummer
 Tracking
 transaktionale
