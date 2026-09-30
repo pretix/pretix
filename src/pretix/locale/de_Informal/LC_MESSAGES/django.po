@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-09-30 07:49+0000\n"
+"PO-Revision-Date: 2026-09-30 07:52+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -18199,7 +18199,7 @@ msgstr "Ein Zwei-Faktor-Notfall-Token wurde generiert."
 #: pretix/control/logdisplay.py
 msgid "Drift and throttle values for two-factor devices have been reset."
 msgstr ""
-"Versatz- und Drosselwerte für die Zwei-Faktor-Authentifizierung wurden "
+"Versatz und Drosselung für die Zwei-Faktor-Authentifizierung wurden "
 "zurückgesetzt."
 
 #: pretix/control/logdisplay.py
@@ -27890,7 +27890,7 @@ msgstr "Authentifizierungsmechanismus"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Reset drift and throttle"
-msgstr "Versatz- und Drosselwerte zurücksetzen"
+msgstr "Versatz und Drosselung zurücksetzen"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Available two-factor authentication methods"
@@ -30228,7 +30228,7 @@ msgstr ""
 
 #: pretix/control/views/users.py
 msgid "The drift values for TOTP devices have been reset."
-msgstr "Der Versatz für TOTP-Geräte wurde zurückgesetzt."
+msgstr "Der Versatz für TOTP wurde zurückgesetzt."
 
 #: pretix/control/views/users.py
 msgid "The new user has been created."
