@@ -147,3 +147,14 @@
 {% dialog "dialog-nothing-to-add" label_nothing_to_add description_nothing_to_add icon="exclamation-circle" %}
     <p class="modal-card-confirm"><button class="btn btn-primary">{% trans "OK" %}</button></p>
 {% enddialog %}
+
+{% trans "Confirmation required" as confirmation_title %}
+{% dialog "confirmationmodal" confirmation_title "" icon="shield" %}
+    <div class="modal-card-confirm modal-card-confirm-spread">
+        <button type="button" class="btn btn-default btn-lg" commandfor="confirmationmodal" command="close">{% trans "Cancel" %}</button>
+        <button type="button" id="confirmationmodal-confirm"
+                class="btn btn-primary btn-lg">
+            {% trans "Confirm" %}
+        </button>
+    </div>
+{% enddialog %}
