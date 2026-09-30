@@ -88,6 +88,7 @@ export function getEventLocales() {
 export function getDatafieldViewUrl(datafield_id) {
 	return fromJsonScript('datafield_view_url').replace('/0/', `/${datafield_id}/`);
 }
+
 export function getDatafieldEditUrl(datafield_id) {
 	return fromJsonScript('datafield_edit_url').replace('/0/', `/${datafield_id}/`) + '?notify_parent=true&';
 }

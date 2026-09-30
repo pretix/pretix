@@ -3,6 +3,7 @@ import {gettext} from "./gettextstub";
 import {GroupedItems, Questionnaire, SalesChannel} from "./model";
 import {inject, Ref, useId} from "vue";
 import {i18n_any, QUESTIONNAIRE_TYPE, QUESTIONNAIRE_TYPE_LABEL, setListState} from "./helper";
+import SalesChannelIcon from "./SalesChannelIcon.vue";
 
 const sales_channels: Ref<SalesChannel[]> = inject('pretix:env:organizer:sales_channels')
 
@@ -26,15 +27,17 @@ const props = defineProps<{
 	</div>
 	<div class="form-group">
 		<label class="col-md-3 control-label">
-			{{ gettext('Where to ask') }}
+			{{ gettext('When to ask') }}
 		</label>
 		<div class="col-md-9">
 			<select v-model="questionnaire.type" class="form-control">
-				<option v-for="(label, type) in QUESTIONNAIRE_TYPE_LABEL" :value="QUESTIONNAIRE_TYPE[type]">{{ label }}</option>
+        <template v-for="(label, type) in QUESTIONNAIRE_TYPE_LABEL">
+				  <option v-if="QUESTIONNAIRE_TYPE[type][0] == questionnaire.type[0]" :value="QUESTIONNAIRE_TYPE[type]">{{ label }}</option>
+        </template>
 			</select>
 		</div>
 	</div>
-	<div class="form-group">
+	<div class="form-group" v-if="questionnaire.type[1] == 'S'">
 		<label class="col-md-3 control-label">
 			{{ gettext('Sales channels') }}
 		</label>
@@ -49,6 +52,7 @@ const props = defineProps<{
 					<input type="checkbox" :checked="questionnaire.all_sales_channels || questionnaire.limit_sales_channels.indexOf(channel.identifier) !== -1"
 								 @change="e => setListState(questionnaire.limit_sales_channels, e.target.checked, channel.identifier)"
 								 :disabled="questionnaire.all_sales_channels">
+          <SalesChannelIcon :sales-channel="channel"/>
 					{{ i18n_any(channel.label) }}
 				</label>
 			</div>

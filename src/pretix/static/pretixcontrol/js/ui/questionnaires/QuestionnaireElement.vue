@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useId, ref, computed, onMounted, watch} from 'vue'
+import {useId, ref, computed, onMounted, watch, Ref, inject} from 'vue'
 import QuestionElement from "./QuestionElement.vue";
 import {
 	i18n_any,
@@ -17,6 +17,8 @@ import {getDatafieldCreateUrl} from "./api";
 import DjangoDialog from "./DjangoDialog.vue";
 import * as api from './api';
 import QuestionnaireDetailForm from "./QuestionnaireDetailForm.vue";
+import SalesChannelIcon from "./SalesChannelIcon.vue";
+import {SalesChannel} from "./model";
 
 const dlgEditor = ref()
 const dlgAddExisting = ref()
@@ -29,6 +31,7 @@ const newTextblockText = ref()
 const id = useId();
 const props = defineProps(['questionnaire', 'datafields', 'selected_product', 'grouped_items', 'preview_mode', 'err_mes'])
 const emit = defineEmits(['update', 'invalidate:datafields', 'invalidate:questionnaires'])
+const sales_channels: Ref<SalesChannel[]> = inject('pretix:env:organizer:sales_channels')
 
 let nextId = 1;
 watch(() => props.questionnaire.children, () => {
@@ -104,6 +107,9 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 
 </script>
 
+<style>
+.sales-channel-icons > * { margin-left: 4px; opacity: 0.8; }
+</style>
 
 <template>
 
@@ -116,6 +122,19 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 					{{ props.questionnaire.internal_name }}
 					<span class="fa fa-warning" v-if="questionnaire._err_mes"></span>
 					<span class="fa fa-cog fa-spin" v-if="questionnaire._loading"></span>
+
+          <span class="pull-right" v-if="questionnaire.type === 'PC'">
+            <span class="label label-default">{{ gettext('Check-in') }}</span>
+          </span>
+          <span class="pull-right" v-else-if="questionnaire.type === 'PA'">
+            <span class="label label-default">{{ gettext('Attendee link') }}</span>
+          </span>
+          <span class="pull-right sales-channel-icons" v-else>
+            <template v-for="sc in sales_channels">
+              <SalesChannelIcon :sales-channel="sc" :tooltip="true"
+                                v-if="props.questionnaire.all_sales_channels || props.questionnaire.limit_sales_channels.indexOf(sc.identifier) !== -1" />
+            </template>
+          </span>
 				</div>
 
 				<aside class="editor-action-area"><div class="btn-group">

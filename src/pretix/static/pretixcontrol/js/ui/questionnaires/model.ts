@@ -76,6 +76,8 @@ export type SalesChannel = {
 	type: string,
 	label: I18nString,
 	position: number,
+	icon: string,
+	icon_url: string | null,
 }
 
 export type GroupedItems = [Category, Item[]][];
