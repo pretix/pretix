@@ -467,7 +467,6 @@ with scopes_disabled():
     class CompatQuestionFilter(FilterSet):
         identifier = django_filters.CharFilter(field_name='question__identifier')
         ask_during_checkin = django_filters.BooleanFilter(method='ask_during_checkin_qs')
-        sales_channel = django_filters.CharFilter(method='sales_channel_qs')
 
         class Meta:
             model = QuestionnaireChild
@@ -476,11 +475,6 @@ with scopes_disabled():
         def ask_during_checkin_qs(self, qs, name, value):
             return qs.filter(
                 questionnaire__type=Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN if value else Questionnaire.QuestionnaireType.ORDER_POSITION_SALE
-            )
-
-        def sales_channel_qs(self, qs, name, value):
-            return qs.filter(
-                Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels__identifier=value)
             )
 
 
@@ -495,7 +489,9 @@ class CompatQuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
     write_permission = 'event.items:write'
 
     def get_queryset(self):
+        self.sales_channel_ident = self.request.query_params.get('sales_channel', getattr(self.request.auth, 'guessed_sales_channel_identifier', None) or 'web')
         return QuestionnaireChild.objects.filter(
+            Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels__identifier=self.sales_channel_ident),
             questionnaire__event=self.request.event,
             # legacy compat only for position-level questions
             questionnaire__type__startswith='P',
