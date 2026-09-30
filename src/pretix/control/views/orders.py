@@ -589,7 +589,8 @@ class OrderDetail(OrderView):
                 'icon': provider.download_button_icon or 'fa-download',
                 'identifier': provider.identifier,
                 'multi': provider.multi_download_enabled,
-                'javascript_required': provider.javascript_required
+                'javascript_required': provider.javascript_required,
+                'confirmation_text': provider.confirmation_text
             })
         return buttons
 
