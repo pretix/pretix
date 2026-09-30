@@ -553,12 +553,22 @@ class TeamInviteSerializer(serializers.ModelSerializer):
 
 class TeamAPITokenSerializer(serializers.ModelSerializer):
     active = serializers.BooleanField(default=True, read_only=True)
+    sales_channel = serializers.SlugRelatedField(
+        slug_field="identifier",
+        queryset=SalesChannel.objects.none(),
+        required=False,
+        allow_empty=True,
+    )
 
     class Meta:
         model = TeamAPIToken
         fields = (
-            'id', 'name', 'active'
+            'id', 'name', 'active', 'sales_channel'
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['sales_channel'].queryset = self.context['organizer'].organizer.sales_channels.all() if 'organizer' in self.context else SalesChannel.objects.none()
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):

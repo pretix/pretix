@@ -28,6 +28,7 @@ from django.contrib.auth.hashers import make_password
 from django.db import transaction
 from django.db.models import OuterRef, Q, Subquery, Sum
 from django.db.models.functions import Coalesce
+from django.http.response import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -467,7 +468,7 @@ class TeamInviteViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnlyMo
         serializer.save(team=self.team)
 
 
-class TeamAPITokenViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnlyModelViewSet):
+class TeamAPITokenViewSet(viewsets.ModelViewSet):
     serializer_class = TeamAPITokenSerializer
     queryset = TeamAPIToken.objects.none()
     permission = 'organizer.teams:write'
@@ -506,6 +507,20 @@ class TeamAPITokenViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnly
         self.team.log_action(
             'pretix.team.token.created', auth=self.request.auth, user=self.request.user, data={
                 'name': instance.name,
+                'sales_channel': instance.sales_channel,
+                'id': instance.pk
+            }
+        )
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        if not self.team.active:
+            raise Http404()
+        instance = serializer.save(team=self.team)
+        self.team.log_action(
+            'pretix.team.token.changed', auth=self.request.auth, user=self.request.user, data={
+                'name': instance.name,
+                'sales_channel': instance.sales_channel,
                 'id': instance.pk
             }
         )
