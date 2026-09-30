@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-08-01 21:00+0000\n"
+"PO-Revision-Date: 2026-09-30 17:00+0000\n"
 "Last-Translator: szurofkamarciidfbe08444ef04788 <szurofkamarcii@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.1\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -93,7 +93,7 @@ msgstr "Héber"
 
 #: pretix/_base_settings.py
 msgid "Hungarian"
-msgstr ""
+msgstr "Magyar"
 
 #: pretix/_base_settings.py
 msgid "Indonesian"
@@ -426,10 +426,8 @@ msgid "You cannot exchange a medium for a medium."
 msgstr "Nem cserélhet adathordozót adathordozóra."
 
 #: pretix/api/views/checkin.py
-#, fuzzy
-#| msgid "Product does not support medium exchange."
 msgid "You cannot simulate a medium exchange."
-msgstr "A termék nem támogatja az adathordozó-cserét."
+msgstr "Az adathordozó szimuláció nem engedélyezett."
 
 #: pretix/api/views/oauth.py pretix/control/logdisplay.py
 #, python-brace-format
@@ -1779,16 +1777,12 @@ msgid "Transmission type"
 msgstr "Továbbítás típusa"
 
 #: pretix/base/exporters/invoices.py
-#, fuzzy
-#| msgid "Transmission type"
 msgid "Transmission status"
-msgstr "Továbbítás típusa"
+msgstr "Továbbítás állapot"
 
 #: pretix/base/exporters/invoices.py
-#, fuzzy
-#| msgid "Transmission type"
 msgid "Transmission date"
-msgstr "Továbbítás típusa"
+msgstr "Továbbítás dátum"
 
 #: pretix/base/exporters/invoices.py
 msgid "Cancellation"
@@ -3078,9 +3072,6 @@ msgid "Street"
 msgstr "Utca"
 
 #: pretix/base/forms/questions.py
-#, fuzzy
-#| msgctxt "address"
-#| msgid "State"
 msgid "State"
 msgstr "Állam/tartomány"
 
@@ -4429,10 +4420,8 @@ msgid "Initialization date"
 msgstr "Inicializálás dátuma"
 
 #: pretix/base/models/devices.py
-#, fuzzy
-#| msgid "Save to profile"
 msgid "Security profile"
-msgstr "Mentés a profilhoz"
+msgstr "Biztonsági profil"
 
 #: pretix/base/models/discount.py
 msgctxt "subevent"
@@ -5864,10 +5853,8 @@ msgid "Maximum value"
 msgstr "Maximális érték"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Maximum length"
 msgid "Minimum length"
-msgstr "Maximális hossz"
+msgstr "Minimum hossz"
 
 #: pretix/base/models/items.py
 msgid "Maximum length"
@@ -5938,10 +5925,8 @@ msgid "The maximum value must not be lower than the minimum value."
 msgstr "A maximális érték nem lehet kisebb a minimális értéknél."
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "The maximum value must not be lower than the minimum value."
 msgid "The maximum length must not be shorter than the minimum length."
-msgstr "A maximális érték nem lehet kisebb a minimális értéknél."
+msgstr "A maximális hossz nem lehet rövidebb a minimális hossznál."
 
 #: pretix/base/models/items.py
 msgid ""
@@ -7489,9 +7474,6 @@ msgid "The payment for this invoice has already been received."
 msgstr "A számla már ki lett fizetve."
 
 #: pretix/base/payment.py
-#, fuzzy
-#| msgid ""
-#| "This payment is already being processed and can not be canceled any more."
 msgid ""
 "This payment is already being processed and cannot be canceled any more."
 msgstr "Ez a fizetés már feldolgozás alatt áll, és többé nem törölhető."
@@ -8267,16 +8249,12 @@ msgid "Presale end"
 msgstr "Elővétel vége"
 
 #: pretix/base/reldate.py
-#, fuzzy
-#| msgid "Order email"
 msgid "Order creation"
-msgstr "Rendelés e-mail címe"
+msgstr "Rendelés létrehozás"
 
 #: pretix/base/reldate.py
-#, fuzzy
-#| msgid "Order expired"
 msgid "Order expiry"
-msgstr "Rendelés lejárt"
+msgstr "Rendelés lejárat"
 
 #: pretix/base/reldate.py
 msgid "before"
