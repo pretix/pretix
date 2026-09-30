@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 15:52+0000\n"
+"POT-Creation-Date: 2026-09-30 07:26+0000\n"
 "PO-Revision-Date: 2026-07-06 02:00+0000\n"
 "Last-Translator: Benedikt Bormann <mail@bbormann.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -800,194 +800,163 @@ msgstr "Deine lokale Zeit:"
 msgid "Google Pay"
 msgstr "Google Pay"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Quantity"
 msgstr "Menge"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Decrease quantity"
 msgstr "Menge reduzieren"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Increase quantity"
 msgstr "Menge erhöhen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Filter events by"
 msgstr "Veranstaltungen filtern nach"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Filter"
 msgstr "Filtern"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Price"
 msgstr "Preis"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
 msgstr "Originalpreis: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "New price: %s"
 msgstr "Neuer Preis: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Select"
 msgstr "Auswählen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Select %s"
 msgstr "%s auswählen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
 msgstr "Variante %s auswählen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Sold out"
 msgstr "Ausverkauft"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Buy"
 msgstr "In den Warenkorb"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Register"
 msgstr "Anmelden"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Reserved"
 msgstr "Reserviert"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "FREE"
 msgstr "GRATIS"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
 msgstr "ab %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
 msgstr "Bild von %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
 msgstr "inkl. %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
 msgstr "zzgl. %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "incl. taxes"
 msgstr "inkl. Steuern"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "plus taxes"
 msgstr "zzgl. Steuern"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
 msgstr "aktuell verfügbar: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Only available with a voucher"
 msgstr "Nur mit Gutschein verfügbar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Not yet available"
 msgstr "Noch nicht verfügbar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Not available anymore"
 msgstr "Nicht mehr verfügbar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Currently not available"
 msgstr "Aktuell nicht verfügbar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
 msgstr "minimale Bestellmenge: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Close ticket shop"
 msgstr "Ticketshop schließen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
 msgstr "Der Ticketshop konnte nicht geladen werden."
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
@@ -997,25 +966,21 @@ msgstr ""
 "Es sind derzeit sehr viele Benutzer in diesem Ticketshop. Bitte öffnen Sie "
 "diesen Ticketshop in einem neuen Tab um fortzufahren."
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Open ticket shop"
 msgstr "Ticketshop öffnen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Checkout"
 msgstr "Buchung"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr "Der Warenkorb konnte nicht erstellt werden. Bitte erneut versuchen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
@@ -1026,13 +991,11 @@ msgstr ""
 "diesem Ticketshop sind. Bitte klicken Sie \"Weiter\" um es in einem neuen "
 "Tab erneut zu versuchen."
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "Warteliste"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
@@ -1042,43 +1005,36 @@ msgstr ""
 "Sie haben einen aktiven Warenkorb für diese Veranstaltung. Wenn Sie mehr "
 "Produkte auswählen, werden diese zu Ihrem Warenkorb hinzugefügt."
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "Kauf fortsetzen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Gutschein einlösen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Einlösen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Gutscheincode"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Close"
 msgstr "Schließen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Close checkout"
 msgstr "Kauf schließen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
@@ -1086,73 +1042,61 @@ msgstr ""
 "Sie können diese Aktion nicht abbrechen. Bitte warten Sie, bis der "
 "Ladevorgang abgeschlossen ist."
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Continue"
 msgstr "Fortfahren"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Show variants"
 msgstr "Varianten zeigen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Hide variants"
 msgstr "Varianten verstecken"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "Andere Veranstaltung auswählen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Choose a different date"
 msgstr "Anderen Termin auswählen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Back"
 msgstr "Zurück"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Next month"
 msgstr "Nächster Monat"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Previous month"
 msgstr "Vorheriger Monat"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Next week"
 msgstr "Nächste Woche"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Previous week"
 msgstr "Vorherige Woche"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Open seat selection"
 msgstr "Sitzplan öffnen"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
@@ -1164,138 +1108,111 @@ msgstr ""
 "möchten, können Sie sich in die Warteliste eintragen. Wir benachrichtigen "
 "Sie dann, wenn die gewünschten Plätze wieder verfügbar sind."
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Load more"
 msgstr "Mehr laden"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Mo"
 msgstr "Mo"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Tu"
 msgstr "Di"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "We"
 msgstr "Mi"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Th"
 msgstr "Do"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Fr"
 msgstr "Fr"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Sa"
 msgstr "Sa"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Su"
 msgstr "So"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Monday"
 msgstr "Montag"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Tuesday"
 msgstr "Dienstag"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Wednesday"
 msgstr "Mittwoch"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Thursday"
 msgstr "Donnerstag"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Friday"
 msgstr "Freitag"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Saturday"
 msgstr "Samstag"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Sunday"
 msgstr "Sonntag"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "January"
 msgstr "Januar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "February"
 msgstr "Februar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "March"
 msgstr "März"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "April"
 msgstr "April"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "May"
 msgstr "Mai"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "June"
 msgstr "Juni"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "July"
 msgstr "Juli"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "August"
 msgstr "August"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "September"
 msgstr "September"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "October"
 msgstr "Oktober"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "November"
 msgstr "November"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "December"
 msgstr "Dezember"

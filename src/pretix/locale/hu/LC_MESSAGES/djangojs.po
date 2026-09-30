@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 15:52+0000\n"
+"POT-Creation-Date: 2026-09-30 07:26+0000\n"
 "PO-Revision-Date: 2026-07-15 14:20+0000\n"
 "Last-Translator: szurofkamarciidfbe08444ef04788 <szurofkamarcii@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -791,194 +791,163 @@ msgstr "Az Ön helyi ideje:"
 msgid "Google Pay"
 msgstr "Google Pay"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Quantity"
 msgstr "Mennyiség"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Decrease quantity"
 msgstr "Mennyiség csökkentése"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Increase quantity"
 msgstr "Mennyiség növelése"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Filter events by"
 msgstr "Események szűrése a következő szerint"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Filter"
 msgstr "Szűrés"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Price"
 msgstr "Ár"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
 msgstr "Eredeti ár: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "New price: %s"
 msgstr "Új ár: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Select"
 msgstr "Kiválasztás"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Select %s"
 msgstr "%s kiválasztása"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
 msgstr "Változat kiválasztása: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Sold out"
 msgstr "Elkelt"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Buy"
 msgstr "Vásárlás"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Register"
 msgstr "Regisztráció"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Reserved"
 msgstr "Foglalt"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "FREE"
 msgstr "INGYENES"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
 msgstr "%(currency)s %(price)s-tól"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
 msgstr "%s képe"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
 msgstr "beleértve %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
 msgstr "plusz %(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "incl. taxes"
 msgstr "adóval"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "plus taxes"
 msgstr "plusz adó"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
 msgstr "jelenleg elérhető: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Only available with a voucher"
 msgstr "Csak kuponnal elérhető"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Not yet available"
 msgstr "Még nem elérhető"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Not available anymore"
 msgstr "Már nem elérhető"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Currently not available"
 msgstr "Jelenleg nem elérhető"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
 msgstr "minimális rendelés: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Close ticket shop"
 msgstr "Jegyvásárlás bezárása"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
 msgstr "Jegyvásárlás betöltése sikertelen."
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
@@ -988,25 +957,21 @@ msgstr ""
 "Jelenleg sokan tartózkodnak ebben a jegyvásárlási felületen. A folytatáshoz "
 "kérjük, nyissa meg a jegyvásárlást egy új lapon."
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Open ticket shop"
 msgstr "Jegyvásárlás megnyitása"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Checkout"
 msgstr "Fizetés"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr "A kosár feltöltése sikertelen. Kérjük próbálja újra"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
@@ -1017,13 +982,11 @@ msgstr ""
 "ebben a jegyvásárlási felületen. Kattintson a „Folytatás” gombra az új lapon "
 "történő újrapróbálkozáshoz."
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "Várólista"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
@@ -1033,43 +996,36 @@ msgstr ""
 "A rendezvényhez már tartozik kosártartalom. A további kijelölt termékeket a "
 "már meglévő kosárhoz adjuk."
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "Fizetés folytatása"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Kupon beváltása"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Beváltás"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Kupon kód"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Close"
 msgstr "Bezárás"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Close checkout"
 msgstr "Fizetés bezárása"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
@@ -1077,73 +1033,61 @@ msgstr ""
 "Ezt a műveletet nem lehet megszakítani. Kérjük, várja meg, amíg a betöltés "
 "befejeződik."
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Continue"
 msgstr "Folytatás"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Show variants"
 msgstr "Variációk megtekintése"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Hide variants"
 msgstr "Variációk elrejtése"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "Másik esemény választása"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Choose a different date"
 msgstr "Másik időpont választása"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Back"
 msgstr "Vissza"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Next month"
 msgstr "Következő hónap"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Previous month"
 msgstr "Előző hónap"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Next week"
 msgstr "Következő hét"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Previous week"
 msgstr "Előző hét"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Open seat selection"
 msgstr "Helyválasztás megnyitása"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
@@ -1155,138 +1099,111 @@ msgstr ""
 "feliratkozhat a várólistára. Ebben az esetben értesítjük, ha ismét lesznek "
 "elérhető helyek."
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Load more"
 msgstr "Továbbiak betöltése"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Mo"
 msgstr "H"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Tu"
 msgstr "K"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "We"
 msgstr "Sze"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Th"
 msgstr "Cs"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Fr"
 msgstr "P"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Sa"
 msgstr "Szo"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Su"
 msgstr "V"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Monday"
 msgstr "Hétfő"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Tuesday"
 msgstr "Kedd"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Wednesday"
 msgstr "Szerda"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Thursday"
 msgstr "Csütörtök"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Friday"
 msgstr "Péntek"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Saturday"
 msgstr "Szombat"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Sunday"
 msgstr "Vasárnap"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "January"
 msgstr "Január"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "February"
 msgstr "Február"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "March"
 msgstr "Március"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "April"
 msgstr "Április"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "May"
 msgstr "Május"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "June"
 msgstr "Június"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "July"
 msgstr "Július"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "August"
 msgstr "Augusztus"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "September"
 msgstr "Szeptember"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "October"
 msgstr "Október"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "November"
 msgstr "November"
 
-#: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "December"
 msgstr "December"
