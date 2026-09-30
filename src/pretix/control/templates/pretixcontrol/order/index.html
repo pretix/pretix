@@ -10,6 +10,7 @@
 {% load l10n %}
 {% load phone_format %}
 {% load getitem %}
+{% load dialog %}
 {% block title %}
     {% blocktrans trimmed with code=order.code %}
         Order details: {{ code }}
@@ -563,15 +564,41 @@
                                     <div class="position-buttons">
                                         {% if line.generate_ticket %}
                                             {% for b in download_buttons %}
-                                                <form action="{% url "control:event.order.download.ticket" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk output=b.identifier %}"
-                                                        method="post" data-asynctask data-asynctask-download
-                                                        class="form-inline helper-display-inline{% if b.javascript_required %} requirejs{% endif %}">
-                                                    {% csrf_token %}
-                                                    <button type="submit"
-                                                            class="btn btn-xs btn-default">
+                                                {% if b.confirmation_text %}
+                                                    <button type="button" class="btn btn-xs btn-default" data-toggle="modal" data-target="#download-confirm-{{b.identifier}}">
                                                         <span class="fa {{ b.icon }}"></span> {{ b.text }}
                                                     </button>
-                                                </form>
+                                                    <dialog class="modal modal-card" id="download-confirm-{{b.identifier}}" tabindex="-1" role="dialog" aria-labelledby="download-confirm-{{b.identifier}}-label">
+                                                        <div class="modal-card-inner" role="document">
+                                                            <div class="modal-card-icon"><span class="fa fa-shield" aria-hidden="true"></span></div>
+                                                            <div class="modal-card-content">
+                                                                <h4 class="modal-card-title h3" id="download-confirm-{{b.identifier}}-label">{% trans "Confirmation required" %}</h4>
+                                                                <p>{{ b.confirmation_text }}</p>
+                                                            <div class="modal-card-confirm modal-card-confirm-spread">
+                                                                <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">{% trans "Cancel" %}</button>
+                                                                <form action="{% url "control:event.order.download.ticket" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk output=b.identifier %}"
+                                                                        method="post" data-asynctask data-asynctask-download
+                                                                        class="form-inline helper-display-inline{% if b.javascript_required %} requirejs{% endif %}">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit"
+                                                                            class="btn btn-primary btn-lg">
+                                                                        {% trans "Confirm" %}
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </dialog>
+                                                {% else %}
+                                                    <form action="{% url "control:event.order.download.ticket" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk output=b.identifier %}"
+                                                            method="post" data-asynctask data-asynctask-download
+                                                            class="form-inline helper-display-inline{% if b.javascript_required %} requirejs{% endif %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit"
+                                                                class="btn btn-xs btn-default">
+                                                            <span class="fa {{ b.icon }}"></span> {{ b.text }}
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
                                             {% endfor %}
                                         {% endif %}
                                         <button type="submit" data-toggle="qrcode" data-qrcode="{{ line.secret }}"

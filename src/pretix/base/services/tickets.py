@@ -22,7 +22,7 @@
 import logging
 import os
 from decimal import Decimal
-
+from datetime import timedelta
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
@@ -31,7 +31,7 @@ from django_scopes import scopes_disabled
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, Order,
-    OrderPosition,
+    OrderPosition, CachedFile
 )
 from pretix.base.services.tasks import EventTask, ProfiledTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
@@ -43,7 +43,7 @@ from django.db import transaction
 logger = logging.getLogger(__name__)
 
 
-def generate_orderposition(order_position: int, provider: str):
+def generate_orderposition(order_position: int, provider: str, cf: CachedFile | None = None):
     order_position = OrderPosition.objects.select_related('order', 'order__event').get(id=order_position)
 
     with language(order_position.order.locale, order_position.order.event.settings.region):
@@ -53,15 +53,22 @@ def generate_orderposition(order_position: int, provider: str):
             if prov.identifier == provider:
                 filename, ttype, data = prov.generate(order_position)
                 path, ext = os.path.splitext(filename)
-                for ct in CachedTicket.objects.filter(order_position=order_position, provider=provider):
-                    ct.delete()
-                ct = CachedTicket.objects.create(order_position=order_position, provider=provider,
-                                                 extension=ext, type=ttype, file=None)
-                ct.file.save(filename, ContentFile(data))
-                return ct.pk
 
+                if cf:
+                    cf.type = ttype
+                    cf.filename = filename
+                    cf.file.save(name=filename, content=ContentFile(data))
+                    return cf.pk
 
-def generate_order(order: int, provider: str):
+                if prov.is_cacheable:
+                    for ct in CachedTicket.objects.filter(order_position=order_position, provider=provider):
+                        ct.delete()
+                    ct = CachedTicket.objects.create(order_position=order_position, provider=provider,
+                                                    extension=ext, type=ttype, file=None)
+                    ct.file.save(filename, ContentFile(data))
+                    return ct.pk
+
+def generate_order(order: int, provider: str, cf: CachedFile | None = None):
     order = Order.objects.select_related('event').get(id=order)
 
     with language(order.locale, order.event.settings.region):
@@ -71,21 +78,32 @@ def generate_order(order: int, provider: str):
             if prov.identifier == provider:
                 filename, ttype, data = prov.generate_order(order)
                 path, ext = os.path.splitext(filename)
-                for ct in CachedCombinedTicket.objects.filter(order=order, provider=provider):
-                    ct.delete()
-                ct = CachedCombinedTicket.objects.create(order=order, provider=provider, extension=ext,
-                                                         type=ttype, file=None)
-                ct.file.save(filename, ContentFile(data))
-                return ct.pk
 
+                if cf:
+                    cf.type = ttype
+                    cf.filename = filename
+                    cf.file.save(name=filename, content=ContentFile(data))
+                    return cf.pk
+
+                if prov.is_cacheable:
+                    for ct in CachedCombinedTicket.objects.filter(order=order, provider=provider):
+                        ct.delete()
+                    ct = CachedCombinedTicket.objects.create(order=order, provider=provider, extension=ext,
+                                                            type=ttype, file=None)
+                    ct.file.save(filename, ContentFile(data))
+                    return ct.pk
 
 @app.task(base=ProfiledTask)
-def generate(model: str, pk: int, provider: str):
+def generate(model: str, pk: int, provider: str, cachedfile_pk: int | None = None):
     with scopes_disabled():
+        if cachedfile_pk:
+            cf = CachedFile.objects.get(pk=cachedfile_pk)
+        else:
+            cf = None
         if model == 'order':
-            return generate_order(pk, provider)
+            return generate_order(pk, provider, cf)
         elif model == 'orderposition':
-            return generate_orderposition(pk, provider)
+            return generate_orderposition(pk, provider, cf)
 
 
 class DummyRollbackException(Exception):
@@ -95,7 +113,7 @@ def get_preview_position(event):
     connection = transaction.get_connection()
     if not connection.in_atomic_block:
         raise RuntimeError("get_preview_position needs to be called in a rolledback_transaction")
-    
+
     item = event.items.create(name=_("Sample product"), default_price=Decimal('42.23'),
                                   description=_("Sample product description"))
     item2 = event.items.create(name=_("Sample workshop"), default_price=Decimal('23.40'))
@@ -151,7 +169,7 @@ def get_tickets_for_order(order, base_position=None):
         ]
 
     for p in providers:
-        if not p.is_enabled:
+        if not p.is_enabled or not p.is_cacheable:
             continue
 
         if p.multi_download_enabled and not base_position:

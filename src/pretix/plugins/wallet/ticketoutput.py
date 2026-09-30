@@ -20,13 +20,13 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.base.models import Event
 from pretix.base.settings import SettingsSandbox
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
-from .styles.base import WalletPlatform
+from pretix.plugins.wallet.styles.base import WalletPlatform
 from .styles.apple import ApplePlatform
 from .styles.google import GooglePlatform
 from collections import OrderedDict
@@ -79,6 +79,18 @@ class GoogleWalletTicketOutput(WalletOutput):
     verbose_name = _("Google")
     download_button_text = "Add to Google Wallet"
     platform = GooglePlatform
+    is_cacheable = False
+
+    @property
+    def confirmation_text(self) -> str | None:
+        return _(
+            "Please be aware, that contrary to other virtual wallets/passes (like Apple Wallet), Google Wallet Passes are not "
+            "handled offline. Every pass that is created, has to be transmitted to Google Inc.\n"
+            "\n"
+            "By clicking \"Confirm\" below, we will transfer some of your personal information, which is "
+            "necessary to provide you with your Google Wallet Pass, to Google Inc.\n"
+            "\n"
+            "Please be aware, that there is no way to delete the data, once it has been transmitted.\n")
 
     def get_global_settings(sender, **kwargs):
         return OrderedDict(
