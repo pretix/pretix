@@ -39,6 +39,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
+from i18nfield.strings import LazyI18nString
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
@@ -49,15 +50,18 @@ from pretix.api.serializers.item import (
     CompatQuestionSerializer, ItemAddOnSerializer, ItemBundleSerializer, ItemCategorySerializer,
     ItemProgramTimeSerializer, ItemSerializer, ItemVariationSerializer,
     QuestionnaireSerializer, QuestionOptionSerializer, DatafieldSerializer,
-    QuotaSerializer, uncook_id,
+    QuotaSerializer, cook_id_from_parts, uncook_id,
 )
 from pretix.api.views import ConditionalListView
+from pretix.base.forms.questions import REQUIRED_NAME_PARTS
 from pretix.base.models import (
     CartPosition, Item, ItemAddOn, ItemBundle, ItemCategory, ItemProgramTime,
     ItemVariation, Question, QuestionOption, Quota,
 )
 from pretix.base.models.items import Questionnaire, QuestionnaireChild
 from pretix.base.services.quotas import QuotaAvailability
+from pretix.base.settings import PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
+from pretix.control.views.item import i18n_all_from_gettext
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.i18n import i18ncomp
 
@@ -496,6 +500,38 @@ class CompatQuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
             # legacy compat only for position-level questions
             questionnaire__type__startswith='P',
         ).prefetch_related('user_datafield', 'user_datafield__options', 'questionnaire').all()
+
+    def list(self, request, **kwargs):
+        resp = super().list(request, **kwargs)
+        mangled_results = []
+        pos_offset = 0
+        for row in resp.data['results']:
+            row['position'] += pos_offset
+            if row['identifier'] == '@attendee_name_parts':
+                settings = self.request.event.settings
+                for k, v, w, *__ in PERSON_NAME_SCHEMES.get(settings.name_scheme)['fields']:
+                    part = dict(row)
+                    part["identifier"] += ":" + k
+                    part["question"] = i18n_all_from_gettext(v, settings.locales)
+                    if k == "title" and settings.name_scheme_titles:
+                        part["type"] = Question.FieldType.CHOICE
+                        part["options"] = [{"id": idx + 1, "identifier": k, "answer": i18n_all_from_gettext(k, settings.locales), "position": idx + 1} for idx, k in
+                                           enumerate(PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1])]
+                    elif k == "salutation":
+                        part["type"] = Question.FieldType.CHOICE
+                        part["options"] = [{"id": idx + 1, "identifier": k, "answer": i18n_all_from_gettext(v, settings.locales), "position": idx + 1} for idx, (k, v) in
+                                           enumerate(PERSON_NAME_SALUTATIONS)]
+                    part["id"] = cook_id_from_parts(row['questionnaire_id'], None, part["identifier"][1:])
+                    part["required"] = part["required"] and k in REQUIRED_NAME_PARTS
+                    mangled_results.append(part)
+                    pos_offset += 1
+                    row["position"] += 1
+            else:
+                if row['identifier'] == '@country':
+                    row['type'] = Question.FieldType.COUNTRYCODE
+                mangled_results.append(row)
+        resp.data['results'] = mangled_results
+        return resp
 
     def get_object(self):
         """

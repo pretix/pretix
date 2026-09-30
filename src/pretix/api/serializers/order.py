@@ -48,7 +48,8 @@ from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
-    InlineItemVariationSerializer, ItemSerializer, DatafieldSerializer, cook_id, system_datafield_numbers, uncook_id,
+    InlineItemVariationSerializer, ItemSerializer, DatafieldSerializer, cook_id, cook_id_from_parts,
+    system_datafield_numbers, uncook_id,
 )
 from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
@@ -75,7 +76,8 @@ from pretix.base.services.pricing import (
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.settings import (
-    COUNTRIES_WITH_STATE_IN_ADDRESS, ROUNDING_MODES,
+    COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
+    ROUNDING_MODES,
 )
 from pretix.base.signals import register_ticket_outputs
 from pretix.helpers.countries import CachedCountries
@@ -240,23 +242,58 @@ class MixedAnswerListSerializer(ListSerializer):
 
     def to_representation(self, instance):
         answers = super().to_representation(instance.answers)
-        for qc in QuestionnaireChild.objects.filter(questionnaire__items__id=instance.item_id, system_datafield__isnull=False):
-            answers.append({
-                "question": cook_id(qc),
-                "answer": instance.get_system_answer(qc.system_datafield),
-                "question_identifier": f'@{qc.system_datafield}',
-                "options": [],
-                "option_identifiers": [],
-                "questionnaire_id": qc.questionnaire_id,
-                "system_datafield": qc.system_datafield,
-            })
-        return {
-            "answers": answers,
-        }
+        answers_dict = {answer["question"]: answer for answer in answers}
+        for qc in QuestionnaireChild.objects.filter(questionnaire__items__id=instance.item_id):
+            if qc.user_datafield_id:
+                if answer := answers_dict.get(qc.user_datafield_id):
+                    answer = dict(answer)
+                    answer["question"] = cook_id(qc)
+                    answer["questionnaire_id"] = qc.questionnaire_id
+                    answer["user_datafield_id"] = qc.user_datafield_id
+                    answers.append(answer)
+            elif (sys_answer := instance.get_system_answer(qc.system_datafield)) is not None:
+                if qc.system_datafield == 'attendee_name_parts':
+                    name_parts = instance.attendee_name_parts
+                    settings = self.context['event'].settings
+                    for k, v, w, *__ in PERSON_NAME_SCHEMES.get(settings.name_scheme)['fields']:
+                        if k in name_parts:
+                            options = []
+                            options_ident = []
+                            try:
+                                if k == "salutation":
+                                    salutation_keys = [key for key, value in PERSON_NAME_SALUTATIONS]
+                                    options = [salutation_keys.index(name_parts[k]) + 1]
+                                    options_ident = [name_parts[k]]
+                                elif k == "title" and settings.name_scheme_titles:
+                                    options =  [PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1].index(name_parts[k]) + 1]
+                                    options_ident = [name_parts[k]]
+                            except ValueError:
+                                pass
+                            answers.append({
+                                "question": cook_id_from_parts(qc.questionnaire_id, None, f'{qc.system_datafield}:{k}'),
+                                "answer": name_parts[k],
+                                "question_identifier": f'@{qc.system_datafield}:{k}',
+                                "options": options,
+                                "option_identifiers": options_ident,
+                                "questionnaire_id": qc.questionnaire_id,
+                                "system_datafield": f'{qc.system_datafield}:{k}',
+                            })
+                answers.append({
+                    "question": cook_id(qc),
+                    "answer": sys_answer,
+                    "question_identifier": f'@{qc.system_datafield}',
+                    "options": [],
+                    "option_identifiers": [],
+                    "questionnaire_id": qc.questionnaire_id,
+                    "system_datafield": qc.system_datafield,
+                })
+        return answers
 
     def to_internal_value(self, data):
         result = {}
         answers = []
+        attendee_name_parts = {}
+        settings = self.context['event'].settings
         for answer in data["answers"]:
             try:
                 qid, dfid, sys_df = uncook_id(answer["question"])
@@ -264,13 +301,23 @@ class MixedAnswerListSerializer(ListSerializer):
                 if type(answer["question"]) is str and answer["question"].lstrip("@") in system_datafield_numbers:
                     qid, dfid, sys_df = None, None, answer["question"].lstrip("@")
                 else:
-                    raise
+                    raise ValidationError('Invalid question ID')
             if dfid:
                 answer["question"] = dfid
                 answers.append(answer)
+            elif sys_df == "country":
+                result[sys_df] = Country(answer["answer"])
+            elif sys_df == "attendee_name_parts:salutation":
+                attendee_name_parts['salutation'] =  PERSON_NAME_SALUTATIONS[answer["options"][0] - 1][0]
+            elif sys_df == "attendee_name_parts:title" and settings.name_scheme_titles:
+                attendee_name_parts['title'] =  PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1][answer["options"][0] - 1]
+            elif sys_df.startswith("attendee_name_parts:"):
+                attendee_name_parts[sys_df[len("attendee_name_parts:"):]] = answer["answer"]
             else:
-                result[sys_df] = Country(answer["answer"]) if sys_df == "country" else answer["answer"]
+                result[sys_df] = answer["answer"]
         result["answers"] = super().to_internal_value(answers)
+        if attendee_name_parts:
+            result["attendee_name_parts"] = attendee_name_parts
         return result
 
 

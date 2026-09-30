@@ -708,10 +708,14 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
 
 
 def textchoices_to_json(choices, event):
-    return [(c.name, c.value, i18n_all(event.settings.locales, LazyI18nString.from_gettext(c.label).data)) for c in choices]
+    return [(c.name, c.value, i18n_all_from_gettext(c.label, event.settings.locales)) for c in choices]
 
 
-def i18n_all(locales, data):
+def i18n_all_from_gettext(gettext_str, locales):
+    return i18n_all(LazyI18nString.from_gettext(gettext_str).data, locales)
+
+
+def i18n_all(data, locales):
     out = {}
     for locale in locales:
         out[locale] = data[locale]

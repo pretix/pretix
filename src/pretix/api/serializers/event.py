@@ -995,6 +995,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
                 else []
             )
         )
+        self.fields['system_question_order'] = serializers.JSONField(read_only=True, default=dict(), source='_invalid')
 
 
 class MultiLineStringField(serializers.Field):

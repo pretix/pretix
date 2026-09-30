@@ -551,6 +551,8 @@ class LegacyDependencyValueField(serializers.CharField):
 
 
 
+#name_schemes_all_fields = sorted(list(set(k for scheme in PERSON_NAME_SCHEMES.values() for k, v, w, *__ in scheme['fields'])))
+name_schemes_all_fields = ['calling_name', 'degree', 'family_name', 'full_name', 'given_name', 'latin_transcription', 'middle_name', 'salutation', 'title']
 system_datafield_numbers = [
     QuestionnaireChild.SystemQuestion.ATTENDEE_NAME_PARTS.value,
     QuestionnaireChild.SystemQuestion.ATTENDEE_EMAIL.value,
@@ -560,13 +562,19 @@ system_datafield_numbers = [
     QuestionnaireChild.SystemQuestion.CITY.value,
     QuestionnaireChild.SystemQuestion.STATE.value,
     QuestionnaireChild.SystemQuestion.COUNTRY.value,
+] + [
+    QuestionnaireChild.SystemQuestion.ATTENDEE_NAME_PARTS.value + ':' + field for field in name_schemes_all_fields
 ]
 
 
 def cook_id(questionnaire_child):
-    df_id = questionnaire_child.user_datafield_id + 100 if questionnaire_child.user_datafield_id else system_datafield_numbers.index(questionnaire_child.system_datafield)
-    assert questionnaire_child.questionnaire_id < 1000000000
-    return questionnaire_child.questionnaire_id * 1000000000 + df_id
+    return cook_id_from_parts(questionnaire_child.questionnaire_id, questionnaire_child.user_datafield_id, questionnaire_child.system_datafield)
+
+
+def cook_id_from_parts(qid, dfid, sys_df):
+    df_id = dfid + 100 if dfid else system_datafield_numbers.index(sys_df)
+    assert qid < 1000000000
+    return qid * 1000000000 + df_id
 
 
 def uncook_id(id):
@@ -584,7 +592,7 @@ def uncook_id(id):
 class CompatQuestionSerializer(I18nAwareModelSerializer):
     id = serializers.SerializerMethodField('cook_id', read_only=True)
     question = I18nField(source='label', allow_null=True)
-    type = serializers.CharField(source='user_datafield.type', allow_null=True, default=Question.FieldType.TEXT)
+    type = serializers.CharField(source='user_datafield.type', allow_null=True, default=Question.FieldType.STRING)
     #identifier = serializers.CharField(source='user_datafield.identifier', allow_null=True)
     identifier = serializers.SerializerMethodField('get_identifier', read_only=True)
     show_during_checkin = serializers.BooleanField(source='user_datafield.show_during_checkin', allow_null=True, default=False)
@@ -604,6 +612,7 @@ class CompatQuestionSerializer(I18nAwareModelSerializer):
     dependency_value = serializers.SerializerMethodField('empty', read_only=True)
     position = serializers.SerializerMethodField('get_position', read_only=True)
     items = serializers.PrimaryKeyRelatedField(source='questionnaire.items', many=True, queryset=Item.objects.none(), allow_null=True, required=False)
+    questionnaire_id = serializers.IntegerField(source='questionnaire.id', read_only=True)
 
     options = InlineQuestionOptionSerializer(source='user_datafield.options', many=True, required=False, default=[])
 
@@ -613,7 +622,7 @@ class CompatQuestionSerializer(I18nAwareModelSerializer):
                   'ask_during_checkin', 'show_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
                   'hidden', 'dependency_value', 'print_on_invoice', 'help_text', 'valid_number_min',
                   'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
-                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait')
+                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait', 'questionnaire_id')
 
     def __init__(self, *args, **kwargs):
         self.fields['items'].child_relation.queryset = kwargs['context']['event'].items.all()
