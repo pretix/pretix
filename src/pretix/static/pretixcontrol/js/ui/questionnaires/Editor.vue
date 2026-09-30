@@ -4,7 +4,7 @@ import * as api from './api';
 import {Datafield, Questionnaire} from './model';
 import {i18n_any, sort, numericComp, groupBy, SYSTEM_DATAFIELDS} from './helper';
 import { gettext } from './gettextstub';
-import {inject, onMounted, onUnmounted, ref} from 'vue';
+import {inject, nextTick, onMounted, onUnmounted, ref} from 'vue';
 import { SlickList, SlickItem } from 'vue-slicksort';
 import { ProgressBar } from "./ProgressBar";
 
@@ -54,14 +54,14 @@ function saveQuestionnaire(questionnaire) {
 }
 function addPositionQuestionnaire () {
 	position_questionnaires.value.push({
-		all_sales_channels: true, children: [], limit_sales_channels: [], position: 0,
+		all_sales_channels: true, children: [], limit_sales_channels: [], position: position_questionnaires.value.length,
 		items: [], internal_name: "Unnamed questionnaire", type: "PS",
 		_new_id: Date.now(),
 	});
 }
 function addOrderQuestionnaire () {
 	order_questionnaires.value.push({
-		all_sales_channels: true, children: [], limit_sales_channels: [], position: 0,
+		all_sales_channels: true, children: [], limit_sales_channels: [], position: order_questionnaires.value.length,
 		items: [], internal_name: "Unnamed questionnaire", type: "OS",
 		_new_id: Date.now(),
 	});
@@ -142,8 +142,8 @@ const preview_mode = ref(false)
 
 .questionnaires-editor.preview-mode .questionnaire-panel .questionnaire-panel-heading { color: #888; margin-top: 5px; border-top: 1px dashed rgb(175 175 175 / 0.3); border-bottom: 1px dashed rgb(216 216 216 / 0.3); font-style: italic; padding: 0; }
 
-.questionnaires-editor .editor-row:not(:hover) .btn.btn-default,
-.questionnaires-editor .editor-action-row:not(:hover) .btn.btn-default{ box-shadow: 0 0 0 0 #eeeeee; background: transparent; color: #555; }
+.questionnaires-editor .editor-row:not(:hover):not(:focus-within) .btn.btn-default,
+.questionnaires-editor .editor-action-row:not(:hover):not(:focus-within) .btn.btn-default{ box-shadow: 0 0 0 0 #eeeeee; background: transparent; color: #555; }
 
 .filter-row { background: #f8e6ff; border: 1px solid #e3cbed; padding: 10px; }
 
