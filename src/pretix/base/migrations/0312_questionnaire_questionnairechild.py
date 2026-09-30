@@ -172,7 +172,7 @@ def migrate_questions_backward(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0310_question_valid_string_length_min'),
+        ('pretixbase', '0311_fix_unshredded_invoices'),
     ]
 
     operations = [
