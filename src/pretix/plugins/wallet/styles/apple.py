@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from typing import Any
 
-from .base import (
+from pretix.plugins.wallet.styles.base import (
     FieldEntryType,
     FieldGroupDisplay,
     ImageFieldGroup,

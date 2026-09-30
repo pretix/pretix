@@ -1,6 +1,6 @@
 from pretix.base.models import Event, OrderPosition
 
-from .base import (
+from pretix.plugins.wallet.styles.base import (
     FieldGroupDisplay,
     ImageFieldGroup,
     PassStyle,
