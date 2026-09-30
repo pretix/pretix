@@ -31,7 +31,8 @@ from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import (
-    AnswerCreateSerializer, AnswerSerializer, InlineSeatSerializer, MixedAnswerListSerializer,
+    AnswerCreateSerializer, AnswerSerializer, InlineSeatSerializer,
+    MixedAnswerListSerializer,
 )
 from pretix.base.models import SalesChannel, Seat, Voucher
 from pretix.base.models.orders import CartPosition

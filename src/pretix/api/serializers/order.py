@@ -58,8 +58,8 @@ from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
     CachedFile, Checkin, Customer, Device, GiftCard, Invoice, InvoiceAddress,
     InvoiceLine, Item, ItemVariation, Order, OrderPosition, Question,
-    QuestionAnswer, Questionnaire, QuestionnaireChild, ReusableMedium, SalesChannel, Seat, SubEvent, TaxRule,
-    Voucher,
+    QuestionAnswer, Questionnaire, QuestionnaireChild, ReusableMedium,
+    SalesChannel, Seat, SubEvent, TaxRule, Voucher,
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, CartPosition, OrderFee, OrderPayment, OrderRefund,
@@ -75,8 +75,8 @@ from pretix.base.services.pricing import (
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.settings import (
-    COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
-    ROUNDING_MODES,
+    COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SALUTATIONS,
+    PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, ROUNDING_MODES,
 )
 from pretix.base.signals import register_ticket_outputs
 from pretix.helpers.countries import CachedCountries

@@ -65,7 +65,8 @@ from pretix.api.views.order import OrderPositionFilter
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Checkin, CheckinList, Device, Event, Order, OrderPosition,
-    Question, Questionnaire, QuestionnaireChild, ReusableMedium, RevokedTicketSecret, TeamAPIToken,
+    Question, Questionnaire, QuestionnaireChild, ReusableMedium,
+    RevokedTicketSecret, TeamAPIToken,
 )
 from pretix.base.models.orders import PrintLog
 from pretix.base.permissions import AnyPermissionOf

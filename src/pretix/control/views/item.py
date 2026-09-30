@@ -68,11 +68,13 @@ from pretix.api.serializers.item import (
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, LogEntry,
-    OrderPosition, Question, QuestionAnswer, QuestionOption, QuestionnaireChild, Quota,
-    SeatCategoryMapping, Voucher,
+    OrderPosition, Question, QuestionAnswer, QuestionnaireChild,
+    QuestionOption, Quota, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue, Questionnaire
+from pretix.base.models.items import (
+    ItemAddOn, ItemBundle, ItemMetaValue, Questionnaire,
+)
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
@@ -94,8 +96,8 @@ from pretix.helpers.models import modelcopy
 
 from ...helpers import GroupConcat
 from ...helpers.compat import CompatDeleteView
-from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 from ...helpers.i18n import i18n_all_from_gettext
+from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
 
 def has_truthy_attr(cls, attr):

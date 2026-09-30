@@ -35,14 +35,13 @@
 
 import calendar
 import os
-from itertools import groupby
-
 import sys
 import uuid
 import warnings
 from collections import Counter, OrderedDict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
+from itertools import groupby
 from typing import Optional, Tuple
 from zoneinfo import ZoneInfo
 

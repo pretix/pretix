@@ -95,7 +95,9 @@ from ._transactions import (
 )
 from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
-from .items import Item, ItemVariation, Question, QuestionOption, QuestionnaireChild, Quota
+from .items import (
+    Item, ItemVariation, Question, QuestionnaireChild, QuestionOption, Quota,
+)
 
 logger = logging.getLogger(__name__)
 

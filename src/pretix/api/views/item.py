@@ -46,10 +46,10 @@ from rest_framework.response import Response
 
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.item import (
-    CompatQuestionSerializer, ItemAddOnSerializer, ItemBundleSerializer, ItemCategorySerializer,
-    ItemProgramTimeSerializer, ItemSerializer, ItemVariationSerializer,
-    QuestionnaireSerializer, QuestionOptionSerializer, DatafieldSerializer,
-    QuotaSerializer,
+    CompatQuestionSerializer, DatafieldSerializer, ItemAddOnSerializer,
+    ItemBundleSerializer, ItemCategorySerializer, ItemProgramTimeSerializer,
+    ItemSerializer, ItemVariationSerializer, QuestionnaireSerializer,
+    QuestionOptionSerializer, QuotaSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (

@@ -55,7 +55,7 @@ from django_scopes import scope, scopes_disabled
 
 from pretix.base.models import (
     Checkin, CheckinList, Device, Event, Gate, Item, ItemVariation, Order,
-    OrderPosition, QuestionOption, Questionnaire, QuestionnaireChild,
+    OrderPosition, Questionnaire, QuestionnaireChild, QuestionOption,
 )
 from pretix.base.signals import checkin_created, periodic_task
 from pretix.helpers import OF_SELF

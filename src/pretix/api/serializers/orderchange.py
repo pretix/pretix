@@ -30,7 +30,8 @@ from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.order import (
     AnswerCreateSerializer, AnswerSerializer, CompatibleCountryField,
-    MixedAnswerListSerializer, OrderFeeCreateSerializer, OrderPositionCreateSerializer,
+    MixedAnswerListSerializer, OrderFeeCreateSerializer,
+    OrderPositionCreateSerializer,
 )
 from pretix.base.models import ItemVariation, Order, OrderFee, OrderPosition
 from pretix.base.services.orders import OrderChangeManager, OrderError

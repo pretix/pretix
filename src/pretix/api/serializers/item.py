@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 
+import logging
 # This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
 # the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
 #
@@ -33,10 +34,7 @@
 # License for the specific language governing permissions and limitations under the License.
 import os.path
 from decimal import Decimal
-
-from i18nfield.rest_framework import I18nField
 from itertools import zip_longest
-import logging
 
 import rest_framework
 from django.conf import settings
@@ -45,6 +43,7 @@ from django.db import transaction
 from django.db.models import QuerySet
 from django.utils.functional import cached_property, lazy
 from django.utils.translation import gettext_lazy as _
+from i18nfield.rest_framework import I18nField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError as DrfValidationError
 from rest_framework.serializers import as_serializer_error
@@ -58,11 +57,13 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.forms.questions import REQUIRED_NAME_PARTS
 from pretix.base.models import (
     Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, ItemProgramTime,
-    ItemVariation, ItemVariationMetaValue, Question, QuestionAnswer, QuestionOption, Quota,
-    SalesChannel,
+    ItemVariation, ItemVariationMetaValue, Question, QuestionAnswer,
+    QuestionOption, Quota, SalesChannel,
 )
 from pretix.base.models.items import Questionnaire, QuestionnaireChild
-from pretix.base.settings import PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
+from pretix.base.settings import (
+    PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
+)
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.i18n import i18n_all_from_gettext
 

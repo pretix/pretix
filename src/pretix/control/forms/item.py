@@ -60,7 +60,9 @@ from pretix.base.models import (
     Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
     QuestionOption, Quota,
 )
-from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue, Questionnaire
+from pretix.base.models.items import (
+    ItemAddOn, ItemBundle, ItemMetaValue, Questionnaire,
+)
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
     ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,

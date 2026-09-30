@@ -52,7 +52,7 @@ from pretix.base.i18n import get_language_without_region, set_region
 from pretix.base.middleware import get_supported_language
 from pretix.base.models import (
     CartPosition, Customer, InvoiceAddress, ItemAddOn, OrderFee, Question,
-    QuestionAnswer, QuestionOption, Questionnaire, TaxRule,
+    QuestionAnswer, Questionnaire, QuestionOption, TaxRule,
 )
 from pretix.base.models.items import QuestionnaireChild
 from pretix.base.models.orders import CheckoutSession
