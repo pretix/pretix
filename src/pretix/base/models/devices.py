@@ -178,6 +178,7 @@ class Device(LoggedModel):
     info = models.JSONField(
         null=True, blank=True,
     )
+    sales_channel = models.ForeignKey("SalesChannel", on_delete=models.SET_NULL, null=True, blank=True)
 
     objects = ScopedManager(organizer='organizer')
 

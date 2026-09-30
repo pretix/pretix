@@ -535,11 +535,14 @@ class TeamAPIToken(models.Model):
     :type active: bool
     :param token: The secret required to submit to the API
     :type token: str
+    :param sales_channel: Default value for sales channel on API calls with this token
+    :type sales_channel: SalesChannel
     """
     team = models.ForeignKey(Team, related_name="tokens", on_delete=models.CASCADE)
     name = models.CharField(max_length=190)
     active = models.BooleanField(default=True)
     token = models.CharField(default=generate_api_token, max_length=64)
+    sales_channel = models.ForeignKey("SalesChannel", on_delete=models.CASCADE, null=True, blank=True)
 
     def get_event_permission_set(self, organizer, event) -> set:
         """
