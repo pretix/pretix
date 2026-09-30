@@ -2092,6 +2092,24 @@ class QuestionnaireChild(LoggedModel):
         STATE = 'state', _('State')
         COUNTRY = 'country', _('Country')
 
+    # _name_schemes_all_fields = sorted(list(set(k for scheme in PERSON_NAME_SCHEMES.values() for k, v, w, *__ in scheme['fields'])))
+    _name_schemes_all_fields = ['calling_name', 'degree', 'family_name', 'full_name', 'given_name',
+                                'latin_transcription', 'middle_name', 'salutation', 'title']
+    SYSTEM_DATAFIELD_NUMBERS = [
+       SystemQuestion.ATTENDEE_NAME_PARTS.value,
+       SystemQuestion.ATTENDEE_EMAIL.value,
+       SystemQuestion.COMPANY.value,
+       SystemQuestion.STREET.value,
+       SystemQuestion.ZIPCODE.value,
+       SystemQuestion.CITY.value,
+       SystemQuestion.STATE.value,
+       SystemQuestion.COUNTRY.value,
+   ] + [
+       #SystemQuestion.ATTENDEE_NAME_PARTS.value + ':' + field
+        'attendee_name_parts:' + field
+        for field in _name_schemes_all_fields
+   ]
+
     questionnaire = models.ForeignKey(
         Questionnaire,
         related_name="children",
@@ -2131,6 +2149,28 @@ class QuestionnaireChild(LoggedModel):
 
     class Meta:
         ordering = ('position', 'id')
+
+    @property
+    def cooked_id(self):
+        return QuestionnaireChild.cook_id_from_parts(self.questionnaire_id, self.user_datafield_id, self.system_datafield)
+
+    @staticmethod
+    def cook_id_from_parts(qid, dfid, sys_df):
+        df_id = dfid + 100 if dfid else QuestionnaireChild.SYSTEM_DATAFIELD_NUMBERS.index(sys_df)
+        assert qid < 1000000000
+        return qid * 1000000000 + df_id
+
+    @staticmethod
+    def uncook_id(id):
+        id = int(id)
+        if id > 1000000000:
+            qid, dfid = divmod(id, 1000000000)
+            if dfid >= 100:
+                return qid, dfid - 100, None
+            else:
+                return qid, None, QuestionnaireChild.SYSTEM_DATAFIELD_NUMBERS[dfid]
+        else:
+            return None, id, None
 
 
 class Quota(LoggedModel):

@@ -55,13 +55,16 @@ from pretix.api.serializers import (
 from pretix.api.serializers.event import MetaDataField
 from pretix.api.serializers.fields import UploadedFileField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from pretix.base.forms.questions import REQUIRED_NAME_PARTS
 from pretix.base.models import (
     Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, ItemProgramTime,
-    ItemVariation, ItemVariationMetaValue, Question, QuestionOption, Quota,
+    ItemVariation, ItemVariationMetaValue, Question, QuestionAnswer, QuestionOption, Quota,
     SalesChannel,
 )
 from pretix.base.models.items import Questionnaire, QuestionnaireChild
+from pretix.base.settings import PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.helpers.i18n import i18n_all_from_gettext
 
 logger = logging.getLogger(__name__)
 
@@ -550,54 +553,15 @@ class LegacyDependencyValueField(serializers.CharField):
         return [data] if data else []
 
 
-
-#name_schemes_all_fields = sorted(list(set(k for scheme in PERSON_NAME_SCHEMES.values() for k, v, w, *__ in scheme['fields'])))
-name_schemes_all_fields = ['calling_name', 'degree', 'family_name', 'full_name', 'given_name', 'latin_transcription', 'middle_name', 'salutation', 'title']
-system_datafield_numbers = [
-    QuestionnaireChild.SystemQuestion.ATTENDEE_NAME_PARTS.value,
-    QuestionnaireChild.SystemQuestion.ATTENDEE_EMAIL.value,
-    QuestionnaireChild.SystemQuestion.COMPANY.value,
-    QuestionnaireChild.SystemQuestion.STREET.value,
-    QuestionnaireChild.SystemQuestion.ZIPCODE.value,
-    QuestionnaireChild.SystemQuestion.CITY.value,
-    QuestionnaireChild.SystemQuestion.STATE.value,
-    QuestionnaireChild.SystemQuestion.COUNTRY.value,
-] + [
-    QuestionnaireChild.SystemQuestion.ATTENDEE_NAME_PARTS.value + ':' + field for field in name_schemes_all_fields
-]
-
-
-def cook_id(questionnaire_child):
-    return cook_id_from_parts(questionnaire_child.questionnaire_id, questionnaire_child.user_datafield_id, questionnaire_child.system_datafield)
-
-
-def cook_id_from_parts(qid, dfid, sys_df):
-    df_id = dfid + 100 if dfid else system_datafield_numbers.index(sys_df)
-    assert qid < 1000000000
-    return qid * 1000000000 + df_id
-
-
-def uncook_id(id):
-    id = int(id)
-    if id > 1000000000:
-        qid, dfid = divmod(id, 1000000000)
-        if dfid >= 100:
-            return qid, dfid - 100, None
-        else:
-            return qid, None, system_datafield_numbers[dfid]
-    else:
-        return None, id, None
-
-
 class CompatQuestionSerializer(I18nAwareModelSerializer):
-    id = serializers.SerializerMethodField('cook_id', read_only=True)
+    id = serializers.IntegerField(source='cooked_id', read_only=True)
     question = I18nField(source='label', allow_null=True)
     type = serializers.CharField(source='user_datafield.type', allow_null=True, default=Question.FieldType.STRING)
     #identifier = serializers.CharField(source='user_datafield.identifier', allow_null=True)
-    identifier = serializers.SerializerMethodField('get_identifier', read_only=True)
+    identifier = serializers.SerializerMethodField(read_only=True)
     show_during_checkin = serializers.BooleanField(source='user_datafield.show_during_checkin', allow_null=True, default=False)
-    ask_during_checkin = serializers.SerializerMethodField('get_ask_during_checkin', read_only=True)
-    hidden = serializers.SerializerMethodField('get_hidden', read_only=True)
+    ask_during_checkin = serializers.SerializerMethodField(read_only=True)
+    hidden = serializers.SerializerMethodField(read_only=True)
     print_on_invoice = serializers.BooleanField(source='user_datafield.print_on_invoice', allow_null=True, default=False)
     valid_number_min = serializers.IntegerField(source='user_datafield.valid_number_min', allow_null=True)
     valid_number_max = serializers.IntegerField(source='user_datafield.valid_number_max', allow_null=True)
@@ -610,7 +574,7 @@ class CompatQuestionSerializer(I18nAwareModelSerializer):
     valid_file_portrait = serializers.BooleanField(source='user_datafield.valid_file_portrait', allow_null=True)
     dependency_question = serializers.SerializerMethodField('cook_dependency_question_id', read_only=True)
     dependency_value = serializers.SerializerMethodField('empty', read_only=True)
-    position = serializers.SerializerMethodField('get_position', read_only=True)
+    position = serializers.SerializerMethodField(read_only=True)
     items = serializers.PrimaryKeyRelatedField(source='questionnaire.items', many=True, queryset=Item.objects.none(), allow_null=True, required=False)
     questionnaire_id = serializers.IntegerField(source='questionnaire.id', read_only=True)
 
@@ -625,15 +589,13 @@ class CompatQuestionSerializer(I18nAwareModelSerializer):
                   'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait', 'questionnaire_id')
 
     def __init__(self, *args, **kwargs):
-        self.fields['items'].child_relation.queryset = kwargs['context']['event'].items.all()
         super().__init__(*args, **kwargs)
+        self.fields['items'].child_relation.queryset = self.context['event'].items.all() if 'event' in self.context else Item.objects.none()
 
-    def cook_id(self, qc):
-        return cook_id(qc)
 
     def cook_dependency_question_id(self, qc):
         if qc.dependency_question:
-            return cook_id(qc.dependency_question)
+            return qc.dependency_question.cooked_id
         else:
             return None
 
@@ -651,6 +613,37 @@ class CompatQuestionSerializer(I18nAwareModelSerializer):
 
     def get_position(self, qc):
         return qc.questionnaire.position * 1000000000 + qc.position
+
+    @staticmethod
+    def mangle_results(event, results):
+        mangled_results = []
+        pos_offset = 0
+        for row in results:
+            row['position'] += pos_offset
+            if row['identifier'] == '@attendee_name_parts':
+                settings = event.settings
+                for k, v, w, *__ in PERSON_NAME_SCHEMES.get(settings.name_scheme)['fields']:
+                    part = dict(row)
+                    part["identifier"] += ":" + k
+                    part["question"] = i18n_all_from_gettext(v, settings.locales)
+                    if k == "title" and settings.name_scheme_titles:
+                        part["type"] = Question.FieldType.CHOICE
+                        part["options"] = [{"id": idx + 1, "identifier": k, "answer": i18n_all_from_gettext(k, settings.locales), "position": idx + 1} for idx, k in
+                                           enumerate(PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1])]
+                    elif k == "salutation":
+                        part["type"] = Question.FieldType.CHOICE
+                        part["options"] = [{"id": idx + 1, "identifier": k, "answer": i18n_all_from_gettext(v, settings.locales), "position": idx + 1} for idx, (k, v) in
+                                           enumerate(PERSON_NAME_SALUTATIONS)]
+                    part["id"] = QuestionnaireChild.cook_id_from_parts(row['questionnaire_id'], None, part["identifier"][1:])
+                    part["required"] = part["required"] and k in REQUIRED_NAME_PARTS
+                    mangled_results.append(part)
+                    pos_offset += 1
+                    row["position"] += 1
+            else:
+                if row['identifier'] == '@country':
+                    row['type'] = Question.FieldType.COUNTRYCODE
+                mangled_results.append(row)
+        return mangled_results
 
 
 class DatafieldSerializer(I18nAwareModelSerializer):
@@ -756,7 +749,7 @@ class InlineQuestionnaireChildSerializer(I18nAwareModelSerializer):
     question = QuestionRefField(allow_null=True, source='*', queryset=Question.objects.none())
     dependency_question = QuestionRefField(allow_null=True, required=False, queryset=Question.objects.none())
     rendered_help_text = RenderedMarkdownField(read_only=True, source='help_text')
-    cooked_id = serializers.SerializerMethodField('cook_id', read_only=True)
+    cooked_id = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = QuestionnaireChild
@@ -773,9 +766,6 @@ class InlineQuestionnaireChildSerializer(I18nAwareModelSerializer):
                 if value['user_datafield'].type not in (Question.TYPE_CHOICE, Question.TYPE_BOOLEAN, Question.TYPE_CHOICE_MULTIPLE):
                     raise ValidationError('Question dependencies can only be set to boolean or choice questions.')
         return value
-
-    def cook_id(self, qc):
-        return cook_id(qc)
 
 
 class QuestionnaireSerializer(I18nAwareModelSerializer):

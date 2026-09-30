@@ -32,6 +32,7 @@ from django.conf import settings
 from django.utils import translation
 from django.utils.formats import get_format
 from django.utils.translation import to_locale
+from i18nfield.strings import LazyI18nString
 
 date_conversion_to_moment = {
     '%a': 'ddd',
@@ -244,3 +245,14 @@ def parse_date_localized(date_str) -> Optional[datetime]:
         except (ValueError, TypeError):
             continue
     return dt
+
+
+def i18n_all_from_gettext(gettext_str, locales):
+    return i18n_all(LazyI18nString.from_gettext(gettext_str).data, locales)
+
+
+def i18n_all(data, locales):
+    out = {}
+    for locale in locales:
+        out[locale] = data[locale]
+    return out

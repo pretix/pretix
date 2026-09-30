@@ -95,6 +95,7 @@ from pretix.helpers.models import modelcopy
 from ...helpers import GroupConcat
 from ...helpers.compat import CompatDeleteView
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
+from ...helpers.i18n import i18n_all_from_gettext
 
 
 def has_truthy_attr(cls, attr):
@@ -709,17 +710,6 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
 
 def textchoices_to_json(choices, event):
     return [(c.name, c.value, i18n_all_from_gettext(c.label, event.settings.locales)) for c in choices]
-
-
-def i18n_all_from_gettext(gettext_str, locales):
-    return i18n_all(LazyI18nString.from_gettext(gettext_str).data, locales)
-
-
-def i18n_all(data, locales):
-    out = {}
-    for locale in locales:
-        out[locale] = data[locale]
-    return out
 
 
 class QuestionnairesEditor(EventPermissionRequiredMixin, TemplateView):
