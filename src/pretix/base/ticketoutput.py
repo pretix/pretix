@@ -232,6 +232,19 @@ class BaseTicketOutput:
         return 'fa-download'
 
     @property
+    def confirmation_text(self) -> str | None:
+        """
+        A text the user has to confirm before a pass is generated.
+
+        Returning None means no confirmation screen is shown.
+        """
+        return None
+
+    @property
+    def is_cacheable(self) -> bool:
+        return True
+
+    @property
     def preview_allowed(self) -> bool:
         """
         By default, the ``generate()`` method is called for generating a preview in the pretix backend.
