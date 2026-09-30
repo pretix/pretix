@@ -159,6 +159,7 @@ Erstattungsstatus
 Erstattungsweg
 erstmalig
 etc
+EU-USt-ID
 EU-USt-ID-Nr
 Event
 Event-Absage
