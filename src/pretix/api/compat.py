@@ -70,7 +70,7 @@ class MergeField(serializers.Field):
                 else:
                     raise CompatException({'detail': errmes, '_values': vals})
         elif self.merge_mode == 'union':
-            return list(set(sum(vals, [])))
+            return sorted(set(sum(vals, [])))
         elif self.merge_mode == 'bool_or':
             return reduce(lambda a, b: a or bool(b), vals, False)
         else:

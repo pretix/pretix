@@ -721,7 +721,7 @@ class CompatListMixin:
         serializer = self.get_serializer(queryset, many=True)
         resultlist = serializer.data
         return Response({
-            'next': None, 'previous': None, 'count': len(resultlist),
+            'count': len(resultlist), 'next': None, 'previous': None,
             'results': resultlist,
         })
 

@@ -856,7 +856,7 @@ class CompatDatafieldSerializer(DatafieldSerializer):
             'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
             'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait',
             # new
-            'internal_name', 'referenced_by_questionnaires', 'questionnaire_types',
+            #'internal_name', 'referenced_by_questionnaires', 'questionnaire_types',
         )
 
     def __init__(self, *args, **kwargs):
