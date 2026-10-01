@@ -40,3 +40,6 @@ class SendMailApp(AppConfig):
     def ready(self):
         from . import signals  # NOQA
         from . import tasks  # NOQA
+
+    def uninstalled(self, event):
+        event.sendmail_rules.update(enabled=False)
