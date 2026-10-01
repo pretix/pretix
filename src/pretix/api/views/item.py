@@ -579,7 +579,7 @@ with scopes_disabled():
             fields = ['identifier']
 
 
-class DatafieldViewSet(ConditionalListView, viewsets.ModelViewSet):
+class BaseDatafieldViewSet(viewsets.ModelViewSet):
     serializer_class = DatafieldSerializer
     queryset = Question.objects.none()
     filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
@@ -588,12 +588,24 @@ class DatafieldViewSet(ConditionalListView, viewsets.ModelViewSet):
     ordering = ('id')
     permission = None
     write_permission = 'event.items:write'
+    container_type = Question.ContainerType.ORDERPOSITION
 
     def get_queryset(self):
-        return self.request.event.questions.filter(
-            # the container_type parameter is undocumented, this API is going to change in a later release
-            container_type=self.request.GET.get('container_type', Question.ContainerType.ORDERPOSITION),
-        ).prefetch_related('options').all()
+        return self.request.event.questions.filter(container_type=self.container_type).prefetch_related('options')
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+
+        qid, dfid, sys_df = QuestionnaireChild.uncook_id(self.kwargs[lookup_url_kwarg])
+        self.via_questionnaire_id = qid
+        obj = get_object_or_404(queryset, pk=dfid)
+
+        # May raise a permission denied
+        self.check_object_permissions(self.request, obj)
+
+        return obj
 
     @transaction.atomic()
     def perform_create(self, serializer):
@@ -608,6 +620,7 @@ class DatafieldViewSet(ConditionalListView, viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
+        ctx['container_type'] = self.container_type
         return ctx
 
     @transaction.atomic()
@@ -629,6 +642,13 @@ class DatafieldViewSet(ConditionalListView, viewsets.ModelViewSet):
         )
         super().perform_destroy(instance)
 
+
+class DatafieldViewSet(ConditionalListView, BaseDatafieldViewSet):
+    pass
+
+
+class OrderDatafieldViewSet(ConditionalListView, BaseDatafieldViewSet):
+    container_type = Question.ContainerType.ORDER
 
 class QuestionOptionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionOptionSerializer

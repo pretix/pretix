@@ -43,7 +43,7 @@ watch(() => props.questionnaire.children, () => {
 function addExistingDatafield (field) {
 	props.questionnaire.children.push({
 		_cid: useId(),
-		question: field.id,
+		datafield: field.id,
 		required: false,
 		label: field.question ?? {en: field.internal_name},
 		help_text: {},
@@ -63,7 +63,7 @@ function showAddTextblockDialog () {
 function addTextblock () {
 	props.questionnaire.children.push({
 		_cid: useId(),
-		question: null,
+		datafield: null,
 		required: false,
 		label: newTextblockTitle.value,
 		help_text: newTextblockText.value,
@@ -118,7 +118,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
     <summary class="questionnaire-panel-heading">
 			<div class=" editor-row">
 				<div class="editor-preview-area">
-					<input type="checkbox" @change="e => {setListState(props.questionnaire.items, e.target.checked, selected_product); emit('update')}" v-if="selected_product && !preview_mode" :checked="!isHidden">
+					<input type="checkbox" @change="e => {setListState(props.questionnaire.items, (e.target as HTMLInputElement).checked, selected_product); emit('update')}" v-if="selected_product && !preview_mode" :checked="!isHidden">
 					{{ props.questionnaire.internal_name }}
 					<span class="fa fa-warning" v-if="questionnaire._err_mes"></span>
 					<span class="fa fa-cog fa-spin" v-if="questionnaire._loading"></span>
@@ -139,7 +139,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 
 				<aside class="editor-action-area"><div class="btn-group">
 					<DragHandle tag="button" class="btn btn-default" v-if="!preview_mode"><i class="fa fa-arrows"></i></DragHandle>
-					<button class="btn btn-default" @click="dlgEditor.show()"><i class="fa fa-wrench"></i></button>
+					<button class="btn btn-default" @click="dlgEditor.show()" :title="`#${questionnaire.id}`"><i class="fa fa-wrench"></i></button>
 				</div></aside>
 			</div>
     </summary>

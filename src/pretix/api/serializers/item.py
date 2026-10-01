@@ -712,7 +712,7 @@ class DatafieldSerializer(I18nAwareModelSerializer):
         options_data = validated_data.pop('options') if 'options' in validated_data else []
         items = validated_data.pop('items', [])
 
-        question = Question.objects.create(**validated_data, container_type=Question.ContainerType.ORDERPOSITION)
+        question = Question.objects.create(**validated_data, container_type=self.context['container_type'])
         question.items.set(items)
         for opt_data in options_data:
             QuestionOption.objects.create(question=question, **opt_data)
@@ -755,18 +755,18 @@ class RenderedMarkdownField(serializers.CharField):
 
 
 class InlineQuestionnaireChildSerializer(I18nAwareModelSerializer):
-    question = QuestionRefField(allow_null=True, source='*', queryset=Question.objects.none())
-    dependency_question = QuestionRefField(allow_null=True, required=False, queryset=Question.objects.none())
+    datafield = DatafieldRelatedField(allow_null=True, source='*', queryset=Question.objects.none())
+    dependency_question = DatafieldRelatedField(allow_null=True, required=False, queryset=Question.objects.none())
     rendered_help_text = RenderedMarkdownField(read_only=True, source='help_text')
     cooked_id = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = QuestionnaireChild
-        fields = ('question', 'required', 'label', 'help_text', 'dependency_question', 'dependency_values', 'rendered_help_text', 'cooked_id')
+        fields = ('datafield', 'required', 'label', 'help_text', 'dependency_question', 'dependency_values', 'rendered_help_text', 'cooked_id')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["question"].queryset = self.context["event"].questions.all()
+        self.fields["datafield"].queryset = self.context["event"].questions.all()
         self.fields["dependency_question"].queryset = self.context["event"].questions.all()
 
     def validate_dependency_question(self, value):

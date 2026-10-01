@@ -16,10 +16,10 @@ const question = ref(props.question);
 
 const dlgEditDatafield = ref()
 
-const df = computed(() => typeof question.value.question === 'number' ?
-		props.datafields.find(el => el.id === question.value.question) :
-	typeof question.value.question === 'string' ?
-		SYSTEM_DATAFIELDS[question.value.question] :
+const df = computed(() => typeof question.value.datafield === 'number' ?
+		props.datafields.find(el => el.id === question.value.datafield) :
+	typeof question.value.datafield === 'string' ?
+		SYSTEM_DATAFIELDS[question.value.datafield] :
 		null);
 
 const dependency_values_options = computed(() => props.datafields.find(el => el.id === question.value.dependency_question)?.options);
@@ -107,7 +107,7 @@ const editor = ref();
           </label>
           <div class="col-md-9">
             <p class="form-control-static">
-							<template v-if="typeof question.question === 'number'">
+							<template v-if="typeof question.datafield === 'number'">
 								{{ df.internal_name }}
 								<div>
 									<a class="btn btn-sm btn-default" href="javascript:" @click="dlgEditDatafield.open(getDatafieldEditUrl(df.id))"><span class="fa fa-wrench"></span> Manage data field details</a>
@@ -115,7 +115,7 @@ const editor = ref();
 								</div>
 							</template>
 							<template v-else>
-								{{ question.question }}
+								{{ question.datafield }}
 							</template>
 						</p>
           </div>
@@ -149,7 +149,7 @@ const editor = ref();
           <div class="col-md-9">
             <select v-model="question.dependency_question" class="form-control">
               <option :value="null">{{ gettext('(none)') }}</option>
-              <option v-for="(qc, index) in possible_dependencies" :value="qc.question">{{ i18n_any(qc.label) }}</option>
+              <option v-for="(qc, index) in possible_dependencies" :value="qc.datafield">{{ i18n_any(qc.label) }}</option>
             </select>
             <select v-model="question.dependency_values" class="form-control" multiple>
               <option v-for="(qc, index) in dependency_values_options" :value="qc.identifier">{{ i18n_any(qc.answer) }}</option>

@@ -47,7 +47,7 @@ async function api_json_request(resource, method, json_body) {
 
 export async function getDatafields(container_type) {
 	using pb = ProgressBar.show('loading data fields')
-	return await api_get_all<Datafield>(`organizers/${organizer_slug}/events/${event_slug}/datafields/?container_type=${container_type}&`);
+	return await api_get_all<Datafield>(`organizers/${organizer_slug}/events/${event_slug}/${container_type == 'O' ? 'orderdatafields' : 'datafields'}/`);
 }
 
 export async function getQuestionnaires() {
