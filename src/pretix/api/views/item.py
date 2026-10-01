@@ -47,7 +47,7 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
 
-from pretix.api.compat import CompatException
+from pretix.api.exceptions import CompatException
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.item import (
     CompatDatafieldSerializer, DatafieldSerializer, ItemAddOnSerializer,
