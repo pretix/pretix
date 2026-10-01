@@ -546,6 +546,36 @@ class InlineQuestionOptionSerializer(I18nAwareModelSerializer):
         fields = ('id', 'identifier', 'answer', 'position')
 
 
+class DatafieldRelatedField(serializers.PrimaryKeyRelatedField):
+    default_error_messages = {
+        'invalid_choice': _('"{input}" is not a valid choice.')
+    }
+    def to_representation(self, qc):
+        if not qc:
+            return None
+        elif qc.system_datafield:
+            return qc.system_datafield
+        elif qc.user_datafield_id:
+            return qc.user_datafield_id
+        else:
+            return None
+
+    def to_internal_value(self, data):
+        if type(data) == int:
+            return {'user_datafield': super().to_internal_value(data), 'system_datafield': None}
+        elif type(data) == str:
+            if data not in QuestionnaireChild.SystemQuestion.values:
+                self.fail("invalid_choice", input=data)
+            return {'user_datafield': None, 'system_datafield': data}
+        elif data is None:
+            return {'user_datafield': None, 'system_datafield': None}
+        else:
+            self.fail('incorrect_type', data_type=type(data).__name__)
+
+    def use_pk_only_optimization(self):
+        return self.source == '*'
+
+
 class LegacyDependencyValueField(serializers.CharField):
 
     def to_representation(self, obj):
@@ -555,7 +585,94 @@ class LegacyDependencyValueField(serializers.CharField):
         return [data] if data else []
 
 
-class POSCompatQuestionSerializer(I18nAwareModelSerializer):
+class QuestionFormSerializer(I18nAwareModelSerializer):
+    datafield = DatafieldRelatedField(allow_null=True, source='*', queryset=Question.objects.none())
+    question = I18nField(source='label', allow_null=True)
+    type = serializers.CharField(source='user_datafield.type', allow_null=True, default=Question.FieldType.STRING)
+    identifier = serializers.SerializerMethodField(read_only=True)
+    show_during_checkin = serializers.BooleanField(source='user_datafield.show_during_checkin', allow_null=True, default=False)
+
+    print_on_invoice = serializers.BooleanField(source='user_datafield.print_on_invoice', allow_null=True, default=False)
+    valid_number_min = serializers.IntegerField(source='user_datafield.valid_number_min', allow_null=True)
+    valid_number_max = serializers.IntegerField(source='user_datafield.valid_number_max', allow_null=True)
+    valid_date_min = serializers.DateField(source='user_datafield.valid_date_min', allow_null=True)
+    valid_date_max = serializers.DateField(source='user_datafield.valid_date_max', allow_null=True)
+    valid_datetime_min = serializers.DateTimeField(source='user_datafield.valid_datetime_min', allow_null=True)
+    valid_datetime_max = serializers.DateTimeField(source='user_datafield.valid_datetime_max', allow_null=True)
+    valid_string_length_max = serializers.IntegerField(source='user_datafield.valid_string_length_max', allow_null=True)
+    valid_string_length_min = serializers.IntegerField(source='user_datafield.valid_string_length_min', allow_null=True)
+    valid_file_portrait = serializers.BooleanField(source='user_datafield.valid_file_portrait', allow_null=True)
+
+    dependency_question = DatafieldRelatedField(allow_null=True, required=False, queryset=Question.objects.none())
+    items = serializers.PrimaryKeyRelatedField(source='questionnaire.items', many=True, queryset=Item.objects.none(), allow_null=True, required=False)
+    questionnaire_id = serializers.IntegerField(source='questionnaire.id', read_only=True)
+
+    options = InlineQuestionOptionSerializer(source='user_datafield.options', many=True, required=False, default=[])
+
+    class Meta:
+        model = QuestionnaireChild
+        fields = ('datafield', 'label', 'type', 'required', 'help_text', 'items', 'options', 'position',
+                  'show_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
+                  'print_on_invoice', 'valid_number_min',
+                  'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
+                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait', 'questionnaire_id')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['items'].child_relation.queryset = self.context['event'].items.all() if 'event' in self.context else Item.objects.none()
+
+    def get_attribute(self, instance):
+        if isinstance(instance, QuestionAnswer):
+            position = instance.cartposition if instance.cartposition_id else instance.orderposition
+            print('searching ', repr(instance), repr(position), repr(instance.question), instance.pk, position.item_id, self.context)   # TODO remove print
+            qcs = list(QuestionnaireChild.objects.filter(user_datafield_id=instance.question_id, questionnaire__items__in=[position.item_id]))
+            return next((qc for qc in qcs if qc.questionnaire.type == self.context.get('preferred_questionnaire_type', Questionnaire.QuestionnaireType.ORDER_POSITION_SALE)), qcs[0])
+
+        return super().get_attribute(instance)
+
+    def cook_dependency_question_id(self, qc):
+        if qc.dependency_question:
+            return qc.dependency_question.cooked_id
+        else:
+            return None
+
+    def get_identifier(self, qc):
+        return qc.user_datafield.identifier if qc.user_datafield else f'@{qc.system_datafield}'
+
+    @property
+    def data(self):
+        results = super().data
+        mangled_results = []
+        pos_offset = 0
+        for row in results:
+            row['position'] += pos_offset
+            if row['identifier'] == '@attendee_name_parts' and self.context.get('expand_attendee_name'):
+                settings = self.context['event'].settings
+                for k, v, w, *__ in PERSON_NAME_SCHEMES.get(settings.name_scheme)['fields']:
+                    part = dict(row)
+                    part["identifier"] += ":" + k
+                    part["question"] = i18n_all_from_gettext(v, settings.locales)
+                    if k == "title" and settings.name_scheme_titles:
+                        part["type"] = Question.FieldType.CHOICE
+                        part["options"] = [{"id": idx + 1, "identifier": k, "answer": i18n_all_from_gettext(k, settings.locales), "position": idx + 1} for idx, k in
+                                           enumerate(PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1])]
+                    elif k == "salutation":
+                        part["type"] = Question.FieldType.CHOICE
+                        part["options"] = [{"id": idx + 1, "identifier": k, "answer": i18n_all_from_gettext(v, settings.locales), "position": idx + 1} for idx, (k, v) in
+                                           enumerate(PERSON_NAME_SALUTATIONS)]
+                    part["id"] = QuestionnaireChild.cook_id_from_parts(row['questionnaire_id'], None, part["identifier"][1:])
+                    part["required"] = part["required"] and k in REQUIRED_NAME_PARTS
+                    mangled_results.append(part)
+                    pos_offset += 1
+                    row["position"] += 1
+            else:
+                if row['identifier'] == '@country':
+                    row['type'] = Question.FieldType.COUNTRYCODE
+                mangled_results.append(row)
+        return mangled_results
+
+
+class POSCompatQuestionSerializer(QuestionFormSerializer):
     id = serializers.IntegerField(source='cooked_id', read_only=True)
     question = I18nField(source='label', allow_null=True)
     type = serializers.CharField(source='user_datafield.type', allow_null=True, default=Question.FieldType.STRING)
@@ -650,17 +767,22 @@ class POSCompatQuestionSerializer(I18nAwareModelSerializer):
 
 
 class DatafieldSerializer(I18nAwareModelSerializer):
+    internal_name = serializers.CharField(allow_null=True, source='question', read_only=True)
     options = InlineQuestionOptionSerializer(many=True, required=False)
     identifier = serializers.CharField(allow_null=True)
-    internal_name = serializers.CharField(allow_null=True, source='question', read_only=True)
+
+    referenced_by_questionnaires = MergeField('referenced_by', serializers.IntegerField(source='questionnaire.id'), mode='list')
+    questionnaire_types = MergeField('referenced_by', serializers.CharField(source='questionnaire.type'), mode='list')
 
     class Meta:
         model = Question
-        fields = ('id', 'type', 'options',
-                  'show_during_checkin', 'identifier',
+        fields = ('id', 'internal_name', 'identifier', 'type',
+                  'show_during_checkin',
                   'hidden', 'print_on_invoice', 'valid_number_min',
                   'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
-                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait', 'internal_name',)
+                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait',
+                  'referenced_by_questionnaires', 'questionnaire_types',
+                  'options')
 
     def validate_identifier(self, value):
         Question._clean_identifier(self.context['event'], value, self.instance)
@@ -718,15 +840,12 @@ class CompatDatafieldSerializer(DatafieldSerializer):
     required = MergeField('referenced_by', serializers.BooleanField(), mode='consensus')
     items = MergeField('referenced_by', serializers.PrimaryKeyRelatedField(source='questionnaire.items', many=True, queryset=Item.objects.none(), allow_null=True, required=False), mode='union')
     position = serializers.IntegerField(required=False, read_only=True, default=0)
-    ask_during_checkin = MergeField('referenced_by', serializers.SerializerMethodField(), mode='bool_or')
+    ask_during_checkin = MergeField('referenced_by', serializers.BooleanField(source='questionnaire.ask_during_checkin'), mode='bool_or')
 
     dependency_question = MergeField('referenced_by', serializers.IntegerField(source='dependency_question.user_datafield_id', required=False, default=None, allow_null=True), mode='consensus')
     dependency_values = MergeField('referenced_by', serializers.JSONField(), mode='consensus')
     dependency_value = MergeField('referenced_by', LegacyDependencyValueField(source='dependency_values'), mode='consensus')
     help_text = MergeField('referenced_by', I18nField(), mode='consensus')
-
-    referenced_by_questionnaires = MergeField('referenced_by', serializers.IntegerField(source='questionnaire.id'), mode='list')
-    questionnaire_types = MergeField('referenced_by', serializers.CharField(source='questionnaire.type'), mode='list')
 
     class Meta:
         model = Question
@@ -743,39 +862,6 @@ class CompatDatafieldSerializer(DatafieldSerializer):
     def __init__(self, *args, **kwargs):
         self.fields['items'].inner_field.child_relation.queryset = kwargs['context']['event'].items.all()
         super().__init__(*args, **kwargs)
-
-    def get_ask_during_checkin(self, qc):
-        return qc.questionnaire.type == Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
-
-
-class DatafieldRelatedField(serializers.PrimaryKeyRelatedField):
-    default_error_messages = {
-        'invalid_choice': _('"{input}" is not a valid choice.')
-    }
-    def to_representation(self, qc):
-        if not qc:
-            return None
-        elif qc.system_datafield:
-            return qc.system_datafield
-        elif qc.user_datafield_id:
-            return qc.user_datafield_id
-        else:
-            return None
-
-    def to_internal_value(self, data):
-        if type(data) == int:
-            return {'user_datafield': super().to_internal_value(data), 'system_datafield': None}
-        elif type(data) == str:
-            if data not in QuestionnaireChild.SystemQuestion.values:
-                self.fail("invalid_choice", input=data)
-            return {'user_datafield': None, 'system_datafield': data}
-        elif data is None:
-            return {'user_datafield': None, 'system_datafield': None}
-        else:
-            self.fail('incorrect_type', data_type=type(data).__name__)
-
-    def use_pk_only_optimization(self):
-        return self.source == '*'
 
 
 class RenderedMarkdownField(serializers.CharField):

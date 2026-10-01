@@ -42,7 +42,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
-from rest_framework import viewsets
+from rest_framework import generics, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
@@ -53,7 +53,7 @@ from pretix.api.serializers.item import (
     CompatDatafieldSerializer, DatafieldSerializer, ItemAddOnSerializer,
     ItemBundleSerializer, ItemCategorySerializer, ItemProgramTimeSerializer,
     ItemSerializer, ItemVariationSerializer, POSCompatQuestionSerializer,
-    QuestionnaireSerializer, QuestionOptionSerializer, QuotaSerializer,
+    QuestionFormSerializer, QuestionnaireSerializer, QuestionOptionSerializer, QuotaSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
@@ -512,9 +512,12 @@ class POSCompatQuestionViewSet(DeprecationWarningMixin, viewsets.ReadOnlyModelVi
 
     def get_queryset(self):
         return QuestionnaireChild.objects.filter(
+            # only matching sales channel
             Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels__identifier=self.sales_channel_ident),
+            # only real questions, no text blocks
+            Q(user_datafield_id__isnull=False) | Q(system_datafield__isnull=False),
             questionnaire__event=self.request.event,
-            # legacy compat only for position-level questions
+            # we do legacy compat only for position-level questions
             questionnaire__type__startswith='P',
         ).prefetch_related(
             'user_datafield', 'user_datafield__options', 'questionnaire'
@@ -862,6 +865,96 @@ class QuestionnaireViewSet(ConditionalListView, viewsets.ModelViewSet):
             auth=self.request.auth,
         )
         super().perform_destroy(instance)
+
+
+class QuestionFormView(generics.GenericAPIView):
+    # like POSCompatQuestionViewSet, but less compat
+
+    serializer_class = QuestionFormSerializer
+    queryset = QuestionnaireChild.objects.none()
+    permission = None
+    sales_channel_ident = None
+
+    def __init__(self, sales_channel_ident, *args, **kwargs):
+        self.sales_channel_ident = sales_channel_ident
+        super().__init__(*args, **kwargs)
+
+    @property
+    def deprecation_warning(self):
+        return (
+            f'This API endpoint is deprecated and will be removed in the future. '
+            f'Results are generated on-the-fly, count and page size may be inaccurate. '
+            f'Filtered for sales_channel "{self.sales_channel_ident}"'
+        )
+
+    def get_queryset(self):
+        return QuestionnaireChild.objects.filter(
+            Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels__identifier=self.sales_channel_ident),
+            questionnaire__event=self.request.event,
+            # legacy compat only for position-level questions
+            questionnaire__type__startswith='P',
+        ).prefetch_related(
+            'user_datafield', 'user_datafield__options', 'questionnaire'
+        ).order_by('questionnaire__position', 'position', 'id')
+
+    def list(self, request, **kwargs):
+        resp = super().list(request, **kwargs)
+        resp.data['results'] = POSCompatQuestionSerializer.mangle_results(self.request.event, resp.data['results'])
+        return resp
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+
+        qid, dfid, sys_df = QuestionnaireChild.uncook_id(self.kwargs[lookup_url_kwarg])
+        print(self.kwargs[lookup_url_kwarg], qid, dfid, sys_df)
+        if qid and sys_df:
+            obj = get_object_or_404(queryset, questionnaire__pk=qid, system_datafield=sys_df)
+        elif qid and dfid:
+            obj = get_object_or_404(queryset, questionnaire__pk=qid, user_datafield__pk=dfid)
+        else:
+            obj = get_object_or_404(queryset, user_datafield__pk=dfid)
+
+        # May raise a permission denied
+        self.check_object_permissions(self.request, obj)
+
+        return obj
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.question.added',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.question.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    @transaction.atomic()
+    def perform_destroy(self, instance):
+        instance.log_action(
+            'pretix.event.question.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
+        )
+        super().perform_destroy(instance)
+
 
 
 class NumberInFilter(django_filters.BaseInFilter, django_filters.NumberFilter):
