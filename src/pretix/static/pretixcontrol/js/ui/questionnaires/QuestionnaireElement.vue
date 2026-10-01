@@ -124,15 +124,24 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 					<span class="fa fa-cog fa-spin" v-if="questionnaire._loading"></span>
 
           <span class="pull-right" v-if="questionnaire.type === 'PC'">
-            <span class="label label-default">{{ gettext('Check-in') }}</span>
+            <span class="label label-default" data-toggle="tooltip" :title="gettext('Ask during check-in')">
+              <span class="fa fa-check-square"></span>
+              {{ gettext('Check-in') }}</span>
           </span>
           <span class="pull-right" v-else-if="questionnaire.type === 'PA'">
             <span class="label label-default">{{ gettext('Attendee link') }}</span>
           </span>
+          <span class="pull-right" v-else-if="questionnaire.type === 'PH'">
+            <span class="label label-default" data-toggle="tooltip" :title="gettext('Hidden question')">
+              <span class="fa fa-eye-slash"></span>
+              {{ gettext('Hidden') }}
+            </span>
+          </span>
           <span class="pull-right sales-channel-icons" v-else>
             <template v-for="sc in sales_channels">
-              <SalesChannelIcon :sales-channel="sc" :tooltip="true"
-                                v-if="props.questionnaire.all_sales_channels || props.questionnaire.limit_sales_channels.indexOf(sc.identifier) !== -1" />
+              <SalesChannelIcon
+                  v-if="props.questionnaire.all_sales_channels || props.questionnaire.limit_sales_channels.indexOf(sc.identifier) !== -1"
+                  :sales-channel="sc" :tooltip="true" />
             </template>
           </span>
 				</div>
