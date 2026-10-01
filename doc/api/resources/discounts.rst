@@ -30,6 +30,8 @@ available_from                           datetime                   The first da
                                                                     (or ``null``).
 available_until                          datetime                   The last date time at which this discount can be applied
                                                                     (or ``null``).
+require_membership                       boolean                    If ``true``, booking this variation requires an active membership.
+require_membership_types                 list of integers           Internal IDs of membership types valid if ``require_membership`` is ``true``
 subevent_mode                            strings                    Determines how the discount is handled when used in an
                                                                     event series. Can be ``"mixed"`` (no special effect),
                                                                     ``"same"`` (discount is only applied for groups within
@@ -108,6 +110,8 @@ Endpoints
             "sales_channels": ["web"],
             "available_from": null,
             "available_until": null,
+            "require_membership_hidden": false,
+            "require_membership_types": [],
             "subevent_mode": "mixed",
             "subevent_date_from": null,
             "subevent_date_until": null,
@@ -168,6 +172,8 @@ Endpoints
         "sales_channels": ["web"],
         "available_from": null,
         "available_until": null,
+        "require_membership_hidden": false,
+        "require_membership_types": [],
         "subevent_mode": "mixed",
         "subevent_date_from": null,
         "subevent_date_until": null,
@@ -214,6 +220,8 @@ Endpoints
         "sales_channels": ["web"],
         "available_from": null,
         "available_until": null,
+        "require_membership_hidden": false,
+        "require_membership_types": [],
         "subevent_mode": "mixed",
         "subevent_date_from": null,
         "subevent_date_until": null,
@@ -249,6 +257,8 @@ Endpoints
         "sales_channels": ["web"],
         "available_from": null,
         "available_until": null,
+        "require_membership_hidden": false,
+        "require_membership_types": [],
         "subevent_mode": "mixed",
         "subevent_date_from": null,
         "subevent_date_until": null,
@@ -313,6 +323,8 @@ Endpoints
         "sales_channels": ["web"],
         "available_from": null,
         "available_until": null,
+        "require_membership_hidden": false,
+        "require_membership_types": [],
         "subevent_mode": "mixed",
         "subevent_date_from": null,
         "subevent_date_until": null,
