@@ -1566,7 +1566,7 @@ class ItemBundle(models.Model):
             raise ValidationError(_('The count needs to be equal to or greater than zero.'))
 
 
-class Question(LoggedModel):
+class Question(LoggedModel):  # TODO(questionnaires)  -  rename to Datafield ?
     """
     A question is a data field that can be used to extend an order or a ticket by custom
     information, e.g. "Attendee age". To be actually useful, questions need to be added to
@@ -1686,13 +1686,13 @@ class Question(LoggedModel):
         verbose_name=_("Required question"),
         db_column="required",
     )
-    #items = models.ManyToManyField(  # TODO(questionnaires) : to be removed, -> Questionnaire
-    #    Item,
-    #    related_name='questions',
-    #    verbose_name=_("Products"),
-    #    blank=True,
-    #    help_text=_('This question will be asked to buyers of the selected products')
-    #)
+    # items = models.ManyToManyField(  # TODO(questionnaires) : to be removed, -> Questionnaire
+    #     Item,
+    #     related_name='questions',
+    #     verbose_name=_("Products"),
+    #     blank=True,
+    #     help_text=_('This question will be asked to buyers of the selected products')
+    # )
     tbd_position = models.PositiveIntegerField(  # TODO(questionnaires) : to be removed, -> Questionnaire + QuestionnaireChild
         default=0,
         verbose_name=_("Position"),
@@ -1800,7 +1800,7 @@ class Question(LoggedModel):
 
     @property
     def sortkey(self):
-        return self.position, self.id
+        return self.id
 
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
@@ -2067,7 +2067,7 @@ class Questionnaire(LoggedModel):
             fields = list(fields)
             if len(fields) > 1:
                 sales_channel, type, item_id, sdf, udf, q, item = fields[0]
-                questionnaires = set(q for sc,type,item,sdf,udf,q,item in fields)
+                questionnaires = set(q for sc, type, item, sdf, udf, q, item in fields)
                 df_label = _('System data field') + f' "{sdf}"' if sdf else _('User-defined data field') + f' "{str(udf)}"'
                 if len(questionnaires) == 1:
                     errors.add(_('{datafield} added twice to questionnaire "{questionnaire}"').format(
@@ -2104,11 +2104,10 @@ class QuestionnaireChild(LoggedModel):
        SystemQuestion.CITY.value,
        SystemQuestion.STATE.value,
        SystemQuestion.COUNTRY.value,
-   ] + [
-       #SystemQuestion.ATTENDEE_NAME_PARTS.value + ':' + field
+    ] + [
         'attendee_name_parts:' + field
         for field in _name_schemes_all_fields
-   ]
+    ]
 
     questionnaire = models.ForeignKey(
         Questionnaire,
@@ -2121,7 +2120,7 @@ class QuestionnaireChild(LoggedModel):
     )
     user_datafield = models.ForeignKey(
         Question,
-        related_name="references",
+        related_name="referenced_by",
         on_delete=models.CASCADE,
         null=True, blank=True,
     )

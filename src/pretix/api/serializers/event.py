@@ -933,14 +933,6 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'show_quota_left',
         'show_dates_on_frontpage',
         'max_items_per_order',
-        #'attendee_names_asked',
-        #'attendee_names_required',
-        #'attendee_emails_asked',
-        #'attendee_emails_required',
-        #'attendee_addresses_asked',
-        #'attendee_addresses_required',
-        #'attendee_company_asked',
-        #'attendee_company_required',
         'ticket_download',
         'ticket_download_addons',
         'ticket_download_nonadm',
@@ -971,7 +963,6 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'reusable_media_type_nfc_mf0aes',
         'reusable_media_type_nfc_mf0aes_random_uid',
         'reusable_media_usage_enforced',
-        #  'system_question_order',  # TODO(questionnaires) - remove or replace
         'tax_rule_payment',
         'tax_rule_cancellation',
     ]
@@ -995,7 +986,18 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
                 else []
             )
         )
+
+        # Provide fixed values for old configuration fields to ensure apps never use their built-in FakeQuestions, only the
+        # ones we provide from POSCompatQuestionViewSet
         self.fields['system_question_order'] = serializers.JSONField(read_only=True, default=dict(), source='_invalid')
+        self.fields['attendee_names_asked'] = serializers.BooleanField(read_only=True, default=False, source='_invalid')
+        self.fields['attendee_names_required'] = serializers.BooleanField(read_only=True, default=False, source='_invalid')
+        self.fields['attendee_emails_asked'] = serializers.BooleanField(read_only=True, default=False, source='_invalid')
+        self.fields['attendee_emails_required'] = serializers.BooleanField(read_only=True, default=False, source='_invalid')
+        self.fields['attendee_addresses_asked'] = serializers.BooleanField(read_only=True, default=False, source='_invalid')
+        self.fields['attendee_addresses_required'] = serializers.BooleanField(read_only=True, default=False, source='_invalid')
+        self.fields['attendee_company_asked'] = serializers.BooleanField(read_only=True, default=False, source='_invalid')
+        self.fields['attendee_company_required'] = serializers.BooleanField(read_only=True, default=False, source='_invalid')
 
 
 class MultiLineStringField(serializers.Field):

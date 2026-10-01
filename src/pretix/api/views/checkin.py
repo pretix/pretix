@@ -55,7 +55,7 @@ from pretix.api.serializers.checkin import (
     CheckinListSerializer, CheckinRPCAnnulInputSerializer,
     CheckinRPCRedeemInputSerializer, MiniCheckinListSerializer,
 )
-from pretix.api.serializers.item import CompatQuestionSerializer
+from pretix.api.serializers.item import POSCompatQuestionSerializer
 from pretix.api.serializers.order import (
     CheckinListOrderPositionSerializer, CheckinSerializer,
     FailedCheckinSerializer,
@@ -872,13 +872,13 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             else:
                 perform_checkin(**checkin_args)
         except RequiredQuestionsError as e:
-            qs = CompatQuestionSerializer(context={'event': op.order.event})
+            qs = POSCompatQuestionSerializer(context={'event': op.order.event})
             return Response({
                 'status': 'incomplete',
                 'require_attention': op.require_checkin_attention,
                 'checkin_texts': op.checkin_texts,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
-                'questions': CompatQuestionSerializer.mangle_results(op.order.event, (qs.to_representation(q) for q in e.questions)),  # TODO(questionnaires)
+                'questions': POSCompatQuestionSerializer.mangle_results(op.order.event, (qs.to_representation(q) for q in e.questions)),  # TODO(questionnaires)
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         except RequiredMediaExchangeError as e:

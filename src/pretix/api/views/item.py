@@ -32,6 +32,9 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import logging
+from typing import Mapping
+
 import django_filters
 from django.db import transaction
 from django.db.models import Q
@@ -44,22 +47,26 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
 
+from pretix.api.compat import CompatException
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.item import (
-    CompatQuestionSerializer, DatafieldSerializer, ItemAddOnSerializer,
+    CompatDatafieldSerializer, DatafieldSerializer, ItemAddOnSerializer,
     ItemBundleSerializer, ItemCategorySerializer, ItemProgramTimeSerializer,
-    ItemSerializer, ItemVariationSerializer, QuestionnaireSerializer,
-    QuestionOptionSerializer, QuotaSerializer,
+    ItemSerializer, ItemVariationSerializer, POSCompatQuestionSerializer,
+    QuestionnaireSerializer, QuestionOptionSerializer, QuotaSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
-    CartPosition, Item, ItemAddOn, ItemBundle, ItemCategory, ItemProgramTime,
-    ItemVariation, Question, QuestionOption, Quota,
+    CartPosition, Device, Item, ItemAddOn, ItemBundle, ItemCategory,
+    ItemProgramTime, ItemVariation, Question, QuestionOption, Quota,
 )
 from pretix.base.models.items import Questionnaire, QuestionnaireChild
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.i18n import i18ncomp
+
+logger = logging.getLogger(__name__)
+
 
 with scopes_disabled():
     class ItemFilter(FilterSet):
@@ -460,7 +467,7 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
 
 
 with scopes_disabled():
-    class CompatQuestionFilter(FilterSet):
+    class CompatDatafieldFilter(FilterSet):
         identifier = django_filters.CharFilter(field_name='question__identifier')
         ask_during_checkin = django_filters.BooleanFilter(method='ask_during_checkin_qs')
 
@@ -474,57 +481,57 @@ with scopes_disabled():
             )
 
 
-class CompatQuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
-    serializer_class = CompatQuestionSerializer
+class DeprecationWarningMixin:
+    def finalize_response(self, request, response, *args, **kwargs):
+        if self.deprecation_warning and isinstance(getattr(response, 'data', None), Mapping) and not 'x-deprecated' in response.headers:
+            response.data = {
+                'deprecation_warning': self.deprecation_warning,
+                **response.data
+            }
+            response.headers['x-deprecated'] = self.deprecation_warning
+        return super().finalize_response(request, response, *args, **kwargs)
+
+
+class POSCompatQuestionViewSet(DeprecationWarningMixin, viewsets.ReadOnlyModelViewSet):
+    serializer_class = POSCompatQuestionSerializer
     queryset = QuestionnaireChild.objects.none()
-    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
-    filterset_class = CompatQuestionFilter
-    ordering_fields = ('questionnaire__position', 'position', 'id')
-    ordering = ('questionnaire__position', 'position', 'id')
     permission = None
-    write_permission = 'event.items:write'
+    sales_channel_ident = None
+
+    def __init__(self, sales_channel_ident, *args, **kwargs):
+        self.sales_channel_ident = sales_channel_ident
+        super().__init__(*args, **kwargs)
+
+    @property
+    def deprecation_warning(self):
+        return (
+            f'This API endpoint is deprecated and will be removed in the future. '
+            f'Results are generated on-the-fly, count and page size may be inaccurate. '
+            f'Filtered for sales_channel "{self.sales_channel_ident}"'
+        )
 
     def get_queryset(self):
-        self.sales_channel_ident = self.request.query_params.get('sales_channel', getattr(self.request.auth, 'guessed_sales_channel_identifier', None) or 'web')
         return QuestionnaireChild.objects.filter(
             Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels__identifier=self.sales_channel_ident),
             questionnaire__event=self.request.event,
             # legacy compat only for position-level questions
             questionnaire__type__startswith='P',
-        ).prefetch_related('user_datafield', 'user_datafield__options', 'questionnaire').all()
+        ).prefetch_related(
+            'user_datafield', 'user_datafield__options', 'questionnaire'
+        ).order_by('questionnaire__position', 'position', 'id')
 
     def list(self, request, **kwargs):
         resp = super().list(request, **kwargs)
-        print('api - saleschannel:', repr(getattr(request, 'sales_channel', None)))
-        resp.data['results'] = CompatQuestionSerializer.mangle_results(self.request.event, resp.data['results'])
-        resp.data = {
-            'warning': f'This API endpoint is deprecated and will be removed in the future. The results '
-                       f'are generated on-the-fly, count and page size may be inaccurate. Filtered for sales_channel "{self.sales_channel_ident}"',
-            **resp.data
-        }
+        resp.data['results'] = POSCompatQuestionSerializer.mangle_results(self.request.event, resp.data['results'])
         return resp
 
     def get_object(self):
-        """
-        Returns the object the view is displaying.
-
-        You may want to override this if you need to provide non-standard
-        queryset lookups.  Eg if objects are referenced using multiple
-        keyword arguments in the url conf.
-        """
         queryset = self.filter_queryset(self.get_queryset())
 
-        # Perform the lookup filtering.
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
 
-        assert lookup_url_kwarg in self.kwargs, (
-            'Expected view %s to be called with a URL keyword argument '
-            'named "%s". Fix your URL conf, or set the `.lookup_field` '
-            'attribute on the view correctly.' %
-            (self.__class__.__name__, lookup_url_kwarg)
-        )
-
         qid, dfid, sys_df = QuestionnaireChild.uncook_id(self.kwargs[lookup_url_kwarg])
+        print(self.kwargs[lookup_url_kwarg], qid, dfid, sys_df)
         if qid and sys_df:
             obj = get_object_or_404(queryset, questionnaire__pk=qid, system_datafield=sys_df)
         elif qid and dfid:
@@ -649,6 +656,103 @@ class DatafieldViewSet(ConditionalListView, BaseDatafieldViewSet):
 
 class OrderDatafieldViewSet(ConditionalListView, BaseDatafieldViewSet):
     container_type = Question.ContainerType.ORDER
+
+
+def ordered_union(*lists):
+    from graphlib import TopologicalSorter
+    items_set = {item for lst in lists for __ignore, item in lst}
+    dependencies = {item: set() for item in items_set}
+    for lst in lists:
+        for i in range(1, len(lst)):
+            current_item = lst[i][1]
+            previous_item = lst[i - 1][1]
+            dependencies[current_item].add(previous_item)
+    ts = TopologicalSorter(dependencies)
+    try:
+        return list(ts.static_order())
+    except ValueError:
+        raise CompatException("Questionnaire configuration incompatible with old data model due to conflicting field orders.")
+
+
+class CompatListMixin:
+    deprecation_warning = (
+        f'This API endpoint is deprecated and will be removed in the future. It only works as long as '
+        f'your event\'s questionnaire configuration is compatible with the old data model. '
+        f'Please switch to the .../datafields/ and .../questionnaires/ endpoints.'
+    )
+
+    @property
+    def ignore_errors(self):
+        return self.request.query_params.get('ignore_errors', '') == 'true'
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['ignore_errors'] = self.ignore_errors
+        return ctx
+
+    def do_the_topo_sort(self, queryset):
+        products = {}
+        for df in queryset:
+            for qc in df.referenced_by.all():
+                for item_id in qc.questionnaire.items.values_list('pk', flat=True):
+                    k = (qc.questionnaire.type, item_id)
+                    products[k] = products.get(k, []) + [((qc.questionnaire.position, qc.position), df)]
+        for q in products.values():
+            q.sort()
+        try:
+            result = ordered_union(*products.values())
+            for i, d in enumerate(result):
+                d.position = i
+        except ValueError:
+            if self.ignore_errors:
+                pass
+            else:
+                raise
+        return result
+
+    def list(self, request, **kwargs):
+        logger.info('Returning compatible datafield list on %s/%s', request.organizer.slug, request.event.slug)
+
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.do_the_topo_sort(queryset)
+        serializer = self.get_serializer(queryset, many=True)
+        resultlist = serializer.data
+        return Response({
+            'next': None, 'previous': None, 'count': len(resultlist),
+            'results': resultlist,
+        })
+
+
+class CompatDatafieldViewSet(ConditionalListView, DeprecationWarningMixin, CompatListMixin, BaseDatafieldViewSet):
+    serializer_class = CompatDatafieldSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related('referenced_by', 'referenced_by__questionnaire')
+
+    def _check_defer(self, mode, request, *args, **kwargs):
+        sales_channel_ident = request.query_params.get('sales_channel', None)
+        if sales_channel_ident is None and isinstance(request.auth, Device):
+            sales_channel_ident = 'pretixpos' if request.auth.software_brand.startswith("pretixPOS") else 'web'
+        if sales_channel_ident:
+            logger.info('Returning app compatible question %s for %s (device: %r %s %s) on %s/%s',  mode,sales_channel_ident, request.auth, getattr(request.auth, 'software_brand', ''), getattr(request.auth, 'software_version', ''), request.organizer.slug, request.event.slug)
+            return POSCompatQuestionViewSet.as_view(
+                {'get': mode}, sales_channel_ident=sales_channel_ident
+            )(*self.args, request=request._request, **self.kwargs)
+
+    def list(self, request, *args, **kwargs):
+        if response := self._check_defer('list', request, *args, **kwargs):
+            return response
+
+        logger.info('Returning compatible datafield list on %s/%s', request.organizer.slug, request.event.slug)
+        return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        if response := self._check_defer('retrieve', request, *args, **kwargs):
+            return response
+
+        return super().retrieve(request, *args, **kwargs)
+
 
 class QuestionOptionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionOptionSerializer

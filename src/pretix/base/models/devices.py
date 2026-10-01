@@ -292,11 +292,6 @@ class Device(LoggedModel):
         else:
             return self.organizer.events.none()
 
-    @property
-    def guessed_sales_channel_identifier(self):
-        if self.software_brand.startswith("pretixPOS"):
-            return 'pretixpos'
-
 
 class DeviceLastSeen(models.Model):
     # This is a separate model since we expect it to get A LOT of writes and PostgreSQL always

@@ -48,6 +48,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError as DrfValidationError
 from rest_framework.serializers import as_serializer_error
 
+from pretix.api.compat import MergeField
 from pretix.api.serializers import (
     CompatDecimalField, SalesChannelMigrationMixin,
 )
@@ -554,11 +555,10 @@ class LegacyDependencyValueField(serializers.CharField):
         return [data] if data else []
 
 
-class CompatQuestionSerializer(I18nAwareModelSerializer):
+class POSCompatQuestionSerializer(I18nAwareModelSerializer):
     id = serializers.IntegerField(source='cooked_id', read_only=True)
     question = I18nField(source='label', allow_null=True)
     type = serializers.CharField(source='user_datafield.type', allow_null=True, default=Question.FieldType.STRING)
-    #identifier = serializers.CharField(source='user_datafield.identifier', allow_null=True)
     identifier = serializers.SerializerMethodField(read_only=True)
     show_during_checkin = serializers.BooleanField(source='user_datafield.show_during_checkin', allow_null=True, default=False)
     ask_during_checkin = serializers.SerializerMethodField(read_only=True)
@@ -596,7 +596,7 @@ class CompatQuestionSerializer(I18nAwareModelSerializer):
     def get_attribute(self, instance):
         if isinstance(instance, QuestionAnswer):
             position = instance.cartposition if instance.cartposition_id else instance.orderposition
-            print('searching ',repr(instance), repr(position), repr(instance.question), instance.pk, position.item_id, self.context)
+            print('searching ', repr(instance), repr(position), repr(instance.question), instance.pk, position.item_id, self.context)   # TODO remove print
             qcs = list(QuestionnaireChild.objects.filter(user_datafield_id=instance.question_id, questionnaire__items__in=[position.item_id]))
             return next((qc for qc in qcs if qc.questionnaire.type == self.context.get('preferred_questionnaire_type', Questionnaire.QuestionnaireType.ORDER_POSITION_SALE)), qcs[0])
 
@@ -719,7 +719,42 @@ class DatafieldSerializer(I18nAwareModelSerializer):
         return question
 
 
-class QuestionRefField(serializers.PrimaryKeyRelatedField):
+class CompatDatafieldSerializer(DatafieldSerializer):
+    question = MergeField('referenced_by', I18nField(source='label'), mode='consensus')
+    required = MergeField('referenced_by', serializers.BooleanField(), mode='consensus')
+    items = MergeField('referenced_by', serializers.PrimaryKeyRelatedField(source='questionnaire.items', many=True, queryset=Item.objects.none(), allow_null=True, required=False), mode='union')
+    position = serializers.IntegerField(required=False, read_only=True, default=0)
+    ask_during_checkin = MergeField('referenced_by', serializers.SerializerMethodField(), mode='bool_or')
+
+    dependency_question = MergeField('referenced_by', serializers.IntegerField(source='dependency_question.user_datafield_id', required=False, default=None, allow_null=True), mode='consensus')
+    dependency_values = MergeField('referenced_by', serializers.JSONField(), mode='consensus')
+    dependency_value = MergeField('referenced_by', LegacyDependencyValueField(source='dependency_values'), mode='consensus')
+    help_text = MergeField('referenced_by', I18nField(), mode='consensus')
+
+    referenced_by_questionnaires = MergeField('referenced_by', serializers.IntegerField(source='questionnaire.id'), mode='list')
+    questionnaire_types = MergeField('referenced_by', serializers.CharField(source='questionnaire.type'), mode='list')
+
+    class Meta:
+        model = Question
+        fields = (
+            'id', 'question', 'type', 'required', 'items', 'options', 'position',
+            'ask_during_checkin', 'show_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
+            'hidden', 'dependency_value', 'print_on_invoice', 'help_text', 'valid_number_min',
+            'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
+            'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait',
+            # new
+            'internal_name', 'referenced_by_questionnaires', 'questionnaire_types',
+        )
+
+    def __init__(self, *args, **kwargs):
+        self.fields['items'].inner_field.child_relation.queryset = kwargs['context']['event'].items.all()
+        super().__init__(*args, **kwargs)
+
+    def get_ask_during_checkin(self, qc):
+        return qc.questionnaire.type == Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
+
+
+class DatafieldRelatedField(serializers.PrimaryKeyRelatedField):
     default_error_messages = {
         'invalid_choice': _('"{input}" is not a valid choice.')
     }

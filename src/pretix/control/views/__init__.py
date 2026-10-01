@@ -21,7 +21,6 @@
 #
 import collections.abc
 import warnings
-from errno import EMSGSIZE
 
 from django.contrib import messages
 from django.core.paginator import (
@@ -29,7 +28,6 @@ from django.core.paginator import (
 )
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import edit
 
@@ -50,7 +48,6 @@ class TellParentFormMixin:
         if self.request.GET.get('notify_parent') and isinstance(result, HttpResponseRedirect):
             message_store = messages.get_messages(self.request)
             msgs = [{'level': msg.level_tag, 'message': msg.message} for msg in message_store]
-            #message_store._queued_messages = []
             return render(self.request, 'pretixcontrol/notify_parent.html', {
                 'notify_info': {'object': self.object.pk, 'object_str': str(self.object), 'redirect_url': result.url, 'messages': msgs},
             })

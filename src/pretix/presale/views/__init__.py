@@ -459,6 +459,7 @@ def get_cart_positions(request):
                     cp.addon_to = by_id[cp.addon_to_id]
     return request._cart_cache
 
+
 get_cart = get_cart_positions  # legacy compatibility
 
 

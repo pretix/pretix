@@ -65,9 +65,8 @@ from pretix.base.models.items import (
 )
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
-    ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,
-    SalesChannelCheckboxSelectMultiple, SplitDateTimeField,
-    SplitDateTimePickerWidget,
+    ButtonGroupRadioSelect, ExtFileField, SalesChannelCheckboxSelectMultiple,
+    SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2, Select2ItemVarMulti
 from pretix.helpers.models import modelcopy
