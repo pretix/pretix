@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-10-01 09:43+0000\n"
+"PO-Revision-Date: 2026-10-01 11:14+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -30970,169 +30970,166 @@ msgstr "ทุกคนที่สร้างคำสั่งซื้อต
 
 #: pretix/plugins/sendmail/models.py
 msgid "Everyone"
-msgstr ""
+msgstr "ทุกคน"
 
 #: pretix/plugins/sendmail/models.py
 msgid "Anyone who is or was checked in"
-msgstr ""
+msgstr "ใครก็ตามที่เช็คอินอยู่หรือเคยเช็คอินแล้ว"
 
 #: pretix/plugins/sendmail/models.py
 msgid "Anyone who never checked in before"
-msgstr ""
+msgstr "ใครก็ตามที่ไม่เคยเช็คอินมาก่อน"
 
 #: pretix/plugins/sendmail/models.py
 msgid "Limit products"
-msgstr ""
+msgstr "จำกัดสินค้า"
 
 #: pretix/plugins/sendmail/models.py
 msgid "Restrict to orders with status"
-msgstr ""
+msgstr "จำกัดเฉพาะคำสั่งซื้อที่มีสถานะ"
 
 #: pretix/plugins/sendmail/models.py
 msgid "Restrict to check-in status"
-msgstr ""
+msgstr "จำกัดเฉพาะสถานะการเช็คอิน"
 
 #: pretix/plugins/sendmail/models.py
 msgid "Send date"
-msgstr ""
+msgstr "วันที่ส่ง"
 
 #: pretix/plugins/sendmail/models.py
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html
 #: pretix/presale/templates/pretixpresale/organizers/index.html
 msgid "Time of day"
-msgstr ""
+msgstr "เวลาของวัน"
 
 #: pretix/plugins/sendmail/models.py
 msgid "Send email to"
-msgstr ""
+msgstr "ส่งอีเมลถึง"
 
 #: pretix/plugins/sendmail/models.py
 msgid "Only enabled rules are actually sent"
-msgstr ""
+msgstr "เฉพาะกฎที่เปิดใช้งานเท่านั้นที่จะถูกส่งจริง"
 
 #: pretix/plugins/sendmail/models.py
 #, python-brace-format
 msgid "on {date} at {time}"
-msgstr ""
+msgstr "ณ วันที่ {date} เวลา {time}"
 
 #: pretix/plugins/sendmail/models.py
 #, python-format
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d วัน หลังสิ้นสุดอีเวนต์ เวลา %(time)s"
 
 #: pretix/plugins/sendmail/models.py
 #, python-format
 msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d วัน ก่อนสิ้นสุดอีเวนต์ เวลา %(time)s"
 
 #: pretix/plugins/sendmail/models.py
 #, python-format
 msgid "%(count)d day after event start at %(time)s"
 msgid_plural "%(count)d days after event start at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d วัน หลังเริ่มอีเวนต์ เวลา %(time)s"
 
 #: pretix/plugins/sendmail/models.py
 #, python-format
 msgid "%(count)d day before event start at %(time)s"
 msgid_plural "%(count)d days before event start at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d วัน ก่อนเริ่มอีเวนต์ เวลา %(time)s"
 
 #: pretix/plugins/sendmail/signals.py
 msgid "Scheduled emails"
-msgstr ""
+msgstr "อีเมลที่ตั้งเวลาไว้"
 
 #: pretix/plugins/sendmail/signals.py
 msgid "Mass email was sent to customers or attendees."
-msgstr ""
+msgstr "อีเมลกลุ่มถูกส่งไปยังลูกค้าหรือผู้เข้าร่วมเรียบร้อยแล้ว"
 
 #: pretix/plugins/sendmail/signals.py
 msgid "Mass email was sent to waiting list entries."
-msgstr ""
+msgstr "อีเมลกลุ่มถูกส่งไปยังผู้ลงชื่อในรายชื่อสำรองเรียบร้อยแล้ว"
 
 #: pretix/plugins/sendmail/signals.py
 msgid "The order received a mass email."
-msgstr ""
+msgstr "คำสั่งซื้อได้รับอีเมลกลุ่มแล้ว"
 
 #: pretix/plugins/sendmail/signals.py
 msgid "A ticket holder of this order received a mass email."
-msgstr ""
+msgstr "ผู้ถือตั๋วของคำสั่งซื้อนี้ได้รับอีเมลกลุ่มแล้ว"
 
 #: pretix/plugins/sendmail/signals.py
 msgid "The person on the waiting list received a mass email."
-msgstr ""
+msgstr "บุคคลในรายชื่อสำรองได้รับอีเมลกลุ่มแล้ว"
 
 #: pretix/plugins/sendmail/signals.py
 msgid "An email rule was created"
-msgstr ""
+msgstr "สร้างกฎการส่งอีเมลเรียบร้อยแล้ว"
 
 #: pretix/plugins/sendmail/signals.py
 msgid "An email rule was updated"
-msgstr ""
+msgstr "อัปเดตกฎการส่งอีเมลเรียบร้อยแล้ว"
 
 #: pretix/plugins/sendmail/signals.py
 msgid "A scheduled email was sent to the order"
-msgstr ""
+msgstr "ส่งอีเมลตามเวลาที่กำหนดไปยังคำสั่งซื้อเรียบร้อยแล้ว"
 
 #: pretix/plugins/sendmail/signals.py
 msgid "A scheduled email was sent to a ticket holder"
-msgstr ""
+msgstr "ส่งอีเมลตามเวลาที่กำหนดไปยังผู้ถือตั๋วเรียบร้อยแล้ว"
 
 #: pretix/plugins/sendmail/signals.py
 msgid "An email rule was deleted"
-msgstr ""
+msgstr "ลบกฎการส่งอีเมลเรียบร้อยแล้ว"
 
 #: pretix/plugins/sendmail/signals.py
 #, python-brace-format
 msgid "Mail rule {val}"
-msgstr ""
+msgstr "กฎการส่งอีเมล {val}"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html
 msgid ""
 "This page shows you all mass emails you sent out manually. It does not "
 "include emails sent out automatically."
 msgstr ""
+"หน้านี้แสดงอีเมลกลุ่มทั้งหมดที่คุณส่งด้วยตนเอง โดยไม่รวมอีเมลที่ส่งโดยอัตโนมัติ"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html
 msgid "Send a new email based on this"
-msgstr ""
+msgstr "ส่งอีเมลใหม่โดยอิงตามรายการนี้"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html
 msgid "Sent to orders:"
-msgstr ""
+msgstr "ส่งไปยังคำสั่งซื้อ:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html
 msgid "All customers not checked in"
-msgstr ""
+msgstr "ลูกค้าทุกคนที่ยังไม่ได้เช็คอิน"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html
 msgid "Attendee contact addresses"
-msgstr ""
+msgstr "ที่อยู่ติดต่อของผู้เข้าร่วม"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html
 msgid "All contact addresses"
-msgstr ""
+msgstr "ที่อยู่ติดต่อทั้งหมด"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html
 msgid "Order contact addresses"
-msgstr ""
+msgstr "ที่อยู่ติดต่อของผู้สั่งซื้อ"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html
 msgid "Create Email Rule"
-msgstr ""
+msgstr "สร้างกฎการส่งอีเมล"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html
 msgid "Scheduled emails are not sent as long as your ticket shop is offline."
-msgstr ""
+msgstr "อีเมลที่ตั้งเวลาไว้จะไม่ถูกส่งตราบใดที่ร้านค้าตั๋วของคุณยังคงออฟไลน์"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html
@@ -31141,86 +31138,91 @@ msgid ""
 "your configured date. Typically, this will not be more than 10 minutes. Your "
 "email will never be sent earlier than the time you configured."
 msgstr ""
+"เนื่องจากเหตุผลทางเทคนิค อีเมลอาจถูกส่งช้ากว่าวันที่และเวลาที่คุณกำหนดไว้เล็กน้อย โดยทั่วไปจะไม่เกิ"
+"น 10 นาที และอีเมลของคุณจะไม่มีทางถูกส่งก่อนเวลาที่คุณกำหนดไว้อย่างแน่นอน"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html
 msgid "Delete Email Rule"
-msgstr ""
+msgstr "ลบกฎการส่งอีเมล"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html
 #, python-format
 msgid "Are you sure you want to delete the rule <strong>%(subject)s</strong>?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบกฎ <strong>%(subject)s</strong>?"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html
 msgid "Inspect Email Rule"
-msgstr ""
+msgstr "ตรวจสอบกฎการส่งอีเมล"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html
 msgid "This page shows when your rule is planned to be sent."
-msgstr ""
+msgstr "หน้านี้แสดงกำหนดเวลาการส่งตามกฎของคุณ"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 msgid "Email subject"
-msgstr ""
+msgstr "หัวข้ออีเมล"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 msgid "Scheduled time"
-msgstr ""
+msgstr "เวลาที่กำหนดส่ง"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html
 msgid "Last schedule computation"
-msgstr ""
+msgstr "การคำนวณกำหนดเวลาล่าสุด"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 msgid "Scheduled email rules"
-msgstr ""
+msgstr "กฎการตั้งเวลาส่งอีเมล"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 msgid ""
 "Email rules allow you to automatically send emails to your customers at a "
 "specific time before or after your event."
 msgstr ""
+"กฎการส่งอีเมลช่วยให้คุณสามารถส่งอีเมลถึงลูกค้าโดยอัตโนมัติตามเวลาที่กำหนดก่อนหรือหลังอีเวนต์ของคุณ"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 msgid "Create a new rule"
-msgstr ""
+msgstr "สร้างกฎใหม่"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 msgctxt "subevent"
 msgid "Sent / Total dates"
-msgstr ""
+msgstr "ส่งแล้ว / วันที่ทั้งหมด"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 msgid "Next execution:"
-msgstr ""
+msgstr "การทำงานครั้งถัดไป:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 msgid "Last execution:"
-msgstr ""
+msgstr "การทำงานครั้งล่าสุด:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 msgid "Inspect scheduled times"
-msgstr ""
+msgstr "ตรวจสอบเวลาที่กำหนดส่ง"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 msgid "Use as a template for a new rule"
-msgstr ""
+msgstr "ใช้เป็นเทมเพลตสำหรับกฎใหม่"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html
 msgid "Update Email Rule"
-msgstr ""
+msgstr "อัปเดตกฎการส่งอีเมล"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html
 msgid ""
 "This email has already been sent for all existing dates. Changing it will "
 "have no effect unless you create additional dates in this event series."
 msgstr ""
+"อีเมลนี้ถูกส่งไปแล้วสำหรับทุกวันที่ที่มีอยู่ การแก้ไขจะไม่มีผลใดๆ เว้นแต่คุณจะสร้างวันที่เพิ่มเติมในอีเวนต์แ"
+"บบซีรีส์นี้"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html
 msgid "This email has already been sent. Changing it will have no effect."
-msgstr ""
+msgstr "อีเมลนี้ถูกส่งไปแล้ว การแก้ไขจะไม่มีผลใดๆ"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html
 msgid ""
@@ -31228,18 +31230,19 @@ msgid ""
 "Changing it will only have an effect on dates for which the email has not "
 "yet been sent."
 msgstr ""
+"อีเมลนี้ถูกส่งไปแล้วสำหรับบางวันที่ในซีรีส์ของคุณ การแก้ไขจะมีผลเฉพาะกับวันที่ที่ยังไม่ได้ส่งอีเมลเท่านั้น"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html
 msgid "You need to preview your email before you can send it."
-msgstr ""
+msgstr "คุณจำเป็นต้องแสดงตัวอย่างอีเมลก่อนจึงจะสามารถส่งได้"
 
 #: pretix/plugins/sendmail/views.py
 msgid "You supplied an invalid log entry ID"
-msgstr ""
+msgstr "คุณระบุ ID ประวัติการบันทึก (Log entry ID) ไม่ถูกต้อง"
 
 #: pretix/plugins/sendmail/views.py
 msgid "There are no matching recipients for your selection."
-msgstr ""
+msgstr "ไม่พบผู้รับที่ตรงกับรายการที่คุณเลือก"
 
 #: pretix/plugins/sendmail/views.py
 #, python-format
@@ -31247,49 +31250,49 @@ msgid ""
 "Your message has been queued and will be sent to the contact addresses of %s "
 "in the next few minutes."
 msgstr ""
+"ข้อความของคุณถูกเข้าคิวแล้วและจะถูกส่งไปยังที่อยู่ติดต่อของ %s ภายในไม่กี่นาทีข้างหน้า"
 
 #: pretix/plugins/sendmail/views.py
 msgid "Orders or attendees"
-msgstr ""
+msgstr "คำสั่งซื้อหรือผู้เข้าร่วม"
 
 #: pretix/plugins/sendmail/views.py
 msgid ""
 "Send an email to every customer, or to every person a ticket has been "
 "purchased for, or a combination of both."
 msgstr ""
+"ส่งอีเมลถึงลูกค้าทุกคน หรือทุกคนที่ได้รับการซื้อตั๋วให้ หรือส่งทั้งสองกลุ่มร่วมกัน"
 
 #: pretix/plugins/sendmail/views.py
 #, python-format
 msgid "%(number)s matching order"
 msgid_plural "%(number)s matching orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(number)s คำสั่งซื้อที่ตรงกัน"
 
 #: pretix/plugins/sendmail/views.py
 msgid ""
 "Send an email to every person currently waiting to receive a voucher through "
 "the waiting list feature."
-msgstr ""
+msgstr "ส่งอีเมลถึงทุกคนที่กำลังรอรับวอเชอร์ผ่านฟีเจอร์รายชื่อสำรองในขณะนี้"
 
 #: pretix/plugins/sendmail/views.py
 #, python-format
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(number)s รายการในรายชื่อสำรอง"
 
 #: pretix/plugins/statistics/apps.py pretix/plugins/statistics/signals.py
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Statistics"
-msgstr ""
+msgstr "สถิติ"
 
 #: pretix/plugins/statistics/apps.py
 msgid "Get a birds-eye view of your event sales with graphical statistics."
-msgstr ""
+msgstr "รับชมภาพรวมยอดขายอีเวนต์ของคุณผ่านสถิติในรูปแบบกราฟ"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Orders by day"
-msgstr ""
+msgstr "คำสั่งซื้อแยกตามวัน"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid ""
@@ -31298,10 +31301,14 @@ msgid ""
 "expired); paid orders include only paid orders and exclude all canceled "
 "orders."
 msgstr ""
+"คำสั่งซื้อที่ชำระเงินหลายครั้งจะแสดงตามวันที่ชำระเงินครั้งสุดท้าย ทั้งนี้ คำสั่งซื้อที่ถูกทำรายการ "
+"(Placed orders) จะรวมคำสั่งซื้อทุกสถานะ (รอชำระเงิน, ชำระเงินแล้ว, ยกเลิก และหมดอายุ) ส่"
+"วนคำสั่งซื้อที่ชำระเงินแล้วจะรวมเฉพาะคำสั่งซื้อที่ชำระเงินเรียบร้อยแล้วเท่านั้น และไม่รวมคำสั่งซื้อที่ถูกย"
+"กเลิกทั้งหมด"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Attendees by day"
-msgstr ""
+msgstr "ผู้เข้าร่วมแยกตามวัน"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid ""
@@ -31312,14 +31319,19 @@ msgid ""
 "(pending, paid, canceled, and expired); attendees in paid orders include "
 "only those from paid orders and exclude those from canceled orders."
 msgstr ""
+"ผู้เข้าร่วมในคำสั่งซื้อที่ชำระเงินหลายครั้งจะแสดงโดยใช้วันที่ชำระเงินครั้งสุดท้าย วันที่สั่งซื้อจะสะท้อนถึงเ"
+"วลาที่ทำรายการสั่งซื้อเป็นครั้งแรก ผู้เข้าร่วมที่เพิ่มเข้ามาในภายหลังผ่านทางตำแหน่งสั่งซื้อเพิ่มเติมยังคงใ"
+"ช้วันที่สั่งซื้อเดิม ผู้เข้าร่วมในคำสั่งซื้อที่ถูกทำรายการจะรวมผู้เข้าร่วมจากทุกสถานะคำสั่งซื้อ (รอชำระเงิ"
+"น, ชำระเงินแล้ว, ยกเลิก และหมดอายุ) ส่วนผู้เข้าร่วมในคำสั่งซื้อที่ชำระเงินแล้วจะรวมเฉพาะผู้เข้าร่ว"
+"มจากคำสั่งซื้อที่ชำระเงินเรียบร้อยแล้วเท่านั้น และไม่รวมผู้เข้าร่วมจากคำสั่งซื้อที่ถูกยกเลิก"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Attendees by time"
-msgstr ""
+msgstr "ผู้เข้าร่วมแยกตามเวลา"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Revenue over time"
-msgstr ""
+msgstr "รายได้ตามช่วงเวลา"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgctxt "subevent"
@@ -31327,6 +31339,8 @@ msgid ""
 "If you select a single date, payment method fees will not be listed here as "
 "it might not be clear which date they belong to."
 msgstr ""
+"หากคุณเลือกวันที่เดียว ค่าธรรมเนียมวิธีการชำระเงินจะไม่แสดงรายการไว้ที่นี่ เนื่องจากอาจไม่ชัดเจนว่า"
+"ค่าธรรมเนียมดังกล่าวเป็นของวันที่ใด"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid ""
@@ -31334,6 +31348,8 @@ msgid ""
 "shown with the date of their last payment. Revenue excludes all fees, "
 "including cancellation fees."
 msgstr ""
+"จะนับเฉพาะคำสั่งซื้อที่ชำระเงินเต็มจำนวนแล้วเท่านั้น คำสั่งซื้อที่ชำระเงินหลายครั้งจะแสดงตามวันที่ชำระ"
+"เงินครั้งสุดท้าย รายได้ไม่รวมค่าธรรมเนียมทั้งหมด รวมถึงค่าธรรมเนียมการยกเลิก"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid ""
@@ -31341,66 +31357,72 @@ msgid ""
 "shown with the date of their last payment. Revenue includes all fees, "
 "including cancellation fees from canceled orders."
 msgstr ""
+"จะนับเฉพาะคำสั่งซื้อที่ชำระเงินเต็มจำนวนแล้วเท่านั้น คำสั่งซื้อที่ชำระเงินหลายครั้งจะแสดงตามวันที่ชำระ"
+"เงินครั้งสุดท้าย รายได้รวมค่าธรรมเนียมทั้งหมด รวมถึงค่าธรรมเนียมการยกเลิกจากคำสั่งซื้อที่ถูกยกเลิก"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid ""
 "Placed orders include all orders (pending, paid, canceled, and expired); "
 "paid orders include only paid orders and exclude all canceled orders."
 msgstr ""
+"คำสั่งซื้อที่ถูกทำรายการ (Placed orders) จะรวมคำสั่งซื้อทุกสถานะ (รอชำระเงิน, ชำระเงินแล้ว, "
+"ยกเลิก และหมดอายุ) ส่วนคำสั่งซื้อที่ชำระเงินแล้วจะรวมเฉพาะคำสั่งซื้อที่ชำระเงินเรียบร้อยแล้วเท่านั้น "
+"และไม่รวมคำสั่งซื้อที่ถูกยกเลิกทั้งหมด"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Seating Overview"
-msgstr ""
+msgstr "ภาพรวมผังที่นั่ง"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Sold Seats"
-msgstr ""
+msgstr "ที่นั่งที่ขายแล้ว"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Blocked Seats"
-msgstr ""
+msgstr "ที่นั่งที่ถูกบล็อก/สำรองไว้"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Free Seats"
-msgstr ""
+msgstr "ที่นั่งว่าง"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Seating Sales Potentials"
-msgstr ""
+msgstr "ศักยภาพยอดขายตามผังที่นั่ง"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Unsold Seats"
-msgstr ""
+msgstr "ที่นั่งที่ยังไม่ขาย"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Potential Profits"
-msgstr ""
+msgstr "กำไรคาดการณ์"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Minimum Price"
-msgstr ""
+msgstr "ราคาขั้นต่ำ"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "On Sale"
-msgstr ""
+msgstr "เปิดขายอยู่"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Not on Sale"
-msgstr ""
+msgstr "ไม่ได้เปิดขาย"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Seats not attributed to any specific product"
-msgstr ""
+msgstr "ที่นั่งที่ไม่ได้ระบุระบุกับสินค้าเฉพาะใดๆ"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid ""
 "We will show you a variety of statistics about your sales right here, as "
 "soon as the first orders are submitted!"
 msgstr ""
+"เราจะแสดงสถิติยอดขายที่หลากหลายของคุณตรงนี้ ทันทีที่มีการส่งคำสั่งซื้อแรกเข้ามา!"
 
 #: pretix/plugins/stripe/apps.py pretix/plugins/stripe/payment.py
 msgid "Stripe"
-msgstr ""
+msgstr "Stripe"
 
 #: pretix/plugins/stripe/apps.py
 msgid ""
@@ -31408,6 +31430,8 @@ msgid ""
 "Stripe supports payments via credit cards as well as many local payment "
 "methods such as iDEAL, Alipay,and many more."
 msgstr ""
+"รับชำระเงินผ่าน Stripe ผู้ให้บริการชำระเงินที่ได้รับความนิยมทั่วโลก Stripe รองรับการชำระเงินผ่า"
+"นบัตรเครดิต รวมถึงวิธีการชำระเงินท้องถิ่นที่หลากหลาย เช่น iDEAL, Alipay และอื่นๆ อีกมากมาย"
 
 #: pretix/plugins/stripe/forms.py
 #, python-format
@@ -31415,18 +31439,19 @@ msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
 msgstr ""
+"คีย์ \"%(value)s\" ที่ระบุดูเหมือนไม่ถูกต้อง ควรเริ่มต้นด้วย \"%(prefix)s\""
 
 #: pretix/plugins/stripe/forms.py pretix/plugins/stripe/signals.py
 msgid "Stripe Connect: App fee (percent)"
-msgstr ""
+msgstr "Stripe Connect: ค่าธรรมเนียมแอป (เปอร์เซ็นต์)"
 
 #: pretix/plugins/stripe/forms.py pretix/plugins/stripe/signals.py
 msgid "Stripe Connect: App fee (max)"
-msgstr ""
+msgstr "Stripe Connect: ค่าธรรมเนียมแอป (สูงสุด)"
 
 #: pretix/plugins/stripe/forms.py pretix/plugins/stripe/signals.py
 msgid "Stripe Connect: App fee (min)"
-msgstr ""
+msgstr "Stripe Connect: ค่าธรรมเนียมแอป (ขั้นต่ำ)"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
@@ -31434,14 +31459,16 @@ msgid ""
 "clicking on the following button, you can either create a new Stripe account "
 "connect pretix to an existing one."
 msgstr ""
+"หากต้องการรับชำระเงินผ่าน Stripe คุณจะต้องมีบัญชี Stripe โดยการคลิกปุ่มต่อไปนี้ คุณสามารถสร้าง"
+"บัญชี Stripe ใหม่ หรือเชื่อมต่อ pretix กับบัญชีที่มีอยู่แล้วได้"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Connect with Stripe"
-msgstr ""
+msgstr "เชื่อมต่อกับ Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Disconnect from Stripe"
-msgstr ""
+msgstr "ยกเลิกการเชื่อมต่อกับ Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
@@ -31450,19 +31477,24 @@ msgid ""
 "automatically cancel orders when charges are refunded externally and to "
 "process asynchronous payment methods like SOFORT."
 msgstr ""
+"โปรดกำหนดค่า <a href=\"https://dashboard.stripe.com/account/webhooks\">Stripe "
+"Webhook</a> ไปยังเอนด์พอยต์ต่อไปนี้ เพื่อยกเลิกคำสั่งซื้อโดยอัตโนมัติเมื่อมีการคืนเงินจากภายนอกระบ"
+"บ และเพื่อประมวลผลวิธีการชำระเงินแบบไม่ประสานเวลา (Asynchronous) เช่น SOFORT"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Enable MOTO payments for resellers"
-msgstr ""
+msgstr "เปิดใช้งานการชำระเงินแบบ MOTO สำหรับตัวแทนจำหน่าย (Reseller)"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "Gated feature (needs to be enabled for your account by Stripe support first)"
 msgstr ""
+"ฟีเจอร์ที่ได้รับการจำกัดสิทธิ์ (ต้องได้รับการเปิดใช้งานสำหรับบัญชีของคุณโดยฝ่ายซัพพอร์ตของ Stripe ก่"
+"อน)"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Stripe Integration security guide"
-msgstr ""
+msgstr "คู่มือความปลอดภัยการเชื่อมต่อ Stripe"
 
 #: pretix/plugins/stripe/payment.py
 #, python-format
@@ -31474,34 +31506,40 @@ msgid ""
 "like the 40 page SAQ D. Please consult the %s for further information on "
 "this subject."
 msgstr ""
+"เราสามารถติดแฟล็กรายการบัตรเครดิตที่คุณทำผ่านอินเทอร์เฟซของตัวแทนจำหน่ายให้เป็น MOTO (Mail "
+"Order / Telephone Order) ได้ ซึ่งจะได้รับการยกเว้นจากข้อกำหนดการยืนยันตัวตนลูกค้าอย่างเข้มง"
+"วด (SCA) อย่างไรก็ตาม: การเปิดใช้งานฟีเจอร์นี้ คุณจะต้องกรอกแบบประเมินตนเอง PCI-DSS ประจ"
+"ำปี เช่น SAQ D ที่มีความยาว 40 หน้า โปรดอ่านรายละเอียดเพิ่มเติมใน %s"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Stripe account"
-msgstr ""
+msgstr "บัญชี Stripe"
 
 #: pretix/plugins/stripe/payment.py
 msgctxt "stripe"
 msgid "Live"
-msgstr ""
+msgstr "โหมดใช้งานจริง (Live)"
 
 #: pretix/plugins/stripe/payment.py
 msgctxt "stripe"
 msgid "Testing"
-msgstr ""
+msgstr "โหมดทดสอบ (Testing)"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
 "If your event is in test mode, we will always use Stripe's test API, "
 "regardless of this setting."
 msgstr ""
+"หากอีเวนต์ของคุณอยู่ในโหมดทดสอบ ระบบจะใช้ API ทดสอบของ Stripe เสมอ โดยไม่คำนึงถึงการตั้ง"
+"ค่านี้"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Publishable key"
-msgstr ""
+msgstr "Publishable key (คีย์สาธารณะ)"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Generate API keys"
-msgstr ""
+msgstr "สร้างคีย์ API"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
@@ -31509,6 +31547,8 @@ msgid ""
 "generate you API keys with the recommended permission level for optimal "
 "usage with pretix."
 msgstr ""
+"ปุ่มด้านบนจะทำการติดตั้งแอป Stripe ของเราไปยังบัญชีของคุณ และจะสร้างคีย์ API ที่มีระดับสิทธิ์การใ"
+"ช้งานที่แนะนำ เพื่อการใช้งานที่มีประสิทธิภาพสูงสุดร่วมกับ pretix"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Secret key"
@@ -33155,29 +33195,26 @@ msgid ""
 "Not sure yet? You can complete your order first and then select a payment "
 "method later."
 msgstr ""
+"ยังไม่แน่ใจใช่ไหม? คุณสามารถสั่งซื้อให้เสร็จสมบูรณ์ก่อนได้ แล้วจึงเลือกวิธีการชำระเงินในภายหลัง"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid ""
 "To do so, please first remove the payment methods you already selected above."
-msgstr ""
+msgstr "ในการดำเนินการนี้ โปรดยกเลิกวิธีการชำระเงินที่คุณเลือกไว้ด้านบนก่อน"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
-#, fuzzy, python-format
-#| msgid "Your event needs to be over to use this feature."
+#, python-format
 msgid "Your payment needs to be completed within %(minutes)s minutes."
-msgstr "อีเวนต์ของคุณจะต้องสิ้นสุดลงก่อนจึงจะสามารถใช้ฟีเจอร์นี้ได้"
+msgstr "คุณจะต้องทำการชำระเงินให้เสร็จสิ้นภายใน %(minutes)s นาที"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
-#, fuzzy, python-format
-#| msgid "Your event needs to be over to use this feature."
+#, python-format
 msgid "Your payment needs to be completed by %(deadline)s."
-msgstr "อีเวนต์ของคุณจะต้องสิ้นสุดลงก่อนจึงจะสามารถใช้ฟีเจอร์นี้ได้"
+msgstr "คุณจะต้องทำการชำระเงินให้เสร็จสิ้นภายใน %(deadline)s"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
-#, fuzzy
-#| msgid "Proceed with reset"
 msgid "Proceed without selection"
-msgstr "ดำเนินการรีเซ็ต"
+msgstr "ดำเนินการต่อโดยไม่เลือก"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html
 msgid "Before we continue, we need you to answer some questions."
@@ -33224,19 +33261,20 @@ msgid ""
 "cookie to remember who you are and what is in your cart. Please change your "
 "browser settings accordingly."
 msgstr ""
+"เบราว์เซอร์ของคุณไม่ยอมรับคุกกี้จากเรา อย่างไรก็ตาม เราจำเป็นต้องบันทึกคุกกี้เพื่อจดจำตัวตนของคุณแ"
+"ละรายการในตะกร้า โปรดเปลี่ยนการตั้งค่าเบราว์เซอร์ของคุณให้เหมาะสม"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #, python-format
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "คุณต้องเลือก %(min_count)s ตัวเลือกจากหมวดหมู่นี้"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #, python-format
 msgid "You can choose one option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] ""
+msgstr[0] "คุณสามารถเลือกได้สูงสุด %(max_count)s ตัวเลือกจากหมวดหมู่นี้"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #, python-format
@@ -33244,12 +33282,13 @@ msgid ""
 "You can choose between %(min_count)s and %(max_count)s options from this "
 "category."
 msgstr ""
+"คุณสามารถเลือกได้ระหว่าง %(min_count)s ถึง %(max_count)s ตัวเลือกจากหมวดหมู่นี้"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 #, python-format
 msgid "minimum amount to order: %(num)s"
-msgstr ""
+msgstr "จำนวนขั้นต่ำในการสั่งซื้อ: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
@@ -33261,13 +33300,13 @@ msgstr "ฟรี"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 #, python-format
 msgid "from %(price)s"
-msgstr ""
+msgstr "เริ่มต้น %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 #, python-format
 msgid "from %(from_price)s to %(to_price)s"
-msgstr ""
+msgstr "จาก %(from_price)s ถึง %(to_price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
@@ -33282,24 +33321,24 @@ msgstr "ซ่อนรูปแบบ"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 msgid "Original price:"
-msgstr ""
+msgstr "ราคาเดิม:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 msgid "New price:"
-msgstr ""
+msgstr "ราคาใหม่:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 #, python-format
 msgid "Modify price for %(item)s, at least %(price)s"
-msgstr ""
+msgstr "ปรับเปลี่ยนราคาสำหรับ %(item)s ขั้นต่ำ %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 #, python-format
 msgid "Modify price for %(item)s"
-msgstr ""
+msgstr "ปรับเปลี่ยนราคาสำหรับ %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
@@ -33310,13 +33349,13 @@ msgstr "รวมภาษีแล้ว"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(name)s"
-msgstr ""
+msgstr "<strong>บวกเพิ่ม</strong> %(rate)s%% %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 #, python-format
 msgid "incl. %(rate)s%% %(name)s"
-msgstr ""
+msgstr "รวม %(name)s %(rate)s%% แล้ว"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
@@ -33505,7 +33544,7 @@ msgstr[0] "%(num)s รายการสินค้า"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, python-format
 msgid "incl. %(tax_sum)s taxes"
-msgstr ""
+msgstr "รวมภาษีแล้ว %(tax_sum)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid ""
@@ -33513,6 +33552,8 @@ msgid ""
 "exclusive price. Due to rounding, this caused a small change to the total "
 "price."
 msgstr ""
+"เนื่องจากคุณกรอกที่อยู่องค์กร/นิติบุคคล ราคาของคุณจึงได้รับการคำนวณจากราคาที่ไม่รวมภาษีมูลค่าเพิ่ม "
+"(VAT) และอาจทำให้ยอดรวมเปลี่ยนแปลงไปเล็กน้อยอันเนื่องมาจากการปัดเศษ"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, python-format
@@ -34947,7 +34988,7 @@ msgstr "สร้างบัญชี"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "Login could not be completed"
-msgstr ""
+msgstr "ไม่สามารถเข้าสู่ระบบได้สมบูรณ์"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
@@ -34956,43 +34997,50 @@ msgid ""
 "process.\n"
 "    "
 msgstr ""
+"\n"
+"        เราไม่สามารถทำรายการเข้าสู่ระบบของคุณให้เสร็จสิ้นได้เนื่องจากมีบางอย่างขัดจังหวะกระบว"
+"นการ\n"
+"    "
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "Possible reasons for this:"
-msgstr ""
+msgstr "สาเหตุที่เป็นไปได้:"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
 "You started logging in from a link opened inside an app (such as Instagram "
 "or an email app), and then continued the login in your main browser."
 msgstr ""
+"คุณเริ่มเข้าสู่ระบบจากลิงก์ที่เปิดภายในแอป (เช่น Instagram หรือแอปอีเมล) แล้วไปดำเนินการเข้าสู่ร"
+"ะบบต่อในเบราว์เซอร์หลักของคุณ"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "You refreshed the page or used the back button during login."
-msgstr ""
+msgstr "คุณกดรีเฟรชหน้าเว็บหรือใช้ปุ่มย้อนกลับ (Back) ระหว่างเข้าสู่ระบบ"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "The site was opened in more than one tab or window at the same time."
-msgstr ""
+msgstr "เว็บไซต์นี้ถูกเปิดในแท็บหรือหน้าต่างมากกว่าหนึ่งหน้าพร้อมกัน"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
 "There was a long delay between starting and completing the login process."
-msgstr ""
+msgstr "มีการทิ้งช่วงเวลานานเกินไประหว่างการเริ่มและสิ้นสุดกระบวนการเข้าสู่ระบบ"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "How to fix this:"
-msgstr ""
+msgstr "วิธีแก้ไข:"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "Close this page."
-msgstr ""
+msgstr "ปิดหน้านี้"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
 "Open this website again directly in your main browser (for example Safari or "
 "Chrome)."
 msgstr ""
+"เปิดเว็บไซต์นี้ใหม่อีกครั้งโดยตรงในเบราว์เซอร์หลักของคุณ (เช่น Safari หรือ Chrome)"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
@@ -35000,6 +35048,8 @@ msgid ""
 "browser window, without refreshing the page, opening new tabs, or switching "
 "apps part-way through."
 msgstr ""
+"เริ่มกระบวนการชำระเงินหรือเข้าสู่ระบบใหม่อีกครั้งและทำรายการให้เสร็จสมบูรณ์ในหน้าต่างเบราว์เซอร์"
+"เดิม โดยไม่กดรีเฟรชหน้าเว็บ ไม่เปิดแท็บใหม่ หรือไม่สลับแอปกลางคัน"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
@@ -35007,6 +35057,8 @@ msgid ""
 "before retrying can help. As a last step, try using a different browser or "
 "another device (for example, a desktop or laptop computer)."
 msgstr ""
+"หากยังมีปัญหาอยู่ การปิดหน้าต่างเบราว์เซอร์ทั้งหมดและล้างคุกกี้ก่อนลองใหม่อีกครั้งอาจช่วยได้ และเป็นขั้"
+"นตอนสุดท้าย ลองใช้เบราว์เซอร์อื่นหรืออุปกรณ์อื่น (เช่น คอมพิวเตอร์ตั้งโต๊ะหรือแล็ปท็อป)"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
 msgid "Your membership"
