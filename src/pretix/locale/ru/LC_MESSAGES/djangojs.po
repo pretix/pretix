@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-09-30 17:00+0000\n"
+"PO-Revision-Date: 2026-10-01 20:00+0000\n"
 "Last-Translator: Translate pretix user 594 "
 "<ivagvr@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.10\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js
 msgid "Marked as paid"
@@ -220,7 +220,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Entry"
-msgstr ""
+msgstr "Вход"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Exit"
@@ -269,7 +269,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Ticket not paid"
-msgstr ""
+msgstr "Билет не оплачен"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
@@ -289,11 +289,11 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Ticket already used"
-msgstr ""
+msgstr "Повторный проход по билету"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Information required"
-msgstr ""
+msgstr "Необходима информация"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Unknown ticket"
@@ -301,7 +301,7 @@ msgstr "Неизвестный билет"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Ticket type not allowed here"
-msgstr ""
+msgstr "Здесь нельзя пройти по этому билету"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Entry not allowed"
@@ -309,11 +309,11 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "Код билета аннулирован и/или изменен"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Ticket blocked"
-msgstr ""
+msgstr "Билет заблокирован"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Ticket not valid at this time"
@@ -329,7 +329,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Order not approved"
-msgstr ""
+msgstr "Заказ не подтвержден"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 #, fuzzy
