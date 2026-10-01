@@ -64,7 +64,7 @@ def order(event):
 
 @pytest.fixture
 def team(event):
-    return event.organizer.teams.create(all_events=True, all_event_permissions=True)
+    return event.organizer.teams.create(all_events=True, all_event_permissions=True, all_organizer_permissions=True)
 
 
 @pytest.fixture
@@ -109,6 +109,17 @@ def test_notification_trigger_global_wildcard(event, order, user, django_capture
 
 
 @pytest.mark.django_db
+def test_notification_trigger_organizer(event, user, django_capture_on_commit_callbacks):
+    djmail.outbox = []
+    user.notification_settings.create(
+        method='mail', event=None, action_type='pretix.organizer.changed', enabled=True
+    )
+    with django_capture_on_commit_callbacks(execute=True):
+        event.organizer.log_action('pretix.organizer.changed', {})
+    assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
 def test_notification_enabled_global_ignored_specific(event, order, user, django_capture_on_commit_callbacks):
     djmail.outbox = []
     user.notification_settings.create(
@@ -134,7 +145,7 @@ def test_notification_ignore_same_user(event, order, user, django_capture_on_com
 
 
 @pytest.mark.django_db
-def test_notification_ignore_insufficient_permissions(event, order, user, team, django_capture_on_commit_callbacks):
+def test_notification_ignore_insufficient_event_permissions(event, order, user, team, django_capture_on_commit_callbacks):
     djmail.outbox = []
     team.all_event_permissions = False
     team.limit_event_permissions = {"event.vouchers:read": True}
@@ -144,6 +155,20 @@ def test_notification_ignore_insufficient_permissions(event, order, user, team, 
     )
     with django_capture_on_commit_callbacks(execute=True):
         order.log_action('pretix.event.order.paid', {})
+    assert len(djmail.outbox) == 0
+
+
+@pytest.mark.django_db
+def test_notification_ignore_insufficient_organizer_permissions(event, team, user, django_capture_on_commit_callbacks):
+    djmail.outbox = []
+    team.all_organizer_permissions = False
+    team.limit_organizer_permissions = {"organizer.giftcards:read": True}
+    team.save()
+    user.notification_settings.create(
+        method='mail', event=None, action_type='pretix.organizer.changed', enabled=True
+    )
+    with django_capture_on_commit_callbacks(execute=True):
+        event.organizer.log_action('pretix.organizer.changed', {})
     assert len(djmail.outbox) == 0
 
 # TODO: Test email content

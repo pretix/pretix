@@ -35,7 +35,7 @@
 import logging
 from collections import OrderedDict, namedtuple
 from itertools import groupby
-from typing import Union
+from typing import Optional, Union
 
 from django.dispatch import receiver
 from django.utils.formats import date_format
@@ -69,8 +69,10 @@ class Notification:
       each consisting of a button label and an absolute URL to point to.
     """
 
-    def __init__(self, event: Event, title: str, detail: str=None, url: str=None, organizer: Organizer=None):
-        assert event or organizer
+    def __init__(self, event: Optional[Event], title: str, detail: Optional[str]=None, url: Optional[str]=None, organizer: Optional[Organizer]=None):
+        assert event or organizer, "You need to pass either event or organizer"
+        if event and organizer:
+            assert event.organizer_id == organizer.id, "Organizer and event mismatch"
         self.title = title
         self.organizer = organizer or event.organizer
         self.event = event
