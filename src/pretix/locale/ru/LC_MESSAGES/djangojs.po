@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-10-01 20:00+0000\n"
+"PO-Revision-Date: 2026-10-02 05:00+0000\n"
 "Last-Translator: Translate pretix user 594 "
 "<ivagvr@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -453,7 +453,7 @@ msgstr "Чтобы скопировать, нажмите Ctrl-C."
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
 msgid "Edit"
-msgstr ""
+msgstr "Редактировать"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
 msgid "Visualize"
@@ -512,7 +512,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
 msgid "Duplicate"
-msgstr ""
+msgstr "Дубликат"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
 msgctxt "entry_status"
@@ -1195,15 +1195,15 @@ msgstr ""
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Tuesday"
-msgstr ""
+msgstr "Вторник"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Wednesday"
-msgstr ""
+msgstr "Среда"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Thursday"
-msgstr ""
+msgstr "Четверг"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Friday"
@@ -1211,11 +1211,11 @@ msgstr ""
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Saturday"
-msgstr ""
+msgstr "Суббота"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Sunday"
-msgstr ""
+msgstr "Воскресенье"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "January"
@@ -1231,23 +1231,23 @@ msgstr "март"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "April"
-msgstr "апрель"
+msgstr "Апрель"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "May"
-msgstr "май"
+msgstr "Май"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "June"
-msgstr "июнь"
+msgstr "Июнь"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "July"
-msgstr "июль"
+msgstr "Июль"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "August"
-msgstr "август"
+msgstr "Август"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "September"
@@ -1255,7 +1255,7 @@ msgstr "сентябрь"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "October"
-msgstr "октябрь"
+msgstr "Октябрь"
 
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "November"
