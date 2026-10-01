@@ -11,6 +11,7 @@ from i18nfield.strings import LazyI18nString
 import pretix.base.models.base
 import pretix.base.models.fields
 from pretix.base.i18n import language
+from pretix.helpers.iter import sort_groupby, sort_groupby_exp
 
 FakeQuestion = namedtuple(
     'FakeQuestion', 'id question position required'
@@ -54,31 +55,43 @@ def migrate_questions_forward(apps, schema_editor):
     QuestionnaireChild = apps.get_model("pretixbase", "QuestionnaireChild")
     EventSettingsStore = apps.get_model('pretixbase', 'Event_SettingsStore')
 
-    def create_grouped_item_questionnaires(event, children, label_prefix, questionnaire_type, personalized_items=None):
-        # group by item, creating a unique questionnaire per item
-        item_questionnaires = (([t[3] for t in children], item_id) for item_id, children in
-                               groupby(children, key=lambda t: t[0]))
+    qc_candidate = namedtuple('qc_candidate', ['item_info', 'question_id', 'question'])
 
-        # group again, merging all questionnaires with identical children
-        merged_questionnaires = groupby(sorted(item_questionnaires, key=lambda t: [q.id for q in t[0]]),
-                                        key=lambda t: t[0])
-        for children, iterator in merged_questionnaires:
-            items = [item for _c, item in iterator]
+    def create_grouped_item_questionnaires(event, qc_candidates_iter, label_prefix, questionnaire_type, personalized_items=None):
+        # group by item, creating a unique questionnaire per item  ->  iter[tuple[list[Question], item_info]]
+        item_questionnaires = (
+            ([c.question for c in group], item_info)
+            for item_info, group in sort_groupby(
+                qc_candidates_iter,
+                group_key=lambda c: c.item_info,
+                inner_sort_key=lambda c: c.question.position,
+            )
+        )
 
-            internal_name = label_prefix + ', '.join(str(iname or name) for (id, iname, name) in items)
-            if all(i.personalized for i in items) and len(items) == len(personalized_items) and questionnaire_type == 'PS':
-                # if we have a questionnaire for exactly all personalized items, we just call it "Attendee data"
-                # (same as the default questionnaire for new events)
-                internal_name = _('Attendee data')
+        # group again, combining all questionnaires containing an identical set of questions (by means of grouping by a list of item-ids)
+        merged_questionnaires = sort_groupby_exp(item_questionnaires, group_key=lambda questions, item_info: [str(q.id) for q in questions])
+        for _unused, grouped_data in merged_questionnaires:
+            questions = grouped_data[0][0]
+            item_infos = [item_info for _c, item_info in grouped_data]
+
+            internal_name = label_prefix + ', '.join(str(ii.internal_name or ii.name) for ii in item_infos)
+            if all(ii.personalized for ii in item_infos) and len(item_infos) == len(personalized_items):
+                if questionnaire_type == 'PS':
+                    # if we have a questionnaire for exactly all personalized items, we just call it "Attendee data"
+                    # (same as the default questionnaire for new events)
+                    internal_name = _('Attendee data')
+                else:
+                    internal_name = _('personalized products')
 
             # create questionnaires and children
             questionnaire = Questionnaire.objects.create(
                 event=event, type=questionnaire_type, position=0, all_sales_channels=True,
                 internal_name=internal_name
             )
-            questionnaire.items.set([id for (id, iname, name) in items])
+            questionnaire.items.set([ii.id for ii in item_infos])
             deps = {}
-            for position, child in enumerate(children):
+            for position, child in enumerate(questions):
+                print(position, child)
                 if isinstance(child, FakeQuestion):
                     QuestionnaireChild.objects.create(
                         questionnaire=questionnaire,
@@ -111,37 +124,38 @@ def migrate_questions_forward(apps, schema_editor):
             # [P] get all ticket-level questions (user-defined and system provided), along with the products for which they're asked
             questions = event.questions.filter(container_type='P')
 
+            personalized_items = event.items.filter(personalized=True).values_list('id', 'internal_name', 'name', 'personalized', named=True)
+
             # [PS] presale
-            personalized_items = event.items.filter(personalized=True).values_list('id', 'internal_name', 'name')
-            children = sorted(chain((
-                (item, q.position, 0, q)
+            children = chain((
+                qc_candidate(item, 0, q)
                 for q in get_fake_questions(settings)
                 for item in personalized_items
             ), (
-                (item, q.position, q.id, q)
+                qc_candidate(item, q.id, q)
                 for q in questions.filter(hidden=False, ask_during_checkin=False)
-                for item in q.items.values_list('id', 'internal_name', 'name')
-            )), key=lambda t: (t[0], t[1]))
+                for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
+            ))
 
             create_grouped_item_questionnaires(event, children, '', 'PS', personalized_items)
 
             # [PC] checkin
-            children = sorted(chain((
-                (item, q.position, q.id, q)
+            children = chain((
+                qc_candidate(item, q.id, q)
                 for q in questions.filter(ask_during_checkin=True)
-                for item in q.items.values_list('id', 'internal_name', 'name')
-            )), key=lambda t: (t[0], t[1]))
+                for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
+            ))
 
-            create_grouped_item_questionnaires(event, children, _('Check-in questions for '), 'PC')
+            create_grouped_item_questionnaires(event, children, _('Check-in questions for '), 'PC', personalized_items)
 
             # [PH] hidden
-            children = sorted(chain((
-                (item, q.position, q.id, q)
+            children = chain((
+                qc_candidate(item, q.id, q)
                 for q in questions.filter(hidden=True, ask_during_checkin=False)
-                for item in q.items.values_list('id', 'internal_name', 'name')
-            )), key=lambda t: (t[0], t[1]))
+                for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
+            ))
 
-            create_grouped_item_questionnaires(event, children, _('Hidden questions for '), 'PH')
+            create_grouped_item_questionnaires(event, children, _('Hidden questions for '), 'PH', personalized_items)
 
             # [O] get all order-level questions
             questions = list(event.questions.filter(container_type='O', hidden=False).order_by('position'))
