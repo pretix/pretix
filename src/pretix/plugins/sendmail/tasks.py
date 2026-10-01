@@ -110,7 +110,10 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                     if not allowed:
                         continue
 
-                if not p.attendee_email and p.addon_to_id:
+                if p.addon_to_id and (
+                    not p.attendee_email or p.attendee_email == parent_op.attendee_email
+                ):
+                    # if op is addon and either has no mail or the same as parent => send to parent
                     p = parent_op
 
                 if subevent and p.subevent_id != subevent:
@@ -125,10 +128,6 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                 if not p.attendee_email:
                     send_to_order = True
                     continue
-
-                if p.addon_to_id and p.attendee_email == parent_op.attendee_email:
-                    # if op is add-on and parent's email match => send to parent
-                    p = parent_op
 
                 if p.pk in sent_to_positions:
                     # this position already got an email

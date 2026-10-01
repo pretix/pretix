@@ -118,7 +118,7 @@ class ScheduledMail(models.Model):
 
         filter_orders_by_op = False
         op_qs = OrderPosition.objects.filter(
-            order__event=self.event,
+            order__event=e,
             canceled=False,
         )
 
@@ -194,26 +194,18 @@ class ScheduledMail(models.Model):
                             # not a matching op, just there for parent_op
                             continue
 
-                        if not p.attendee_email and p.addon_to_id:
-                            # no email => try parent_op
-                            p = parent_op
-
-                        if not p.attendee_email:
-                            # still no email on => send to order
-                            send_to_order = True
-                            continue
-
-                        # attendee email available
-
-                        if p.addon_to_id and p.attendee_email == parent_op.attendee_email:
-                            # if op is add-on and parent's email match => send to parent
+                        if p.addon_to_id and (
+                            not p.attendee_email or p.attendee_email == parent_op.attendee_email
+                        ):
+                            # if op is addon and either has no mail or the same as parent => send to parent
                             p = parent_op
 
                         if p.pk in sent_to_positions:
                             # this position already got an email
                             continue
 
-                        if p.attendee_email == o.email:
+                        if not p.attendee_email or p.attendee_email == o.email:
+                            # no email or same as order => send to order
                             send_to_order = True
                             continue
 
