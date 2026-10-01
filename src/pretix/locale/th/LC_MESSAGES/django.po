@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-10-01 09:28+0000\n"
+"PO-Revision-Date: 2026-10-01 09:43+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -30067,6 +30067,10 @@ msgid ""
 "even need a PayPal account. PayPal is one of the most popular payment "
 "methods world-wide."
 msgstr ""
+"รับชำระเงินด้วยบัญชี PayPal ของคุณ นอกเหนือจากการชำระเงินผ่าน PayPal ตามปกติแล้ว คุณยังสาม"
+"ารถเสนอวิธีการชำระเงินท้องถิ่นที่หลากหลาย เช่น eps, iDEAL และอื่นๆ อีกมากมายให้แก่ลูกค้าของคุ"
+"ณ โดยที่ลูกค้าไม่จำเป็นต้องมีบัญชี PayPal ด้วยซ้ำ PayPal เป็นหนึ่งในวิธีการชำระเงินที่ได้รับความนิยม"
+"มากที่สุดทั่วโลก"
 
 #: pretix/plugins/paypal2/apps.py pretix/plugins/paypal2/payment.py
 #: pretix/plugins/stripe/payment.py
@@ -30075,15 +30079,15 @@ msgstr "PayPal"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal Merchant ID"
-msgstr ""
+msgstr "รหัสผู้ขาย PayPal (Merchant ID)"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Click here for a tutorial on how to obtain the required keys"
-msgstr ""
+msgstr "คลิกที่นี่เพื่อดูบทเรียนวิธีรับคีย์ที่จำเป็น"
 
 #: pretix/plugins/paypal2/payment.py pretix/plugins/stripe/payment.py
 msgid "Endpoint"
-msgstr ""
+msgstr "เอนด์พอยต์ (Endpoint)"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -30091,10 +30095,13 @@ msgid ""
 "have the option to revert back to paying with their PayPal account. For this "
 "reason, this payment method is always active."
 msgstr ""
+"แม้ว่าลูกค้าจะเลือกวิธีการชำระเงินทางเลือก (Alternative Payment Method) พวกเขายังคงมีตัวเ"
+"ลือกในการเปลี่ยนกลับไปชำระเงินด้วยบัญชี PayPal ได้เสมอ ด้วยเหตุนี้ วิธีการชำระเงินนี้จึงเปิดใช้งาน"
+"อยู่ตลอดเวลา"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Alternative Payment Methods"
-msgstr ""
+msgstr "วิธีการชำระเงินทางเลือก"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -30105,10 +30112,14 @@ msgid ""
 "shoppers location. For German merchants, this is the direct successor of "
 "PayPal Plus."
 msgstr ""
+"นอกเหนือจากการชำระเงินผ่านบัญชี PayPal คุณยังสามารถเสนอตัวเลือกให้ลูกค้าชำระเงินด้วยบัตรเครดิ"
+"ตและวิธีการชำระเงินท้องถิ่นอื่นๆ เช่น eps, iDEAL และอื่นๆ อีกมากมาย แม้ว่าพวกเขาจะไม่มีบัญชี "
+"PayPal ก็ตาม วิธีการชำระเงินที่สามารถใช้งานได้จะพิจารณาจากตำแหน่งที่อยู่ของผู้ซื้อ สำหรับผู้ขายในเ"
+"ยอรมนี นี่คือระบบที่มาแทนที่ PayPal Plus โดยตรง"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Disable SEPA Direct Debit"
-msgstr ""
+msgstr "ปิดใช้งานการหักบัญชีอัตโนมัติ SEPA"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -30118,10 +30129,14 @@ msgid ""
 "nature of your event - you might want to disabled the option of SEPA Direct "
 "Debit payments in order to reduce the risk of costly chargebacks."
 msgstr ""
+"ขณะที่วิธีการชำระเงินส่วนใหญ่ลูกค้าไม่สามารถดึงเงินคืนได้หากไม่ได้ระบุข้อร้องเรียนที่ชัดเจนกับผู้ขาย แ"
+"ต่ SEPA Direct Debit สามารถดึงเงินคืนได้เพียงกดปุ่มเดียว ด้วยเหตุนี้ (และขึ้นอยู่กับลักษณะอีเวนต์ข"
+"องคุณ) คุณอาจต้องการปิดใช้งานตัวเลือกการชำระเงินผ่าน SEPA Direct Debit เพื่อลดความเสี่ยงจา"
+"กการเรียกเงินคืน (Chargeback) ที่มีค่าใช้จ่ายสูง"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Enable Buy Now Pay Later"
-msgstr ""
+msgstr "เปิดใช้งานซื้อก่อนจ่ายทีหลัง (Buy Now Pay Later)"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -30129,10 +30144,13 @@ msgid ""
 "pay in multiple installments or within 30 days. You, as the merchant, are "
 "getting your money right away."
 msgstr ""
+"เสนอความเป็นไปได้ให้ลูกค้าของคุณซื้อสินค้าทันที (ไม่เกินวงเงินที่กำหนด) และผ่อนชำระหลายงวดหรือชำ"
+"ระภายใน 30 วัน โดยคุณในฐานะผู้ขายจะได้รับเงินทันที"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Allow further payments during compliance hold"
 msgstr ""
+"อนุญาตให้ทำรายการชำระเงินอื่นเพิ่มเติมระหว่างการระงับตรวจสอบความถูกต้อง (Compliance hold)"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -30142,44 +30160,52 @@ msgid ""
 "attempts during that window. This might result in them being charged twice "
 "if the original payment is approved."
 msgstr ""
+"ระบบป้องกันการทุจริตของ PayPal อาจบล็อกการประมวลผลการชำระเงินบางรายการเป็นเวลานาน รา"
+"ยการชำระเงินจะถูกทำเครื่องหมายว่า \"อยู่ระหว่างดำเนินการ\" (Pending) ในช่วงเวลานี้ คุณสามา"
+"รถอนุญาตให้ลูกค้าเริ่มพยายามชำระเงินอีกครั้งในช่วงเวลานั้นได้ ซึ่งอาจส่งผลให้ลูกค้าถูกเรียกเก็บเงินสอ"
+"งครั้งหากการชำระเงินเดิมได้รับการอนุมัติ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Timeout further payment attempts"
-msgstr ""
+msgstr "กำหนดเวลาหมดอายุสำหรับการพยายามชำระเงินเพิ่มเติม"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "Time duration in minutes after which another payment attempt is possible, "
 "while the last payment is still under investigation."
 msgstr ""
+"ระยะเวลาเป็นนาทีหลังจากที่สามารถพยายามชำระเงินอีกครั้งได้ ในขณะที่รายการชำระเงินล่าสุดยังคงอยู่"
+"ระหว่างการตรวจสอบ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Reference prefix"
-msgstr ""
+msgstr "คำนำหน้ารหัสอ้างอิง"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "Any value entered here will be added in front of the regular booking "
 "reference containing the order number."
 msgstr ""
+"ค่าใดๆ ที่กรอกที่นี่จะถูกเพิ่มไว้ที่ด้านหน้าของรหัสอ้างอิงการจองปกติที่มีเลขที่คำสั่งซื้อ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Reference postfix"
-msgstr ""
+msgstr "คำต่อท้ายรหัสอ้างอิง"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "Any value entered here will be added behind the regular booking reference "
 "containing the order number."
 msgstr ""
+"ค่าใดๆ ที่กรอกที่นี่จะถูกเพิ่มไว้ที่ด้านหลังของรหัสอ้างอิงการจองปกติที่มีเลขที่คำสั่งซื้อ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "-- Automatic --"
-msgstr ""
+msgstr "-- อัตโนมัติ --"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Buyer country"
-msgstr ""
+msgstr "ประเทศของผู้ซื้อ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -30187,30 +30213,34 @@ msgid ""
 "clicking on the following button, you can either create a new PayPal account "
 "or connect pretix to an existing one."
 msgstr ""
+"หากต้องการรับชำระเงินผ่าน PayPal คุณจะต้องมีบัญชี PayPal ก่อน โดยการคลิกที่ปุ่มต่อไปนี้ คุณสามาร"
+"ถสร้างบัญชี PayPal ใหม่ หรือเชื่อมต่อ pretix กับบัญชีที่มีอยู่แล้วได้"
 
 #: pretix/plugins/paypal2/payment.py
 #, python-brace-format
 msgid "Connect with {icon} PayPal"
-msgstr ""
+msgstr "เชื่อมต่อด้วย {icon} PayPal"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Disconnect from PayPal"
-msgstr ""
+msgstr "ยกเลิกการเชื่อมต่อกับ PayPal"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
 msgstr ""
+"โปรดกำหนดค่า PayPal Webhook ไปยังเอนด์พอยต์ต่อไปนี้ เพื่อยกเลิกคำสั่งซื้อโดยอัตโนมัติเมื่อมีการคืน"
+"เงินจากภายนอกระบบ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal does not process payments in your event's currency."
-msgstr ""
+msgstr "PayPal ไม่รองรับการประมวลผลการชำระเงินในสกุลเงินของอีเวนต์ของคุณ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "Please check this PayPal page for a complete list of supported currencies."
-msgstr ""
+msgstr "โปรดตรวจสอบหน้าเพจ PayPal นี้เพื่อดูรายการสกุลเงินที่รองรับทั้งหมด"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -30220,16 +30250,22 @@ msgid ""
 "country and use the same currency. Out of country accounts will not be able "
 "to send any payments."
 msgstr ""
+"สกุลเงินของอีเวนต์ของคุณได้รับการรองรับโดย PayPal ในฐานะสกุลเงินสำหรับการชำระเงินและยอดคง"
+"เหลือเฉพาะบัญชีภายในประเทศเดียวกันเท่านั้น ซึ่งหมายความว่าทั้งบัญชี PayPal ผู้รับและผู้ส่งจะต้องถูกส"
+"ร้างขึ้นในประเทศเดียวกันและใช้สกุลเงินเดียวกัน โดยบัญชีต่างประเทศจะไม่สามารถทำรายการชำระเงิน"
+"ได้"
 
 #: pretix/plugins/paypal2/payment.py pretix/plugins/paypal2/views.py
 msgid "An error occurred during connecting with PayPal, please try again."
-msgstr ""
+msgstr "เกิดข้อผิดพลาดระหว่างการเชื่อมต่อกับ PayPal โปรดลองใหม่อีกครั้ง"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "The PayPal sandbox is being used, you can test without actually sending "
 "money but you will need a PayPal sandbox user to log in."
 msgstr ""
+"ขณะนี้กำลังใช้งานระบบทดสอบ (PayPal sandbox) คุณสามารถทดสอบได้โดยไม่ต้องโอนเงินจริง แต่จะ"
+"ต้องใช้บัญชีผู้ใช้ PayPal sandbox ในการเข้าสู่ระบบ"
 
 #: pretix/plugins/paypal2/payment.py
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
@@ -30238,164 +30274,178 @@ msgid ""
 "again, there is a high chance of the payment succeeding on a second or third "
 "attempt. You can also try other payment methods, if available."
 msgstr ""
+"การชำระเงินของคุณล้มเหลวเนื่องจากปัญหาที่พบเป็นประจำในระบบ PayPal โปรดลองใหม่อีกครั้ง เนื่อง"
+"จากมีโอกาสสูงที่การชำระเงินจะสำเร็จในการลองครั้งที่สองหรือสาม คุณยังสามารถลองใช้วิธีการชำระเงิ"
+"นอื่นได้หากมีให้เลือก"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "We had trouble communicating with PayPal"
-msgstr ""
+msgstr "เกิดปัญหาในการสื่อสารกับ PayPal"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "Something went wrong when requesting the payment status. Please try again."
-msgstr ""
+msgstr "เกิดข้อผิดพลาดขณะเรียกดูสถานะการชำระเงิน โปรดลองใหม่อีกครั้ง"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "You may need to enable JavaScript for PayPal payments."
-msgstr ""
+msgstr "คุณอาจจำเป็นต้องเปิดใช้งาน JavaScript สำหรับการชำระเงินผ่าน PayPal"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
 msgstr ""
+"ระบบไม่สามารถประมวลผลการชำระเงินของคุณได้ โปรดดูรายละเอียดด้านล่างเพื่อดำเนินการต่อ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"PayPal ยังไม่อนุมัติการชำระเงินนี้ เราจะแจ้งให้คุณทราบทันทีที่การชำระเงินเสร็จสมบูรณ์"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "Refunding the amount via PayPal failed: The original payment does not "
 "contain the required information to issue an automated refund."
 msgstr ""
+"การคืนเงินผ่าน PayPal ล้มเหลว: รายการชำระเงินเดิมไม่มีข้อมูลที่จำเป็นในการออกเงินคืนแบบอัตโนมั"
+"ติ"
 
 #: pretix/plugins/paypal2/payment.py
 #, python-brace-format
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr ""
+msgstr "การคืนเงินผ่าน PayPal ล้มเหลว: {}"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "The payment for this invoice has already been received."
-msgstr ""
+msgstr "ได้รับการชำระเงินสำหรับใบแจ้งหนี้/ใบกำกับภาษีนี้เรียบร้อยแล้ว"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal payment ID"
-msgstr ""
+msgstr "รหัสการชำระเงิน PayPal (Payment ID)"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal sale ID"
-msgstr ""
+msgstr "รหัสการขาย PayPal (Sale ID)"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal APM"
-msgstr ""
+msgstr "PayPal APM"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal Alternative Payment Methods"
-msgstr ""
+msgstr "วิธีการชำระเงินทางเลือกของ PayPal"
 
 #: pretix/plugins/paypal2/signals.py
 msgid "Payment completed."
-msgstr ""
+msgstr "การชำระเงินเสร็จสมบูรณ์"
 
 #: pretix/plugins/paypal2/signals.py
 msgid "Payment denied."
-msgstr ""
+msgstr "การชำระเงินถูกปฏิเสธ"
 
 #: pretix/plugins/paypal2/signals.py
 msgid "Payment refunded."
-msgstr ""
+msgstr "คืนเงินเรียบร้อยแล้ว"
 
 #: pretix/plugins/paypal2/signals.py
 msgid "Payment reversed."
-msgstr ""
+msgstr "รายการชำระเงินถูกดึงเงินกลับ (Reversed)"
 
 #: pretix/plugins/paypal2/signals.py
 msgid "Payment pending."
-msgstr ""
+msgstr "การชำระเงินอยู่ระหว่างดำเนินการ"
 
 #: pretix/plugins/paypal2/signals.py
 msgctxt "paypal"
 msgid "Order approved."
-msgstr ""
+msgstr "คำสั่งซื้อได้รับการอนุมัติแล้ว"
 
 #: pretix/plugins/paypal2/signals.py
 msgctxt "paypal"
 msgid "Order completed."
-msgstr ""
+msgstr "คำสั่งซื้อเสร็จสมบูรณ์"
 
 #: pretix/plugins/paypal2/signals.py
 msgctxt "paypal"
 msgid "Capture completed."
-msgstr ""
+msgstr "การเรียกเก็บเงิน (Capture) เสร็จสมบูรณ์"
 
 #: pretix/plugins/paypal2/signals.py
 msgctxt "paypal"
 msgid "Capture pending."
-msgstr ""
+msgstr "การเรียกเก็บเงิน (Capture) อยู่ระหว่างดำเนินการ"
 
 #: pretix/plugins/paypal2/signals.py
 #, python-brace-format
 msgid "PayPal reported an event: {}"
-msgstr ""
+msgstr "PayPal รายงานเหตุการณ์: {}"
 
 #: pretix/plugins/paypal2/signals.py
 msgid "PayPal ISU/Connect: Client ID"
-msgstr ""
+msgstr "PayPal ISU/Connect: Client ID"
 
 #: pretix/plugins/paypal2/signals.py
 msgid "PayPal ISU/Connect: Secret key"
-msgstr ""
+msgstr "PayPal ISU/Connect: Secret key"
 
 #: pretix/plugins/paypal2/signals.py
 msgid "PayPal ISU/Connect: Partner Merchant ID"
-msgstr ""
+msgstr "PayPal ISU/Connect: Partner Merchant ID"
 
 #: pretix/plugins/paypal2/signals.py
 msgid ""
 "This is not the BN-code, but rather the ID of the merchant account which "
 "holds branding information for ISU."
 msgstr ""
+"นี่ไม่ใช่รหัส BN-code แต่เป็น ID ของบัญชีผู้ขายที่บรรจุข้อมูลแบรนด์สำหรับ ISU"
 
 #: pretix/plugins/paypal2/signals.py
 msgid "PayPal ISU/Connect Endpoint"
-msgstr ""
+msgstr "PayPal ISU/Connect Endpoint"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
 msgid "Almost done …"
-msgstr ""
+msgstr "เกือบเสร็จแล้ว…"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
 msgid "Please click on the \"Pay now\" button below to confirm your payment."
-msgstr ""
+msgstr "โปรดคลิกที่ปุ่ม \"ชำระเงินทันที\" ด้านล่างเพื่อยืนยันการชำระเงินของคุณ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
 msgid "We will then charge your PayPal account and finalize the order."
 msgstr ""
+"จากนั้นระบบจะทำการเรียกเก็บเงินจากบัญชี PayPal ของคุณและเสร็จสิ้นคำสั่งซื้อ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
 msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
+"ยอดรวมทั้งหมดที่ระบุไว้ด้านบนจะถูกหักจากบัญชี PayPal ของคุณหลังจากที่คุณยืนยันการสั่งซื้อ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
 msgid ""
 "After placing your order, you will be able to select your desired payment "
 "method, including PayPal."
 msgstr ""
+"หลังจากทำรายการสั่งซื้อแล้ว คุณจะสามารถเลือกวิธีการชำระเงินที่ต้องการได้ รวมถึง PayPal"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html
 msgid ""
 "A PayPal account is required to use this online payment method. Please keep "
 "your account information ready to enter in the next step."
 msgstr ""
+"จำเป็นต้องมีบัญชี PayPal เพื่อใช้วิธีการชำระเงินออนไลน์นี้ โปรดเตรียมข้อมูลบัญชีของคุณให้พร้อมสำหรับ"
+"กรอกในขั้นตอนถัดไป"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html
 msgid ""
 "Please click the \"Pay with PayPal\" button below to start your payment."
 msgstr ""
+"โปรดคลิกปุ่ม \"ชำระเงินด้วย PayPal\" ด้านล่างเพื่อเริ่มดำเนินการชำระเงิน"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html
 msgid ""
@@ -30403,6 +30453,8 @@ msgid ""
 "and to fill in your payment details. You will then be redirected back here "
 "to review and confirm your order."
 msgstr ""
+"หลังจากคลิกดำเนินการต่อ คุณจะสามารถเลือกวิธีการชำระเงินที่ต้องการและกรอกรายละเอียดการชำระเ"
+"งินได้ จากนั้นระบบจะนำคุณกลับมายังหน้านี้เพื่อตรวจสอบและยืนยันคำสั่งซื้อ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html
 msgid ""
@@ -30410,32 +30462,36 @@ msgid ""
 "fail. If your payment fails, please just try again. You can also try with a "
 "different payment method, if you prefer."
 msgstr ""
+"ในขณะนี้พบปัญหาที่พบบ่อยในระบบ PayPal ซึ่งอาจส่งผลให้การชำระเงินบางรายการล้มเหลว หากการชำ"
+"ระเงินของคุณล้มเหลว โปรดลองใหม่อีกครั้ง หรือคุณสามารถเลือกใช้วิธีการชำระเงินอื่นได้ตามต้องการ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
 msgid "Sale ID"
-msgstr ""
+msgstr "รหัสการขาย (Sale ID)"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 msgid "Capture status"
-msgstr ""
+msgstr "สถานะการเรียกเก็บเงิน (Capture status)"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 msgid ""
 "This payment is being reviewed by PayPal. Until the review is lifted, the "
 "money will not be disbursed and the order remain in its pending state."
 msgstr ""
+"การชำระเงินนี้กำลังอยู่ระหว่างการตรวจสอบโดย PayPal เงินจะไม่ถูกโอนออกและคำสั่งซื้อจะยังคงอยู่ใ"
+"นสถานะรอการชำระเงินจนกว่าจะเสร็จสิ้นการตรวจสอบ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
 msgid "Last update"
-msgstr ""
+msgstr "อัปเดตล่าสุด"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html
 msgid "Total value"
-msgstr ""
+msgstr "มูลค่ารวม"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html
@@ -30443,23 +30499,23 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html
 msgid "Pay order"
-msgstr ""
+msgstr "ชำระเงินคำสั่งซื้อ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html
 #: pretix/presale/templates/pretixpresale/event/order_pay.html
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html
 #, python-format
 msgid "Pay order: %(code)s"
-msgstr ""
+msgstr "ชำระเงินคำสั่งซื้อ: %(code)s"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html
 msgid "Please turn on JavaScript."
-msgstr ""
+msgstr "โปรดเปิดใช้งาน JavaScript"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid "Please select how you want to pay."
-msgstr ""
+msgstr "โปรดเลือกวิธีการชำระเงินของคุณ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
 msgid ""
@@ -30469,91 +30525,107 @@ msgid ""
 "twice in case PayPal allows your initial payment attempt. Please contact us "
 "to resolve this case."
 msgstr ""
+"การชำระเงินของคุณกำลังอยู่ระหว่างการประมวลผลโดย PayPal ซึ่งใช้เวลานานกว่าปกติ คุณสามารถรอ"
+"จนกว่า PayPal จะรับยืนยันการชำระเงิน หรือลองชำระเงินอีกครั้งด้วยวิธีนี้หรือวิธีการชำระเงินอื่น ทั้ง"
+"นี้ อาจส่งผลให้คุณถูกเรียกเก็บเงินสองครั้งในกรณีที่ PayPal อนุมัติการพยายามชำระเงินในครั้งแรก โปร"
+"ดติดต่อเราเพื่อแก้ไขปัญหานี้"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
 msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
+"ระบบกำลังรอการตอบรับจาก PayPal เกี่ยวกับการชำระเงินของคุณ โปรดติดต่อเราหากใช้เวลานานกว่า"
+"สองสามชั่วโมง"
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
 "try again."
 msgstr ""
+"เกิดข้อผิดพลาดขณะส่งตัวกลับมาจาก PayPal: พารามิเตอร์ของคำร้องขอขาดหายไป โปรดลองใหม่อีกครั้"
+"ง"
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
 "An error occurred returning from PayPal: result parameters missing. Please "
 "try again."
 msgstr ""
+"เกิดข้อผิดพลาดขณะส่งตัวกลับมาจาก PayPal: พารามิเตอร์ผลลัพธ์ขาดหายไป โปรดลองใหม่อีกครั้ง"
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
 msgstr ""
+"เกิดข้อผิดพลาดขณะส่งตัวกลับมาจาก PayPal: พารามิเตอร์เซสชันไม่ตรงกัน โปรดลองใหม่อีกครั้ง"
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
 "The email address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
 msgstr ""
+"ที่อยู่อีเมลในบัญชี PayPal ของคุณยังไม่ได้รับการยืนยัน คุณจำเป็นต้องดำเนินการนี้ก่อนจึงจะสามารถเริ่มรั"
+"บชำระเงินได้"
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"บัญชี PayPal ของคุณเชื่อมต่อกับ pretix เรียบร้อยแล้ว คุณสามารถเปลี่ยนแปลงการตั้งค่าโดยละเอียดไ"
+"ด้ด้านล่าง"
 
 #: pretix/plugins/paypal2/views.py
 msgid "Invalid response from PayPal received."
-msgstr ""
+msgstr "ได้รับการตอบรับที่ไม่ถูกต้องจาก PayPal"
 
 #: pretix/plugins/paypal2/views.py
 msgid "It looks like you canceled the PayPal payment"
-msgstr ""
+msgstr "ดูเหมือนว่าคุณได้ยกเลิกการชำระเงินผ่าน PayPal"
 
 #: pretix/plugins/paypal2/views.py
 msgid "Your PayPal account has been disconnected."
-msgstr ""
+msgstr "บัญชี PayPal ของคุณถูกยกเลิกการเชื่อมต่อเรียบร้อยแล้ว"
 
 #: pretix/plugins/pretixdroid/apps.py
 msgid "Old check-in device API"
-msgstr ""
+msgstr "API อุปกรณ์เช็คอินเวอร์ชันเก่า"
 
 #: pretix/plugins/pretixdroid/apps.py
 msgid ""
 "This plugin allows you to use the pretixdroid and pretixdesk apps for your "
 "event."
 msgstr ""
+"พลักอินนี้ช่วยให้คุณสามารถใช้งานแอป pretixdroid และ pretixdesk สำหรับอีเวนต์ของคุณได้"
 
 #: pretix/plugins/reports/accountingreport.py
 msgid "Accounting report"
-msgstr ""
+msgstr "รายงานทางบัญชี"
 
 #: pretix/plugins/reports/accountingreport.py
 msgid ""
 "Download a PDF report of all sales and payments within a given time frame."
 msgstr ""
+"ดาวน์โหลดรายงานยอดขายและการชำระเงินทั้งหมดในรูปแบบ PDF ตามช่วงเวลาที่กำหนด"
 
 #: pretix/plugins/reports/accountingreport.py
 #: pretix/plugins/reports/exporters.py
 msgctxt "export_category"
 msgid "Analysis"
-msgstr ""
+msgstr "การวิเคราะห์"
 
 #: pretix/plugins/reports/accountingreport.py
 msgid "Ignore test mode orders"
-msgstr ""
+msgstr "ละเว้นคำสั่งซื้อในโหมดทดสอบ"
 
 #: pretix/plugins/reports/accountingreport.py
 msgid "Split event series by date"
-msgstr ""
+msgstr "แยกอีเวนต์แบบซีรีส์ตามวันที่"
 
 #: pretix/plugins/reports/accountingreport.py
 msgid "Report includes test orders which may be deleted later!"
-msgstr ""
+msgstr "รายงานนี้รวมคำสั่งซื้อในโหมดทดสอบซึ่งอาจถูกลบในภายหลัง!"
 
 #: pretix/plugins/reports/accountingreport.py
 msgid ""
@@ -30562,147 +30634,154 @@ msgid ""
 "might therefore be inaccurate with regards to orders that were changed in "
 "the time frame."
 msgstr ""
+"ช่วงเวลาของรายงานนี้รวมถึงข้อมูลที่สร้างขึ้นด้วยซอฟต์แวร์เวอร์ชันเก่า ซึ่งยังไม่ได้จัดเก็บข้อมูลทั้งหมดที่จ"
+"ำเป็นสำหรับการสร้างรายงานนี้ ดังนั้น รายงานอาจมีความคลาดเคลื่อนเกี่ยวกับคำสั่งซื้อที่มีการเปลี่ยนแปล"
+"งในช่วงเวลาดังกล่าว"
 
 #: pretix/plugins/reports/accountingreport.py
 #, python-brace-format
 msgid "Pending payments at {datetime}"
-msgstr ""
+msgstr "รายการชำระเงินที่อยู่ระหว่างดำเนินการ ณ {datetime}"
 
 #: pretix/plugins/reports/accountingreport.py
 #, python-brace-format
 msgid "Total gift card value at {datetime}"
-msgstr ""
+msgstr "มูลค่าบัตรของขวัญรวม ณ {datetime}"
 
 #: pretix/plugins/reports/accountingreport.py
 msgid "Gift card transactions (credit)"
-msgstr ""
+msgstr "รายการบัตรของขวัญ (เครดิต/เพิ่มเงิน)"
 
 #: pretix/plugins/reports/accountingreport.py
 msgid "Gift card transactions (debit)"
-msgstr ""
+msgstr "รายการบัตรของขวัญ (เดบิต/ตัดเงิน)"
 
 #: pretix/plugins/reports/accountingreport.py
 msgid "Open items"
-msgstr ""
+msgstr "รายการค้างชำระ/ค้างดำเนินการ"
 
 #: pretix/plugins/reports/apps.py
 msgid "Report exporter"
-msgstr ""
+msgstr "เครื่องมือส่งออกรายงาน"
 
 #: pretix/plugins/reports/apps.py
 msgid "Generate printable reports about your sales."
-msgstr ""
+msgstr "สร้างรายงานเกี่ยวกับยอดขายของคุณสำหรับพิมพ์"
 
 #: pretix/plugins/reports/exporters.py
 #, python-format
 msgid "Page %d of %d"
-msgstr ""
+msgstr "หน้า %d จาก %d"
 
 #: pretix/plugins/reports/exporters.py
 #, python-format
 msgid "Page %d"
-msgstr ""
+msgstr "หน้า %d"
 
 #: pretix/plugins/reports/exporters.py
 #, python-format
 msgid "Created: %s"
-msgstr ""
+msgstr "สร้างเมื่อ: %s"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Order overview (PDF)"
-msgstr ""
+msgstr "ภาพรวมคำสั่งซื้อ (PDF)"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Download a PDF version of the key sales numbers per ticket type."
-msgstr ""
+msgstr "ดาวน์โหลดรายงาน PDF สรุปตัวเลขยอดขายสำคัญแยกตามประเภทตั๋ว"
 
 #: pretix/plugins/reports/exporters.py
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Orders by product"
-msgstr ""
+msgstr "คำสั่งซื้อแยกตามสินค้า"
 
 #: pretix/plugins/reports/exporters.py
 msgid "(excl. taxes)"
-msgstr ""
+msgstr "(ไม่รวมภาษี)"
 
 #: pretix/plugins/reports/exporters.py
 msgid "(incl. taxes)"
-msgstr ""
+msgstr "(รวมภาษี)"
 
 #: pretix/plugins/reports/exporters.py
 #, python-brace-format
 msgid "{axis} between {start} and {end}"
-msgstr ""
+msgstr "{axis} ระหว่าง {start} ถึง {end}"
 
 #: pretix/plugins/reports/exporters.py
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Skip empty lines"
-msgstr ""
+msgstr "ข้ามบรรทัดว่าง"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Tax split list (PDF)"
-msgstr ""
+msgstr "รายงานการจัดแบ่งภาษี (PDF)"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Download a PDF list with the tax amounts included in each order."
-msgstr ""
+msgstr "ดาวน์โหลดรายการจำนวนภาษีที่รวมอยู่ในแต่ละคำสั่งซื้อในรูปแบบ PDF"
 
 #: pretix/plugins/reports/exporters.py
 #, python-brace-format
 msgid "Orders by tax rate ({currency})"
-msgstr ""
+msgstr "คำสั่งซื้อแยกตามอัตราภาษี ({currency})"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Gross"
-msgstr ""
+msgstr "ยอดรวมภาษี (Gross)"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Tax"
-msgstr ""
+msgstr "ภาษี"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Tax split list"
-msgstr ""
+msgstr "รายงานการจัดแบ่งภาษี"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Download a spreadsheet with the tax amounts included in each order."
-msgstr ""
+msgstr "ดาวน์โหลดสเปรดชีตรายการจำนวนภาษีที่รวมอยู่ในแต่ละคำสั่งซื้อ"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Taxes by country"
-msgstr ""
+msgstr "ภาษีแยกตามประเทศ"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Business customers"
-msgstr ""
+msgstr "ลูกค้าองค์กร/นิติบุคคล"
 
 #: pretix/plugins/reports/exporters.py
 msgid "Country code"
-msgstr ""
+msgstr "รหัสประเทศ"
 
 #: pretix/plugins/returnurl/apps.py
 #: pretix/plugins/returnurl/templates/returnurl/settings.html
 msgid "Redirection from order page"
-msgstr ""
+msgstr "การเปลี่ยนเส้นทางจากหน้าคำสั่งซื้อ (Redirection)"
 
 #: pretix/plugins/returnurl/apps.py
 msgid ""
 "This plugin allows to link to payments and redirect back afterwards. This is "
 "useful in combination with our API."
 msgstr ""
+"พลักอินนี้ช่วยให้สามารถลิงก์ไปยังการชำระเงินและเปลี่ยนเส้นทางกลับมาหลังจากนั้นได้ ซึ่งมีประโยชน์อย่า"
+"งยิ่งเมื่อใช้งานร่วมกับ API ของเรา"
 
 #: pretix/plugins/returnurl/apps.py pretix/plugins/returnurl/signals.py
 msgid "Redirection"
-msgstr ""
+msgstr "การเปลี่ยนเส้นทาง (Redirection)"
 
 #: pretix/plugins/returnurl/templates/returnurl/settings.html
 msgid ""
 "This feature is useful if you use only the payment component of pretix but "
 "build your own checkout interface for other steps."
 msgstr ""
+"ฟีเจอร์นี้มีประโยชน์อย่างมากหากคุณใช้งานเฉพาะส่วนประกอบการชำระเงินของ pretix แต่สร้างอินเทอ"
+"ร์เฟซหน้าชำระเงิน (Checkout) ขึ้นเองสำหรับขั้นตอนอื่นๆ"
 
 #: pretix/plugins/returnurl/views.py
 msgid "Base redirection URLs"
@@ -30714,19 +30793,22 @@ msgid ""
 "prefixes. Enter one allowed URL prefix per line. URL prefixes must include a "
 "slash after the hostname."
 msgstr ""
+"ระบบจะอนุญาตให้เปลี่ยนเส้นทางไปยัง URL ที่เริ่มต้นด้วยคำนำหน้าเหล่านี้เท่านั้น กรอกคำนำหน้า URL ที่"
+"อนุญาตบรรทัดละหนึ่งรายการ คำนำหน้า URL ต้องมีเครื่องหมายทับ (slash) ต่อท้ายชื่อโฮสต์"
 
 #: pretix/plugins/returnurl/views.py
 msgid ""
 "All values must be URLs that include at last one slash after the hostname."
 msgstr ""
+"ค่าทั้งหมดต้องเป็น URL ที่มีเครื่องหมายทับ (slash) อย่างน้อยหนึ่งตัวต่อท้ายชื่อโฮสต์"
 
 #: pretix/plugins/sendmail/apps.py
 msgid "Send out emails to all your customers or specific groups of customers."
-msgstr ""
+msgstr "ส่งอีเมลถึงลูกค้าทุกคนของคุณหรือกลุ่มลูกค้าเฉพาะ"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Attachment"
-msgstr ""
+msgstr "ไฟล์แนบ"
 
 #: pretix/plugins/sendmail/forms.py
 msgid ""
@@ -30734,152 +30816,157 @@ msgid ""
 "being sorted into spam folders. We recommend only using PDFs of no more than "
 "2 MB in size."
 msgstr ""
+"การส่งไฟล์แนบเพิ่มโอกาสที่อีเมลของคุณจะไม่ส่งถึงผู้รับหรือถูกจัดประเภทเป็นสแปม เราขอแนะนำให้ใช้เฉ"
+"พาะไฟล์ PDF ที่มีขนาดไม่เกิน 2 MB เท่านั้น"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_form"
 msgid "Waiting for"
-msgstr ""
+msgstr "กำลังรอ"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_form"
 msgid "Restrict to a specific event date"
-msgstr ""
+msgstr "จำกัดเฉพาะวันที่จัดอีเวนต์ที่ระบุ"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_form"
 msgid "Restrict to event dates starting at or after"
-msgstr ""
+msgstr "จำกัดเฉพาะวันที่จัดอีเวนต์ที่เริ่มต้น ณ วันที่หรือหลังจาก"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_form"
 msgid "Restrict to event dates starting before"
-msgstr ""
+msgstr "จำกัดเฉพาะวันที่จัดอีเวนต์ที่เริ่มต้นก่อนวันที่"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_form"
 msgid "Send to"
-msgstr ""
+msgstr "ส่งถึง"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_form"
 msgid "Restrict to products"
-msgstr ""
+msgstr "จำกัดเฉพาะสินค้า"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Filter check-in status"
-msgstr ""
+msgstr "กรองตามสถานะการเช็คอิน"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_form"
 msgid "Restrict to recipients without check-in on any list"
-msgstr ""
+msgstr "จำกัดเฉพาะผู้รับที่ยังไม่มีการเช็คอินในรายการใดๆ"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_form"
 msgid "Restrict to orders created at or after"
-msgstr ""
+msgstr "จำกัดเฉพาะคำสั่งซื้อที่สร้างขึ้น ณ วันที่หรือหลังจาก"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_form"
 msgid "Restrict to orders created before"
-msgstr ""
+msgstr "จำกัดเฉพาะคำสั่งซื้อที่สร้างขึ้นก่อนวันที่"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Everyone who placed an order"
-msgstr ""
+msgstr "ทุกคนที่ทำรายการสั่งซื้อ"
 
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/models.py
 msgid ""
 "Every attendee (falling back to the order contact when no attendee email "
 "address is given)"
 msgstr ""
+"ผู้เข้าร่วมทุกคน (จะใช้ข้อมูลติดต่อของผู้สั่งซื้อหากไม่ได้ระบุอีเมลของผู้เข้าร่วม)"
 
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/models.py
 msgid "Both (all order contact addresses and all attendee email addresses)"
 msgstr ""
+"ทั้งสองกลุ่ม (อีเมลติดต่อของผู้สั่งซื้อทั้งหมด และอีเมลของผู้เข้าร่วมทั้งหมด)"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Attachment of tickets is disabled in this event's email settings."
-msgstr ""
+msgstr "การแนบตั๋วถูกปิดใช้งานในการตั้งค่าอีเมลของอีเวนต์นี้"
 
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/views.py
 msgid "payment pending but already confirmed"
-msgstr ""
+msgstr "อยู่ระหว่างรอการชำระเงิน แต่ยืนยันคำสั่งซื้อแล้ว"
 
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/views.py
 msgid "payment pending (except unapproved or already confirmed)"
 msgstr ""
+"อยู่ระหว่างรอการชำระเงิน (ยกเว้นรายการที่ไม่ได้รับอนุมัติหรือยืนยันแล้ว)"
 
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/views.py
 msgid "pending with payment overdue"
-msgstr ""
+msgstr "อยู่ระหว่างรอการชำระเงิน (เกินกำหนดชำระ)"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_form"
 msgid "Restrict to orders with status"
-msgstr ""
+msgstr "จำกัดเฉพาะคำสั่งซื้อที่มีสถานะ"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_form"
 msgid "Restrict to recipients with check-in on list"
-msgstr ""
+msgstr "จำกัดเฉพาะผู้รับที่มีการเช็คอินในรายการ"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Type of schedule time"
-msgstr ""
+msgstr "ประเภทของเวลาที่กำหนด"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Absolute"
-msgstr ""
+msgstr "ตามเวลาจริงที่แน่นอน (Absolute)"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Relative, before event start"
-msgstr ""
+msgstr "สัมพันธ์กัน, ก่อนเริ่มอีเวนต์"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Relative, before event end"
-msgstr ""
+msgstr "สัมพันธ์กัน, ก่อนสิ้นสุดอีเวนต์"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Relative, after event start"
-msgstr ""
+msgstr "สัมพันธ์กัน, หลังจากเริ่มอีเวนต์"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Relative, after event end"
-msgstr ""
+msgstr "สัมพันธ์กัน, หลังจากสิ้นสุดอีเวนต์"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_from"
 msgid "Restrict to orders with status"
-msgstr ""
+msgstr "จำกัดเฉพาะคำสั่งซื้อที่มีสถานะ"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Please specify the send date"
-msgstr ""
+msgstr "โปรดระบุวันที่ส่ง"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Please specify the offset days and time"
-msgstr ""
+msgstr "โปรดระบุจำนวนวันและเวลาที่ต้องการชดเชย (Offset)"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Please specify a product"
-msgstr ""
+msgstr "โปรดระบุสินค้า"
 
 #: pretix/plugins/sendmail/models.py
 msgid "scheduled"
-msgstr ""
+msgstr "กำหนดเวลาไว้แล้ว"
 
 #: pretix/plugins/sendmail/models.py
 msgid "completed"
-msgstr ""
+msgstr "เสร็จสมบูรณ์"
 
 #: pretix/plugins/sendmail/models.py
 msgid "missed"
-msgstr ""
+msgstr "ไม่สำเร็จ/พลาดการส่ง"
 
 #: pretix/plugins/sendmail/models.py
 msgid "Everyone who created a ticket order"
-msgstr ""
+msgstr "ทุกคนที่สร้างคำสั่งซื้อตั๋ว"
 
 #: pretix/plugins/sendmail/models.py
 msgid "Everyone"
