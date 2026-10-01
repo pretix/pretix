@@ -619,7 +619,7 @@ class VoucherBulkForm(VoucherForm):
                 except ValidationError as err:
                     raise ValidationError(
                         _('Invalid email address ({email}) in row {number} ({value}).').format(
-                            number=i+1,
+                            number=i + 1,
                             value=', '.join(row.values()),
                             email=row['email'] or _('empty column'),
                         )
