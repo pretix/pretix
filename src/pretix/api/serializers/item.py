@@ -561,8 +561,8 @@ class POSCompatQuestionSerializer(I18nAwareModelSerializer):
     type = serializers.CharField(source='user_datafield.type', allow_null=True, default=Question.FieldType.STRING)
     identifier = serializers.SerializerMethodField(read_only=True)
     show_during_checkin = serializers.BooleanField(source='user_datafield.show_during_checkin', allow_null=True, default=False)
-    ask_during_checkin = serializers.SerializerMethodField(read_only=True)
-    hidden = serializers.SerializerMethodField(read_only=True)
+    ask_during_checkin = serializers.BooleanField(source='questionnaire.ask_during_checkin')
+    hidden = serializers.BooleanField(source='questionnaire.hidden')
     print_on_invoice = serializers.BooleanField(source='user_datafield.print_on_invoice', allow_null=True, default=False)
     valid_number_min = serializers.IntegerField(source='user_datafield.valid_number_min', allow_null=True)
     valid_number_max = serializers.IntegerField(source='user_datafield.valid_number_max', allow_null=True)
@@ -607,12 +607,6 @@ class POSCompatQuestionSerializer(I18nAwareModelSerializer):
             return qc.dependency_question.cooked_id
         else:
             return None
-
-    def get_ask_during_checkin(self, qc):
-        return qc.questionnaire.type == Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
-
-    def get_hidden(self, qc):
-        return qc.questionnaire.type == Questionnaire.QuestionnaireType.ORDER_POSITION_HIDDEN
 
     def get_identifier(self, qc):
         return qc.user_datafield.identifier if qc.user_datafield else f'@{qc.system_datafield}'

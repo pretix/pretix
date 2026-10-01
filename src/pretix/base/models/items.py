@@ -2052,6 +2052,18 @@ class Questionnaire(LoggedModel):
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
 
+    @property
+    def ask_before_sale(self):
+        return self.type == Questionnaire.QuestionnaireType.ORDER_POSITION_SALE
+
+    @property
+    def ask_during_checkin(self):
+        return self.type == Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
+
+    @property
+    def hidden(self):
+        return self.type == Questionnaire.QuestionnaireType.ORDER_POSITION_HIDDEN
+
     @staticmethod
     def check_constraints(event):
         errors = set()
