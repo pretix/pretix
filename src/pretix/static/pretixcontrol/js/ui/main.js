@@ -813,7 +813,13 @@ function setup_basics (el) {
 			return
 		}
 
-		$('<li><a href="#' + scrollTarget.id + '">' + $.trim(label) + '</a> – ' + description + '</li>')
+		$('<li></li>')
+			.append(
+				$('<a></a>').attr("href", "#" + scrollTarget.id).text($.trim(label))
+			)
+			.append(
+				document.createTextNode(' - ' + description)
+			)
 			.appendTo(alert.querySelector('ul') || $('<ul>').appendTo(alert))
 			.find('a').on('click', function (e) {
 				$panel.collapse('show')
