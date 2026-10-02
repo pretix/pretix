@@ -97,25 +97,42 @@
             {% if request.organizer %}data-organizer="{{ request.organizer.slug }}"{% endif %}
             {% if request.event %}data-event="{{ request.event.slug }}"{% endif %}
             data-select2-locale="{{ select2locale }}" data-longdateformat="{{ js_long_date_format }}" class="nojs">
+        {% if request.event %}
+            {% if has_domain and not request.event.live %}
+                <form action="{% eventurl request.event "presale:event.auth" %}" method="post"
+                        target="_blank" id="gotoshopform">
+                    <input type="hidden" value="{{ new_session }}" name="session">
+                </form>
+            {% else %}
+                <form action="{% eventurl request.event "presale:event.index" %}" method="get"
+                        target="_blank" id="gotoshopform"></form>
+            {% endif %}
+        {% endif %}
         <div id="wrapper">
             <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle"
-                            data-toggle="collapse" data-target=".navbar-nav-collapse">
-                        <span class="sr-only">{% trans "Toggle navigation" %}</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+                    <a class="navbar-brand" href="{% url "control:index" %}">
+                        <img src="{% static "pretixbase/img/pretix-icon-white-mini.svg" %}" />
+                        <span class="{% if request.event or request.organizer %}visible-lg-inline-block{% endif %}">
+                            {{ settings.PRETIX_INSTANCE_NAME }}
+                        </span>
+                    </a>
+                    {% if request.organizer %}
+                        <a class="navbar-context-breadcrumb" href="{% url "control:organizer" organizer=request.organizer.slug %}">
+                            {{ request.organizer.slug }} {#<span class="fa fa-users"></span>#}
+                        </a>
+                    {% endif %}
+                    {% if request.event %}
+                        <a class="navbar-context-breadcrumb" href="{% url "control:event.index" organizer=request.organizer.slug event=request.event.slug %}">
+                            {{ request.event.slug }} {#<span class="fa fa-calendar"></span>#}
+                        </a>
+                    {% endif %}
+
                     {% if request.event %}
                         {% if has_domain and not request.event.live %}
-                            <form action="{% eventurl request.event "presale:event.auth" %}" method="post"
-                                    target="_blank" class="mobile-navbar-view-form visible-xs-block">
-                                <input type="hidden" value="{{ new_session }}" name="session">
-                                <button type="submit" class="btn btn-link navbar-toggle">
-                                    <i class="fa fa-eye"></i>
-                                </button>
-                            </form>
+                            <button type="submit" class="btn btn-link navbar-toggle" form="gotoshopform">
+                                <i class="fa fa-eye"></i>
+                            </button>
                         {% else %}
                             <a href="{% eventurl request.event "presale:event.index" %}" title="{% trans "Go to shop" %}"
                                     target="_blank" class="navbar-toggle mobile-navbar-view-link">
@@ -128,23 +145,24 @@
                             <i class="fa fa-eye"></i>
                         </a>
                     {% endif %}
-                    <a class="navbar-brand" href="{% url "control:index" %}">
-                        <img src="{% static "pretixbase/img/pretix-icon-white-mini.svg" %}" />
-                        <span>
-                            {{ settings.PRETIX_INSTANCE_NAME }}
-                        </span>
-                    </a>
+
+                    <button type="button" class="navbar-toggle"
+                            data-toggle="dropdown" data-target="#main_sidebar">
+                        <span class="sr-only">{% trans "Toggle navigation" %}</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
                 </div>
+
                 <ul class="nav navbar-nav navbar-top-links navbar-left flip hidden-xs">
+                    <!--
                     {% if request.event %}
                         <li>
                             {% if has_domain and not request.event.live %}
-                                <form action="{% eventurl request.event "presale:event.auth" %}" method="post" target="_blank">
-                                    <input type="hidden" value="{{ new_session }}" name="session">
-                                    <button type="submit" class="btn btn-link" id="button-shop">
-                                       <i class="fa fa-eye"></i> {% trans "Go to shop" %}
-                                    </button>
-                                </form>
+                                <button type="submit" class="btn btn-link" id="button-shop" form="gotoshopform">
+                                   <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+                                </button>
                             {% else %}
                                 <a href="{% eventurl request.event "presale:event.index" %}" title="{% trans "Go to shop" %}"  target="_blank">
                                     <i class="fa fa-eye"></i> {% trans "Go to shop" %}
@@ -158,11 +176,13 @@
                             </a>
                         </li>
                     {% endif %}
+                    -->
                 </ul>
-                <ul class="nav navbar-nav navbar-top-links navbar-right flip">
+                <ul class="nav navbar-nav navbar-top-links navbar-right flip hidden-xs">
                     {% for nav in nav_topbar %}
                         <li {% if nav.children %}class="dropdown"{% endif %}>
                             <a href="{{ nav.url }}" title="{{ nav.title }}" {% if nav.active %}class="active"{% endif %}
+                                    {% if nav.external %}target="_blank"{% endif %}
                                     {% if nav.children %}class="dropdown-toggle" data-toggle="dropdown"{% endif %}>
                                 {% if nav.icon %}
                                     {% if "<svg" in nav.icon %}
@@ -177,16 +197,24 @@
                             </a>
                             {% if nav.children %}
                                 <ul class="dropdown-menu" role="menu">
+                                    <li class="dropdown-mobile-header visible-xs">
+                                        <strong>{{ nav.title }}</strong>
+                                    </li>
+                                    <li role="separator" class="divider visible-xs"></li>
                                     {% for item in nav.children %}
-                                        <li>
-                                            <a {% if item.url %}href="{{ item.url }}"{% endif %}
-                                                    {% if item.external %}target="_blank"{% endif %}
-                                                    {% if item.active %}class="active"{% endif %}>
-                                                {% if item.icon %}
-                                                    <span class="fa fa-fw fa-{{ item.icon }}"></span>
-                                                {% endif %}
-                                                {{ item.label|safe }}</a>
-                                        </li>
+                                        {% if item.separator %}
+                                            <li role="separator" class="divider"></li>
+                                        {% else %}
+                                            <li>
+                                                <a {% if item.url %}href="{{ item.url }}"{% endif %}
+                                                        {% if item.external %}target="_blank"{% endif %}
+                                                        {% if item.active %}class="active"{% endif %}>
+                                                    {% if item.icon %}
+                                                        <span class="fa fa-fw fa-{{ item.icon }}"></span>
+                                                    {% endif %}
+                                                    {{ item.label|safe }}</a>
+                                            </li>
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
                             {% endif %}
@@ -216,20 +244,139 @@
                             </a>
                         </li>
                     {% endif %}
-                    <li>
-                        <a href="{% url 'control:user.settings' %}" title="{% trans "Account Settings" %}" >
+                    <li class="dropdown">
+                        <a href="{% url 'control:user.settings' %}" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user"></i> {{ request.user.get_full_name }}
                         </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}">
-                            <i class="fa fa-sign-out"></i>
-                            <span class="visible-xs-inline">{% trans "Log out" %}</span>
-                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-mobile-header dropdown-header">
+                                <strong>{{ request.user.get_full_name }}</strong><br>
+                                {{ request.user.email }}
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a href="{% url 'control:organizers' %}">
+                                    <i class="fa fa-fw fa-group"></i> {% trans "My organizer accounts" %}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'control:user.settings' %}">
+                                    <i class="fa fa-fw fa-cog"></i> {% trans "Account settings" %}
+                                </a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}">
+                                    <i class="fa fa-fw fa-sign-out"></i> {% trans "Log out" %}
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
-                <div class="navbar-default sidebar" role="navigation">
-                    <div class="sidebar-nav navbar-nav-collapse navbar-collapse">
+                <div class="navbar-default sidebar" id="main_sidebar" role="navigation" data-dropdown-keep-on-click-inside="true">
+                    <div class="sidebar-nav">
+                        <ul class="nav visible-xs">
+                            {% for nav in nav_topbar %}
+                                <li {% if nav.children %}{% endif %}>
+                                    {% if nav.children %}<details>
+                                        <summary>{% endif %}
+                                    <a {% if not nav.children %}href="{{ nav.url }}"{% endif %} title="{{ nav.title }}" {% if nav.active %}class="active"{% endif %}
+                                            {% if nav.external %}target="_blank"{% endif %}
+                                            >
+                                        {% if nav.icon %}
+                                            {% if "<svg" in nav.icon %}
+                                                {{ nav.icon|safe }}
+                                            {% else %}
+                                                <span class="fa fa-fw fa-{{ nav.icon }}"></span>
+                                            {% endif %}
+                                            <span class="visible-xs-inline">{{ nav.label|default:nav.title }}</span>
+                                        {% else %}
+                                            {{ nav.label }}
+                                        {% endif %}
+                                        {% if nav.children %}<span class="fa arrow pull-right"></span>{% endif %}
+                                    </a>
+                                    {% if nav.children %}
+                                        </summary>
+                                        <ul class="nav nav-second-level" role="menu">
+                                            {% for item in nav.children %}
+                                                {% if item.separator %}
+                                                    <li role="separator" class="divider"></li>
+                                                {% else %}
+                                                    <li>
+                                                        <a {% if item.url %}href="{{ item.url }}"{% endif %}
+                                                                {% if item.external %}target="_blank"{% endif %}
+                                                                {% if item.active %}class="active"{% endif %}>
+                                                            {% if item.icon %}
+                                                                <span class="fa fa-fw fa-{{ item.icon }}"></span>
+                                                            {% endif %}
+                                                            {{ item.label|safe }}</a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    </details>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+
+                            {% if request.user.is_staff and not staff_session %}
+                                <li>
+                                    <form action="{% url 'control:user.sudo' %}?next={{ request.path|add:"?"|add:request.GET.urlencode|urlencode }}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-block text-left" id="button-sudo">
+                                            <i class="fa  fa-fw fa-id-card"></i> {% trans "Admin mode" %}
+                                        </button>
+                                    </form>
+                                </li>
+                            {% elif request.user.is_staff and staff_session %}
+                                <li>
+                                    <a href="{% url 'control:user.sudo.stop' %}" class="danger admin-only">
+                                        <i class="fa  fa-fw fa-id-card"></i> {% trans "End admin session" %}
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if warning_update_available %}
+                                <li>
+                                    <a href="{% url 'control:global.update' %}" class="danger">
+                                        <i class="fa  fa-fw fa-bell"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <details>
+                                    <summary><a>
+                                        <i class="fa  fa-fw fa-user"></i> {{ request.user.get_full_name }}
+                                        <span class="fa arrow pull-right"></span>
+                                    </a></summary>
+                                    <ul class="nav nav-second-level" role="menu">
+                                        <li>
+                                            <a href="{% url 'control:organizers' %}">
+                                                <i class="fa fa-fw fa-group"></i> {% trans "My organizer accounts" %}
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'control:user.settings' %}">
+                                                <i class="fa fa-fw fa-cog"></i> {% trans "Account settings" %}
+                                            </a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>
+                                            <a href="{% url 'control:auth.logout' %}" title="{% trans "Log out" %}">
+                                                <i class="fa fa-fw fa-sign-out"></i> {% trans "Log out" %}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+
+                        <div class="side-header">
+                            {% if request.event or request.organizer %}
+                                {% trans "Switch organizer or event" %}
+                            {% else %}
+                                {% trans "Go to organizer or event" %}
+                            {% endif %}
+                        </div>
                         <div class="dropdown context-selector">
                             {% if request.event %}
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -257,11 +404,11 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <span class="fa-stack fa-lg">
                                       <i class="fa fa-circle fa-stack-2x"></i>
-                                      <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+                                      <i class="fa fa-search fa-stack-1x fa-inverse"></i>
                                     </span>
 
                                     <div class="context-indicator">
-                                        <span class="context-name">{{ request.user }}</span>
+                                        <span class="context-name">{% trans "Search..." %}</span>
                                     </div>
                                     <span class="caret"></span></a>
                             {% endif %}
@@ -278,6 +425,15 @@
                                     </div>
                                 </li>
                             </ul>
+                        </div>
+                        <div class="side-header">
+                            {% if request.event %}
+                                {% trans "Event menu" %}
+                            {% elif request.organizer %}
+                                {% trans "Organizer account menu" %}
+                            {% else %}
+                                {% trans "Personal account menu" %}
+                            {% endif %}
                         </div>
                         <ul class="nav" id="side-menu">
                             {% if request.event and request.event.testmode %}
