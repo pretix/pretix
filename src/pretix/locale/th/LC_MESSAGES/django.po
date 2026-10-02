@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-10-01 11:14+0000\n"
+"PO-Revision-Date: 2026-10-02 05:00+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.10\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -11407,7 +11407,8 @@ msgstr ""
 "ดังนั้นคำสั่งซื้อของคุณจึงยังถือว่ายังไม่ได้ชำระ \n"
 "เนื่องจากยังขาดชำระเพิ่มเติมอีก {pending_sum}\n"
 "\n"
-"คุณสามารถดูข้อมูลการชำระเงินและสถานะคำสั่งซื้อของคุณได้ที่ {url}\n"
+"คุณสามารถดูข้อมูลการชำระเงินและสถานะคำสั่งซื้อของคุณได้ที่\n"
+"{url}\n"
 "\n"
 "ขอแสดงความนับถือ\n"
 "ทีมงาน {event}"
@@ -34264,9 +34265,8 @@ msgid ""
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
 msgstr ""
-"คุณสามารถยื่นคำร้องขอยกเลิกคำสั่งซื้อนี้ได้ หากคำร้องขอของคุณได้รับการอนุมัติ "
-"จะมีการหักค่าธรรมเนียมการยกเลิกจำนวน  <strong>%(fee)s</"
-"strong>และคุณจะได้รับเงินคืนในส่วนที่เหลือ"
+"คุณสามารถยื่นคำร้องขอยกเลิกคำสั่งซื้อนี้ได้ หากคำร้องขอของคุณได้รับการอนุมัติ จะมีการหักค่าธรรมเนียม"
+"การยกเลิกจำนวน <strong>%(fee)s</strong>และคุณจะได้รับเงินคืนในส่วนที่เหลือ"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 #, python-format
@@ -35088,7 +35088,7 @@ msgstr "คุณยังไม่มีสมาชิกภาพในบั
 #, python-format
 msgid "%(counter)s item"
 msgid_plural "%(counter)s items"
-msgstr[0] ""
+msgstr[0] "%(counter)s รายการ"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html
 msgid "You don’t have any orders in your account yet."
