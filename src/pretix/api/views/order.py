@@ -1683,7 +1683,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     @action(detail=True, methods=['POST'])
     def confirm(self, request, **kwargs):
         payment = self.get_object()
-        force = request.data.get('force', False) if request.data else True
+        force = request.data.get('force', False) if request.data else False
         send_mail = request.data.get('send_email', True) if request.data else True
 
         if payment.state not in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
