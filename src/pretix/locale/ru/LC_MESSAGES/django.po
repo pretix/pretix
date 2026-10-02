@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-10-02 05:00+0000\n"
+"PO-Revision-Date: 2026-10-03 00:00+0000\n"
 "Last-Translator: Translate pretix user 594 "
 "<ivagvr@users.noreply.translate.pretix.eu>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -1347,10 +1347,8 @@ msgid "Name"
 msgstr "Имя"
 
 #: pretix/base/exporters/customers.py pretix/base/models/customers.py
-#, fuzzy
-#| msgid "This account is inactive."
 msgid "Account active"
-msgstr "Данная учётная запись неактивна."
+msgstr "Учётная запись активна"
 
 #: pretix/base/exporters/customers.py pretix/base/models/auth.py
 #: pretix/base/models/customers.py
@@ -2233,7 +2231,7 @@ msgstr "Дата заказа"
 
 #: pretix/base/exporters/orderlist.py pretix/plugins/checkinlists/exporters.py
 msgid "Order time"
-msgstr "Время заказа:"
+msgstr "Время заказа"
 
 #: pretix/base/exporters/orderlist.py
 #, fuzzy
@@ -15984,7 +15982,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html
 #: pretix/plugins/reports/exporters.py
 msgid "Payment date"
-msgstr ""
+msgstr "Дата платежа"
 
 #: pretix/control/forms/orders.py
 #, fuzzy
