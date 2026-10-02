@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-09-29 09:51+0000\n"
+"PO-Revision-Date: 2026-10-02 05:00+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "th/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.10\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js
 msgid "Marked as paid"
@@ -426,7 +426,7 @@ msgstr "แก้ไข"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
 msgid "Visualize"
-msgstr ""
+msgstr "แสดงภาพผัง"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
 msgid ""
@@ -434,10 +434,12 @@ msgid ""
 "or variations are not contained in any of your rule parts so people with "
 "these tickets will not get in:"
 msgstr ""
+"กฎของคุณมีการกรองตามสินค้าหรือรูปแบบย่อยเสมอ แต่สินค้าหรือรูปแบบย่อยต่อไปนี้ไม่ได้ถูกรวมอยู่ในส่วนใ"
+"ดของกฎ คุณจึงส่งผลให้ผู้ที่ถือตั๋วเหล่านี้จะไม่สามารถผ่านเข้างานได้:"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
 msgid "Please double-check if this was intentional."
-msgstr ""
+msgstr "โปรดตรวจสอบอีกครั้งว่าเป็นการดำเนินการโดยตั้งใจหรือไม่"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
 msgid "All of the conditions below (AND)"
