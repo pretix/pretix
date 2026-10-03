@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-10-01 09:28+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"PO-Revision-Date: 2026-10-03 23:00+0000\n"
+"Last-Translator: Oksigenia <github@oksigenia.cc>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.10\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -3285,7 +3285,7 @@ msgstr ""
 #: pretix/base/forms/validators.py pretix/control/views/event.py
 #, python-format
 msgid "Invalid placeholder: {%(value)s}"
-msgstr "Marcador de posición no válido: {%(value)ss}"
+msgstr "Marcador de posición no válido: {%(value)s}"
 
 #: pretix/base/forms/widgets.py
 #, python-format
@@ -35003,12 +35003,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 #, python-format
 msgid "Your payment needs to be completed within %(minutes)s minutes."
-msgstr "Debe completar el pago en un plazo de %(minutes)s minutos."
+msgstr "Su pago debe completarse en un plazo de %(minutes)s minutos."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 #, python-format
 msgid "Your payment needs to be completed by %(deadline)s."
-msgstr "El pago debe realizarse antes del %(deadline)s."
+msgstr "Su pago debe completarse antes de %(deadline)s."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid "Proceed without selection"
