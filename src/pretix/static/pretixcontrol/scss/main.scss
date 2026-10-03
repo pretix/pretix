@@ -530,18 +530,45 @@ table td ul:last-child {
     display: inline-block;
     vertical-align: top;
     width: 50px;
+    text-align: center;
+    margin-bottom: 5px;
+    strong {
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
     .progress {
-        height: 7px;
+        height: 10px;
         margin-bottom: 2px;
     }
     .numbers {
         font-size: 10px;
         color: $text-muted;
         display: block;
-        text-align: center;
     }
-    &.availability .progress-bar-success {
-        background: var(--pretix-brand-success-lighten-20);
+    .progress-bar-unconfirmed {
+      opacity: 0.7;
+    }
+
+    &.quotabox-full {
+        width: 100px;
+        padding: 0 2px;
+
+        strong {
+            font-size: 12px;
+        }
+
+        .progress {
+            height: 16px;
+            width: 80px;
+            margin: auto;
+        }
+
+        .numbers {
+            font-size: 12px;
+        }
     }
 }
 .quotabox-more {
@@ -700,6 +727,10 @@ h1 .label {
 }
 
 .timeline {
+    max-height: 200px;
+    overflow-y: auto;
+    position: relative;
+
     .col-date {
         position: relative;
         min-height: 1px;
@@ -897,6 +928,18 @@ tbody th {
     width: 1.28571em;
     height: auto;
 }
+
+.htmx-indicator {
+  opacity:0;
+  visibility: hidden
+}
+.htmx-request .htmx-indicator,
+.htmx-request.htmx-indicator {
+  opacity:1;
+  visibility: visible;
+  transition: opacity 200ms ease-in
+}
+
 
 @import "../../pretixbase/scss/_rtl.scss";
 @import "../../bootstrap/scss/_rtl.scss";

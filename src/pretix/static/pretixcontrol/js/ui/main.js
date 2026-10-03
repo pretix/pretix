@@ -1126,4 +1126,11 @@ $(function () {
 	$('form[method=post]').filter(function () {
 		return $(this).find('button:not([type=button]), input[type=submit]').length > 0
 	}).areYouSure({ message: gettext('You have unsaved changes!') })
+});
+
+htmx.on('htmx:afterSettle', (e) => {
+	console.log("afterSwap", e)
+	setup_basics($(e.detail.elt))
+	form_handlers($(e.detail.elt))
+	add_log_expand_handlers($(e.detail.elt))
 })
