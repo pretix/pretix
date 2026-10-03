@@ -1123,19 +1123,13 @@ function add_log_expand_handlers (el) {
 }
 
 $(function () {
-<<<<<<< HEAD
 	$('form[method=post]').filter(function () {
 		return $(this).find('button:not([type=button]), input[type=submit]').length > 0
 	}).areYouSure({ message: gettext('You have unsaved changes!') })
-=======
-   $('form[method=post]').filter(function () {
-       return $(this).find("button:not([type=button]), input[type=submit]").length > 0;
-   }).areYouSure( {'message': gettext('You have unsaved changes!')});
 });
 
 htmx.on('htmx:afterSettle', (e) => {
 	console.log("afterSwap", e)
 	setup_basics($(e.detail.elt))
 	form_handlers($(e.detail.elt))
->>>>>>> d15706f36f (Move default statistics to plugin)
 })
