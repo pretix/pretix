@@ -1132,4 +1132,5 @@ htmx.on('htmx:afterSettle', (e) => {
 	console.log("afterSwap", e)
 	setup_basics($(e.detail.elt))
 	form_handlers($(e.detail.elt))
+	add_log_expand_handlers($(e.detail.elt))
 })

@@ -66,6 +66,10 @@
         {% include "pretixcontrol/event/dashboard_partial_comment.html" with url=0 %}
     </div>
 
+    {% if not request.event.items.exists %}
+        {% include "pretixcontrol/event/dashboard_partial_welcome.html" %}
+    {% endif %}
+
     <div hx-get="{% url "control:event.index.warnings" organizer=request.organizer.slug event=request.event.slug %}"
          {# loading indicator is somewhere else because the happy case is "no warnings" and shouldn't make the page jump #}
          hx-indicator="#warnings_indicator"
@@ -77,7 +81,7 @@
     <p>&nbsp;</p>
 
     {% if not request.event.items.exists %}
-        {% include "pretixcontrol/event/dashboard_partial_welcome.html" %}
+        {# pass #}
     {% elif not request.event.has_subevents %}
         {% include "pretixcontrol/event/fragment_timeline.html" %}
         <div class="row">
