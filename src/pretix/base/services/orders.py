@@ -2474,7 +2474,11 @@ class OrderChangeManager:
                 self.order.log_action('pretix.event.order.changed.feevalue', user=self.user, auth=self.auth, data={
                     'fee': fee.pk,
                     'old_price': fee.value,
-                    'new_price': op.value.gross
+                    'new_price': op.value.gross,
+                    'old_tax_rate': fee.tax_rate,
+                    'new_tax_rate': op.value.tax,
+                    'old_tax_value': fee.tax_value,
+                    'new_tax_value': op.value.rate,
                 })
                 fee.value = op.value.gross
                 fee._calculate_tax()
@@ -2486,7 +2490,11 @@ class OrderChangeManager:
                     'positionid': position.positionid,
                     'old_price': position.price,
                     'addon_to': position.addon_to_id,
-                    'new_price': op.price.gross
+                    'new_price': op.price.gross,
+                    'old_tax_rate': position.tax_rate,
+                    'new_tax_rate': op.price.tax,
+                    'old_tax_value': position.tax_value,
+                    'new_tax_value': op.price.rate,
                 })
                 position.price = op.price.gross
                 position.price_includes_rounding_correction = Decimal("0.00")
