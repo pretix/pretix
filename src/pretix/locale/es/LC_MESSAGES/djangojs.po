@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-06-29 17:00+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"PO-Revision-Date: 2026-10-03 23:00+0000\n"
+"Last-Translator: Oksigenia <github@oksigenia.cc>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.1\n"
+"X-Generator: Weblate 2026.10\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js
 msgid "Marked as paid"
@@ -780,7 +780,7 @@ msgstr "El organizador retiene %(currency)s %(amount)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js
 msgid "You get %(currency)s %(amount)s back"
-msgstr "Se le devolverá %(moneda)s %(cantidad)s"
+msgstr "Se le devolverá %(currency)s %(amount)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js
 msgid "Please enter the amount the organizer can keep."
