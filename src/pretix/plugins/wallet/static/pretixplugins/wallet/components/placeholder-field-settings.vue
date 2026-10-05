@@ -9,6 +9,8 @@ import { StoreKey } from "../walletStore";
 const store = inject(StoreKey)!;
 
 const gettext = (window as any).gettext;
+const ngettext = (window as any).ngettext;
+const interpolate = (window as any).interpolate;
 
 const props = defineProps<{
     fieldgroup: PlaceholderFieldGroupDefinition;
@@ -60,6 +62,18 @@ const placeholderChoices = computed(() => {
     choices.push(["other", gettext("Other…")]);
     return choices;
 });
+
+const overflowText = computed(() => {
+    if (!props.fieldgroup.max_entries) {
+        return ""
+    }
+    const formats = ngettext(
+        'Maximum one field in this fieldgroup can be shown on the pass. The remaining fields will be shown in the selected fieldgroup.',
+        'Maximum %s fields in this fieldgroup can be shown on the pass. The remaining fields will be shown in the selected fieldgroup.',
+        props.fieldgroup.max_entries
+    );
+    return interpolate(formats, [props.fieldgroup.max_entries])
+})
 </script>
 
 <template lang="pug">
@@ -67,9 +81,9 @@ const placeholderChoices = computed(() => {
         .panel-heading
             h3.panel-title {{ fieldgroup.name }}
         .panel-body(v-if="fieldConfig")
+            span.text-muted(v-if="fieldgroup.description") {{ fieldgroup.description }}
+            h4 {{ gettext("Content") }}
             .form-group()
-                span.text-muted(v-if="fieldgroup.description") {{ fieldgroup.description }}
-                h4 {{ gettext("Content") }}
                 table.table.table-hover
                     thead
                         tr
@@ -97,5 +111,5 @@ const placeholderChoices = computed(() => {
                 button.btn.btn-default(type="button" @click="addVariable")
                     i.fa.fa-plus
                     |  {{ gettext("Add field") }}
-            Select(:label="gettext('Overflow to …')" :choices="overflowOptions" v-model="fieldConfig.overflow")
+            Select(:label="gettext('Overflow to …')" :choices="overflowOptions" v-model="fieldConfig.overflow" :help_text="overflowText")
 </template>
