@@ -86,7 +86,7 @@ class FieldEntry[T]:
         return {
             "type": self.type.value,
             "content": self.content,
-            "label": self.label.data if self.label else None,
+            "label": self.label.data if self.label is not None else None,
         }
 
 
@@ -294,10 +294,12 @@ class SettingsField:
 class PassStyle:
     identifier: str  # unique within platform
     name: str
-    # order here limits in what order users can configure field "overspilling" (if too many fields are defined, where should the rest go)
-    #   -> can only go down in the list
-    # we evaluate the fields in this order, so they overspill in this order as well
-    fieldgroups: list[FieldGroup]
+    @property
+    def fieldgroups(self) -> list[FieldGroup]:
+        # order here limits in what order users can configure field "overspilling" (if too many fields are defined, where should the rest go)
+        #   -> can only go down in the list
+        # we evaluate the fields in this order, so they overspill in this order as well
+        return []
 
     @property
     def settings(self) -> list[SettingsField]:
@@ -307,7 +309,7 @@ class PassStyle:
     def preview_layout(self) -> list | None:
         return None
 
-    def asdict(self):
+    def asdict(self):# -> dict[str, Any]:
         context = LayoutContext(placeholders=self.placeholders, placeholder_renderer=get_wallet_placeholder_renderer())
         return {
             "identifier": self.identifier,
