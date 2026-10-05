@@ -1232,14 +1232,14 @@ class OrderDownloadMixin:
 
         return self.do('orderposition' if 'position' in kwargs else 'order',
                        self.order_position.pk if 'position' in kwargs else self.order.pk,
-                       self.output.identifier,
-                       cf.pk if cf else None)
+                       self.output.identifier, cf.pk if cf else None)
 
     def get_success_url(self, value):
         if isinstance(value, UUID):
             cf = CachedFile.objects.filter(pk=value).first()
         else:
             cf = None
+
         if not cf or not cf.allowed_for_session(self.request):
             return self.get_self_url()
 
@@ -1285,7 +1285,7 @@ class OrderDownloadMixin:
                     content_type=value.type
                 )
         else:
-            return redirect(self.get_self_url())
+            return redirect(self.get_success_url(value))
 
     def get_last_ct(self):
         if self.output.is_cacheable:
@@ -1297,6 +1297,8 @@ class OrderDownloadMixin:
                 ct = CachedCombinedTicket.objects.filter(
                     order=self.order, provider=self.output.identifier, file__isnull=False
                 ).last()
+        else:
+            ct = None
         if not ct or not ct.file:
             return None
         return ct
