@@ -4,6 +4,8 @@ from pretix.base.models import (
 from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.conf import settings
+from pretix.api.auth.utils import get_session_key_for_api_auth
+
 
 def handle_file_upload(data, user, auth, allowed_types):
     try:
@@ -18,7 +20,7 @@ def handle_file_upload(data, user, auth, allowed_types):
             pass
         elif cf.session_key != get_session_key_for_api_auth(user, auth):
             raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
-    except (ValidationError, BaseValidationError, IndexError):  # invalid uuid
+    except (ValidationError, DjangoValidationError, IndexError):  # invalid uuid
         raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
     except CachedFile.DoesNotExist:
         raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
