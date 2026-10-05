@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-09-07 18:00+0000\n"
-"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"PO-Revision-Date: 2026-10-05 14:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.9\n"
+"X-Generator: Weblate 2026.10\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -1776,16 +1776,12 @@ msgid "Transmission type"
 msgstr "送信タイプ"
 
 #: pretix/base/exporters/invoices.py
-#, fuzzy
-#| msgid "Transmission type"
 msgid "Transmission status"
-msgstr "送信タイプ"
+msgstr "送信ステータス"
 
 #: pretix/base/exporters/invoices.py
-#, fuzzy
-#| msgid "Transmission type"
 msgid "Transmission date"
-msgstr "送信タイプ"
+msgstr "送信日"
 
 #: pretix/base/exporters/invoices.py
 msgid "Cancellation"
@@ -4400,10 +4396,8 @@ msgid "Initialization date"
 msgstr "初期化日"
 
 #: pretix/base/models/devices.py
-#, fuzzy
-#| msgid "Save to profile"
 msgid "Security profile"
-msgstr "プロフィールに保存します"
+msgstr "セキュリティ・プロフィール"
 
 #: pretix/base/models/discount.py
 msgctxt "subevent"
@@ -5779,10 +5773,8 @@ msgid "Maximum value"
 msgstr "最大値"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "Maximum length"
 msgid "Minimum length"
-msgstr "最大長"
+msgstr "最小長"
 
 #: pretix/base/models/items.py
 msgid "Maximum length"
@@ -5853,10 +5845,8 @@ msgid "The maximum value must not be lower than the minimum value."
 msgstr "最大値は最小値より低くできません。"
 
 #: pretix/base/models/items.py
-#, fuzzy
-#| msgid "The maximum value must not be lower than the minimum value."
 msgid "The maximum length must not be shorter than the minimum length."
-msgstr "最大値は最小値より低くできません。"
+msgstr "最大長は最小長より短くできません。"
 
 #: pretix/base/models/items.py
 msgid ""
@@ -10269,10 +10259,8 @@ msgstr ""
 "す。上記で設定された\"支払いの最終日\"を過ぎてからは支払いを受け付けません。"
 
 #: pretix/base/settings.py
-#, fuzzy
-#| msgid "Generate invoices for Sales channels"
 msgid "Allow postponed payment choice for sales channels"
-msgstr "請求書を生成する販売チャネル"
+msgstr "販売チャネルの支払延期選択を許可する"
 
 #: pretix/base/settings.py
 msgid ""
@@ -10280,6 +10268,9 @@ msgid ""
 "their order without selecting a payment method. This is useful whenever "
 "orders are not created by the same person who is making the payment."
 msgstr ""
+"販売チャネルで支払いの延期が許可されている場合、顧客は支払い方法を選択せずに"
+"注文を完了できます。これは、支払いを行う同じ人物によって注文が作成されていな"
+"い場合に便利です。"
 
 #: pretix/base/settings.py
 msgid "Show start date"
@@ -16362,7 +16353,7 @@ msgstr "第三"
 #: pretix/control/forms/rrule.py
 msgctxt "rrule"
 msgid "fourth"
-msgstr ""
+msgstr "4番目"
 
 #: pretix/control/forms/rrule.py
 msgctxt "rrule"
@@ -17442,28 +17433,20 @@ msgid "Queued emails have been aborted."
 msgstr "キューに入っていた電子メールが、破棄されました。"
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "The property has been created."
 msgid "An organizer meta property has been created."
-msgstr "プロパティが作成されました。"
+msgstr "主催者メタプロパティが作成されました。"
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "The selected property has been deleted."
 msgid "An organizer meta property has been deleted."
-msgstr "選択されたプロパティは削除されました。"
+msgstr "オーガナイザーのメタプロパティが削除されました。"
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "The organizer has been changed."
 msgid "An organizer meta property has been changed."
-msgstr "主催者が変更されました。"
+msgstr "主催者のメタプロパティが変更されました。"
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "The product has been reordered."
 msgid "An organizer meta property has been reordered."
-msgstr "製品の並び順が変更されました。"
+msgstr "オーガナイザーのメタプロパティが再配置されました。"
 
 #: pretix/control/logdisplay.py
 msgid "Gift card acceptance for another organizer has been added."
@@ -17673,7 +17656,7 @@ msgstr "二要素の緊急コードが生成されました。"
 
 #: pretix/control/logdisplay.py
 msgid "Drift and throttle values for two-factor devices have been reset."
-msgstr ""
+msgstr "二要素装置のドリフト値とスロットル値がリセットされました。"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -18611,10 +18594,8 @@ msgid "Cancel"
 msgstr "キャンセル"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
-#, fuzzy
-#| msgid "Authorized apps"
 msgid "Authorize"
-msgstr "承認されたアプリ"
+msgstr "承認する"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 msgid "Error:"
@@ -21418,10 +21399,6 @@ msgstr ""
 "銀行振込の参照としていくつかの場所で使用します。"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
-#, fuzzy
-#| msgid ""
-#| "We strongly recommend against using short forms of more then 16 "
-#| "characters."
 msgid ""
 "We strongly recommend against using short forms of more than 16 characters."
 msgstr "16文字を超える短縮形の使用は強くお勧めしません。"
@@ -27136,26 +27113,22 @@ msgstr "認証バックエンド"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Reset drift and throttle"
-msgstr ""
+msgstr "ドリフトとスロットルをリセットする"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
-#, fuzzy
-#| msgid "Disable two-factor authentication"
 msgid "Available two-factor authentication methods"
-msgstr "二要素認証を無効にする"
+msgstr "選択可能な二要素認証"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
-#, fuzzy, python-format
-#| msgid "Expired since %(date)s"
+#, python-format
 msgid "1 failed attempt since %(date)s"
 msgid_plural "%(cnt)s failed attempts since %(date)s"
-msgstr[0] "%(date)s以降失効"
+msgstr[0] "%(date)s以降%(cnt)s回失敗"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
-#, fuzzy, python-format
-#| msgid "Valid until %(date)s"
+#, python-format
 msgid "Currently locked until %(date)s"
-msgstr "%(date)sまで有効"
+msgstr "現時点で%(date)sまでロックされています"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Team memberships"
@@ -27676,18 +27649,16 @@ msgid "Invalid code, please try again."
 msgstr "無効なコードです。もう一度お試しください。"
 
 #: pretix/control/views/auth.py
-#, fuzzy, python-brace-format
-#| msgid "Invalid code, please try again."
+#, python-brace-format
 msgid "Invalid code. Please try again after waiting {value} minute."
 msgid_plural "Invalid code. Please try again after waiting {value} minutes."
-msgstr[0] "無効なコードです。もう一度お試しください。"
+msgstr[0] "無効なコードです。{value}分後再度お試しください。"
 
 #: pretix/control/views/auth.py
-#, fuzzy, python-brace-format
-#| msgid "Invalid code, please try again."
+#, python-brace-format
 msgid "Invalid code. Please try again after waiting {value} second."
 msgid_plural "Invalid code. Please try again after waiting {value} seconds."
-msgstr[0] "無効なコードです。もう一度お試しください。"
+msgstr[0] "無効なコードです。{value}秒後再度お試しください。"
 
 #: pretix/control/views/checkin.py
 msgid "The selected check-ins have been reverted."
@@ -28533,10 +28504,8 @@ msgid "You entered an order in an event with a different currency."
 msgstr "イベントで異なる通貨で注文を入力しました。"
 
 #: pretix/control/views/orders.py
-#, fuzzy
-#| msgid "You entered an order in an event with a different currency."
 msgid "You entered an order in an event that you do not have access to."
-msgstr "イベントで異なる通貨で注文を入力しました。"
+msgstr "アクセスできないイベントに注文が入力されました。"
 
 #: pretix/control/views/orders.py
 msgid ""
@@ -29394,10 +29363,8 @@ msgstr ""
 "ください。このユーザーの過去の緊急トークンは引き続き有効です。"
 
 #: pretix/control/views/users.py
-#, fuzzy
-#| msgid "The password has been reset."
 msgid "The drift values for TOTP devices have been reset."
-msgstr "パスワードがリセットされました。"
+msgstr "TOTP デバイスのドリフト値がリセットされました。"
 
 #: pretix/control/views/users.py
 msgid "The new user has been created."
@@ -29412,14 +29379,12 @@ msgid "Bypass quota"
 msgstr "クォータをバイパスする"
 
 #: pretix/control/views/vouchers.py
-#, fuzzy
-#| msgid "Widget"
 msgid "Budget"
-msgstr "ウィジェット"
+msgstr "予算"
 
 #: pretix/control/views/vouchers.py
 msgid "Budget used"
-msgstr ""
+msgstr "消化済み予算"
 
 #: pretix/control/views/vouchers.py
 msgid "The requested voucher does not exist."
@@ -33979,29 +33944,27 @@ msgid ""
 "Not sure yet? You can complete your order first and then select a payment "
 "method later."
 msgstr ""
+"まだ確かではありませんか？ご注文を先に完了し、その後でお支払い方法を選択でき"
+"ます。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid ""
 "To do so, please first remove the payment methods you already selected above."
-msgstr ""
+msgstr "そのためには、まず上記で既に選択された支払い方法を削除してください。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
-#, fuzzy, python-format
-#| msgid "Your event needs to be over to use this feature."
+#, python-format
 msgid "Your payment needs to be completed within %(minutes)s minutes."
-msgstr "この機能を使用するには、イベントが終了している必要があります。"
+msgstr "支払いは、%(minutes)s分以内に完了する必要があります。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
-#, fuzzy, python-format
-#| msgid "Your event needs to be over to use this feature."
+#, python-format
 msgid "Your payment needs to be completed by %(deadline)s."
-msgstr "この機能を使用するには、イベントが終了している必要があります。"
+msgstr "支払いは、%(deadline)sまでに完了させる必要があります。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
-#, fuzzy
-#| msgid "Proceed with reset"
 msgid "Proceed without selection"
-msgstr "リセットを実行"
+msgstr "選択なしで進む"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html
 msgid "Before we continue, we need you to answer some questions."
