@@ -36,9 +36,9 @@ class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
                 raise ValidationError(_("Invalid style"))
             style = platform_styles[data["style"]]
 
-            style = style(event=self.context["event"], layout=data["layout"])
-            style.validate()
-            data["file_settings"] = style.extract_file_settings(
+            obj = style(event=self.context["event"], layout=data["layout"])
+            obj.validate()
+            data["file_settings"] = obj.extract_file_settings(
                 self.context["request"], data.get("file_settings", {})
             )
 
