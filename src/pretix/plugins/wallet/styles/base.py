@@ -278,6 +278,9 @@ class SettingsField:
         self.help_text = help_text
         self.required = required
 
+        if type == "image" and required:
+            raise NotImplementedError("required image settings are currently unsupported")
+
     def asdict(self):
         return {
             "identifier": self.identifier,
@@ -341,11 +344,12 @@ class PassStyle:
                     "properties": {
                         setting.identifier: {"type": ["string", "null"]}
                         for setting in self.settings
+                        if setting.type == 'text'
                     },
                     "required": [
-                        setting.identifier for setting in self.settings if setting.required
+                        setting.identifier for setting in self.settings if setting.required and setting.type == 'text'
                     ],
-                }
+                },
             },
             "$defs": {
                 "I18nString": {
@@ -359,9 +363,9 @@ class PassStyle:
         if any(group.required for group in self.fieldgroups):
             schema.setdefault("required", [])
             schema["required"].append("fieldgroups")
-        # if any(setting.required for setting in self.settings):
-        #     schema.setdefault("required", [])
-        #     schema["required"].append("settings")
+        if any(setting.required and setting.type == 'text' for setting in self.settings):
+            schema.setdefault("required", [])
+            schema["required"].append("settings")
 
         return schema
 
