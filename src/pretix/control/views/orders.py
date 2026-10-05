@@ -54,6 +54,7 @@ from django.db.models import (
     Count, Exists, F, IntegerField, Max, OuterRef, Prefetch, ProtectedError, Q,
     QuerySet, Subquery, Sum,
 )
+from uuid import UUID
 from django.forms import formset_factory
 from django.http import (
     FileResponse, Http404, HttpResponseNotAllowed, HttpResponseRedirect,
@@ -670,7 +671,18 @@ class OrderDownload(AsyncAction, OrderView):
     permission = 'event.orders:read'
 
     def get_success_url(self, value):
-        return self.get_self_url()
+        if isinstance(value, UUID):
+            cf = CachedFile.objects.filter(pk=value).first()
+        else:
+            cf = None
+
+        if not cf or not cf.allowed_for_session(self.request):
+            return self.get_self_url()
+
+        if cf.type == 'text/uri-list':
+            return cf.file.file.read().decode()
+        else:
+            return reverse('cachedfile.download', kwargs={"id":str(value)})
 
     def get_error_url(self):
         return self.get_order_url()
@@ -709,12 +721,19 @@ class OrderDownload(AsyncAction, OrderView):
         if 'position' in kwargs and not self.order_position.generate_ticket:
             return self.error(_('Ticket download is not enabled for this product.'))
 
-        ct = self.get_last_ct()
-        if ct:
+        if self.output.is_cacheable and (ct := self.get_last_ct()):
             return self.success(ct)
+
+        if not self.output.is_cacheable:
+            cf = CachedFile(web_download=True, date=now(), expires=now() + timedelta(hours=2))
+            cf.bind_to_session(request)
+            cf.save()
+        else:
+            cf = None
+
         return self.do('orderposition' if 'position' in kwargs else 'order',
                        self.order_position.pk if 'position' in kwargs else self.order.pk,
-                       self.output.identifier)
+                       self.output.identifier, cf.pk if cf else None)
 
     def get_success_message(self, value):
         return ""
@@ -741,12 +760,15 @@ class OrderDownload(AsyncAction, OrderView):
                     content_type=value.type
                 )
         else:
-            return redirect(self.get_self_url())
+            return redirect(self.get_success_url(value))
 
     def get_last_ct(self):
-        ct = CachedTicket.objects.filter(
-            order_position=self.order_position, provider=self.output.identifier, file__isnull=False
-        ).last()
+        if self.output.is_cacheable:
+            ct = CachedTicket.objects.filter(
+                order_position=self.order_position, provider=self.output.identifier, file__isnull=False
+            ).last()
+        else:
+            ct = None
         if not ct or not ct.file:
             return None
         return ct
