@@ -65,7 +65,7 @@ class WalletOutput(BaseTicketOutput):
 
     def generate(self, op):
         if hasattr(op.item, "walletlayout"):
-            wallet_layout = op.item.walletlayout
+            wallet_layout = op.item.walletlayout.layout
         else:
             wallet_layout = op.event.wallet_layouts.get(default=True)
         platform_layout = get_object_or_404(
@@ -92,7 +92,8 @@ class GoogleWalletTicketOutput(WalletOutput):
             "\n"
             "Please be aware, that there is no way to delete the data, once it has been transmitted.\n")
 
-    def get_global_settings(sender, **kwargs):
+    @classmethod
+    def get_global_settings(cls, **kwargs):
         return OrderedDict(
             [
                 (
@@ -143,7 +144,8 @@ class AppleWalletTicketOutput(WalletOutput):
     download_button_text = "Add to Apple Wallet"
     platform = ApplePlatform
 
-    def get_global_settings(sender, **kwargs):
+    @classmethod
+    def get_global_settings(cls, **kwargs):
         return OrderedDict(
             [
                 (

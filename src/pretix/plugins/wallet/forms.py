@@ -9,6 +9,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile, UploadedFile
 from django.utils.translation import gettext_lazy as _
 from pretix.control.forms import ClearableBasenameFileInput
 from django.core.files import File
+from .models import WalletLayout, WalletLayoutItem
+
 logger = logging.getLogger(__name__)
 
 
@@ -18,7 +20,11 @@ def validate_rsa_privkey(value: File):
         value = value.decode()
     if not value:
         return
-    if not re.match(r"^-----BEGIN( (RSA |ENCRYPTED )?PRIVATE KEY-----).*-----END\1$", value, re.DOTALL):
+    if not re.match(
+        r"^-----BEGIN( (RSA |ENCRYPTED )?PRIVATE KEY-----).*-----END\1$",
+        value,
+        re.DOTALL,
+    ):
         raise ValidationError(
             _(
                 "This does not look like an RSA private key in PEM format (it misses the correct begin or end signifiers)"
@@ -99,3 +105,30 @@ class PNGImageField(forms.FileField):
                 )
 
         return value
+
+
+class WalletLayoutItemForm(forms.ModelForm):
+    is_layouts = True
+    layout = forms.ModelChoiceField(
+        queryset=WalletLayout.objects.none(),
+        label=_("Wallet Layout"),
+        empty_label=_("(Event default)"),
+        required=False
+    )
+
+    class Meta:
+        model = WalletLayoutItem
+        fields = ("layout",)
+
+    def __init__(self, *args, **kwargs):
+        event = kwargs.pop("event")
+        super().__init__(*args, **kwargs)
+        self.fields["layout"].queryset = event.wallet_layouts.all()
+
+    def save(self, commit=True):
+        if self.cleaned_data["layout"] is None:
+            if self.instance.pk:
+                self.instance.delete()
+        else:
+            self.instance.layout = self.cleaned_data["layout"]
+            return super().save(commit=commit)
