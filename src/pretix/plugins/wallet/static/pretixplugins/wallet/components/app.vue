@@ -10,42 +10,42 @@ const store = inject(StoreKey)!;
 const gettext = (window as any).gettext;
 
 function openForm(url: string, data: Record<string, string|object>) {
-	let form = document.createElement("form");
-	form.target = "_blank";
-	form.method = "POST";
-	form.action = url;
-	form.style.display = "none";
+    let form = document.createElement("form");
+    form.target = "_blank";
+    form.method = "POST";
+    form.action = url;
+    form.style.display = "none";
 
-	for (var key in data) {
-		var input = document.createElement("input");
-		input.type = "hidden";
-		input.name = key;
-		let value = data[key];
-		if (value instanceof Object) {
-			value = JSON.stringify(data[key]);
-		}
-		input.value = value
-		form.appendChild(input);
-	}
-	document.body.appendChild(form);
-	form.submit();
-	document.body.removeChild(form);
+    for (var key in data) {
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        let value = data[key];
+        if (value instanceof Object) {
+            value = JSON.stringify(data[key]);
+        }
+        input.value = value
+        form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
 }
 
 async function openPreview(e: Event) {
-	e.preventDefault();
-	openForm("../../preview/", {
-		csrfmiddlewaretoken: store.csrfToken,
-		id: store.layoutId,
-		...(await store.serializeCurrentPlatformLayout())
-	});
+    e.preventDefault();
+    openForm("../../preview/", {
+        csrfmiddlewaretoken: store.csrfToken,
+        id: store.layoutId,
+        ...(await store.serializeCurrentPlatformLayout())
+    });
 }
 
 const platformChoices = computed(() => {
-	return [
-		[null, "Do not generate pass"],
-		...Object.values(store.platform.styles).map((x) => [x.identifier, x.name]),
-	];
+    return [
+        [null, "Do not generate pass"],
+        ...Object.values(store.platform.styles).map((x) => [x.identifier, x.name]),
+    ];
 });
 </script>
 
@@ -66,6 +66,7 @@ const platformChoices = computed(() => {
             .tab-pane.active.row
                 .col-md-6.col-lg-8
                     Select.form-group(label="Style" :modelValue="store.style?.identifier || null" @update:modelValue="store.setStyle" :choices="platformChoices")
+                    button(type="button" @click="store.setStyle(store.style.identifier)") Reset style
                     StyleSettings(v-if="!!store.style")
                 .col-md-6.col-lg-4
                     .panel.panel-default
@@ -88,25 +89,25 @@ const platformChoices = computed(() => {
 
 <style lang="css">
 .walletsettings-panel .panel-heading {
-	.checkbox {
-		padding: 0;
-		margin: 0;
-		display: inline-block;
-		input[type="checkbox"] {
-			margin-top: 0;
-			margin-right: 5px;
-			margin-left: 0px;
-			position: relative;
-			top: 1px;
-		}
-		label {
-			padding-left: 0;
-		}
-	}
+    .checkbox {
+        padding: 0;
+        margin: 0;
+        display: inline-block;
+        input[type="checkbox"] {
+            margin-top: 0;
+            margin-right: 5px;
+            margin-left: 0px;
+            position: relative;
+            top: 1px;
+        }
+        label {
+            padding-left: 0;
+        }
+    }
 }
 .walletsettings-panel .panel-body {
-	> :is(h1, h2, h3, h4, h5, h6):first-child {
-		margin-top: 0;
-	}
+    > :is(h1, h2, h3, h4, h5, h6):first-child {
+        margin-top: 0;
+    }
 }
 </style>

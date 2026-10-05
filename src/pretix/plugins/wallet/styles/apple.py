@@ -3,6 +3,7 @@ from typing import Any
 
 from pretix.plugins.wallet.styles.base import (
     FieldEntryType,
+    FieldGroup,
     FieldGroupDisplay,
     ImageFieldGroup,
     PlaceholderFieldGroup,
@@ -33,6 +34,7 @@ import logging
 from django.forms import ValidationError
 
 logger = logging.getLogger()
+
 
 class ApplePlatform(WalletPlatform):
     identifier = "apple"
@@ -146,6 +148,7 @@ class SignedZipFile:
             f.write(content)
         self.manifest[filename] = hashlib.sha1(content).hexdigest()
 
+
 def convert_to_png(file, max_size=None):
     # TODO: move validation to upload
     try:
@@ -164,14 +167,13 @@ def convert_to_png(file, max_size=None):
                 im.thumbnail(max_size)
             im.save(tmpfile.name)
             tmpfile.seek(0)
-            return SimpleUploadedFile(
-                "picture.png", tmpfile.read(), "image png"
-            )
+            return SimpleUploadedFile("picture.png", tmpfile.read(), "image png")
     except IOError:
         logger.exception("Could not convert image to PNG.")
         raise ValidationError(
             _("The file you uploaded could not be converted to PNG format.")
         )
+
 
 class AppleWalletStyle(PassStyle):
     @property
@@ -197,6 +199,9 @@ class AppleWalletStyle(PassStyle):
         raise NotImplementedError()
 
     def generate_pass_json(self, fields, op, strings):
+        event = op.subevent or op.order.event
+        tz = event.timezone
+
         ticket = str(op.item.name)
         if op.variation:
             ticket += " - " + str(op.variation)
@@ -224,6 +229,21 @@ class AppleWalletStyle(PassStyle):
             "serialNumber": serialNumber,
             **self.pass_content(fields, strings),
         }
+
+        if "expirationDate" not in pass_json:
+            if op.valid_until:
+                pass_json["expirationDate"] = op.valid_until.astimezone(tz).isoformat()
+            elif event.settings.show_date_to and event.date_to:
+                pass_json["expirationDate"] = event.date_to.astimezone(tz).isoformat()
+
+        if "relevantDates" not in pass_json:
+            if op.valid_from:
+                pass_json["relevantDates"] = [{"date": op.valid_from.astimezone(tz).isoformat()}]
+            else:
+                pass_json["relevantDates"] = [{"date": event.date_from.astimezone(tz).isoformat()}]
+
+        # TODO: also will relevantDates from program times
+
         return pass_json
 
     def generate(self, op: OrderPosition):
@@ -241,15 +261,19 @@ class AppleWalletStyle(PassStyle):
         strings = StringResource(locales=self.event.settings.locales)
 
         pass_json = self.generate_pass_json(fields, op, strings)
-        print(pass_json)
-        if (file := self.file_settings.get("logo")):
-            logo = convert_to_png(file, (480, 150)) # TODO: check max_size against apple HIG
+
+        if file := self.file_settings.get("logo"):
+            logo = convert_to_png(
+                file, (480, 150)
+            )  # TODO: check max_size against apple HIG
         else:
             # TODO: move to own plugin folder
             logo = open(finders.find("pretix_passbook/logo.png"), "rb")
 
-        if (file := self.file_settings.get("icon")):
-            icon = convert_to_png(file, max_size=(87,87)) # TODO: check max_size against apple HIG
+        if file := self.file_settings.get("icon"):
+            icon = convert_to_png(
+                file, max_size=(87, 87)
+            )  # TODO: check max_size against apple HIG
         else:
             icon = open(finders.find("pretix_passbook/icon.png"), "rb")
 
@@ -266,66 +290,135 @@ class AppleWalletStyle(PassStyle):
 class AppleWalletEventTicket(AppleWalletStyle):
     identifier = "event_1"
     name = _("Event Ticket Layout 1")
-    fieldgroups = [
-        TextFieldGroup(
-            identifier="logo_text",
-            name=_("Logo text"),
-            max_entries=1,
-            display=FieldGroupDisplay.PLAIN,
-            default_entries=[],
-            context_args={"order_position"},
-        ),
-        TextFieldGroup(
-            identifier="primary",
-            name=_("Primary"),
-            min_entries=1,
-            max_entries=1,
-            default_entries=[
-                PlaceholderFieldEntry(
-                    label=LazyI18nString({"de": "Tickettyp", "en": "Ticket type"}),
-                    content="item",
-                )
-            ],  # TODO: support Lazyi18nproxy here by using lazyi18nstring_from_gettext
-            description=_("These fields appear prominently featured on the pass."),
-            required=True,
-            context_args={"order_position"},
-        ),
-        TextFieldGroup(
-            identifier="secondary",
-            name=_("Secondary"),
-            max_entries=4,
-            context_args={"order_position"},
-        ),  # TODO: validation of max field count if combined "Coupons, store cards, and generic passes with a square barcode can have a total of up to four secondary and auxiliary fields, combined."
-        TextFieldGroup(
-            identifier="header",
-            name=_("Header"),
-            max_entries=3,
-            context_args={"order_position"},
-        ),
-        TextFieldGroup(
-            identifier="auxiliary",
-            name=_("Auxiliary"),
-            max_entries=4,
-            context_args={"order_position"},
-        ),
-        TextFieldGroup(
-            identifier="code",
-            name=_("QR-Code"),
-            max_entries=1,
-            display=FieldGroupDisplay.CODE,
-            default_entries=[
-                PlaceholderFieldEntry(
-                    content="secret",
-                )
-            ],
-            context_args={"order_position"},
-        ),
-        TextFieldGroup(
-            identifier="back",
-            name=_("Back"),
-            context_args={"order_position"},
-        ),
-    ]
+
+    @property
+    def fieldgroups(self) -> list[FieldGroup]:
+        return [
+            TextFieldGroup(
+                identifier="logo_text",
+                name=_("Logo text"),
+                max_entries=1,
+                display=FieldGroupDisplay.PLAIN,
+                context_args={"order_position"},
+            ),
+            TextFieldGroup(
+                identifier="header",
+                name=_("Header"),
+                max_entries=3,
+                context_args={"order_position"},
+                default_entries=[
+                    PlaceholderFieldEntry(
+                        content="admission_or_date_from",
+                        label=lazyi18nstring_from_gettext(
+                            "Admission", self.event.settings.locales
+                        ),
+                    ),
+                ],
+            ),
+            TextFieldGroup(
+                identifier="primary",
+                name=_("Primary"),
+                min_entries=1,
+                max_entries=1,
+                default_entries=[
+                    PlaceholderFieldEntry(
+                        content="event",
+                    )
+                ],
+                description=_("These fields appear prominently featured on the pass."),
+                required=True,
+                context_args={"order_position"},
+            ),
+            TextFieldGroup(
+                identifier="secondary",
+                name=_("Secondary"),
+                max_entries=4,
+                context_args={"order_position"},
+                default_entries=[
+                    PlaceholderFieldEntry(
+                        content="item_with_variation",
+                        label=lazyi18nstring_from_gettext(
+                            "Product", self.event.settings.locales
+                        ),
+                    )
+                ],
+            ),  # TODO: validation of max field count if combined "Coupons, store cards, and generic passes with a square barcode can have a total of up to four secondary and auxiliary fields, combined."
+            TextFieldGroup(
+                identifier="auxiliary",
+                name=_("Auxiliary"),
+                max_entries=4,
+                context_args={"order_position"},
+                default_entries=[
+                    PlaceholderFieldEntry(
+                        content="seat",
+                        label=lazyi18nstring_from_gettext(
+                            "Seat", locales=self.event.settings.locales
+                        ),
+                    ),
+                    PlaceholderFieldEntry(
+                        content="attendee_name",
+                    ),
+                    PlaceholderFieldEntry(
+                        content="program_start",
+                        label=lazyi18nstring_from_gettext(
+                            "From", locales=self.event.settings.locales
+                        ),
+                    ),
+                    PlaceholderFieldEntry(
+                        content="program_end",
+                        label=lazyi18nstring_from_gettext(
+                            "To", locales=self.event.settings.locales
+                        ),
+                    ),
+                ],
+            ),
+            TextFieldGroup(
+                identifier="code",
+                name=_("QR-Code"),
+                max_entries=1,
+                display=FieldGroupDisplay.CODE,
+                default_entries=[
+                    PlaceholderFieldEntry(
+                        content="secret",
+                    )
+                ],
+                context_args={"order_position"},
+            ),
+            TextFieldGroup(
+                identifier="back",
+                name=_("Back"),
+                context_args={"order_position"},
+                default_entries=[
+                    PlaceholderFieldEntry(
+                        content="admission",
+                    ),
+                    PlaceholderFieldEntry(
+                        content="attendee_name",
+                    ),
+                    PlaceholderFieldEntry(
+                        content="order_email",
+                        label=lazyi18nstring_from_gettext(
+                            "Ordered by", self.event.settings.locales
+                        ),
+                    ),
+                    PlaceholderFieldEntry(
+                        content="organizer",
+                    ),
+                    PlaceholderFieldEntry(
+                        content="organizer_contact",
+                    ),
+                    PlaceholderFieldEntry(
+                        content="order_code",
+                    ),
+                    PlaceholderFieldEntry(
+                        content="purchase_date",
+                    ),
+                    PlaceholderFieldEntry(
+                        content="website",
+                    ),
+                ],
+            ),
+        ]
 
     @property
     def preview_layout(self):

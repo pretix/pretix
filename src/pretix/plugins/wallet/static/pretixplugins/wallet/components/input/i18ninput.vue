@@ -18,10 +18,13 @@ watchEffect(() => {
         const oldVal = modelValue.value;
         modelValue.value = Object.fromEntries(Object.keys(store.locales).map((x): [string, string] => [x, oldVal]))
     }
+    if (modelValue.value === null) {
+        modelValue.value = {};
+    }
 })
 </script>
 
 <template lang="pug">
-    input.form-control(v-for="(human_readable, locale) in store.locales" v-model="modelValue[locale]" v-bind="$attrs" :lang="locale" :title="human_readable" :placeholder="human_readable")
+    input.form-control(v-if="!!modelValue" v-for="(human_readable, locale) in store.locales" v-model="modelValue[locale]" v-bind="$attrs" :lang="locale" :title="human_readable" :placeholder="human_readable")
     .help-block(v-if="props.errors" v-for="error in props.errors") {{ error }}
 </template>
