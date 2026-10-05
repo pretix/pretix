@@ -12,6 +12,11 @@ const store = inject(StoreKey)!;
 
 <template lang="pug">
     div.form-group
-        Input(v-if='field.type == "text"' :label="field.label" :type="field.type" :required="field.required" @update:modelValue="(v) => store.setSetting(field.identifier, v)" :modelValue="store.settings[field.identifier]" :help_text="field.help_text")
-        FileInput(v-if='field.type == "image"' :label="field.label" :required="field.required" :help_text="field.help_text" @change="(v) => store.setSetting(field.identifier, v)" :filename="store.settings[field.identifier]?.name" :current_url="store.settings[field.identifier]?.name")
+        Input(v-if='field.type == "text"' :label="field.label" :type="field.type"
+            :required="field.required" @update:modelValue="(v) => store.setSetting(field.identifier, v)"
+            :modelValue="store.settings[field.identifier]" :help_text="field.help_text"
+            :inline="true")
+        FileInput(v-if='field.type == "image"' :label="field.label" :required="field.required"
+            :help_text="field.help_text" @change="(v) => store.setSetting(field.identifier, v)"
+            :filename="store.settings[field.identifier]?.name" :current_url="store.settings[field.identifier]?.url")
 </template>
