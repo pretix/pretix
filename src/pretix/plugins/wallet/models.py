@@ -78,10 +78,10 @@ class WalletPlatformLayout(LoggedModel):
 class WalletLayoutItem(models.Model):
     item = models.OneToOneField('pretixbase.Item', null=True, blank=True, related_name='walletlayout',
                              on_delete=models.CASCADE)
-    layout = models.ForeignKey(WalletLayout, on_delete=models.CASCADE, related_name='item_assignments')
+    layout = models.ForeignKey(WalletLayout, null=True, on_delete=models.CASCADE, related_name='item_assignments')
 
     def clean(self):
-        if self.item.event != self.layout.event:
+        if self.layout and self.item.event != self.layout.event:
             raise ValidationError("cannot bind layout to item of different event")
 
 class WalletLayoutFileSetting(models.Model):
