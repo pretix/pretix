@@ -22,18 +22,10 @@
 
 from pretix.base.signals import EventPluginSignal
 
-register_wallet_text_placeholders = EventPluginSignal()
+register_wallet_placeholders = EventPluginSignal()
 """
 This signal is sent out to get all known wallet placeholders. Receivers should return
-an list of subclasses of pretix.plugins.wallet.placeholders.BaseWalletTextPlaceholder.
-
-As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
-"""
-
-register_wallet_image_placeholders = EventPluginSignal()
-"""
-This signal is sent out to get all known wallet placeholders. Receivers should return
-an list of subclasses of pretix.plugins.wallet.placeholders.BaseWalletImagePlaceholder.
+an list of subclasses of pretix.plugins.wallet.placeholders.BaseWalletPlaceholder.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
