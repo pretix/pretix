@@ -22,7 +22,7 @@
 import logging
 import os
 from decimal import Decimal
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
@@ -117,6 +117,8 @@ def get_preview_position(event):
     item = event.items.create(name=_("Sample product"), default_price=Decimal('42.23'),
                                   description=_("Sample product description"))
     item2 = event.items.create(name=_("Sample workshop"), default_price=Decimal('23.40'))
+    item.program_times.create(item=item, start=datetime(2017, 12, 27, 0, 0, 0, tzinfo=timezone.utc),
+                                  end=datetime(2017, 12, 28, 0, 0, 0, tzinfo=timezone.utc))
 
     from pretix.base.models import Order
     order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
