@@ -2,18 +2,15 @@ from collections.abc import Callable
 from functools import cached_property
 from typing import Any
 
-from tests.api.test_items import order_position
-from .signals import (
-    register_wallet_text_placeholders,
-    register_wallet_image_placeholders,
-)
+from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.dispatch import receiver
-from pretix.base.templatetags.money import money_filter
-from django.contrib.staticfiles import finders
 from django.templatetags.static import static
-from django.utils.translation import gettext_lazy as _
 from i18nfield.strings import LazyI18nString
+
+from pretix.base.templatetags.money import money_filter
+
+from .signals import register_wallet_placeholders
 
 
 class BaseWalletPlaceholder:
@@ -31,6 +28,11 @@ class BaseWalletPlaceholder:
     @property
     def identifier(self) -> str:
         """The unique identifier of this placeholder"""
+        raise NotImplementedError()
+
+    @property
+    def content_type(self) -> str:
+        """The content type this placeholder generates (text / image)"""
         raise NotImplementedError()
 
     @property
@@ -55,6 +57,10 @@ class BaseWalletPlaceholder:
 
 
 class BaseWalletTextPlaceholder(BaseWalletPlaceholder):
+    @property
+    def content_type(self) -> str:
+        return "text"
+
     def render(self, **context) -> str | None:
         """
         This method is called to generate the text that is being shown on the pass.
@@ -77,6 +83,10 @@ class BaseWalletTextPlaceholder(BaseWalletPlaceholder):
 
 
 class BaseWalletImagePlaceholder(BaseWalletPlaceholder):
+    @property
+    def content_type(self) -> str:
+        return "image"
+
     def render(self, **context) -> File | None:
         """
         This method is called to generate the image that is being shown on the pass.
@@ -199,6 +209,7 @@ class FunctionalContextTransformation(PlaceholderContextTransformation):
     def generated_context_name(self) -> str:
         return self.context_name
 
+
 def get_available_context(initial_context: set[str], transformations: list[PlaceholderContextTransformation]):
     used_trans = set()
     available_context = set(initial_context)
@@ -216,6 +227,7 @@ def get_available_context(initial_context: set[str], transformations: list[Place
                     changed = True
 
     return available_context
+
 
 def get_transformed_context(context_args: dict[str, Any], transformations: list[PlaceholderContextTransformation]):
     used_trans = set()
@@ -239,6 +251,7 @@ def get_transformed_context(context_args: dict[str, Any], transformations: list[
                     changed = True
 
     return transformed_context_args
+
 
 class WalletPlaceholderRenderer:
     def __init__(
@@ -303,18 +316,10 @@ def get_wallet_placeholder_renderer(**kwargs):
 
 
 def get_wallet_placeholders(event) -> dict[str, dict[str, BaseWalletPlaceholder]]:
-    placeholders = {
-        "text": {
-            v.identifier: v
-            for r, vs in register_wallet_text_placeholders.send(sender=event)
-            for v in vs
-        },
-        "image": {
-            v.identifier: v
-            for r, vs in register_wallet_image_placeholders.send(sender=event)
-            for v in vs
-        },
-    }
+    placeholders = {"text": {}, "image": {}}
+    for r, ps in register_wallet_placeholders.send(sender=event):
+        for placeholder in ps:
+            placeholders[placeholder.content_type][placeholder.identifier] = placeholder
     return placeholders
 
 
@@ -326,8 +331,8 @@ def get_static_file(name) -> File | None:
 
 
 @receiver(
-    register_wallet_text_placeholders,
-    dispatch_uid="plugin_wallet_register_wallet_text_placeholders",
+    register_wallet_placeholders,
+    dispatch_uid="plugin_wallet_register_wallet_placeholders",
 )
 def base_text_placeholders(sender, **kwargs):
     return [
@@ -387,15 +392,7 @@ def base_text_placeholders(sender, **kwargs):
             {"item"},
             lambda item: item.description,
         ),
-    ]
-
-
-@receiver(
-    register_wallet_image_placeholders,
-    dispatch_uid="plugin_wallet_register_wallet_image_placeholders",
-)
-def base_image_placeholders(sender, **kwargs):
-    return [
+        # IMAGES
         FunctionalWalletImagePlaceholder(
             "poweredby",
             LazyI18nString.from_gettext("Logo"),
