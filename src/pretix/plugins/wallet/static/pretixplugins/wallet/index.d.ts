@@ -73,9 +73,10 @@ type FieldEntry = PlaceholderFieldEntry | CustomFieldEntry;
 type Setting = {
 	identifier: string;
 	label: string;
-	type: "text" | "image";
+	type: "text" | "image" | "color" | "float";
 	required: boolean;
 	help_text: string;
+	attrs: Record<string, any>
 };
 
 type PlaceholderFieldGroupConfig = {
