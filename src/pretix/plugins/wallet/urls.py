@@ -51,12 +51,12 @@ urlpatterns = [
         name="preview",
     ),
     re_path(
-        r"^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/default/(?P<layout>[^/]+)/$",  # TODO
+        r"^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/default/(?P<layout>[^/]+)/$",
         LayoutSetDefault.as_view(),
         name="default",
     ),
     re_path(
-        r"^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/delete/(?P<layout>[^/]+)/$",  # TODO
+        r"^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/delete/(?P<layout>[^/]+)/$",
         LayoutDelete.as_view(),
         name="delete",
     ),
