@@ -2,13 +2,16 @@ import logging
 import re
 import subprocess
 import tempfile
+
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile, UploadedFile
 from django.utils.translation import gettext_lazy as _
+
 from pretix.control.forms import ClearableBasenameFileInput
-from django.core.files import File
+
 from .models import WalletLayout, WalletLayoutItem
 
 logger = logging.getLogger(__name__)

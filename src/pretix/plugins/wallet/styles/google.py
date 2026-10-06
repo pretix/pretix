@@ -1,35 +1,22 @@
-from pretix.base.models import Event, OrderPosition
+import uuid
 
-from pretix.plugins.wallet.styles.base import (
-    FieldGroupDisplay,
-    ImageFieldGroup,
-    PassStyle,
-    PlaceholderFieldEntry,
-    PredefinedFieldGroup,
-    TextFieldGroup,
-    WalletPlatform,
-)
+from django.conf import settings
+from django.utils import translation
 from django.utils.translation import gettext as _
-
 from walletobjects import ButtonJWT, EventTicketClass, EventTicketObject
 from walletobjects.comms import Comms
 from walletobjects.constants import (
-    Barcode,
-    ClassType,
-    ConfirmationCode,
-    DoorsOpen,
-    MultipleDevicesAndHoldersAllowedStatus,
-    ObjectState,
-    ObjectType,
-    ReviewStatus,
-    Seat,
-    AnimationType
+    Barcode, ClassType, MultipleDevicesAndHoldersAllowedStatus, ObjectState,
+    ObjectType, ReviewStatus,
 )
+
+from pretix.base.models import Event, OrderPosition
 from pretix.base.settings import GlobalSettingsObject
-import uuid
 from pretix.multidomain.urlreverse import eventreverse_absolute
-from django.utils import translation
-from django.conf import settings
+from pretix.plugins.wallet.styles.base import (
+    FieldGroupDisplay, ImageFieldGroup, PassStyle, PlaceholderFieldEntry,
+    PredefinedFieldGroup, TextFieldGroup, WalletPlatform,
+)
 
 
 def _get_instance_uuid():
@@ -49,7 +36,7 @@ def get_class_id(event: Event, op: OrderPosition):
         event.organizer.slug,
         event.slug,
         op.item_id,
-        op.variation_id or 0
+        op.variation_id or 0,
     )
 
 
