@@ -66,7 +66,7 @@ class ProcessForm(forms.Form):
                 widget=forms.Select(
                     attrs={'data-static': 'true'}
                 ),
-                help_text=conditional_escape(c.help_text),
+                help_text=conditional_escape(c.help_text or ""),
             )
 
     def get_columns(self):
