@@ -20,31 +20,46 @@
 # <https://www.gnu.org/licenses/>.
 #
 from django.urls import re_path
+
 from pretix.api.urls import event_router
 
-from .views import (
-    LayoutEditorView,
-    LayoutCreateView,
-    LayoutListView,
-    LayoutPreviewView,
-    LayoutSetDefault,
-    LayoutDelete
-)
 from .api import WalletLayoutViewSet
+from .views import (
+    LayoutCreateView, LayoutDelete, LayoutEditorView, LayoutListView,
+    LayoutPreviewView, LayoutSetDefault,
+)
 
 urlpatterns = [
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/$',
-        LayoutListView.as_view(), name='index'),
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/add/$',
-        LayoutCreateView.as_view(), name='add'),
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/edit/(?P<layout>[^/]+)/$',
-        LayoutEditorView.as_view(), name='edit'),
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/preview/$',
-        LayoutPreviewView.as_view(), name='preview'),
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/default/(?P<layout>[^/]+)/$', # TODO
-        LayoutSetDefault.as_view(), name='default'),
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/delete/(?P<layout>[^/]+)/$', # TODO
-        LayoutDelete.as_view(), name='delete'),
+    re_path(
+        r"^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/$",
+        LayoutListView.as_view(),
+        name="index",
+    ),
+    re_path(
+        r"^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/add/$",
+        LayoutCreateView.as_view(),
+        name="add",
+    ),
+    re_path(
+        r"^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/edit/(?P<layout>[^/]+)/$",
+        LayoutEditorView.as_view(),
+        name="edit",
+    ),
+    re_path(
+        r"^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/preview/$",
+        LayoutPreviewView.as_view(),
+        name="preview",
+    ),
+    re_path(
+        r"^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/default/(?P<layout>[^/]+)/$",  # TODO
+        LayoutSetDefault.as_view(),
+        name="default",
+    ),
+    re_path(
+        r"^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/delete/(?P<layout>[^/]+)/$",  # TODO
+        LayoutDelete.as_view(),
+        name="delete",
+    ),
 ]
 
-event_router.register('walletlayouts', WalletLayoutViewSet)
+event_router.register("walletlayouts", WalletLayoutViewSet)
