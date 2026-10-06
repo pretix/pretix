@@ -353,3 +353,82 @@ def test_webhook_global_legacy_reference(env, client, monkeypatch):
     assert order.status == Order.STATUS_PAID
     with scopes_disabled():
         assert list(order.payments.all()) == [payment]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("stripe_status,state,action_type", [
+    ("failed", OrderRefund.REFUND_STATE_FAILED, "pretix.event.order.refund.failed"),
+    ("canceled", OrderRefund.REFUND_STATE_CANCELED, "pretix.event.order.refund.canceled"),
+])
+def test_webhook_refund_failed_after_done(env, client, monkeypatch, stripe_status, state, action_type):
+    # Stripe can report a refund as succeeded and fail it days later (e.g. the
+    # card was closed), or it can be canceled in the Stripe dashboard. Stripe then
+    # sends refund.updated / charge.refund.updated with a refund object; the local
+    # refund must no longer count as done.
+    charge = get_test_charge(env[1])
+    charge["amount_refunded"] = 0
+
+    with scopes_disabled():
+        payment = env[1].payments.create(
+            provider='stripe', amount=env[1].total, info=json.dumps(charge),
+            state=OrderPayment.PAYMENT_STATE_REFUNDED,
+        )
+        refund = env[1].refunds.create(
+            provider='stripe', amount=env[1].total, payment=payment,
+            source=OrderRefund.REFUND_SOURCE_ADMIN, state=OrderRefund.REFUND_STATE_DONE,
+            info=json.dumps({"id": "re_18otImGGWE2Ias8TY0QvwKYQ", "object": "refund", "status": "succeeded"}),
+        )
+    ReferencedStripeObject.objects.create(order=env[1], reference="ch_18TY6GGGWE2Ias8TZHanef25",
+                                          payment=payment)
+
+    charge['refunds'] = {
+        "object": "list",
+        "data": [
+            {
+                "id": "re_18otImGGWE2Ias8TY0QvwKYQ",
+                "object": "refund",
+                "amount": 1337,
+                "charge": "ch_18TY6GGGWE2Ias8TZHanef25",
+                "created": 1472729052,
+                "currency": "eur",
+                "failure_reason": "expired_or_canceled_card" if stripe_status == "failed" else "merchant_request",
+                "metadata": {},
+                "reason": None,
+                "status": stripe_status
+            }
+        ],
+        "total_count": 1
+    }
+    monkeypatch.setattr("stripe.Charge.retrieve", lambda *args, **kwargs: charge)
+
+    # Stripe sends several events for the same change (and may redeliver them)
+    for _ in range(2):
+        client.post('/dummy/dummy/stripe/webhook/', json.dumps(
+            {
+                "id": "evt_18otImGGWE2Ias8TUyVRDB1H",
+                "object": "event",
+                "api_version": "2016-03-07",
+                "created": 1472729052,
+                "data": {
+                    "object": {
+                        "id": "re_18otImGGWE2Ias8TY0QvwKYQ",
+                        "object": "refund",
+                        "charge": "ch_18TY6GGGWE2Ias8TZHanef25",
+                        "status": stripe_status,
+                        # Rest of object is ignored anway
+                    }
+                },
+                "livemode": True,
+                "pending_webhooks": 1,
+                "request": "req_977XOWC8zk51Z9",
+                "type": "charge.refund.updated"
+            }
+        ), content_type='application_json')
+
+    refund.refresh_from_db()
+    payment.refresh_from_db()
+    assert refund.state == state
+    assert payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    with scopes_disabled():
+        assert env[1].all_logentries().filter(action_type=action_type).count() == 1
+        assert env[1].refunds.count() == 1
