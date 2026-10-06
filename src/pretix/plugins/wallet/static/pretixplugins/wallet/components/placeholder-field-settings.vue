@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, inject, watchEffect } from "vue";
 import Select from "./input/select.vue";
-import Checkbox from "./input/checkbox.vue";
 import I18nInput from "./input/i18ninput.vue";
 import TextContent from "./text-content.vue";
 import { StoreKey } from "../walletStore";
@@ -40,9 +39,6 @@ watchEffect(() => {
         fieldConfig.value = {
             overflow: null,
             entries: JSON.parse(JSON.stringify(props.fieldgroup.default_entries)),
-            active:
-                props.fieldgroup.required ||
-                props.fieldgroup.default_entries.length > 0,
         };
     }
     if (fieldConfig.value && !fieldConfig.value.entries) {

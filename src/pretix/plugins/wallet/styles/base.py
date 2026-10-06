@@ -1,13 +1,18 @@
 import enum
-from typing import Literal, OrderedDict, TypedDict
+from typing import Any, Literal, TypedDict
 from i18nfield.strings import LazyI18nString
 import jsonschema
 from django.core.exceptions import ValidationError
 from pretix.base.models import OrderPosition
-from ..placeholders import WalletPlaceholderRenderer, get_available_context, get_wallet_placeholder_renderer, get_wallet_placeholders
-from django import forms
+from ..placeholders import (
+    WalletPlaceholderRenderer,
+    get_available_context,
+    get_wallet_placeholder_renderer,
+    get_wallet_placeholders,
+)
 from pretix.api.helpers import handle_file_upload
 from django.core.files import File
+
 
 class WalletPlatform:
     identifier: str
@@ -167,7 +172,11 @@ class PlaceholderFieldGroup(FieldGroup):
             "display": self.display.value,
             "min_entries": self.min_entries,
             "max_entries": self.max_entries,
-            "context_args": list(get_available_context(self.context_args, context['placeholder_renderer'].transformations)),
+            "context_args": list(
+                get_available_context(
+                    self.context_args, context["placeholder_renderer"].transformations
+                )
+            ),
         }
 
     def layout_schema(
@@ -178,7 +187,7 @@ class PlaceholderFieldGroup(FieldGroup):
         content_type_placeholders = (
             context["placeholders"].get(self.content_type.value, {}).values()
         )
-        renderer = context['placeholder_renderer']
+        renderer = context["placeholder_renderer"]
         available_placeholders = [
             x.identifier
             for x in content_type_placeholders
@@ -257,11 +266,14 @@ class ImageFieldGroup(PlaceholderFieldGroup):
         super().__init__(content_type=self.content_type, display=self.display, **kwargs)
 
 
+SettingType = Literal["image", "text", "float", "color"]
+
+
 class SettingsField:
     identifier: str
     label: str
-    type: Literal["image", "text"]
-    help_text: str|None
+    type: SettingType
+    help_text: str | None
     required: bool
 
     def __init__(
@@ -269,7 +281,7 @@ class SettingsField:
         identifier: str,
         label: str,
         type: Literal["image", "text"] = "text",
-        help_text = None,
+        help_text=None,
         required: bool = False,
     ):
         self.identifier = identifier
@@ -279,7 +291,9 @@ class SettingsField:
         self.required = required
 
         if type == "image" and required:
-            raise NotImplementedError("required image settings are currently unsupported")
+            raise NotImplementedError(
+                "required image settings are currently unsupported"
+            )
 
     def asdict(self):
         return {
@@ -288,12 +302,69 @@ class SettingsField:
             "type": self.type,
             "help_text": self.help_text,
             "required": self.required,
+            "attrs": self.attrs,
         }
+
+    @property
+    def attrs(self):
+        return {}
+
+    def layout_schema(self) -> dict[str, Any] | None:
+        if self.type == "string":
+            schema = {"type": "string"}
+        elif self.type == "float":
+            schema = {"type": "number"}
+        elif self.type == "color":
+            schema = {"type": ["string"]}
+        else:
+            assert self.type == "image"
+            return
+        if not self.required:
+            schema = {"oneOf": [schema, {"type": "null"}]}
+
+        return
+
+
+class FloatSettingsField(SettingsField):
+    min: float | None
+    max: float | None
+
+    def __init__(
+        self,
+        identifier: str,
+        label: str,
+        help_text=None,
+        required: bool = False,
+        min: float | None = None,
+        max: float | None = None,
+    ):
+        self.type = "float"
+        self.identifier = identifier
+        self.label = label
+        self.help_text = help_text
+        self.required = required
+        self.min = min
+        self.max = max
+
+    def layout_schema(self):
+        schema = {"type": "number"}
+        if self.min is not None:
+            schema["minimum"] = self.min
+        if self.max is not None:
+            schema["maximum"] = self.max
+        if not self.required:
+            schema = {"oneOf": [schema, {"type": "null"}]}
+        return schema
+
+    @property
+    def attrs(self):
+        return {"min": self.min, "max": self.max}
 
 
 class PassStyle:
     identifier: str  # unique within platform
     name: str
+
     @property
     def fieldgroups(self) -> list[FieldGroup]:
         # order here limits in what order users can configure field "overspilling" (if too many fields are defined, where should the rest go)
@@ -309,8 +380,11 @@ class PassStyle:
     def preview_layout(self) -> list | None:
         return None
 
-    def asdict(self):# -> dict[str, Any]:
-        context = LayoutContext(placeholders=self.placeholders, placeholder_renderer=get_wallet_placeholder_renderer())
+    def asdict(self):  # -> dict[str, Any]:
+        context = LayoutContext(
+            placeholders=self.placeholders,
+            placeholder_renderer=get_wallet_placeholder_renderer(),
+        )
         return {
             "identifier": self.identifier,
             "name": self.name,
@@ -320,7 +394,10 @@ class PassStyle:
         }
 
     def layout_schema(self):
-        context = LayoutContext(placeholders=self.placeholders, placeholder_renderer=get_wallet_placeholder_renderer())
+        context = LayoutContext(
+            placeholders=self.placeholders,
+            placeholder_renderer=get_wallet_placeholder_renderer(),
+        )
         print(f"schema {self.settings=}")
         schema = {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -344,12 +421,14 @@ class PassStyle:
                 "settings": {
                     "type": "object",
                     "properties": {
-                        setting.identifier: {"type": ["string", "null"]}
+                        setting.identifier: setting.layout_schema()
                         for setting in self.settings
-                        if setting.type == 'text'
+                        if setting.layout_schema()
                     },
                     "required": [
-                        setting.identifier for setting in self.settings if setting.required and setting.type == 'text'
+                        setting.identifier
+                        for setting in self.settings
+                        if setting.required and setting.layout_schema()
                     ],
                 },
             },
@@ -365,7 +444,9 @@ class PassStyle:
         if any(group.required for group in self.fieldgroups):
             schema.setdefault("required", [])
             schema["required"].append("fieldgroups")
-        if any(setting.required and setting.type == 'text' for setting in self.settings):
+        if any(
+            setting.required and setting.type == "text" for setting in self.settings
+        ):
             schema.setdefault("required", [])
             schema["required"].append("settings")
 
@@ -380,7 +461,9 @@ class PassStyle:
 
         return None, None
 
-    def __init__(self, event, layout = None, file_settings: dict[str, File] | None = None):
+    def __init__(
+        self, event, layout=None, file_settings: dict[str, File] | None = None
+    ):
         self.event = event
         self.layout = layout
         self.file_settings = file_settings or {}
@@ -400,7 +483,12 @@ class PassStyle:
                 if file_settings.get(setting.identifier) == "file:keep":
                     res[setting.identifier] = "keep"
                 elif data := file_settings.get(setting.identifier):
-                    res[setting.identifier] = handle_file_upload(data, request.user, getattr(request, "auth", None), {"image/png", "image/jpeg"})
+                    res[setting.identifier] = handle_file_upload(
+                        data,
+                        request.user,
+                        getattr(request, "auth", None),
+                        {"image/png", "image/jpeg"},
+                    )
                 elif setting.identifier in file_settings:
                     res[setting.identifier] = None
 

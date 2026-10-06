@@ -1,20 +1,16 @@
-from collections import OrderedDict
 from typing import Any
 
 from pretix.plugins.wallet.styles.base import (
-    FieldEntryType,
     FieldGroup,
     FieldGroupDisplay,
-    ImageFieldGroup,
-    PlaceholderFieldGroup,
-    PredefinedFieldGroup,
+    FloatSettingsField,
     TextFieldGroup,
     WalletPlatform,
     PassStyle,
     PlaceholderFieldEntry,
     SettingsField,
 )
-from django.utils.translation import gettext as _, gettext_lazy, override
+from django.utils.translation import gettext as _, override
 from i18nfield.strings import LazyI18nString
 import io
 import hashlib
@@ -193,6 +189,40 @@ class AppleWalletStyle(PassStyle):
                 required=False,
                 help_text="Will be displayed as the file icon",
             ),
+            SettingsField(
+                identifier="background",
+                label=_("Background"),
+                type="image",
+                required=False,
+            ),
+            FloatSettingsField(
+                identifier="lat", label=_("Latitude"), required=False, min=-90, max=90
+            ),
+            FloatSettingsField(
+                identifier="long",
+                label=_("Longitude"),
+                required=False,
+                min=-180,
+                max=180,
+            ),
+            SettingsField(
+                identifier="bg_color",
+                label=_("Background Color"),
+                type="color",
+                required=False,
+            ),
+            SettingsField(
+                identifier="fg_color",
+                label=_("Foreground Color"),
+                type="color",
+                required=False,
+            ),
+            SettingsField(
+                identifier="label_color",
+                label=_("Label Color"),
+                type="color",
+                required=False,
+            ),
         ]
 
     def pass_content(self, fields, strings):
@@ -230,6 +260,19 @@ class AppleWalletStyle(PassStyle):
             **self.pass_content(fields, strings),
         }
 
+        if "bg_color" in self.layout["settings"]:
+            pass_json["backgroundColor"] = self.layout["settings"][
+                "bg_color"
+            ]  # TODO: specified as a CSS-style RGB triple, such as rgb(100, 10, 110).
+        if "fg_color" in self.layout["settings"]:
+            pass_json["foregroundColor"] = self.layout["settings"][
+                "fg_color"
+            ]  # TODO: specified as a CSS-style RGB triple, such as rgb(100, 10, 110).
+        if "label_color" in self.layout["settings"]:
+            pass_json["labelColor"] = self.layout["settings"][
+                "label_color"
+            ]  # TODO: specified as a CSS-style RGB triple, such as rgb(100, 10, 110).
+
         if "expirationDate" not in pass_json:
             if op.valid_until:
                 pass_json["expirationDate"] = op.valid_until.astimezone(tz).isoformat()
@@ -237,13 +280,44 @@ class AppleWalletStyle(PassStyle):
                 pass_json["expirationDate"] = event.date_to.astimezone(tz).isoformat()
 
         if "relevantDates" not in pass_json:
-            if op.valid_from:
-                pass_json["relevantDates"] = [{"date": op.valid_from.astimezone(tz).isoformat()}]
+            if op.valid_from and op.valid_to:
+                pass_json["relevantDates"] = [
+                    {
+                        "startDate": op.valid_from.astimezone(tz).isoformat(),
+                        "endDate": op.valid_to.astimezone(tz).isoformat(),
+                    }
+                ]
+            elif op.valid_from:
+                pass_json["relevantDates"] = [
+                    {"date": op.valid_from.astimezone(tz).isoformat()}
+                ]
+            elif event.settings.show_date_to and event.date_to:
+                pass_json["relevantDates"] = [
+                    {
+                        "startDate": event.date_from.astimezone(tz).isoformat(),
+                        "endDate": event.date_to.astimezone(tz).isoformat(),
+                    }
+                ]
             else:
-                pass_json["relevantDates"] = [{"date": event.date_from.astimezone(tz).isoformat()}]
+                pass_json["relevantDates"] = [
+                    {"date": event.date_from.astimezone(tz).isoformat()}
+                ]
 
-        # TODO: also will relevantDates from program times
+        # TODO: also fill relevantDates from program times
 
+        if "locations" not in pass_json:
+            if "lat" in self.layout["settings"] and "long" in self.layout["settings"]:
+                pass_json["locations"] = {
+                    "latitude": float(self.layout["settings"]["lat"]),
+                    "longitude": float(self.layout["settings"]["long"]),
+                }
+            elif event.geo_lat and event.geo_lon:
+                pass_json["locations"] = {
+                    "latitude": float(event.get_lat),
+                    "longitude": float(event.get_lon),
+                }
+
+        print(pass_json)
         return pass_json
 
     def generate(self, op: OrderPosition):
@@ -267,15 +341,14 @@ class AppleWalletStyle(PassStyle):
                 file, (480, 150)
             )  # TODO: check max_size against apple HIG
         else:
-            # TODO: move to own plugin folder
-            logo = open(finders.find("pretix_passbook/logo.png"), "rb")
+            logo = open(finders.find("pretixplugins/wallet/logo.png"), "rb")
 
         if file := self.file_settings.get("icon"):
             icon = convert_to_png(
                 file, max_size=(87, 87)
             )  # TODO: check max_size against apple HIG
         else:
-            icon = open(finders.find("pretix_passbook/icon.png"), "rb")
+            icon = open(finders.find("pretixplugins/wallet/icon.png"), "rb")
 
         pkpass.add_file("icon.png", icon.read())
         pkpass.add_file("logo.png", logo.read())
@@ -342,7 +415,9 @@ class AppleWalletEventTicket(AppleWalletStyle):
                         ),
                     )
                 ],
-            ),  # TODO: validation of max field count if combined "Coupons, store cards, and generic passes with a square barcode can have a total of up to four secondary and auxiliary fields, combined."
+            ),
+            # TODO: validation of max field count if combined "Coupons, store cards, and generic passes
+            # with a square barcode can have a total of up to four secondary and auxiliary fields, combined."
             TextFieldGroup(
                 identifier="auxiliary",
                 name=_("Auxiliary"),

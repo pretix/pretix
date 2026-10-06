@@ -80,7 +80,7 @@ export function createWalletStore(config: {
 			settings() {
 				const settings = {};
 				for (const setting of this.style.settings) {
-					if (setting.type == "text") {
+					if (setting.type == "text" || setting.type == 'color' || setting.type == 'float') {
 						settings[setting.identifier] =
 							this.layout.settings[setting.identifier];
 					} else if (setting.type == "image") {
@@ -129,9 +129,7 @@ export function createWalletStore(config: {
 				for (const fieldgroup of group_defs) {
 					if (fieldgroup.type == "placeholder") {
 						const layout_group: PlaceholderFieldGroupConfig =
-							this.layout.fieldgroups[
-								fieldgroup.identifier
-							];
+							this.layout.fieldgroups[fieldgroup.identifier];
 						if (
 							fieldgroup.max_entries &&
 							content[fieldgroup.identifier].length > fieldgroup.max_entries
@@ -234,7 +232,14 @@ export function createWalletStore(config: {
 					this.layout.file_settings[setting.identifier] = {
 						file: value as File | null,
 					};
-				} else if (setting.type == "text" && typeof value == "string") {
+				} else if (
+					(setting.type == "text" || setting.type == "color") &&
+					typeof value == "string"
+				) {
+					this.layout.settings[setting.identifier] = value;
+				} else if (setting.type == "float" && typeof value == "string") {
+					this.layout.settings[setting.identifier] = parseFloat(value);
+				} else if (setting.type == "float" && typeof value == "number") {
 					this.layout.settings[setting.identifier] = value;
 				}
 			},
@@ -284,7 +289,7 @@ export function createWalletStore(config: {
 				};
 			},
 			async serializeCurrentPlatformLayout() {
-				return this.serializePlatformLayout(this.activePlatform, this.layout)
+				return this.serializePlatformLayout(this.activePlatform, this.layout);
 			},
 			async serializeLayout() {
 				const layoutPromises = Object.entries(this.platformLayouts).map(
