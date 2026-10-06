@@ -1,17 +1,18 @@
 import enum
 from typing import Any, Literal, TypedDict
-from i18nfield.strings import LazyI18nString
+
 import jsonschema
 from django.core.exceptions import ValidationError
-from pretix.base.models import OrderPosition
-from ..placeholders import (
-    WalletPlaceholderRenderer,
-    get_available_context,
-    get_wallet_placeholder_renderer,
-    get_wallet_placeholders,
-)
-from pretix.api.helpers import handle_file_upload
 from django.core.files import File
+from i18nfield.strings import LazyI18nString
+
+from pretix.api.helpers import handle_file_upload
+from pretix.base.models import OrderPosition
+
+from ..placeholders import (
+    WalletPlaceholderRenderer, get_available_context,
+    get_wallet_placeholder_renderer, get_wallet_placeholders,
+)
 
 
 class WalletPlatform:
@@ -342,7 +343,7 @@ class ImageSettingsField(SettingsField):
         identifier: str,
         label: str,
         help_text: str | None = None,
-        default: str | None = None
+        default: str | None = None,
     ):
         self.identifier = identifier
         self.label = label

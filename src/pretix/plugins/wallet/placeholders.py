@@ -6,11 +6,10 @@ from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.dispatch import receiver
 from django.templatetags.static import static
+from django.utils.formats import date_format
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.templatetags.money import money_filter
-from django.utils.formats import date_format
-
 from pretix.multidomain.urlreverse import eventreverse_absolute
 
 from .signals import register_wallet_placeholders

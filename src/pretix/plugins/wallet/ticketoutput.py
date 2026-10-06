@@ -20,19 +20,22 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+from collections import OrderedDict
+
+from django import forms
+from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
-from pretix.base.ticketoutput import BaseTicketOutput
+
 from pretix.base.models import Event
 from pretix.base.settings import SettingsSandbox
-from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404
+from pretix.base.ticketoutput import BaseTicketOutput
+from pretix.control.forms import ClearableBasenameFileInput
 from pretix.plugins.wallet.styles.base import WalletPlatform
+
+from .forms import CertificateFileField, validate_rsa_privkey
 from .styles.apple import ApplePlatform
 from .styles.google import GooglePlatform
-from collections import OrderedDict
-from django import forms
-from .forms import CertificateFileField, validate_rsa_privkey
-from pretix.control.forms import ClearableBasenameFileInput
 
 logger = logging.getLogger("pretix.plugins.wallet")
 
@@ -87,10 +90,11 @@ class GoogleWalletTicketOutput(WalletOutput):
             "Please be aware, that contrary to other virtual wallets/passes (like Apple Wallet), Google Wallet Passes are not "
             "handled offline. Every pass that is created, has to be transmitted to Google Inc.\n"
             "\n"
-            "By clicking \"Confirm\" below, we will transfer some of your personal information, which is "
+            'By clicking "Confirm" below, we will transfer some of your personal information, which is '
             "necessary to provide you with your Google Wallet Pass, to Google Inc.\n"
             "\n"
-            "Please be aware, that there is no way to delete the data, once it has been transmitted.\n")
+            "Please be aware, that there is no way to delete the data, once it has been transmitted.\n"
+        )
 
     @classmethod
     def get_global_settings(cls, **kwargs):
@@ -133,7 +137,6 @@ class GoogleWalletTicketOutput(WalletOutput):
                         required=False,
                     ),
                 ),
-
             ]
         )
 
@@ -202,5 +205,6 @@ class AppleWalletTicketOutput(WalletOutput):
                 ),
             ]
         )
+
 
 OUTPUTS = [WalletSettingsHolder, GoogleWalletTicketOutput, AppleWalletTicketOutput]
