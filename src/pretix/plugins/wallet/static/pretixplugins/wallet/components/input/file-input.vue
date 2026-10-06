@@ -13,6 +13,7 @@ const props = defineProps<{
 	help_text?: string;
     filename?: string;
     current_url?: string;
+    default?: string;
 }>();
 const id = useId();
 
@@ -57,7 +58,12 @@ const clearFile = () => {
         input(:id="id" @change="onChange" v-bind="$attrs" :required="$attrs.required && !current_url" type="file" style="display: inline" ref="inputRef")
         | {{ " " }}
         button.btn.btn-sm(v-if="selectedFile" @click.prevent="clearFile") {{ gettext("Clear") }}
-        .help-block(v-if="!!help_text") {{ help_text }}
+        .help-block(v-if="!!help_text || !!props.default")
+            template(v-if="!!help_text") {{ help_text }}
+            br(v-if="!!help_text && !!props.default")
+            template(v-if="!!props.default")
+                a(:href="props.default" data-lightbox="input") {{ gettext("Show default") }}
+
         .help-block(v-if="!!errors" v-for="error in errors") {{ error }}
 </template>
 
