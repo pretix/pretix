@@ -120,7 +120,7 @@ const placeholders = computed(() => {
                                             :placeholderChoices="placeholderChoices")
                                 Select(v-else-if='fieldgroup.content_type == "image"'
                                         v-model="fieldConfig.entries[n - 1].content"
-                                        :choices="Object.entries(store.variables.image).map(([k, v]) => [k, v.label])"
+                                        :choices="Object.entries(store.variables.image).map(([k, v]) => [k, i18nstringLocalize(v.label)])"
                                     )
                             td.text-right
                                 button.btn.btn-danger.form-control-static(type="button" @click="fieldConfig.entries.splice(n - 1, 1)")

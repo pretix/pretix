@@ -6,16 +6,25 @@ from django.utils.translation import gettext as _
 from walletobjects import ButtonJWT, EventTicketClass, EventTicketObject
 from walletobjects.comms import Comms
 from walletobjects.constants import (
-    Barcode, ClassType, MultipleDevicesAndHoldersAllowedStatus, ObjectState,
-    ObjectType, ReviewStatus,
+    Barcode,
+    ClassType,
+    MultipleDevicesAndHoldersAllowedStatus,
+    ObjectState,
+    ObjectType,
+    ReviewStatus,
 )
 
 from pretix.base.models import Event, OrderPosition
 from pretix.base.settings import GlobalSettingsObject
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.wallet.styles.base import (
-    FieldGroupDisplay, ImageFieldGroup, PassStyle, PlaceholderFieldEntry,
-    PredefinedFieldGroup, TextFieldGroup, WalletPlatform,
+    FieldGroupDisplay,
+    ImageFieldGroup,
+    PassStyle,
+    PlaceholderFieldEntry,
+    PredefinedFieldGroup,
+    TextFieldGroup,
+    WalletPlatform,
 )
 
 
@@ -235,54 +244,58 @@ class GoogleWalletEventTicket(GoogleWalletStyle):
     @property
     def preview_layout(self):
         return [
-            [
-                {
-                    "children": [
-                        {"fieldgroup": "logo", "relSize": 1},
-                        {
-                            "value": str(self.event.organizer.name),
-                            "relSize": 3,
-                            "display": ["large", "centered"],
-                        },
-                    ]
-                },
-                {
-                    "children": [
-                        {
-                            "fieldgroup": "venue",
-                            "sample": [
-                                {"content": self.venue()[0], "label": ""},
-                            ],
-                        },
-                        {"value": str(self.event.name), "display": "large"},
-                    ],
-                    "direction": "column",
-                    "display": ["tight"],
-                },
-                {
-                    "fieldgroup": "date",
-                    "sample": [
-                        {"content": "01/01/1970", "label": "Date"},
-                        {"content": "12:34", "label": "Time"},
-                    ],
-                },
-                {
-                    "fieldgroup": "seating",
-                    "sample": [
-                        {"content": "5", "label": "Row"},
-                        {"content": "2", "label": "Seat"},
-                    ],
-                },
-                {"fieldgroup": "code"},
-            ],
-            [
-                {
-                    "fieldgroup": "venue",
-                    "sample": [
-                        {"content": self.venue()[1], "label": self.venue()[0]},
-                    ],
-                },
-            ],
+            {
+                "rows": [
+                    {
+                        "children": [
+                            {"fieldgroup": "logo", "relSize": 1},
+                            {
+                                "value": str(self.event.organizer.name),
+                                "relSize": 3,
+                                "display": ["large", "centered"],
+                            },
+                        ]
+                    },
+                    {
+                        "children": [
+                            {
+                                "fieldgroup": "venue",
+                                "sample": [
+                                    {"content": self.venue()[0], "label": ""},
+                                ],
+                            },
+                            {"value": str(self.event.name), "display": "large"},
+                        ],
+                        "direction": "column",
+                        "display": ["tight"],
+                    },
+                    {
+                        "fieldgroup": "date",
+                        "sample": [
+                            {"content": "01/01/1970", "label": "Date"},
+                            {"content": "12:34", "label": "Time"},
+                        ],
+                    },
+                    {
+                        "fieldgroup": "seating",
+                        "sample": [
+                            {"content": "5", "label": "Row"},
+                            {"content": "2", "label": "Seat"},
+                        ],
+                    },
+                    {"fieldgroup": "code"},
+                ]
+            },
+            {
+                "rows": [
+                    {
+                        "fieldgroup": "venue",
+                        "sample": [
+                            {"content": self.venue()[1], "label": self.venue()[0]},
+                        ],
+                    },
+                ]
+            },
         ]
 
     def venue(self):

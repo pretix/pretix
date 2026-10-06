@@ -21,8 +21,14 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.models import OrderPosition
 from pretix.plugins.wallet.styles.base import (
-    ColorSettingsField, FieldGroup, FieldGroupDisplay, FloatSettingsField,
-    ImageSettingsField, PassStyle, PlaceholderFieldEntry, TextFieldGroup,
+    ColorSettingsField,
+    FieldGroup,
+    FieldGroupDisplay,
+    FloatSettingsField,
+    ImageSettingsField,
+    PassStyle,
+    PlaceholderFieldEntry,
+    TextFieldGroup,
     WalletPlatform,
 )
 
@@ -145,7 +151,7 @@ class SignedZipFile:
 def convert_to_png(file, max_size=None):
     # TODO: move validation to upload
     try:
-        from PIL import Image
+        from PIL import Image, ImageOps
     except ImportError:
         return file
 
@@ -156,8 +162,9 @@ def convert_to_png(file, max_size=None):
             Image.open(file, formats=settings.PILLOW_FORMATS_IMAGE) as im,
             tempfile.NamedTemporaryFile("rb", suffix=".png") as tmpfile,
         ):
+            im = ImageOps.exif_transpose(im)
             if max_size:
-                im.thumbnail(max_size)
+                im.thumbnail(max_size, resample=Image.Resampling.BICUBIC)
             im.save(tmpfile.name)
             tmpfile.seek(0)
             return SimpleUploadedFile("picture.png", tmpfile.read(), "image png")
@@ -176,13 +183,13 @@ class AppleWalletStyle(PassStyle):
                 identifier="logo",
                 label=_("Logo"),
                 help_text="Will be displayed on the top left corner of the pass",
-                default=static("pretixplugins/wallet/logo.png")
+                default=static("pretixplugins/wallet/logo.png"),
             ),
             ImageSettingsField(
                 identifier="icon",
                 label=_("Icon"),
                 help_text="Will be displayed as the file icon",
-                default=static("pretixplugins/wallet/icon.png")
+                default=static("pretixplugins/wallet/icon.png"),
             ),
             ImageSettingsField(identifier="background", label=_("Background")),
             FloatSettingsField(identifier="lat", label=_("Latitude"), min=-90, max=90),
@@ -229,18 +236,14 @@ class AppleWalletStyle(PassStyle):
             **self.pass_content(fields, strings),
         }
 
-        if "bg_color" in self.layout["settings"]:
-            pass_json["backgroundColor"] = self.layout["settings"][
-                "bg_color"
-            ]  # TODO: specified as a CSS-style RGB triple, such as rgb(100, 10, 110).
-        if "fg_color" in self.layout["settings"]:
-            pass_json["foregroundColor"] = self.layout["settings"][
-                "fg_color"
-            ]  # TODO: specified as a CSS-style RGB triple, such as rgb(100, 10, 110).
-        if "label_color" in self.layout["settings"]:
-            pass_json["labelColor"] = self.layout["settings"][
-                "label_color"
-            ]  # TODO: specified as a CSS-style RGB triple, such as rgb(100, 10, 110).
+        if bg_color := self.layout["settings"].get("bg_color"):
+            pass_json["backgroundColor"] = (
+                bg_color  # TODO: specified as a CSS-style RGB triple, such as rgb(100, 10, 110).
+            )
+        if fg_color := self.layout["settings"].get("fg_color"):
+            pass_json["foregroundColor"] = fg_color # TODO: specified as a CSS-style RGB triple, such as rgb(100, 10, 110).
+        if label_color := self.layout["settings"].get("label_color"):
+            pass_json["labelColor"] = label_color  # TODO: specified as a CSS-style RGB triple, such as rgb(100, 10, 110).
 
         if "expirationDate" not in pass_json:
             if op.valid_until:
@@ -321,6 +324,12 @@ class AppleWalletStyle(PassStyle):
 
         pkpass.add_file("icon.png", icon.read())
         pkpass.add_file("logo.png", logo.read())
+
+        if file := self.file_settings.get("background"):
+            background = convert_to_png(
+                file, max_size=(540, 660)
+            )  # TODO: check max_size against apple HIG
+            pkpass.add_file("background.png", background.read())
 
         for lang, content in strings.generate().items():
             pkpass.add_file(f"{lang}.lproj/pass.strings", content)
@@ -467,28 +476,38 @@ class AppleWalletEventTicket(AppleWalletStyle):
     @property
     def preview_layout(self):
         return [
-            [
-                {
-                    "children": [
-                        {"setting": "logo"},
-                        {
-                            "fieldgroup": "logo_text",
-                            "relSize": 3,
-                            "display": ["bold", "large", "centered"],
-                        },
-                        {
-                            "fieldgroup": "header",
-                            "relSize": 2,
-                            "display": ["large", "tight"],
-                        },
-                    ]
+            {
+                "style": {
+                    "--background-color": {"setting": "bg_color"},
+                    "color": {"setting": "fg_color"},
+                    "--label-color": {"setting": "label_color"},
+                    "--background-image": {"setting": "background"},
                 },
-                {"fieldgroup": "primary", "display": "large"},
-                {"fieldgroup": "secondary"},
-                {"fieldgroup": "auxiliary"},
-                {"fieldgroup": "code"},
-            ],
-            [{"fieldgroup": "back", "direction": "column"}],
+                "rows": [
+                    {
+                        "children": [
+                            {"setting": "logo"},
+                            {
+                                "fieldgroup": "logo_text",
+                                "relSize": 3,
+                                "display": ["bold", "large", "centered"],
+                            },
+                            {
+                                "fieldgroup": "header",
+                                "relSize": 2,
+                                "display": ["large", "tight"],
+                            },
+                        ]
+                    },
+                    {"fieldgroup": "primary", "display": "large"},
+                    {"fieldgroup": "secondary"},
+                    {"fieldgroup": "auxiliary"},
+                    {"fieldgroup": "code"},
+                ],
+            },
+            {
+                "rows": [{"fieldgroup": "back", "direction": "column"}],
+            },
         ]
 
     def convert_fields(self, strings, fields, prefix):
