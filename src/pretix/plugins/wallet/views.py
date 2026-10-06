@@ -1,18 +1,15 @@
-import copy
 import json
 from typing import Any
 
 from django.db import transaction
 from django import forms
 from django.core.exceptions import BadRequest
-from django.db.models.query import QuerySet
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, ListView, DeleteView, View
 from pretix_vrpayment_wero.payment import HttpRequest
 from pretix.base.i18n import language
-from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.tickets import get_preview_position
 from pretix.control.permissions import EventPermissionRequiredMixin
 from django.conf import settings
@@ -26,11 +23,18 @@ from .styles import (
     AVAILABLE_STYLES_DICT,
 )
 from django.contrib import messages
-from django.contrib.staticfiles import finders
 from django.utils.functional import cached_property
-from django.templatetags.static import static
-from .placeholders import get_wallet_placeholder_renderer, get_wallet_placeholders, WalletPlaceholderRenderer
+from .placeholders import get_wallet_placeholder_renderer, get_wallet_placeholders
 from pretix.base.middleware import add_to_response_csp
+from i18nfield.strings import LazyI18nString
+
+
+def localize_lazyi18n_string(string: LazyI18nString, locales):
+    data = {}
+    for locale in locales:
+        data[locale] = string.localize(locale)
+    return data
+
 
 def get_editor_placeholders(event):
     with (
@@ -41,7 +45,15 @@ def get_editor_placeholders(event):
         context = get_wallet_placeholder_renderer(order_position=p)
         placeholders = {
             t: {
-                pid: {"label": str(p.label), "sample": str(context.render_sample(p)), "required_context": list(sorted(p.required_context))}
+                pid: {
+                    "label": (
+                        localize_lazyi18n_string(p.label, event.settings.locales)
+                        if isinstance(p.label, LazyI18nString)
+                        else str(p.label)
+                    ),
+                    "sample": str(context.render_sample(p)),
+                    "required_context": list(sorted(p.required_context)),
+                }
                 for pid, p in ps.items()
             }
             for t, ps in get_wallet_placeholders(event).items()
@@ -90,12 +102,17 @@ class LayoutEditorView(LayoutDetailView):
         }
 
         return context
+
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         response = super().dispatch(request, *args, **kwargs)
-        add_to_response_csp(response, {
-            'img-src': ['blob:'],
-        })
+        add_to_response_csp(
+            response,
+            {
+                "img-src": ["blob:"],
+            },
+        )
         return response
+
 
 class WalletLayoutCreateForm(forms.ModelForm):
     class Meta:
@@ -161,10 +178,16 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
         style_id = request.POST.get("style")
         layout = request.POST.get("layout")
         file_settings = json.loads(request.POST.get("file_settings"))
-        base_layout = event.wallet_layouts.get(pk=request.POST.get("id")).platform_layouts.filter(platform=platform_id).first()
+        base_layout = (
+            event.wallet_layouts.get(pk=request.POST.get("id"))
+            .platform_layouts.filter(platform=platform_id)
+            .first()
+        )
 
         if base_layout:
-            base_file_settings = {fs.key: fs.file for fs in base_layout.file_settings.all()}
+            base_file_settings = {
+                fs.key: fs.file for fs in base_layout.file_settings.all()
+            }
         else:
             base_file_settings = {}
 
@@ -185,7 +208,10 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
         ):
             p = get_preview_position(request.event)
             l = style(event=event, layout=layout)
-            file_settings = {**base_file_settings, **l.extract_file_settings(request, file_settings)}
+            file_settings = {
+                **base_file_settings,
+                **l.extract_file_settings(request, file_settings),
+            }
             layout = style(event, layout, file_settings)
             layout.validate()
 

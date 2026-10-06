@@ -1,12 +1,13 @@
-export function i18nstringLocalize(s: I18nString): string {
+export function i18nstringLocalize(s: I18nString, locale?: string): string {
     if (typeof s === 'string') {
         return s
     }
     if (s === null) {
         return null
     }
-
-    var locale = document.body.attributes['data-pretixlocale'].value
+    if (!locale) {
+        locale = document.body.attributes['data-pretixlocale'].value
+    }
     var short_locale = locale.split('-')[0]
     if (locale in s)
         return s[locale]
