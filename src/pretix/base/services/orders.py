@@ -2476,9 +2476,9 @@ class OrderChangeManager:
                     'old_price': fee.value,
                     'new_price': op.value.gross,
                     'old_tax_rate': fee.tax_rate,
-                    'new_tax_rate': op.value.tax,
+                    'new_tax_rate': op.value.rate,
                     'old_tax_value': fee.tax_value,
-                    'new_tax_value': op.value.rate,
+                    'new_tax_value': op.value.tax,
                 })
                 fee.value = op.value.gross
                 fee._calculate_tax()
@@ -2492,9 +2492,9 @@ class OrderChangeManager:
                     'addon_to': position.addon_to_id,
                     'new_price': op.price.gross,
                     'old_tax_rate': position.tax_rate,
-                    'new_tax_rate': op.price.tax,
+                    'new_tax_rate': op.price.rate,
                     'old_tax_value': position.tax_value,
-                    'new_tax_value': op.price.rate,
+                    'new_tax_value': op.price.tax,
                 })
                 position.price = op.price.gross
                 position.price_includes_rounding_correction = Decimal("0.00")
