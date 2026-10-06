@@ -1,12 +1,14 @@
-from rest_framework import viewsets
-from django.db import transaction
-from .styles import AVAILABLE_STYLES_DICT, AVAILABLE_PLATFORMS
-from .models import WalletLayout, WalletPlatformLayout
-from pretix.api.serializers.i18n import I18nAwareModelSerializer
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
-from rest_framework import serializers
 import os
+
+from django.core.exceptions import ValidationError
+from django.db import transaction
+from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers, viewsets
+
+from pretix.api.serializers.i18n import I18nAwareModelSerializer
+
+from .models import WalletLayout, WalletPlatformLayout
+from .styles import AVAILABLE_PLATFORMS, AVAILABLE_STYLES_DICT
 
 
 class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):

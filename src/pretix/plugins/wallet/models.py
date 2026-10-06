@@ -19,50 +19,48 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.db import models
-from django.db.models import constraints, Q
-from django.utils.translation import gettext_lazy as _
-
-from pretix.base.models import LoggedModel, OrderPosition
-from django_scopes import ScopedManager
 from django.core.exceptions import ValidationError
+from django.db import models
+from django.db.models import Q, constraints
+from django.utils.translation import gettext_lazy as _
+from django_scopes import ScopedManager
 
+from pretix.base.models import LoggedModel
 
 
 class WalletLayout(LoggedModel):
     event = models.ForeignKey(
-        'pretixbase.Event',
-        on_delete=models.CASCADE,
-        related_name='wallet_layouts'
+        "pretixbase.Event", on_delete=models.CASCADE, related_name="wallet_layouts"
     )
-    name = models.CharField(
-        max_length=190,
-        verbose_name=_('Name')
-    )
+    name = models.CharField(max_length=190, verbose_name=_("Name"))
     default = models.BooleanField(
-        verbose_name=_('Default'),
+        verbose_name=_("Default"),
         default=False,
     )
 
-    objects = ScopedManager(organizer='event__organizer')
+    objects = ScopedManager(organizer="event__organizer")
 
     class Meta:
         constraints = [
-            constraints.UniqueConstraint("event", condition=Q(default=True), name="one_default_wallet_per_event")
+            constraints.UniqueConstraint(
+                "event", condition=Q(default=True), name="one_default_wallet_per_event"
+            )
         ]
 
 
 class WalletPlatformLayout(LoggedModel):
-    parent = models.ForeignKey(WalletLayout, on_delete=models.CASCADE, related_name="platform_layouts")
+    parent = models.ForeignKey(
+        WalletLayout, on_delete=models.CASCADE, related_name="platform_layouts"
+    )
 
     platform = models.CharField(max_length=10)
     style = models.CharField(max_length=255)
     layout = models.JSONField(default=dict)
 
-    objects = ScopedManager(organizer='parent__event__organizer')
+    objects = ScopedManager(organizer="parent__event__organizer")
 
     class Meta:
-        unique_together = (('parent', 'platform'),)
+        unique_together = (("parent", "platform"),)
 
     @property
     def pass_layout(self):
@@ -71,23 +69,40 @@ class WalletPlatformLayout(LoggedModel):
         style = get_style(self.platform, self.style)
         if style:
             file_settings = {fs.key: fs.file for fs in self.file_settings.all()}
-            return style(event=self.parent.event, layout=self.layout, file_settings=file_settings)
+            return style(
+                event=self.parent.event, layout=self.layout, file_settings=file_settings
+            )
         else:
             raise RuntimeError(f"Style {self.platform}.{self.style} not found")
 
+
 class WalletLayoutItem(models.Model):
-    item = models.OneToOneField('pretixbase.Item', null=True, blank=True, related_name='walletlayout',
-                             on_delete=models.CASCADE)
-    layout = models.ForeignKey(WalletLayout, null=True, on_delete=models.CASCADE, related_name='item_assignments')
+    item = models.OneToOneField(
+        "pretixbase.Item",
+        null=True,
+        blank=True,
+        related_name="walletlayout",
+        on_delete=models.CASCADE,
+    )
+    layout = models.ForeignKey(
+        WalletLayout,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="item_assignments",
+    )
 
     def clean(self):
         if self.layout and self.item.event != self.layout.event:
             raise ValidationError("cannot bind layout to item of different event")
 
+
 class WalletLayoutFileSetting(models.Model):
-    layout = models.ForeignKey(WalletPlatformLayout, on_delete=models.CASCADE, related_name="file_settings")
+    layout = models.ForeignKey(
+        WalletPlatformLayout, on_delete=models.CASCADE, related_name="file_settings"
+    )
     key = models.CharField()
     file = models.FileField()
+
 
 # smth like this for apple, lets see what the best architecture for google will be
 # class AppleWalletPass(models.Model):
