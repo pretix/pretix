@@ -1,14 +1,15 @@
 from typing import Any
-
+from django.templatetags.static import static
 from pretix.plugins.wallet.styles.base import (
+    ColorSettingsField,
     FieldGroup,
     FieldGroupDisplay,
     FloatSettingsField,
+    ImageSettingsField,
     TextFieldGroup,
     WalletPlatform,
     PassStyle,
     PlaceholderFieldEntry,
-    SettingsField,
 )
 from django.utils.translation import gettext as _, override
 from i18nfield.strings import LazyI18nString
@@ -175,54 +176,26 @@ class AppleWalletStyle(PassStyle):
     @property
     def settings(self):
         return [
-            SettingsField(
+            ImageSettingsField(
                 identifier="logo",
                 label=_("Logo"),
-                type="image",
-                required=False,
                 help_text="Will be displayed on the top left corner of the pass",
+                default=static("pretixplugins/wallet/logo.png")
             ),
-            SettingsField(
+            ImageSettingsField(
                 identifier="icon",
                 label=_("Icon"),
-                type="image",
-                required=False,
                 help_text="Will be displayed as the file icon",
+                default=static("pretixplugins/wallet/icon.png")
             ),
-            SettingsField(
-                identifier="background",
-                label=_("Background"),
-                type="image",
-                required=False,
-            ),
+            ImageSettingsField(identifier="background", label=_("Background")),
+            FloatSettingsField(identifier="lat", label=_("Latitude"), min=-90, max=90),
             FloatSettingsField(
-                identifier="lat", label=_("Latitude"), required=False, min=-90, max=90
+                identifier="long", label=_("Longitude"), min=-180, max=180
             ),
-            FloatSettingsField(
-                identifier="long",
-                label=_("Longitude"),
-                required=False,
-                min=-180,
-                max=180,
-            ),
-            SettingsField(
-                identifier="bg_color",
-                label=_("Background Color"),
-                type="color",
-                required=False,
-            ),
-            SettingsField(
-                identifier="fg_color",
-                label=_("Foreground Color"),
-                type="color",
-                required=False,
-            ),
-            SettingsField(
-                identifier="label_color",
-                label=_("Label Color"),
-                type="color",
-                required=False,
-            ),
+            ColorSettingsField(identifier="bg_color", label=_("Background Color")),
+            ColorSettingsField(identifier="fg_color", label=_("Foreground Color")),
+            ColorSettingsField(identifier="label_color", label=_("Label Color")),
         ]
 
     def pass_content(self, fields, strings):
