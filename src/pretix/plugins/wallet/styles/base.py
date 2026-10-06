@@ -276,25 +276,6 @@ class SettingsField:
     help_text: str | None
     required: bool
 
-    def __init__(
-        self,
-        identifier: str,
-        label: str,
-        type: Literal["image", "text"] = "text",
-        help_text=None,
-        required: bool = False,
-    ):
-        self.identifier = identifier
-        self.label = label
-        self.type = type
-        self.help_text = help_text
-        self.required = required
-
-        if type == "image" and required:
-            raise NotImplementedError(
-                "required image settings are currently unsupported"
-            )
-
     def asdict(self):
         return {
             "identifier": self.identifier,
@@ -310,18 +291,71 @@ class SettingsField:
         return {}
 
     def layout_schema(self) -> dict[str, Any] | None:
-        if self.type == "string":
-            schema = {"type": "string"}
-        elif self.type == "float":
-            schema = {"type": "number"}
-        elif self.type == "color":
-            schema = {"type": ["string"]}
-        else:
-            assert self.type == "image"
-            return
+        raise NotImplementedError()
+
+
+class TextSettingsField(SettingsField):
+    def __init__(
+        self,
+        identifier: str,
+        label: str,
+        help_text: str | None = None,
+        required: bool = False,
+    ):
+        self.identifier = identifier
+        self.label = label
+        self.type = "text"
+        self.help_text = help_text
+        self.required = required
+
+    def layout_schema(self) -> dict[str, Any] | None:
+        schema = {"type": "string"}
         if not self.required:
             schema = {"oneOf": [schema, {"type": "null"}]}
+        return schema
 
+
+class ColorSettingsField(SettingsField):
+    def __init__(
+        self,
+        identifier: str,
+        label: str,
+        help_text: str | None = None,
+        required: bool = False,
+    ):
+        self.identifier = identifier
+        self.label = label
+        self.type = "color"
+        self.help_text = help_text
+        self.required = required
+
+    def layout_schema(self) -> dict[str, Any] | None:
+        schema = {"type": "string"}
+        if not self.required:
+            schema = {"oneOf": [schema, {"type": "null"}]}
+        return schema
+
+
+class ImageSettingsField(SettingsField):
+    def __init__(
+        self,
+        identifier: str,
+        label: str,
+        help_text: str | None = None,
+        default: str | None = None
+    ):
+        self.identifier = identifier
+        self.label = label
+        self.type = "image"
+        self.help_text = help_text
+        self.required = False
+        self.default = default
+
+    @property
+    def attrs(self):
+        return {"default": self.default}
+
+    def layout_schema(self):
         return
 
 
