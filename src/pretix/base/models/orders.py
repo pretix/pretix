@@ -95,7 +95,9 @@ from ._transactions import (
 )
 from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
-from .items import Item, ItemVariation, Question, QuestionOption, Quota
+from .items import (
+    Item, ItemVariation, Question, QuestionnaireChild, QuestionOption, Quota,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -918,7 +920,7 @@ class Order(LockModel, LoggedModel):
         positions = list(
             self.positions.all().annotate(
                 has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk'), list__consider_tickets_used=True))
-            ).select_related('item').prefetch_related('item__questions')
+            ).select_related('item').prefetch_related('item__questionnaires')
         )
         if not self.event.settings.allow_modifications_after_checkin:
             for cp in positions:
@@ -929,7 +931,7 @@ class Order(LockModel, LoggedModel):
             return True
         ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
         for cp in positions:
-            if (cp.item.ask_attendee_data and ask_names) or cp.item.questions.all():
+            if (cp.item.ask_attendee_data and ask_names) or cp.item.questionnaires.all():  # TODO(questionnaires) : filter to only QuestionnaireType.ORDER_POSITION_SALE
                 return True
 
         return False  # nothing there to modify
@@ -1449,6 +1451,12 @@ class QuestionAnswer(models.Model):
         else:
             return self.answer
 
+    def to_dependency_values(self):
+        if self.question.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+            return [o.identifier for o in self.options.all()]
+        elif self.question.type in (Question.TYPE_BOOLEAN, Question.TYPE_COUNTRYCODE):
+            return self.answer
+
     def save(self, *args, **kwargs):
         if self.orderposition and self.cartposition:
             raise ValueError('QuestionAnswer cannot be linked to an order and a cart position at the same time.')
@@ -1591,55 +1599,92 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
     def meta_info_data(self, d):
         self.meta_info = json.dumps(d)
 
-    def cache_answers(self, all=True):
+    def cache_answers(self, questionnaire_type, sales_channel):
         """
-        Creates two properties on the object.
-        (1) answ: a dictionary of question.id → answer string
-        (2) questions: a list of Question objects, extended by an 'answer' property
+        Creates a new property on the object:
+        questions: a list of Question objects, extended by an 'answer' property
         """
-        self.answ = {}
-        for a in getattr(self, 'answerlist', self.answers.all()):  # use prefetch_related cache from get_cart
-            self.answ[a.question_id] = a
-
         # We need to clone our question objects, otherwise we will override the cached
         # answers of other items in the same cart if the question objects have been
         # selected via prefetch_related
-        if not all:
-            if hasattr(self.item, 'questions_to_ask'):
-                questions = list(copy.copy(q) for q in self.item.questions_to_ask)
-            else:
-                questions = list(copy.copy(q) for q in self.item.questions.filter(ask_during_checkin=False,
-                                                                                  hidden=False))
+        if hasattr(self.item, 'relevant_questionnaires'):
+            children = list(copy.copy(qc) for qq in self.item.relevant_questionnaires for qc in qq.childlist)
         else:
-            questions = list(copy.copy(q) for q in self.item.questions.all())
+            children = QuestionnaireChild.objects.filter(questionnaire__event_id=self.item.event_id, questionnaire__items__in=[self.item.id])
+            if questionnaire_type is not None:
+                children = children.filter(questionnaire__type=questionnaire_type)
+            if sales_channel is not None:
+                children = children.filter(Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels=sales_channel))
 
-        question_cache = {
-            q.pk: q for q in questions
+            children = list(children)
+
+        qc_cache = {
+            q.pk: q for q in children
         }
 
-        def question_is_visible(parentid, qvals):
-            if parentid not in question_cache:
+        def qc_is_visible(parentid, qvals):
+            if parentid not in qc_cache:
                 return False
-            parentq = question_cache[parentid]
-            if parentq.dependency_question_id and not question_is_visible(parentq.dependency_question_id, parentq.dependency_values):
+            parentqc = qc_cache[parentid]
+            if parentqc.dependency_question_id and not qc_is_visible(parentqc.dependency_question_id, parentqc.dependency_values):
                 return False
-            if parentid not in self.answ:
-                return False
-            return (
-                ('True' in qvals and self.answ[parentid].answer == 'True')
-                or ('False' in qvals and self.answ[parentid].answer == 'False')
-                or (any(qval in [o.identifier for o in self.answ[parentid].options.all()] for qval in qvals))
-            )
+            answer_values = self.get_dependency_answer_values(parentqc)
+            return answer_values and any(qval in answer_values for qval in qvals)
 
         self.questions = []
-        for q in questions:
-            if q.id in self.answ:
-                q.answer = self.answ[q.id]
-                q.answer.question = q  # cache object
-            else:
-                q.answer = ""
-            if not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_values):
-                self.questions.append(q)
+        for qc in children:
+            try:
+                qc.answer = self.answer_cache[qc.user_datafield_id or qc.system_datafield]
+            except KeyError:
+                continue
+            if not qc.dependency_question_id or qc_is_visible(qc.dependency_question_id, qc.dependency_values):
+                self.questions.append(qc)
+        return self.questions
+
+    @cached_property
+    def answer_cache(self):
+        return {
+            "attendee_name_parts": self.attendee_name,
+            "attendee_email": self.attendee_email,
+            "company": self.company,
+            "street": self.street,
+            "zipcode": self.zipcode,
+            "city": self.city,
+            "state": self.state,
+            "country": str(self.country),
+            **{aw.question_id: aw for aw in getattr(self, 'answerlist', self.answers.all())},
+        }
+
+    def get_dependency_answer_values(self, qc):
+        if qc.user_datafield_id:
+            if qc.user_datafield_id not in self.answer_cache:
+                return None
+            answer = self.answer_cache[qc.user_datafield_id]
+            return answer.to_dependency_values()
+        elif qc.system_datafield:
+            return [self.get_system_answer(qc.system_datafield)]
+        else:
+            raise ValueError('Questionnaire child without datafield has no answer')
+
+    def get_system_answer(self, system_datafield_name):
+        if system_datafield_name == 'attendee_name_parts':
+            return self.attendee_name
+        elif system_datafield_name == 'attendee_email':
+            return self.attendee_email
+        elif system_datafield_name == 'company':
+            return self.company
+        elif system_datafield_name == 'street':
+            return self.street
+        elif system_datafield_name == 'zipcode':
+            return self.zipcode
+        elif system_datafield_name == 'city':
+            return self.city
+        elif system_datafield_name == 'state':
+            return self.state
+        elif system_datafield_name == 'country':
+            return str(self.country)
+        else:
+            raise ValueError('Unknown system question name')
 
     @property
     def net_price(self):
@@ -1652,20 +1697,21 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
                 else self.variation.quotas.filter(subevent=self.subevent))
 
     def save(self, *args, **kwargs):
-        update_fields = kwargs.get('update_fields', set())
-        if 'attendee_name_parts' in update_fields:
-            kwargs['update_fields'] = {'attendee_name_cached'}.union(kwargs['update_fields'])
+        def ensure_updated(fieldname):
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {fieldname}.union(kwargs['update_fields'])
+
+        if 'attendee_name_parts' in kwargs.get('update_fields', set()):
+            ensure_updated('attendee_name_cached')
 
         name = self.attendee_name
         if name != self.attendee_name_cached:
             self.attendee_name_cached = name
-            if 'update_fields' in kwargs:
-                kwargs['update_fields'] = {'attendee_name_cached'}.union(kwargs['update_fields'])
+            ensure_updated('attendee_name_cached')
 
         if self.attendee_name_parts is None:
             self.attendee_name_parts = {}
-            if 'update_fields' in kwargs:
-                kwargs['update_fields'] = {'attendee_name_parts'}.union(kwargs['update_fields'])
+            ensure_updated('attendee_name_parts')
         super().save(*args, **kwargs)
 
     @property
@@ -2741,7 +2787,7 @@ class OrderPosition(AbstractPosition):
         positions = list(
             self.order.positions.all().annotate(
                 has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk'), list__consider_tickets_used=True))
-            ).select_related('item').prefetch_related('item__questions')
+            ).select_related('item').prefetch_related('item__questionnaires')
         )
         if not self.event.settings.allow_modifications_after_checkin:
             for cp in positions:
@@ -2751,7 +2797,7 @@ class OrderPosition(AbstractPosition):
         ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
         for cp in positions:
             if cp.pk == self.pk or cp.addon_to_id == self.pk:
-                if (cp.item.ask_attendee_data and ask_names) or cp.item.questions.all():
+                if (cp.item.ask_attendee_data and ask_names) or cp.item.questionnaires.all():  # TODO(questionnaires) : filter to only QuestionnaireType.ORDER_POSITION_SALE
                     return True
 
         return False  # nothing there to modify
