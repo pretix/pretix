@@ -46,6 +46,7 @@ class WalletLayout(LoggedModel):
                 "event", condition=Q(default=True), name="one_default_wallet_per_event"
             )
         ]
+        ordering = ("-default", "name",)
 
 
 class WalletPlatformLayout(LoggedModel):
