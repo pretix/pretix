@@ -57,7 +57,7 @@ def notify(logentry_ids: list):
     _event, _organizer, _at, notify_specific, notify_global = None, None, None, None, None
     for logentry in qs:
         if not logentry.event and not logentry.organizer:
-            break  # Ignore, we only have event-related notifications right now
+            break  # Ignore, we only have event- or organizer-related notifications right now
 
         notification_type = logentry.notification_type
 
@@ -69,15 +69,11 @@ def notify(logentry_ids: list):
             _organizer = logentry.organizer
             _at = logentry.action_type
 
-            if logentry.event:
-                # All users that have the permission to get the notification
-                users = logentry.event.get_users_with_permission(
-                    notification_type.required_permission
-                ).filter(notifications_send=True, is_active=True)
-            else:
-                users = logentry.organizer.get_users_with_permission(
-                    notification_type.required_permission
-                ).filter(notifications_send=True, is_active=True)
+            event_or_organizer = logentry.event or logentry.organizer
+            # All users that have the permission to get the notification
+            users = event_or_organizer.get_users_with_permission(
+                notification_type.required_permission
+            ).filter(notifications_send=True, is_active=True)
 
             if logentry.user:
                 users = users.exclude(pk=logentry.user.pk)
