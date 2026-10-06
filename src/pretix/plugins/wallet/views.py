@@ -1,32 +1,36 @@
 import json
 from typing import Any
 
-from django.db import transaction
 from django import forms
+from django.conf import settings
+from django.contrib import messages
 from django.core.exceptions import BadRequest
-from django.urls import reverse
+from django.db import transaction
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, DetailView, ListView, DeleteView, View
+from django.views.generic import (
+    CreateView, DeleteView, DetailView, ListView, View,
+)
+from i18nfield.strings import LazyI18nString
 from pretix_vrpayment_wero.payment import HttpRequest
+
 from pretix.base.i18n import language
+from pretix.base.middleware import add_to_response_csp
 from pretix.base.services.tickets import get_preview_position
 from pretix.control.permissions import EventPermissionRequiredMixin
-from django.conf import settings
-from django.shortcuts import redirect
 from pretix.helpers.database import rolledback_transaction
 from pretix.helpers.models import modelclone
+
 from .models import WalletLayout
-from .styles import (
-    AVAILABLE_STYLES,
-    AVAILABLE_PLATFORMS,
-    AVAILABLE_STYLES_DICT,
+from .placeholders import (
+    get_wallet_placeholder_renderer, get_wallet_placeholders,
 )
-from django.contrib import messages
-from django.utils.functional import cached_property
-from .placeholders import get_wallet_placeholder_renderer, get_wallet_placeholders
-from pretix.base.middleware import add_to_response_csp
-from i18nfield.strings import LazyI18nString
+from .styles import (
+    AVAILABLE_PLATFORMS, AVAILABLE_STYLES, AVAILABLE_STYLES_DICT,
+)
 
 
 def localize_lazyi18n_string(string: LazyI18nString, locales):

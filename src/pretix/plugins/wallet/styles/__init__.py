@@ -1,6 +1,7 @@
+from pretix.plugins.wallet.styles.base import PassStyle
+
 from .apple import ApplePlatform, AppleWalletEventTicket
 from .google import GooglePlatform, GoogleWalletEventTicket
-from pretix.plugins.wallet.styles.base import PassStyle
 
 AVAILABLE_PLATFORMS = [ApplePlatform, GooglePlatform]
 
