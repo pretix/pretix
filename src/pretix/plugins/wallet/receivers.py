@@ -20,12 +20,17 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-from pretix.base.signals import register_ticket_outputs, register_global_settings
-from pretix.control.signals import item_forms
-from .ticketoutput import OUTPUTS
 from django.dispatch import receiver
+
+from pretix.base.signals import (
+    register_global_settings, register_ticket_outputs,
+)
+from pretix.control.signals import item_forms
+
 from .forms import WalletLayoutItemForm
 from .models import WalletLayoutItem
+from .ticketoutput import OUTPUTS
+
 
 def connect_signals():
     for output in OUTPUTS:
@@ -33,10 +38,18 @@ def connect_signals():
         def get_register_func(o):
             def register(sender, **kwargs):
                 return o
+
             return register
-        register_ticket_outputs.connect(get_register_func(output), dispatch_uid=f"wallet_output_{output.identifier}")
+
+        register_ticket_outputs.connect(
+            get_register_func(output), dispatch_uid=f"wallet_output_{output.identifier}"
+        )
         if hasattr(output, "get_global_settings"):
-            register_global_settings.connect(output.get_global_settings, dispatch_uid=f"wallet_global_settings_{output.identifier}")
+            register_global_settings.connect(
+                output.get_global_settings,
+                dispatch_uid=f"wallet_global_settings_{output.identifier}",
+            )
+
 
 connect_signals()
 
@@ -48,10 +61,12 @@ def control_item_forms(sender, request, item, **kwargs):
         inst = WalletLayoutItem.objects.get(item=item)
     except WalletLayoutItem.DoesNotExist:
         inst = WalletLayoutItem(item=item)
-    forms.append(WalletLayoutItemForm(
-        instance=inst,
-        event=sender,
-        data=(request.POST if request.method == "POST" else None),
-        prefix="wallet"
-    ))
+    forms.append(
+        WalletLayoutItemForm(
+            instance=inst,
+            event=sender,
+            data=(request.POST if request.method == "POST" else None),
+            prefix="wallet",
+        )
+    )
     return forms
