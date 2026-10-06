@@ -1,34 +1,30 @@
+import hashlib
+import io
+import json
+import logging
+import tempfile
+import zipfile
 from typing import Any
+
+import cryptography
+import cryptography.hazmat.primitives.hashes
+import cryptography.hazmat.primitives.serialization.pkcs7
+import cryptography.x509
+from django.conf import settings
+from django.contrib.staticfiles import finders
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.forms import ValidationError
 from django.templatetags.static import static
-from pretix.plugins.wallet.styles.base import (
-    ColorSettingsField,
-    FieldGroup,
-    FieldGroupDisplay,
-    FloatSettingsField,
-    ImageSettingsField,
-    TextFieldGroup,
-    WalletPlatform,
-    PassStyle,
-    PlaceholderFieldEntry,
-)
+from django.utils.encoding import force_bytes
 from django.utils.translation import gettext as _, override
 from i18nfield.strings import LazyI18nString
-import io
-import hashlib
-import zipfile
-import cryptography
-import cryptography.x509
-import cryptography.hazmat.primitives.serialization.pkcs7
-import cryptography.hazmat.primitives.hashes
-import json
-from django.contrib.staticfiles import finders
+
 from pretix.base.models import OrderPosition
-from django.utils.encoding import force_bytes
-import tempfile
-from django.conf import settings
-from django.core.files.uploadedfile import SimpleUploadedFile
-import logging
-from django.forms import ValidationError
+from pretix.plugins.wallet.styles.base import (
+    ColorSettingsField, FieldGroup, FieldGroupDisplay, FloatSettingsField,
+    ImageSettingsField, PassStyle, PlaceholderFieldEntry, TextFieldGroup,
+    WalletPlatform,
+)
 
 logger = logging.getLogger()
 
