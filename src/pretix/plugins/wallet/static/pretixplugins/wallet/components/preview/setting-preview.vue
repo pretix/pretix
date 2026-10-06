@@ -7,23 +7,26 @@ import PredefinedFieldgroupPreview from "./predefined-fieldgroup-preview.vue";
 const store = inject(StoreKey)!;
 
 const { config } = defineProps<{
-	config: SettingPreview;
+    config: SettingPreview;
 }>();
 
 const settingDef = computed(() => {
-	return Object.fromEntries(
-		store.styles[store.layout.style].settings.map(
-			(x) => [x.identifier, x],
-		),
-	)[config.setting];
+    return Object.fromEntries(
+        store.styles[store.layout.style].settings.map((x) => [x.identifier, x]),
+    )[config.setting];
 });
 const settingValue = computed(() => {
-	const val = store.settings[config.setting];
-	if (settingDef.value.type == "image" && val && 'file' in val && val.file) {
-		return URL.createObjectURL(val.file);
-	} else {
-		return val;
-	}
+    const val = store.settings[config.setting];
+    if (settingDef.value.type == "image" && val && "file" in val && val.file) {
+        return URL.createObjectURL(val.file);
+    } else if (
+        settingDef.value.type == "image" &&
+        settingDef.value.attrs.default
+    ) {
+        return settingDef.value.attrs.default;
+    } else {
+        return val;
+    }
 });
 </script>
 
