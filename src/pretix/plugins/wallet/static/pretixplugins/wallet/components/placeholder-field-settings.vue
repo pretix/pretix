@@ -4,6 +4,7 @@ import Select from "./input/select.vue";
 import I18nInput from "./input/i18ninput.vue";
 import TextContent from "./text-content.vue";
 import { StoreKey } from "../walletStore";
+import { i18nstringLocalize } from "../helpers.js";
 
 const store = inject(StoreKey)!;
 
@@ -54,7 +55,7 @@ const placeholderChoices = computed(() => {
         .filter(([_, { required_context }]) =>
             new Set(required_context).isSubsetOf(availableContext),
         )
-        .map(([k, v]): [string, string] => [k, v.label]);
+        .map(([k, v]): [string, string] => [k, i18nstringLocalize(v.label)]);
     choices.push(["other", gettext("Other…")]);
     return choices;
 });
@@ -70,6 +71,28 @@ const overflowText = computed(() => {
     );
     return interpolate(formats, [props.fieldgroup.max_entries])
 })
+
+const placeholders = computed(() => {
+    return fieldConfig.value.entries.map((entry) => {
+        const placeholder =
+                entry.type === "placeholder"
+                    ? store.variables[props.fieldgroup.content_type][entry.content]
+                    : null;
+        const placeholders = {};
+        let base;
+        if (i18nstringLocalize(entry.label)) {
+            base = entry.label
+        } else if (placeholder) {
+            base = placeholder.label
+        } else {
+            return null
+        }
+        for (const locale of Object.keys(store.locales)) {
+            placeholders[locale] = i18nstringLocalize(base, locale)
+        }
+        return placeholders
+    })
+});
 </script>
 
 <template lang="pug">
@@ -90,7 +113,7 @@ const overflowText = computed(() => {
                         tr(v-for="n, i in fieldConfig.entries.length" :key="i")
                             td(v-if="fieldgroup.display == 'with_label'")
                                 .i18n-form-group
-                                    I18nInput(v-model="fieldConfig.entries[n - 1].label")
+                                    I18nInput(v-model="fieldConfig.entries[n - 1].label" :placeholders="placeholders[n - 1]")
                             td
                                 TextContent(v-if='fieldgroup.content_type == "text"'
                                             v-model="fieldConfig.entries[n - 1]"
