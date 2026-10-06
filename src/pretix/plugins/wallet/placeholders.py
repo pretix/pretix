@@ -8,7 +8,6 @@ from django.dispatch import receiver
 from django.templatetags.static import static
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.models.orders import OrderPosition
 from pretix.base.templatetags.money import money_filter
 from django.utils.formats import date_format
 
@@ -591,16 +590,15 @@ def base_text_placeholders(sender, **kwargs):
             "poweredby",
             LazyI18nString.from_gettext("Logo"),
             set(),
-            # TODO: replace with paths not from another plugin
-            lambda: get_static_file("pretix_passbook/logo.png"),
-            static("pretix_passbook/logo.png"),
+            lambda: get_static_file("pretixplugins/wallet/logo.png"),
+            static("pretixplugins/wallet/logo.png"),
         ),
         FunctionalWalletImagePlaceholder(
             "poweredby_icon",
             LazyI18nString.from_gettext("Icon"),
             set(),
-            lambda: get_static_file("pretix_passbook/icon.png"),
-            static("pretix_passbook/icon.png"),
+            lambda: get_static_file("pretixplugins/wallet/icon.png"),
+            static("pretixplugins/wallet/icon.png"),
         ),
         FunctionalWalletImagePlaceholder(
             "example_no_preview",

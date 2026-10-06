@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { watchEffect } from 'vue';
-import Input from './input/input.vue';
 import Checkbox from './input/checkbox.vue';
 
 const gettext = (window as any).gettext;
