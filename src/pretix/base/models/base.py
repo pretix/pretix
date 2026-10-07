@@ -151,12 +151,29 @@ class LoggingMixin:
         logentry = LogEntry(content_object=self, user=user, action_type=action, event=event,
                             organizer_id=organizer_id, **kwargs)
         if isinstance(data, dict):
-            sensitivekeys = ['password', 'secret', 'api_key']
+            # sensitivekeys are matched whether contained, not exactly
+            sensitivekeys = [
+                'auth',
+                'key',
+                'token',
+                'password',
+                'Password',
+                '_pass',
+                'salt',
+                'secret',
+            ]
 
-            for sensitivekey in sensitivekeys:
-                for k, v in data.items():
-                    if (sensitivekey in k) and v:
+            def clean_dict_recursive(d):
+                data = d
+                data_iterator = d.items() if isinstance(d, dict) else enumerate(d)
+                for k, v in data_iterator:
+                    if v and any([sensitivekey in str(k) for sensitivekey in sensitivekeys]):
                         data[k] = "********"
+                    elif isinstance(v, (list, dict)):
+                        data[k] = clean_dict_recursive(v)
+                return data
+
+            data = clean_dict_recursive(data)
 
             logentry.data = json.dumps(data, cls=CustomJSONEncoder, sort_keys=True)
         elif data:
