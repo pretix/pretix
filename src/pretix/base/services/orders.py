@@ -2474,7 +2474,11 @@ class OrderChangeManager:
                 self.order.log_action('pretix.event.order.changed.feevalue', user=self.user, auth=self.auth, data={
                     'fee': fee.pk,
                     'old_price': fee.value,
-                    'new_price': op.value.gross
+                    'new_price': op.value.gross,
+                    'old_tax_rate': fee.tax_rate,
+                    'new_tax_rate': op.value.rate,
+                    'old_tax_value': fee.tax_value,
+                    'new_tax_value': op.value.tax,
                 })
                 fee.value = op.value.gross
                 fee._calculate_tax()
@@ -2484,9 +2488,13 @@ class OrderChangeManager:
                 self.order.log_action('pretix.event.order.changed.price', user=self.user, auth=self.auth, data={
                     'position': position.pk,
                     'positionid': position.positionid,
-                    'old_price': position.price,
                     'addon_to': position.addon_to_id,
-                    'new_price': op.price.gross
+                    'old_price': position.price,
+                    'new_price': op.price.gross,
+                    'old_tax_rate': position.tax_rate,
+                    'new_tax_rate': op.price.rate,
+                    'old_tax_value': position.tax_value,
+                    'new_tax_value': op.price.tax,
                 })
                 position.price = op.price.gross
                 position.price_includes_rounding_correction = Decimal("0.00")
@@ -2501,25 +2509,43 @@ class OrderChangeManager:
             elif isinstance(op, self.TaxRuleOperation):
                 if isinstance(op.position, OrderPosition):
                     position = position_cache.setdefault(op.position.pk, op.position)
-                    self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data={
+                    log = {
                         'position': position.pk,
                         'positionid': position.positionid,
                         'addon_to': position.addon_to_id,
                         'old_taxrule': position.tax_rule.pk if position.tax_rule else None,
-                        'new_taxrule': op.tax_rule.pk
-                    })
+                        'new_taxrule': op.tax_rule.pk,
+                        'old_price': position.price,
+                        'old_tax_rate': position.tax_rate,
+                        'old_tax_value': position.tax_value,
+                    }
                     position._calculate_tax(op.tax_rule)
                     position.save()
+                    log.update({
+                        'new_price': position.price,
+                        'new_tax_rate': position.tax_rate,
+                        'new_tax_value': position.tax_value,
+                    })
+                    self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data=log)
                 elif isinstance(op.position, OrderFee):
                     fee = fee_cache.setdefault(op.position.pk, op.position)
-                    self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data={
+                    log = {
                         'fee': fee.pk,
                         'fee_type': fee.fee_type,
                         'old_taxrule': fee.tax_rule.pk if fee.tax_rule else None,
-                        'new_taxrule': op.tax_rule.pk
-                    })
+                        'new_taxrule': op.tax_rule.pk,
+                        'old_price': fee.value,
+                        'old_tax_rate': fee.tax_rate,
+                        'old_tax_value': fee.tax_value,
+                    }
                     fee._calculate_tax(op.tax_rule)
                     fee.save()
+                    log.update({
+                        'new_price': fee.value,
+                        'new_tax_rate': fee.tax_rate,
+                        'new_tax_value': fee.tax_value,
+                    })
+                    self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data=log)
             elif isinstance(op, self.CancelFeeOperation):
                 fee = fee_cache.setdefault(op.fee.pk, op.fee)
                 self.order.log_action('pretix.event.order.changed.cancelfee', user=self.user, auth=self.auth, data={
