@@ -122,7 +122,7 @@ dev = [
   "pytest-cache",
   "pytest-cov",
   "pytest-django==4.*",
-  "pytest-mock==3.15.*",
+  "pytest-mock==3.16.*",
   "pytest-sugar",
   "pytest-xdist==3.8.*",
   "pytest-playwright",
