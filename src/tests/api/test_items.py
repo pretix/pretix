@@ -1928,6 +1928,14 @@ def test_addons_update(token_client, organizer, event, item, addon):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug, item.pk, addon.pk),
         {
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug, item.pk, addon.pk),
+        {
             "min_count": 100,
             "max_count": 101
         },
