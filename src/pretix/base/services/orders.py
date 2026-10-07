@@ -678,6 +678,13 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
 
     for p in order.payments.filter(state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING)):
         try:
+            if not p.payment_provider:
+                raise PaymentException(
+                    _("The payment {payment} could not be canceled as the payment provider ({provider}) is not available anymore.").format(
+                        payment=str(p),
+                        provider=p.provider
+                    )
+                )
             with transaction.atomic():
                 p.payment_provider.cancel_payment(p)
                 order.log_action(

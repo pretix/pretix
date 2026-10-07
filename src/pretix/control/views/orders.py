@@ -874,6 +874,13 @@ class OrderPaymentCancel(OrderView):
     def post(self, *args, **kwargs):
         if self.payment.state in (OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING):
             try:
+                if not self.payment.payment_provider:
+                    raise PaymentException(
+                        _('The payment {payment} can not be canceled as the payment provider "{provider}" is not available anymore.').format(
+                            payment=str(self.payment),
+                            provider=self.payment.provider
+                        )
+                    )
                 with transaction.atomic():
                     self.payment.payment_provider.cancel_payment(self.payment)
                     self.order.log_action('pretix.event.order.payment.canceled', {
@@ -898,6 +905,16 @@ class OrderPaymentCancel(OrderView):
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):
+        if not self.payment.payment_provider:
+            messages.error(
+                self.request,
+                _('The payment {payment} can not be canceled as the payment provider "{provider}" is not available anymore.').format(
+                    payment=str(self.payment),
+                    provider=self.payment.provider
+                )
+            )
+            return redirect(self.get_order_url())
+
         return render(self.request, 'pretixcontrol/order/pay_cancel.html', {
             'order': self.order,
         })
@@ -1077,6 +1094,16 @@ class OrderPaymentConfirm(OrderView):
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):
+        if not self.payment.payment_provider:
+            messages.error(
+                self.request,
+                _('The payment {payment} can not be confirmend as the payment provider "{provider}" is not available anymore.').format(
+                    payment=str(self.payment),
+                    provider=self.payment.provider
+                )
+            )
+            return redirect(self.get_order_url())
+
         return render(self.request, 'pretixcontrol/order/pay_complete.html', {
             'form': self.mark_paid_form,
             'order': self.order,
