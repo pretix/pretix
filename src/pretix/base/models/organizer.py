@@ -329,7 +329,7 @@ class Organizer(LoggedModel):
             members__pk=OuterRef('pk'),
             organizer=self,
         )
-        return User.objects.annotate(twp=Exists(team_with_perm)).filter(twp=True)
+        return User.objects.filter(Exists(team_with_perm))
 
 
 def generate_invite_token():
