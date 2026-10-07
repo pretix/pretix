@@ -51,6 +51,7 @@ class CrossSellingService:
         self.sales_channel = sales_channel
         self.cartpositions = cartpositions
         self.customer = customer
+        self._discount_cache = {}
 
     def get_data(self):
         if self.event.has_subevents:
@@ -177,6 +178,7 @@ class CrossSellingService:
                 )
                 if self.customer else None
             ),
+            _discount_cache=self._discount_cache,
         )
         new_items = list()
         for item in items:
