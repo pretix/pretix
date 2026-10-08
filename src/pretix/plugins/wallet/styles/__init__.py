@@ -1,13 +1,13 @@
 from pretix.plugins.wallet.styles.base import PassStyle
 
 from .apple import ApplePlatform, AppleWalletEventTicket
-from .google import GooglePlatform, GoogleWalletEventTicket
+from .google import GooglePlatform, GoogleWalletDefaultEventTicket
 
 AVAILABLE_PLATFORMS = [ApplePlatform, GooglePlatform]
 
 AVAILABLE_STYLES: dict[str, list[type[PassStyle]]] = {
     "apple": [AppleWalletEventTicket],
-    "google": [GoogleWalletEventTicket],
+    "google": [GoogleWalletDefaultEventTicket],
 }
 
 AVAILABLE_STYLES_DICT = {

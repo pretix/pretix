@@ -10,9 +10,14 @@ from pretix.api.helpers import handle_file_upload
 from pretix.base.models import OrderPosition
 
 from ..placeholders import (
-    WalletPlaceholderRenderer, get_available_context,
-    get_wallet_placeholder_renderer, get_wallet_placeholders,
+    WalletPlaceholderRenderer,
+    get_available_context,
+    get_wallet_placeholder_renderer,
+    get_wallet_placeholders,
 )
+from django.templatetags.static import static
+from urllib.parse import urljoin
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 
 class WalletPlatform:
@@ -276,6 +281,7 @@ class SettingsField:
     type: SettingType
     help_text: str | None
     required: bool
+    default: str | None
 
     def asdict(self):
         return {
@@ -284,30 +290,30 @@ class SettingsField:
             "type": self.type,
             "help_text": self.help_text,
             "required": self.required,
-            "attrs": self.attrs,
+            "default": self.default,
         }
-
-    @property
-    def attrs(self):
-        return {}
 
     def layout_schema(self) -> dict[str, Any] | None:
         raise NotImplementedError()
 
 
 class TextSettingsField(SettingsField):
+    default: str | None
+
     def __init__(
         self,
         identifier: str,
         label: str,
         help_text: str | None = None,
         required: bool = False,
+        default: str | None = None,
     ):
         self.identifier = identifier
         self.label = label
         self.type = "text"
         self.help_text = help_text
         self.required = required
+        self.default = default
 
     def layout_schema(self) -> dict[str, Any] | None:
         schema = {"type": "string"}
@@ -323,14 +329,17 @@ class ColorSettingsField(SettingsField):
         label: str,
         help_text: str | None = None,
         required: bool = False,
+        default: str | None = None,
     ):
         self.identifier = identifier
         self.label = label
         self.type = "color"
         self.help_text = help_text
         self.required = required
+        self.default = default
 
     def layout_schema(self) -> dict[str, Any] | None:
+        # TODO: validate that '#' + 6 hex chars
         schema = {"type": "string"}
         if not self.required:
             schema = {"oneOf": [schema, {"type": "null"}]}
@@ -338,23 +347,28 @@ class ColorSettingsField(SettingsField):
 
 
 class ImageSettingsField(SettingsField):
+    _default: str | File | None
+
     def __init__(
         self,
         identifier: str,
         label: str,
         help_text: str | None = None,
-        default: str | None = None,
+        default: str | File | None = None,
     ):
         self.identifier = identifier
         self.label = label
         self.type = "image"
         self.help_text = help_text
         self.required = False
-        self.default = default
+        self._default = default
 
     @property
-    def attrs(self):
-        return {"default": self.default}
+    def default(self):
+        if isinstance(self._default, str):
+            return static(self._default)
+        elif isinstance(self._default, File):
+            return self._default.url
 
     def layout_schema(self):
         return
@@ -372,6 +386,7 @@ class FloatSettingsField(SettingsField):
         required: bool = False,
         min: float | None = None,
         max: float | None = None,
+        default: str | None = None,
     ):
         self.type = "float"
         self.identifier = identifier
@@ -380,6 +395,7 @@ class FloatSettingsField(SettingsField):
         self.required = required
         self.min = min
         self.max = max
+        self.default = default
 
     def layout_schema(self):
         schema = {"type": "number"}
@@ -391,14 +407,21 @@ class FloatSettingsField(SettingsField):
             schema = {"oneOf": [schema, {"type": "null"}]}
         return schema
 
-    @property
-    def attrs(self):
-        return {"min": self.min, "max": self.max}
+    def asdict(self):
+        return super().asdict() | {"min": self.min, "max": self.max}
 
 
 class PassStyle:
     identifier: str  # unique within platform
     name: str
+
+    def __init__(
+        self, event, layout=None, file_settings: dict[str, File] | None = None
+    ):
+        self.event = event
+        self.layout = layout
+        self.file_settings = file_settings or {}
+        self.placeholders = get_wallet_placeholders(self.event)
 
     @property
     def fieldgroups(self) -> list[FieldGroup]:
@@ -414,6 +437,26 @@ class PassStyle:
     @property
     def preview_layout(self) -> list | None:
         return None
+
+    @property
+    def cleaned_settings(self):
+        if not self.layout:
+            return {}
+        settings = {}
+        for setting in self.settings:
+            if isinstance(setting, ImageSettingsField):
+                settings[setting.identifier] = self.file_settings.get(
+                    setting.identifier
+                )
+                if not settings[setting.identifier] and setting.default:
+                    settings[setting.identifier] = setting.default
+            else:
+                settings[setting.identifier] = self.layout.get("settings", {}).get(
+                    setting.identifier, setting.default
+                )
+                if not settings[setting.identifier] and setting.default:
+                    settings[setting.identifier] = setting.default
+        return settings
 
     def asdict(self):  # -> dict[str, Any]:
         context = LayoutContext(
@@ -433,7 +476,6 @@ class PassStyle:
             placeholders=self.placeholders,
             placeholder_renderer=get_wallet_placeholder_renderer(),
         )
-        print(f"schema {self.settings=}")
         schema = {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
             # TODO: $id
@@ -495,14 +537,6 @@ class PassStyle:
                 return placeholder.label, placeholder_value
 
         return None, None
-
-    def __init__(
-        self, event, layout=None, file_settings: dict[str, File] | None = None
-    ):
-        self.event = event
-        self.layout = layout
-        self.file_settings = file_settings or {}
-        self.placeholders = get_wallet_placeholders(self.event)
 
     def validate(self):
         schema = self.layout_schema()
