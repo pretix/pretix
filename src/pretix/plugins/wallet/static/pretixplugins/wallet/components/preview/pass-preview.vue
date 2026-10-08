@@ -115,7 +115,6 @@ console.log("layoutStyle", layoutStyle.value);
 		white-space: pre-wrap;
 	}
 	.fieldgroup-item-image {
-		max-height: 3lh;
 		object-fit: contain;
 	}
 	.fieldgroup-item-qrcode {
@@ -147,6 +146,9 @@ console.log("layoutStyle", layoutStyle.value);
 	}
 	.tight {
 		line-height: 1;
+	}
+	.img-inline {
+		max-height: 3lh;
 	}
 }
 </style>

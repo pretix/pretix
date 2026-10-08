@@ -1,3 +1,5 @@
+from functools import cached_property
+from urllib.parse import urljoin
 import uuid
 
 from django.conf import settings
@@ -12,20 +14,32 @@ from walletobjects.constants import (
     ObjectState,
     ObjectType,
     ReviewStatus,
+    AnimationType,
+    DoorsOpen,
+    ConfirmationCode
 )
+
 
 from pretix.base.models import Event, OrderPosition
 from pretix.base.settings import GlobalSettingsObject
 from pretix.multidomain.urlreverse import eventreverse_absolute
+from pretix.plugins.wallet.models import GoogleWalletInstance, GoogleWalletType
 from pretix.plugins.wallet.styles.base import (
+    ColorSettingsField,
+    FieldGroup,
     FieldGroupDisplay,
+    FloatSettingsField,
     ImageFieldGroup,
+    ImageSettingsField,
     PassStyle,
     PlaceholderFieldEntry,
     PredefinedFieldGroup,
     TextFieldGroup,
     WalletPlatform,
 )
+from django.db import transaction
+
+SHIMMER = False
 
 
 def _get_instance_uuid():
@@ -87,8 +101,50 @@ class GooglePlatform(WalletPlatform):
     name = _("Google")
 
 
-class GoogleWalletStyle(PassStyle):
+class GoogleWalletEventTicketStyle(PassStyle):
     platform = GooglePlatform
+
+    @property
+    def settings(self):
+        return [
+            ImageSettingsField(
+                identifier="logo",
+                label=_("Logo"),
+                default="pretixplugins/wallet/logo.png",
+            ),
+            ImageSettingsField(
+                identifier="hero",
+                label=_("Hero Image"),
+                default=self.event.settings.logo_image,
+            ),
+            ColorSettingsField(
+                identifier="bg_color",
+                label=_("Background Color"),
+                default=self.event.settings.primary_color,
+            ),
+            FloatSettingsField(identifier="lat", label=_("Latitude"), min=-90, max=90),
+            FloatSettingsField(
+                identifier="long", label=_("Longitude"), min=-180, max=180
+            ),
+        ]
+
+    @cached_property
+    def comms(self):
+        return Comms(self.event.settings.get("wallet_google_credentials").read())
+
+    def put_item_cached(self, instance_type, item_type, object):
+        with transaction.atomic():
+            instance, created = GoogleWalletInstance.objects.get_or_create(
+                event=self.event,
+                type=instance_type,
+                identifier=object["id"],
+                defaults={"data": object},
+            )
+            if created or instance.data != object:
+                result = self.comms.put_item(item_type, object["id"], object)
+                instance.data = object
+                instance.save(update_fields=["data"])
+                return result
 
     def _generate_class(self):
         output_class = EventTicketClass(
@@ -109,62 +165,38 @@ class GoogleWalletStyle(PassStyle):
         # TODO: callback url
         # output_class.callback_url(eventreverse_absolute(event.organizer,"plugins:wallet:google_webhook",))
 
-        # TODO: move to pass settings or set defaults
-        # if (event.settings.get('ticketoutput_googlepaypasses_latitude')
-        #         and event.settings.get('ticketoutput_googlepaypasses_longitude')):
-        #     output_class.locations(
-        #         event.settings.get('ticketoutput_googlepaypasses_latitude'),
-        #         event.settings.get('ticketoutput_googlepaypasses_longitude')
-        #     )
-        # elif event.geo_lat and event.geo_lon:
-        #     output_class.locations(
-        #         event.geo_lat,
-        #         event.geo_lon
-        #     )
+        if (lat := self.cleaned_settings["lat"]) and (
+            long := self.cleaned_settings["long"]
+        ):
+            output_class.locations(lat, long)
+        elif self.event.geo_lat and self.event.geo_lon:
+            output_class.locations(self.event.geo_lat, self.event.geo_lon)
 
-        # output_class.country_code(event.settings.locale)
+        output_class.country_code(self.event.settings.locale)
 
-        # if event.settings.get('ticketoutput_googlepaypasses_hero'):
-        #     output_class.hero_image(
-        #         urljoin(django_settings.SITE_URL, event.settings.get('ticketoutput_googlepaypasses_hero').url),
-        #         str(event.name),
-        #         event.name,
-        #     )
+        if hero := self.cleaned_settings["hero"]:
+            output_class.hero_image(
+                urljoin(eventreverse_absolute(self.event, "presale:event.index"), hero),
+                self.event.name,
+            )
 
-        # output_class.hex_background_color(event.settings.get('primary_color'))
-        # output_class.event_id('pretix-%s-%s-%s' % (gs.settings.get('update_check_id'), event.organizer.id, event.id))
+        if logo := self.cleaned_settings["logo"]:
+            output_class.logo(
+                urljoin(eventreverse_absolute(self.event, "presale:event.index"), logo),
+                self.event.name,
+            )
 
-        # if event.settings.get('ticketoutput_googlepaypasses_logo'):
-        #     output_class.logo(
-        #         urljoin(django_settings.SITE_URL, event.settings.get('ticketoutput_googlepaypasses_logo').url),
-        #         str(event.name),
-        #         event.name,
-        #     )
+        output_class.hex_background_color(self.cleaned_settings["bg_color"])
 
-        # if event.location:
-        #     name = {}
-        #     address = {}
+        # # if event.date_from and event.date_to and event.date_admission:
+        # output_class.date_time(
+        #     DoorsOpen.doorsOpen,
+        #     event.date_admission.isoformat(),
+        #     event.date_from.isoformat(),
+        #     event.date_to.isoformat(),
+        # )
 
-        #     for key, value in event.location.data.items():
-        #         lines = value.splitlines()
-        #         name[key] = lines[0]
-        #         # We must provide at least one address line each for the name and address - no way around it.
-        #         if len(lines) > 1:
-        #             address[key] = '\n'.join(value.splitlines()[1:])
-        #         else:
-        #             address[key] = lines[0]
-
-        #     output_class.venue(name, address)
-
-        # if event.date_from and event.date_to and event.date_admission:
-        #     output_class.date_time(
-        #         DoorsOpen.doorsOpen,
-        #         event.date_admission.isoformat(),
-        #         event.date_from.isoformat(),
-        #         event.date_to.isoformat(),
-        #     )
-
-        # output_class.confirmation_code_label(ConfirmationCode.orderNumber)
+        output_class.confirmation_code_label(ConfirmationCode.orderNumber)
 
         # if event.seating_plan_id is not None:
         #     output_class.seat_label(Seat.seat)
@@ -180,23 +212,21 @@ class GoogleWalletStyle(PassStyle):
 
     def generate(self, op):
         self.op = op
-        comms = Comms(self.event.settings.get("wallet_google_credentials").read())
 
         class_object = self._generate_class()
         ticket_object = self._generate_object(op, class_id=class_object["id"])
 
-        # TODO: privacy screen
-        class_object = comms.put_item(
-            ClassType.eventTicketClass, class_object["id"], class_object
+        self.put_item_cached(
+            GoogleWalletType.CLASS, ClassType.eventTicketClass, class_object
         )
-        ticket_object = comms.put_item(
-            ObjectType.eventTicketObject, ticket_object["id"], ticket_object
+        self.put_item_cached(
+            GoogleWalletType.OBJECT, ObjectType.eventTicketObject, ticket_object
         )
 
-        generated_jwt = comms.sign_jwt(
+        generated_jwt = self.comms.sign_jwt(
             ButtonJWT(
                 origins=[settings.SITE_URL],
-                issuer=comms.client_email,
+                issuer=self.comms.client_email,
                 event_ticket_objects=[ticket_object],
                 skinny=True,
             )
@@ -209,46 +239,54 @@ class GoogleWalletStyle(PassStyle):
         )
 
 
-class GoogleWalletEventTicket(GoogleWalletStyle):
+class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
     identifier = "event"
     name = "Event Ticket"
-    fieldgroups = [
-        ImageFieldGroup(
-            identifier="logo",
-            name=_("Logo"),
-            min_entries=0,
-            max_entries=1,
-            default_entries=[
-                PlaceholderFieldEntry(
-                    content="poweredby",
-                )
-            ],
-        ),
-        PredefinedFieldGroup(identifier="venue", name=_("Venue")),
-        PredefinedFieldGroup(identifier="date", name=_("Date")),
-        PredefinedFieldGroup(identifier="seating", name=_("Seating")),
-        TextFieldGroup(
-            identifier="code",
-            name=_("QR-Code"),
-            max_entries=1,
-            display=FieldGroupDisplay.CODE,
-            default_entries=[
-                PlaceholderFieldEntry(
-                    content="secret",
-                )
-            ],
-            context_args={"order_position"},
-        ),
-    ]
+
+    @property
+    def fieldgroups(self):
+        return [
+            ImageFieldGroup(
+                identifier="logo",
+                name=_("Logo"),
+                min_entries=0,
+                max_entries=1,
+                default_entries=[
+                    PlaceholderFieldEntry(
+                        content="poweredby",
+                    )
+                ],
+            ),
+            PredefinedFieldGroup(identifier="venue", name=_("Venue")),
+            PredefinedFieldGroup(identifier="date", name=_("Date")),
+            PredefinedFieldGroup(identifier="seating", name=_("Seating")),
+            PredefinedFieldGroup(identifier="ticket_holder", name=_("Ticket Holder")),
+            TextFieldGroup(
+                identifier="code",
+                name=_("QR-Code"),
+                max_entries=1,
+                display=FieldGroupDisplay.CODE,
+                default_entries=[
+                    PlaceholderFieldEntry(
+                        content="secret",
+                    )
+                ],
+                context_args={"order_position"},
+            ),
+        ]
 
     @property
     def preview_layout(self):
         return [
             {
+                "style": {
+                    "--background-color": {"setting": "bg_color"},
+                    "color": "contrast-color(var(--background-color))",
+                },
                 "rows": [
                     {
                         "children": [
-                            {"fieldgroup": "logo", "relSize": 1},
+                            {"setting": "logo", "display": ["img-inline"]},
                             {
                                 "value": str(self.event.organizer.name),
                                 "relSize": 3,
@@ -284,10 +322,17 @@ class GoogleWalletEventTicket(GoogleWalletStyle):
                         ],
                     },
                     {"fieldgroup": "code"},
-                ]
+                    {"setting": "hero"},
+                ],
             },
             {
                 "rows": [
+                    {
+                        "fieldgroup": "ticket_holder",
+                        "sample": [
+                            {"content": _("John Doe"), "label": _("Ticket Holder")},
+                        ],
+                    },
                     {
                         "fieldgroup": "venue",
                         "sample": [
@@ -319,22 +364,26 @@ class GoogleWalletEventTicket(GoogleWalletStyle):
         output_class = super()._generate_class()
         if self.group_is_active("venue") and all(self.venue()):
             output_class.venue(*self.venue())
-        # TODO: hidden flag to enable:
-        # output_class.securityAnimation(AnimationType.FOIL_SHIMMER)
+        if SHIMMER:
+            output_class.securityAnimation(AnimationType.FOIL_SHIMMER)
         return output_class
+
+    def ticket_holder_name(self, op):
+        return op.attendee_name or (op.addon_to.attendee_name if op.addon_to else None)
 
     def _generate_object(self, op: OrderPosition, class_id: str):
         output_object = super()._generate_object(op, class_id)
         fields = self.get_pass_fields(op)
+
         if fields["code"]:
             output_object.barcode(
                 Barcode.qrCode, fields["code"][0]["value"], fields["code"][0]["value"]
             )
+        output_object.reservation_info(op.order.code)
+        output_object.ticket_number(op.code)
 
-        # output_object.reservation_info("%s-%s" % (op.order.event.slug, op.order.code))
-        # output_object.ticket_holder_name(op.attendee_name or (op.addon_to.attendee_name if op.addon_to else ''))
-        output_object.ticket_holder_name("Some name")
-        output_object.ticket_number(fields["code"][0]["value"])
+        if self.group_is_active("venue") and self.ticket_holder_name(op):
+            output_object.ticket_holder_name(self.ticket_holder_name(op))
         # output_object.ticket_type(
         #     get_translated_dict(
         #         str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
