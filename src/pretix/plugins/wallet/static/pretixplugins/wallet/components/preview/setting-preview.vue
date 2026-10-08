@@ -21,9 +21,9 @@ const settingValue = computed(() => {
         return URL.createObjectURL(val.file);
     } else if (
         settingDef.value.type == "image" &&
-        settingDef.value.attrs.default
+        settingDef.value.default
     ) {
-        return settingDef.value.attrs.default;
+        return settingDef.value.default;
     } else {
         return val;
     }
