@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useId, computed, onMounted, useTemplateRef, onUnmounted } from "vue";
+import { useId, computed, onMounted, useTemplateRef, onUnmounted, onUpdated, onBeforeUpdate } from "vue";
 
 const gettext = (window as any).gettext;
 
@@ -11,12 +11,18 @@ const {
 	label,
 	errors,
 	type = "text",
+	min=null,
+	max=null,
+	defaultVal=null
 } = defineProps<{
 	label?: I18nString;
 	errors?: string[];
 	type?: string;
 	help_text?: string;
 	inline?: boolean;
+	min?: number;
+	max?: number;
+	defaultVal?: string;
 }>();
 const modelValue = defineModel<string | null>();
 const id = useId();
@@ -24,7 +30,7 @@ const inputRef = useTemplateRef("input");
 
 const attrs = computed(() => {
 	if (type === "float") {
-		return { class: "appear-text", type: "number", step: "any" };
+		return { class: "appear-text", type: "number", step: "any", min, max };
 	} else {
 		return { type: "text" };
 	}
@@ -32,7 +38,8 @@ const attrs = computed(() => {
 
 onMounted(() => {
 	if (type == "color") {
-		$(inputRef.value).colorpicker({
+		const jq_elem = $(inputRef.value)
+		jq_elem.colorpicker({
 			format: "hex",
 			align: "left",
 			customClass: "colorpicker-2x",
@@ -48,9 +55,12 @@ onMounted(() => {
 					maxTop: 200,
 				},
 			},
-		}).on('changeColor', (e) => e.value && (modelValue.value = e.value));
+		})
+		jq_elem.on('changeColor', (e) => e.value && (modelValue.value = e.value))
+		jq_elem.on('showPicker', () => {jq_elem.colorpicker('setValue', modelValue.value || defaultVal)});
 	}
 });
+
 onUnmounted(() => {
 	if (type == "color") {
 		$(inputRef.value).colorpicker("destroy");

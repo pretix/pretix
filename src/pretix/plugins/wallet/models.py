@@ -112,7 +112,16 @@ class WalletLayoutFileSetting(models.Model):
 #     content = models.BinaryField()
 #     updated_at = models.DateTimeField(null=True, auto_now=True)
 # prob smth like this
-# class GoogleWalletObject(models.Model):
-#     type = models.CharField(choices=["CLASS", "OBJECT"])
-#     identifier = models.CharField()
-#     data = models.JSONField()
+
+class GoogleWalletType(models.TextChoices):
+    CLASS = "CL", _("Class")
+    OBJECT = "OB", _("Object")
+
+class GoogleWalletInstance(models.Model):
+    event = models.ForeignKey("pretixbase.Event", on_delete=models.CASCADE)
+    type = models.CharField(choices=GoogleWalletType)
+    identifier = models.CharField()
+    data = models.JSONField()
+
+    class Meta:
+        unique_together = (("type", "identifier"),)

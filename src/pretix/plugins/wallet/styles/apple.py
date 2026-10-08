@@ -183,22 +183,22 @@ class AppleWalletStyle(PassStyle):
                 identifier="logo",
                 label=_("Logo"),
                 help_text="Will be displayed on the top left corner of the pass",
-                default=static("pretixplugins/wallet/logo.png"),
+                default="pretixplugins/wallet/logo.png",
             ),
             ImageSettingsField(
                 identifier="icon",
                 label=_("Icon"),
                 help_text="Will be displayed as the file icon",
-                default=static("pretixplugins/wallet/icon.png"),
+                default="pretixplugins/wallet/icon.png",
             ),
-            ImageSettingsField(identifier="background", label=_("Background")),
+            ImageSettingsField(identifier="background", label=_("Background Image")),
+            ColorSettingsField(identifier="bg_color", label=_("Background Color")),
+            ColorSettingsField(identifier="fg_color", label=_("Foreground Color")),
+            ColorSettingsField(identifier="label_color", label=_("Label Color")),
             FloatSettingsField(identifier="lat", label=_("Latitude"), min=-90, max=90),
             FloatSettingsField(
                 identifier="long", label=_("Longitude"), min=-180, max=180
             ),
-            ColorSettingsField(identifier="bg_color", label=_("Background Color")),
-            ColorSettingsField(identifier="fg_color", label=_("Foreground Color")),
-            ColorSettingsField(identifier="label_color", label=_("Label Color")),
         ]
 
     def pass_content(self, fields, strings):
@@ -486,7 +486,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 "rows": [
                     {
                         "children": [
-                            {"setting": "logo"},
+                            {"setting": "logo", "display": ["img-inline"]},
                             {
                                 "fieldgroup": "logo_text",
                                 "relSize": 3,

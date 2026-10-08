@@ -21,5 +21,5 @@ const props = defineProps<{
         template(v-else)
             div.fieldgroup-label.nowrap(v-if="display == 'with_label'") {{ i18nstringLocalize(label) }}
             div.nowrap.content(v-if="content_type == 'text'" :class="display_class") {{ i18nstringLocalize(content) }}
-            img.fieldgroup-item-image(v-else-if="content_type == 'image' && content" :src="i18nstringLocalize(content)")
+            img.fieldgroup-item-image(v-else-if="content_type == 'image' && content" :src="i18nstringLocalize(content)" :class="display_class")
 </template>
