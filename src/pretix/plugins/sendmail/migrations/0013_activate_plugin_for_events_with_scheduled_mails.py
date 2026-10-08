@@ -19,7 +19,9 @@ def activate_plugin(apps, schema_editor):
     )
 
     for event in events:
-        event.enable_plugin('pretix.plugins.sendmail')
+        plugins_active = event.plugins.split(',')
+        plugins_active.append('pretix.plugins.sendmail')
+        event.plugins = ','.join(plugins_active)
         event.save(update_fields=['plugins'])
 
 
