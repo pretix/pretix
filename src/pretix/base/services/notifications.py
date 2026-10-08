@@ -172,10 +172,11 @@ def send_notification_mail(notification: Notification, user: User):
     guid = uuid.uuid4()
     settings_holder = notification.event or notification.organizer
     prefix = settings_holder.settings.mail_prefix
-    if not prefix and notification.event:
-        prefix = notification.event.slug.upper()
-    elif notification.organizer:
-        prefix = notification.organizer.name
+    if not prefix:
+        if notification.event:
+            prefix = notification.event.slug.upper()
+        elif notification.organizer:
+            prefix = notification.organizer.name
     m = OutgoingMail.objects.create(
         guid=guid,
         user=user,
