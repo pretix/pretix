@@ -635,7 +635,7 @@ class VoucherBulkForm(VoucherForm):
                     raise ValidationError(
                         _('Invalid value ({value}) in row {number}.').format(
                             number=i + 1,
-                            value=escape(', '.join(row.values())),
+                            value=', '.join(row.values()),
                         )
                     ) from err
         else:
