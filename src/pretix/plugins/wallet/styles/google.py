@@ -272,7 +272,7 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
                 "rows": [
                     {
                         "children": [
-                            {"setting": "logo", "display": ["img-inline"]},
+                            {"setting": "logo", "display": ["img-circle-sm"]},
                             {
                                 "value": str(self.event.organizer.name),
                                 "relSize": 3,

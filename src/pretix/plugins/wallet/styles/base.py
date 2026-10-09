@@ -440,9 +440,7 @@ class PassStyle:
         settings = {}
         for setting in self.settings:
             if isinstance(setting, ImageSettingsField):
-                settings[setting.identifier] = self.file_settings.get(
-                    setting.identifier
-                )
+                settings[setting.identifier] = self.file_settings[setting.identifier].url if setting.identifier in self.file_settings else None
                 if not settings[setting.identifier] and setting.default:
                     settings[setting.identifier] = setting.default
             else:
