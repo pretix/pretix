@@ -186,21 +186,8 @@ class GoogleWalletEventTicketStyle(PassStyle):
             )
 
         output_class.hex_background_color(self.cleaned_settings["bg_color"])
-
-        # # if event.date_from and event.date_to and event.date_admission:
-        # output_class.date_time(
-        #     DoorsOpen.doorsOpen,
-        #     event.date_admission.isoformat(),
-        #     event.date_from.isoformat(),
-        #     event.date_to.isoformat(),
-        # )
-
         output_class.confirmation_code_label(ConfirmationCode.orderNumber)
 
-        # if event.seating_plan_id is not None:
-        #     output_class.seat_label(Seat.seat)
-
-        # return self._comms().put_item(ClassType.eventTicketClass, class_name, output_class)
         return output_class
 
     def _generate_object(self, op: OrderPosition, class_id: str):
@@ -460,25 +447,7 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
             )
         )
 
-        # places = django_settings.CURRENCY_PLACES.get(op.order.event.currency, 2)
+        # places = settings.CURRENCY_PLACES.get(op.order.event.currency, 2)
         # output_object.face_value(int(op.price * 1000 ** places), op.order.event.currency)
 
-        # if op.order.event.seating_plan_id is not None:
-        #     if op.seat:
-        #         output_object.seat(
-        #             get_translated_dict(
-        #                 _(str(op.seat)),
-        #                 op.order.event.settings.get('locales')
-        #             )
-        #         )
-        #     else:
-        #         output_object.seat(
-        #             get_translated_dict(
-        #                 _('General admission'),
-        #                 op.order.event.settings.get('locales')
-        #             )
-        #         )
-
-        # return self._comms().put_item(ObjectType.eventTicketObject, object_name, output_object)
-        print(output_object)
         return output_object
