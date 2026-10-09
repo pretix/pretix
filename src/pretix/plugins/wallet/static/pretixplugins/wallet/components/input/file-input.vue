@@ -8,7 +8,7 @@ defineOptions({
 });
 const emit = defineEmits<{change: [File]}>()
 const props = defineProps<{
-	label?: I18nString;
+	label?: LocalizableString;
 	errors?: string[];
 	help_text?: string;
     filename?: string;

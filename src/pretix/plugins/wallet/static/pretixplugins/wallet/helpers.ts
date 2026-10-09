@@ -1,4 +1,4 @@
-export function i18nstringLocalize(s: I18nString, locale?: string): string {
+export function i18nstringLocalize(s: LocalizableString, locale?: string): string {
     if (typeof s === 'string') {
         return s
     }

@@ -83,7 +83,7 @@ class LayoutEditorView(LayoutDetailView):
                 "name": platform.name,
                 "styles": {
                     style.identifier: style(self.request.event).asdict()
-                    for style in AVAILABLE_STYLES.get(platform.identifier)
+                    for style in AVAILABLE_STYLES.get(platform.identifier, [])
                 },
             }
             for platform in AVAILABLE_PLATFORMS
