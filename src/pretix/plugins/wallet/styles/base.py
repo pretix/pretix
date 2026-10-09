@@ -10,9 +10,9 @@ from i18nfield.strings import LazyI18nString
 from pretix.api.helpers import handle_file_upload
 from pretix.base.models import OrderPosition
 
-from ..i18n import localizable_to_dict
+from ..i18n import MaybeTranslatedString, localizable_to_dict
 from ..placeholders import (
-    MaybeTranslatedString, WalletPlaceholderRenderer, get_available_context,
+    WalletPlaceholderRenderer, get_available_context,
     get_wallet_placeholder_renderer, get_wallet_placeholders,
 )
 
@@ -58,7 +58,7 @@ class FieldGroup:
     ) -> dict:
         raise NotImplementedError()
 
-    def asdict(self, locales, context: LayoutContext):
+    def asdict(self, locales: list[str], context: LayoutContext):
         return {
             "type": self.type.value,
             "identifier": self.identifier,
@@ -90,7 +90,7 @@ class FieldEntry[T]:
         self.label = label
         self.content = content
 
-    def asdict(self, locales) -> dict:
+    def asdict(self, locales: list[str]) -> dict:
         return {
             "type": self.type.value,
             "content": self.content,
@@ -111,7 +111,7 @@ class CustomFieldEntry(FieldEntry[MaybeTranslatedString]):
     type: FieldEntryType
     content: MaybeTranslatedString
 
-    def asdict(self, locales) -> dict:
+    def asdict(self, locales: list[str]) -> dict:
         return {
             "type": self.type.value,
             "content": localizable_to_dict(self.content, locales),
@@ -165,7 +165,7 @@ class PlaceholderFieldGroup(FieldGroup):
         if self.required and (self.min_entries is None or self.min_entries < 1):
             self.min_entries = 1
 
-    def asdict(self, locales, context: LayoutContext):
+    def asdict(self, locales: list[str], context: LayoutContext):
         return {
             **super().asdict(locales, context),
             "content_type": self.content_type.value,
@@ -278,7 +278,7 @@ class SettingsField:
     required: bool
     default: str | None
 
-    def asdict(self, locales):
+    def asdict(self, locales: list[str]):
         return {
             "identifier": self.identifier,
             "label": self.label,
@@ -402,7 +402,7 @@ class FloatSettingsField(SettingsField):
             schema = {"oneOf": [schema, {"type": "null"}]}
         return schema
 
-    def asdict(self, locales):
+    def asdict(self, locales: list[str]):
         return super().asdict(locales) | {"min": self.min, "max": self.max}
 
 
@@ -560,7 +560,7 @@ class PassStyle:
 
     def get_pass_fields(self, op: OrderPosition):
         if not self.layout:
-            raise ValueError("`value` needs to be set")
+            raise ValueError("`layout` needs to be set")
 
         context = get_wallet_placeholder_renderer(order_position=op)
 
@@ -610,7 +610,7 @@ class PassStyle:
 
     def group_is_active(self, identifier: str):
         if not self.layout:
-            raise ValueError("`value` needs to be set")
+            raise ValueError("`layout` needs to be set")
 
         return self.layout["fieldgroups"].get(identifier, {}).get("active", False)
 
