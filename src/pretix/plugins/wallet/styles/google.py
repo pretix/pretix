@@ -1,43 +1,29 @@
+import uuid
 from functools import cached_property
 from urllib.parse import urljoin
-import uuid
 
 from django.conf import settings
+from django.db import transaction
 from django.utils import translation
+from django.utils.formats import date_format
 from django.utils.translation import gettext as _
 from walletobjects import ButtonJWT, EventTicketClass, EventTicketObject
 from walletobjects.comms import Comms
 from walletobjects.constants import (
-    Barcode,
-    ClassType,
-    MultipleDevicesAndHoldersAllowedStatus,
-    ObjectState,
-    ObjectType,
+    AnimationType, Barcode, ClassType, ConfirmationCode, DoorsOpen,
+    MultipleDevicesAndHoldersAllowedStatus, ObjectState, ObjectType,
     ReviewStatus,
-    AnimationType,
-    DoorsOpen,
-    ConfirmationCode
 )
-
 
 from pretix.base.models import Event, OrderPosition
 from pretix.base.settings import GlobalSettingsObject
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.wallet.models import GoogleWalletInstance, GoogleWalletType
 from pretix.plugins.wallet.styles.base import (
-    ColorSettingsField,
-    FieldGroup,
-    FieldGroupDisplay,
-    FloatSettingsField,
-    ImageFieldGroup,
-    ImageSettingsField,
-    PassStyle,
-    PlaceholderFieldEntry,
-    PredefinedFieldGroup,
-    TextFieldGroup,
-    WalletPlatform,
+    ColorSettingsField, FieldGroupDisplay, FloatSettingsField, ImageFieldGroup,
+    ImageSettingsField, PassStyle, PlaceholderFieldEntry, PredefinedFieldGroup,
+    TextFieldGroup, WalletPlatform,
 )
-from django.db import transaction
 
 SHIMMER = False
 
@@ -310,15 +296,31 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
                     {
                         "fieldgroup": "date",
                         "sample": [
-                            {"content": "01/01/1970", "label": "Date"},
-                            {"content": "12:34", "label": "Time"},
+                            {
+                                "content": date_format(
+                                    self.event.date_from.astimezone(
+                                        self.event.timezone
+                                    ),
+                                    "SHORT_DATE_FORMAT",
+                                ),
+                                "label": "Date",
+                            },
+                            {
+                                "content": date_format(
+                                    self.event.date_from.astimezone(
+                                        self.event.timezone
+                                    ),
+                                    "TIME_FORMAT",
+                                ),
+                                "label": "Time",
+                            },
                         ],
                     },
                     {
                         "fieldgroup": "seating",
                         "sample": [
-                            {"content": "5", "label": "Row"},
-                            {"content": "2", "label": "Seat"},
+                            {"content": _("Ground floor"), "label": _("Section")},
+                            {"content": "5 / 2", "label": _("Row") + " / " + _("Seat")},
                         ],
                     },
                     {"fieldgroup": "code"},
@@ -339,6 +341,22 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
                             {"content": self.venue()[1], "label": self.venue()[0]},
                         ],
                     },
+                    {
+                        "fieldgroup": "date",
+                        "sample": [
+                            {
+                                "content": date_format(
+                                    self.event.date_from.astimezone(
+                                        self.event.timezone
+                                    ),
+                                    "DATETIME_FORMAT",
+                                ),
+                                "label": _("Event Start Time"),
+                            },
+                        ],
+                    },
+                    {"value": "ABCDE-1", "label": _("Ticket Number")},
+                    {"value": "ABCDE", "label": _("Order Number")},
                 ]
             },
         ]
@@ -364,8 +382,22 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
         output_class = super()._generate_class()
         if self.group_is_active("venue") and all(self.venue()):
             output_class.venue(*self.venue())
+
+        if self.group_is_active("date"):
+            if self.event.date_from:
+                output_class.start(self.event.date_from.isoformat())
+
+            if self.event.settings.show_date_to and self.event.date_to:
+                output_class.end(self.event.date_to.isoformat())
+
+            if self.event.date_admission:
+                output_class.doors_open(
+                    DoorsOpen.doorsOpen, self.event.date_admission.isoformat()
+                )
+
         if SHIMMER:
             output_class.securityAnimation(AnimationType.FOIL_SHIMMER)
+        print(output_class)
         return output_class
 
     def ticket_holder_name(self, op):
@@ -382,14 +414,31 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
         output_object.reservation_info(op.order.code)
         output_object.ticket_number(op.code)
 
-        if self.group_is_active("venue") and self.ticket_holder_name(op):
+        if self.group_is_active("ticket_holder") and self.ticket_holder_name(op):
             output_object.ticket_holder_name(self.ticket_holder_name(op))
-        # output_object.ticket_type(
-        #     get_translated_dict(
-        #         str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
-        #         op.order.event.settings.get('locales')
-        #     )
-        # )
+
+        if self.group_is_active("seating") and (seat := self.op.seat):
+            if seat.zone_name:
+                output_object.section(seat.zone_name)
+
+            if seat.row_label:
+                output_object.row(seat.row_label)
+            elif seat.row_name:
+                output_object.row(seat.row_name)
+
+            if seat.seat_label:
+                output_object.seat(seat.seat_label)
+            elif seat.seat_number:
+                output_object.seat(seat.seat_number)
+
+        output_object.valid_time_interval(op.valid_from, op.valid_until)
+        output_object.ticket_type(
+            get_translated_dict(
+                str(op.item)
+                + (" – " + str(op.variation.value) if op.variation else ""),
+                op.order.event.settings.get("locales"),
+            )
+        )
 
         # places = django_settings.CURRENCY_PLACES.get(op.order.event.currency, 2)
         # output_object.face_value(int(op.price * 1000 ** places), op.order.event.currency)
@@ -411,4 +460,5 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
         #         )
 
         # return self._comms().put_item(ObjectType.eventTicketObject, object_name, output_object)
+        print(output_object)
         return output_object
