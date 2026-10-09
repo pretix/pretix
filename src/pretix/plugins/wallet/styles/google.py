@@ -368,6 +368,7 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
                             },
                         ],
                     },
+                    {"value": _("Sample product"), "label": _("Ticket Type")},
                     {"value": "ABCDE-1", "label": _("Ticket Number")},
                     {"value": "ABCDE", "label": _("Order Number")},
                     {
