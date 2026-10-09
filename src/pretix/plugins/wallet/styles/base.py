@@ -4,20 +4,17 @@ from typing import Any, Literal, TypedDict
 import jsonschema
 from django.core.exceptions import ValidationError
 from django.core.files import File
+from django.templatetags.static import static
 from i18nfield.strings import LazyI18nString
 
 from pretix.api.helpers import handle_file_upload
 from pretix.base.models import OrderPosition
 
+from ..i18n import localizable_to_dict
 from ..placeholders import (
-    WalletPlaceholderRenderer,
-    get_available_context,
-    get_wallet_placeholder_renderer,
-    get_wallet_placeholders,
+    MaybeTranslatedString, WalletPlaceholderRenderer, get_available_context,
+    get_wallet_placeholder_renderer, get_wallet_placeholders,
 )
-from django.templatetags.static import static
-from urllib.parse import urljoin
-from pretix.multidomain.urlreverse import eventreverse_absolute
 
 
 class WalletPlatform:
@@ -61,7 +58,7 @@ class FieldGroup:
     ) -> dict:
         raise NotImplementedError()
 
-    def asdict(self, context: LayoutContext):
+    def asdict(self, locales, context: LayoutContext):
         return {
             "type": self.type.value,
             "identifier": self.identifier,
@@ -83,44 +80,42 @@ class FieldEntryType(enum.Enum):
 
 class FieldEntry[T]:
     type: FieldEntryType
-    label: LazyI18nString | None
+    label: MaybeTranslatedString | None
     content: T
 
     def __init__(
-        self, type: FieldEntryType, content: T, label: LazyI18nString | None = None
+        self, type: FieldEntryType, content: T, label: MaybeTranslatedString | None = None
     ):
         self.type = type
         self.label = label
         self.content = content
 
-    def asdict(self) -> dict:
+    def asdict(self, locales) -> dict:
         return {
             "type": self.type.value,
             "content": self.content,
-            "label": self.label.data if self.label is not None else None,
+            "label": localizable_to_dict(self.label, locales) if self.label is not None else None,
         }
 
 
 class PlaceholderFieldEntry(FieldEntry[str]):
     type = FieldEntryType.PLACEHOLDER
-    label: LazyI18nString | None
     content: str
 
-    def __init__(self, content: str, label: LazyI18nString | None = None):
+    def __init__(self, content: str, label: MaybeTranslatedString | None = None):
         self.label = label
         self.content = content
 
 
-class CustomFieldEntry(FieldEntry[LazyI18nString]):
+class CustomFieldEntry(FieldEntry[MaybeTranslatedString]):
     type: FieldEntryType
-    label: LazyI18nString | None
-    content: LazyI18nString
+    content: MaybeTranslatedString
 
-    def asdict(self) -> dict:
+    def asdict(self, locales) -> dict:
         return {
             "type": self.type.value,
-            "content": self.content.data,
-            "label": self.label.data if self.label else None,
+            "content": localizable_to_dict(self.content, locales),
+            "label": localizable_to_dict(self.label, locales) if self.label else None,
         }
 
 
@@ -170,11 +165,11 @@ class PlaceholderFieldGroup(FieldGroup):
         if self.required and (self.min_entries is None or self.min_entries < 1):
             self.min_entries = 1
 
-    def asdict(self, context: LayoutContext):
+    def asdict(self, locales, context: LayoutContext):
         return {
-            **super().asdict(context),
+            **super().asdict(locales, context),
             "content_type": self.content_type.value,
-            "default_entries": [x.asdict() for x in self.default_entries],
+            "default_entries": [x.asdict(locales) for x in self.default_entries],
             "display": self.display.value,
             "min_entries": self.min_entries,
             "max_entries": self.max_entries,
@@ -283,7 +278,7 @@ class SettingsField:
     required: bool
     default: str | None
 
-    def asdict(self):
+    def asdict(self, locales):
         return {
             "identifier": self.identifier,
             "label": self.label,
@@ -398,7 +393,7 @@ class FloatSettingsField(SettingsField):
         self.default = default
 
     def layout_schema(self):
-        schema = {"type": "number"}
+        schema: dict[str, Any] = {"type": "number"}
         if self.min is not None:
             schema["minimum"] = self.min
         if self.max is not None:
@@ -407,8 +402,8 @@ class FloatSettingsField(SettingsField):
             schema = {"oneOf": [schema, {"type": "null"}]}
         return schema
 
-    def asdict(self):
-        return super().asdict() | {"min": self.min, "max": self.max}
+    def asdict(self, locales):
+        return super().asdict(locales) | {"min": self.min, "max": self.max}
 
 
 class PassStyle:
@@ -466,9 +461,9 @@ class PassStyle:
         return {
             "identifier": self.identifier,
             "name": self.name,
-            "fieldgroups": [x.asdict(context) for x in self.fieldgroups],
+            "fieldgroups": [x.asdict(self.event.settings.locales, context) for x in self.fieldgroups],
             "preview_layout": self.preview_layout,
-            "settings": [x.asdict() for x in self.settings],
+            "settings": [x.asdict(self.event.settings.locales) for x in self.settings],
         }
 
     def layout_schema(self):
@@ -580,7 +575,7 @@ class PassStyle:
                     for field in self.layout["fieldgroups"][group.identifier][
                         "entries"
                     ]:
-                        field_entry = {}
+                        field_entry: dict[str, MaybeTranslatedString | None] = {}
                         if group.display == FieldGroupDisplay.WITH_LABEL:
                             field_entry["label"] = LazyI18nString(field["label"])
                         if field["type"] == FieldEntryType.PLACEHOLDER.value:
@@ -592,7 +587,7 @@ class PassStyle:
                                 and not str(field_entry["label"])
                                 and label
                             ):
-                                field_entry["label"] = LazyI18nString(label)
+                                field_entry["label"] = label
 
                         elif field["type"] == FieldEntryType.CUSTOM.value:
                             field_entry["value"] = LazyI18nString(field["content"])
