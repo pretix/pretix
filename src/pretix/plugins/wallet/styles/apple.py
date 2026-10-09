@@ -14,21 +14,17 @@ from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.forms import ValidationError
-from django.templatetags.static import static
 from django.utils.encoding import force_bytes
-from django.utils.translation import gettext as _, override
-from i18nfield.strings import LazyI18nString
+from django.utils.translation import gettext as _
 
 from pretix.base.models import OrderPosition
+from pretix.plugins.wallet.i18n import (
+    FormattingLocalizableString, GettextLocalizableString, Localizable,
+    MaybeTranslatedString,
+)
 from pretix.plugins.wallet.styles.base import (
-    ColorSettingsField,
-    FieldGroup,
-    FieldGroupDisplay,
-    FloatSettingsField,
-    ImageSettingsField,
-    PassStyle,
-    PlaceholderFieldEntry,
-    TextFieldGroup,
+    ColorSettingsField, FieldGroup, FieldGroupDisplay, FloatSettingsField,
+    ImageSettingsField, PassStyle, PlaceholderFieldEntry, TextFieldGroup,
     WalletPlatform,
 )
 
@@ -40,32 +36,15 @@ class ApplePlatform(WalletPlatform):
     name = _("Apple")
 
 
-class FormattedLazyI18nString:
-    def __init__(self, base_str: LazyI18nString, **format_args: str):
-        self.base_str = base_str
-        self.format_args = format_args
-
-    def localize(self, language):
-        return self.base_str.localize(language).format(**self.format_args)
-
-
-def lazyi18nstring_from_gettext(text: str, locales: set[str]) -> LazyI18nString:
-    data = {}
-    for locale in locales:
-        with override(locale):
-            data[locale] = _(text)
-    return LazyI18nString(data)
-
-
 class StringResource:
-    entries: dict[str, LazyI18nString | FormattedLazyI18nString]
+    entries: dict[str, MaybeTranslatedString]
     locales: set[str]
 
     def __init__(self, locales):
         self.entries = {}
         self.locales = set(locales)
 
-    def add_entry(self, key: str, value: LazyI18nString | FormattedLazyI18nString):
+    def add_entry(self, key: str, value: MaybeTranslatedString):
         if key in self.entries:
             raise ValueError(f"{key} already exists in this StringResource")
         self.entries[key] = value
@@ -78,9 +57,10 @@ class StringResource:
     def generate_resource(self, language):
         output = ""
         for key, entry in self.entries.items():
-            output += (
-                f'"{self.escape(key)}" = "{self.escape(entry.localize(language))}";\n'
-            )
+            if isinstance(entry, str):
+                output += f'"{self.escape(key)}" = "{self.escape(entry)}";\n'
+            else:
+                output += f'"{self.escape(key)}" = "{self.escape(entry.localize(language))}";\n'
         return output.strip()
 
     def generate(self):
@@ -208,12 +188,16 @@ class AppleWalletStyle(PassStyle):
         event = op.subevent or op.order.event
         tz = event.timezone
 
-        ticket = str(op.item.name)
-        if op.variation:
-            ticket += " - " + str(op.variation)
+        ticket = (
+            FormattingLocalizableString(
+                "{name} - {variation}", name=op.item.name, variation=op.variation.name
+            )
+            if op.variation
+            else op.item.name
+        )
 
-        description = FormattedLazyI18nString(
-            LazyI18nString.from_gettext("Ticket for {event} ({product})"),
+        description = FormattingLocalizableString(
+            GettextLocalizableString.gettext("Ticket for {event} ({product})"),
             event=self.event.name,
             product=ticket,
         )
@@ -236,14 +220,13 @@ class AppleWalletStyle(PassStyle):
             **self.pass_content(fields, strings),
         }
 
+        # TODO: Apples specs says this should be  "specified as a CSS-style RGB triple, such as rgb(100, 10, 110).", but hex codes work as well
         if bg_color := self.layout["settings"].get("bg_color"):
-            pass_json["backgroundColor"] = (
-                bg_color  # TODO: specified as a CSS-style RGB triple, such as rgb(100, 10, 110).
-            )
+            pass_json["backgroundColor"] = bg_color
         if fg_color := self.layout["settings"].get("fg_color"):
-            pass_json["foregroundColor"] = fg_color # TODO: specified as a CSS-style RGB triple, such as rgb(100, 10, 110).
+            pass_json["foregroundColor"] = fg_color
         if label_color := self.layout["settings"].get("label_color"):
-            pass_json["labelColor"] = label_color  # TODO: specified as a CSS-style RGB triple, such as rgb(100, 10, 110).
+            pass_json["labelColor"] = label_color
 
         if "expirationDate" not in pass_json:
             if op.valid_until:
@@ -289,7 +272,6 @@ class AppleWalletStyle(PassStyle):
                     "longitude": float(event.get_lon),
                 }
 
-        print(pass_json)
         return pass_json
 
     def generate(self, op: OrderPosition):
@@ -297,7 +279,6 @@ class AppleWalletStyle(PassStyle):
         filename = "{}-{}.pkpass".format(order.event.slug, order.code)
 
         fields = self.get_pass_fields(op)
-
         pkpass = SignedZipFile(
             self.event.settings.wallet_apple_ca_certificate.read(),
             self.event.settings.wallet_apple_certificate.read(),
@@ -332,6 +313,7 @@ class AppleWalletStyle(PassStyle):
             pkpass.add_file("background.png", background.read())
 
         for lang, content in strings.generate().items():
+            print(lang, content)
             pkpass.add_file(f"{lang}.lproj/pass.strings", content)
         pkpass.add_file("pass.json", json.dumps(pass_json))
         result = pkpass.finish()
@@ -360,8 +342,8 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 default_entries=[
                     PlaceholderFieldEntry(
                         content="admission_or_date_from",
-                        label=lazyi18nstring_from_gettext(
-                            "Admission", self.event.settings.locales
+                        label=GettextLocalizableString.gettext(
+                            "Admission"
                         ),
                     ),
                 ],
@@ -388,8 +370,8 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 default_entries=[
                     PlaceholderFieldEntry(
                         content="item_with_variation",
-                        label=lazyi18nstring_from_gettext(
-                            "Product", self.event.settings.locales
+                        label=GettextLocalizableString.gettext(
+                            "Product"
                         ),
                     )
                 ],
@@ -404,8 +386,8 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 default_entries=[
                     PlaceholderFieldEntry(
                         content="seat",
-                        label=lazyi18nstring_from_gettext(
-                            "Seat", locales=self.event.settings.locales
+                        label=GettextLocalizableString.gettext(
+                            "Seat"
                         ),
                     ),
                     PlaceholderFieldEntry(
@@ -413,14 +395,14 @@ class AppleWalletEventTicket(AppleWalletStyle):
                     ),
                     PlaceholderFieldEntry(
                         content="program_start",
-                        label=lazyi18nstring_from_gettext(
-                            "From", locales=self.event.settings.locales
+                        label=GettextLocalizableString.gettext(
+                            "From"
                         ),
                     ),
                     PlaceholderFieldEntry(
                         content="program_end",
-                        label=lazyi18nstring_from_gettext(
-                            "To", locales=self.event.settings.locales
+                        label=GettextLocalizableString.gettext(
+                            "To"
                         ),
                     ),
                 ],
@@ -450,8 +432,8 @@ class AppleWalletEventTicket(AppleWalletStyle):
                     ),
                     PlaceholderFieldEntry(
                         content="order_email",
-                        label=lazyi18nstring_from_gettext(
-                            "Ordered by", self.event.settings.locales
+                        label=GettextLocalizableString.gettext(
+                            "Ordered by"
                         ),
                     ),
                     PlaceholderFieldEntry(
@@ -511,16 +493,20 @@ class AppleWalletEventTicket(AppleWalletStyle):
         ]
 
     def convert_fields(self, strings, fields, prefix):
+        # TODO: detect if a string-value/string-label is the same as a generated field name
+        # eg if a placeholder returns "primary-0-label", this would not be shown to the user but instead replaces with the label
         converted = []
         for i, f in enumerate(fields):
             converted_field = {**f, "key": f"{prefix}-{i}"}
             if "label" in converted_field and isinstance(
-                converted_field["label"], LazyI18nString
+                converted_field["label"], Localizable
             ):
                 strings.add_entry(f"{prefix}-{i}-label", converted_field["label"])
                 converted_field["label"] = f"{prefix}-{i}-label"
 
-            if isinstance(converted_field["value"], LazyI18nString):
+            if isinstance(
+                converted_field["value"], Localizable
+            ):
                 strings.add_entry(f"{prefix}-{i}-value", converted_field["value"])
                 converted_field["value"] = f"{prefix}-{i}-value"
             converted.append(converted_field)

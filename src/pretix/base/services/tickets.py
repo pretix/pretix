@@ -21,24 +21,27 @@
 #
 import logging
 import os
+import uuid
+from datetime import datetime, timezone
 from decimal import Decimal
-from datetime import datetime, timedelta, timezone
+
 from django.core.files.base import ContentFile
+from django.db import transaction
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django_scopes import scopes_disabled
+from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, Order,
-    OrderPosition, CachedFile
+    CachedCombinedTicket, CachedFile, CachedTicket, Event, InvoiceAddress,
+    Order, OrderPosition,
 )
 from pretix.base.services.tasks import EventTask, ProfiledTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import register_ticket_outputs
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
-from django.db import transaction
 
 logger = logging.getLogger(__name__)
 
@@ -64,9 +67,10 @@ def generate_orderposition(order_position: int, provider: str, cf: CachedFile | 
                     for ct in CachedTicket.objects.filter(order_position=order_position, provider=provider):
                         ct.delete()
                     ct = CachedTicket.objects.create(order_position=order_position, provider=provider,
-                                                    extension=ext, type=ttype, file=None)
+                                                     extension=ext, type=ttype, file=None)
                     ct.file.save(filename, ContentFile(data))
                     return ct.pk
+
 
 def generate_order(order: int, provider: str, cf: CachedFile | None = None):
     order = Order.objects.select_related('event').get(id=order)
@@ -89,9 +93,10 @@ def generate_order(order: int, provider: str, cf: CachedFile | None = None):
                     for ct in CachedCombinedTicket.objects.filter(order=order, provider=provider):
                         ct.delete()
                     ct = CachedCombinedTicket.objects.create(order=order, provider=provider, extension=ext,
-                                                            type=ttype, file=None)
+                                                             type=ttype, file=None)
                     ct.file.save(filename, ContentFile(data))
                     return ct.pk
+
 
 @app.task(base=ProfiledTask)
 def generate(model: str, pk: int, provider: str, cachedfile_pk: int | None = None):
@@ -109,18 +114,19 @@ def generate(model: str, pk: int, provider: str, cachedfile_pk: int | None = Non
 class DummyRollbackException(Exception):
     pass
 
+
 def get_preview_position(event):
     connection = transaction.get_connection()
     if not connection.in_atomic_block:
         raise RuntimeError("get_preview_position needs to be called in a rolledback_transaction")
 
-    item = event.items.create(name=_("Sample product"), default_price=Decimal('42.23'),
-                                  description=_("Sample product description"))
-    item2 = event.items.create(name=_("Sample workshop"), default_price=Decimal('23.40'))
+    item = event.items.create(name=LazyI18nString.from_gettext("Sample product"), default_price=Decimal('42.23'),
+                              description=_("Sample product description"))
+    item2 = event.items.create(name=LazyI18nString.from_gettext("Sample workshop"), default_price=Decimal('23.40'))
     item.program_times.create(item=item, start=datetime(2017, 12, 27, 0, 0, 0, tzinfo=timezone.utc),
-                                  end=datetime(2017, 12, 28, 0, 0, 0, tzinfo=timezone.utc))
+                              end=datetime(2017, 12, 28, 0, 0, 0, tzinfo=timezone.utc))
 
-    from pretix.base.models import Order
+    from pretix.base.models import Order, SeatingPlan
     order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
                                 email='sample@pretix.eu',
                                 locale=event.settings.locale,
@@ -129,13 +135,23 @@ def get_preview_position(event):
 
     scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
     sample = {k: str(v) for k, v in scheme['sample'].items()}
-    position = order.positions.create(item=item, attendee_name_parts=sample, price=item.default_price)
+
+    SeatingPlan.objects.create(
+        name="Plan", organizer=event.organizer, layout="{}"
+    )
+    event.seat_category_mappings.create(
+        layout_category='Stalls', product=item
+    )
+    seat = event.seats.create(seat_number="1", row_label="C", product=item, seat_guid=uuid.uuid4())
+
+    position = order.positions.create(item=item, attendee_name_parts=sample, price=item.default_price, seat=seat)
     s = event.subevents.first()
     order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=position, subevent=s)
     order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=position, subevent=s)
 
     InvoiceAddress.objects.create(order=order, name_parts=sample, company=_("Sample company"))
     return position
+
 
 def preview(event: int, provider: str, provider_arguments: dict = {}):
     event = Event.objects.get(id=event)

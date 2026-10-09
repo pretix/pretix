@@ -14,7 +14,6 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
     CreateView, DeleteView, DetailView, ListView, View,
 )
-from i18nfield.strings import LazyI18nString
 from pretix_vrpayment_wero.payment import HttpRequest
 
 from pretix.base.i18n import language
@@ -23,6 +22,7 @@ from pretix.base.services.tickets import get_preview_position
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.database import rolledback_transaction
 from pretix.helpers.models import modelclone
+from pretix.plugins.wallet.i18n import localizable_to_dict
 
 from .models import WalletLayout
 from .placeholders import (
@@ -31,13 +31,6 @@ from .placeholders import (
 from .styles import (
     AVAILABLE_PLATFORMS, AVAILABLE_STYLES, AVAILABLE_STYLES_DICT,
 )
-
-
-def localize_lazyi18n_string(string: LazyI18nString, locales):
-    data = {}
-    for locale in locales:
-        data[locale] = string.localize(locale)
-    return data
 
 
 def get_editor_placeholders(event):
@@ -50,11 +43,7 @@ def get_editor_placeholders(event):
         placeholders = {
             t: {
                 pid: {
-                    "label": (
-                        localize_lazyi18n_string(p.label, event.settings.locales)
-                        if isinstance(p.label, LazyI18nString)
-                        else str(p.label)
-                    ),
+                    "label": (localizable_to_dict(p.label, event.settings.locales)),
                     "sample": str(context.render_sample(p)),
                     "required_context": list(sorted(p.required_context)),
                 }
@@ -220,6 +209,8 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
             layout.validate()
 
             fname, mimet, data = layout.generate(p)
+            if mimet == "text/uri-list":
+                return redirect(data)
             resp = HttpResponse(data, content_type=mimet)
             ftype = fname.split(".")[-1]
             if not mimet.startswith("text/"):
