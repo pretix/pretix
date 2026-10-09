@@ -8,6 +8,7 @@ type Style = {
 	identifier: string;
 	name: string;
 	fieldgroups: FieldGroupDefinition[];
+	preview_layout: PreviewLayout[];
 	settings: Setting[];
 };
 
@@ -22,14 +23,12 @@ type Variables = Record<string, Variable>;
 type VariableConfig = Record<string, Variables>;
 type Platforms = Platform[];
 
-//
-
 type BaseFieldGroupDefinition = {
-	type: string;
+	type: FieldGroupType;
 	identifier: string;
 	name: string;
-	required: boolean;
 	description: string;
+	required: boolean;
 };
 
 type FieldGroupDefinition =
@@ -37,6 +36,8 @@ type FieldGroupDefinition =
 	| PredefinedFieldGroupDefinition;
 
 type FieldGroupDisplay = "plain" | "with_label" | "code";
+type FieldGroupType = "placeholder" | "predefined";
+type FieldContentType = "text" | "image";
 
 type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
 	type: "placeholder";
@@ -52,20 +53,19 @@ type PredefinedFieldGroupDefinition = BaseFieldGroupDefinition & {
 	type: "predefined";
 };
 
-type I18nString = null | string | Record<string, string>;
+type LocalizableString = null | string | Record<string, string>;
 
-type FieldContentType = "text" | "image";
 
 type PlaceholderFieldEntry = {
 	type: "placeholder";
-	label?: I18nString;
-	content?: string;
+	label: LocalizableString;
+	content: string;
 };
 
 type CustomFieldEntry = {
 	type: "custom";
-	label?: I18nString;
-	content?: I18nString;
+	label?: LocalizableString;
+	content?: LocalizableString;
 };
 
 type FieldEntry = PlaceholderFieldEntry | CustomFieldEntry;
@@ -76,7 +76,7 @@ type Setting = {
 	type: "text" | "image" | "color" | "float";
 	required: boolean;
 	help_text: string;
-	attrs: Record<string, any>
+	default: string
 };
 
 type PlaceholderFieldGroupConfig = {
@@ -97,25 +97,8 @@ type LayoutData = {
 	settings?: Record<string, any>;
 };
 
-type PlatformLayout = {
-	platform: string;
-	style: string | null;
-	layout: LayoutData;
-};
+type PreviewLayout = {"style": Record<string, string | {settting: string}>, "rows": PreviewRow};
 
-type WalletLayout = {
-	name?: string;
-	platform_layouts: PlatformLayout[];
-};
-type WalletStore = {
-	platforms: Platforms;
-	variables: VariableConfig;
-	locales: Record<string, string>;
-	csrfToken: String;
-	walletLayout: WalletLayout | null;
-};
-
-type PreviewLayout = Array<PreviewRow>;
 type PreviewRow =
 	| {
 			children: Array<PreviewRow>;
@@ -138,7 +121,8 @@ type SettingPreview = {
 type PreviewFieldgroup =
 	| PredefinedFieldgroupPreview
 	| PlaceholderFieldGroupPreview;
-type FixedPreview = { value: I18nString; label?: I18nString } & PreviewProps;
+
+type FixedPreview = { value: LocalizableString; label?: LocalizableString } & PreviewProps;
 
 type PlaceholderFieldGroupPreview = {
 	fieldgroup: string;
@@ -150,8 +134,8 @@ type PredefinedFieldgroupPreview = {
 } & PreviewProps;
 
 type PreviewSample = {
-	content: I18nString;
-	label: I18nString;
+	content: LocalizableString;
+	label: LocalizableString;
 };
 
 type NewPlatformLayout = {
