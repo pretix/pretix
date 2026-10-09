@@ -6,11 +6,14 @@ from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.dispatch import receiver
 from django.templatetags.static import static
-from django.utils.formats import date_format
-from i18nfield.strings import LazyI18nString
 
+from pretix.base.models.event import Event
 from pretix.base.templatetags.money import money_filter
 from pretix.multidomain.urlreverse import eventreverse_absolute
+from pretix.plugins.wallet.i18n import (
+    FormattingLocalizableString, GettextLocalizableString, LocalizableDatetime,
+    MaybeTranslatedString,
+)
 
 from .signals import register_wallet_placeholders
 
@@ -38,12 +41,12 @@ class BaseWalletPlaceholder:
         raise NotImplementedError()
 
     @property
-    def label(self) -> LazyI18nString:
+    def label(self) -> MaybeTranslatedString:
         """The human readable name of this placeholder"""
         raise NotImplementedError()
 
     @property
-    def control_label(self) -> LazyI18nString:
+    def control_label(self) -> MaybeTranslatedString:
         """
         The human readable name of this placeholder shown in the backend.
 
@@ -63,7 +66,7 @@ class BaseWalletTextPlaceholder(BaseWalletPlaceholder):
     def content_type(self) -> str:
         return "text"
 
-    def render(self, **context) -> LazyI18nString | str | None:
+    def render(self, **context) -> MaybeTranslatedString | None:
         """
         This method is called to generate the text that is being shown on the pass.
         You will be passed the keyword arguments specified in ``required_context``.
@@ -71,7 +74,7 @@ class BaseWalletTextPlaceholder(BaseWalletPlaceholder):
         """
         raise NotImplementedError()
 
-    def render_sample(self, **context) -> LazyI18nString | str:
+    def render_sample(self, **context) -> MaybeTranslatedString:
         """
         This method is called to generate a text to be used in previews.
 
@@ -79,8 +82,8 @@ class BaseWalletTextPlaceholder(BaseWalletPlaceholder):
         If those instances contain all data needed, you do not need to implement this.
         """
         sample = self.render(**context)
-        if sample is None:
-            raise RuntimeError("`render` returned None when rendering a sample")
+        if not sample:
+            raise RuntimeError("`render` returned falsy value when rendering a sample")
         return sample
 
 
@@ -111,11 +114,11 @@ class FunctionalWalletTextPlaceholder(BaseWalletTextPlaceholder):
     def __init__(
         self,
         identifier: str,
-        label: LazyI18nString,
+        label: MaybeTranslatedString,
         args: set[str],
-        func: Callable[..., LazyI18nString | str | None],
+        func: Callable[..., MaybeTranslatedString | None],
         sample: (
-            None | LazyI18nString | str | Callable[..., str | LazyI18nString]
+            None | MaybeTranslatedString | Callable[..., MaybeTranslatedString]
         ) = None,
     ):
         self._identifier = identifier
@@ -123,6 +126,9 @@ class FunctionalWalletTextPlaceholder(BaseWalletTextPlaceholder):
         self._args = args
         self.render = func
         self._sample = sample
+
+    def __repr__(self):
+        return f"FunctionalWalletTextPlaceholder(identifier={self.identifier!r}, label={self.label!r})"
 
     @property
     def identifier(self):
@@ -136,7 +142,7 @@ class FunctionalWalletTextPlaceholder(BaseWalletTextPlaceholder):
     def required_context(self) -> set[str]:
         return self._args
 
-    def render_sample(self, **context) -> LazyI18nString | str:
+    def render_sample(self, **context) -> MaybeTranslatedString:
         if isinstance(self._sample, Callable):
             return self._sample(**context)
         elif self._sample:
@@ -149,7 +155,7 @@ class FunctionalWalletImagePlaceholder(BaseWalletImagePlaceholder):
     def __init__(
         self,
         identifier: str,
-        label: LazyI18nString,
+        label: MaybeTranslatedString,
         args: set[str],
         func: Callable[..., File | None],
         sample: None | str | Callable[..., str] = None,
@@ -334,13 +340,7 @@ def get_wallet_placeholder_renderer(**kwargs):
                 "seat",
                 {"order_position"},
                 lambda order_position: (
-                    order_position.seat
-                    if order_position.seat_id
-                    else (
-                        order_position.addon_to.seat
-                        if order_position.addon_to_id
-                        else None
-                    )
+                    order_position.seat if order_position.seat_id else None
                 ),
             ),
         ],
@@ -364,15 +364,19 @@ def get_static_file(name) -> File | None:
 
 def admission(subevent_or_event):
     return (
-        subevent_or_event.date_admission.astimezone(subevent_or_event.timezone)
+        LocalizableDatetime(
+            subevent_or_event.date_admission.astimezone(subevent_or_event.timezone),
+            "SHORT_DATETIME_FORMAT",
+        )
         if subevent_or_event.date_admission
         else None
     )
 
 
 def date_from(subevent_or_event):
-    return subevent_or_event.get_date_from_display(
-        subevent_or_event.timezone, short=True
+    return LocalizableDatetime(
+        subevent_or_event.date_from.astimezone(subevent_or_event.timezone),
+        "SHORT_DATETIME_FORMAT",
     )
 
 
@@ -395,62 +399,60 @@ def website(order_position, order):
     register_wallet_placeholders,
     dispatch_uid="plugin_wallet_register_wallet_placeholders",
 )
-def base_text_placeholders(sender, **kwargs):
+def base_text_placeholders(sender: Event, **kwargs):
     return [
         FunctionalWalletTextPlaceholder(
             "event",
-            LazyI18nString.from_gettext("Event"),
+            GettextLocalizableString.gettext("Event"),
             {"event"},
             lambda event: event.name,
         ),
         FunctionalWalletTextPlaceholder(
             "event_slug",
-            LazyI18nString.from_gettext("Event Slug"),
+            GettextLocalizableString.gettext("Event Slug"),
             {"event"},
             lambda event: event.slug,
         ),
         FunctionalWalletTextPlaceholder(
             "admission",
-            LazyI18nString.from_gettext("Admission"),
+            GettextLocalizableString.gettext("Admission"),
             {"subevent_or_event"},
             admission,
-            lambda subevent_or_event: subevent_or_event.get_date_from_display(
-                subevent_or_event.timezone, short=True
-            ),
+            date_from,
         ),
         FunctionalWalletTextPlaceholder(
             "date_from",
-            LazyI18nString.from_gettext("Begin"),
+            GettextLocalizableString.gettext("Begin"),
             {"subevent_or_event"},
             date_from,
         ),
         FunctionalWalletTextPlaceholder(
             "admission_or_date_from",
-            LazyI18nString.from_gettext("Admission or Date From"),
+            GettextLocalizableString.gettext("Admission or Date From"),
             {"subevent_or_event"},
             admission_or_date_from,
         ),
         FunctionalWalletTextPlaceholder(
             "order",
-            LazyI18nString.from_gettext("Order Code"),
+            GettextLocalizableString.gettext("Order Code"),
             {"order"},
             lambda order: order.code,
         ),
         FunctionalWalletTextPlaceholder(
             "total",
-            LazyI18nString.from_gettext("Order Total"),
+            GettextLocalizableString.gettext("Order Total"),
             {"event", "order"},
             lambda event, order: money_filter(order.total, event.currency),
         ),
         FunctionalWalletTextPlaceholder(
             "order_email",
-            LazyI18nString.from_gettext("Order Email"),
+            GettextLocalizableString.gettext("Order Email"),
             {"order"},
             lambda order: order.email,
         ),
         FunctionalWalletTextPlaceholder(
             "price",
-            LazyI18nString.from_gettext("Item Price"),
+            GettextLocalizableString.gettext("Item Price"),
             {"event", "order_position"},
             lambda event, order_position: money_filter(
                 order_position.price, event.currency
@@ -458,74 +460,78 @@ def base_text_placeholders(sender, **kwargs):
         ),
         FunctionalWalletTextPlaceholder(
             "secret",
-            LazyI18nString.from_gettext("Order Secret (QR-Code-Content)"),
+            GettextLocalizableString.gettext("Order Secret (QR-Code-Content)"),
             {"order_position"},
             lambda order_position: order_position.secret,
         ),
         FunctionalWalletTextPlaceholder(
             "item",
-            LazyI18nString.from_gettext("Product"),
+            GettextLocalizableString.gettext("Product"),
             {"item"},
             lambda item: item.name,
         ),
         FunctionalWalletTextPlaceholder(
             "item_description",
-            LazyI18nString.from_gettext("Product description"),
+            GettextLocalizableString.gettext("Product description"),
             {"item"},
             lambda item: item.description,
         ),
         FunctionalWalletTextPlaceholder(
             "item_with_variation",
-            LazyI18nString.from_gettext("Product and variation"),
+            GettextLocalizableString.gettext("Product and variation"),
             {"order_position"},
             lambda order_position: (
-                f"{order_position.item.name} - {order_position.variation}"
+                FormattingLocalizableString(
+                    "{name} - {variation}",
+                    name=order_position.item.name,
+                    variation=order_position.variation.name,
+                )
                 if order_position.variation
                 else order_position.item.name
             ),
         ),
         FunctionalWalletTextPlaceholder(
             "seat",
-            LazyI18nString.from_gettext("Seat: Full name"),
-            {"event", "seat"},
-            lambda event, seat: (
-                seat
-                if seat
-                else (
-                    LazyI18nString.from_gettext("General admission")
-                    if event.seating_plan_id is not None
-                    else ""
-                )
+            GettextLocalizableString.gettext("Seat: Full name"),
+            {"seat"},
+            lambda seat: (
+                FormattingLocalizableString("{seat}", seat=seat) if seat else None
             ),
-            LazyI18nString.from_gettext("Ground floor, Row 3, Seat 4"),
+            GettextLocalizableString.gettext("Ground floor, Row 3, Seat 4")
         ),
         FunctionalWalletTextPlaceholder(
             "seat_zone",
-            LazyI18nString.from_gettext("Seat: zone"),
-            {"event", "seat"},
-            lambda event, seat: (
-                seat.zone_name
-                if seat
-                else (
-                    LazyI18nString.from_gettext("General admission")
-                    if event.seating_plan_id is not None
-                    else ""
-                )
-            ),
-            LazyI18nString.from_gettext("Ground floor"),
+            GettextLocalizableString.gettext("Seat: Zone"),
+            {"seat"},
+            lambda seat: seat.zone_name,
+            GettextLocalizableString.gettext("Ground floor"),
+        ),
+        FunctionalWalletTextPlaceholder(
+            "seat_row",
+            GettextLocalizableString.gettext("Seat: Row"),
+            {"seat"},
+            lambda seat: seat.row_label or seat.row_name,
+            "C",
+        ),
+        FunctionalWalletTextPlaceholder(
+            "seat_number",
+            GettextLocalizableString.gettext("Seat: Seat Number"),
+            {"seat"},
+            lambda seat: seat.seat_label or seat.seat_number,
+            "5",
         ),
         FunctionalWalletTextPlaceholder(
             "attendee_name",
-            LazyI18nString.from_gettext("Attendee name"),
+            GettextLocalizableString.gettext("Attendee name"),
             {"order_position"},
             lambda order_position: order_position.attendee_name,
         ),
         FunctionalWalletTextPlaceholder(
             "program_start",
-            LazyI18nString.from_gettext("Programm times: Start"),
+            GettextLocalizableString.gettext("Programm times: Start"),
             {"item", "subevent_or_event"},
             lambda item, subevent_or_event: (
-                date_format(
+                LocalizableDatetime(
                     min(pt.start for pt in item.program_times.all()).astimezone(
                         subevent_or_event.timezone
                     ),
@@ -537,10 +543,10 @@ def base_text_placeholders(sender, **kwargs):
         ),
         FunctionalWalletTextPlaceholder(
             "program_end",
-            LazyI18nString.from_gettext("Programm times: End"),
+            GettextLocalizableString.gettext("Programm times: End"),
             {"item", "subevent_or_event"},
             lambda item, subevent_or_event: (
-                date_format(
+                LocalizableDatetime(
                     max(pt.end for pt in item.program_times.all()).astimezone(
                         subevent_or_event.timezone
                     ),
@@ -552,56 +558,56 @@ def base_text_placeholders(sender, **kwargs):
         ),
         FunctionalWalletTextPlaceholder(
             "organizer",
-            LazyI18nString.from_gettext("Organizer"),
+            GettextLocalizableString.gettext("Organizer"),
             {"organizer"},
             lambda organizer: organizer.name,
         ),
         FunctionalWalletTextPlaceholder(
             "organizer_contact",
-            LazyI18nString.from_gettext("Organizer Contact"),
+            GettextLocalizableString.gettext("Organizer Contact"),
             {"event"},
             lambda event: event.settings.contact_mail,
             "contact@example.com",
         ),
         FunctionalWalletTextPlaceholder(
             "order_code",
-            LazyI18nString.from_gettext("Order Code"),
+            GettextLocalizableString.gettext("Order Code"),
             {"order"},
             lambda order: order.code,
         ),
         FunctionalWalletTextPlaceholder(
             "purchase_date",
-            LazyI18nString.from_gettext("Purchase Date"),
+            GettextLocalizableString.gettext("Purchase Date"),
             {"order", "subevent_or_event"},
-            lambda order, subevent_or_event: date_format(
+            lambda order, subevent_or_event: LocalizableDatetime(
                 order.datetime.astimezone(subevent_or_event.timezone),
                 "SHORT_DATETIME_FORMAT",
             ),
         ),
         FunctionalWalletTextPlaceholder(
             "website",
-            LazyI18nString.from_gettext("Website"),
+            GettextLocalizableString.gettext("Website"),
             {"order_position", "order"},
             website,
         ),
         # IMAGES
         FunctionalWalletImagePlaceholder(
             "poweredby",
-            LazyI18nString.from_gettext("Logo"),
+            GettextLocalizableString.gettext("Logo"),
             set(),
             lambda: get_static_file("pretixplugins/wallet/logo.png"),
             static("pretixplugins/wallet/logo.png"),
         ),
         FunctionalWalletImagePlaceholder(
             "poweredby_icon",
-            LazyI18nString.from_gettext("Icon"),
+            GettextLocalizableString.gettext("Icon"),
             set(),
             lambda: get_static_file("pretixplugins/wallet/icon.png"),
             static("pretixplugins/wallet/icon.png"),
         ),
         FunctionalWalletImagePlaceholder(
             "example_no_preview",
-            LazyI18nString.from_gettext("Image with no preview"),
+            GettextLocalizableString.gettext("Image with no preview"),
             set(),
             lambda: get_static_file("pretix_passbook/icon.png"),
         ),

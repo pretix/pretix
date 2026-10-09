@@ -28,8 +28,8 @@ const layoutStyle = computed(() => {
 							v = `url(${URL.createObjectURL(val.file)})`; // TODO: encode
 						} else if (settingDef.type == "image" && val && val.url) {
 							v = `url(${val.url})`;
-						} else if (settingDef.type == "image" && settingDef.attrs.default) {
-							v = `url(${settingDef.attrs.default})`;
+						} else if (settingDef.type == "image" && settingDef.default) {
+							v = `url(${settingDef.default})`;
 						} else {
 							v = val;
 						}
