@@ -15,7 +15,7 @@ const {
 	max=null,
 	defaultVal=null
 } = defineProps<{
-	label?: I18nString;
+	label?: string;
 	errors?: string[];
 	type?: string;
 	help_text?: string;

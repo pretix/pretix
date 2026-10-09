@@ -5,7 +5,7 @@ import RowPreview from "./row-preview.vue";
 
 const store = inject(StoreKey)!;
 
-const { layout } = defineProps<{ layout: Array<PreviewLayout> }>();
+const { layout } = defineProps<{ layout: PreviewLayout }>();
 
 const layoutStyle = computed(() => {
 	if (layout.style) {
@@ -149,6 +149,13 @@ console.log("layoutStyle", layoutStyle.value);
 	}
 	.img-inline {
 		max-height: 3lh;
+	}
+	.img-circle-sm {
+		max-height: 2lh;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background-color: white;
+		object-fit: fill;
 	}
 }
 </style>
