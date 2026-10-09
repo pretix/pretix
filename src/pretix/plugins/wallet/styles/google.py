@@ -10,8 +10,14 @@ from django.utils.translation import gettext as _
 from walletobjects import ButtonJWT, EventTicketClass, EventTicketObject
 from walletobjects.comms import Comms
 from walletobjects.constants import (
-    AnimationType, Barcode, ClassType, ConfirmationCode, DoorsOpen,
-    MultipleDevicesAndHoldersAllowedStatus, ObjectState, ObjectType,
+    AnimationType,
+    Barcode,
+    ClassType,
+    ConfirmationCode,
+    DoorsOpen,
+    MultipleDevicesAndHoldersAllowedStatus,
+    ObjectState,
+    ObjectType,
     ReviewStatus,
 )
 
@@ -20,9 +26,16 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.wallet.models import GoogleWalletInstance, GoogleWalletType
 from pretix.plugins.wallet.styles.base import (
-    ColorSettingsField, FieldGroupDisplay, FloatSettingsField, ImageFieldGroup,
-    ImageSettingsField, PassStyle, PlaceholderFieldEntry, PredefinedFieldGroup,
-    TextFieldGroup, WalletPlatform,
+    ColorSettingsField,
+    FieldGroupDisplay,
+    FloatSettingsField,
+    ImageFieldGroup,
+    ImageSettingsField,
+    PassStyle,
+    PlaceholderFieldEntry,
+    PredefinedFieldGroup,
+    TextFieldGroup,
+    WalletPlatform,
 )
 
 SHIMMER = False
@@ -357,6 +370,12 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
                     },
                     {"value": "ABCDE-1", "label": _("Ticket Number")},
                     {"value": "ABCDE", "label": _("Order Number")},
+                    {
+                        "value": eventreverse_absolute(
+                            self.event, "presale:event.index"
+                        ),
+                        "label": _("Website"),
+                    },
                 ]
             },
         ]
