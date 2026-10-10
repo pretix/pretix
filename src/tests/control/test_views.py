@@ -74,13 +74,13 @@ def order(item):
                              datetime=now())
     OrderPosition.objects.create(order=o, item=item, price=13)
     p1 = o.payments.create(
-        provider='stripe',
+        provider='manual',
         state='refunded',
         amount=Decimal('23.00'),
         payment_date=o.datetime,
     )
     o.refunds.create(
-        provider='stripe',
+        provider='manual',
         state='done',
         source='admin',
         amount=Decimal('23.00'),
