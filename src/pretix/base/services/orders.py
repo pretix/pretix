@@ -114,6 +114,76 @@ from pretix.presale.productlist import prepare_item_list_for_shop
 from pretix.testutils.middleware import debugflags_var
 
 
+# todo before pr ready: (aka note to myself)
+#  think about placing this helper function somewhere better
+#  also: check those mail send functions, instead of replacing
+#  maybe we still want to use them here instead of generic send_mail
+#  and/or maybe we want to generalize this thing to also include order mails
+#  (let's maybe not rewrite the whole mail logic?!)
+#  but also, remember to write tests - a whole bunch of tests
+def _attendee_mail_send_helper(
+    event: Event,
+    order: Order,
+    positions: list,
+    template,
+    subject,
+    user,
+    invoices: list = None,
+    log_entry_type: str = 'pretix.event.order.email.sent',
+    attach_tickets: bool = False,
+    attach_ical: bool = False,
+    attach_other_files: list = None,
+    subevent: SubEvent = None,
+):
+    parent_op = None
+    sent_to_positions = set()
+    for p in positions:
+        if subevent and p.subevent_id != subevent.id:
+            continue
+
+        if p.addon_to_id is None:
+            # this op might have matching add-ons, so save for later
+            parent_op = p
+        elif not parent_op or p.addon_to_id != parent_op.id:
+            # this op is an add-on, but not to the current parent_op
+            # something got mixed up as add-ons should always come directly after their parent
+            logger.warning(f"Add-ons are mixed up for position #{p.positionid} in order {order.full_code}")
+            continue
+
+        if p.addon_to_id and (
+            not p.attendee_email or p.attendee_email == parent_op.attendee_email
+        ):
+            # if op is addon and either has no mail or the same as parent => send to parent
+            p = parent_op
+
+        if p.pk in sent_to_positions:
+            # this position already got an email
+            continue
+
+        if not p.attendee_email or p.attendee_email == order.email:
+            # no email or same as order
+            continue
+
+        email_ctx = get_email_context(event=order.event, order=order, position=p)
+
+        p.send_mail(
+            subject=subject,
+            template=template,
+            context=email_ctx,
+            log_entry_type=log_entry_type,
+            user=user if user else None,
+            invoices=invoices,
+            attach_tickets=attach_tickets,
+            attach_ical=attach_ical,
+            attach_other_files=attach_other_files,
+            # possible, as of yet unused here, parameters:
+            #     headers: dict=None,
+            #     sender: str=None,
+            #     auth=None,
+        )
+        sent_to_positions.add(p.pk)
+
+
 class OrderError(Exception):
     def __init__(self, *args):
         msg = args[0]
@@ -461,14 +531,21 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
             )
 
             if email_attendees:
-                for p in order.positions.all():
-                    if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-                        email_attendee_context = get_email_context(event=order.event, order=order, position=p)
-                        p.send_mail(
-                            email_attendee_subject, email_attendee_template, email_attendee_context,
-                            'pretix.event.order.email.order_approved', user,
-                            attach_tickets=True,
-                        )
+                _attendee_mail_send_helper(
+                    event=order.event,
+                    order=order,
+                    positions=order.positions.all(),
+                    template=email_attendee_template,
+                    subject=email_attendee_subject,
+                    log_entry_type='pretix.event.order.email.order_approved',
+                    user=user,
+                    attach_tickets=True,
+                    attach_ical=order.event.settings.mail_attach_ical and (
+                        not order.event.settings.mail_attach_ical_paid_only or
+                        order.total == Decimal('0.00') or
+                        order.valid_if_pending
+                    ),
+                )
 
     return order.pk
 
@@ -1399,10 +1476,20 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
                 is_free=free_order_flow
             )
             if email_attendees:
-                for p in order.positions.all():
-                    if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-                        _order_placed_email_attendee(event, order, p, email_attendees_template, subject_attendees_template, log_entry,
-                                                     is_free=free_order_flow)
+                # todo re note: order_placed_email for attendees (formerly services/orders _order_placed_email_attendee)
+                _attendee_mail_send_helper(
+                    event=event,
+                    order=order,
+                    positions=order.positions.all(),
+                    template=email_attendees_template,
+                    subject=subject_attendees_template,
+                    log_entry_type=log_entry,
+                    attach_ical=event.settings.mail_attach_ical and (
+                        not event.settings.mail_attach_ical_paid_only or
+                        free_order_flow or
+                        order.valid_if_pending
+                    ),
+                )
 
     if not any_payment_failed:
         for p in payment_objs:
@@ -1601,6 +1688,7 @@ def send_download_reminders(sender, **kwargs):
                     )
 
                     if event.settings.mail_send_download_reminder_attendee:
+                        send_to_positions = []
                         for p in positions:
                             if p.subevent_id:
                                 reminder_date = (p.subevent.date_from - timedelta(days=event.reminder_days)).replace(
@@ -1608,15 +1696,22 @@ def send_download_reminders(sender, **kwargs):
                                 )
                                 if now() < reminder_date:
                                     continue
-                            if p.addon_to_id is None and p.attendee_email and p.attendee_email != o.email:
-                                email_template = event.settings.mail_text_download_reminder_attendee
-                                email_subject = event.settings.mail_subject_download_reminder_attendee
-                                email_context = get_email_context(event=event, order=o, position=p)
-                                o.send_mail(
-                                    email_subject, email_template, email_context,
-                                    'pretix.event.order.email.download_reminder_sent',
-                                    attach_tickets=True, position=p
-                                )
+                                else:
+                                    send_to_positions.append(p)
+                        # todo before pr ready (aka note to myself):
+                        #  order's send_mail used before, check if there was a good reason to not
+                        #  use postion's send_mail
+                        #  if not, look for a way to not use double iteration over positions (see above)
+                        #  otherwise: rewrite this without this helper function anyway
+                        _attendee_mail_send_helper(
+                            event=event,
+                            order=o,
+                            positions=send_to_positions,
+                            email_template=event.settings.mail_text_download_reminder_attendee,
+                            email_subject=event.settings.mail_subject_download_reminder_attendee,
+                            log_entry_type='pretix.event.order.email.download_reminder_sent',
+                            attach_tickets=True,
+                        )
 
 
 def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
