@@ -69,6 +69,7 @@ from pretix.base.models.orders import CancellationRequest
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services import tickets
 from pretix.base.services.quotas import QuotaAvailability
+from pretix.base.timeline import timeline_for_event
 from pretix.base.views.tasks import AsyncFormView
 from pretix.control.forms.checkin import SimpleCheckinListForm
 from pretix.control.forms.filter import SubEventFilterForm
@@ -83,6 +84,7 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import subevent_forms
 from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
+from pretix.control.views.utils import prepare_quotas_for_boxes
 from pretix.helpers import GroupConcat
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.i18n import get_format_without_seconds
@@ -144,19 +146,7 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryM
             s.first_quotas = s.first_quotas[:4]
             quotas += list(s.first_quotas)
 
-        qa = QuotaAvailability(early_out=False)
-        for q in quotas:
-            qa.queue(q)
-        qa.compute()
-
-        for q in quotas:
-            q.cached_avail = qa.results[q]
-            q.cached_availability_paid_orders = qa.count_paid_orders.get(q, 0)
-            if q.size is not None:
-                q.percent_paid = min(
-                    100,
-                    round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
-                )
+        prepare_quotas_for_boxes(quotas)
         return ctx
 
 
@@ -565,6 +555,17 @@ class SubEventDetail(EventPermissionRequiredMixin, DetailView):
         qa.compute()
         for quota in ctx["quotas"]:
             quota.cached_avail = qa.results[quota]
+
+        ctx['timeline'] = [
+            {
+                'date': t.datetime.astimezone(self.request.event.timezone).date(),
+                'entry': t,
+                'time': t.datetime.astimezone(self.request.event.timezone)
+            }
+            for t in timeline_for_event(self.request.event, self.object)
+        ]
+        ctx['today'] = now().astimezone(self.request.event.timezone).date()
+        ctx['nearly_now'] = now().astimezone(self.request.event.timezone) - timedelta(seconds=20)
 
         return super().get_context_data(
             **kwargs,

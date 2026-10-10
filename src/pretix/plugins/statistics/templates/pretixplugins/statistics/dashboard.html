@@ -1,0 +1,15 @@
+<div class="dashboard">
+    {% for w in widgets %}
+        <div class="widget-container widget-{{ w.display_size|default:"small" }}">
+        {% if w.url %}
+            <a href="{{ w.url }}" class="widget">
+                {{ w.content }}
+            </a>
+        {% else %}
+            <div class="widget">
+                {{ w.content }}
+            </div>
+        {% endif %}
+        </div>
+    {% endfor %}
+</div>
