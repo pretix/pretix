@@ -943,7 +943,12 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             ])
 
         if not self.invoice.is_cancellation:
+            show_payment_stamp = bool(self.invoice.payment_provider_stamp)
+
             if self.invoice.event.settings.invoice_show_payments and self.invoice.order.status == Order.STATUS_PENDING:
+                # This block spells out the outstanding amount, so a stamp next to it would be misleading even
+                # if the invoice was created at a time the order was paid.
+                show_payment_stamp = False
                 pending_sum = self.invoice.order.pending_sum
                 if pending_sum != total:
                     tdata.append(
@@ -981,7 +986,10 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 tstyledata += [
                     ('FONTNAME', (0, len(tdata) - 3), (-1, len(tdata) - 3), self.font_bold),
                 ]
-            elif self.invoice.payment_provider_stamp:
+
+            if show_payment_stamp:
+                # A part of the order might have been paid by gift card. That's worth showing, but it does not
+                # make the order any less paid, so the stamp still belongs on the last row.
                 pm = PaidMarker(
                     text=self._normalize(self.invoice.payment_provider_stamp),
                     color=colors.HexColor(self.event.settings.theme_color_success),
