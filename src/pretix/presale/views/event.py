@@ -247,6 +247,10 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
 
         templating_context = PlaceholderContext(event_or_subevent=self.subevent or self.request.event, event=self.request.event)
+
+        for field in ('presale_has_ended_text',):
+            context[field] = templating_context.format(str(self.request.event.settings[field]))
+
         if self.subevent:
             context['frontpage_text'] = templating_context.format(str(self.subevent.frontpage_text))
         else:
