@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-10-13 14:00+0000\n"
-"Last-Translator: Jakob <git@jakob-info.de>\n"
+"PO-Revision-Date: 2026-10-13 14:40+0000\n"
+"Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Luxembourgish <https://translate.pretix.eu/projects/pretix/"
 "pretix/lb/>\n"
 "Language: lb\n"
@@ -3248,7 +3248,7 @@ msgstr "Smartphone mat Authenticator-App"
 
 #: pretix/base/forms/user.py
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr "WebAuthn-kompatibelen Hardware-Token (z. B. Yubikey)"
+msgstr "WebAuthn-kompatibelen Hardware-Token (z.B. Yubikey)"
 
 #: pretix/base/forms/user.py pretix/presale/forms/customer.py
 msgid "The current password you entered was not correct."
@@ -4194,7 +4194,7 @@ msgid ""
 "This is relevant in various situations, e.g. for deciding if a ticket can "
 "still be canceled by the customer."
 msgstr ""
-"Dës ass fir verschidden Entscheedunge relevant, z. B. ob en Ticket vun engem "
+"Dës ass fir verschidden Entscheedunge relevant, z.B. ob en Ticket vun engem "
 "Client selwer annuléiert ka ginn."
 
 #: pretix/base/models/checkin.py
@@ -4536,7 +4536,7 @@ msgid ""
 msgstr ""
 "Wann dës Optioun aktiv ass, kënne Produiten, déi schonn duerch e Bong eng "
 "Remise kruten, net fir weider Remisë berücksichtegt ginn. Wann de Bong awer "
-"just z. B. fir d'Fräischaltung vun engem verstoppte Produit oder engem "
+"just z.B. fir d'Fräischaltung vun engem verstoppte Produit oder engem "
 "ausverkaafte Contingent benotzt gëtt, gëtt dëse berücksichtegt."
 
 #: pretix/base/models/discount.py
@@ -13869,7 +13869,7 @@ msgstr ""
 #: pretix/control/forms/global_settings.py
 #, python-brace-format
 msgid "e.g. {sample}"
-msgstr "z. B. {sample}"
+msgstr "z.B. {sample}"
 
 #: pretix/control/forms/global_settings.py
 msgid "Leaflet tiles attribution"
@@ -24452,7 +24452,7 @@ msgstr ""
 #, fuzzy
 #| msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
 msgid "WebAuthn-compatible hardware token"
-msgstr "WebAuthn-kompatibelen Hardware-Token (z. B. Yubikey)"
+msgstr "WebAuthn-kompatibelen Hardware-Token (z.B. Yubikey)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html
 msgid ""
