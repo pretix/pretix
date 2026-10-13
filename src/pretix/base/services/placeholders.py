@@ -752,6 +752,11 @@ def base_placeholders(sender, **kwargs):
         lambda position_or_address: concatenation_for_salutation(get_best_name(position_or_address, parts=True)),
         lambda event: concatenation_for_salutation(name_scheme['sample']),
     ))
+    ph.append(SimpleFunctionalTextPlaceholder(
+        "attendee_name_for_salutation", ["position"],
+        lambda position: concatenation_for_salutation(position.attendee_name_parts),
+        lambda event: concatenation_for_salutation(name_scheme['sample']),
+    ))
 
     for f, l, w in name_scheme['fields']:
         if f == 'full_name':
