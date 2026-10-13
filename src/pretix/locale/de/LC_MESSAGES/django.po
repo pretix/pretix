@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-10-13 14:00+0000\n"
-"Last-Translator: Jakob <git@jakob-info.de>\n"
+"PO-Revision-Date: 2026-10-13 14:40+0000\n"
+"Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/"
 "de/>\n"
 "Language: de\n"
@@ -241,7 +241,7 @@ msgstr "Kommentar"
 #: pretix/api/serializers/cart.py pretix/api/serializers/order.py
 #, python-brace-format
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "Das Produkt „{}“ ist keinem Kontingent zugeordnet."
+msgstr "Das Produkt \"{}\" ist keinem Kontingent zugeordnet."
 
 #: pretix/api/serializers/checkin.py pretix/base/models/event.py
 #: pretix/base/models/items.py
@@ -372,24 +372,25 @@ msgstr ""
 #: pretix/api/serializers/order.py
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "„{input}“ ist keine gültige Auswahl."
+msgstr "\"{input}\" ist keine gültige Auswahl."
 
 #: pretix/api/serializers/order.py pretix/api/views/cart.py
 #: pretix/base/services/orders.py
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr "Der ausgewählte Sitzplatz „{seat}“ ist nicht verfügbar."
+msgstr "Der ausgewählte Sitzplatz \"{seat}\" ist nicht verfügbar."
 
 #: pretix/api/serializers/order.py
 #, python-brace-format
 msgid "The product \"{}\" is not available on this date."
-msgstr "Das Produkt „{}“ ist an diesem Termin nicht verfügbar."
+msgstr "Das Produkt \"{}\" ist an diesem Termin nicht verfügbar."
 
 #: pretix/api/serializers/order.py pretix/api/views/cart.py
 #, python-brace-format
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr "Das Kontingent „{}“ hat nicht genug freie Kapazität für diese Änderung."
+msgstr ""
+"Das Kontingent \"{}\" hat nicht genug freie Kapazität für diese Änderung."
 
 #: pretix/api/serializers/organizer.py pretix/control/forms/organizer.py
 #: pretix/presale/forms/customer.py
@@ -442,7 +443,8 @@ msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
-"Der Applikation „{application_name}“ wurde der Zugriff auf Ihr Konto erlaubt."
+"Der Applikation \"{application_name}\" wurde der Zugriff auf Ihr Konto "
+"erlaubt."
 
 #: pretix/api/views/order.py pretix/control/views/orders.py
 #: pretix/presale/views/order.py
@@ -589,7 +591,7 @@ msgid ""
 "variations or bundles."
 msgstr ""
 "Dies schließt hinzugefügte oder gelöschte Produkt und Änderungen an "
-"Unterobjekten wie z. B. Varianten oder enthaltenen Produkten) ein."
+"Unterobjekten wie z.B. Varianten oder enthaltenen Produkten) ein."
 
 #: pretix/api/webhooks.py
 msgid "Quota changed"
@@ -649,7 +651,7 @@ msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
 msgstr ""
-"Nur explizite Änderungen am Gutschein, nicht z. B. Änderungen an der Anzahl "
+"Nur explizite Änderungen am Gutschein, nicht z.B. Änderungen an der Anzahl "
 "der Einlösungen."
 
 #: pretix/api/webhooks.py
@@ -782,30 +784,30 @@ msgstr "Quellcode"
 #: pretix/base/customersso/oidc.py
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr "Konfigurationsoption „{name}“ fehlt."
+msgstr "Konfigurationsoption \"{name}\" fehlt."
 
 #: pretix/base/customersso/oidc.py
 #, python-brace-format
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
 msgstr ""
-"Die Konfiguration von „{url}“ konnte nicht abgerufen werden. Fehlermeldung: „"
-"{error}“."
+"Die Konfiguration von \"{url}\" konnte nicht abgerufen werden. "
+"Fehlermeldung: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py
 #, python-brace-format
 msgid "Incompatible SSO provider: \"{error}\"."
-msgstr "SSO-Provider ist nicht kompatibel: „{error}“."
+msgstr "SSO-Provider ist nicht kompatibel: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py
 #, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "Sie fragen „{scope}“ nicht mit an."
+msgstr "Sie fragen \"{scope}\" nicht mit an."
 
 #: pretix/base/customersso/oidc.py pretix/presale/views/customer.py
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr "Login war nicht erfolgreich. Fehlermeldung: „{error}“."
+msgstr "Login war nicht erfolgreich. Fehlermeldung: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py
 msgid ""
@@ -821,8 +823,8 @@ msgid ""
 "Field \"{field_name}\" does not exist. Please check your {provider_name} "
 "settings."
 msgstr ""
-"Feld „{field_name}“ existiert nicht. Bitte prüfen Sie die Einstellungen für "
-"{provider_name}."
+"Feld \"{field_name}\" existiert nicht. Bitte prüfen Sie die Einstellungen "
+"für {provider_name}."
 
 #: pretix/base/datasync/datasync.py
 #, python-brace-format
@@ -830,8 +832,9 @@ msgid ""
 "Field \"{field_name}\" requires {required_input}, but only got "
 "{available_inputs}. Please check your {provider_name} settings."
 msgstr ""
-"Feld „{field_name}“ erfordert, {required_input}, aber nur {available_inputs} "
-"sind vorhanden. Bitte prüfen Sie die Einstellungen für {provider_name}."
+"Feld \"{field_name}\" erfordert, {required_input}, aber nur "
+"{available_inputs} sind vorhanden. Bitte prüfen Sie die Einstellungen für "
+"{provider_name}."
 
 #: pretix/base/datasync/datasync.py
 #, python-brace-format
@@ -839,8 +842,8 @@ msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
 msgstr ""
-"Bitte aktualisieren Sie die Werte-Zuordnung für Feld „{field_name}“. Option „"
-"{val}“ ist nicht zugeordnet"
+"Bitte aktualisieren Sie die Werte-Zuordnung für Feld \"{field_name}\". "
+"Option \"{val}\" ist nicht zugeordnet"
 
 #: pretix/base/datasync/sourcefields.py
 msgid "Order position details"
@@ -3027,12 +3030,12 @@ msgid ""
 "The field \"%(label)s\" may not contain special characters such as "
 "\"%(chars)s\"."
 msgstr ""
-"Das Feld „%(label)s“ darf keine Sonderzeichen wie „%(chars)s“ enthalten."
+"Das Feld \"%(label)s\" darf keine Sonderzeichen wie \"%(chars)s\" enthalten."
 
 #: pretix/base/forms/questions.py
 #, python-format
 msgid "The field \"%(label)s\" may not contain an URL (%(url)s)."
-msgstr "Das Feld „%(label)s“ darf keine Links enthalten (%(url)s)."
+msgstr "Das Feld \"%(label)s\" darf keine Links enthalten (%(url)s)."
 
 #: pretix/base/forms/questions.py
 msgctxt "phonenumber"
@@ -3213,7 +3216,7 @@ msgstr "Smartphone mit Authenticator-App"
 
 #: pretix/base/forms/user.py
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr "WebAuthn-kompatibler Hardwaretoken (z. B. Yubikey)"
+msgstr "WebAuthn-kompatibler Hardwaretoken (z.B. Yubikey)"
 
 #: pretix/base/forms/user.py pretix/presale/forms/customer.py
 msgid "The current password you entered was not correct."
@@ -3260,9 +3263,9 @@ msgid ""
 "\"{{\" and \"}}\"."
 msgstr ""
 "Es ist ein Fehler in Ihrer Platzhalter-Syntax. Bitte prüfen Sie, dass die "
-"öffnenden „{“ und schließenden „}“ geschweiften Klammern zusammenpassen. Um "
-"die geschweiften Klammern „{“ und „}“‚ im erzeugten Text zu verwenden, "
-"müssen sie doppelt gesetzt werden als „{{“ und „}}“."
+"öffnenden \"{\" und schließenden \"}\" geschweiften Klammern zusammenpassen. "
+"Um die geschweiften Klammern \"{\" und \"}\" im erzeugten Text zu verwenden, "
+"müssen sie doppelt gesetzt werden als \"{{\" und \"}}\"."
 
 #: pretix/base/forms/validators.py pretix/control/views/event.py
 #, python-format
@@ -3733,7 +3736,7 @@ msgstr "Leer lassen"
 #: pretix/base/modelimport.py
 #, python-brace-format
 msgid "Invalid setting for column \"{header}\"."
-msgstr "Ungültige Einstellung für Spalte „{header}“."
+msgstr "Ungültige Einstellung für Spalte \"{header}\"."
 
 #: pretix/base/modelimport.py
 #, python-brace-format
@@ -3769,9 +3772,10 @@ msgid ""
 "together...\". Lines with the same grouping value will be put in the same "
 "order, but MUST be consecutive lines of the input file."
 msgstr ""
-"Nur anwendbar, wenn der Importmodus auf „Mehrere Zeilen gruppieren …“ steht. "
-"Zeilen mit dem selben Gruppierungswert werden in die gleiche Bestellung "
-"gebucht, aber MÜSSEN in aufeinanderfolgenden Zeilen der Eingabedatei stehen."
+"Nur anwendbar, wenn der Importmodus auf \"Mehrere Zeilen gruppieren…\" "
+"steht. Zeilen mit dem selben Gruppierungswert werden in die gleiche "
+"Bestellung gebucht, aber MÜSSEN in aufeinanderfolgenden Zeilen der "
+"Eingabedatei stehen."
 
 #: pretix/base/modelimport_orders.py
 msgid "Enter a valid phone number."
@@ -4027,7 +4031,7 @@ msgstr ""
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 #, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr "Sie müssen das Produkt „{prod}“ für diesen Sitzplatz auswählen."
+msgstr "Sie müssen das Produkt \"{prod}\" für diesen Sitzplatz auswählen."
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 #: pretix/control/templates/pretixcontrol/vouchers/index.html
@@ -4163,7 +4167,7 @@ msgid ""
 "This is relevant in various situations, e.g. for deciding if a ticket can "
 "still be canceled by the customer."
 msgstr ""
-"Dies ist für einige Entscheidungen relevant, z. B. ob ein Ticket noch vom "
+"Dies ist für einige Entscheidungen relevant, z.B. ob ein Ticket noch vom "
 "Kunden selbst storniert werden kann."
 
 #: pretix/base/models/checkin.py
@@ -4496,7 +4500,7 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiv ist, werden Produkte, die bereits aufgrund eines "
 "Gutscheins einen Rabatt erhalten haben, nicht für Rabatte berücksichtigt. "
-"Wenn der Gutschein hingegen nur z. B. zur Freischaltung eines versteckten "
+"Wenn der Gutschein hingegen nur z.B. zur Freischaltung eines versteckten "
 "Produkts oder eines ausverkauften Kontingents verwendet wurde, werden diese "
 "berücksichtigt."
 
@@ -4563,7 +4567,7 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiv ist, werden Produkte, die bereits aufgrund eines "
 "Gutscheins einen Rabatt erhalten haben, nicht rabattiert. Wenn der Gutschein "
-"hingegen nur z. B. Freischaltung eines versteckten Produkts oder eines "
+"hingegen nur z.B. Freischaltung eines versteckten Produkts oder eines "
 "ausverkauften Kontingents verwendet wurde, wird der automatische Rabatt "
 "trotzdem gewährt."
 
@@ -4637,7 +4641,7 @@ msgstr ""
 "Punkte enthalten. Muss unter Ihren Veranstaltungen einmalig sein. Wir "
 "empfehlen eine Abkürzung oder ein Datum mit unter 10 Zeichen, das man sich "
 "gut merken kann. Sie können jedoch auch einen zufälligen Wert verwenden. "
-"Dies wird z. B. in Links, Bestellnummern, Rechnungsnummern und "
+"Dies wird z.B. in Links, Bestellnummern, Rechnungsnummern und "
 "Verwendungszwecken für Banküberweisungen benutzt."
 
 #: pretix/base/models/event.py pretix/base/models/organizer.py
@@ -4869,7 +4873,7 @@ msgid ""
 msgstr ""
 "Diese Meta-Eigenschaft wird angezeigt um Veranstaltungslisten oder Berichte "
 "im Backend zu filtern. Sie kann außerdem für versteckte Filter im Shop "
-"verwendet werden, z. B. über das Widget."
+"verwendet werden, z.B. über das Widget."
 
 #: pretix/base/models/event.py
 msgid "A property can either be required or have a default value, not both."
@@ -5186,7 +5190,7 @@ msgid ""
 msgstr ""
 "Wenn diese Option aktiviert ist, kann der Kunde den Preis selbst bearbeiten. "
 "Der oben eingestellte Preis ist der minimale Preis, der eingegeben werden "
-"muss. Sie können dies z. B. benutzen, um freiwillige Spenden für Ihre "
+"muss. Sie können dies z.B. benutzen, um freiwillige Spenden für Ihre "
 "Veranstaltung zu sammeln."
 
 #: pretix/base/models/items.py
@@ -5306,7 +5310,7 @@ msgid ""
 msgstr ""
 "Wenn dieses Produkt Teil einer Bestellung ist, wird die Bestellung nicht "
 "direkt freigegeben, sondern muss von Ihnen bestätigt werden, bevor sie "
-"bezahlt und abgeschlossen werden kann. Sie können das z. B. für Tickets "
+"bezahlt und abgeschlossen werden kann. Sie können das z.B. für Tickets "
 "nutzen, die nur für bestimmte Mitglieder zur Verfügung stehen."
 
 #: pretix/base/models/items.py
@@ -5369,7 +5373,7 @@ msgid ""
 "needs to be checked."
 msgstr ""
 "Wenn diese Option gesetzt ist, wird die Check-in-Anwendung melden, dass "
-"dieses Ticket besondere Behandlung braucht. Das ist z. B. für Studierende "
+"dieses Ticket besondere Behandlung braucht. Das ist z.B. für Studierende "
 "nützlich, deren Studierendenausweis noch geprüft werden soll."
 
 #: pretix/base/models/items.py
@@ -5413,7 +5417,7 @@ msgid ""
 "membership. Be aware that this means it will never be visible in the widget."
 msgstr ""
 "Zeige dies nicht an, wenn der Kunde nicht eingeloggt ist und eine gültige "
-"Mitgliedschaft hat. Vorsicht, das bedeutet z. B., dass dieses Produkt nie im "
+"Mitgliedschaft hat. Vorsicht, das bedeutet z.B., dass dieses Produkt nie im "
 "Widget angezeigt werden kann."
 
 #: pretix/base/models/items.py
@@ -5456,7 +5460,7 @@ msgstr ""
 "ändern. Die Standardeinstellung bedeutet, dass die Gültigkeit des Tickets "
 "sich nicht nach dem Produkt, sondern nach den Veranstaltungs- und Check-in-"
 "Einstellungen richtet. Die anderen Optionen benötigen Sie nur, wenn Sie "
-"spezielle Anwendungsfälle wie z. B. eine Jahreskarte mit dynamischem "
+"spezielle Anwendungsfälle wie z.B. eine Jahreskarte mit dynamischem "
 "Startdatum umsetzen möchten. Bitte beachten Sie, dass die Gültigkeit als "
 "Teil des einzelnen Tickets gespeichert wird. Wenn Sie die Einstellungen hier "
 "später ändern, werden bereits bestehende Tickets nicht verändert, sondern "
@@ -5630,7 +5634,7 @@ msgid ""
 msgstr ""
 "Wenn diese Variante Teil einer Bestellung ist, wird die Bestellung nicht "
 "direkt freigegeben, sondern muss von Ihnen bestätigt werden, bevor sie "
-"bezahlt und abgeschlossen werden kann. Sie können das z. B. für Tickets "
+"bezahlt und abgeschlossen werden kann. Sie können das z.B. für Tickets "
 "nutzen, die nur für bestimmte Mitglieder zur Verfügung stehen."
 
 #: pretix/base/models/items.py pretix/control/navigation.py
@@ -6020,7 +6024,7 @@ msgid ""
 "as sold out."
 msgstr ""
 "Wenn diese Option aktiv ist, wird dieses Kontingent bei der Bestimmung der "
-"Gesamt-Verfügbarkeit im Veranstaltungskalender ignoriert. Dies ist z. B. "
+"Gesamt-Verfügbarkeit im Veranstaltungskalender ignoriert. Dies ist z.B. "
 "nützlich für Zusatz-Artikel, die in jeder Veranstaltung verkauft werden, "
 "aber die Anzeige im Kalender nicht beeinflussen sollen."
 
@@ -6262,7 +6266,7 @@ msgid ""
 "cases."
 msgstr ""
 "Wenn diese Option gesetzt ist, wird die Check-in-Anwendung melden, dass "
-"dieses Ticket besondere Behandlung braucht. Das ist z. B. für Studierende "
+"dieses Ticket besondere Behandlung braucht. Das ist z.B. für Studierende "
 "nützlich, deren Studierendenausweis noch geprüft werden soll."
 
 #: pretix/base/models/orders.py
@@ -6433,7 +6437,7 @@ msgstr "Grund für die Erstattung"
 msgid ""
 "May be shown to the end user or used e.g. as part of a payment reference."
 msgstr ""
-"Kann dem Nutzer angezeigt werden, z. B. als Teil eines Verwendungszwecks."
+"Kann dem Nutzer angezeigt werden, z.B. als Teil eines Verwendungszwecks."
 
 #: pretix/base/models/orders.py
 msgid "Service fee"
@@ -6482,7 +6486,7 @@ msgstr "Wert"
 
 #: pretix/base/models/orders.py
 msgid "Cart ID (e.g. session key)"
-msgstr "Warenkorb-ID (z. B. Session-ID)"
+msgstr "Warenkorb-ID (z.B. Session-ID)"
 
 #: pretix/base/models/orders.py
 msgid "Limit for extending expiration date"
@@ -6803,7 +6807,7 @@ msgstr "Offizieller Name"
 
 #: pretix/base/models/tax.py
 msgid "Should be short, e.g. \"VAT\""
-msgstr "Sollte kurz sein, z. B. \"MwSt.\""
+msgstr "Sollte kurz sein, z.B. \"MwSt.\""
 
 #: pretix/base/models/tax.py pretix/control/forms/event.py
 #: pretix/control/templates/pretixcontrol/order/transactions.html
@@ -6960,7 +6964,7 @@ msgstr ""
 "der ersten Einlösung für mindestens so viele Produkte eingelöst werden. Bei "
 "späteren Einlösungen kann auch eine geringere Anzahl an Produkten ausgewählt "
 "werden. In manchen Fällen kann es trotzdem dazu kommen, dass der Gutschein "
-"weniger oft als diese Anzahl eingelöst wurde, z. B. im Fall von späteren "
+"weniger oft als diese Anzahl eingelöst wurde, z.B. im Fall von späteren "
 "Stornierungen."
 
 #: pretix/base/models/vouchers.py
@@ -7025,7 +7029,7 @@ msgid ""
 msgstr ""
 "Sie können dieses Feld benutzen, um mehrere Gutscheine zusammenzufassen. "
 "Wenn Sie bei verschiedenen Gutscheinen denselben Wert eingeben, können Sie "
-"z. B. Statistiken erhalten, wie viele dieser Gutscheine bereits eingelöst "
+"z.B. Statistiken erhalten, wie viele dieser Gutscheine bereits eingelöst "
 "wurden."
 
 #: pretix/base/models/vouchers.py pretix/base/permissions.py
@@ -9883,7 +9887,7 @@ msgid ""
 "different tickets or gift cards later."
 msgstr ""
 "Diese Funktion erlaubt Ihnen, Tickets und Wertgutscheine mit physischen "
-"Medien wie z. B. Armbändern oder Chipkarten zu verknüpfen, die später für "
+"Medien wie z.B. Armbändern oder Chipkarten zu verknüpfen, die später für "
 "andere Tickets oder Wertgutscheine wiederverwendet werden können."
 
 #: pretix/base/settings.py
@@ -9996,7 +10000,7 @@ msgstr ""
 "Üblicherweise fragt pretix nach einer E-Mail-Adresse pro Bestellung und "
 "sendet die Bestellbestätigung an diese Adresse. Wenn Sie diese Option "
 "aktivieren, fragt das System zusätzlich nach einzelnen E-Mail-Adressen für "
-"jedes personalisierte Ticket in der Bestellung. Dies könnte z. B. nützlich "
+"jedes personalisierte Ticket in der Bestellung. Dies könnte z.B. nützlich "
 "sein, wenn Sie auch im Falle von Gruppenbestellungen individuelle Adressen "
 "von jedem Teilnehmer benötigen. pretix sendet die Bestellbestätigung "
 "standardmäßig nach wie vor nur an die primäre Adresse, dies kann jedoch in "
@@ -10156,11 +10160,11 @@ msgid ""
 "details as well as for displaying the value on the invoice. It will be shown "
 "on the invoice below the headline. The field will not be required."
 msgstr ""
-"Wenn Sie ein zusätzliches Textfeld zum Adressformular hinzufügen wollen, z. B"
-". für eine landesspezifische Registrierungsnummer, tragen Sie hier bitte die "
-"Bezeichnung des Feldes ein. Die Bezeichnung wird sowohl bei der Abfrage der "
-"Adresse des Nutzers als auch bei der Anzeige auf der Rechnung verwendet. Auf "
-"der Rechnung wird es nicht als Teil der Adresse, sondern unter der "
+"Wenn Sie ein zusätzliches Textfeld zum Adressformular hinzufügen wollen, "
+"z.B. für eine landesspezifische Registrierungsnummer, tragen Sie hier bitte "
+"die Bezeichnung des Feldes ein. Die Bezeichnung wird sowohl bei der Abfrage "
+"der Adresse des Nutzers als auch bei der Anzeige auf der Rechnung verwendet. "
+"Auf der Rechnung wird es nicht als Teil der Adresse, sondern unter der "
 "Überschrift angezeigt. Das Feld ist kein Pflichtfeld."
 
 #: pretix/base/settings.py
@@ -10188,8 +10192,7 @@ msgid ""
 "business customers in the following countries: {countries}."
 msgstr ""
 "Funktioniert nur, wenn auch nach einer Rechnungsadresse gefragt ist. Die USt-"
-"ID-Nr. wird nur von Firmenkunden aus folgenden Ländern abgefragt: {countries}"
-"."
+"ID wird nur von Firmenkunden aus folgenden Ländern abgefragt: {countries}"
 
 #: pretix/base/settings.py
 msgid "Require VAT ID in"
@@ -10260,7 +10263,7 @@ msgid ""
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
 msgstr ""
 "Der Bereich der Rechnungsnummer nach dem Präfix wird mit führenden Nullen "
-"bis zu dieser Länge aufgefüllt, z. B. INV-001 oder INV-00001."
+"bis zu dieser Länge aufgefüllt, z.B. INV-001 oder INV-00001."
 
 #: pretix/base/settings.py
 msgid "Generate invoices with consecutive numbers"
@@ -10360,7 +10363,7 @@ msgid ""
 msgstr ""
 "Dieser Text wird über dem Ticketshop angezeigt, sobald der konfigurierte "
 "Verkaufszeitraum beendet ist. Sie können hier andere Wege ein Ticket zu "
-"bekommen, wie z. B. eine Abendkasse, beschreiben."
+"bekommen, wie z.B. eine Abendkasse, beschreiben."
 
 #: pretix/base/settings.py
 msgid "No dates match your criteria."
@@ -10381,7 +10384,7 @@ msgid ""
 "or two sentences."
 msgstr ""
 "Dieser Text wird im Kalender oder der Terminliste angezeigt, wenn sie leer "
-"ist, weil z. B. der Monat keine Termine enthält oder der vom Nutzer gesetzte "
+"ist, weil z.B. der Monat keine Termine enthält oder der vom Nutzer gesetzte "
 "Filter keine Treffer hat. Sie können hier Wege bewerben, wie man Kontakt für "
 "zusätzliche Termine aufnehmen kann. Wir empfehlen nicht mehr als ein oder "
 "zwei Sätze."
@@ -10725,7 +10728,7 @@ msgstr "Inländische Steuernummer"
 
 #: pretix/base/settings.py
 msgid "e.g. tax number in Germany, ABN in Australia, …"
-msgstr "z. B. Steuernummer in Deutschland, ABN in Australien, …"
+msgstr "z.B. Steuernummer in Deutschland, ABN in Australien, …"
 
 #: pretix/base/settings.py
 msgid "EU VAT ID"
@@ -10734,8 +10737,7 @@ msgstr "USt-ID-Nr."
 #: pretix/base/settings.py
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
 msgstr ""
-"z. B. Mit diesem Dokument erhalten Sie die Rechnung für Ihre "
-"Kartenbestellung."
+"z.B. Mit diesem Dokument erhalten Sie die Rechnung für Ihre Ticketbestellung."
 
 #: pretix/base/settings.py
 msgid "Introductory text"
@@ -10750,7 +10752,7 @@ msgid ""
 "e.g. Thank you for your purchase! You can find more information on the event "
 "at ..."
 msgstr ""
-"z. B. Vielen Dank für Ihren Kartenkauf! Sie finden mehr Informationen zur "
+"z.B. Vielen Dank für Ihren Ticketkauf! Sie finden mehr Informationen zur "
 "Veranstaltung unter …"
 
 #: pretix/base/settings.py
@@ -10766,7 +10768,7 @@ msgid ""
 "e.g. your bank details, legal details like your VAT ID, registration "
 "numbers, etc."
 msgstr ""
-"z. B. Ihre Bankverbindung und rechtliche Angaben wie die USt-ID-Nr., "
+"z.B. Ihre Bankverbindung und rechtliche Angaben wie die USt-ID-Nr., "
 "Registernummern, etc."
 
 #: pretix/base/settings.py
@@ -10844,8 +10846,8 @@ msgstr ""
 "Wird zur Feineinstellung von Datums- und Zeitformaten, sowie als "
 "Standardland für Kundenadressen und Telefonnummern verwenden. Für die "
 "Formatierung hat dies eine geringere Priorität als die Sprache und ist daher "
-"vor allem für Sprachen nützlich, die keiner Region fest zuzuordnen sind (z. B"
-". Englisch)."
+"vor allem für Sprachen nützlich, die keiner Region fest zuzuordnen sind "
+"(z.B. Englisch)."
 
 #: pretix/base/settings.py
 msgid "This shop represents an event"
@@ -10860,9 +10862,9 @@ msgid ""
 "may still show up in other places."
 msgstr ""
 "Entfernen Sie dieses Häkchen, wenn Sie nur Dinge verkaufen, die kein "
-"bestimmtes Datum haben, wie z. B. Gutscheine oder Tickets, die zu einem "
+"bestimmtes Datum haben, wie z.B. Gutscheine oder Tickets, die zu einem "
 "beliebigem Zeitpunkt genutzt werden können. Das System zeigt dann das "
-"Veranstaltungsdatum an einigen Stellen wie z. B. der Veranstaltungs-"
+"Veranstaltungsdatum an einigen Stellen wie z.B. der Veranstaltungs-"
 "Startseite nicht mehr an. Beachten Sie, dass pretix trotzdem ein System ist, "
 "das für Veranstaltungen konzipiert ist und das Datum an anderen Stellen "
 "möglicherweise trotzdem auftaucht."
@@ -11264,8 +11266,8 @@ msgid ""
 "order contains tickets for multiple event dates, the earliest date will be "
 "used."
 msgstr ""
-"Das späteste Datum, zu dem Benutzer die Details Ihrer Bestellung (z. B. "
-"Namen oder Antworten zu Fragen) verändern können. Wenn Sie die "
+"Das späteste Datum, zu dem Benutzer die Details ihrer Bestellung (z.B. Namen "
+"oder Antworten zu Fragen) verändern können. Wenn Sie die "
 "Veranstaltungsreihen-Funktion nutzen und eine Bestellung Tickets für mehrere "
 "Termine enthält, wird die Änderung aller Tickets nicht mehr möglich sein "
 "sobald der Zeitpunkt für einen der Termine verstrichen ist."
@@ -11448,7 +11450,7 @@ msgid ""
 msgstr ""
 "Dieser Text wird angezeigt zwischen der Beschreibung, wie die Erstattung "
 "funktioniert, und dem Eingabefeld mit dem Ihre Kunden auswählen können, "
-"welchen Betrag sie erstattet haben möchten. Sie können es z. B. nutzen um zu "
+"welchen Betrag sie erstattet haben möchten. Sie können es z.B. nutzen um zu "
 "erklären, wie eine geringere Erstattung Ihrer Organisation hilft."
 
 #: pretix/base/settings.py
@@ -11462,7 +11464,7 @@ msgid ""
 "of 10."
 msgstr ""
 "Standardmäßig können Kunden auf einen beliebigen Betrag verzichten. Wenn Sie "
-"diesen Wert z. B. auf 10 setzen, sind nur noch Werte im Abstand von 10 "
+"diesen Wert z.B. auf 10 setzen, sind nur noch Werte im Abstand von 10 "
 "erlaubt."
 
 #: pretix/base/settings.py
@@ -11552,7 +11554,7 @@ msgid ""
 msgstr ""
 "Wenn Sie diese Option setzen, wird der Kontakt-Link in der Fußzeile auf "
 "diese Adresse verweisen statt auf die obige E-Mail-Adresse. Bitte beachten "
-"Sie, dass die Kontakt-E-Mail-Adresse trotzdem z. B. mit allen Empfängern von "
+"Sie, dass die Kontakt-E-Mail-Adresse trotzdem z.B. mit allen Empfängern von "
 "E-Mails geteilt wird."
 
 #: pretix/base/settings.py pretix/control/forms/event.py
@@ -11644,7 +11646,7 @@ msgid ""
 "Use this if you e.g. put a private access link into the calendar file to "
 "make sure people only receive it after their payment was confirmed."
 msgstr ""
-"Diese Option sollte aktiv sein, wenn z. B. ein privater Zugangslink in der "
+"Diese Option sollte aktiv sein, wenn z.B. ein privater Zugangslink in der "
 "Kalenderdatei verschickt wird, damit dieser nicht zugänglich wird, bevor die "
 "Zahlung bestätigt wurde."
 
@@ -11662,7 +11664,7 @@ msgid ""
 "people."
 msgstr ""
 "Sie können dieses Feld benutzen, um zusätzliche Informationen mit Ihren "
-"Teilnehmer*innen zu teilen, wie z. B. Anreise-Informationen oder den Link zu "
+"Teilnehmer*innen zu teilen, wie z.B. Anreise-Informationen oder den Link zu "
 "einer digitalen Veranstaltung. Wenn das Feld leer ist, fügen wir automatisch "
 "einen Link zum Ticketshop, die Einlass-Uhrzeit und den Veranstalter hier "
 "ein. Es sind keine Platzhalter mit sensiblen personenbezogenen Daten "
@@ -11678,8 +11680,8 @@ msgid ""
 "This will be prepended to the subject of all outgoing emails, formatted as "
 "[prefix]. Choose, for example, a short form of your event name."
 msgstr ""
-"Dies wird in eckigen Klammern (z. B. \"[Präfix] ...\") jedem E-Mail-Betreff "
-"vorangestellt und könnte z. B. eine Kurzform Ihres Veranstaltungsnamens "
+"Dies wird in eckigen Klammern (z.B. \"[Präfix] ...\") jedem E-Mail-Betreff "
+"vorangestellt und könnte z.B. eine Kurzform Ihres Veranstaltungsnamens "
 "enthalten."
 
 #: pretix/base/settings.py pretix/control/forms/mailsetup.py
@@ -12662,7 +12664,7 @@ msgstr ""
 
 #: pretix/base/settings.py
 msgid "Please enter the hexadecimal code of a color, e.g. #990000."
-msgstr "Bitte geben Sie einen hexadezimalen Farbwert ein, z. B. #990000."
+msgstr "Bitte geben Sie einen hexadezimalen Farbwert ein, z.B. #990000."
 
 #: pretix/base/settings.py
 msgid "Primary color"
@@ -12818,7 +12820,7 @@ msgid ""
 "Not displayed anywhere by default, but if you want to, you can use this e.g. "
 "in ticket templates."
 msgstr ""
-"Wird standardmäßig nicht angezeigt, kann aber z. B. in Ticket-Vorlagen "
+"Wird standardmäßig nicht angezeigt, kann aber z.B. in Ticket-Vorlagen "
 "verwendet werden."
 
 #: pretix/base/settings.py
@@ -12855,7 +12857,7 @@ msgid ""
 "e.g. to explain how to obtain a voucher code."
 msgstr ""
 "Dieser Text wird neben der Gutscheincode-Eingabe angezeigt. Sie können ihn "
-"z. B. nutzen um zu erklären, wie man an einen Gutscheincode gelangt."
+"z.B. nutzen um zu erklären, wie man an einen Gutscheincode gelangt."
 
 #: pretix/base/settings.py
 msgid "Attendee data explanation"
@@ -12867,7 +12869,7 @@ msgid ""
 "product. You can use it e.g. to explain why you need information from them."
 msgstr ""
 "Dieser Text wird oberhalb der Dateneingabe für jedes personalisierte Ticket "
-"angezeigt. Sie können hierüber z. B. erklären, warum Sie die angeforderten "
+"angezeigt. Sie können hierüber z.B. erklären, warum Sie die angeforderten "
 "Informationen benötigen."
 
 #: pretix/base/settings.py
@@ -14554,7 +14556,7 @@ msgstr "Diese wird an jede E-Mail angehängt. Verfügbare Platzhalter: {event}"
 
 #: pretix/control/forms/event.py pretix/control/forms/organizer.py
 msgid "e.g. your contact details"
-msgstr "z. B. Ihre Kontaktdaten"
+msgstr "z.B. Ihre Kontaktdaten"
 
 #: pretix/control/forms/event.py
 msgid "HTML mail renderer"
@@ -14646,7 +14648,7 @@ msgid ""
 "payments, such as bank transfer."
 msgstr ""
 "Diese E-Mail wird nur bei Zahlungsmethoden eingesetzt, bei denen "
-"unvollständige Zahlungen eingehen können, wie z. B. Banküberweisung."
+"unvollständige Zahlungen eingehen können, wie z.B. Banküberweisung."
 
 #: pretix/control/forms/event.py
 msgid ""
@@ -15462,7 +15464,7 @@ msgstr "Leaflet-Kacheln URL-Format"
 #: pretix/control/forms/global_settings.py
 #, python-brace-format
 msgid "e.g. {sample}"
-msgstr "z. B. {sample}"
+msgstr "z.B. {sample}"
 
 #: pretix/control/forms/global_settings.py
 msgid "Leaflet tiles attribution"
@@ -15555,9 +15557,9 @@ msgid ""
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
 "as-a-Service company)."
 msgstr ""
-"Ich nutze pretix um Tickets anderer Veranstalter zu verkaufen (z. B. eine "
+"Ich nutze pretix um Tickets anderer Veranstalter zu verkaufen (z.B. eine "
 "Ticketing-Firma/-Agentur) oder ich biete die Funktionen von pretix Dritten "
-"an (z. B. als Software as a Service)."
+"an (z.B. als Software as a Service)."
 
 #: pretix/control/forms/global_settings.py
 msgid "I'm not sure which option applies."
@@ -15732,7 +15734,7 @@ msgid ""
 "Select this option e.g. for t-shirts that come in multiple sizes. You can "
 "select the variations in the next step."
 msgstr ""
-"Wählen Sie diese Option z. B. für T-Shirts, die es in verschiedenen Größen "
+"Wählen Sie diese Option z.B. für T-Shirts, die es in verschiedenen Größen "
 "gibt. Sie können die einzelnen Varianten im nächsten Schritt eingeben."
 
 #: pretix/control/forms/item.py
@@ -15806,7 +15808,7 @@ msgid ""
 "people over 65. This ticket includes access to all parts of the event, "
 "except the VIP area."
 msgstr ""
-"z. B.: Dieses reduzierte Ticket ist erhältlich für Vollzeitstudent*innen, "
+"z.B. Dieses reduzierte Ticket ist erhältlich für Vollzeitstudent*innen, "
 "Arbeitslose und Menschen über 65. Das Ticket enthält Zugang zu allen Teilen "
 "der Veranstaltung außer des VIP-Bereiches."
 
@@ -16794,7 +16796,7 @@ msgid ""
 "to interact with the media type."
 msgstr ""
 "Dies ist erforderlich wenn der andere Veranstalter an einem gemeinsamen "
-"System z. B. mit NFC-Zahlungsmitteln teilnehmen soll. Sie sollten diese "
+"System z.B. mit NFC-Zahlungsmitteln teilnehmen soll. Sie sollten diese "
 "Option nur nutzen, wenn Sie dem anderen Veranstalter vertrauen, da dies "
 "(abhängig von den aktivierten Medientypen) dem anderen Veranstalter Zugriff "
 "auf kryptografische Schlüssel gibt, die notwendig sind um mit den Medien zu "
@@ -19004,7 +19006,7 @@ msgid ""
 "e.g. your phone. Please enter your verification code here:"
 msgstr ""
 "Sie haben Ihr Konto so eingerichtet, dass es zur Authentifizierung ein "
-"zweites Medium benötigt, z. B. Ihr Telefon. Bitte geben Sie den "
+"zweites Medium benötigt, z.B. Ihr Telefon. Bitte geben Sie den "
 "Überprüfungscode hier ein:"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html
@@ -19320,7 +19322,7 @@ msgid ""
 "Microsoft Edge, Mozilla Firefox, Google Chrome, or Safari."
 msgstr ""
 "Wir bitten Sie daher, einen unserer unterstützen Browser zu verwenden, wie "
-"z. B. Microsoft Edge, Mozilla Firefox, Google Chrome oder Safari."
+"z.B. Microsoft Edge, Mozilla Firefox, Google Chrome oder Safari."
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid ""
@@ -19862,7 +19864,7 @@ msgid ""
 "do this process by printing out the list on paper, using this web interface "
 "or by using one of our mobile or desktop apps to automatically scan tickets."
 msgstr ""
-"Sie können Check-in-Listen erzeugen, um z. B. am Einlass Ihrer Veranstaltung "
+"Sie können Check-in-Listen erzeugen, um z.B. am Einlass Ihrer Veranstaltung "
 "zu kontrollieren, ob jeder Besucher ein gültiges Ticket hat. Hierzu können "
 "Sie die Listen auf Papier ausdrucken, dieses Online-Interface benutzen oder "
 "eine unserer mobilen oder Desktop-Apps nutzen, um die Tickets automatisch zu "
@@ -19878,10 +19880,10 @@ msgid ""
 "performances as well as tickets only valid for single performances."
 msgstr ""
 "Sie können mehrere Listen erzeugen, um Teile Ihrer Veranstaltung getrennt "
-"voneinander zu behandeln, z. B. wenn Sie für verschiedene Ticket-Typen "
+"voneinander zu behandeln, z.B. wenn Sie für verschiedene Ticket-Typen "
 "unterschiedliche Eingänge haben. Die verschiedenen Listen sind völlig "
 "unabhängig: Wenn ein Ticket auf zwei Listen auftaucht, ist es auf jeder "
-"einmal gültig. Das kann z. B. nützlich sein, wenn Sie ein Festival mit "
+"einmal gültig. Das kann z.B. nützlich sein, wenn Sie ein Festival mit "
 "Dauerkarten und Einzelkarten für einzelne Vorführungen veranstalten."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html
@@ -20565,7 +20567,7 @@ msgid ""
 "as payment, service, or shipping fees, even though an additional payment "
 "might be required."
 msgstr ""
-"Wenn eine Änderung zu einer Preisänderung führt, werden Gebühren wie z. B. "
+"Wenn eine Änderung zu einer Preisänderung führt, werden Gebühren wie z.B. "
 "Zahlungs-, Service- oder Versandgebühren nicht angepasst, auch wenn eine "
 "zusätzliche Zahlung notwendig sein könnte."
 
@@ -20677,7 +20679,7 @@ msgid ""
 "undeletable data, such as orders not performed in test mode."
 msgstr ""
 "Sie können die Veranstaltung nur komplett löschen, solange sie keine "
-"unlöschbaren Daten enthält, wie z. B. Bestellungen, die nicht im Testmodus "
+"unlöschbaren Daten enthält, wie z.B. Bestellungen, die nicht im Testmodus "
 "getätigt wurden."
 
 #: pretix/control/templates/pretixcontrol/event/dashboard_partial_logs.html
@@ -20711,7 +20713,7 @@ msgid ""
 "duplicate payment attempts. You should review the cases and consider "
 "refunding the overpaid amount to the user."
 msgstr ""
-"Diese Veranstaltung enthält <strong>überzahlte Bestellungen</strong>, z. B. "
+"Diese Veranstaltung enthält <strong>überzahlte Bestellungen</strong>, z.B. "
 "durch doppelte Zahlungsversuche. Sie sollten sich diese Fälle genau "
 "anschauen und ggf. den zu viel bezahlten Betrag an den Kunden "
 "zurückerstatten."
@@ -21592,8 +21594,8 @@ msgid ""
 "you can configure it there."
 msgstr ""
 "Diese Texte müssen vom Benutzer bestätigt werden, bevor ein Kauf möglich "
-"ist. Sie könnten hier z. B. auf Ihre Teilnahmebedingungen verlinken. Wenn "
-"Sie die „Seiten“-Funktion nutzen, um Ihre Bedingungen zu veröffentlichen, "
+"ist. Sie könnten hier z.B. auf Ihre Teilnahmebedingungen verlinken. Wenn Sie "
+"die \"Seiten\"-Funktion nutzen, um Ihre Bedingungen zu veröffentlichen, "
 "brauchen Sie diese Einstellung nicht, sondern können ähnliches im Seiten-"
 "Modul selbst einstellen."
 
@@ -21676,7 +21678,7 @@ msgid ""
 "pretix such as hidden products, add-on products or product bundles."
 msgstr ""
 "Die Warteliste ist derzeit mit einigen fortgeschrittenen Funktionen von "
-"pretix wie z. B. versteckten Produkten, Zusatzprodukten oder Produktpaketen "
+"pretix wie z.B. versteckten Produkten, Zusatzprodukten oder Produktpaketen "
 "inkompatibel."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html
@@ -22041,7 +22043,7 @@ msgid ""
 "We will also use this in some places like order codes, invoice numbers or "
 "bank transfer references as an abbreviation to reference this event."
 msgstr ""
-"Wir werden dies auch als Abkürzung für diese Veranstaltung verwenden, z. B. "
+"Wir werden dies auch als Abkürzung für diese Veranstaltung verwenden, z.B. "
 "in Bestellnummern, Rechnungsnummern und Verwendungszwecken."
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
@@ -22071,7 +22073,7 @@ msgid ""
 "that contain the event name."
 msgstr ""
 "Bitte kontrollieren Sie alle Einstellungen ausführlich. Einige Einstellungen "
-"wie z. B. Datumsangaben oder Freitexte können nicht vollständig automatisch "
+"wie z.B. Datumsangaben oder Freitexte können nicht vollständig automatisch "
 "angepasst werden."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html
@@ -22498,8 +22500,8 @@ msgid ""
 "Only purchases of such products will be considered \"attendees\" for most "
 "statistical purposes or within some plugins."
 msgstr ""
-"Nur Käufe eines solchen Produkts werden als „Teilnehmer*innen“ gewertet, z. B"
-". in Statistiken oder in Funktionen von Erweiterungen."
+"Nur Käufe eines solchen Produkts werden als \"Teilnehmer*innen\" gewertet, "
+"z.B. in Statistiken oder in Funktionen von Erweiterungen."
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
@@ -22510,10 +22512,10 @@ msgid ""
 "people (e.g. group bundles)."
 msgstr ""
 "Diese Option sollte für die meisten Produkte gewählt werden, die man "
-"üblicherweise als „Ticket“ bezeichnen würde. Für Zusatzprodukte oder "
+"üblicherweise als \"Ticket\" bezeichnen würde. Für Zusatzprodukte oder "
 "enthaltene Produkte sollte diese Option nur für das Haupt-Ticket gewählt "
 "werden, außer wenn es sich bei den Zusatzprodukten oder enthaltenen "
-"Produkten um weitere Personen handelt (z. B. Gruppenpaket)."
+"Produkten um weitere Personen handelt (z.B. Gruppenpaket)."
 
 #: pretix/control/templates/pretixcontrol/item/create.html
 #: pretix/control/templates/pretixcontrol/item/index.html
@@ -23249,8 +23251,8 @@ msgid ""
 "dietary requirements."
 msgstr ""
 "Fragen erlauben Ihren Besuchern, zusätzliche Informationen zu ihrem Ticket "
-"auszufüllen. Wenn Ihre Veranstaltung Verpflegung beinhaltet, könnten Sie z. B"
-". nach Allergien Ihrer Teilnehmer fragen."
+"auszufüllen. Wenn Ihre Veranstaltung Verpflegung beinhaltet, könnten Sie "
+"z.B. nach Allergien Ihrer Teilnehmer fragen."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html
 msgid "Create a new per-ticket question"
@@ -23332,7 +23334,7 @@ msgid ""
 "through cancellations, they will not become available again unless you "
 "manually re-open the quota on this page."
 msgstr ""
-"Dieses Kontingent ist ausverkauft und geschlossen. Selbst, wenn z. B. durch "
+"Dieses Kontingent ist ausverkauft und geschlossen. Selbst, wenn z.B. durch "
 "Stornos wieder Tickets verfügbar werden, stehen diese nicht zum Verkauf bis "
 "das Kontingent manuell wieder geöffnet wird."
 
@@ -23458,7 +23460,7 @@ msgstr ""
 "Art können Sie konfigurieren, ob Ihre Veranstaltung unbegrenzt viele "
 "Teilnehmer aufnehmen kann oder ob die Anzahl begrenzt ist. Sie können ein "
 "Produkt zu mehreren Kontingenten hinzufügen, um komplexere Anforderungen "
-"abzubilden, z. B. wenn Sie die Gesamtzahl der Tickets begrenzen wollen, aber "
+"abzubilden, z.B. wenn Sie die Gesamtzahl der Tickets begrenzen wollen, aber "
 "einen speziellen Ticket-Typ noch stärker begrenzen wollen."
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html
@@ -23708,7 +23710,7 @@ msgid ""
 msgstr ""
 "Sie können dieses Werkzeug nutzen, um die bestellten Produkte zu ändern oder "
 "die Bestellung teilweise zu stornieren. Bitte beachten Sie, dass das Ändern "
-"einer Bestellung verschiedene Implikationen haben kann, z. B. kann sich die "
+"einer Bestellung verschiedene Implikationen haben kann, z.B. kann sich die "
 "Zahlungsmittelgebühr ändern oder zusätzliche Fragen können auftreten, die "
 "vom Kunden beantwortet werden müssen."
 
@@ -23745,7 +23747,7 @@ msgid ""
 "order completely and create a new one."
 msgstr ""
 "Bitte benutzen Sie dieses Werkzeug vorsichtig. Hier vorgenommene Änderungen "
-"können nicht rückgängig gemacht werden. Nicht alle Bedingungen (wie z. B. "
+"können nicht rückgängig gemacht werden. Nicht alle Bedingungen (wie z.B. "
 "verpflichtende Zusatzprodukte) werden von diesem Werkzeug geprüft, es ist "
 "also möglich, eine Bestellung zu erzeugen, die normal nicht möglich gewesen "
 "wäre. In vielen Fällen ist es einfacher, die Bestellung komplett zu "
@@ -24675,7 +24677,7 @@ msgid ""
 "orders or pending refunds that you need to take care of manually."
 msgstr ""
 "Sie können diese Seite verwenden, um alle Bestellungen auf einmal zu "
-"stornieren und zurückzuerstatten, z. B. wenn Sie die Veranstaltung absagen "
+"stornieren und zurückzuerstatten, z.B. wenn Sie die Veranstaltung absagen "
 "müssen. Dies deaktiviert weiterhin alle Produkte, sodass keine neuen "
 "Bestellungen eingehen können. Überprüfen Sie die Veranstaltung danach auf "
 "überbezahlte Bestellungen oder ausstehende Erstattungen, die manuell "
@@ -25003,8 +25005,8 @@ msgid ""
 "sensitive personal data."
 msgstr ""
 "E-Mail ist kein Medium mit starker Verschlüsselung. Wir empfehlen diesen "
-"Mechanismus daher nur für Exporte, die z. B. statistische Daten ausgeben, "
-"und nicht für Exporte, die sensible personenbezogene Daten enthalten."
+"Mechanismus daher nur für Exporte, die z.B. statistische Daten ausgeben, und "
+"nicht für Exporte, die sensible personenbezogene Daten enthalten."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html
 msgid ""
@@ -25389,7 +25391,7 @@ msgstr "Mitgliedschaft hinzufügen"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html
 msgid "Matched to the account based on the email address."
-msgstr "Zum Kundenkonto auf Basis der E-Mail-Adresse zugeordnet."
+msgstr "Zum Kundenkonto auf Basis der E-Mail-Adresse zugeordnet"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html
@@ -25513,7 +25515,7 @@ msgid ""
 "Download an app that is compatible with pretix. For example, our check-in "
 "app <strong>pretixSCAN</strong> is available on all major platforms."
 msgstr ""
-"Laden Sie eine App herunter, die mit pretix kompatibel ist, wie z. B. unsere "
+"Laden Sie eine App herunter, die mit pretix kompatibel ist, wie z.B. unsere "
 "Check-in-App <strong>pretixSCAN</strong>."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html
@@ -25594,7 +25596,7 @@ msgid ""
 "If data (e.g. POS transactions or check-ins) has been created on this device "
 "and has not been uploaded, you will no longer be able to upload it."
 msgstr ""
-"Wenn Daten (z. B. Kassentransaktionen oder Check-ins) auf dem Gerät erstellt "
+"Wenn Daten (z.B. Kassentransaktionen oder Check-ins) auf dem Gerät erstellt "
 "und noch nicht hochgeladen wurden, können sie nicht mehr hochgeladen werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html
@@ -25605,18 +25607,18 @@ msgid ""
 "uninstall or reset the software manually."
 msgstr ""
 "Wenn die Software des Gerätes diese Funktion unterstützt, wird das Gerät "
-"persönliche Daten wie z. B. Bestelldaten beim nächsten "
+"persönliche Daten wie z.B. Bestelldaten beim nächsten "
 "Synchronisationsversuch vom Gerät löschen. Nicht-personenbezogene Daten wie "
-"z. B. Veranstaltungsdaten oder Kassentransaktionen werden nicht gelöscht, "
-"bis Sie die Software manuell deinstallieren oder zurücksetzen."
+"z.B. Veranstaltungsdaten oder Kassentransaktionen werden nicht gelöscht, bis "
+"Sie die Software manuell deinstallieren oder zurücksetzen."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid ""
 "This menu allows you to connect hardware devices such as box office "
 "terminals or scanning terminals to your account."
 msgstr ""
-"Dieses Menü erlaubt Ihnen, Hardware wie z. B. Kassen- oder Scan-Terminals "
-"mit diesem Account zu verbinden."
+"Dieses Menü erlaubt Ihnen, Hardware wie z.B. Kassen- oder Scan-Terminals mit "
+"diesem Account zu verbinden."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "You haven't connected any hardware devices yet."
@@ -25690,7 +25692,7 @@ msgid ""
 "before you are allowed to use cookies or similar technology for analytics, "
 "tracking, payment, or similar purposes."
 msgstr ""
-"Einige Jurisdiktionen wie z. B. die EU erfordern die Einwilligung des "
+"Einige Jurisdiktionen wie z.B. die EU erfordern die Einwilligung des "
 "Benutzers, bevor Cookies oder ähnliche Technologien für Analyse, Tracking, "
 "Zahlung oder ähnliche Zwecke verwendet werden dürfen."
 
@@ -25981,8 +25983,8 @@ msgid ""
 msgstr ""
 "Sie können optional einstellen, ob der andere Veranstalter auf Ihre "
 "wiederverwendbaren Medien zugreifen darf. Dies ist erforderlich, wenn Sie "
-"möchten, dass diese an einem gemeinsamen System mit z. B. NFC-"
-"Zahlungsmitteln teilnehmen."
+"möchten, dass diese an einem gemeinsamen System mit z.B. NFC-Zahlungsmitteln "
+"teilnehmen."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html
 msgid ""
@@ -26114,7 +26116,7 @@ msgstr "Cc"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 msgctxt "email"
 msgid "Bcc"
-msgstr "Blindkopie"
+msgstr "Bcc"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
@@ -26692,10 +26694,9 @@ msgid ""
 "generated by plugins. If you want to embed a logo or other images, use a "
 "custom background instead."
 msgstr ""
-"Sie können diese Funktion nutzen, um dynamische Bilder z. B. aus "
-"Fragefeldern oder aus Erweiterungen einzubinden. Wenn Sie ein Logo oder "
-"andere statische Bilder einbinden wollen, nutzen Sie stattdessen einen "
-"eigenen Hintergrund."
+"Sie können diese Funktion nutzen, um dynamische Bilder z.B. aus Fragefeldern "
+"oder aus Erweiterungen einzubinden. Wenn Sie ein Logo oder andere statische "
+"Bilder einbinden wollen, nutzen Sie stattdessen einen eigenen Hintergrund."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Dynamic image"
@@ -26757,7 +26758,7 @@ msgid ""
 "preview."
 msgstr ""
 "Bitte beachten Sie, dass der Editor nur eine grobe Vorschau bieten kann. "
-"Einige Details, z. B. die Textdarstellung, können auf den finalen Tickets "
+"Einige Details, z.B. die Textdarstellung, können auf den finalen Tickets "
 "leicht anders aussehen. Sie können den \"Vorschau\"-Button rechts benutzen "
 "um eine präzisere Vorschau zu erhalten."
 
@@ -27109,7 +27110,7 @@ msgid ""
 "countries, you need to keep some data in the live system in case of an audit."
 msgstr ""
 "Es liegt in Ihrer Verantwortung zu prüfen, ob Sie die ausgewählten Daten "
-"löschen dürfen oder z. B. aus steuerrechtlichen Gründen aufbewahren dürfen. "
+"löschen dürfen oder z.B. aus steuerrechtlichen Gründen aufbewahren dürfen. "
 "In vielen Ländern müssen Sie einige dieser Daten für den Fall einer "
 "Betriebsprüfung im Produktivsystem aufbewahren."
 
@@ -27121,7 +27122,7 @@ msgid ""
 msgstr ""
 "Für die meisten Arten personenbezogener Daten können Sie die Daten vorher "
 "teilweise herunterladen um sie offline aufzubewahren. Für manche Daten wie "
-"z. B. Zahlungsdaten oder historische Daten steht im Moment kein Download zur "
+"z.B. Zahlungsdaten oder historische Daten steht im Moment kein Download zur "
 "Verfügung."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html
@@ -27223,8 +27224,8 @@ msgstr ""
 "Sie können entweder eine oder mehrere Check-in-Listen für jeden Termin Ihrer "
 "Veranstaltungsreihe einzeln anlegen oder nur eine Check-in-Liste für alle "
 "Ihre Termine verwenden und den Einlass über Check-in-Regeln limitieren. "
-"Welcher Ansatz besser geeignet ist, hängt von mehreren Faktoren ab, wie z. B"
-". der Menge an Terminen in Ihrer Veranstaltungsreihe. Für Reihen mit weniger "
+"Welcher Ansatz besser geeignet ist, hängt von mehreren Faktoren ab, wie z.B. "
+"der Menge an Terminen in Ihrer Veranstaltungsreihe. Für Reihen mit weniger "
 "als einem Termin pro Tag sind einzelne Check-in-Listen in der Regel "
 "nützlicher. Wenn Sie Termine nutzen um viele Zeitfenster am selben Tag "
 "darzustellen oder sogar überlappende Termine haben, ist die Arbeit mit einer "
@@ -27409,7 +27410,7 @@ msgid ""
 "Google Authenticator or Proton Authenticator."
 msgstr ""
 "Nutzen Sie Ihr Smartphone mit einer App für zeitbasierte Einmalpasswörter "
-"(TOTP) wie z. B. freeOTP, Google Authenticator oder Proton Authenticator."
+"(TOTP) wie z.B. freeOTP, Google Authenticator oder Proton Authenticator."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html
 msgid "WebAuthn-compatible hardware token"
@@ -27592,7 +27593,7 @@ msgid ""
 msgstr ""
 "Zwei-Faktor-Authentifizierung ist ein Weg, Ihren Account zusätzlich "
 "abzusichern. Wenn Sie es aktivieren, benötigen Sie neben Ihren Passwort bei "
-"jeder Anmeldung auch einen zusätzlichen Token, der z. B. von einer App auf "
+"jeder Anmeldung auch einen zusätzlichen Token, der z.B. von einer App auf "
 "Ihrem Smartphone oder einem Hardware-Tokengenerator erzeugt wird und sich "
 "regelmäßig ändert."
 
@@ -27673,7 +27674,7 @@ msgid ""
 msgstr ""
 "Wenn Sie Zugriff auf Ihre Geräte verlieren, können Sie sich mit einem Ihrer "
 "Notfall-Token einloggen. Wir empfehlen, diese an einem sicheren Ort "
-"aufzubewahren, z. B. ausgedruckt oder in einem Passwort-Manager. Jeder Token "
+"aufzubewahren, z.B. ausgedruckt oder in einem Passwort-Manager. Jeder Token "
 "kann nur einmal verwendet werden."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html
@@ -28766,7 +28767,7 @@ msgid ""
 "An order could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
 msgstr ""
-"Diese Bestellung konnte nicht gelöscht werden, da einige Bedingungen (z. B. "
+"Diese Bestellung konnte nicht gelöscht werden, da einige Bedingungen (z.B. "
 "von Plugins erstellte Daten) es nicht erlauben."
 
 #: pretix/control/views/event.py
@@ -28787,8 +28788,8 @@ msgid ""
 "The event could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
-"Diese Veranstaltung konnte nicht gelöscht werden, da einige Bedingungen (z. B"
-". von Plugins erstellte Daten) es nicht erlauben."
+"Diese Veranstaltung konnte nicht gelöscht werden, da einige Bedingungen "
+"(z.B. von Plugins erstellte Daten) es nicht erlauben."
 
 #: pretix/control/views/event.py
 #, python-brace-format
@@ -29070,7 +29071,7 @@ msgid ""
 "plug-ins) did not allow it. Deleting it could break reporting or other "
 "functionality, so the product has been disabled instead."
 msgstr ""
-"Das Produkt konnte nicht gelöscht werden, da einige Bedingungen (z. B. von "
+"Das Produkt konnte nicht gelöscht werden, da einige Bedingungen (z.B. von "
 "Plugins erstellte Daten) es nicht erlauben. Ein Löschen des Produktes könnte "
 "Berichte oder Funktionen im System beschädigen, daher wurde das Produkt "
 "stattdessen deaktiviert."
@@ -29183,7 +29184,7 @@ msgid ""
 "period."
 msgstr ""
 "Wir empfehlen, Google Mail nicht für transaktionale Mails zu verwenden. Wenn "
-"Sie versuchen, viele Mails in kurzer Zeit zu verschicken, z. B. wenn Sie "
+"Sie versuchen, viele Mails in kurzer Zeit zu verschicken, z.B. wenn Sie "
 "Informationen an alle Ihre Ticketkäufer schicken, gibt es ein hohes Risiko, "
 "dass Google die Mails nicht zustellt, da Google ein Maximum an E-Mails pro "
 "Zeitperiode festsetzt."
@@ -29286,7 +29287,7 @@ msgid ""
 "The order could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
-"Diese Bestellung konnte nicht gelöscht werden, da einige Bedingungen (z. B. "
+"Diese Bestellung konnte nicht gelöscht werden, da einige Bedingungen (z.B. "
 "von Plugins erstellte Daten) es nicht erlauben."
 
 #: pretix/control/views/orders.py
@@ -29734,8 +29735,8 @@ msgid ""
 "The organizer could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
-"Dieser Veranstalter konnte nicht gelöscht werden, da einige Bedingungen (z. B"
-". von Plugins erstellte Daten) es nicht erlauben."
+"Dieser Veranstalter konnte nicht gelöscht werden, da einige Bedingungen "
+"(z.B. von Plugins erstellte Daten) es nicht erlauben."
 
 #: pretix/control/views/organizer.py
 #, python-brace-format
@@ -29799,7 +29800,7 @@ msgid ""
 "The team could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
 msgstr ""
-"Das Team konnte nicht gelöscht werden, da einige Bedingungen (z. B. von "
+"Das Team konnte nicht gelöscht werden, da einige Bedingungen (z.B. von "
 "Plugins erstellte Daten) es nicht erlauben."
 
 #: pretix/control/views/organizer.py
@@ -29998,7 +29999,7 @@ msgid ""
 "The channel could not be deleted as some constraints (e.g. data created by "
 "plug-ins) did not allow it."
 msgstr ""
-"Der Verkaufskanal konnte nicht gelöscht werden, da einige Bedingungen (z. B. "
+"Der Verkaufskanal konnte nicht gelöscht werden, da einige Bedingungen (z.B. "
 "von Plugins erstellte Daten) es nicht erlauben."
 
 #: pretix/control/views/organizer.py
@@ -30043,7 +30044,7 @@ msgid ""
 "The date could not be deleted as some constraints (e.g. data created by plug-"
 "ins) did not allow it. The date was disabled instead."
 msgstr ""
-"Der Termin konnte nicht gelöscht werden, da einige Bedingungen (z. B. Daten "
+"Der Termin konnte nicht gelöscht werden, da einige Bedingungen (z.B. Daten "
 "von Plugins) es verhindert haben. Der Termin wurde stattdessen deaktiviert."
 
 #: pretix/control/views/subevents.py
@@ -30700,7 +30701,7 @@ msgid ""
 "are not a number."
 msgstr ""
 "Die Daten konnten nicht wie gewünscht konvertiert werden. Dies kann an "
-"ungültigen Werten in der Datenbank liegen, z. B. wenn es Antworten auf eine "
+"ungültigen Werten in der Datenbank liegen, z.B. wenn es Antworten auf eine "
 "Frage vom Typ Zahl gibt, die keine gültige Zahl sind."
 
 #: pretix/plugins/badges/forms.py
@@ -30928,7 +30929,7 @@ msgid ""
 "numbers, routing numbers, addresses, etc."
 msgstr ""
 "Für SEPA-Konten können Sie dies leer lassen. Ansonsten fügen Sie bitte alles "
-"ein, das Ihre Kunden zur Überweisung brauchen, z. B. Kontonummern, "
+"ein, das Ihre Kunden zur Überweisung brauchen, z.B. Kontonummern, "
 "Banknummern, Adressen, etc."
 
 #: pretix/plugins/banktransfer/payment.py
@@ -30974,11 +30975,11 @@ msgid ""
 "starting with 12345."
 msgstr ""
 "Eine IBAN oder ein IBAN-Präfix pro Zeile. Das System versucht keine "
-"automatischen Rückerstattungen an diese IBANs zu senden. Dies ist z. B. "
+"automatischen Rückerstattungen an diese IBANs zu senden. Dies ist z.B. "
 "nützlich wenn Sie viele \"weitergeleitete Zahlungen\" von einem "
 "Zahlungsdienstleister erhalten. Sie können auch Ländercodes wie \"GB\" "
 "auflisten, wenn Sie nie Erstattungen an britische IBANs anstoßen wollen. Die "
-"Prüfziffern der IBAN werden beim Vergleich ignoriert, sodass Sie z. B. "
+"Prüfziffern der IBAN werden beim Vergleich ignoriert, sodass Sie z.B. "
 "DE0012345 sperren können, um alle deutschen IBANs mit einer BLZ, die mit "
 "12345 startet, zu sperren."
 
@@ -31616,7 +31617,7 @@ msgid ""
 "a different system. Does not included blocked codes or personal data."
 msgstr ""
 "Laden Sie eine Tabelle mit allen gültigen Barcodes zum Check-in herunter, "
-"z. B. für den Import in ein anderes System. Enthält keine gesperrten Codes "
+"z.B. für den Import in ein anderes System. Enthält keine gesperrten Codes "
 "und keine persönlichen Daten."
 
 #: pretix/plugins/checkinlists/exporters.py
@@ -33115,7 +33116,7 @@ msgid ""
 msgstr ""
 "Akzeptieren Sie Zahlungen über Stripe, einen weltweit beliebten "
 "Zahlungsdienstleister. Stripe unterstützt Zahlungen per Kreditkarte sowie "
-"viele lokale Zahlungsarten wie z. B. iDEAL, Alipay, und viele mehr."
+"viele lokale Zahlungsarten wie z.B. iDEAL, Alipay, und viele mehr."
 
 #: pretix/plugins/stripe/forms.py
 #, python-format
@@ -33195,7 +33196,7 @@ msgstr ""
 "Wir können von Vorverkaufsstellen ausgelöste Buchungen als MOTO (Mail "
 "Order / Telephone Order) markieren, wodurch keine Strong Customer "
 "Authentication (SCA) notwendig wird. Allerdings werden Sie dadurch "
-"verpflichtet, jährlich PCI-DSS-Formulare wie z. B. das 40-seitige SAQ D "
+"verpflichtet, jährlich PCI-DSS-Formulare wie z.B. das 40-seitige SAQ D "
 "auszufüllen. Bitte überprüfen Sie %s für weitere Infos zum Thema."
 
 #: pretix/plugins/stripe/payment.py
@@ -35385,7 +35386,7 @@ msgstr "Reservierung verlängert"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "Overview of your ordered products."
-msgstr "Übersicht über die bestellten Produkte."
+msgstr "Übersicht über die bestellten Produkte"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html
 msgid "Continue with order process"
@@ -36412,8 +36413,8 @@ msgid ""
 "vouchers."
 msgstr ""
 "Bitte beachten Sie, dass die geänderte Zeit nicht für Aspekte des Shops "
-"einbezogen wird, die Kontingente betreffen, wie z. B. den "
-"Gültigkeitszeitraum von Warenkörben und Gutscheinen."
+"einbezogen wird, die Kontingente betreffen, wie z.B. den Gültigkeitszeitraum "
+"von Warenkörben und Gutscheinen."
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html
 msgid "Enable time machine"
@@ -36679,8 +36680,8 @@ msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
 msgstr ""
-"Funktionale Cookies (z. B. Warenkorb, Login, Zahlung, Sprachauswahl) und "
-"technische Cookies (z. B. Sicherheitsmechanismen)"
+"Funktionale Cookies (z.B. Warenkorb, Login, Zahlung, Sprachauswahl) und "
+"technische Cookies (z.B. Sicherheitsmechanismen)"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
 msgctxt "cookie_usage"
@@ -36913,7 +36914,7 @@ msgid ""
 "You started logging in from a link opened inside an app (such as Instagram "
 "or an email app), and then continued the login in your main browser."
 msgstr ""
-"Sie haben den Login von einem Link in einer App (wie z. B. Instagram oder "
+"Sie haben den Login von einem Link in einer App (wie z.B. Instagram oder "
 "einer E-Mail-App) gestartet und dann in Ihrem normalen Browser fortgesetzt."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
@@ -36945,7 +36946,7 @@ msgid ""
 "Open this website again directly in your main browser (for example Safari or "
 "Chrome)."
 msgstr ""
-"Öffnen Sie die Website erneut direkt mit Ihrem bevorzugten Browser (z. B. "
+"Öffnen Sie die Website erneut direkt mit Ihrem bevorzugten Browser (z.B. "
 "Safari oder Chrome)."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
@@ -36966,7 +36967,7 @@ msgid ""
 msgstr ""
 "Wenn das Problem fortbesteht, kann es helfen, alle Browser-Fenster zu "
 "schließen und Cookies zu löschen. Als letzten Schritt können Sie einen "
-"anderen Browser oder ein andres Gerät (z. B. ein Laptop oder Desktop-"
+"anderen Browser oder ein andres Gerät (z.B. ein Laptop oder Desktop-"
 "Computer) verwenden."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
