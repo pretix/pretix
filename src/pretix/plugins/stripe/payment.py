@@ -138,7 +138,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - BLIK: ✗
 # - Pay By Bank: ✓
 # - TWINT: ✓
-# - Wero: ✓ (No settings UI yet)
+# - Wero: ✓
 # - giropay: ✗ (deprecated)
 # - Sofort: ✗ (deprecated)
 #
@@ -529,15 +529,14 @@ class StripeSettingsHolder(BasePaymentProvider):
                                  'before they work properly.'),
                      required=False,
                  )),
-                # Disabled for now, since still in closed Beta and only available to dedicated boarded accounts.
-                # ('method_wero',
-                #  forms.BooleanField(
-                #     label=_('Wero'),
-                #      disabled=self.event.currency not in 'EUR',
-                #      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                #                  'before they work properly.'),
-                #      required=False,
-                #  )),
+                ('method_wero',
+                 forms.BooleanField(
+                     label=_('Wero'),
+                     disabled=self.event.currency not in 'EUR',
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before they work properly.'),
+                     required=False,
+                 )),
             ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
         )
         if not self.settings.connect_client_id or self.settings.secret_key:
