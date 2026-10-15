@@ -174,7 +174,7 @@ Endpoints
             "confirmation_email_template": {
               "en": "To whom it may concern…",
             },
-            "is_human": false,
+            "is_human": false
           }
         ]
       }
@@ -204,7 +204,7 @@ Endpoints
         "confirmation_pending_email_template": "To whom it may concern…",
         "confirmation_email_subject": "Confirmation subject",
         "confirmation_email_template": "To whom it may concern…",
-        "is_human": false,
+        "is_human": false
       }
 
 
@@ -236,7 +236,7 @@ Endpoints
         "confirmation_email_template": {
           "en": "To whom it may concern…",
         },
-        "is_human": false,
+        "is_human": false
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -284,7 +284,7 @@ Endpoints
         "confirmation_email_template": {
           "en": "To whom it may concern…",
         },
-        "is_human": false,
+        "is_human": false
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -342,7 +342,7 @@ Endpoints
         "confirmation_email_template": {
           "en": "To whom it may concern…",
         },
-        "is_human": false,
+        "is_human": false
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -386,7 +386,7 @@ Endpoints
             "locale": "en",
             "active": true,
             "notification_email": "",
-            "confirmation_required": false,
+            "confirmation_required": false
           }
         ]
       }
@@ -417,7 +417,7 @@ Endpoints
         "locale": "en",
         "active": true,
         "notification_email": "",
-        "confirmation_required": false,
+        "confirmation_required": false
       }
 
 
@@ -438,7 +438,7 @@ Endpoints
         "locale": "en",
         "active": true,
         "notification_email": "",
-        "confirmation_required": false,
+        "confirmation_required": false
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -475,7 +475,7 @@ Endpoints
         "locale": "en",
         "active": true,
         "notification_email": "",
-        "confirmation_required": false,
+        "confirmation_required": false
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -522,7 +522,7 @@ Endpoints
         "locale": "en",
         "active": true,
         "notification_email": "",
-        "confirmation_required": false,
+        "confirmation_required": false
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -559,7 +559,7 @@ Endpoints
         "results": [
           {
             "id": 1,
-            "email": "mark@example.org",
+            "email": "mark@example.org"
           }
         ]
       }
@@ -584,7 +584,7 @@ Endpoints
       Accept: application/json, text/javascript
 
       {
-        "email": "mark@example.org",
+        "email": "mark@example.org"
       }
 
 
@@ -598,7 +598,7 @@ Endpoints
 
       {
         "id": 1,
-        "email": "mark@example.org",
+        "email": "mark@example.org"
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -629,7 +629,7 @@ Endpoints
 
       {
         "id": 1,
-        "email": "mark@example.org",
+        "email": "mark@example.org"
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -695,7 +695,7 @@ Endpoints
         "results": [
           {
             "id": 1,
-            "email": "mark@example.org",
+            "email": "mark@example.org"
           }
         ]
       }
@@ -720,7 +720,7 @@ Endpoints
       Accept: application/json, text/javascript
 
       {
-        "email": "mark@example.org",
+        "email": "mark@example.org"
       }
 
 
@@ -734,7 +734,7 @@ Endpoints
 
       {
         "id": 1,
-        "email": "mark@example.org",
+        "email": "mark@example.org"
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -765,7 +765,7 @@ Endpoints
 
       {
         "id": 1,
-        "email": "mark@example.org",
+        "email": "mark@example.org"
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -804,7 +804,7 @@ Endpoints
           {
             "id": 1,
             "resource_type": 4,
-            "name": "My Property",
+            "name": "My Property"
           }
         ]
       }
@@ -829,7 +829,7 @@ Endpoints
 
       {
         "resource_type": 4,
-        "name": "My Property",
+        "name": "My Property"
       }
 
 
@@ -844,7 +844,7 @@ Endpoints
       {
         "id": 1,
         "resource_type": 4,
-        "name": "My Property",
+        "name": "My Property"
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -878,7 +878,7 @@ Endpoints
         "subevent": 5,
         "requirement": 6,
         "status": "requested",
-        "invoiced": false,
+        "invoiced": false
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -919,7 +919,7 @@ Endpoints
       {
         "id": 1,
         "resource_type": 4,
-        "name": "New Property",
+        "name": "New Property"
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -957,7 +957,7 @@ Endpoints
           {
             "id": 1,
             "prop": 4,
-            "value": "My Value",
+            "value": "My Value"
           }
         ]
       }
@@ -983,7 +983,7 @@ Endpoints
 
       {
         "prop": 4,
-        "value": "My Value",
+        "value": "My Value"
       }
 
 
@@ -998,7 +998,7 @@ Endpoints
       {
         "id": 1,
         "prop": 4,
-        "value": "My Value",
+        "value": "My Value"
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -1030,7 +1030,7 @@ Endpoints
       {
         "id": 1,
         "prop": 4,
-        "value": "My Value",
+        "value": "My Value"
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -1072,7 +1072,7 @@ Endpoints
       {
         "id": 1,
         "prop": 4,
-        "value": "New Value",
+        "value": "New Value"
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -1114,7 +1114,7 @@ Endpoints
             "subevent": 5,
             "requirement": 6,
             "status": "requested",
-            "invoiced": false,
+            "invoiced": false
           }
         ]
       }
@@ -1142,7 +1142,7 @@ Endpoints
         "subevent": 5,
         "requirement": 6,
         "status": "requested",
-        "invoiced": false,
+        "invoiced": false
       }
 
 
@@ -1160,7 +1160,7 @@ Endpoints
         "subevent": 5,
         "requirement": 6,
         "status": "requested",
-        "invoiced": false,
+        "invoiced": false
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -1194,7 +1194,7 @@ Endpoints
         "subevent": 5,
         "requirement": 6,
         "status": "requested",
-        "invoiced": false,
+        "invoiced": false
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -1238,7 +1238,7 @@ Endpoints
         "subevent": 5,
         "requirement": 6,
         "status": "confirmed",
-        "invoiced": false,
+        "invoiced": false
       }
 
    :param organizer: The ``slug`` field of a valid organizer
