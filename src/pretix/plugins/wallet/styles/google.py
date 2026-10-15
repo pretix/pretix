@@ -498,7 +498,6 @@ class GoogleWalletCustomEventTicket(GoogleWalletEventTicketStyle):
             TextFieldGroup(
                 identifier="details",
                 name=_("Details"),
-                max_entries=20,
                 context_args={"order_position"},
             ),
         ]
