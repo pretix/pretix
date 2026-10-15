@@ -18,7 +18,6 @@ The type resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
-organizer                             integer                    Internal ID for Organizer in pretix
 name                                  string                     Type name
 name_plural                           string                     Plural form of the type's name
 confirmation_pending_email_subject    string                     Template for pending confirmation email subject
@@ -39,7 +38,6 @@ The resource resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
-organizer                             integer                    Internal ID for Organizer in pretix
 type                                  integer                    Internal ID for resource type in pretix
 property_values                       list of strings            Order code of the order the scanned attendee belongs to
 managed_by                            list of integers           ???
@@ -159,7 +157,6 @@ Endpoints
         "results": [
           {
             "id": 1,
-            "organizer": 1,
             "name": {
               "en": "New Name"
             },
@@ -202,7 +199,6 @@ Endpoints
       Accept: application/json, text/javascript
 
       {
-        "organizer": 1,
         "name": "My Type",
         "name_plural": "My Types",
         "confirmation_pending_email_subject": "Pending subject",
@@ -223,7 +219,6 @@ Endpoints
 
       {
         "id": 1,
-        "organizer": 1,
         "name": {
           "en": "New Name"
         },
@@ -272,7 +267,6 @@ Endpoints
 
       {
         "id": 1,
-        "organizer": 1,
         "name": {
           "en": "New Name"
         },
@@ -331,7 +325,6 @@ Endpoints
 
       {
         "id": 1,
-        "organizer": 1,
         "name": {
           "en": "New Name"
         },
@@ -387,7 +380,6 @@ Endpoints
         "results": [
           {
             "id": 1,
-            "organizer": 4,
             "type": 5,
             "property_values": [2, 3, 4],
             "managed_by": [7, 8, 9],
@@ -419,7 +411,6 @@ Endpoints
       Accept: application/json, text/javascript
 
       {
-        "organizer": 4,
         "type": 5,
         "property_values": [2, 3, 4],
         "managed_by": [7, 8, 9],
@@ -441,7 +432,6 @@ Endpoints
 
       {
         "id": 1,
-        "organizer": 4,
         "type": 5,
         "property_values": [2, 3, 4],
         "managed_by": [7, 8, 9],
@@ -479,7 +469,6 @@ Endpoints
 
       {
         "id": 1,
-        "organizer": 4,
         "type": 5,
         "property_values": [2, 3, 4],
         "managed_by": [7, 8, 9],
@@ -527,7 +516,6 @@ Endpoints
 
       {
         "id": 1,
-        "organizer": 4,
         "type": 5,
         "property_values": [2, 3, 4],
         "managed_by": [7, 8, 9],
