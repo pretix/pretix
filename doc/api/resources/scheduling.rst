@@ -40,7 +40,6 @@ Field                                 Type                       Description
 id                                    integer                    Internal ID in pretix
 type                                  integer                    Internal ID for resource type in pretix
 property_values                       list of strings            Order code of the order the scanned attendee belongs to
-managed_by                            list of integers           ???
 name                                  string                     Resource name
 locale                                string                     Locale name
 active                                boolean                    Deleted resources will have this set to false
