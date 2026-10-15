@@ -9,7 +9,7 @@ function getDefaultFieldgroupState(
 	fieldgroup: FieldGroupDefinition,
 ): FieldGroupConfig {
 	if (fieldgroup.type == "predefined") {
-		return { active: fieldgroup.required };
+		return { active: fieldgroup.required || fieldgroup.default_active };
 	} else if (fieldgroup.type == "placeholder") {
 		return {
 			overflow: null,
@@ -84,8 +84,14 @@ export function createWalletStore(config: {
 						settings[setting.identifier] =
 							this.layout.settings[setting.identifier];
 					} else if (setting.type == "image") {
-						settings[setting.identifier] =
-							this.layout.file_settings[setting.identifier];
+						const val = this.layout.file_settings[setting.identifier];
+						if (val && "file" in val && val.file) {
+							settings[setting.identifier] = {"name": val.file.name, "url": URL.createObjectURL(val.file)};
+						} else if (val && "url" in val && val.url) {
+							settings[setting.identifier] = val;
+						} else {
+							settings[setting.identifier] = null;
+						}
 					}
 				}
 				return settings;

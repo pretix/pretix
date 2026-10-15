@@ -19,9 +19,6 @@ const settingValue = computed(() => {
 	const val = store.settings[config.setting];
 
 	if (settingDef.value.type == "image") {
-		if (val && "file" in val && val.file) {
-			return URL.createObjectURL(val.file);
-		}
 		if (val && "url" in val && val.url) {
 			return val.url;
 		} else if (settingDef.value.type == "image" && settingDef.value.default) {
