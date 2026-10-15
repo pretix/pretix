@@ -41,7 +41,7 @@ id                                    integer                    Internal ID in 
 type                                  integer                    Internal ID for resource type in pretix
 property_values                       list of strings            Properties assigned to the resource
 name                                  string                     Resource name
-locale                                string                     Locale name
+locale                                string                     The locale used for communication with this resource
 active                                boolean                    Deleted resources will have this set to false
 notification_email                    string                     The email address to send confirmation emails to when a
                                                                  planning is created.
