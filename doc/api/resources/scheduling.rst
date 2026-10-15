@@ -129,7 +129,7 @@ invoiced                              boolean                    Should this pla
 Endpoints
 ---------
 
-.. http:get:: /api/v1/organizers/(organizer)/resource-types/
+.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/
 
    Returns a list of all resource types for an organizer.
 
@@ -137,7 +137,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/resource-types/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/resourcetypes/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -185,7 +185,7 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
 
-.. http:post:: /api/v1/organizers/(organizer)/resource-types/
+.. http:post:: /api/v1/organizers/(organizer)/resourcetypes/
 
    Create a resource type for an organizer.
 
@@ -193,7 +193,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      POST /api/v1/organizers/bigevents/resource-types/ HTTP/1.1
+      POST /api/v1/organizers/bigevents/resourcetypes/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -244,7 +244,7 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
 
-.. http:get:: /api/v1/organizers/(organizer)/resource-types/(id)/
+.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(id)/
 
    Returns information on one resource type, identified by its ID.
 
@@ -252,7 +252,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/resource-types/1/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/resourcetypes/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -294,7 +294,7 @@ Endpoints
    :statuscode 403: The requested organizer or resource type does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource type does not exist
 
-.. http:patch:: /api/v1/organizers/(organizer)/resource-types/(id)/
+.. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(id)/
 
    Update a resource type. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
@@ -304,7 +304,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      PATCH /api/v1/organizers/bigevents/resource-types/1/ HTTP/1.1
+      PATCH /api/v1/organizers/bigevents/resourcetypes/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
