@@ -102,12 +102,12 @@ const placeholders = computed(() => {
         .panel-body(v-if="fieldConfig")
             span.text-muted(v-if="fieldgroup.description") {{ fieldgroup.description }}
             h4 {{ gettext("Content") }}
-            .form-group()
+            .form-group
                 table.table.table-hover
                     thead
                         tr
-                            th.col-md-5(v-if="fieldgroup.display == 'with_label'") {{ gettext('Label') }}
-                            th(:class="'col-md-' + (fieldgroup.display == 'with_label' ? '6' : '11')") {{ gettext('Content') }}
+                            th.col-5(v-if="fieldgroup.display == 'with_label'") {{ gettext('Label') }}
+                            th(:class="'col-' + (fieldgroup.display == 'with_label' ? '6' : '11')") {{ gettext('Content') }}
                             th.col-xs-1
                     tbody
                         tr(v-for="n, i in fieldConfig.entries.length" :key="i")
@@ -123,9 +123,10 @@ const placeholders = computed(() => {
                                         :choices="Object.entries(store.variables.image).map(([k, v]) => [k, i18nstringLocalize(v.label)])"
                                     )
                             td.text-right
-                                button.btn.btn-danger.form-control-static(type="button" @click="fieldConfig.entries.splice(n - 1, 1)")
+                                button.btn.btn-danger.form-control-static(type="button" @click="fieldConfig.entries.splice(n - 1, 1)" v-if="fieldConfig.entries.length > (fieldgroup.min_entries||0)")
                                     i.fa.fa-trash
                                     span.sr-only {{ gettext('Delete') }}
+                                .text-left.text-muted(v-else) {{  gettext("At least one field in this group is required") }}
 
                 button.btn.btn-default(type="button" @click="addVariable")
                     i.fa.fa-plus

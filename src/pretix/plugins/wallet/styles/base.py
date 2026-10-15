@@ -121,6 +121,14 @@ class CustomFieldEntry(FieldEntry[MaybeTranslatedString]):
 
 class PredefinedFieldGroup(FieldGroup):
     type = FieldGroupType.PREDEFINED
+    default_active: bool
+
+    def __init__(self, identifier: str, name: str, description=None, required=False, default_active=True):
+        self.identifier = identifier
+        self.name = name
+        self.required = required
+        self.description = description or ""
+        self.default_active = default_active
 
     def layout_schema(
         self,
@@ -129,6 +137,11 @@ class PredefinedFieldGroup(FieldGroup):
     ):
         return {"type": "object", "properties": {"active": {"type": "boolean"}}}
 
+    def asdict(self, locales: list[str], context: LayoutContext):
+        return {
+            **super().asdict(locales, context),
+            "default_active": self.default_active,
+        }
 
 class PlaceholderFieldGroup(FieldGroup):
     type = FieldGroupType.PLACEHOLDER
