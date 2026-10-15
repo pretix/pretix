@@ -777,7 +777,7 @@ Endpoints
    :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
    :statuscode 404: The requested manager does not exist
 
-.. http:get:: /api/v1/organizers/(organizer)/properties/
+.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/
 
    Returns a list of all properties for an organizer.
 
@@ -785,7 +785,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/properties/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/resourcetypes/1/properties/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -812,11 +812,12 @@ Endpoints
 
    :query page: The page number in case of a multi-page result set, default is 1
    :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
 
-.. http:post:: /api/v1/organizers/(organizer)/properties/
+.. http:post:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/
 
    Create a property for an organizer.
 
@@ -824,7 +825,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      POST /api/v1/organizers/bigevents/properties/ HTTP/1.1
+      POST /api/v1/organizers/bigevents/resourcetypes/1/properties/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -849,11 +850,12 @@ Endpoints
       }
 
    :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
    :statuscode 201: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
 
-.. http:get:: /api/v1/organizers/(organizer)/properties/(id)/
+.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
 
    Returns information on one property, identified by its ID.
 
@@ -861,7 +863,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/properties/1/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/resourcetypes/1/properties/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -883,13 +885,14 @@ Endpoints
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
+   :param resource_type: The ``id`` field of a valid resource type
    :param id: The ``id`` field of the property to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or property does not exist **or** you have no permission to view it.
    :statuscode 404: The requested property does not exist
 
-.. http:patch:: /api/v1/organizers/(organizer)/properties/(id)/
+.. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
 
    Update a property. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
@@ -899,7 +902,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      PATCH /api/v1/organizers/bigevents/properties/1/ HTTP/1.1
+      PATCH /api/v1/organizers/bigevents/resourcetypes/1/properties/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
@@ -924,13 +927,14 @@ Endpoints
       }
 
    :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
    :param id: The ``id`` field of the property to update
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or property does not exist **or** you have no permission to view it.
    :statuscode 404: The requested property does not exist
 
-.. http:get:: /api/v1/organizers/(organizer)/properties/(property)/values/
+.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/
 
    Returns a list of all values for a property and an organizer.
 
@@ -938,7 +942,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/properties/1/values/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -965,12 +969,13 @@ Endpoints
 
    :query page: The page number in case of a multi-page result set, default is 1
    :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
    :param property: The ``id`` field of a valid property
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or property does not exist **or** you have no permission to view it.
 
-.. http:post:: /api/v1/organizers/(organizer)/properties/(property)/values/
+.. http:post:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/
 
    Create a value for a property and an organizer.
 
@@ -978,7 +983,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      POST /api/v1/organizers/bigevents/properties/1/values/ HTTP/1.1
+      POST /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -1003,12 +1008,13 @@ Endpoints
       }
 
    :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
    :param property: The ``id`` field of a valid property
    :statuscode 201: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or property does not exist **or** you have no permission to view it.
 
-.. http:get:: /api/v1/organizers/(organizer)/properties/(property)/values/(id)/
+.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
 
    Returns information on one value, identified by its ID.
 
@@ -1016,7 +1022,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/properties/1/values/1/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -1035,6 +1041,7 @@ Endpoints
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
+   :param resource_type: The ``id`` field of a valid resource type
    :param property: The ``id`` field of a valid property
    :param id: The ``id`` field of the value to fetch
    :statuscode 200: no error
@@ -1042,7 +1049,7 @@ Endpoints
    :statuscode 403: The requested organizer, property, or value does not exist **or** you have no permission to view it.
    :statuscode 404: The requested value does not exist
 
-.. http:patch:: /api/v1/organizers/(organizer)/properties/(property)/values/(id)/
+.. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
 
    Update a value. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
@@ -1052,7 +1059,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      PATCH /api/v1/organizers/bigevents/properties/1/values/1/ HTTP/1.1
+      PATCH /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
@@ -1077,6 +1084,7 @@ Endpoints
       }
 
    :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
    :param property: The ``id`` field of a valid property
    :param id: The ``id`` field of the value to update
    :statuscode 200: no error
