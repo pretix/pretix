@@ -18,6 +18,6 @@ const store = inject(StoreKey)!;
             :label="field.label" :type="field.type" :help_text="field.help_text"
             :min="field.min" :max="field.max" :defaultVal="field.default")
         FileInput(v-if='field.type == "image"' :label="field.label" :required="field.required"
-            :help_text="field.help_text" @change="(v) => store.setSetting(field.identifier, v)"
-            :filename="store.settings[field.identifier]?.name" :current_url="store.settings[field.identifier]?.url" :default="field.default")
+            :help_text="field.help_text" @update:modelValue="(v) => store.setSetting(field.identifier, v)"
+            :modelValue="store.settings[field.identifier]" :default="field.default")
 </template>

@@ -12,24 +12,17 @@ const layoutStyle = computed(() => {
 		return Object.fromEntries(
 			Object.entries(layout.style)
 				.map(([k, v]) => {
-					if (v.setting) {
+					if (typeof v !== "string" && v.setting) {
 						const settingDef = store.styles[store.layout.style].settings.find(
 							(x) => x.identifier == v.setting,
 						);
 						const val = store.settings[v.setting];
 						if (!settingDef) {
 							v = null;
-						} else if (
-							settingDef.type == "image" &&
-							val &&
-							"file" in val &&
-							val.file
-						) {
-							v = `url(${URL.createObjectURL(val.file)})`; // TODO: encode
-						} else if (settingDef.type == "image" && val && val.url) {
-							v = `url(${val.url})`;
+						} else if (settingDef.type == "image" && val) {
+							v = `url(${val.url})`; // TODO: encode
 						} else if (settingDef.type == "image" && settingDef.default) {
-							v = `url(${settingDef.default})`;
+							v = `url(${settingDef.default})`; // TODO: encode
 						} else {
 							v = val;
 						}
@@ -53,8 +46,8 @@ const layoutStyle = computed(() => {
 
 <style lang="css" scoped>
 .pass-container {
-    width: 100%;
-    max-width: 360px;
+	width: 100%;
+	max-width: 360px;
 	vertical-align: top;
 	display: inline-block;
 

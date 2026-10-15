@@ -29,7 +29,6 @@ from pretix.plugins.wallet.styles.base import (
     ColorSettingsField,
     FieldGroupDisplay,
     FloatSettingsField,
-    ImageFieldGroup,
     ImageSettingsField,
     PassStyle,
     PlaceholderFieldEntry,
@@ -232,17 +231,6 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
     @property
     def fieldgroups(self):
         return [
-            ImageFieldGroup(
-                identifier="logo",
-                name=_("Logo"),
-                min_entries=0,
-                max_entries=1,
-                default_entries=[
-                    PlaceholderFieldEntry(
-                        content="poweredby",
-                    )
-                ],
-            ),
             PredefinedFieldGroup(identifier="venue", name=_("Venue")),
             PredefinedFieldGroup(identifier="date", name=_("Date")),
             PredefinedFieldGroup(identifier="seating", name=_("Seating")),
