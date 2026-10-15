@@ -131,7 +131,7 @@ Endpoints
 
 .. http:get:: /api/v1/organizers/(organizer)/resource-types/
 
-   Returns a list of all resource types configured for an organizer.
+   Returns a list of all resource types for an organizer.
 
    **Example request**:
 
@@ -187,7 +187,7 @@ Endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/resource-types/
 
-   Create a resource type configured for an organizer.
+   Create a resource type for an organizer.
 
    **Example request**:
 
@@ -354,7 +354,7 @@ Endpoints
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/
 
-   Returns a list of all resources configured for an organizer.
+   Returns a list of all resources for an organizer.
 
    **Example request**:
 
@@ -399,7 +399,7 @@ Endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/resources/
 
-   Create a resource configured for an organizer.
+   Create a resource for an organizer.
 
    **Example request**:
 
@@ -819,7 +819,7 @@ Endpoints
 
 .. http:get:: /api/v1/organizers/(organizer)/properties/
 
-   Returns a list of all properties configured for an organizer.
+   Returns a list of all properties for an organizer.
 
    **Example request**:
 
@@ -858,7 +858,7 @@ Endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/properties/
 
-   Create a property configured for an organizer.
+   Create a property for an organizer.
 
    **Example request**:
 
@@ -972,7 +972,7 @@ Endpoints
 
 .. http:get:: /api/v1/organizers/(organizer)/properties/(property)/values/
 
-   Returns a list of all values configured for a property and an organizer.
+   Returns a list of all values for a property and an organizer.
 
    **Example request**:
 
@@ -1012,7 +1012,7 @@ Endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/properties/(property)/values/
 
-   Create a value configured for a property and an organizer.
+   Create a value for a property and an organizer.
 
    **Example request**:
 
@@ -1126,7 +1126,7 @@ Endpoints
 
 .. http:get:: /api/v1/organizers/(organizer)/plannings/
 
-   Returns a list of all plannings configured for an organizer.
+   Returns a list of all plannings for an organizer.
 
    **Example request**:
 
@@ -1168,7 +1168,7 @@ Endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/plannings/
 
-   Create a planning configured for an organizer.
+   Create a planning for an organizer.
 
    **Example request**:
 
