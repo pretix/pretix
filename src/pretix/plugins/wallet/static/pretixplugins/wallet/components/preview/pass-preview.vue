@@ -42,7 +42,6 @@ const layoutStyle = computed(() => {
 		);
 	}
 });
-console.log("layoutStyle", layoutStyle.value);
 </script>
 
 <template lang="pug">

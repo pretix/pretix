@@ -182,7 +182,6 @@ export function createWalletStore(config: {
 					const styleDefinition = this.getPlatform(layout.platform).styles[
 						layout.style
 					];
-					console.log(styleDefinition);
 					for (const fieldgroup of styleDefinition.fieldgroups) {
 						clientLayout.fieldgroups[fieldgroup.identifier] =
 							parseExistingFieldgroupState(
