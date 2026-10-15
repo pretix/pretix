@@ -51,6 +51,7 @@ type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
 
 type PredefinedFieldGroupDefinition = BaseFieldGroupDefinition & {
 	type: "predefined";
+	default_active: boolean;
 };
 
 type LocalizableString = null | string | Record<string, string>;
@@ -97,7 +98,7 @@ type LayoutData = {
 	settings?: Record<string, any>;
 };
 
-type PreviewLayout = {"style": Record<string, string | {settting: string}>, "rows": PreviewRow};
+type PreviewLayout = {"style": Record<string, string | {setting: string}>, "rows": PreviewRow};
 
 type PreviewRow =
 	| {
