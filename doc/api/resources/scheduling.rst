@@ -21,7 +21,7 @@ id                                    integer                    Internal ID in 
 name                                  string                     Type name
 name_plural                           string                     Plural form of the type's name
 confirmation_pending_email_subject    string                     Template for pending confirmation email subject
-confirmation_pending_email_template   string                     Template for pending econfirmation mail
+confirmation_pending_email_template   string                     Template for pending confirmation mail
 confirmation_email_subject            string                     Template for confirmation email subject
 confirmation_email_template           string                     Template for confirmation email
 is_human                              boolean                    Enables lead scanning app
@@ -119,7 +119,7 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
 resource                              integer                    Internal ID in pretix for the planning's organizer
-requirment                            integer                    Internal ID in pretix for the planning's requirement
+requirement                           integer                    Internal ID in pretix for the planning's requirement
 subevent                              integer                    Internal ID in pretix for the planning's subevent
 status                                string                     Status for the planning, can be one of ``requested``,
                                                                  ``confirmed``, ``completed``, or ``cancelled``.
