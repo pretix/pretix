@@ -776,47 +776,6 @@ Endpoints
    :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
    :statuscode 404: The requested manager does not exist
 
-.. http:patch:: /api/v1/organizers/(organizer)/resources/(resource)/managers/(id)/
-
-   Update a resource. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
-   want to change.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      PATCH /api/v1/organizers/bigevents/resources/7/managers/1/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-      Content-Type: application/json
-      Content-Length: 31
-
-      {
-        "email": "mark@example.org"
-      }
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: text/javascript
-
-      {
-        "id": 1,
-        "email": "mark@example.org",
-      }
-
-   :param organizer: The ``slug`` field of a valid organizer
-   :param resource: The ``id`` field of a valid resource
-   :param id: The ``id`` field of the manager to update
-   :statuscode 200: no error
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested manager does not exist
-
 .. http:get:: /api/v1/organizers/(organizer)/properties/
 
    Returns a list of all properties for an organizer.
