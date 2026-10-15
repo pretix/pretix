@@ -121,7 +121,7 @@ def get_preview_position(event):
         raise RuntimeError("get_preview_position needs to be called in a rolledback_transaction")
 
     item = event.items.create(name=LazyI18nString.from_gettext("Sample product"), default_price=Decimal('42.23'),
-                              description=_("Sample product description"))
+                              description=LazyI18nString.from_gettext("Sample product description"))
     item2 = event.items.create(name=LazyI18nString.from_gettext("Sample workshop"), default_price=Decimal('23.40'))
     item.program_times.create(item=item, start=datetime(2017, 12, 27, 0, 0, 0, tzinfo=timezone.utc),
                               end=datetime(2017, 12, 28, 0, 0, 0, tzinfo=timezone.utc))
