@@ -24,7 +24,7 @@ confirmation_pending_email_subject    string                     Template for pe
 confirmation_pending_email_template   string                     Template for pending confirmation mail
 confirmation_email_subject            string                     Template for confirmation email subject
 confirmation_email_template           string                     Template for confirmation email
-is_human                              boolean                    Enables lead scanning app
+is_human                              boolean                    Does the resource represent a human (read-only)
 ===================================== ========================== =======================================================
 
 Resource resource
