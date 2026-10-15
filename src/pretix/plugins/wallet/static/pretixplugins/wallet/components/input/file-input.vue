@@ -8,7 +8,7 @@ defineOptions({
 });
 const emit = defineEmits<{change: [File]}>()
 const props = defineProps<{
-	label?: LocalizableString;
+	label?: I18nString;
 	errors?: string[];
 	help_text?: string;
     filename?: string;
@@ -52,7 +52,7 @@ const clearFile = () => {
             | {{  gettext("Currently") + ': ' }}
             a(:href="current_url" data-lightbox="input") {{ filename }}
             | {{ " " }}
-            button.btn.btn-sm(@click.prevent="() => {console.log('clear'); emit('change', null)}") {{ gettext("Clear") }}
+            button.btn.btn-sm(@click.prevent="() => emit('change', null)") {{ gettext("Clear") }}
             br
             | {{ gettext("Change") + ': ' }}
         input(:id="id" @change="onChange" v-bind="$attrs" :required="$attrs.required && !current_url" type="file" style="display: inline" ref="inputRef")
