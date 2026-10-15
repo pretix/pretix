@@ -316,6 +316,7 @@ def mail(email: Union[str, Sequence[str]], subject: Union[str, FormattedString],
                 body_html = None
 
         m = OutgoingMail.objects.create(
+            guid=guid,
             organizer=organizer,
             event=event,
             order=order,
