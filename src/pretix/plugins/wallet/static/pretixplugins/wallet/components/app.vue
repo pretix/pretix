@@ -5,6 +5,7 @@ import Select from "./input/select.vue";
 import Input from "./input/input.vue";
 import PassPreview from "./preview/pass-preview.vue";
 import { StoreKey } from "../walletStore";
+import Google from "./platform-preview/google.vue";
 
 const store = inject(StoreKey)!;
 const gettext = (window as any).gettext;
@@ -74,8 +75,9 @@ const platformChoices = computed(() => {
                         .panel-body
                             div(v-if="!!store.style?.preview_layout")
                                 span.text-muted {{ gettext("The preview below is only a rough representation of what the pass might look like. Please check the generated pass.") }}
-                                div(style="display: grid; gap: 1em; grid-template-columns: repeat(auto-fit, minmax(auto, 360px));")
-                                    PassPreview(v-for="layout in store.style.preview_layout" :layout="layout")
+                                //- div(style="display: grid; gap: 1em; grid-template-columns: repeat(auto-fit, minmax(auto, 360px));")
+                                //-     PassPreview(v-for="layout in store.style.preview_layout" :layout="layout")
+                                Google(v-if="store.activePlatform == 'google'" :data="store.style?.preview_layout")
                             div(v-else) Preview not supported
                             //- pre(v-if="store.currentPlatformLayout.style")
                             //-     code {{ store.currentPlatformStyles[store.currentPlatformLayout.style] }}
