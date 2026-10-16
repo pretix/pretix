@@ -36,7 +36,7 @@ dependencies = [
   "cryptography>=50.0.2",
   "css-inline==0.22.*",
   "defusedcsv>=3.0.0",
-  "dnspython==2.*",
+  "dnspython==2.9.*",
   "Django[argon2]==5.2.*,>=5.2.17",
   "django-bootstrap3==26.2",
   "django-compressor==4.6.0",
