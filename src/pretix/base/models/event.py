@@ -1081,6 +1081,7 @@ class Event(EventMixin, LoggedModel):
             c_items = list(d.condition_limit_products.all())
             b_items = list(d.benefit_limit_products.all())
             limit_sales_channels = list(d.limit_sales_channels.all())
+            require_membership_types = list(d.require_membership_types.all())
             d.pk = None
             d.event = self
             d._prefetched_objects_cache = {}
@@ -1092,9 +1093,10 @@ class Event(EventMixin, LoggedModel):
             for i in b_items:
                 if i.pk in item_map:
                     d.benefit_limit_products.add(item_map[i.pk])
-
             if not d.all_sales_channels:
                 d.limit_sales_channels.set(self.organizer.sales_channels.filter(identifier__in=[s.identifier for s in limit_sales_channels]))
+            if require_membership_types and not is_cross_organizer:
+                d.require_membership_types.set(require_membership_types)
 
         question_map = {}
         for q in Question.objects.filter(event=other).prefetch_related('items', 'options'):

@@ -47,6 +47,7 @@ from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Value
 from django.db.models.aggregates import Min
 from django.dispatch import receiver
+from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import (
     gettext as _, gettext_lazy, ngettext_lazy, pgettext_lazy,
@@ -57,8 +58,8 @@ from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
-    CartPosition, Event, InvoiceAddress, Item, ItemVariation, SalesChannel,
-    Seat, SeatCategoryMapping, Voucher,
+    CartPosition, Customer, Event, InvoiceAddress, Item, ItemVariation,
+    SalesChannel, Seat, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import CheckoutSession, OrderFee
@@ -417,13 +418,15 @@ class CartManager:
     }
 
     def __init__(self, event: Event, cart_id: str, sales_channel: SalesChannel,
-                 invoice_address: InvoiceAddress=None, widget_data=None, reservation_time: timedelta=None):
+                 invoice_address: InvoiceAddress=None, widget_data=None, reservation_time: timedelta=None,
+                 customer: Customer=None):
         """
         Creates a new CartManager for an event.
         """
         self.event = event
         self.cart_id = cart_id
         self.real_now_dt = now()
+        self.customer = customer
         self._operations = []
         self._quota_diff = Counter()
         self._voucher_use_diff = Counter()
@@ -1544,7 +1547,7 @@ class CartManager:
             self._sales_channel.identifier,
             [
                 (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.line_price_gross,
-                 cp.addon_to, cp.is_bundled, cp.listed_price - cp.price_after_voucher)
+                 cp.addon_to, cp.is_bundled, cp.listed_price - cp.price_after_voucher, cp.memberships_valid_by_time(self.memberships))
                 for cp in positions
             ]
         )
@@ -1558,6 +1561,13 @@ class CartManager:
                 cp.save(update_fields=['price', 'price_includes_rounding_correction', 'discount'])
 
         return diff
+
+    @cached_property
+    def memberships(self):
+        if self.customer:
+            return self.customer.memberships.filter(testmode=self.event.testmode).select_related('membership_type')
+        else:
+            return []
 
     def _remove_parents_if_bundles_are_removed(self):
         removed_positions = {op.position.pk for op in self._operations if isinstance(op, self.RemoveOperation)}
@@ -1712,7 +1722,8 @@ def get_fees(event, request, _total_ignored_=None, invoice_address=None, payment
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, locale='en',
-                      invoice_address: int=None, widget_data=None, sales_channel='web', override_now_dt: datetime=None) -> None:
+                      invoice_address: int=None, widget_data=None, sales_channel='web', override_now_dt: datetime=None,
+                      customer: int=None) -> None:
     """
     Adds a list of items to a user's cart.
     :param event: The event ID in question
@@ -1734,10 +1745,16 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
         except SalesChannel.DoesNotExist:
             raise CartError("Invalid sales channel.")
 
+        if customer:
+            try:
+                customer = event.organizer.customers.get(pk=customer)
+            except Customer.DoesNotExist:
+                raise CartError("Invalid customer.")
+
         try:
             try:
                 cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia, widget_data=widget_data,
-                                 sales_channel=sales_channel)
+                                 sales_channel=sales_channel, customer=customer)
                 cm.add_new_items(items)
                 cm.commit()
             except LockTimeoutException:
@@ -1747,7 +1764,7 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> None:
+def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None, customer=None) -> None:
     """
     :param event: The event ID in question
     :param voucher: A voucher code
@@ -1758,9 +1775,14 @@ def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='e
             sales_channel = event.organizer.sales_channels.get(identifier=sales_channel)
         except SalesChannel.DoesNotExist:
             raise CartError("Invalid sales channel.")
+        if customer:
+            try:
+                customer = event.organizer.customers.get(pk=customer)
+            except Customer.DoesNotExist:
+                raise CartError("Invalid customer.")
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel)
+                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel, customer=customer)
                 cm.apply_voucher(voucher)
                 cm.commit()
             except LockTimeoutException:
@@ -1770,7 +1792,8 @@ def apply_voucher(self, event: Event, voucher: str, cart_id: str=None, locale='e
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def remove_cart_position(self, event: Event, position: int, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> None:
+def remove_cart_position(self, event: Event, position: int, cart_id: str=None, locale='en',
+                         sales_channel='web', override_now_dt: datetime=None, customer=None) -> None:
     """
     Removes an item specified by its position ID from a user's cart.
     :param event: The event ID in question
@@ -1782,9 +1805,14 @@ def remove_cart_position(self, event: Event, position: int, cart_id: str=None, l
             sales_channel = event.organizer.sales_channels.get(identifier=sales_channel)
         except SalesChannel.DoesNotExist:
             raise CartError("Invalid sales channel.")
+        if customer:
+            try:
+                customer = event.organizer.customers.get(pk=customer)
+            except Customer.DoesNotExist:
+                raise CartError("Invalid customer.")
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel)
+                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel, customer=customer)
                 cm.remove_item(position)
                 cm.commit()
             except LockTimeoutException:
@@ -1794,7 +1822,7 @@ def remove_cart_position(self, event: Event, position: int, cart_id: str=None, l
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> None:
+def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None, customer=None) -> None:
     """
     Removes all items from a user's cart.
     :param event: The event ID in question
@@ -1805,9 +1833,14 @@ def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel
             sales_channel = event.organizer.sales_channels.get(identifier=sales_channel)
         except SalesChannel.DoesNotExist:
             raise CartError("Invalid sales channel.")
+        if customer:
+            try:
+                customer = event.organizer.customers.get(pk=customer)
+            except Customer.DoesNotExist:
+                raise CartError("Invalid customer.")
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel)
+                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel, customer=customer)
                 cm.clear()
                 cm.commit()
             except LockTimeoutException:
@@ -1817,7 +1850,7 @@ def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def extend_cart_reservation(self, event: Event, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None) -> dict:
+def extend_cart_reservation(self, event: Event, cart_id: str=None, locale='en', sales_channel='web', override_now_dt: datetime=None, customer=None) -> dict:
     """
     Resets the expiry time of a cart to the configured reservation time of this event.
     Limited to 11x the reservation time.
@@ -1830,9 +1863,14 @@ def extend_cart_reservation(self, event: Event, cart_id: str=None, locale='en', 
             sales_channel = event.organizer.sales_channels.get(identifier=sales_channel)
         except SalesChannel.DoesNotExist:
             raise CartError("Invalid sales channel.")
+        if customer:
+            try:
+                customer = event.organizer.customers.get(pk=customer)
+            except Customer.DoesNotExist:
+                raise CartError("Invalid customer.")
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel)
+                cm = CartManager(event=event, cart_id=cart_id, sales_channel=sales_channel, customer=customer)
                 cm.commit()
                 return {
                     "success": cm.num_extended_positions,
@@ -1848,7 +1886,7 @@ def extend_cart_reservation(self, event: Event, cart_id: str=None, locale='en', 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
 def set_cart_addons(self, event: Event, addons: List[dict], add_to_cart_items: List[dict], cart_id: str=None, locale='en',
-                    invoice_address: int=None, sales_channel='web', override_now_dt: datetime=None) -> None:
+                    invoice_address: int=None, sales_channel='web', override_now_dt: datetime=None, customer=None) -> None:
     """
     Assigns addons to eligible products in a user's cart, adding and removing the addon products as necessary to
     ensure the requested addon state.
@@ -1869,9 +1907,14 @@ def set_cart_addons(self, event: Event, addons: List[dict], add_to_cart_items: L
             sales_channel = event.organizer.sales_channels.get(identifier=sales_channel)
         except SalesChannel.DoesNotExist:
             raise CartError("Invalid sales channel.")
+        if customer:
+            try:
+                customer = event.organizer.customers.get(pk=customer)
+            except Customer.DoesNotExist:
+                raise CartError("Invalid customer.")
         try:
             try:
-                cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia, sales_channel=sales_channel)
+                cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia, sales_channel=sales_channel, customer=customer)
                 cm.set_addons(addons)
                 cm.add_new_items(add_to_cart_items)
                 cm.commit()

@@ -296,7 +296,7 @@ class Customer(LoggedModel):
         return self.memberships.active(for_event).with_usages().filter(
             Q(membership_type__max_usages__isnull=True) | Q(usages__lt=F('membership_type__max_usages')),
             testmode=testmode,
-        )
+        ).select_related('membership_type')
 
     def send_activation_mail(self):
         from pretix.base.services.mail import mail

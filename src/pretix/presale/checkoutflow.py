@@ -248,7 +248,19 @@ class TemplateFlowStep(TemplateResponseMixin, BaseCheckoutFlowStep):
         raise NotImplementedError()
 
 
-class CustomerStep(CartMixin, TemplateFlowStep):
+class RecomputeMixin:
+    def recompute_cart(self):
+        cm = CartManager(
+            event=self.request.event,
+            cart_id=get_or_create_cart_id(self.request),
+            invoice_address=self.invoice_address,
+            sales_channel=self.request.sales_channel,
+            customer=self.cart_customer,
+        )
+        return cm.recompute_final_prices_and_taxes()
+
+
+class CustomerStep(CartMixin, RecomputeMixin, TemplateFlowStep):
     priority = 45
     identifier = "customer"
     template_name = "pretixpresale/event/checkout_customer.html"
@@ -326,28 +338,34 @@ class CustomerStep(CartMixin, TemplateFlowStep):
         customer_login(self.request, customer)
         return True
 
+    def _proceed_to_next(self):
+        diff = self.recompute_cart()
+        if abs(diff) > Decimal('0.001'):
+            messages.info(self.request, _('Due to the information you entered, the total of your cart has changed.'))
+        return redirect_to_url(self.get_next_url(self.request))
+
     def post(self, request):
         self.request = request
 
         if request.POST.get("customer_mode") == 'login':
             if self.cart_session.get('customer'):
-                return redirect_to_url(self.get_next_url(request))
+                return self._proceed_to_next()
             elif request.customer:
                 self.cart_session['customer_mode'] = 'login'
                 self.cart_session['customer'] = request.customer.pk
                 self.cart_session['customer_cart_tied_to_login'] = True
-                return redirect_to_url(self.get_next_url(request))
+                return self._proceed_to_next()
             elif self.request.POST.get("login-sso-data"):
                 if not self._handle_sso_login():
                     messages.error(request, _('We failed to process your authentication request, please try again.'))
                     return self.render()
-                return redirect_to_url(self.get_next_url(request))
+                return self._proceed_to_next()
             elif self.event.settings.customer_accounts_native and self.login_form.is_valid():
                 customer_login(self.request, self.login_form.get_customer())
                 self.cart_session['customer_mode'] = 'login'
                 self.cart_session['customer'] = self.login_form.get_customer().pk
                 self.cart_session['customer_cart_tied_to_login'] = True
-                return redirect_to_url(self.get_next_url(request))
+                return self._proceed_to_next()
             else:
                 return self.render()
         elif request.POST.get("customer_mode") == 'register' and self.signup_allowed:
@@ -356,13 +374,13 @@ class CustomerStep(CartMixin, TemplateFlowStep):
                 self.cart_session['customer_mode'] = 'login'
                 self.cart_session['customer'] = customer.pk
                 self.cart_session['customer_cart_tied_to_login'] = False
-                return redirect_to_url(self.get_next_url(request))
+                return self._proceed_to_next()
             else:
                 return self.render()
         elif request.POST.get("customer_mode") == 'guest' and self.guest_allowed:
             self.cart_session['customer'] = None
             self.cart_session['customer_mode'] = 'guest'
-            return redirect_to_url(self.get_next_url(request))
+            return self._proceed_to_next()
         else:
             return self.render()
 
@@ -770,12 +788,18 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
         add_to_cart_items = _items_from_post_data(self.request, warn_if_empty=False)
 
+        if 'customer_mode' in self.cart_session:
+            cart_customer = self.cart_customer
+        else:
+            cart_customer = getattr(self.request, 'customer', None)
+
         return self.do(self.request.event.id, addons, add_to_cart_items, get_or_create_cart_id(self.request),
                        invoice_address=self.invoice_address.pk, locale=get_language(),
-                       sales_channel=request.sales_channel.identifier, override_now_dt=time_machine_now(default=None))
+                       sales_channel=request.sales_channel.identifier, override_now_dt=time_machine_now(default=None),
+                       customer=cart_customer.pk if cart_customer else None)
 
 
-class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
+class QuestionsStep(CartQuestionsViewMixin, RecomputeMixin, CartMixin, TemplateFlowStep):
     priority = 50
     identifier = "questions"
     template_name = "pretixpresale/event/checkout_questions.html"
@@ -986,6 +1010,7 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
     def post(self, request):
         self.request = request
         failed = not self.save() or not self.contact_form.is_valid()
+        recomputed = False
         if self.address_asked or self.request.event.settings.invoice_name_required:
             failed = failed or not self.invoice_form.is_valid()
         if failed:
@@ -1030,13 +1055,8 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
                 self.cart_session['saved_invoice_address'] = saved.pk
 
             try:
-                cm = CartManager(
-                    event=self.request.event,
-                    cart_id=get_or_create_cart_id(request),
-                    invoice_address=addr,
-                    sales_channel=request.sales_channel,
-                )
-                diff = cm.recompute_final_prices_and_taxes()
+                diff = self.recompute_cart()
+                recomputed = True
             except TaxRule.SaleNotAllowed:
                 messages.error(request,
                                _("Unfortunately, based on the invoice address you entered, we're not able to sell you "
@@ -1045,14 +1065,22 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
 
             self.cart_session['invoice_address'] = addr.pk
             if abs(diff) > Decimal('0.001'):
-                messages.info(request, _('Due to the invoice address you entered, we need to apply a different tax '
-                                         'rate to your purchase and the price of the products in your cart has '
-                                         'changed accordingly.'))
+                messages.info(request, _('Due to the information you entered, tax rates or discounts on your purchase '
+                                         'have been changed and  the price of the products in your cart has changed '
+                                         'accordingly.'))
                 return redirect_to_url(self.get_next_url(request) + '?open_cart=true')
         elif 'invoice_address' in self.cart_session:
             # Invoice address was there, but is no longer asked for
             self.invoice_address.delete()
             del self.cart_session['invoice_address']
+
+        if self.cart_customer and not recomputed and any(cp.item.validity_dynamic_start_choice for cp in self.positions):
+            # Discounts might have changed
+            diff = self.recompute_cart()
+            if abs(diff) > Decimal('0.001'):
+                messages.info(request, _('Due to the information you entered, tax rates or discounts on your purchase '
+                                         'have been changed and  the price of the products in your cart has changed '
+                                         'accordingly.'))
 
         try:
             validate_memberships_in_order(self.cart_customer, self.positions, self.request.event, lock=False,

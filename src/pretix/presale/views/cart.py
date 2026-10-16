@@ -58,7 +58,8 @@ from django.views.generic import TemplateView, View
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    CartPosition, GiftCard, InvoiceAddress, QuestionAnswer, SubEvent, Voucher,
+    CartPosition, Customer, GiftCard, InvoiceAddress, QuestionAnswer, SubEvent,
+    Voucher,
 )
 from pretix.base.services.cart import (
     CartError, add_items_to_cart, apply_voucher, clear_cart, error_messages,
@@ -152,6 +153,17 @@ class CartActionMixin:
                 return InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
         except InvoiceAddress.DoesNotExist:
             return InvoiceAddress()
+
+    @cached_property
+    def cart_customer(self):
+        if 'customer_mode' in self.cart_session:
+            if self.cart_session['customer_mode'] == 'login':
+                try:
+                    return self.request.organizer.customers.get(pk=self.cart_session.get('customer', -1))
+                except Customer.DoesNotExist:
+                    return
+        else:
+            return getattr(self.request, 'customer', None)
 
 
 def _item_from_post_value(request, key, value, voucher=None, voucher_ignore_if_redeemed=False):
@@ -505,7 +517,7 @@ class CartApplyVoucher(EventViewMixin, CartActionMixin, AsyncAction, View):
 
             return self.do(self.request.event.id, code, get_or_create_cart_id(self.request),
                            translation.get_language(), request.sales_channel.identifier,
-                           time_machine_now(default=None))
+                           time_machine_now(default=None), self.cart_customer.pk if self.cart_customer else None)
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
@@ -532,7 +544,7 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
             try:
                 return self.do(self.request.event.id, int(request.POST.get('id')), get_or_create_cart_id(self.request),
                                translation.get_language(), request.sales_channel.identifier,
-                               time_machine_now(default=None))
+                               time_machine_now(default=None), self.cart_customer.pk if self.cart_customer else None)
             except ValueError:
                 return redirect_to_url(self.get_error_url())
         else:
@@ -555,7 +567,7 @@ class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
 
     def post(self, request, *args, **kwargs):
         return self.do(self.request.event.id, get_or_create_cart_id(self.request), translation.get_language(),
-                       request.sales_channel.identifier, time_machine_now(default=None))
+                       request.sales_channel.identifier, time_machine_now(default=None), self.cart_customer.pk if self.cart_customer else None)
 
 
 @method_decorator(allow_cors_if_namespaced, 'dispatch')
@@ -591,7 +603,7 @@ class CartExtendReservation(EventViewMixin, CartActionMixin, AsyncAction, View):
 
     def post(self, request, *args, **kwargs):
         return self.do(self.request.event.id, get_or_create_cart_id(self.request), translation.get_language(),
-                       request.sales_channel.identifier, time_machine_now(default=None))
+                       request.sales_channel.identifier, time_machine_now(default=None), self.cart_customer.pk if self.cart_customer else None)
 
 
 @method_decorator(allow_cors_if_namespaced, 'dispatch')
@@ -648,7 +660,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
         if items:
             return self.do(self.request.event.id, items, cart_id, translation.get_language(),
                            self.invoice_address.pk, widget_data, self.request.sales_channel.identifier,
-                           time_machine_now(default=None))
+                           time_machine_now(default=None), self.cart_customer.pk if self.cart_customer else None)
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
