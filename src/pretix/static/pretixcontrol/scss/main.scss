@@ -456,6 +456,19 @@ details.details-open .panel-title::before {
     background-color: #eeeeee;
 }
 
+.panel-condensed {
+  .panel-heading {
+    padding: 8px 10px;
+    font-size: 14px;
+    .panel-title {
+      font-size: 1em;
+    }
+  }
+  .panel-body {
+    padding: 5px 10px;
+  }
+}
+
 .panel-body {
     overflow-wrap: break-word;
     word-wrap: break-word;

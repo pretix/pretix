@@ -38,18 +38,19 @@ from pretix.base.middleware import (
 register = template.Library()
 LOGGER = logging.getLogger(__name__)
 _MANIFEST = {}
+_MANIFEST_ENTRIES = {}
 # TODO more os.path.join ?
 MANIFEST_PATH = settings.STATIC_ROOT + "/vite/control/.vite/manifest.json"
 MANIFEST_BASE = "vite/control/"
 
-# entry_name -> {"manifest_entry": {...}, "url_base": "..."}
+# entry_name -> {"manifest": {...}, "key": "...", "url_base": "..."}
 _PLUGIN_REGISTRY = {}
 
 
 def _discover_plugin_manifests():
     """Discover plugin vite manifests at startup.
 
-    Scans installed pretix plugins for a .vite/manifest.json inside a static.dist
+    Scans installed pretix plugins for a .vite/manifest.json inside a static
     directory. Only non-editable (wheel) plugins are expected to ship pre-built
     assets; editable plugins are served through the Vite dev server.
     """
@@ -84,10 +85,11 @@ def _discover_plugin_manifests():
 
             url_base = re.search(r'/static/(.+?)/\.vite/', str(manifest_rel)).group(1) + '/'
 
-            for _key, entry in plugin_manifest.items():
+            for key, entry in plugin_manifest.items():
                 if entry.get('isEntry') and 'name' in entry:
                     _PLUGIN_REGISTRY[entry['name']] = {
-                        'manifest_entry': entry,
+                        'manifest': plugin_manifest,
+                        'key': key,
                         'url_base': url_base,
                     }
         except Exception:
@@ -99,6 +101,9 @@ if not settings.VITE_DEV_MODE and not settings.VITE_IGNORE:
     try:
         with open(MANIFEST_PATH) as fp:
             _MANIFEST = json.load(fp)
+        _MANIFEST_ENTRIES = {
+            entry["name"]: key for key, entry in _MANIFEST.items() if entry.get("isEntry") and "name" in entry
+        }
     except Exception as e:
         LOGGER.warning(f"Error reading vite manifest at {MANIFEST_PATH}: {str(e)}")
 
@@ -117,34 +122,29 @@ def _generate_script_tag(path, attrs, src=None):
     return f'<script {all_attrs} src="{src}"></script>'
 
 
-def _generate_css_tags(asset, already_processed=None):
-    """Recursively builds all CSS tags used in a given asset from the core manifest."""
+def _generate_css_tags(manifest, key, url_base, seen_chunks=None, seen_css=None):
+    """
+    Builds the CSS tags for a manifest chunk and everything it imports statically.
+
+    Vite lists a chunk's own CSS only. Traverse dependency graph to find all CSS that is imported by this chunk and its dependencies.
+    """
+    if seen_chunks is None:
+        seen_chunks = set()
+    if seen_css is None:
+        seen_css = set()
+    if key in seen_chunks:
+        return []
+    seen_chunks.add(key)
+
+    manifest_entry = manifest[key]
     tags = []
-    manifest_entry = _MANIFEST[asset]
-    if already_processed is None:
-        already_processed = []
-
-    if "css" in manifest_entry:
-        for css_path in manifest_entry["css"]:
-            if css_path not in already_processed:
-                full_path = urljoin(settings.STATIC_URL, MANIFEST_BASE + css_path)
-                tags.append(f'<link rel="stylesheet" href="{full_path}" />')
-                already_processed.append(css_path)
-
-    if "imports" in manifest_entry:
-        for import_path in manifest_entry["imports"]:
-            tags += _generate_css_tags(import_path, already_processed)
-
-    return tags
-
-
-def _generate_plugin_css_tags(manifest_entry, url_base):
-    """Build CSS tags for a plugin manifest entry."""
-    tags = []
-    if "css" in manifest_entry:
-        for css_path in manifest_entry["css"]:
-            full_path = urljoin(settings.STATIC_URL, url_base + css_path)
-            tags.append(f'<link rel="stylesheet" href="{full_path}" />')
+    for css_path in manifest_entry.get("css", []):
+        # Different chunks can reference the same emitted stylesheet.
+        if css_path not in seen_css:
+            tags.append(f'<link rel="stylesheet" href="{urljoin(settings.STATIC_URL, url_base + css_path)}" />')
+            seen_css.add(css_path)
+    for import_key in manifest_entry.get("imports", []):
+        tags += _generate_css_tags(manifest, import_key, url_base, seen_chunks, seen_css)
     return tags
 
 
@@ -161,11 +161,10 @@ def vite_asset(path):
     # Check plugin registry (non-editable plugins with pre-built assets)
     if path in _PLUGIN_REGISTRY:
         info = _PLUGIN_REGISTRY[path]
-        entry = info['manifest_entry']
-        url_base = info['url_base']
-        tags = _generate_plugin_css_tags(entry, url_base)
+        manifest, key, url_base = info['manifest'], info['key'], info['url_base']
+        tags = _generate_css_tags(manifest, key, url_base)
         # Always use STATIC_URL for pre-built plugin assets, even in dev mode
-        src = urljoin(settings.STATIC_URL, url_base + entry["file"])
+        src = urljoin(settings.STATIC_URL, url_base + manifest[key]["file"])
         tags.append(_generate_script_tag(path, {"type": "module", "crossorigin": ""}, src=src))
         return "".join(tags)
 
@@ -173,12 +172,13 @@ def vite_asset(path):
     if settings.VITE_DEV_MODE:
         return _generate_script_tag(path, {"type": "module"})
 
-    # Prod mode
-    manifest_entry = _MANIFEST.get(path)
+    # Prod mode: core addresses entries by source path (the manifest key), plugins by entry name
+    key = _MANIFEST_ENTRIES.get(path, path)
+    manifest_entry = _MANIFEST.get(key)
     if not manifest_entry:
         raise RuntimeError(f"Cannot find {path} in Vite manifest at {MANIFEST_PATH}")
 
-    tags = _generate_css_tags(path)
+    tags = _generate_css_tags(_MANIFEST, key, MANIFEST_BASE)
     tags.append(
         _generate_script_tag(
             MANIFEST_BASE + manifest_entry["file"], {"type": "module", "crossorigin": ""}
@@ -199,7 +199,7 @@ _dev_importmap_cache = None
 
 
 def _get_dev_importmap():
-    """Fetch the shared-dep import map from the Vite dev server. Cached after first call."""
+    """Fetch the shared-dep import map from the Vite dev server. Cached after first successful fetch."""
     global _dev_importmap_cache
     if _dev_importmap_cache is not None:
         return _dev_importmap_cache
@@ -212,7 +212,7 @@ def _get_dev_importmap():
         }
     except Exception:
         LOGGER.warning("Failed to fetch import map from Vite dev server")
-        _dev_importmap_cache = {}
+        return {}
     return _dev_importmap_cache
 
 
