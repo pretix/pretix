@@ -1,0 +1,19 @@
+{% load i18n %}
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h2 class="panel-title">{% trans "Welcome to pretix!" %}</h2>
+    </div>
+    <div class="panel-body">
+        <div class="attentionline">{% trans "Get started with our setup tool" %}</div>
+        <p>
+            {% blocktrans trimmed %}
+                To start selling tickets, you need to create products or quotas. The fastest way to create
+                this is to use our setup tool.
+            {% endblocktrans %}
+        </p>
+        <a href="{% url "control:event.quick" organizer=request.organizer.slug event=request.event.slug %}"
+           class="btn btn-primary btn-lg">
+            {% trans "Set up event" %}
+        </a>
+    </div>
+</div>

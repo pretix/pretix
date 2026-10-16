@@ -1,0 +1,11 @@
+{% load i18n %}
+{% load humanize %}
+{% if count %}
+    <a href="{% url "control:event.orders.waitinglist" event=request.event.slug organizer=request.organizer.slug %}">
+        {% blocktrans trimmed with number=count|intcomma count count=count %}
+            {{ number }} person waiting
+        {% plural %}
+            {{ number }} persons waiting
+        {% endblocktrans %}
+    </a>
+{% endif %}

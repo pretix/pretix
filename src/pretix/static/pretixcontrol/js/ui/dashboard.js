@@ -1,5 +1,7 @@
-/* global add_log_expand_handlers */
+/* global $,gettext */
+
 $(function () {
+	// Still used on global dashboard
 	if ($('div[data-lazy-id]').length == 0) {
 		return
 	}
@@ -10,16 +12,11 @@ $(function () {
 		})
 	})
 })
+
 $(function () {
-	if ($('#logs_target').length == 0) {
-		return
-	}
-	$.get('dashboard/partials/logs', function (data) {
-		$('#logs_target').html(data)
-		add_log_expand_handlers($('#logs_target'))
-	})
-	$.get('dashboard/partials/warnings', function (data) {
-		$('#warnings_loading').remove()
-		$('#warnings_target').html(data)
+	$('.timeline').each(function () {
+		let $tl = $(this)
+		let $first = $(this).find('.row:not(.text-muted)').first()
+		$tl.scrollTop($tl.scrollTop() + Math.max($first.position().top - 50, 0))
 	})
 })
