@@ -12,8 +12,10 @@ from pretix.base.models import OrderPosition
 
 from ..i18n import MaybeTranslatedString, localizable_to_dict
 from ..placeholders import (
-    WalletPlaceholderRenderer, get_available_context,
-    get_wallet_placeholder_renderer, get_wallet_placeholders,
+    WalletPlaceholderRenderer,
+    get_available_context,
+    get_wallet_placeholder_renderer,
+    get_wallet_placeholders,
 )
 
 
@@ -84,7 +86,10 @@ class FieldEntry[T]:
     content: T
 
     def __init__(
-        self, type: FieldEntryType, content: T, label: MaybeTranslatedString | None = None
+        self,
+        type: FieldEntryType,
+        content: T,
+        label: MaybeTranslatedString | None = None,
     ):
         self.type = type
         self.label = label
@@ -94,7 +99,11 @@ class FieldEntry[T]:
         return {
             "type": self.type.value,
             "content": self.content,
-            "label": localizable_to_dict(self.label, locales) if self.label is not None else None,
+            "label": (
+                localizable_to_dict(self.label, locales)
+                if self.label is not None
+                else None
+            ),
         }
 
 
@@ -123,7 +132,14 @@ class PredefinedFieldGroup(FieldGroup):
     type = FieldGroupType.PREDEFINED
     default_active: bool
 
-    def __init__(self, identifier: str, name: str, description=None, required=False, default_active=True):
+    def __init__(
+        self,
+        identifier: str,
+        name: str,
+        description=None,
+        required=False,
+        default_active=True,
+    ):
         self.identifier = identifier
         self.name = name
         self.required = required
@@ -142,6 +158,7 @@ class PredefinedFieldGroup(FieldGroup):
             **super().asdict(locales, context),
             "default_active": self.default_active,
         }
+
 
 class PlaceholderFieldGroup(FieldGroup):
     type = FieldGroupType.PLACEHOLDER
@@ -280,7 +297,7 @@ class ImageFieldGroup(PlaceholderFieldGroup):
         super().__init__(content_type=self.content_type, display=self.display, **kwargs)
 
 
-SettingType = Literal["image", "text", "float", "color"]
+SettingType = Literal["image", "text", "float", "color", "bool"]
 
 
 class SettingsField:
@@ -289,7 +306,7 @@ class SettingsField:
     type: SettingType
     help_text: str | None
     required: bool
-    default: str | None
+    default: Any
 
     def asdict(self, locales: list[str]):
         return {
@@ -419,6 +436,25 @@ class FloatSettingsField(SettingsField):
         return super().asdict(locales) | {"min": self.min, "max": self.max}
 
 
+class BooleanSettingsField(SettingsField):
+    def __init__(
+        self,
+        identifier: str,
+        label: str,
+        help_text: str | None = None,
+        default: bool = False,
+    ):
+        self.type = "bool"
+        self.identifier = identifier
+        self.label = label
+        self.help_text = help_text
+        self.required = False
+        self.default = default
+
+    def layout_schema(self):
+        return {"type": "boolean"}
+
+
 class PassStyle:
     identifier: str  # unique within platform
     name: str
@@ -453,7 +489,11 @@ class PassStyle:
         settings = {}
         for setting in self.settings:
             if isinstance(setting, ImageSettingsField):
-                settings[setting.identifier] = self.file_settings[setting.identifier].url if setting.identifier in self.file_settings else None
+                settings[setting.identifier] = (
+                    self.file_settings[setting.identifier].url
+                    if setting.identifier in self.file_settings
+                    else None
+                )
                 if not settings[setting.identifier] and setting.default:
                     settings[setting.identifier] = setting.default
             else:
@@ -472,7 +512,9 @@ class PassStyle:
         return {
             "identifier": self.identifier,
             "name": self.name,
-            "fieldgroups": [x.asdict(self.event.settings.locales, context) for x in self.fieldgroups],
+            "fieldgroups": [
+                x.asdict(self.event.settings.locales, context) for x in self.fieldgroups
+            ],
             "preview_layout": self.preview_layout,
             "settings": [x.asdict(self.event.settings.locales) for x in self.settings],
         }

@@ -74,7 +74,7 @@ type FieldEntry = PlaceholderFieldEntry | CustomFieldEntry;
 type Setting = {
 	identifier: string;
 	label: string;
-	type: "text" | "image" | "color" | "float";
+	type: "text" | "image" | "color" | "float" | "bool";
 	required: boolean;
 	help_text: string;
 	default: string
