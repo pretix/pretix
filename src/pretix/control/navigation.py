@@ -174,14 +174,6 @@ def get_event_navigation(request: HttpRequest):
                 'active': 'event.items.quota' in url.url_name,
             },
             {
-                'label': _('Categories'),
-                'url': reverse('control:event.items.categories', kwargs={
-                    'event': request.event.slug,
-                    'organizer': request.event.organizer.slug,
-                }),
-                'active': 'event.items.categories' in url.url_name,
-            },
-            {
                 'label': _('Questions'),
                 'url': reverse('control:event.items.questions', kwargs={
                     'event': request.event.slug,
