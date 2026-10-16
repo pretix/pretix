@@ -46,7 +46,7 @@ import isoweek
 from django.conf import settings
 from django.core.cache import caches
 from django.db.models import (
-    Case, Exists, F, Max, Min, OuterRef, Prefetch, Q, Value, When,
+    Case, Exists, F, Max, Min, OuterRef, Prefetch, Q, Subquery, Value, When,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.dispatch.dispatcher import NO_RECEIVERS
@@ -189,22 +189,27 @@ class EventListMixin:
     def _get_event_list_queryset(self):
         query = Q(is_public=True) & Q(live=True)
         qs = self.request.organizer.events.using(settings.DATABASE_REPLICA).filter(query)
-        qs = qs.filter(Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel))
+        qs = qs.filter(Q(all_sales_channels=True) | Q(id__in=self.request.sales_channel.event_set.values_list("pk")))
 
         show_old = "old" in self.request.GET
 
-        subevent_filter = Q(subevents__active=True, subevents__is_public=True)
+        subevent_filter = Q(active=True, is_public=True)
         if not show_old:
             subevent_filter &= Q(
-                Q(subevents__date_to__gte=now()) | Q(subevents__date_from__gte=now())
+                Q(date_to__gte=now()) | Q(date_from__gte=now())
             )
 
+        subevent_subquery_qs = SubEvent.objects.with_scopes_disabled().filter(
+            subevent_filter,
+            event_id=OuterRef('pk')
+        ).values('event').order_by()
         qs = qs.annotate(
-            min_from=Min('subevents__date_from', filter=subevent_filter),
-            min_to=Min('subevents__date_to', filter=subevent_filter),
-            max_from=Max('subevents__date_from', filter=subevent_filter),
-            max_to=Max('subevents__date_to', filter=subevent_filter),
-            max_fromto=Greatest(Max('subevents__date_to', filter=subevent_filter), Max('subevents__date_from', filter=subevent_filter)),
+            min_from=Subquery(subevent_subquery_qs.annotate(m=Min('date_from')).values('m')),
+            min_to=Subquery(subevent_subquery_qs.annotate(m=Min('date_to')).values('m')),
+            max_from=Subquery(subevent_subquery_qs.annotate(m=Max('date_from')).values('m')),
+            max_to=Subquery(subevent_subquery_qs.annotate(m=Max('date_to')).values('m')),
+        ).annotate(
+            max_fromto=Greatest(F("max_to"), F("max_from")),
         )
         if show_old:
             date_q = Q(date_to__lt=now()) | (Q(date_to__isnull=True) & Q(date_from__lt=now()))
