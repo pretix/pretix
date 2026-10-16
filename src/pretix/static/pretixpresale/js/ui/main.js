@@ -135,6 +135,29 @@ let form_handlers = function (el) {
         }
         wait();
     });
+
+	// usually a hash in the action-url of a form is enough to make the browser jump to the focus-point
+	// filter-form on subevents needs to be a bit more clever as we only want the list/calendar to be focused
+	// when the form was actually submitted, not when an URL-with-hash is shared/loaded without form-submit
+    el.find("form[data-focus-after-submit]").each(function (i, form) {
+    	$(form).on("submit", function (e) {
+    		var currentElement = document.activeElement;
+    		if (currentElement && !$(currentElement).is(':submit')) {
+    			window.sessionStorage.setItem("autofocus", currentElement.id);
+    		} else {
+    			window.sessionStorage.setItem("autofocus", form.getAttribute("data-focus-after-submit"));
+    		}
+    	});
+    });
+    if (window.sessionStorage.getItem("autofocus")) {
+    	var afElement = document.getElementById(window.sessionStorage.getItem("autofocus"));
+    	if (afElement) {
+    		afElement.tabIndex = 0;
+    		afElement.focus();
+    	}
+    	window.sessionStorage.removeItem("autofocus");
+    }
+
 	el.find('.input-item-count-dec, .input-item-count-inc').on('click', function (e) {
 		e.preventDefault()
 		let step = parseFloat(this.getAttribute('data-step'))

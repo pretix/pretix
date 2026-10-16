@@ -45,7 +45,7 @@
         </div>
     {% endif %}
         {% if events %}
-            <div class="panel-body">
+            <div class="panel-body" id="events-filter-result">
                 <div class="event-list full-width-list alternating-rows">
                 {% for e in events %}{% eventurl e "presale:event.index" as url %}
                     <article class="row" aria-labelledby="event-{{ e.pk }}-label" aria-describedby="event-{{ e.pk }}-desc">
