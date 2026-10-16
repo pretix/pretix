@@ -7,41 +7,119 @@ const store = inject(StoreKey)!;
 
 const { layout } = defineProps<{ layout: PreviewLayout }>();
 
-const layoutStyle = computed(() => {
-	if (layout.style) {
-		return Object.fromEntries(
-			Object.entries(layout.style)
-				.map(([k, v]) => {
-					if (typeof v !== "string" && v.setting) {
-						const settingDef = store.styles[store.layout.style].settings.find(
-							(x) => x.identifier == v.setting,
-						);
-						const val = store.settings[v.setting];
-						if (!settingDef) {
-							v = null;
-						} else if (settingDef.type == "image" && val) {
-							v = `url(${val.url})`; // TODO: encode
-						} else if (settingDef.type == "image" && settingDef.default) {
-							v = `url(${settingDef.default})`; // TODO: encode
-						} else {
-							v = val;
-						}
-					} else if (v.value) {
-						v = v.value;
-					}
-					return [k, v];
-				})
-				.filter(([k, v]) => !!v),
-		);
+function isPredefined(
+	row: PreviewFieldgroup,
+): row is PredefinedFieldgroupPreview {
+	const fieldgroup = store.fieldgroups[row.fieldgroup];
+	return fieldgroup.type == "predefined";
+}
+
+function getSettingPreview(setting: string) {
+	const settingDef = store.styles[store.layout.style].settings.find(
+		(x) => x.identifier == setting,
+	);
+	const val = store.settings[setting];
+
+	if (settingDef.type == "image") {
+		if (val && "url" in val && val.url) {
+			return { content: val.url, content_type: "image" };
+		} else if (settingDef.default) {
+			return { content: settingDef.default, content_type: "image" };
+		}
+	} else if (val) {
+		return { content: val, content_type: "text" };
+	} else if (settingDef.default) {
+		return { content: settingDef.default, content_type: "text" };
 	}
+}
+
+function evaluateStyle(style: StyleConfig) {
+	return Object.fromEntries(
+		Object.entries(style)
+			.map(([k, v]) => {
+				if (typeof v !== "string" && v.setting) {
+					const settingsVal = getSettingPreview(v.setting);
+					if (!settingsVal) {
+						v = null;
+					} else if (settingsVal.content_type == "image") {
+						v = `url(${encodeURI(settingsVal.content)})`;
+					} else {
+						v = settingsVal.content;
+					}
+				}
+				return [k, v];
+			})
+			.filter(([_k, v]) => !!v),
+	);
+}
+
+type EvaluatedPreviewItem = {
+	label?: LocalizableString;
+	content: LocalizableString;
+	content_type?: "text" | "image";
+};
+type EvaluatedPreviewRow = (
+	| EvaluatedPreviewItem
+	| { children: EvaluatedPreviewRow[] }
+) & {
+	display?: string;
+	display_class?: string | string[];
+	style?: Record<string, string | number>;
+};
+
+function hasEntries(row) {
+	if ("content" in row) {
+		return true;
+	} else if ("children" in row) {
+		return row.children.some(hasEntries);
+	}
+}
+function evaluateRow(row: PreviewRow): EvaluatedPreviewRow {
+	if ("children" in row) {
+		const style = {
+			"flex-direction": row.direction || "row",
+		};
+		const children = row.children.map(evaluateRow).filter((x) => !!x);
+		if (row.max_entries) {
+			children.splice(row.max_entries);
+		}
+		return { children, display_class: row.display_class, style };
+	} else if ("fieldgroup" in row) {
+		// TODO: click
+		const style = {
+			"flex-grow": row.relSize,
+			"flex-direction": row.direction || "row",
+		};
+		if (isPredefined(row)) {
+			if (store.layout.fieldgroups[row.fieldgroup]?.active) {
+				return { style: style, children: row.sample, display_class: row.display_class };
+			}
+		} else {
+			return {
+				style: style,
+				children: store.renderedFieldGroups[row.fieldgroup],
+				display_class: row.display_class
+			};
+		}
+	} else if ("content" in row) {
+		return { label: row.label, content: row.content, display_class: row.display_class };
+	} else if ("setting" in row) {
+		return { ...getSettingPreview(row.setting), display_class: row.display_class };
+	}
+}
+
+const renderedLayout = computed(() => {
+	return {
+		style: evaluateStyle(layout.style || {}),
+		rows: layout.rows.map(evaluateRow),
+	};
 });
 </script>
 
 <template lang="pug">
-    div(style="container-type: inline-size;")
-        div.pass-container(:style="layoutStyle")
-            div.pass-content
-                RowPreview(v-for="row of layout.rows" :config="row")
+    div.pass-container(:style="renderedLayout.style")
+        div.pass-content
+            RowPreview(v-for="row of renderedLayout.rows" :config="row")
 </template>
 
 <style lang="css" scoped>
@@ -100,10 +178,8 @@ const layoutStyle = computed(() => {
 	.fieldgroup-item {
 		flex: 0 1 100%;
 		min-width: 0;
-		width: 100%;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
 		white-space: pre-wrap;
 	}
 	.fieldgroup-item-image {
@@ -115,7 +191,7 @@ const layoutStyle = computed(() => {
 		color: black;
 		width: 50%;
 		aspect-ratio: 1;
-		margin: auto;
+		align-self: center;
 
 		/* center content */
 		display: flex;
@@ -138,6 +214,7 @@ const layoutStyle = computed(() => {
 	}
 	.tight {
 		line-height: 1;
+		gap: 0.25rem;
 	}
 	.img-inline {
 		max-height: 3lh;

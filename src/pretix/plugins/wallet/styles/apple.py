@@ -468,23 +468,23 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 "rows": [
                     {
                         "children": [
-                            {"setting": "logo", "display": ["img-inline"]},
+                            {"setting": "logo", "display_class": ["img-inline"]},
                             {
                                 "fieldgroup": "logo_text",
                                 "relSize": 3,
-                                "display": ["bold", "large", "centered"],
+                                "display_class": ["bold", "large", "centered"],
                             },
                             {
                                 "fieldgroup": "header",
                                 "relSize": 2,
-                                "display": ["large", "tight"],
+                                "display_class": ["large", "tight"],
                             },
                         ]
                     },
-                    {"fieldgroup": "primary", "display": "large"},
+                    {"fieldgroup": "primary", "display_class": "large"},
                     {"fieldgroup": "secondary"},
                     {"fieldgroup": "auxiliary"},
-                    {"fieldgroup": "code"},
+                    {"fieldgroup": "code", "direction": "column"},
                 ],
             },
             {

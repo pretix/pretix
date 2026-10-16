@@ -78,7 +78,8 @@ export function createWalletStore(config: {
 				return this.platform.styles;
 			},
 			settings() {
-				const settings = {};
+				const settings: Record<string, string | { name: string; url: string }> =
+					{};
 				for (const setting of this.style.settings) {
 					if (
 						setting.type == "text" ||
@@ -133,9 +134,10 @@ export function createWalletStore(config: {
 									`(unknown placeholder: ${entry.content})`;
 							}
 							content[fieldgroup.identifier].push({
-								entry,
+								// entry,
 								label,
 								content: value,
+								display: fieldgroup.display,
 							});
 						}
 					}
@@ -162,6 +164,11 @@ export function createWalletStore(config: {
 				}
 
 				return content;
+			},
+			fieldgroups(): Record<string, FieldGroupDefinition> {
+				return Object.fromEntries(
+					this.style.fieldgroups.map((x) => [x.identifier, x]),
+				);
 			},
 		},
 		actions: {
@@ -231,6 +238,31 @@ export function createWalletStore(config: {
 				for (const setting of this.style.settings) {
 					if (setting.identifier === identifier) {
 						return setting;
+					}
+				}
+			},
+			getSettingValue(identifier: string): Setting {
+				const setting = this.getSetting(identifier);
+				if (!setting) return;
+
+				if (
+					setting.type == "text" ||
+					setting.type == "color" ||
+					setting.type == "float" ||
+					setting.type == "bool"
+				) {
+					return this.layout.settings[setting.identifier] || setting.default;
+				} else if (setting.type == "image") {
+					const val = this.layout.file_settings[setting.identifier];
+					if (val && "file" in val && val.file) {
+						return {
+							name: val.file.name,
+							url: URL.createObjectURL(val.file),
+						};
+					} else if (val && "url" in val && val.url) {
+						return val;
+					} else if (setting.default) {
+						return {"url": setting.default};
 					}
 				}
 			},
