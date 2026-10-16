@@ -2021,9 +2021,23 @@ class OrderPayment(models.Model):
         if send_mail and self.order.sales_channel.identifier in self.order.event.settings.mail_sales_channel_placed_paid:
             self._send_paid_mail(invoice if transmit_invoice_mail else None, user, mail_text)
             if self.order.event.settings.mail_send_order_paid_attendee:
-                for p in self.order.positions.all():
-                    if p.addon_to_id is None and p.attendee_email and p.attendee_email != self.order.email:
-                        self._send_paid_mail_attendee(p, user)
+                # todo re note: paid_mail for attendees (formerly models/orders _send_paid_mail_attendee)
+                from pretix.base.services.orders import (
+                    _attendee_mail_send_helper,
+                )
+
+                _attendee_mail_send_helper(
+                    event=self.order.event,
+                    order=self.order,
+                    positions=self.order.positions.all(),
+                    template=self.order.event.settings.mail_text_order_paid_attendee,
+                    subject=self.order.event.settings.mail_subject_order_paid_attendee,
+                    log_entry_type='pretix.event.order.email.order_paid',
+                    user=user,
+                    invoices=[],
+                    attach_tickets=True,
+                    attach_ical=self.order.event.settings.mail_attach_ical,
+                )
 
         if invoice and not transmit_invoice_mail:
             transmit_invoice.apply_async(args=(self.order.event_id, invoice.pk, False))
