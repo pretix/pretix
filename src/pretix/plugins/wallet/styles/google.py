@@ -28,14 +28,12 @@ from pretix.plugins.wallet.i18n import localizable_to_dict
 from pretix.plugins.wallet.models import GoogleWalletInstance, GoogleWalletType
 from pretix.plugins.wallet.styles.base import (
     ColorSettingsField,
-    FieldContentType,
     FieldGroup,
     FieldGroupDisplay,
     FloatSettingsField,
     ImageSettingsField,
     PassStyle,
     PlaceholderFieldEntry,
-    PlaceholderFieldGroup,
     PredefinedFieldGroup,
     TextFieldGroup,
     WalletPlatform,
@@ -482,6 +480,7 @@ class GoogleWalletCustomEventTicket(GoogleWalletEventTicketStyle):
     @property
     def fieldgroups(self):
         return [
+            *super().fieldgroups,
             TextFieldGroup(
                 identifier="second_row",
                 name=_("Second Row"),
@@ -494,7 +493,6 @@ class GoogleWalletCustomEventTicket(GoogleWalletEventTicketStyle):
                 max_entries=3,
                 context_args={"order_position"},
             ),
-            *super().fieldgroups,
             TextFieldGroup(
                 identifier="details",
                 name=_("Details"),
@@ -576,16 +574,28 @@ class GoogleWalletCustomEventTicket(GoogleWalletEventTicketStyle):
 
         output_class["classTemplateInfo"].setdefault("detailsTemplateOverride", {})
         output_class["classTemplateInfo"]["detailsTemplateOverride"][
-            "detailsItemInfo"
-        ] = []
-
+            "detailsItemInfos"
+        ] = [
+            {
+                "item": {
+                    "firstValue": {
+                        "fields": [
+                            {"fieldPath": f"object.textModulesData['details-{i}']"}
+                        ]
+                    }
+                }
+            }
+            for i in range(
+                len(self.layout["fieldgroups"].get("details", {}).get("entries", []))
+            )
+        ]
         return output_class
 
     def _generate_object(self, op: OrderPosition, class_id: str):
         output_object = super()._generate_object(op, class_id)
         fields = self.get_pass_fields(op)
 
-        for row in ["second_row", "third_row"]:
+        for row in ["second_row", "third_row", "details"]:
             for i, field in enumerate(fields.get(row, [])):
                 output_object.text_modules_data(
                     f"{row}-{i}",
