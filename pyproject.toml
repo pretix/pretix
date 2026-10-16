@@ -126,6 +126,7 @@ dev = [
   "pytest-sugar",
   "pytest-xdist==3.8.*",
   "pytest-playwright",
+  "pytest-memray",
   "pytest==9.1.*",
   "playwright",
   "responses",

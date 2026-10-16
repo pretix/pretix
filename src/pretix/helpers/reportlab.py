@@ -26,13 +26,13 @@ import unicodedata
 from arabic_reshaper import ArabicReshaper
 from bidi import get_display
 from django.conf import settings
-from django.utils.functional import SimpleLazyObject
+from django.core.cache import cache
+from django.utils.functional import SimpleLazyObject, cached_property
 from django.utils.html import escape
 from PIL import Image
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Paragraph
 
 from pretix.presale.style import get_fonts
@@ -90,15 +90,23 @@ def normalize_text(text: str) -> str:
 
 
 def font_supports_text(text, font_name):
+    from reportlab.pdfbase.ttfonts import TTFont
+
     if not text:
         return True
     font = pdfmetrics.getFont(font_name)
-    if not isinstance(font, TTFont):
+    if isinstance(font, TTFont):
+        return all(
+            ord(c) in font.face.charToGlyph or not c.isprintable()
+            for c in text
+        )
+    elif isinstance(font, LazyTTFont):
+        return all(
+            ord(c) in font.face.supported_glyphs or not c.isprintable()
+            for c in text
+        )
+    else:  # unsupported
         return True
-    return all(
-        ord(c) in font.face.charToGlyph or not c.isprintable()
-        for c in text
-    )
 
 
 def find_font_supporting_text(fonts, text, preferred_font):
@@ -144,9 +152,64 @@ class PlainTextParagraph(FontFallbackParagraph):
         super().__init__(text, style, *args, **kwargs)
 
 
+class LazyTTFontFace:
+    def __init__(self, *args, **kwargs):
+        self.__args = args
+        self.__kwargs = kwargs
+        self.__casted = None
+
+    def __cast(self):
+        if self.__casted is None:
+            from reportlab.pdfbase.ttfonts import TTFontFace
+            print("casting TTFontFace", self.__args)
+            self.__casted = TTFontFace(*self.__args, **self.__kwargs)
+        return self.__casted
+
+    def __getattr__(self, item):
+        print("attr", item)
+        return getattr(self.__cast(), item)
+
+    @cached_property
+    def supported_glyphs(self):
+        if self.__casted is not None:
+            return set(self.__casted.charToGlyph.keys())
+        return cache.get_or_set(
+            key=f'font_ttf_glyphs:{self.__args[0]}',
+            default=lambda: set(self.__cast().charToGlyph.keys())
+        )
+
+    @property
+    def name(self):
+        if self.__casted is not None:
+            return self.__casted.name
+        return cache.get_or_set(
+            key=f'font_ttf_name:{self.__args[0]}',
+            default=lambda: self.__cast().name
+        )
+
+
+class LazyTTFont:
+    _multiByte = 1  # noqa
+    _dynamicFont = 1  # noqa
+
+    def __init__(self, name, filename, validate=0, subfontIndex=0):  # noqa
+        self.fontName = name
+        self.__file = filename
+        self.__casted = None
+        self.face = LazyTTFontFace(filename, validate=validate, subfontIndex=subfontIndex)
+
+    def __cast(self):
+        if self.__casted is None:
+            from reportlab.pdfbase.ttfonts import TTFont
+            self.__casted = TTFont(self.fontName, self.__file)
+        return self.__casted
+
+    def __getattr__(self, item):
+        return getattr(self.__cast(), item)
+
+
 def register_ttf_font_if_new(name, path):
     from reportlab.pdfbase import pdfmetrics
-    from reportlab.pdfbase.ttfonts import TTFont
 
     if name not in pdfmetrics.getRegisteredFontNames():
-        pdfmetrics.registerFont(TTFont(name, path))
+        pdfmetrics.registerFont(LazyTTFont(name, path))
