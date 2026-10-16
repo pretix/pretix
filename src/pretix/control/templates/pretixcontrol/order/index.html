@@ -357,7 +357,7 @@
                                               action="{% url "control:event.order.retransmitinvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
                                             {% csrf_token %}
                                             <button class="btn btn-default btn-xs" data-toggle="tooltip"
-                                                title="{{ i.transmission_type_instance.verbose_name }}">
+                                                title="{{ i.transmission_type_destination_description }}">
                                                 {% if i.transmission_status == "pending" %}
                                                     {% trans "Transmit" %}
                                                 {% else %}
