@@ -623,8 +623,6 @@ LOGGING = {
         'default': {
             'format': (
                 '%(levelname)s %(asctime)s RequestId=%(request_id)s %(name)s %(module)s %(message)s'
-                if REQUEST_ID_HEADER
-                else '%(levelname)s %(asctime)s %(name)s %(module)s %(message)s'
             )
         },
     },
@@ -711,6 +709,7 @@ LOGGING = {
         },
     },
 }
+CELERY_WORKER_HIJACK_ROOT_LOGGER = False
 
 SENTRY_ENABLED = False
 if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell', 'shell_scoped', 'shell_plus')):
