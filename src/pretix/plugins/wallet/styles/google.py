@@ -27,6 +27,7 @@ from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.wallet.i18n import localizable_to_dict
 from pretix.plugins.wallet.models import GoogleWalletInstance, GoogleWalletType
 from pretix.plugins.wallet.styles.base import (
+    BooleanSettingsField,
     ColorSettingsField,
     FieldGroup,
     FieldGroupDisplay,
@@ -38,8 +39,6 @@ from pretix.plugins.wallet.styles.base import (
     TextFieldGroup,
     WalletPlatform,
 )
-
-SHIMMER = False
 
 
 def _get_instance_uuid():
@@ -173,6 +172,9 @@ class GoogleWalletEventTicketStyle(PassStyle):
             FloatSettingsField(
                 identifier="long", label=_("Longitude"), min=-180, max=180
             ),
+            BooleanSettingsField(
+                identifier="shimmer", label=_("Add shimmer animation around barcode")
+            ),
         ]
 
     @property
@@ -301,7 +303,7 @@ class GoogleWalletEventTicketStyle(PassStyle):
         if self.group_is_active("venue") and all(self.venue()):
             output_class.venue(*self.venue())
 
-        if SHIMMER:
+        if self.cleaned_settings.get("shimmer", False):
             output_class.securityAnimation(AnimationType.FOIL_SHIMMER)
 
         # TODO: callback url
