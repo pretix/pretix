@@ -128,6 +128,23 @@ elif 'mysql' in db_backend:
 DATABASE_ADVISORY_LOCK_INDEX = config.getint('database', 'advisory_lock_index', fallback=0)
 
 db_options = {}
+if 'postgresql' in db_backend:
+    db_options["pool"] = {
+        # https://docs.djangoproject.com/en/6.1/ref/databases/#connection-pool
+        # "Django maintains a separate pool for each database alias in each process"
+        # We run both celery and gunicorn in multi-process mode, so we should get away with one connection per process
+        # per alias, so let's try to use a really small pool size.
+        "min_size": 1,
+        "max_size": 2,
+        # We set low lifetime values since we want to quickly get rid of all old connections if something changes
+        # on the database end, e.g. a cluster failover.
+        "max_idle": 120,
+        "max_lifetime": 120,
+        # A check callable is set by Django automatically since we have CONN_HEALTH_CHECKS enabled.
+        # In the future, we could provide different callables for default and replica databases if we want to test
+        # actual writability for the default database, but it might not be necessary if a failover triggers a reconnect
+        # anyways.
+    }
 
 postgresql_sslmode = config.get('database', 'sslmode', fallback='disable')
 USE_DATABASE_TLS = postgresql_sslmode != 'disable'
@@ -162,7 +179,7 @@ DATABASES = {
         'PASSWORD': config.get('database', 'password', fallback=''),
         'HOST': config.get('database', 'host', fallback=''),
         'PORT': config.get('database', 'port', fallback=''),
-        'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
+        'CONN_MAX_AGE': 0,
         'CONN_HEALTH_CHECKS': db_backend != 'sqlite3',
         'DISABLE_SERVER_SIDE_CURSORS': db_disable_server_side_cursors,
         'OPTIONS': db_options,
@@ -382,6 +399,7 @@ if HAS_CELERY:
     if HAS_CELERY_BACKEND_TRANSPORT_OPTS:
         CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = loads(config.get('celery', 'backend_transport_options'))
     CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+    CELERY_DB_REUSE_MAX = sys.maxsize  # Actual reuse will be governed by psycopg3 pool features
 
     if CELERY_BROKER_URL.startswith("amqp://"):
         # https://docs.celeryq.dev/en/latest/userguide/routing.html#routing-options-rabbitmq-priorities
