@@ -359,7 +359,8 @@ def mark_order_refunded(order, user=None, auth=None, api_token=None):
 
 def mark_order_expired(order, user=None, auth=None):
     """
-    Mark this order as expired. This sets the payment status and returns the order object.
+    Mark this order as expired. This sets the order status, generates an invoice cancellation
+    and returns the order object.
     :param order: The order to change
     :param user: The user that performed the change
     """
