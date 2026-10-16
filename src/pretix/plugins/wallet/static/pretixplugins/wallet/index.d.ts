@@ -56,7 +56,6 @@ type PredefinedFieldGroupDefinition = BaseFieldGroupDefinition & {
 
 type LocalizableString = null | string | Record<string, string>;
 
-
 type PlaceholderFieldEntry = {
 	type: "placeholder";
 	label: LocalizableString;
@@ -77,7 +76,7 @@ type Setting = {
 	type: "text" | "image" | "color" | "float" | "bool";
 	required: boolean;
 	help_text: string;
-	default: string
+	default: string;
 };
 
 type PlaceholderFieldGroupConfig = {
@@ -98,7 +97,8 @@ type LayoutData = {
 	settings?: Record<string, any>;
 };
 
-type PreviewLayout = {"style": Record<string, string | {setting: string}>, "rows": PreviewRow};
+type StyleConfig = Record<string, string | { setting: string }>;
+type PreviewLayout = { style?: StyleConfig; rows: PreviewRow[] };
 
 type PreviewRow =
 	| {
@@ -123,7 +123,10 @@ type PreviewFieldgroup =
 	| PredefinedFieldgroupPreview
 	| PlaceholderFieldGroupPreview;
 
-type FixedPreview = { value: LocalizableString; label?: LocalizableString } & PreviewProps;
+type FixedPreview = {
+	content: LocalizableString;
+	label?: LocalizableString;
+} & PreviewProps;
 
 type PlaceholderFieldGroupPreview = {
 	fieldgroup: string;

@@ -181,6 +181,7 @@ class GoogleWalletEventTicketStyle(PassStyle):
     def fieldgroups(self) -> list[FieldGroup]:
         return [
             PredefinedFieldGroup(identifier="venue", name=_("Venue")),
+            PredefinedFieldGroup(identifier="date", name=_("Date")),
             TextFieldGroup(
                 identifier="code",
                 name=_("QR-Code"),
@@ -197,43 +198,96 @@ class GoogleWalletEventTicketStyle(PassStyle):
 
     @property
     def preview_layout(self):
-        return [
-            {
-                "style": {
-                    "--background-color": {"setting": "bg_color"},
-                    "color": "contrast-color(var(--background-color))",
-                },
-                "rows": [
-                    {
-                        "children": [
-                            {"setting": "logo", "display": ["img-circle-sm"]},
-                            {
-                                "value": str(self.event.organizer.name),
-                                "relSize": 3,
-                                "display": ["large", "centered"],
-                            },
-                        ]
-                    },
-                    {
-                        "children": [
-                            {
-                                "fieldgroup": "venue",
-                                "sample": [
-                                    {"content": self.venue()[0], "label": ""},
-                                ],
-                            },
-                            {"value": str(self.event.name), "display": "large"},
-                        ],
-                        "direction": "column",
-                        "display": ["tight"],
-                    },
-                    *self._preview_layout_front_card,
-                    {"fieldgroup": "code"},
-                    {"setting": "hero"},
-                ],
-            },
-            {"rows": [*self._preview_layout_back_details]},
-        ]
+        return {
+            "renderer": "google_eventticket",
+            "event": str(self.event),
+            "organizer": str(self.event.organizer),
+            "date_from": date_format(
+                self.event.date_from.astimezone(self.event.timezone),
+                "SHORT_DATE_FORMAT",
+            ),
+            "venue": self.venue()
+        }
+
+    # @property
+    # def preview_layout(self):
+    #     return [
+    #         {
+    #             "rows": [
+    #                 {
+    #                     "children": [
+    #                         {"setting": "logo", "display_class": ["img-circle-sm"]},
+    #                         {
+    #                             "direction": "column",
+    #                             "display_class": ["tight"],
+    #                             "children": [
+    #                                 {
+    #                                     "content": str(self.event.name),
+    #                                     "display_class": ["bold"],
+    #                                 },
+    #                                 {
+    #                                     "children": [
+    #                                         {
+    #                                             "fieldgroup": "date",
+    #                                             "sample": [
+    #                                                 {
+    #                                                     "content": date_format(
+    #                                                         self.event.date_from.astimezone(
+    #                                                             self.event.timezone
+    #                                                         ),
+    #                                                         "SHORT_DATE_FORMAT",
+    #                                                     ),
+    #                                                 },
+    #                                             ],
+    #                                         },
+    #                                         {
+    #                                             "content": str(self.event.organizer.name),
+    #                                         },
+    #                                     ],
+    #                                     "max_entries": 1,
+    #                                 },
+    #                             ],
+    #                         },
+    #                     ]
+    #                 },
+    #             ],
+    #         },
+    #         {
+    #             "style": {
+    #                 "--background-color": {"setting": "bg_color"},
+    #                 "color": "contrast-color(var(--background-color))",
+    #             },
+    #             "rows": [
+    #                 {
+    #                     "children": [
+    #                         {"setting": "logo", "display_class": ["img-circle-sm"]},
+    #                         {
+    #                             "content": str(self.event.organizer.name),
+    #                             "relSize": 3,
+    #                             "display_class": ["large", "centered"],
+    #                         },
+    #                     ]
+    #                 },
+    #                 {
+    #                     "children": [
+    #                         {
+    #                             "fieldgroup": "venue",
+    #                             "sample": [
+    #                                 {"content": self.venue()[0], "label": ""},
+    #                             ],
+    #                         },
+    #                         {"content": str(self.event.name), "display_class": "large"},
+    #                     ],
+    #                     "direction": "column",
+    #                     "display_class": ["tight"],
+    #                 },
+    #                 *self._preview_layout_front_card,
+    #                 {"fieldgroup": "code", "direction": "column"},
+    #                 {"setting": "hero"},
+    #             ],
+    #         },
+    #         {"rows": [*self._preview_layout_back_details]},
+    #     ]
 
     @property
     def _preview_layout_front_card(self):
@@ -306,6 +360,17 @@ class GoogleWalletEventTicketStyle(PassStyle):
         if self.cleaned_settings.get("shimmer", False):
             output_class.securityAnimation(AnimationType.FOIL_SHIMMER)
 
+        if self.group_is_active("date"):
+            output_class.start(self.event.date_from.isoformat())
+
+            if self.event.settings.show_date_to and self.event.date_to:
+                output_class.end(self.event.date_to.isoformat())
+
+            if self.event.date_admission:
+                output_class.doors_open(
+                    DoorsOpen.doorsOpen, self.event.date_admission.isoformat()
+                )
+
         # TODO: callback url
         # output_class.callback_url(eventreverse_absolute(event.organizer,"plugins:wallet:google_webhook",))
 
@@ -342,7 +407,6 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
     @property
     def fieldgroups(self):
         return [
-            PredefinedFieldGroup(identifier="date", name=_("Date")),
             PredefinedFieldGroup(identifier="seating", name=_("Seating")),
             PredefinedFieldGroup(identifier="ticket_holder", name=_("Ticket Holder")),
             *super().fieldgroups,
@@ -406,28 +470,28 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
                     },
                 ],
             },
-            {"value": _("Sample product"), "label": _("Ticket Type")},
-            {"value": "ABCDE-1", "label": _("Ticket Number")},
-            {"value": "ABCDE", "label": _("Order Number")},
+            {"content": _("Sample product"), "label": _("Ticket Type")},
+            {"content": "ABCDE-1", "label": _("Ticket Number")},
+            {"content": "ABCDE", "label": _("Order Number")},
             {
-                "value": eventreverse_absolute(self.event, "presale:event.index"),
+                "content": eventreverse_absolute(self.event, "presale:event.index"),
                 "label": _("Website"),
             },
         ]
 
     def _generate_class(self):
         output_class = super()._generate_class()
-        if self.group_is_active("date"):
-            if self.event.date_from:
-                output_class.start(self.event.date_from.isoformat())
+        # if self.group_is_active("date"):
+        #     if self.event.date_from:
+        #         output_class.start(self.event.date_from.isoformat())
 
-            if self.event.settings.show_date_to and self.event.date_to:
-                output_class.end(self.event.date_to.isoformat())
+        #     if self.event.settings.show_date_to and self.event.date_to:
+        #         output_class.end(self.event.date_to.isoformat())
 
-            if self.event.date_admission:
-                output_class.doors_open(
-                    DoorsOpen.doorsOpen, self.event.date_admission.isoformat()
-                )
+        #     if self.event.date_admission:
+        #         output_class.doors_open(
+        #             DoorsOpen.doorsOpen, self.event.date_admission.isoformat()
+        #         )
 
         return output_class
 
