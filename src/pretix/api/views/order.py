@@ -256,7 +256,7 @@ class OrderViewSetMixin:
                 [request.event],
                 Prefetch('meta_values', queryset=EventMetaValue.objects.select_related('property'),
                          to_attr='meta_values_cached'),
-                'questions',
+                'questionnaires',
                 'item_meta_properties',
             )
             return Prefetch(
@@ -287,7 +287,9 @@ class OrderViewSetMixin:
                     Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
                     Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
                     'item', 'variation',
-                    Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options', 'question').order_by('question__position')),
+                    Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options', 'question')
+                             # TODO(questionnaires) .order_by('question__position')
+                             ),
                     'seat',
                 )
             )

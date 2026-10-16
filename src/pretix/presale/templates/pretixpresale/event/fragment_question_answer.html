@@ -1,7 +1,8 @@
 {% load safelink %}
 {% load i18n %}
 {% load rich_text %}
-{% if answer %}
+{% if not answer and not question %}
+{% elif answer %}
     {% if answer.file %}
         <span class="fa fa-file" aria-hidden="true"></span>
         <a href="{{ answer.frontend_file_url }}?token={% answer_token request answer %}">

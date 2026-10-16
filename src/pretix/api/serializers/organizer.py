@@ -26,6 +26,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import Q
+from django.templatetags.static import static
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext, gettext_lazy as _
 from i18nfield.rest_framework import I18nField
@@ -219,10 +220,12 @@ class FlexibleTicketRelatedField(serializers.PrimaryKeyRelatedField):
 
 class SalesChannelSerializer(I18nAwareModelSerializer):
     type = serializers.CharField(default="api")
+    icon_url = serializers.SerializerMethodField()
 
     class Meta:
         model = SalesChannel
-        fields = ('identifier', 'type', 'label', 'position')
+        fields = ('identifier', 'type', 'label', 'position', 'icon', 'icon_url')
+        read_only_fields = ('icon',)
 
     def validate_type(self, value):
         if (not self.instance or not self.instance.pk) and value != "api":
@@ -245,6 +248,10 @@ class SalesChannelSerializer(I18nAwareModelSerializer):
                 "You cannot change the identifier of a sales channel."
             )
         return value
+
+    def get_icon_url(self, instance):
+        if '.' in instance.icon:
+            return static(instance.icon)
 
 
 class GiftCardSerializer(I18nAwareModelSerializer):
