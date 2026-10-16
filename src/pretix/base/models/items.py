@@ -510,7 +510,9 @@ class Item(LoggedModel):
         verbose_name=_("Free price input"),
         help_text=_("If this option is active, your users can choose the price themselves. The price configured above "
                     "is then interpreted as the minimum price a user has to enter. You could use this e.g. to collect "
-                    "additional donations for your event.")
+                    "additional donations for your event. We recommend against combining this feature with automatic "
+                    "discounts since discounts are applied as the last step of price computation, which means that the "
+                    "price entered by the customer will be modified again.")
     )
     free_price_suggestion = models.DecimalField(
         verbose_name=_("Suggested price"),
