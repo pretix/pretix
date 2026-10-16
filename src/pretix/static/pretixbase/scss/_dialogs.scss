@@ -87,6 +87,8 @@ dialog::backdrop {
   100% { transform: skewX(0deg); }
 }
 
+.modal-card.no-padding, .modal-card.no-padding .modal-card-content { padding: 0; }
+.modal-card.no-scroll { overflow: hidden; }
 
 
 /* Legacy dialogs (still used for #ajaxerr and #popupmodal) */
