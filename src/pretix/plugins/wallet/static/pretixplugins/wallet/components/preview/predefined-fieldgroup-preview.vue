@@ -18,5 +18,5 @@ const isActive = computed(
 
 <template lang="pug">
 	div.fieldgroup-container(v-if="isActive" :style="{'flex-grow': config.relSize, 'flex-direction': config.direction || 'row'}")
-		FieldgroupItemPreview(v-for="{ label, content } of config.sample" :label="label" :content="content" content_type="text" display="with_label")
+		FieldgroupItemPreview(v-for="{ label, content } of config.sample" :label="label" :content="content" content_type="text" :display="!!label ? 'with_label' : 'plain'")
 </template>
