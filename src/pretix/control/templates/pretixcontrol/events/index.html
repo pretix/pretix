@@ -21,10 +21,10 @@
             </a>
         </div>
     {% else %}
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <details class="panel panel-default" data-stateful="events_index_filter">
+            <summary class="panel-heading">
                 <h3 class="panel-title">{% trans "Filter" %}</h3>
-            </div>
+            </summary>
             <form class="panel-body filter-form" action="" method="get">
                 <div class="row">
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -55,14 +55,14 @@
                     </button>
                 </div>
             </form>
-        </div>
+        </details>
         <p>
             <a href="{% url "control:events.add" %}" class="btn btn-default">
                 <span class="fa fa-plus"></span>
                 {% trans "Create a new event" %}
             </a>
         </p>
-        <table class="table table-condensed table-hover">
+        <div class="table-responsive"><table class="table table-condensed table-hover">
             <thead>
             <tr>
                 <th>
@@ -186,7 +186,7 @@
                 </tr>
             {% endfor %}
             </tbody>
-        </table>
+        </table></div>
         {% include "pretixcontrol/pagination.html" %}
     {% endif %}
 {% endblock %}

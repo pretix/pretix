@@ -5,14 +5,16 @@
 {% load eventurl %}
 {% block title %}{% trans "Organizers" %}{% endblock %}
 {% block content %}
-	<h1>{% trans "Organizers" %}</h1>
+	<h1>
+        {% trans "Organizers" %}
+    </h1>
     <p>{% trans "The list below shows all organizer accounts you have administrative access to." %}</p>
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <details class="panel panel-default" open data-stateful="organizers_index_filter">
+        <summary class="panel-heading">
             <h3 class="panel-title">
                 {% trans "Filter" %}
             </h3>
-        </div>
+        </summary>
         <form class="panel-body filter-form" action="" method="get">
             <div class="row">
                 <div class="col-md-12 col-sm-6 col-xs-12">
@@ -26,7 +28,7 @@
                 </button>
             </div>
         </form>
-    </div>
+    </details>
     {% if staff_session %}
         <p>
             <a href="{% url "control:organizers.add" %}" class="btn btn-default admin-only">
@@ -35,9 +37,9 @@
             </a>
         </p>
     {% endif %}
-	<table class="table table-condensed table-hover">
-		<thead>
-			<tr>
+    <div class="table-responsive"><table class="table table-condensed table-hover">
+        <thead>
+            <tr>
                 <th>
                     {% trans "Organizer name" %}
                     <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
@@ -48,18 +50,18 @@
                     <a href="?{% url_replace request 'ordering' '-slug' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'slug' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for o in organizers %}
-			<tr>
-				<td><strong>
+            </tr>
+        </thead>
+        <tbody>
+            {% for o in organizers %}
+            <tr>
+                <td><strong>
                     <a href="{% url "control:organizer" organizer=o.slug %}">{{ o.name }}</a>
                 </strong></td>
                 <td>{{ o.slug }}</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table></div>
     {% include "pretixcontrol/pagination.html" %}
 {% endblock %}
