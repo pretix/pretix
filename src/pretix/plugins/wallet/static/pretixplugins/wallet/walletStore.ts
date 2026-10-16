@@ -80,13 +80,21 @@ export function createWalletStore(config: {
 			settings() {
 				const settings = {};
 				for (const setting of this.style.settings) {
-					if (setting.type == "text" || setting.type == 'color' || setting.type == 'float') {
+					if (
+						setting.type == "text" ||
+						setting.type == "color" ||
+						setting.type == "float" ||
+						setting.type == "bool"
+					) {
 						settings[setting.identifier] =
 							this.layout.settings[setting.identifier];
 					} else if (setting.type == "image") {
 						const val = this.layout.file_settings[setting.identifier];
 						if (val && "file" in val && val.file) {
-							settings[setting.identifier] = {"name": val.file.name, "url": URL.createObjectURL(val.file)};
+							settings[setting.identifier] = {
+								name: val.file.name,
+								url: URL.createObjectURL(val.file),
+							};
 						} else if (val && "url" in val && val.url) {
 							settings[setting.identifier] = val;
 						} else {
@@ -245,6 +253,8 @@ export function createWalletStore(config: {
 				} else if (setting.type == "float" && typeof value == "string") {
 					this.layout.settings[setting.identifier] = parseFloat(value);
 				} else if (setting.type == "float" && typeof value == "number") {
+					this.layout.settings[setting.identifier] = value;
+				} else if (setting.type == "bool" && typeof value == "boolean") {
 					this.layout.settings[setting.identifier] = value;
 				}
 			},
