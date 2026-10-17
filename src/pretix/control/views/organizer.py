@@ -40,11 +40,14 @@ from collections import Counter
 from datetime import time, timedelta
 from decimal import Decimal
 from hashlib import sha1
+from io import BytesIO
 from itertools import groupby
 from json import JSONDecodeError
 
 import bleach
 import dateutil
+import qrcode
+import qrcode.image.svg
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -3758,3 +3761,41 @@ def reorder_channels(request, organizer):
             )
 
     return HttpResponse()
+
+
+class OrganizerQRCode(OrganizerPermissionRequiredMixin, View):
+    permission = None
+
+    def get(self, request, *args, filetype, **kwargs):
+        url = eventreverse_absolute(request.organizer, 'presale:organizer.index')
+
+        if "url" in request.GET:
+            if request.GET["url"].startswith(url):
+                url = request.GET["url"]
+            else:
+                raise PermissionDenied("Untrusted URL")
+
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_M,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(url)
+        qr.make(fit=True)
+
+        if filetype == 'svg':
+            factory = qrcode.image.svg.SvgPathImage
+            img = qr.make_image(image_factory=factory)
+            r = HttpResponse(img.to_string(), content_type='image/svg+xml')
+            r['Content-Disposition'] = f'inline; filename="qrcode-{request.organizer.slug}.{filetype}"'
+            return r
+        elif filetype in ('jpeg', 'png', 'gif'):
+            img = qr.make_image(fill_color="black", back_color="white")
+
+            byte_io = BytesIO()
+            img.save(byte_io, filetype.upper())
+            byte_io.seek(0)
+            r = HttpResponse(byte_io.read(), content_type='image/' + filetype)
+            r['Content-Disposition'] = f'inline; filename="qrcode-{request.organizer.slug}.{filetype}"'
+            return r
