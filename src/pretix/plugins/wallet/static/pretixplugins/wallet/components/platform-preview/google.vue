@@ -15,7 +15,7 @@ const qrcode = computed(() => store.renderedFieldGroups["code"]?.[0]);
 </script>
 
 <template lang="pug">
-    div.pass-preview-google(style="display: grid; gap: 1em; grid-template-columns: repeat(auto-fit, minmax(auto, 360px)); align-items: start;")
+    div.pass-preview-google(style="")
         div.f-column
             .pass-container.f-row
                 img.logo(:src="store.getSettingValue('logo')?.url")
@@ -42,7 +42,7 @@ const qrcode = computed(() => store.renderedFieldGroups["code"]?.[0]);
                     .f-column
                         img.hero(:src="store.getSettingValue('hero')?.url")
 
-        .pass-container
+        .pass-container.google-pass-details
             .pass-inner
                 slot(name="details")
 
@@ -50,6 +50,11 @@ const qrcode = computed(() => store.renderedFieldGroups["code"]?.[0]);
 
 <style lang="css">
 .pass-preview-google {
+	display: grid;
+	gap: 1em;
+	grid-template-columns: repeat(auto-fit, minmax(auto, 360px));
+	align-items: start;
+
 	.google-main {
 		--background-color: attr(data-background-color type(<color>));
 		color: contrast-color(var(--background-color));
@@ -98,23 +103,25 @@ const qrcode = computed(() => store.renderedFieldGroups["code"]?.[0]);
 		}
 	}
 
-	.card-rows-label {
-		font-size: 0.9em;
+	.card-row {
+		.pass-label {
+			font-size: 0.9em;
+		}
 	}
 
-	.pass-details-row {
-		border-bottom: 2px lightblue;
-	}
 	.hero {
 		align-self: center;
 		max-width: 100%;
 	}
-	.pass-details-label {
-		font-weight: bold;
-	}
-	.pass-details-content {
-		font-size: 0.9em;
-		white-space: pre-wrap;
+
+	.google-pass-details {
+		.pass-label {
+			font-weight: bold;
+		}
+		.pass-content {
+			font-size: 0.9em;
+			white-space: pre-wrap;
+		}
 	}
 
 	.pass-details-link {

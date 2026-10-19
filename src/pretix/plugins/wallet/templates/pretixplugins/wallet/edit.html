@@ -12,9 +12,9 @@
 {% block content %}
     <h1>{% trans "Edit layout" %}</h1>
     {{ platforms|json_script:"platforms" }}
-    {{ variables|json_script:"variables" }}
+    {{ placeholders|json_script:"placeholders" }}
     {{ locales|json_script:"locales" }}
-    <div id="editor" data-layout-id="{{ object.pk }}"></div>
+    <div id="editor" data-layout-id="{{ object.pk }}" data-base-url="{% url 'api-v1:walletlayout-list' organizer=request.organizer.slug event=request.event.slug  %}"></div>
     {% vite_hmr %}
     {% vite_asset "src/pretix/plugins/wallet/static/pretixplugins/wallet/main.ts" %}
 
