@@ -19,7 +19,7 @@ const store = inject(StoreKey)!;
             v-model="store.layout.fieldgroups[fieldgroup.identifier]"
             :fieldgroup="fieldgroup"
             :overflows="store.style.fieldgroups.slice(fieldgroupId + 1) \
-                .filter(x => x.type == 'placeholder' && x.content_type === fieldgroup.content_type)"
+                .filter(x => x.type == 'placeholder' && x.content_type === fieldgroup.content_type && x.display == fieldgroup.display)"
         )
         PredefinedFieldSettings(v-else-if="fieldgroup.type == 'predefined'"
                     v-model="store.layout.fieldgroups[fieldgroup.identifier]"

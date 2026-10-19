@@ -43,10 +43,10 @@ async function openPreview(e: Event) {
 	});
 }
 
-const platformChoices = computed(() => {
+const platformChoices = computed((): [string, string][] => {
 	return [
 		[null, "Do not generate pass"],
-		...Object.values(store.platform.styles).map((x) => [x.identifier, x.name]),
+		...Object.values(store.platform.styles).map((x): [string, string] => [x.identifier, x.name]),
 	];
 });
 

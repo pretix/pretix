@@ -6,14 +6,15 @@ const store = createWalletStore({
 	platforms: JSON.parse(
 		document.querySelector("#platforms")?.textContent ?? "{}",
 	),
-	variables: JSON.parse(
-		document.querySelector("#variables")?.textContent ?? "{}",
+	placeholders: JSON.parse(
+		document.querySelector("#placeholders")?.textContent ?? "{}",
 	),
 	locales: JSON.parse(document.querySelector("#locales")?.textContent ?? "{}"),
 	csrfToken: document.querySelector<HTMLInputElement>(
 		"input[name=csrfmiddlewaretoken]",
 	)?.value!!,
-	layoutId: mountEl.dataset.layoutId!
+	layoutId: mountEl.dataset.layoutId!,
+	baseUrl: mountEl.dataset.baseUrl!
 });
 store.load();
 const app = createApp(App);
