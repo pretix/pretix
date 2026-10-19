@@ -186,7 +186,7 @@ class GoogleWalletEventTicketStyle(PassStyle):
                 identifier="code",
                 name=_("QR-Code"),
                 max_entries=1,
-                display=FieldGroupDisplay.CODE,
+                display=FieldGroupDisplay.PLAIN,
                 default_entries=[
                     PlaceholderFieldEntry(
                         content="secret",
@@ -197,105 +197,16 @@ class GoogleWalletEventTicketStyle(PassStyle):
         ]
 
     @property
-    def preview_layout(self):
+    def preview_data(self):
         return {
-            "renderer": "google_eventticket",
             "event": str(self.event),
             "organizer": str(self.event.organizer),
-            "date_from": date_format(
-                self.event.date_from.astimezone(self.event.timezone),
-                "SHORT_DATE_FORMAT",
-            ),
-            "venue": self.venue()
+            "date_from": self.event.date_from.astimezone(
+                self.event.timezone
+            ).isoformat(),
+            "venue": self.venue(),
+            "event_page": eventreverse_absolute(self.event, "presale:event.index"),
         }
-
-    # @property
-    # def preview_layout(self):
-    #     return [
-    #         {
-    #             "rows": [
-    #                 {
-    #                     "children": [
-    #                         {"setting": "logo", "display_class": ["img-circle-sm"]},
-    #                         {
-    #                             "direction": "column",
-    #                             "display_class": ["tight"],
-    #                             "children": [
-    #                                 {
-    #                                     "content": str(self.event.name),
-    #                                     "display_class": ["bold"],
-    #                                 },
-    #                                 {
-    #                                     "children": [
-    #                                         {
-    #                                             "fieldgroup": "date",
-    #                                             "sample": [
-    #                                                 {
-    #                                                     "content": date_format(
-    #                                                         self.event.date_from.astimezone(
-    #                                                             self.event.timezone
-    #                                                         ),
-    #                                                         "SHORT_DATE_FORMAT",
-    #                                                     ),
-    #                                                 },
-    #                                             ],
-    #                                         },
-    #                                         {
-    #                                             "content": str(self.event.organizer.name),
-    #                                         },
-    #                                     ],
-    #                                     "max_entries": 1,
-    #                                 },
-    #                             ],
-    #                         },
-    #                     ]
-    #                 },
-    #             ],
-    #         },
-    #         {
-    #             "style": {
-    #                 "--background-color": {"setting": "bg_color"},
-    #                 "color": "contrast-color(var(--background-color))",
-    #             },
-    #             "rows": [
-    #                 {
-    #                     "children": [
-    #                         {"setting": "logo", "display_class": ["img-circle-sm"]},
-    #                         {
-    #                             "content": str(self.event.organizer.name),
-    #                             "relSize": 3,
-    #                             "display_class": ["large", "centered"],
-    #                         },
-    #                     ]
-    #                 },
-    #                 {
-    #                     "children": [
-    #                         {
-    #                             "fieldgroup": "venue",
-    #                             "sample": [
-    #                                 {"content": self.venue()[0], "label": ""},
-    #                             ],
-    #                         },
-    #                         {"content": str(self.event.name), "display_class": "large"},
-    #                     ],
-    #                     "direction": "column",
-    #                     "display_class": ["tight"],
-    #                 },
-    #                 *self._preview_layout_front_card,
-    #                 {"fieldgroup": "code", "direction": "column"},
-    #                 {"setting": "hero"},
-    #             ],
-    #         },
-    #         {"rows": [*self._preview_layout_back_details]},
-    #     ]
-
-    @property
-    def _preview_layout_front_card(self):
-        return []
-
-    @property
-    def _preview_layout_back_details(self):
-        return []
 
     def venue(self):
         if self.event.location:
@@ -330,8 +241,8 @@ class GoogleWalletEventTicketStyle(PassStyle):
             localizable_to_dict("Website", self.event.settings.locales),
         )
 
-        if (lat := self.cleaned_settings["lat"]) and (
-            long := self.cleaned_settings["long"]
+        if (lat := self.get_cleaned_setting("lat")) and (
+            long := self.get_cleaned_setting("long")
         ):
             output_class.locations(lat, long)
         elif self.event.geo_lat and self.event.geo_lon:
@@ -339,36 +250,43 @@ class GoogleWalletEventTicketStyle(PassStyle):
 
         output_class.country_code(self.event.settings.locale)
 
-        if hero := self.cleaned_settings["hero"]:
+        if hero := self.get_cleaned_setting("hero"):
             output_class.hero_image(
                 urljoin(eventreverse_absolute(self.event, "presale:event.index"), hero),
                 self.event.name,
             )
 
-        if logo := self.cleaned_settings["logo"]:
+        if logo := self.get_cleaned_setting("logo"):
             output_class.logo(
                 urljoin(eventreverse_absolute(self.event, "presale:event.index"), logo),
                 self.event.name,
             )
 
-        output_class.hex_background_color(self.cleaned_settings["bg_color"])
+        output_class.hex_background_color(self.get_cleaned_setting("bg_color"))
         output_class.confirmation_code_label(ConfirmationCode.orderNumber)
 
         if self.group_is_active("venue") and all(self.venue()):
             output_class.venue(*self.venue())
 
-        if self.cleaned_settings.get("shimmer", False):
+        if self.get_cleaned_setting("shimmer"):
             output_class.securityAnimation(AnimationType.FOIL_SHIMMER)
 
         if self.group_is_active("date"):
-            output_class.start(self.event.date_from.isoformat())
+            output_class.start(
+                self.event.date_from.astimezone(self.event.timezone).isoformat()
+            )
 
             if self.event.settings.show_date_to and self.event.date_to:
-                output_class.end(self.event.date_to.isoformat())
+                output_class.end(
+                    self.event.date_to.astimezone(self.event.timezone).isoformat()
+                )
 
             if self.event.date_admission:
                 output_class.doors_open(
-                    DoorsOpen.doorsOpen, self.event.date_admission.isoformat()
+                    DoorsOpen.doorsOpen,
+                    self.event.date_admission.astimezone(
+                        self.event.timezone
+                    ).isoformat(),
                 )
 
         # TODO: callback url
@@ -403,6 +321,10 @@ class GoogleWalletEventTicketStyle(PassStyle):
 class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
     identifier = "event"
     name = "Default Event Ticket"
+
+    @property
+    def preview_renderer(self):
+        return "google_eventticket_default"
 
     @property
     def fieldgroups(self):
@@ -529,19 +451,8 @@ class GoogleWalletCustomEventTicket(GoogleWalletEventTicketStyle):
     name = "Custom Event Ticket"
 
     @property
-    def _preview_layout_front_card(self):
-        return [
-            {
-                "fieldgroup": "second_row",
-            },
-            {
-                "fieldgroup": "third_row",
-            },
-        ]
-
-    @property
-    def _preview_layout_back_details(self):
-        return [{"fieldgroup": "details", "direction": "column"}]
+    def preview_renderer(self):
+        return "google_eventticket_custom"
 
     @property
     def fieldgroups(self):

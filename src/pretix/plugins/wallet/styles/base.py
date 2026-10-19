@@ -1,4 +1,5 @@
 import enum
+from functools import cached_property
 from typing import Any, Literal, TypedDict
 
 import jsonschema
@@ -37,7 +38,6 @@ class FieldGroupType(enum.Enum):
 class FieldGroupDisplay(enum.Enum):
     PLAIN = "plain"
     WITH_LABEL = "with_label"
-    CODE = "code"
 
 
 class FieldGroup:
@@ -478,33 +478,40 @@ class PassStyle:
     def settings(self) -> list[SettingsField]:
         return []
 
+    @cached_property
+    def _settings_dict(self):
+        return {x.identifier: x for x in self.settings}
+
     @property
-    def preview_layout(self) -> list | None:
+    def preview_renderer(self) -> str | None:
         return None
 
     @property
-    def cleaned_settings(self):
-        if not self.layout:
-            return {}
-        settings = {}
-        for setting in self.settings:
-            if isinstance(setting, ImageSettingsField):
-                settings[setting.identifier] = (
-                    self.file_settings[setting.identifier].url
-                    if setting.identifier in self.file_settings
-                    else None
-                )
-                if not settings[setting.identifier] and setting.default:
-                    settings[setting.identifier] = setting.default
-            else:
-                settings[setting.identifier] = self.layout.get("settings", {}).get(
-                    setting.identifier, setting.default
-                )
-                if not settings[setting.identifier] and setting.default:
-                    settings[setting.identifier] = setting.default
-        return settings
+    def preview_data(self) -> dict:
+        return {}
 
-    def asdict(self):  # -> dict[str, Any]:
+    def get_cleaned_setting(self, setting_identifier: str):
+        if not self.layout:
+            raise ValueError("`layout` needs to be set")
+
+        setting = self._settings_dict.get(setting_identifier)
+
+        if not setting:
+            return None
+
+        if isinstance(setting, ImageSettingsField):
+            if setting.identifier in self.file_settings:
+                return self.file_settings[setting.identifier].url
+        else:
+            if val := self.layout.get("settings", {}).get(
+                setting.identifier, setting.default
+            ):
+                return val
+
+        if setting.default:
+            return setting.default
+
+    def asdict(self):
         context = LayoutContext(
             placeholders=self.placeholders,
             placeholder_renderer=get_wallet_placeholder_renderer(),
@@ -515,7 +522,8 @@ class PassStyle:
             "fieldgroups": [
                 x.asdict(self.event.settings.locales, context) for x in self.fieldgroups
             ],
-            "preview_layout": self.preview_layout,
+            "preview_renderer": self.preview_renderer,
+            "preview_data": self.preview_data,
             "settings": [x.asdict(self.event.settings.locales) for x in self.settings],
         }
 
@@ -611,6 +619,33 @@ class PassStyle:
 
         return res
 
+    def _render_placeholder_fieldgroup_entries(self, group, context):
+        group_fields = []
+        if group.identifier not in self.layout["fieldgroups"]:
+            return group_fields
+
+        for field in self.layout["fieldgroups"][group.identifier]["entries"]:
+            field_entry: dict[str, MaybeTranslatedString | None] = {}
+            if group.display == FieldGroupDisplay.WITH_LABEL:
+                field_entry["label"] = LazyI18nString(field["label"])
+            if field["type"] == FieldEntryType.PLACEHOLDER.value:
+                label, field_entry["value"] = self.render_placeholder(
+                    context, group.content_type.value, field["content"]
+                )
+                if (
+                    group.display == FieldGroupDisplay.WITH_LABEL
+                    and not str(field_entry["label"])
+                    and label
+                ):
+                    field_entry["label"] = label
+
+            elif field["type"] == FieldEntryType.CUSTOM.value:
+                field_entry["value"] = LazyI18nString(field["content"])
+            if "value" in field_entry and field_entry["value"]:
+                group_fields.append(field_entry)
+
+        return group_fields
+
     def get_pass_fields(self, op: OrderPosition):
         if not self.layout:
             raise ValueError("`layout` needs to be set")
@@ -619,46 +654,25 @@ class PassStyle:
 
         fields = {}
         for group in self.fieldgroups:
-            if isinstance(group, PredefinedFieldGroup):
-                pass
+            if not isinstance(group, PlaceholderFieldGroup):
+                continue
 
-            elif isinstance(group, PlaceholderFieldGroup):
-                group_fields = fields.get(group.identifier, [])
-                if group.identifier in self.layout["fieldgroups"]:
-                    for field in self.layout["fieldgroups"][group.identifier][
-                        "entries"
-                    ]:
-                        field_entry: dict[str, MaybeTranslatedString | None] = {}
-                        if group.display == FieldGroupDisplay.WITH_LABEL:
-                            field_entry["label"] = LazyI18nString(field["label"])
-                        if field["type"] == FieldEntryType.PLACEHOLDER.value:
-                            label, field_entry["value"] = self.render_placeholder(
-                                context, group.content_type.value, field["content"]
-                            )
-                            if (
-                                group.display == FieldGroupDisplay.WITH_LABEL
-                                and not str(field_entry["label"])
-                                and label
-                            ):
-                                field_entry["label"] = label
+            fields.setdefault(group.identifier, [])
+            fields[group.identifier] += self._render_placeholder_fieldgroup_entries(
+                group, context
+            )
+            if group.min_entries and len(fields[group.identifier]) < group.min_entries:
+                raise ValueError(
+                    f"Group {group.identifier} needs at least {group.min_entries} entries, but only {len(fields[group.identifier])} were provided"
+                )
 
-                        elif field["type"] == FieldEntryType.CUSTOM.value:
-                            field_entry["value"] = LazyI18nString(field["content"])
-                        if "value" in field_entry and field_entry["value"]:
-                            group_fields.append(field_entry)
-                if group.min_entries and len(group_fields) < group.min_entries:
-                    raise ValueError(
-                        f"Group {group.identifier} needs at least {group.min_entries} entries, but only {len(group_fields)} were provided"
-                    )
-                fields[group.identifier] = group_fields[: group.max_entries]
-                if overflow_group := self.layout["fieldgroups"][group.identifier][
-                    "overflow"
-                ]:
-                    fields.setdefault(overflow_group, [])
-                    fields[overflow_group] += group_fields[group.max_entries :]
+            if overflow_group := self.layout["fieldgroups"][group.identifier][
+                "overflow"
+            ]:
+                fields.setdefault(overflow_group, [])
+                fields[overflow_group] += fields[group.identifier][group.max_entries :]
+            fields[group.identifier] = fields[group.identifier][: group.max_entries]
 
-            else:
-                raise ValueError("Unknown field group")
         return fields
 
     def group_is_active(self, identifier: str):

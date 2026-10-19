@@ -411,7 +411,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 identifier="code",
                 name=_("QR-Code"),
                 max_entries=1,
-                display=FieldGroupDisplay.CODE,
+                display=FieldGroupDisplay.PLAIN,
                 default_entries=[
                     PlaceholderFieldEntry(
                         content="secret",
@@ -456,41 +456,8 @@ class AppleWalletEventTicket(AppleWalletStyle):
         ]
 
     @property
-    def preview_layout(self):
-        return [
-            {
-                "style": {
-                    "--background-color": {"setting": "bg_color"},
-                    "color": {"setting": "fg_color"},
-                    "--label-color": {"setting": "label_color"},
-                    "--background-image": {"setting": "background"},
-                },
-                "rows": [
-                    {
-                        "children": [
-                            {"setting": "logo", "display_class": ["img-inline"]},
-                            {
-                                "fieldgroup": "logo_text",
-                                "relSize": 3,
-                                "display_class": ["bold", "large", "centered"],
-                            },
-                            {
-                                "fieldgroup": "header",
-                                "relSize": 2,
-                                "display_class": ["large", "tight"],
-                            },
-                        ]
-                    },
-                    {"fieldgroup": "primary", "display_class": "large"},
-                    {"fieldgroup": "secondary"},
-                    {"fieldgroup": "auxiliary"},
-                    {"fieldgroup": "code", "direction": "column"},
-                ],
-            },
-            {
-                "rows": [{"fieldgroup": "back", "direction": "column"}],
-            },
-        ]
+    def preview_renderer(self) -> str | None:
+        return "apple_eventticket"
 
     def convert_fields(self, strings, fields, prefix):
         # TODO: detect if a string-value/string-label is the same as a generated field name
