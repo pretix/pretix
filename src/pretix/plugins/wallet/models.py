@@ -113,15 +113,11 @@ class WalletLayoutFileSetting(models.Model):
 #     updated_at = models.DateTimeField(null=True, auto_now=True)
 # prob smth like this
 
-class GoogleWalletType(models.TextChoices):
-    CLASS = "CL", _("Class")
-    OBJECT = "OB", _("Object")
-
 class GoogleWalletInstance(models.Model):
     event = models.ForeignKey("pretixbase.Event", on_delete=models.CASCADE)
-    type = models.CharField(choices=GoogleWalletType)
+    resource = models.CharField()
     identifier = models.CharField()
     data = models.JSONField()
 
     class Meta:
-        unique_together = (("type", "identifier"),)
+        unique_together = (("resource", "identifier"),)
