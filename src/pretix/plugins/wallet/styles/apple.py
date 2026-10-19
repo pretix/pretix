@@ -190,7 +190,7 @@ class AppleWalletStyle(PassStyle):
 
         ticket = (
             FormattingLocalizableString(
-                "{name} - {variation}", name=op.item.name, variation=op.variation.name
+                "{name} - {variation}", name=op.item.name, variation=op.variation.value
             )
             if op.variation
             else op.item.name

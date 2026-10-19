@@ -74,7 +74,7 @@ onUnmounted(() => {
         br(v-if="!$attrs.required")
         span.optional(v-if="!$attrs.required")  {{ gettext("Optional") }}
     div(:class="{'col-md-9': inline}")
-        input.form-control(:id="id" ref="input" v-model="modelValue" v-bind="{...$attrs, ...attrs}")
+        input.form-control(:id="id" ref="input" v-model="modelValue" v-bind="{...$attrs, ...attrs}" :placeholder="defaultVal")
         .help-block(v-if="!!help_text") {{ help_text }}
         .help-block(v-if="!!errors" v-for="error in errors") {{ error }}
 </template>

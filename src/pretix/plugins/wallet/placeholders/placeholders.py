@@ -189,7 +189,7 @@ def base_text_placeholders(sender: Event, **kwargs):
                 FormattingLocalizableString(
                     "{name} - {variation}",
                     name=order_position.item.name,
-                    variation=order_position.variation.name,
+                    variation=order_position.variation.value,
                 )
                 if order_position.variation
                 else order_position.item.name

@@ -1,7 +1,8 @@
-from typing import Protocol, runtime_checkable
+from typing import Callable, Iterable, Protocol, runtime_checkable
 
 from django.utils import translation
 from django.utils.formats import date_format
+from django.utils.functional import Promise
 
 type MaybeTranslatedString = str | Localizable
 
@@ -12,7 +13,8 @@ class Localizable(Protocol):
         ...
 
 
-class LocalizableBase:
+# marked Promise so DjangoJSONEncoder automatically transforms it into a string
+class LocalizableBase(Promise):
     def localize(self, lng):
         with translation.override(lng):
             return str(self)
@@ -55,7 +57,15 @@ class LocalizableDatetime(LocalizableBase):
         return date_format(self.datetime, self.format)
 
 
-def localizable_to_dict(string: MaybeTranslatedString, locales: list[str]):
+class LazyLocalizable(LocalizableBase):
+    def __init__(self, func: Callable[..., str]):
+        self.func = func
+
+    def __str__(self):
+        return self.func()
+
+
+def localizable_to_dict(string: MaybeTranslatedString, locales: Iterable[str]):
     translated = {}
 
     for locale in locales:
