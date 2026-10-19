@@ -238,6 +238,7 @@ class PlaceholderFieldGroup(FieldGroup):
                                 for f in remaining_fields
                                 if isinstance(f, PlaceholderFieldGroup)
                                 and f.content_type == self.content_type
+                                and f.display == self.display
                             ],
                         },
                     ]

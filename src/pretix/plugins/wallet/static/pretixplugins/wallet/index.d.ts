@@ -8,19 +8,20 @@ type Style = {
 	identifier: string;
 	name: string;
 	fieldgroups: FieldGroupDefinition[];
-	preview_layout: PreviewLayout[];
 	settings: Setting[];
+	preview_renderer: string;
+	preview_data: Record<string, string>;
 };
 
-type Variable = {
+type Placeholder = {
 	label: string;
 	sample: string;
 	required_context: string[];
 };
 
 type Styles = Record<string, Style>;
-type Variables = Record<string, Variable>;
-type VariableConfig = Record<string, Variables>;
+type Placeholders = Record<string, Placeholder>;
+type PlaceholderConfig = Record<string, Placeholders>;
 type Platforms = Platform[];
 
 type BaseFieldGroupDefinition = {
@@ -58,7 +59,7 @@ type LocalizableString = null | string | Record<string, string>;
 type PlaceholderFieldEntry = {
 	type: "placeholder";
 	label: LocalizableString;
-	content: string;
+	content?: string;
 };
 
 type CustomFieldEntry = {
@@ -96,52 +97,8 @@ type LayoutData = {
 	settings?: Record<string, any>;
 };
 
-type StyleConfig = Record<string, string | { setting: string }>;
-type PreviewLayout = { style?: StyleConfig; rows: PreviewRow[] };
 
-type PreviewRow =
-	| {
-			children: Array<PreviewRow>;
-			direction?: "row" | "column";
-			display?: Array<string>;
-	  }
-	| PreviewFieldgroup
-	| FixedPreview
-	| SettingPreview;
-
-type PreviewProps = {
-	relSize?: number;
-	direction?: "row" | "column";
-	display?: Array<string>;
-};
-type SettingPreview = {
-	setting: string;
-} & PreviewProps;
-
-type PreviewFieldgroup =
-	| PredefinedFieldgroupPreview
-	| PlaceholderFieldGroupPreview;
-
-type FixedPreview = {
-	content: LocalizableString;
-	label?: LocalizableString;
-} & PreviewProps;
-
-type PlaceholderFieldGroupPreview = {
-	fieldgroup: string;
-} & PreviewProps;
-
-type PredefinedFieldgroupPreview = {
-	fieldgroup: string;
-	sample: PreviewSample[];
-} & PreviewProps;
-
-type PreviewSample = {
-	content: LocalizableString;
-	label: LocalizableString;
-};
-
-type NewPlatformLayout = {
+type PlatformLayout = {
 	style: string;
 	fieldgroups: {};
 	settings: {};

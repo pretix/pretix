@@ -44,10 +44,11 @@ function parseExistingFieldgroupState(
 
 export function createWalletStore(config: {
 	platforms: Platforms;
-	variables: VariableConfig;
+	placeholders: PlaceholderConfig;
 	locales: Record<string, string>;
 	csrfToken: string;
 	layoutId: string;
+	baseUrl: string;
 }) {
 	return createStore({
 		state: () => ({
@@ -55,7 +56,7 @@ export function createWalletStore(config: {
 			loaded: false,
 			activePlatform: config.platforms[0].identifier,
 			name: null as string | null,
-			platformLayouts: {} as Record<string, NewPlatformLayout>,
+			platformLayouts: {} as Record<string, PlatformLayout>,
 		}),
 		getters: {
 			platform(): Platform {
@@ -107,59 +108,48 @@ export function createWalletStore(config: {
 			},
 			renderedFieldGroups() {
 				const content = {};
-				const group_defs = this.style.fieldgroups;
-				for (const fieldgroup of group_defs) {
-					if (fieldgroup.type == "placeholder") {
-						content[fieldgroup.identifier] = [];
-						const layout_group = this.layout.fieldgroups[
-							fieldgroup.identifier
-						] as any as PlaceholderFieldGroupConfig;
-						for (const entry of layout_group.entries) {
-							if (entry.type === "placeholder" && !entry.content) {
-								continue
-							}
+				const placeholderFieldGroups = this.style.fieldgroups.filter(
+					(x) => x.type === "placeholder",
+				);
+				for (const fieldgroup of placeholderFieldGroups) {
+					content[fieldgroup.identifier] = [];
+					const layout_group = this.layout.fieldgroups[
+						fieldgroup.identifier
+					] as any as PlaceholderFieldGroupConfig;
+					for (const entry of layout_group.entries) {
+						let label = i18nstringLocalize(entry.label);
+						let value = null;
+						if (entry.type === "placeholder") {
 							const placeholder =
-								entry.type === "placeholder"
-									? this.variables[fieldgroup.content_type][entry.content]
-									: null;
-
-							let label = i18nstringLocalize(entry.label);
-							if (placeholder && !label) {
+								this.placeholders[fieldgroup.content_type][entry.content];
+							if (!placeholder) {
+								continue;
+							}
+							if (!label) {
 								label = i18nstringLocalize(placeholder.label);
 							}
-
-							let value = null;
-							if (entry.type == "custom") {
-								value = i18nstringLocalize(entry.content);
-							} else if (entry.type == "placeholder") {
-								value =
-									placeholder?.sample ||
-									`(unknown placeholder: ${entry.content})`;
-							}
-							content[fieldgroup.identifier].push({
-								label,
-								content: value,
-							});
+							value = placeholder?.sample;
+						} else if (entry.type == "custom") {
+							value = i18nstringLocalize(entry.content);
 						}
+						content[fieldgroup.identifier].push({
+							label,
+							content: value,
+						});
 					}
 				}
-				for (const fieldgroup of group_defs) {
-					if (fieldgroup.type == "placeholder") {
-						const layout_group: PlaceholderFieldGroupConfig =
-							this.layout.fieldgroups[fieldgroup.identifier];
-						if (
-							fieldgroup.max_entries &&
-							content[fieldgroup.identifier].length > fieldgroup.max_entries
-						) {
-							const overflow = content[fieldgroup.identifier].slice(
-								fieldgroup.max_entries,
-							);
-							content[fieldgroup.identifier] = content[
-								fieldgroup.identifier
-							].slice(0, fieldgroup.max_entries);
-							if (layout_group.overflow) {
-								content[layout_group.overflow].splice(0, 0, ...overflow);
-							}
+				for (const fieldgroup of placeholderFieldGroups) {
+					const layout_group: PlaceholderFieldGroupConfig =
+						this.layout.fieldgroups[fieldgroup.identifier];
+					if (
+						fieldgroup.max_entries &&
+						content[fieldgroup.identifier].length > fieldgroup.max_entries
+					) {
+						const overflow = content[fieldgroup.identifier].splice(
+							fieldgroup.max_entries,
+						);
+						if (layout_group.overflow) {
+							content[layout_group.overflow].unshift(...overflow);
 						}
 					}
 				}
@@ -183,7 +173,7 @@ export function createWalletStore(config: {
 			load() {
 				// TODO: error handling / proper api client
 				fetch(
-					`/api/v1/organizers/demo/events/wallet/walletlayouts/${this.layoutId}/`,
+					`${this.baseUrl}${this.layoutId}/`,
 				)
 					.then((x) => x.json())
 					.then((x) => {
@@ -263,7 +253,7 @@ export function createWalletStore(config: {
 					} else if (val && "url" in val && val.url) {
 						return val;
 					} else if (setting.default) {
-						return {"url": setting.default};
+						return { url: setting.default };
 					}
 				}
 			},
@@ -308,7 +298,7 @@ export function createWalletStore(config: {
 					})
 					.catch(alert);
 			},
-			async serializePlatformLayout(platform, layout: NewPlatformLayout) {
+			async serializePlatformLayout(platform, layout: PlatformLayout) {
 				const uploadedFiles = Object.fromEntries(
 					(
 						await Promise.all(

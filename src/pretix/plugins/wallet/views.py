@@ -88,7 +88,7 @@ class LayoutEditorView(LayoutDetailView):
             }
             for platform in AVAILABLE_PLATFORMS
         ]
-        context["variables"] = get_editor_placeholders(self.request.event)
+        context["placeholders"] = get_editor_placeholders(self.request.event)
         context["locales"] = {
             l: dict(settings.LANGUAGES).get(l, l)
             for l in self.request.event.settings.get("locales")
