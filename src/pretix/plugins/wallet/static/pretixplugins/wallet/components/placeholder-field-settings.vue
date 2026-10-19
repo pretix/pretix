@@ -31,8 +31,8 @@ const overflowOptions = computed((): Array<[string | null, string]> => {
     }
 });
 
-function addVariable() {
-    fieldConfig.value.entries.push({ type: "placeholder", label: "" });
+function addEntry() {
+    fieldConfig.value.entries.push({ type: "placeholder", label: "", content: null });
 }
 
 watchEffect(() => {
@@ -51,7 +51,7 @@ watchEffect(() => {
 
 const placeholderChoices = computed(() => {
     const availableContext = new Set(props.fieldgroup.context_args);
-    const choices = Object.entries(store.variables.text)
+    const choices = Object.entries(store.placeholders.text)
         .filter(([_, { required_context }]) =>
             new Set(required_context).isSubsetOf(availableContext),
         )
@@ -76,7 +76,7 @@ const placeholders = computed(() => {
     return fieldConfig.value.entries.map((entry) => {
         const placeholder =
                 entry.type === "placeholder"
-                    ? store.variables[props.fieldgroup.content_type][entry.content]
+                    ? store.placeholders[props.fieldgroup.content_type][entry.content]
                     : null;
         const placeholders = {};
         let base;
@@ -120,7 +120,7 @@ const placeholders = computed(() => {
                                             :placeholderChoices="placeholderChoices")
                                 Select(v-else-if='fieldgroup.content_type == "image"'
                                         v-model="fieldConfig.entries[n - 1].content"
-                                        :choices="Object.entries(store.variables.image).map(([k, v]) => [k, i18nstringLocalize(v.label)])"
+                                        :choices="Object.entries(store.placeholders.image).map(([k, v]) => [k, i18nstringLocalize(v.label)])"
                                     )
                             td.text-right
                                 button.btn.btn-danger.form-control-static(type="button" @click="fieldConfig.entries.splice(n - 1, 1)" v-if="fieldConfig.entries.length > (fieldgroup.min_entries||0)")
@@ -128,7 +128,7 @@ const placeholders = computed(() => {
                                     span.sr-only {{ gettext('Delete') }}
                                 .text-left.text-muted(v-else) {{  gettext("At least one field in this group is required") }}
 
-                button.btn.btn-default(type="button" @click="addVariable")
+                button.btn.btn-default(type="button" @click="addEntry")
                     i.fa.fa-plus
                     |  {{ gettext("Add field") }}
             Select(:label="gettext('Overflow to …')" :choices="overflowOptions" v-model="fieldConfig.overflow" :help_text="overflowText")

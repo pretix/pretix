@@ -18,42 +18,42 @@ function isActive(fieldgroup: string) {
         template(#card-rows)
             div.card-row(v-if="isActive('date')")
                 div
-                    div.card-rows-label {{ gettext("Date") }}
-                    div.card-rows-content {{ dateTimeFormat(data.date_from, {"dateStyle": "medium"}) }}
+                    div.pass-label {{ gettext("Date") }}
+                    div.pass-content {{ dateTimeFormat(data.date_from, {"dateStyle": "medium"}) }}
                 div
-                    div.card-rows-label {{ gettext("Time") }}
-                    div.card-rows-content {{ dateTimeFormat(data.date_from, {"timeStyle": "short"}) }}
+                    div.pass-label {{ gettext("Time") }}
+                    div.pass-content {{ dateTimeFormat(data.date_from, {"timeStyle": "short"}) }}
             div.card-row(v-if="isActive('seating')")
                 div
-                    div.card-rows-label {{ gettext("Section") }}
-                    div.card-rows-content {{ gettext("Ground floor") }}
+                    div.pass-label {{ gettext("Section") }}
+                    div.pass-content {{ gettext("Ground floor") }}
                 div
-                    div.card-rows-label {{ gettext("Row") }} / {{ gettext("Seat") }}
-                    div.card-rows-content 5 / 2
+                    div.pass-label {{ gettext("Row") }} / {{ gettext("Seat") }}
+                    div.pass-content 5 / 2
 
         template(#details)
             div.pass-details-row(v-if="isActive('ticket_holder')")
-                div.pass-details-label {{ gettext("Ticket Holder") }}
-                div.pass-details-content {{ gettext("John Doe") }}
+                div.pass-label {{ gettext("Ticket Holder") }}
+                div.pass-content {{ gettext("John Doe") }}
             div.pass-details-row(v-if="isActive('venue')")
-                div.pass-details-label  {{ i18nstringLocalize(data.venue?.[0]) }}
-                div.pass-details-content {{ i18nstringLocalize(data.venue?.[1]) }}
+                div.pass-label  {{ i18nstringLocalize(data.venue?.[0]) }}
+                div.pass-content {{ i18nstringLocalize(data.venue?.[1]) }}
             div.pass-details-row(v-if="isActive('date')")
-                div.pass-details-label {{ gettext("Event Start Time") }}
-                div.pass-details-content {{ i18nstringLocalize(data.venue?.[1]) }}
+                div.pass-label {{ gettext("Event Start Time") }}
+                div.pass-content {{ i18nstringLocalize(data.venue?.[1]) }}
             div.pass-details-row
-                div.pass-details-label {{ gettext("Ticket Type") }}
-                div.pass-details-content {{ gettext("Sample product") }}
+                div.pass-label {{ gettext("Ticket Type") }}
+                div.pass-content {{ gettext("Sample product") }}
             div.pass-details-row
-                div.pass-details-label {{ gettext("Ticket Number") }}
-                div.pass-details-content ABCDE-1
+                div.pass-label {{ gettext("Ticket Number") }}
+                div.pass-content ABCDE-1
             div.pass-details-row
-                div.pass-details-label {{ gettext("Order Number") }}
-                div.pass-details-content ABCDE
+                div.pass-label {{ gettext("Order Number") }}
+                div.pass-content ABCDE
             a.pass-details-link.f-row(:href="data.event_page")
                 div
                     i.fa.fa-globe
-                div.pass-details-label
+                div.pass-label
                     | {{ " " + gettext("Website") }}
 
 </template>
