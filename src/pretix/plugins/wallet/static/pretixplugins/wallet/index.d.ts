@@ -35,7 +35,7 @@ type FieldGroupDefinition =
 	| PlaceholderFieldGroupDefinition
 	| PredefinedFieldGroupDefinition;
 
-type FieldGroupDisplay = "plain" | "with_label" | "code";
+type FieldGroupDisplay = "plain" | "with_label";
 type FieldGroupType = "placeholder" | "predefined";
 type FieldContentType = "text" | "image";
 
@@ -43,7 +43,6 @@ type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
 	type: "placeholder";
 	content_type: FieldContentType;
 	default_entries: FieldEntry[];
-	display: FieldGroupDisplay;
 	min_entries: number | null;
 	max_entries: number | null;
 	context_args: string[];
