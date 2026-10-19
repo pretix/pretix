@@ -115,6 +115,9 @@ export function createWalletStore(config: {
 							fieldgroup.identifier
 						] as any as PlaceholderFieldGroupConfig;
 						for (const entry of layout_group.entries) {
+							if (entry.type === "placeholder" && !entry.content) {
+								continue
+							}
 							const placeholder =
 								entry.type === "placeholder"
 									? this.variables[fieldgroup.content_type][entry.content]
@@ -134,10 +137,8 @@ export function createWalletStore(config: {
 									`(unknown placeholder: ${entry.content})`;
 							}
 							content[fieldgroup.identifier].push({
-								// entry,
 								label,
 								content: value,
-								display: fieldgroup.display,
 							});
 						}
 					}
