@@ -105,5 +105,5 @@ type PlatformLayout = {
 	file_settings: Record<string, WalletFile>;
 };
 type ServerSideFile = { url: string; name: string };
-type ClientSideFile = { file: File | null; identifier?: string };
+type ClientSideFile = { file: File | null; identifier?: string; url: string };
 type WalletFile = ServerSideFile | ClientSideFile;
