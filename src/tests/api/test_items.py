@@ -1000,7 +1000,6 @@ def test_item_create_with_bundle(token_client, organizer, event, item, category,
             "bundles": [
                 {
                     "bundled_item": i.pk,
-                    "bundled_variation": None,
                     "count": 2,
                     "designated_price": "3.00",
                 }
