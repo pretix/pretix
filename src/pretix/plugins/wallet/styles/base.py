@@ -1,6 +1,7 @@
 import enum
 from functools import cached_property
-from typing import Any, Literal, TypedDict
+from typing import Any, BinaryIO, Literal, TypedDict
+from django.contrib.staticfiles import finders
 
 import jsonschema
 from django.core.exceptions import ValidationError
@@ -456,6 +457,15 @@ class BooleanSettingsField(SettingsField):
         return {"type": "boolean"}
 
 
+class SettingsFile:
+    url: str
+    file: BinaryIO
+
+    def __init__(self, url, file):
+        self.url = url
+        self.file = file
+
+
 class PassStyle:
     identifier: str  # unique within platform
     name: str
@@ -491,7 +501,7 @@ class PassStyle:
     def preview_data(self) -> dict:
         return {}
 
-    def get_cleaned_setting(self, setting_identifier: str):
+    def get_cleaned_setting(self, setting_identifier: str) -> SettingsFile | str | float | bool | None:
         if not self.layout:
             raise ValueError("`layout` needs to be set")
 
@@ -502,15 +512,19 @@ class PassStyle:
 
         if isinstance(setting, ImageSettingsField):
             if setting.identifier in self.file_settings:
-                return self.file_settings[setting.identifier].url
+                return SettingsFile(self.file_settings[setting.identifier].url, self.file_settings[setting.identifier])
+            elif isinstance(setting._default, File):
+                return SettingsFile(setting._default.url, setting._default)
+            elif isinstance(setting._default, str):
+                return SettingsFile(static(setting._default), File(None, finders.find(setting._default)))
         else:
             if val := self.layout.get("settings", {}).get(
                 setting.identifier, setting.default
             ):
                 return val
 
-        if setting.default:
-            return setting.default
+            if setting.default:
+                return setting.default
 
     def asdict(self):
         context = LayoutContext(
