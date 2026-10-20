@@ -136,11 +136,13 @@ class GoogleWalletEventTicketStyle(PassStyle):
         self.put_item_cached(Resource.EVENT_TICKET_CLASS, class_object)
         self.put_item_cached(Resource.EVENT_TICKET_OBJECT, ticket_object)
 
-        generated_jwt = ButtonJWT(
-            origins=[settings.SITE_URL],
-            issuer=self.comms.client_email,
-            payload={"eventTicketObjects": [ticket_object]},
-        ).sign(self.comms)
+        generated_jwt = self.comms.sign_jwt(
+            ButtonJWT(
+                origins=[settings.SITE_URL],
+                issuer=self.comms.client_email,
+                payload={"eventTicketObjects": [ticket_object]},
+            ).serialize()
+        )
 
         return (
             "googlepaypass",
@@ -167,9 +169,9 @@ class GoogleWalletEventTicketStyle(PassStyle):
                 label=_("Background Color"),
                 default=self.event.settings.primary_color,
             ),
-            FloatSettingsField(identifier="lat", label=_("Latitude"), min=-90, max=90),
+            FloatSettingsField(identifier="lat", label=_("Latitude"), min=-90, max=90, default=self.event.geo_lat),
             FloatSettingsField(
-                identifier="long", label=_("Longitude"), min=-180, max=180
+                identifier="long", label=_("Longitude"), min=-180, max=180, default=self.event.geo_lon
             ),
             BooleanSettingsField(
                 identifier="shimmer", label=_("Add shimmer animation around barcode")
@@ -244,20 +246,17 @@ class GoogleWalletEventTicketStyle(PassStyle):
         #     long := self.get_cleaned_setting("long")
         # ):
         #     output_class.locations(lat, long)
-        # elif self.event.geo_lat and self.event.geo_lon:
-        #     output_class.locations(self.event.geo_lat, self.event.geo_lon)
-
         output_class.country_code(self.event.settings.locale)
 
         if hero := self.get_cleaned_setting("hero"):
             output_class.hero_image(
-                urljoin(eventreverse_absolute(self.event, "presale:event.index"), hero),
+                urljoin(eventreverse_absolute(self.event, "presale:event.index"), hero.url),
                 self.event.name,
             )
 
         if logo := self.get_cleaned_setting("logo"):
             output_class.logo(
-                urljoin(eventreverse_absolute(self.event, "presale:event.index"), logo),
+                urljoin(eventreverse_absolute(self.event, "presale:event.index"), logo.url),
                 self.event.name,
             )
 

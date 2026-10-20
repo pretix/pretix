@@ -356,6 +356,33 @@ class EventTicketObject(GoogleWalletObjectMixin):
         )
 
 
+class ButtonJWT(dict):
+    def __init__(
+        self,
+        issuer,
+        origins,
+        payload: dict[str, list[GoogleWalletObjectMixin]],
+        precreated=True,
+    ):
+        serialized_payload = {}
+        for k, v in payload.items():
+            serialized_payload[k] = [x.serialize(mini=precreated) for x in v]
+
+        self.payload = serialized_payload
+        self.issuer = issuer
+        self.origins = origins
+
+    def serialize(self):
+        return {
+            "iss": self.issuer,
+            "aud": "google",
+            "typ": "savetowallet",
+            "iat": int(time.time()),
+            "payload": self.payload,
+            "origins": self.origins,
+        }
+
+
 class Comms:
     def __init__(self, service_account_info: dict):
         credentials = service_account.Credentials.from_service_account_info(
@@ -403,31 +430,3 @@ class Comms:
             return False
 
         return encoded.decode("utf-8")
-
-
-class ButtonJWT(dict):
-    def __init__(
-        self,
-        issuer,
-        origins,
-        payload: dict[str, list[GoogleWalletObjectMixin]],
-        precreated=True,
-    ):
-        serialized_payload = {}
-        for k, v in payload.items():
-            serialized_payload[k] = [x.serialize(mini=precreated) for x in v]
-
-        self.payload = serialized_payload
-        self.issuer = issuer
-        self.origins = origins
-
-    def sign(self, comms):
-        payload = {
-            "iss": self.issuer,
-            "aud": "google",
-            "typ": "savetowallet",
-            "iat": int(time.time()),
-            "payload": self.payload,
-            "origins": self.origins,
-        }
-        return comms.sign_jwt(payload)

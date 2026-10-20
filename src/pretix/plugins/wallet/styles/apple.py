@@ -11,7 +11,6 @@ import cryptography.hazmat.primitives.hashes
 import cryptography.hazmat.primitives.serialization.pkcs7
 import cryptography.x509
 from django.conf import settings
-from django.contrib.staticfiles import finders
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.forms import ValidationError
 from django.utils.encoding import force_bytes
@@ -180,18 +179,32 @@ class AppleWalletStyle(PassStyle):
                 default="pretixplugins/wallet/icon.png",
             ),
             ImageSettingsField(identifier="background", label=_("Background Image")),
-            ColorSettingsField(identifier="bg_color", label=_("Background Color")),
+            ColorSettingsField(
+                identifier="bg_color",
+                label=_("Background Color"),
+            ),
             ColorSettingsField(
                 identifier="fg_color",
                 label=_("Foreground Color"),
                 help_text=_(
                     "This color is ignored if a background image is set. Instead, the text will be displayed in white."
                 ),
+                default=self.event.settings.primary_color,
             ),
             ColorSettingsField(identifier="label_color", label=_("Label Color")),
-            FloatSettingsField(identifier="lat", label=_("Latitude"), min=-90, max=90),
             FloatSettingsField(
-                identifier="long", label=_("Longitude"), min=-180, max=180
+                identifier="lat",
+                label=_("Latitude"),
+                min=-90,
+                max=90,
+                default=self.event.geo_lat,
+            ),
+            FloatSettingsField(
+                identifier="long",
+                label=_("Longitude"),
+                min=-180,
+                max=180,
+                default=self.event.geo_lon,
             ),
         ]
 
@@ -235,17 +248,21 @@ class AppleWalletStyle(PassStyle):
         }
 
         # TODO: Apples specs says this should be  "specified as a CSS-style RGB triple, such as rgb(100, 10, 110).", but hex codes work as well
-        if bg_color := self.layout["settings"].get("bg_color"):
+        if bg_color := self.get_cleaned_setting("bg_color"):
             pass_json["backgroundColor"] = bg_color
-        if self.file_settings.get("background"):
+        if fg_color := self.get_cleaned_setting("fg_color"):
+            pass_json["foregroundColor"] = fg_color
+        if label_color := self.get_cleaned_setting("label_color"):
+            pass_json["labelColor"] = label_color
+
+        if self.get_cleaned_setting("background"):
             # iOS ignores the set foregroundColor if a background is set and uses white instead.
             # Explicitly set white in this case so the pass looks the same on all platforms
             # https://developer.apple.com/forums/thread/809417
             pass_json["foregroundColor"] = "#ffffff"
-        elif fg_color := self.layout["settings"].get("fg_color"):
-            pass_json["foregroundColor"] = fg_color
-        if label_color := self.layout["settings"].get("label_color"):
-            pass_json["labelColor"] = label_color
+            # macOS always shows transparency as black, iOS as backgroundColor.
+            # Explicitly set black in this case so the pass looks the same on all platforms
+            pass_json["backgroundColor"] = "#000000"
 
         if "expirationDate" not in pass_json:
             if op.valid_until:
@@ -280,15 +297,12 @@ class AppleWalletStyle(PassStyle):
         # TODO: also fill relevantDates from program times
 
         if "locations" not in pass_json:
-            if "lat" in self.layout["settings"] and "long" in self.layout["settings"]:
+            if (lat := self.get_cleaned_setting("lat")) and (
+                long := self.get_cleaned_setting("long")
+            ):
                 pass_json["locations"] = {
-                    "latitude": float(self.layout["settings"]["lat"]),
-                    "longitude": float(self.layout["settings"]["long"]),
-                }
-            elif event.geo_lat and event.geo_lon:
-                pass_json["locations"] = {
-                    "latitude": float(event.get_lat),
-                    "longitude": float(event.get_lon),
+                    "latitude": lat,
+                    "longitude": long,
                 }
 
         return pass_json
@@ -308,31 +322,26 @@ class AppleWalletStyle(PassStyle):
 
         pass_json = self.generate_pass_json(fields, op, strings)
 
-        if file := self.file_settings.get("logo"):
+        if file := self.get_cleaned_setting("logo"):
             logo = convert_to_png(
-                file, (480, 150)
+                file.file, (480, 150)
             )  # TODO: check max_size against apple HIG
-        else:
-            logo = open(finders.find("pretixplugins/wallet/logo.png"), "rb")
 
-        if file := self.file_settings.get("icon"):
+        if file := self.get_cleaned_setting("icon"):
             icon = convert_to_png(
-                file, max_size=(87, 87)
+                file.file, max_size=(87, 87)
             )  # TODO: check max_size against apple HIG
-        else:
-            icon = open(finders.find("pretixplugins/wallet/icon.png"), "rb")
 
         pkpass.add_file("icon.png", icon.read())
         pkpass.add_file("logo.png", logo.read())
 
-        if file := self.file_settings.get("background"):
+        if file := self.get_cleaned_setting("background"):
             background = convert_to_png(
-                file, max_size=(540, 660)
+                file.file, max_size=(540, 660)
             )  # TODO: check max_size against apple HIG
             pkpass.add_file("background.png", background.read())
 
         for lang, content in strings.generate().items():
-            print(lang, content)
             pkpass.add_file(f"{lang}.lproj/pass.strings", content)
         pkpass.add_file("pass.json", json.dumps(pass_json))
         result = pkpass.finish()
