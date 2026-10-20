@@ -585,6 +585,7 @@ class ScaView(StripeOrderView, View):
         if intent.status == 'requires_action' and intent.next_action.type in [
             'use_stripe_sdk', 'redirect_to_url', 'alipay_handle_redirect', 'wechat_pay_display_qr_code',
             'swish_handle_redirect_or_display_qr_code', 'multibanco_display_details', 'promptpay_display_qr_code',
+            'pix_display_qr_code',
         ]:
             ctx = {
                 'order': self.order,
@@ -601,6 +602,9 @@ class ScaView(StripeOrderView, View):
                 ctx['payment_intent_redirect_action_handling'] = 'iframe'
             elif intent.next_action.type == 'multibanco_display_details':
                 ctx['payment_intent_next_action_redirect_url'] = intent.next_action.multibanco_display_details['hosted_voucher_url']
+                ctx['payment_intent_redirect_action_handling'] = 'iframe'
+            elif intent.next_action.type == 'pix_display_qr_code':
+                ctx['payment_intent_next_action_redirect_url'] = intent.next_action.pix_display_qr_code['hosted_instructions_url']
                 ctx['payment_intent_redirect_action_handling'] = 'iframe'
             elif intent.next_action.type == 'promptpay_display_qr_code':
                 ctx['payment_intent_promptpay_image_url'] = intent.next_action.promptpay_display_qr_code['image_url_svg']
