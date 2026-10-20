@@ -378,7 +378,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     def validate_bundles(self, value):
         if not self.instance:
             for b_data in value:
-                ItemBundle.clean_itemvar(self.context['event'], b_data['bundled_item'], b_data['bundled_variation'])
+                ItemBundle.clean_itemvar(self.context['event'], b_data.get('bundled_item'), b_data.get('bundled_variation'))
         return value
 
     def validate_addons(self, value):
