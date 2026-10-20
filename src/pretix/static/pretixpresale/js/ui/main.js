@@ -9,6 +9,22 @@ let form_handlers = function (el) {
 		}
 	})
 
+	// A11y-bug on iOS-26.x Safari/Chrome: select-element loses focus after option has been selected
+	el.find('select').one('touchstart', function (e) {
+		function focusAfterBlur () {
+			this.focus();
+		}
+		// click event seems wrong, but it triggers after select is closed even if no change is made
+		// change event triggers only if a different option than the selected one is selected
+		$(this).on("click", function () {
+			// only focus if element was blurred immediately after change, ie. the bug exists
+			$(this).one("blur", focusAfterBlur);
+			window.setTimeout(function() {
+				$(this).off("blur", focusAfterBlur);
+			}, 1);
+		});
+	});
+
 	el.find('.datetimepicker').each(function () {
 		$(this).datetimepicker({
 			format: $(this).attr('data-format') ? $(this).attr('data-format') : $('body').attr('data-datetimeformat'),
