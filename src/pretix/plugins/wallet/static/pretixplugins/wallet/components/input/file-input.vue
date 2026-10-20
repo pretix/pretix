@@ -9,8 +9,6 @@ const props = defineProps<{
 	label?: LocalizableString;
 	errors?: string[];
 	help_text?: string;
-    filename?: string;
-    current_url?: string;
     default?: string;
 }>();
 const id = useId();

@@ -19,12 +19,20 @@ from django.utils.translation import gettext as _
 
 from pretix.base.models import OrderPosition
 from pretix.plugins.wallet.i18n import (
-    FormattingLocalizableString, GettextLocalizableString, Localizable,
+    FormattingLocalizableString,
+    GettextLocalizableString,
+    Localizable,
     MaybeTranslatedString,
 )
 from pretix.plugins.wallet.styles.base import (
-    ColorSettingsField, FieldGroup, FieldGroupDisplay, FloatSettingsField,
-    ImageSettingsField, PassStyle, PlaceholderFieldEntry, TextFieldGroup,
+    ColorSettingsField,
+    FieldGroup,
+    FieldGroupDisplay,
+    FloatSettingsField,
+    ImageSettingsField,
+    PassStyle,
+    PlaceholderFieldEntry,
+    TextFieldGroup,
     WalletPlatform,
 )
 
@@ -162,18 +170,24 @@ class AppleWalletStyle(PassStyle):
             ImageSettingsField(
                 identifier="logo",
                 label=_("Logo"),
-                help_text="Will be displayed on the top left corner of the pass",
+                help_text=_("Will be displayed on the top left corner of the pass"),
                 default="pretixplugins/wallet/logo.png",
             ),
             ImageSettingsField(
                 identifier="icon",
                 label=_("Icon"),
-                help_text="Will be displayed as the file icon",
+                help_text=_("Will be displayed as the file icon"),
                 default="pretixplugins/wallet/icon.png",
             ),
             ImageSettingsField(identifier="background", label=_("Background Image")),
             ColorSettingsField(identifier="bg_color", label=_("Background Color")),
-            ColorSettingsField(identifier="fg_color", label=_("Foreground Color")),
+            ColorSettingsField(
+                identifier="fg_color",
+                label=_("Foreground Color"),
+                help_text=_(
+                    "This color is ignored if a background image is set. Instead, the text will be displayed in white."
+                ),
+            ),
             ColorSettingsField(identifier="label_color", label=_("Label Color")),
             FloatSettingsField(identifier="lat", label=_("Latitude"), min=-90, max=90),
             FloatSettingsField(
@@ -223,7 +237,12 @@ class AppleWalletStyle(PassStyle):
         # TODO: Apples specs says this should be  "specified as a CSS-style RGB triple, such as rgb(100, 10, 110).", but hex codes work as well
         if bg_color := self.layout["settings"].get("bg_color"):
             pass_json["backgroundColor"] = bg_color
-        if fg_color := self.layout["settings"].get("fg_color"):
+        if self.file_settings.get("background"):
+            # iOS ignores the set foregroundColor if a background is set and uses white instead.
+            # Explicitly set white in this case so the pass looks the same on all platforms
+            # https://developer.apple.com/forums/thread/809417
+            pass_json["foregroundColor"] = "#ffffff"
+        elif fg_color := self.layout["settings"].get("fg_color"):
             pass_json["foregroundColor"] = fg_color
         if label_color := self.layout["settings"].get("label_color"):
             pass_json["labelColor"] = label_color
@@ -342,9 +361,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 default_entries=[
                     PlaceholderFieldEntry(
                         content="admission_or_date_from",
-                        label=GettextLocalizableString.gettext(
-                            "Admission"
-                        ),
+                        label=GettextLocalizableString.gettext("Admission"),
                     ),
                 ],
             ),
@@ -370,9 +387,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 default_entries=[
                     PlaceholderFieldEntry(
                         content="item_with_variation",
-                        label=GettextLocalizableString.gettext(
-                            "Product"
-                        ),
+                        label=GettextLocalizableString.gettext("Product"),
                     )
                 ],
             ),
@@ -386,24 +401,18 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 default_entries=[
                     PlaceholderFieldEntry(
                         content="seat",
-                        label=GettextLocalizableString.gettext(
-                            "Seat"
-                        ),
+                        label=GettextLocalizableString.gettext("Seat"),
                     ),
                     PlaceholderFieldEntry(
                         content="attendee_name",
                     ),
                     PlaceholderFieldEntry(
                         content="program_start",
-                        label=GettextLocalizableString.gettext(
-                            "From"
-                        ),
+                        label=GettextLocalizableString.gettext("From"),
                     ),
                     PlaceholderFieldEntry(
                         content="program_end",
-                        label=GettextLocalizableString.gettext(
-                            "To"
-                        ),
+                        label=GettextLocalizableString.gettext("To"),
                     ),
                 ],
             ),
@@ -432,9 +441,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                     ),
                     PlaceholderFieldEntry(
                         content="order_email",
-                        label=GettextLocalizableString.gettext(
-                            "Ordered by"
-                        ),
+                        label=GettextLocalizableString.gettext("Ordered by"),
                     ),
                     PlaceholderFieldEntry(
                         content="organizer",
@@ -471,9 +478,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 strings.add_entry(f"{prefix}-{i}-label", converted_field["label"])
                 converted_field["label"] = f"{prefix}-{i}-label"
 
-            if isinstance(
-                converted_field["value"], Localizable
-            ):
+            if isinstance(converted_field["value"], Localizable):
                 strings.add_entry(f"{prefix}-{i}-value", converted_field["value"])
                 converted_field["value"] = f"{prefix}-{i}-value"
             converted.append(converted_field)

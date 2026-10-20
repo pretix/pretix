@@ -92,12 +92,7 @@ export function createWalletStore(config: {
 							this.layout.settings[setting.identifier];
 					} else if (setting.type == "image") {
 						const val = this.layout.file_settings[setting.identifier];
-						if (val && "file" in val && val.file) {
-							settings[setting.identifier] = {
-								name: val.file.name,
-								url: URL.createObjectURL(val.file),
-							};
-						} else if (val && "url" in val && val.url) {
+						if (val) {
 							settings[setting.identifier] = val;
 						} else {
 							settings[setting.identifier] = null;
@@ -172,9 +167,7 @@ export function createWalletStore(config: {
 			},
 			load() {
 				// TODO: error handling / proper api client
-				fetch(
-					`${this.baseUrl}${this.layoutId}/`,
-				)
+				fetch(`${this.baseUrl}${this.layoutId}/`)
 					.then((x) => x.json())
 					.then((x) => {
 						this.parseServerLayout(x);
@@ -232,7 +225,7 @@ export function createWalletStore(config: {
 					}
 				}
 			},
-			getSettingValue(identifier: string): Setting {
+			getSettingValue(identifier: string): Setting | { url: string } {
 				const setting = this.getSetting(identifier);
 				if (!setting) return;
 
@@ -245,12 +238,7 @@ export function createWalletStore(config: {
 					return this.layout.settings[setting.identifier] || setting.default;
 				} else if (setting.type == "image") {
 					const val = this.layout.file_settings[setting.identifier];
-					if (val && "file" in val && val.file) {
-						return {
-							name: val.file.name,
-							url: URL.createObjectURL(val.file),
-						};
-					} else if (val && "url" in val && val.url) {
+					if (val && "url" in val && val.url) {
 						return val;
 					} else if (setting.default) {
 						return { url: setting.default };
@@ -261,13 +249,23 @@ export function createWalletStore(config: {
 				const setting = this.getSetting(identifier);
 				if (!setting) return;
 
-				if (
-					setting.type === "image" &&
-					(value instanceof File || value === null)
-				) {
-					this.layout.file_settings[setting.identifier] = {
-						file: value as File | null,
-					};
+				if (setting.type === "image") {
+					if (this.layout.file_settings[setting.identifier]?.url) {
+						URL.revokeObjectURL(
+							this.layout.file_settings[setting.identifier].url,
+						);
+					}
+					if (value instanceof File) {
+						this.layout.file_settings[setting.identifier] = {
+							file: value,
+							url: value === null ? null : URL.createObjectURL(value),
+							name: value.name,
+						};
+					} else if (value === null) {
+						this.layout.file_settings[setting.identifier] = {
+							file: null,
+						};
+					}
 				} else if (
 					(setting.type == "text" || setting.type == "color") &&
 					typeof value == "string"
@@ -303,9 +301,7 @@ export function createWalletStore(config: {
 					(
 						await Promise.all(
 							Object.entries(layout.file_settings).map(async ([k, v]) => {
-								if ("url" in v) {
-									return;
-								} else if ("identifier" in v) {
+								if ("identifier" in v) {
 									return [k, v.identifier];
 								} else if ("file" in v && v.file instanceof File) {
 									return [k, await this.uploadFile(v)];

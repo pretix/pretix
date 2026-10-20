@@ -16,6 +16,7 @@ const theme = computed(() => {
 	if (bg_image?.url) {
 		theme.bg_image = `url(${encodeURI(store.getSettingValue("background").url)})`;
 		theme.bg_color = "#000";
+		theme.fg_color = '#fff'
 	}
 	return theme;
 });
