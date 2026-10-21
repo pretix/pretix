@@ -642,6 +642,8 @@ def assert_mail_connection(res, should_connect, use_ssl):
     True, False
 ])
 def test_private_smtp_ip(res, use_ssl, settings):
+    settings.EMAIL_HOST_USER = ''
+    settings.EMAIL_HOST_PASSWORD = ''
     settings.EMAIL_CUSTOM_SMTP_BACKEND = 'pretix.base.email.CheckPrivateNetworkSmtpBackend'
     settings.MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = False
     with assert_mail_connection(res=res, should_connect=False, use_ssl=use_ssl), pytest.raises(match="Request to .* blocked"):
@@ -665,6 +667,8 @@ def test_private_smtp_ip(res, use_ssl, settings):
     True, False
 ])
 def test_public_smtp_ip(use_ssl, allow_private, settings):
+    settings.EMAIL_HOST_USER = ''
+    settings.EMAIL_HOST_PASSWORD = ''
     settings.EMAIL_CUSTOM_SMTP_BACKEND = 'pretix.base.email.CheckPrivateNetworkSmtpBackend'
     settings.MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = allow_private
 
