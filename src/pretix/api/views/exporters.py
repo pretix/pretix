@@ -73,7 +73,7 @@ class ExportersMixin:
 
     @action(detail=True, methods=['GET'], url_name='download', url_path='download/(?P<asyncid>[^/]+)/(?P<cfid>[^/]+)')
     def download(self, *args, **kwargs):
-        cf = get_object_or_404(CachedFile, id=kwargs['cfid'])
+        cf = get_object_or_404(CachedFile, id=kwargs['cfid'], web_download=True)
         if not cf.allowed_for_session(self.request, "exporters-api"):
             return Response(
                 {'status': 'failed', 'message': 'Unknown file ID or export failed'},
