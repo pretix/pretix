@@ -75,7 +75,7 @@ from pretix.presale.views.cart import get_or_create_cart_id
 from pretix.presale.views.organizer import (
     EventListMixin, add_events_for_days, add_subevents_for_days,
     days_for_template, filter_qs_by_attr, filter_subevents_with_plugins,
-    weeks_for_template,
+    should_hide_subevent, weeks_for_template,
 )
 
 logger = logging.getLogger(__name__)
@@ -122,25 +122,9 @@ def widget_css_etag(request, version, **kwargs):
         return f'{_get_source_cache_key(version)}-{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}'
 
 
-def _use_vite(request):
-    if getattr(settings, 'PRETIX_WIDGET_VITE', False) or "beta" in request.GET:
-        return True
-    origin = request.META.get('HTTP_ORIGIN', '')
-    gs = GlobalSettingsObject()
-    vite_origins = gs.settings.get('widget_vite_origins', as_type=str, default='')
-    if vite_origins and not origin:
-        referer = request.META.get('HTTP_REFERER', '')
-        origin = '/'.join(referer.split('/', 3)[:3])
-    if origin and vite_origins:
-        origins_list = [o.strip() for o in vite_origins.strip().splitlines() if o.strip()]
-        return origin in origins_list
-    return False
-
-
 def widget_js_etag(request, version, lang, **kwargs):
     gs = GlobalSettingsObject()
-    variant = 'vite' if _use_vite(request) else 'legacy'
-    return gs.settings.get('widget_checksum_{}_{}_{}'.format(version, lang, variant))
+    return gs.settings.get('widget_checksum_{}_{}'.format(version, lang))
 
 
 @gzip_page
@@ -168,16 +152,13 @@ def widget_css(request, version, **kwargs):
     return resp
 
 
-def generate_widget_js(version, lang, use_vite=False):
+def generate_widget_js(version, lang):
     code = []
     with language(lang):
         # Provide isolation
         code.append('(function (siteglobals) {\n')
         code.append('var module = {}, exports = {};\n')
-        if use_vite:
-            code.append('const LANG = "%s";\n' % lang)
-        else:
-            code.append('var lang = "%s";\n' % lang)
+        code.append('const LANG = "%s";\n' % lang)
 
         c = JavaScriptCatalog()
         c.translation = DjangoTranslation(lang, domain='djangojs')
@@ -201,23 +182,11 @@ def generate_widget_js(version, lang, use_vite=False):
         i18n_js = template.render(context)
         code.append(i18n_js)
 
-        if use_vite:
-            vite_js = finders.find('vite/widget/widget.js')
-            if not vite_js:
-                raise FileNotFoundError('Vite widget build not found. Run: npm run build:widget')
-            with open(vite_js, 'r', encoding='utf-8') as fp:
-                code.append(fp.read())
-        else:
-            files = [
-                'vuejs/vue.js' if settings.DEBUG else 'vuejs/vue.min.js',
-                'pretixpresale/js/widget/docready.js',
-                'pretixpresale/js/widget/floatformat.js',
-                'pretixpresale/js/widget/widget.js' if version == version_max else 'pretixpresale/js/widget/widget.v{}.js'.format(version),
-            ]
-            for fname in files:
-                f = finders.find(fname)
-                with open(f, 'r', encoding='utf-8') as fp:
-                    code.append(fp.read())
+        vite_js = finders.find('vite/widget/widget.js')
+        if not vite_js:
+            raise FileNotFoundError('Vite widget build not found. Run: npm run build:widget')
+        with open(vite_js, 'r', encoding='utf-8') as fp:
+            code.append(fp.read())
 
         if settings.DEBUG:
             code.append('})(this);\n')
@@ -229,14 +198,13 @@ def generate_widget_js(version, lang, use_vite=False):
     return f"/* v{version} */\n" + code
 
 
-def get_widget_js(version, lang, use_vite, force_regenerate=False):
+def get_widget_js(version, lang, force_regenerate=False):
     if settings.DEBUG:
-        return generate_widget_js(version, lang, use_vite=use_vite).encode()
+        return generate_widget_js(version, lang).encode()
 
-    variant = 'vite' if use_vite else 'legacy'
-    cache_prefix = 'widget_js_data_v{}_{}_{}'.format(version, lang, variant)
-    settings_key = 'widget_file_v{}_{}_{}'.format(version, lang, variant)
-    checksum_key = 'widget_checksum_v{}_{}_{}'.format(version, lang, variant)
+    cache_prefix = 'widget_js_data_v{}_{}'.format(version, lang)
+    settings_key = 'widget_file_v{}_{}'.format(version, lang)
+    checksum_key = 'widget_checksum_v{}_{}'.format(version, lang)
     gs = GlobalSettingsObject()
 
     if not force_regenerate:
@@ -258,7 +226,7 @@ def get_widget_js(version, lang, use_vite, force_regenerate=False):
     else:
         fname = gs.settings.get(settings_key)
 
-    data = generate_widget_js(version, lang, use_vite=use_vite).encode()
+    data = generate_widget_js(version, lang).encode()
     checksum = hashlib.sha1(data).hexdigest()
     should_save = (
         not fname
@@ -266,7 +234,7 @@ def get_widget_js(version, lang, use_vite, force_regenerate=False):
     )
     if should_save:
         newname = default_storage.save(
-            'widget/widget.{}.{}.{}.{}.js'.format(version, lang, variant, checksum),
+            'widget/widget.{}.{}.{}.js'.format(version, lang, checksum),
             ContentFile(data)
         )
         gs.settings.set(settings_key, 'file://' + newname)
@@ -283,8 +251,7 @@ def get_widget_js(version, lang, use_vite, force_regenerate=False):
 def regenerate_all_widget_js():
     for lc, ll in settings.LANGUAGES:
         for version in range(version_min, version_max + 1):
-            for use_vite in [True, False]:
-                get_widget_js(version, lc, use_vite, force_regenerate=True)
+            get_widget_js(version, lc, force_regenerate=True)
 
 
 @gzip_page
@@ -296,8 +263,7 @@ def widget_js(request, version, lang, **kwargs):
     if version < version_min:
         version = version_min
 
-    use_vite = _use_vite(request)
-    data = get_widget_js(version, lang, use_vite)
+    data = get_widget_js(version, lang)
 
     resp = HttpResponse(data, content_type='text/javascript')
     resp['Access-Control-Allow-Origin'] = '*'
@@ -757,14 +723,10 @@ class WidgetAPIProductList(EventListMixin, View):
                         evs = evs[:limit]
 
                 tz = request.event.timezone
-                if self.request.event.settings.event_list_available_only:
-                    evs = [
-                        se for se in evs
-                        if not se.presale_has_ended and (
-                            se.best_availability_state is not None and
-                            se.best_availability_state >= Quota.AVAILABILITY_RESERVED
-                        )
-                    ]
+                evs = [
+                    se for se in evs
+                    if not should_hide_subevent(self.request.event.settings, se)
+                ]
 
                 data['events'] = [
                     {

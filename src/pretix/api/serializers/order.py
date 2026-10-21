@@ -41,6 +41,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
+from pretix.api.auth.utils import get_session_key_for_api_request
 from pretix.api.serializers import CompatDecimalField, CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.forms import form_field_to_serializer_field
@@ -258,16 +259,21 @@ class AnswerSerializer(I18nAwareModelSerializer):
         if data['answer'] == 'file:keep':
             return data
         try:
-            ao = self.context["request"].user or self.context["request"].auth
             cf = CachedFile.objects.get(
-                session_key=f'api-upload-{str(type(ao))}-{ao.pk}',
                 file__isnull=False,
                 pk=data['answer'][len("file:"):],
             )
+            if cf.session_key == "api-upload-<class 'django.contrib.auth.models.AnonymousUser'>-None":
+                # OK, backwards-compatibility of a security bug fixed 2026-09, delete this at some point, but should
+                # also be harmless because all files with this key are expired one day after deployment of this fix
+                # and no new files with this key are created
+                pass
+            elif cf.session_key != get_session_key_for_api_request(self.context["request"]):
+                raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data['answer']))
         except (ValidationError, IndexError):  # invalid uuid
-            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
+            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data['answer']))
         except CachedFile.DoesNotExist:
-            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
+            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data['answer']))
 
         allowed_types = (
             'image/png', 'image/jpeg', 'image/gif', 'application/pdf'

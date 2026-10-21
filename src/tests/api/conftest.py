@@ -63,6 +63,15 @@ def meta_prop(organizer):
 
 @pytest.fixture
 @scopes_disabled()
+def meta_prop_choices(organizer):
+    return organizer.meta_properties.create(name="department", default="A", choices=[
+        {"key": "A", "label": {"en": "Group A"}},
+        {"key": "B", "label": {"en": "Group B"}},
+    ])
+
+
+@pytest.fixture
+@scopes_disabled()
 def event(organizer, meta_prop):
     e = Event.objects.create(
         organizer=organizer, name='Dummy', slug='dummy',

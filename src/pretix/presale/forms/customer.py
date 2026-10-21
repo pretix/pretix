@@ -30,7 +30,7 @@ from django.contrib.auth.password_validation import (
 )
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core import signing
-from django.utils.html import escape
+from django.utils.html import escape, format_html
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
@@ -81,7 +81,8 @@ class AuthenticationForm(forms.Form):
         self.request = request
         self.customer_cache = None
         super().__init__(*args, **kwargs)
-        self.fields['password'].help_text = "<a target='_blank' href='{}'>{}</a>".format(
+        self.fields['password'].help_text = format_html(
+            "<a target='_blank' href='{}'>{}</a>",
             eventreverse_absolute(False, 'presale:organizer.customer.resetpw', kwargs={
                 'organizer': request.organizer.slug,
             }),
@@ -334,7 +335,7 @@ class ResetPasswordForm(forms.Form):
     def clean_email(self):
         if 'email' not in self.cleaned_data:
             return
-        if rate_limit("customer_pwreset_check", max_num=10, expire_time=600):
+        if rate_limit("customer_pwreset_check", include_ip_from_request=self.request, max_num=10, expire_time=600):
             raise forms.ValidationError(
                 self.error_messages['rate_limit'],
                 code='rate_limit',

@@ -107,6 +107,9 @@ class TransmissionType:
     def transmission_info_to_form_data(self, transmission_info: dict) -> dict:
         return transmission_info
 
+    def describe_info_columns(self):
+        return [f.label for f in self.invoice_address_form_fields.values()]
+
     def describe_info(self, transmission_info: dict, country: Country, is_business: bool):
         form_data = self.transmission_info_to_form_data(transmission_info)
         data = []

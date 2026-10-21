@@ -19,13 +19,21 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import json
 
-from django.dispatch import receiver
-
-from pretix.base.signals import register_payment_providers
+import pytest
 
 
-@receiver(register_payment_providers, dispatch_uid="payment_paypal")
-def register_payment_provider(sender, **kwargs):
-    from .payment import Paypal
-    return Paypal
+def test_allowed_json():
+    assert json.loads('{"float":1.5,"int":161,"arr":[]}') == {"float": 1.5, "int": 161, "arr": []}
+
+
+def test_disallowed_json_float_consts():
+    with pytest.raises(KeyError):
+        json.loads("Infinity")
+    with pytest.raises(KeyError):
+        json.loads("-Infinity")
+    with pytest.raises(KeyError):
+        json.loads("NaN")
+    with pytest.raises(KeyError):
+        json.loads("[123, NaN, Infinity, -Infinity]")

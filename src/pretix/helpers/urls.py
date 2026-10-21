@@ -29,7 +29,7 @@ from django.urls import reverse
 def build_absolute_uri(urlname, args=None, kwargs=None):
     warnings.warn(
         'Usage of build_absolute_uri is confusing since there are many functions with that name. '
-        'Replace this usage with ',
+        'Replace this usage with mainreverse_absolute.',
         DeprecationWarning
     )
     return mainreverse_absolute(urlname, args, kwargs)

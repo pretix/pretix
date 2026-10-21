@@ -181,6 +181,7 @@ def sendmail_run_rules(sender, **kwargs):
             state=ScheduledMail.STATE_MISSED
         )
         for m_id in mails.filter(
+            event__plugins__contains="pretix.plugins.sendmail",
             state__in=(ScheduledMail.STATE_SCHEDULED, ScheduledMail.STATE_FAILED),
             rule__enabled=True,
             event__live=True,

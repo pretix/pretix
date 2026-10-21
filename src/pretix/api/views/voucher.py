@@ -40,6 +40,7 @@ with scopes_disabled():
     class VoucherFilter(FilterSet):
         active = BooleanFilter(method='filter_active')
         code = CharFilter(lookup_expr='iexact')
+        search = CharFilter(method='search_qs')
 
         class Meta:
             model = Voucher
@@ -53,6 +54,9 @@ with scopes_disabled():
             else:
                 return queryset.filter(Q(redeemed__gte=F('max_usages')) |
                                        (Q(valid_until__isnull=False) & Q(valid_until__lte=now())))
+
+        def search_qs(self, qs, name, value):
+            return qs.filter(Q(code__icontains=value) | Q(tag__icontains=value) | Q(comment__icontains=value))
 
 
 class VoucherViewSet(viewsets.ModelViewSet):

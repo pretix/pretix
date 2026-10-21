@@ -40,6 +40,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import ListView, TemplateView
+from django_otp import devices_for_user
 from django_otp.plugins.otp_static.models import StaticDevice
 from hijack import signals
 
@@ -107,6 +108,9 @@ class UserEditView(AdministratorPermissionRequiredMixin, RecentAuthenticationReq
         ctx['backend'] = (
             b[self.object.auth_backend].verbose_name if self.object.auth_backend in b else self.object.auth_backend
         )
+
+        ctx['devices'] = devices_for_user(self.object)
+
         return ctx
 
     def get_success_url(self):
@@ -177,6 +181,25 @@ class UserEmergencyTokenView(AdministratorPermissionRequiredMixin, RecentAuthent
             token=token.token
         ))
 
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('control:users.edit', kwargs=self.kwargs)
+
+
+class Reset2FADriftThrottleView(AdministratorPermissionRequiredMixin, RecentAuthenticationRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        return redirect(reverse('control:users.edit', kwargs=self.kwargs))
+
+    def post(self, request, *args, **kwargs):
+        self.object = get_object_or_404(User, pk=self.kwargs.get("id"))
+        self.object.totpdevice_set.update(drift=0, throttling_failure_timestamp=None, throttling_failure_count=0)
+        self.object.staticdevice_set.update(throttling_failure_timestamp=None, throttling_failure_count=0)
+        self.object.log_action('pretix.user.settings.2fa.resetdrift', user=self.request.user)
+        messages.success(request, _(
+            'The drift values for TOTP devices have been reset.'
+        ))
         return redirect(self.get_success_url())
 
     def get_success_url(self):

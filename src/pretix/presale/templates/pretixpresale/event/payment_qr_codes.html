@@ -3,7 +3,7 @@
 {% load escapejson %}
 
 {% if payment_qr_codes %}
-    <div class="tabcontainer col-md-6 col-sm-6 hidden-xs text-center js-only blank-after">
+    <div class="tabcontainer col-md-6 col-sm-6 col-xs-12 text-center js-only blank-after">
         <div id="banktransfer_qrcodes_tabs_content" class="tabpanels blank-after">
             {% for code_info in payment_qr_codes %}
                 <div id="banktransfer_qrcodes_{{ code_info.id }}"

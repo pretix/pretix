@@ -350,16 +350,22 @@ class WrappedPhonePrefixSelect(Select):
         return super().render(name, value or self.initial, *args, **kwargs)
 
     def get_context(self, name, value, attrs):
-        if value and self.choices[1][0] != value:
-            matching_choices = len([1 for p, c in self.choices if p == value])
+        # self.choices is lazy evaluated, needs to be realized to be modifiable
+        choices = list(self.choices)
+        if value and choices[1][0] != value:
+            matching_choices = len([1 for p, c in choices if p == value])
             if matching_choices > 1:
                 # Some countries share a phone prefix, for example +1 is used all over the Americas.
                 # This causes a UX problem: If the default value or the existing data is +12125552368,
                 # the widget will just show the first <option> entry with value="+1" as selected,
                 # which alphabetically is America Samoa, although most numbers statistically are from
-                # the US. As a workaround, we detect this case and add an aditional choice value with
+                # the US. As a workaround, we detect this case and add an additional choice value with
                 # just <option value="+1">+1</option> without an explicit country.
-                self.choices.insert(1, (value, value))
+                self.choices = [
+                    choices[0],
+                    (value, value),
+                    *choices[1:],
+                ]
         context = super().get_context(name, value, attrs)
         return context
 
@@ -594,12 +600,16 @@ class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileFiel
             image = ImageOps.exif_transpose(image)
 
             if f._cropdata:
-                image = image.crop((
-                    f._cropdata.get('x', 0),
-                    f._cropdata.get('y', 0),
-                    f._cropdata.get('x', 0) + f._cropdata.get('width', image.width),
-                    f._cropdata.get('y', 0) + f._cropdata.get('height', image.height),
-                ))
+                left = int(f._cropdata.get('x', 0))
+                top = int(f._cropdata.get('y', 0))
+                right = left + int(f._cropdata.get('width', image.width))
+                bottom = top + int(f._cropdata.get('height', image.height))
+                if left >= image.width or top >= image.height or right > image.width or bottom > image.height:
+                    raise ValidationError(
+                        self.error_messages['max_dimension'],
+                        code='max_dimension',
+                    )
+                image = image.crop((left, top, right, bottom))
                 with BytesIO() as output:
                     # This might use a lot of memory, but temporary files are not a good option since
                     # we don't control the cleanup
@@ -899,7 +909,7 @@ class BaseQuestionsForm(forms.Form):
             field.widget.attrs['data-question-dependency-values'] = escapejson_attr(json.dumps(q.dependency_values))
             if q.type != 'M':
                 field.widget.attrs['required'] = q.required and not self.all_optional
-                field._required = q.required and not self.all_optional
+            field._required = q.required and not self.all_optional
             field.required = False
         return field
 
@@ -1196,8 +1206,9 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
             return field
 
     def clean(self):
-        from pretix.base.addressvalidation import \
-            validate_address  # local import to prevent impact on startup time
+        from pretix.base.addressvalidation import (  # local import to prevent impact on startup time
+            validate_address,
+        )
 
         d = super().clean()
 
@@ -1438,8 +1449,9 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         self.fields['transmission_type'].widget.attrs['data-trigger-address-info'] = 'on'
 
     def clean(self):
-        from pretix.base.addressvalidation import \
-            validate_address  # local import to prevent impact on startup time
+        from pretix.base.addressvalidation import (  # local import to prevent impact on startup time
+            validate_address,
+        )
 
         data = self.cleaned_data
 
@@ -1493,11 +1505,12 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 "vat_id": _("This field is required.")
             })
 
-        if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
+        if self.validate_vat_id and self.instance.vat_id_validated and not any(v in self.changed_data for v in ('is_business', 'vat_id', 'country')):
             pass  # Skip re-validation if it is validated
         elif self.validate_vat_id and vat_id_applicable:
             try:
-                normalized_id = validate_vat_id(data.get('vat_id'), str(data.get('country')))
+                requester_id = self.request.event.settings.invoice_address_from_vat_id
+                normalized_id = validate_vat_id(data.get('vat_id'), str(data.get('country')), requester_id)
                 self.instance.vat_id_validated = bool(normalized_id)
                 self.instance.vat_id = data['vat_id'] = normalized_id
             except VATIDFinalError as e:

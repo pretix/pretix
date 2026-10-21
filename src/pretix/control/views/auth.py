@@ -35,6 +35,7 @@
 import base64
 import json
 import logging
+import math
 import time
 from urllib.parse import quote, urljoin, urlparse
 
@@ -50,11 +51,12 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
-from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _, ngettext
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
-from django_otp import match_token
+from django_otp import devices_for_user
 from django_otp.plugins.otp_static.models import StaticDevice
 from webauthn.helpers import generate_challenge
 
@@ -64,6 +66,7 @@ from pretix.base.forms.auth import (
 )
 from pretix.base.metrics import pretix_failed_logins, pretix_successful_logins
 from pretix.base.models import TeamInvite, U2FDevice, User, WebAuthnDevice
+from pretix.helpers import OF_SELF
 from pretix.helpers.http import get_client_ip, redirect_to_url
 from pretix.helpers.ratelimit import rate_limit, rate_limit_reset
 from pretix.helpers.security import handle_login_source, session_login
@@ -395,15 +398,17 @@ class Recover(TemplateView):
 
     def post(self, request, *args, **kwargs):
         if self.form.is_valid():
-            try:
-                user = User.objects.get(id=self.request.GET.get('id'), auth_backend='native')
-            except User.DoesNotExist:
-                return self.invalid('unknownuser')
-            if not default_token_generator.check_token(user, self.request.GET.get('token')):
-                return self.invalid('invalid')
-            user.set_password(self.form.cleaned_data['password'])
-            user.needs_password_change = False
-            user.save()
+            with transaction.atomic():
+                # Check token in transaction to prevent race condition
+                try:
+                    user = User.objects.select_for_update(of=OF_SELF).get(id=self.request.GET.get('id'), auth_backend='native')
+                except User.DoesNotExist:
+                    return self.invalid('unknownuser')
+                if not default_token_generator.check_token(user, self.request.GET.get('token')):
+                    return self.invalid('invalid')
+                user.set_password(self.form.cleaned_data['password'])
+                user.needs_password_change = False
+                user.save()
             messages.success(request, _('You can now login using your new password.'))
             user.log_action('pretix.control.auth.user.forgot_password.recovered')
 
@@ -460,6 +465,7 @@ class Login2FAView(TemplateView):
         token = request.POST.get('token', '').strip().replace(' ', '')
 
         valid = False
+        retry_after = None
         if 'webauthn_challenge' in self.request.session and token.startswith('{'):
             challenge = self.request.session['webauthn_challenge']
 
@@ -515,12 +521,28 @@ class Login2FAView(TemplateView):
                     valid = True
                     break
         else:
-            valid = match_token(self.user, token)
-            if isinstance(valid, StaticDevice):
+            with transaction.atomic():
+                for device in devices_for_user(self.user, for_verify=True):
+                    if isinstance(device, StaticDevice) and len(token) < 12:
+                        # If we enter a wrong TOTP token (which is 6 characters), do not even try if it is a valid
+                        # emergency token, which will only "lock up" the StaticDevice due to the throttling plugin
+                        # and just locks people out without security gain.
+                        continue
+                    if device.verify_token(token):
+                        valid = True
+                        break
+                    elif hasattr(device, 'verify_is_allowed'):
+                        verify_allowed, reason_dict = device.verify_is_allowed()
+                        if not verify_allowed:
+                            if not retry_after or reason_dict['locked_until'] > retry_after:
+                                retry_after = reason_dict['locked_until']
+                else:
+                    device = None
+
+            if isinstance(device, StaticDevice):
                 self.user.send_security_notice([
                     _("A recovery code for two-factor authentification was used to log in.")
                 ])
-
         if valid:
             logger.info(f"Backend login successful for user {self.user.pk} with 2FA.")
             pretix_successful_logins.inc(1)
@@ -533,7 +555,23 @@ class Login2FAView(TemplateView):
             return redirect('control:index')
         else:
             pretix_failed_logins.inc(1, reason="2fa")
-            messages.error(request, _('Invalid code, please try again.'))
+            msg = _('Invalid code, please try again.')
+            if retry_after:
+                seconds = (retry_after - now()).total_seconds()
+                minutes = seconds / 60
+                if minutes >= 1:
+                    msg = ngettext(
+                        'Invalid code. Please try again after waiting {value} minute.',
+                        'Invalid code. Please try again after waiting {value} minutes.',
+                        minutes,
+                    ).format(value=math.ceil(minutes))
+                elif seconds >= 1:
+                    msg = ngettext(
+                        'Invalid code. Please try again after waiting {value} second.',
+                        'Invalid code. Please try again after waiting {value} seconds.',
+                        seconds,
+                    ).format(value=math.ceil(seconds))
+            messages.error(request, msg)
             return redirect('control:auth.login.2fa')
 
     def get_context_data(self, **kwargs):

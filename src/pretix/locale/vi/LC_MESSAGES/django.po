@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-24 15:35+0000\n"
+"POT-Creation-Date: 2026-09-30 07:26+0000\n"
 "PO-Revision-Date: 2025-06-11 02:00+0000\n"
 "Last-Translator: Michael Dao <garudong89@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
@@ -198,7 +198,7 @@ msgid "Allowed Post Logout URIs list, space separated"
 msgstr "Danh sách URI Đăng xuất được cho phép, phân tách bằng dấu cách"
 
 #: pretix/api/models.py pretix/base/models/customers.py
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
+#: pretix/plugins/paypal2/payment.py
 msgid "Client ID"
 msgstr "ID người dùng"
 
@@ -1848,6 +1848,24 @@ msgstr "ID khớp thanh toán"
 msgid "Payment providers"
 msgstr "Nhà cung cấp thanh toán"
 
+#: pretix/base/exporters/invoices.py pretix/base/models/orders.py
+#, fuzzy
+#| msgid "Transaction time"
+msgid "Transmission type"
+msgstr "Thời gian giao dịch"
+
+#: pretix/base/exporters/invoices.py
+#, fuzzy
+#| msgid "Transaction time"
+msgid "Transmission status"
+msgstr "Thời gian giao dịch"
+
+#: pretix/base/exporters/invoices.py
+#, fuzzy
+#| msgid "Transaction time"
+msgid "Transmission date"
+msgstr "Thời gian giao dịch"
+
 #: pretix/base/exporters/invoices.py
 msgid "Cancellation"
 msgstr "Hủy bỏ"
@@ -2506,7 +2524,6 @@ msgstr "Sự kiện"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 #: pretix/plugins/banktransfer/refund_export.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html
@@ -2530,7 +2547,6 @@ msgstr "Dữ liệu cũ"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "Quantity"
 msgstr "Số lượng"
 
@@ -2618,7 +2634,6 @@ msgstr "Đặt hàng"
 
 #: pretix/base/exporters/orderlist.py
 #: pretix/control/templates/pretixcontrol/search/payments.html
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
 msgid "Payment ID"
 msgstr "ID thanh toán"
@@ -4477,6 +4492,12 @@ msgstr "Ngày thiết lập"
 msgid "Initialization date"
 msgstr "Ngày khởi tạo"
 
+#: pretix/base/models/devices.py
+#, fuzzy
+#| msgid "Save to profile"
+msgid "Security profile"
+msgstr "Lưu vào hồ sơ"
+
 #: pretix/base/models/discount.py
 msgctxt "subevent"
 msgid "Dates can be mixed without limitation"
@@ -5857,6 +5878,12 @@ msgid "Maximum value"
 msgstr "Giá trị tối đa"
 
 #: pretix/base/models/items.py
+#, fuzzy
+#| msgid "Maximum length"
+msgid "Minimum length"
+msgstr "Chiều dài tối đa"
+
+#: pretix/base/models/items.py
 msgid "Maximum length"
 msgstr "Chiều dài tối đa"
 
@@ -5921,6 +5948,12 @@ msgstr "Ngày tối đa không được trước giá trị tối thiểu."
 
 #: pretix/base/models/items.py
 msgid "The maximum value must not be lower than the minimum value."
+msgstr "Giá trị tối đa không được thấp hơn giá trị tối thiểu."
+
+#: pretix/base/models/items.py
+#, fuzzy
+#| msgid "The maximum value must not be lower than the minimum value."
+msgid "The maximum length must not be shorter than the minimum length."
 msgstr "Giá trị tối đa không được thấp hơn giá trị tối thiểu."
 
 #: pretix/base/models/items.py
@@ -6450,12 +6483,6 @@ msgstr "Khách hàng kinh doanh"
 msgid "This reference will be printed on your invoice for your convenience."
 msgstr ""
 "Tài liệu tham khảo này sẽ được in trên hóa đơn của bạn để thuận tiện cho bạn."
-
-#: pretix/base/models/orders.py
-#, fuzzy
-#| msgid "Transaction time"
-msgid "Transmission type"
-msgstr "Thời gian giao dịch"
 
 #: pretix/base/models/orders.py
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html
@@ -10286,6 +10313,19 @@ msgstr ""
 "'hết hạn' miễn là có đủ công suất."
 
 #: pretix/base/settings.py
+#, fuzzy
+#| msgid "Generate invoices for Sales channels"
+msgid "Allow postponed payment choice for sales channels"
+msgstr "Tạo hóa đơn cho các kênh bán hàng"
+
+#: pretix/base/settings.py
+msgid ""
+"If postponed payment is allowed on a sales channel, customers can complete "
+"their order without selecting a payment method. This is useful whenever "
+"orders are not created by the same person who is making the payment."
+msgstr ""
+
+#: pretix/base/settings.py
 msgid "Show start date"
 msgstr "Hiển thị ngày bắt đầu"
 
@@ -10867,14 +10907,6 @@ msgstr ""
 #: pretix/base/settings.py
 msgid "Hide all unavailable dates from calendar or list views"
 msgstr "Ẩn tất cả các ngày không có sẵn từ Lịch hoặc Danh sách lượt xem"
-
-#: pretix/base/settings.py
-msgid ""
-"This option currently only affects the calendar of this event series, not "
-"the organizer-wide calendar."
-msgstr ""
-"Tùy chọn này hiện chỉ ảnh hưởng đến lịch của chuỗi sự kiện này, không phải "
-"là lịch toàn bộ tổ chức."
 
 #: pretix/base/settings.py
 msgid "Hide all past dates from calendar"
@@ -15992,6 +16024,11 @@ msgstr "Thứ ba"
 
 #: pretix/control/forms/rrule.py
 msgctxt "rrule"
+msgid "fourth"
+msgstr ""
+
+#: pretix/control/forms/rrule.py
+msgctxt "rrule"
 msgid "last"
 msgstr "Cuối cùng"
 
@@ -17074,6 +17111,30 @@ msgid "Queued emails have been aborted."
 msgstr "Các chi tiết sự kiện đã được thay đổi."
 
 #: pretix/control/logdisplay.py
+#, fuzzy
+#| msgid "The property has been created."
+msgid "An organizer meta property has been created."
+msgstr "Tài sản đã được tạo ra."
+
+#: pretix/control/logdisplay.py
+#, fuzzy
+#| msgid "The selected property has been deleted."
+msgid "An organizer meta property has been deleted."
+msgstr "Thuộc tính được chọn đã bị xóa."
+
+#: pretix/control/logdisplay.py
+#, fuzzy
+#| msgid "The organizer has been changed."
+msgid "An organizer meta property has been changed."
+msgstr "Người tổ chức đã được thay đổi."
+
+#: pretix/control/logdisplay.py
+#, fuzzy
+#| msgid "The product has been reordered."
+msgid "An organizer meta property has been reordered."
+msgstr "Sản phẩm đã được sắp xếp lại."
+
+#: pretix/control/logdisplay.py
 msgid "Gift card acceptance for another organizer has been added."
 msgstr "Chấp nhận thẻ quà tặng cho một người tổ chức khác đã được thêm vào."
 
@@ -17280,6 +17341,10 @@ msgstr "Mã khẩn cấp hai yếu tố của bạn đã được tái sinh."
 #: pretix/control/logdisplay.py
 msgid "A two-factor emergency code has been generated."
 msgstr "Mã khẩn cấp hai yếu tố đã được tạo ra."
+
+#: pretix/control/logdisplay.py
+msgid "Drift and throttle values for two-factor devices have been reset."
+msgstr ""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -18141,6 +18206,89 @@ msgid ""
 msgstr "Ứng dụng này có <strong> không </strong> đã được nhóm Pretix xem xét."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
+#: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
+#: pretix/control/templates/pretixcontrol/checkin/list_delete.html
+#: pretix/control/templates/pretixcontrol/checkin/reset.html
+#: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#: pretix/control/templates/pretixcontrol/event/tax_delete.html
+#: pretix/control/templates/pretixcontrol/item/delete.html
+#: pretix/control/templates/pretixcontrol/items/category_delete.html
+#: pretix/control/templates/pretixcontrol/items/discount_delete.html
+#: pretix/control/templates/pretixcontrol/items/question_delete.html
+#: pretix/control/templates/pretixcontrol/items/quota_delete.html
+#: pretix/control/templates/pretixcontrol/items/quota_delete_bulk.html
+#: pretix/control/templates/pretixcontrol/oauth/app_delete.html
+#: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html
+#: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html
+#: pretix/control/templates/pretixcontrol/order/change.html
+#: pretix/control/templates/pretixcontrol/order/change_contact.html
+#: pretix/control/templates/pretixcontrol/order/change_locale.html
+#: pretix/control/templates/pretixcontrol/order/change_questions.html
+#: pretix/control/templates/pretixcontrol/order/extend.html
+#: pretix/control/templates/pretixcontrol/order/pay.html
+#: pretix/control/templates/pretixcontrol/order/pay_complete.html
+#: pretix/control/templates/pretixcontrol/order/reactivate.html
+#: pretix/control/templates/pretixcontrol/order/refund_choose.html
+#: pretix/control/templates/pretixcontrol/order/refund_done.html
+#: pretix/control/templates/pretixcontrol/order/refund_process.html
+#: pretix/control/templates/pretixcontrol/order/refund_start.html
+#: pretix/control/templates/pretixcontrol/orders/bulk_action.html
+#: pretix/control/templates/pretixcontrol/orders/export_delete.html
+#: pretix/control/templates/pretixcontrol/orders/refunds.html
+#: pretix/control/templates/pretixcontrol/organizers/channel_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html
+#: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/device_revoke.html
+#: pretix/control/templates/pretixcontrol/organizers/export_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/gate_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/property_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/team_delete.html
+#: pretix/control/templates/pretixcontrol/pdf/index.html
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html
+#: pretix/control/templates/pretixcontrol/subevents/delete.html
+#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html
+#: pretix/control/templates/pretixcontrol/subevents/edit.html
+#: pretix/control/templates/pretixcontrol/user/2fa_delete.html
+#: pretix/control/templates/pretixcontrol/user/2fa_disable.html
+#: pretix/control/templates/pretixcontrol/user/2fa_enable.html
+#: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html
+#: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html
+#: pretix/control/templates/pretixcontrol/user/change_email.html
+#: pretix/control/templates/pretixcontrol/user/change_password.html
+#: pretix/control/templates/pretixcontrol/user/confirmation_code_dialog.html
+#: pretix/control/templates/pretixcontrol/vouchers/delete.html
+#: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html
+#: pretix/control/templates/pretixcontrol/waitinglist/delete.html
+#: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html
+#: pretix/control/templates/pretixcontrol/waitinglist/edit.html
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html
+#: pretix/plugins/badges/templates/pretixplugins/badges/delete.html
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html
+#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html
+#: pretix/presale/templates/pretixpresale/event/order_change.html
+#: pretix/presale/templates/pretixpresale/event/order_modify.html
+#: pretix/presale/templates/pretixpresale/event/order_pay.html
+#: pretix/presale/templates/pretixpresale/event/order_pay_change.html
+#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html
+#: pretix/presale/templates/pretixpresale/event/position_change.html
+#: pretix/presale/templates/pretixpresale/event/position_modify.html
+msgid "Cancel"
+msgstr "Huỷ"
+
+#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
+#, fuzzy
+#| msgid "Authorized apps"
+msgid "Authorize"
+msgstr "Ứng dụng ủy quyền"
+
+#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 msgid "Error:"
 msgstr "Lỗi:"
 
@@ -18517,82 +18665,6 @@ msgid_plural ""
 "Are you sure you want to permanently delete the check-ins of "
 "<strong>%(count)s tickets</strong>?"
 msgstr[0] ""
-
-#: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
-#: pretix/control/templates/pretixcontrol/checkin/list_delete.html
-#: pretix/control/templates/pretixcontrol/checkin/reset.html
-#: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
-#: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#: pretix/control/templates/pretixcontrol/event/tax_delete.html
-#: pretix/control/templates/pretixcontrol/item/delete.html
-#: pretix/control/templates/pretixcontrol/items/category_delete.html
-#: pretix/control/templates/pretixcontrol/items/discount_delete.html
-#: pretix/control/templates/pretixcontrol/items/question_delete.html
-#: pretix/control/templates/pretixcontrol/items/quota_delete.html
-#: pretix/control/templates/pretixcontrol/items/quota_delete_bulk.html
-#: pretix/control/templates/pretixcontrol/oauth/app_delete.html
-#: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html
-#: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html
-#: pretix/control/templates/pretixcontrol/order/change.html
-#: pretix/control/templates/pretixcontrol/order/change_contact.html
-#: pretix/control/templates/pretixcontrol/order/change_locale.html
-#: pretix/control/templates/pretixcontrol/order/change_questions.html
-#: pretix/control/templates/pretixcontrol/order/extend.html
-#: pretix/control/templates/pretixcontrol/order/pay.html
-#: pretix/control/templates/pretixcontrol/order/pay_complete.html
-#: pretix/control/templates/pretixcontrol/order/reactivate.html
-#: pretix/control/templates/pretixcontrol/order/refund_choose.html
-#: pretix/control/templates/pretixcontrol/order/refund_done.html
-#: pretix/control/templates/pretixcontrol/order/refund_process.html
-#: pretix/control/templates/pretixcontrol/order/refund_start.html
-#: pretix/control/templates/pretixcontrol/orders/bulk_action.html
-#: pretix/control/templates/pretixcontrol/orders/export_delete.html
-#: pretix/control/templates/pretixcontrol/orders/refunds.html
-#: pretix/control/templates/pretixcontrol/organizers/channel_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html
-#: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/device_revoke.html
-#: pretix/control/templates/pretixcontrol/organizers/export_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/gate_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/property_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/team_delete.html
-#: pretix/control/templates/pretixcontrol/pdf/index.html
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html
-#: pretix/control/templates/pretixcontrol/subevents/delete.html
-#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html
-#: pretix/control/templates/pretixcontrol/subevents/edit.html
-#: pretix/control/templates/pretixcontrol/user/2fa_delete.html
-#: pretix/control/templates/pretixcontrol/user/2fa_disable.html
-#: pretix/control/templates/pretixcontrol/user/2fa_enable.html
-#: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html
-#: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html
-#: pretix/control/templates/pretixcontrol/user/change_email.html
-#: pretix/control/templates/pretixcontrol/user/change_password.html
-#: pretix/control/templates/pretixcontrol/user/confirmation_code_dialog.html
-#: pretix/control/templates/pretixcontrol/vouchers/delete.html
-#: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html
-#: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html
-#: pretix/control/templates/pretixcontrol/waitinglist/delete.html
-#: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html
-#: pretix/control/templates/pretixcontrol/waitinglist/edit.html
-#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html
-#: pretix/plugins/badges/templates/pretixplugins/badges/delete.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html
-#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html
-#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html
-#: pretix/presale/templates/pretixpresale/event/order_change.html
-#: pretix/presale/templates/pretixpresale/event/order_modify.html
-#: pretix/presale/templates/pretixpresale/event/order_pay.html
-#: pretix/presale/templates/pretixpresale/event/order_pay_change.html
-#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html
-#: pretix/presale/templates/pretixpresale/event/position_change.html
-#: pretix/presale/templates/pretixpresale/event/position_modify.html
-msgid "Cancel"
-msgstr "Huỷ"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
@@ -20903,8 +20975,12 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
+#, fuzzy
+#| msgid ""
+#| "We strongly recommend against using short forms of more then 16 "
+#| "characters."
 msgid ""
-"We strongly recommend against using short forms of more then 16 characters."
+"We strongly recommend against using short forms of more than 16 characters."
 msgstr "Chúng tôi thực sự khuyên bạn nên sử dụng các dạng ngắn hơn 16 ký tự."
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
@@ -26299,6 +26375,7 @@ msgid "Add a new device"
 msgstr "Thêm một thiết bị mới"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html
+#: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Emergency tokens"
 msgstr "Mã thông báo khẩn cấp"
 
@@ -26558,6 +26635,28 @@ msgstr "Người dùng mạo danh"
 #: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Authentication backend"
 msgstr "phụ trợ xác thực"
+
+#: pretix/control/templates/pretixcontrol/users/form.html
+msgid "Reset drift and throttle"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/users/form.html
+#, fuzzy
+#| msgid "Disable two-factor authentication"
+msgid "Available two-factor authentication methods"
+msgstr "Vô hiệu hóa xác thực hai yếu tố"
+
+#: pretix/control/templates/pretixcontrol/users/form.html
+#, fuzzy, python-format
+#| msgid "Expired since"
+msgid "1 failed attempt since %(date)s"
+msgid_plural "%(cnt)s failed attempts since %(date)s"
+msgstr[0] "đã hết hạn kể từ đó"
+
+#: pretix/control/templates/pretixcontrol/users/form.html
+#, fuzzy, python-format
+msgid "Currently locked until %(date)s"
+msgstr "hợp lệ cho đến %(DateTime) s"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Team memberships"
@@ -27060,6 +27159,20 @@ msgstr "Xác thực hai yếu tố được yêu cầu để đăng nhập"
 #: pretix/control/views/auth.py
 msgid "Invalid code, please try again."
 msgstr "Mã không hợp lệ, vui lòng thử lại."
+
+#: pretix/control/views/auth.py
+#, fuzzy, python-brace-format
+#| msgid "Invalid code, please try again."
+msgid "Invalid code. Please try again after waiting {value} minute."
+msgid_plural "Invalid code. Please try again after waiting {value} minutes."
+msgstr[0] "Mã không hợp lệ, vui lòng thử lại."
+
+#: pretix/control/views/auth.py
+#, fuzzy, python-brace-format
+#| msgid "Invalid code, please try again."
+msgid "Invalid code. Please try again after waiting {value} second."
+msgid_plural "Invalid code. Please try again after waiting {value} seconds."
+msgstr[0] "Mã không hợp lệ, vui lòng thử lại."
 
 #: pretix/control/views/checkin.py
 msgid "The selected check-ins have been reverted."
@@ -27909,6 +28022,13 @@ msgstr ""
 "Bạn đã nhập một đơn đặt hàng trong một sự kiện với một loại tiền tệ khác."
 
 #: pretix/control/views/orders.py
+#, fuzzy
+#| msgid "You entered an order in an event with a different currency."
+msgid "You entered an order in an event that you do not have access to."
+msgstr ""
+"Bạn đã nhập một đơn đặt hàng trong một sự kiện với một loại tiền tệ khác."
+
+#: pretix/control/views/orders.py
 msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
@@ -27922,6 +28042,11 @@ msgid ""
 msgstr ""
 "Bạn đã chọn một khoản hoàn trả một phần cho một phương thức thanh toán chỉ "
 "hỗ trợ hoàn tiền đầy đủ."
+
+#: pretix/control/views/orders.py
+msgid "The refunds you selected do not match the selected total refund amount."
+msgstr ""
+"Các khoản hoàn trả bạn đã chọn không khớp với tổng số tiền hoàn lại đã chọn."
 
 #: pretix/control/views/orders.py
 #, fuzzy, python-brace-format
@@ -27967,11 +28092,6 @@ msgid ""
 "Your {event} team"
 msgstr ""
 "Xin chào,  n  nwe đã hoàn trả cho bạn {số tiền} cho đơn đặt hàng của bạn."
-
-#: pretix/control/views/orders.py
-msgid "The refunds you selected do not match the selected total refund amount."
-msgstr ""
-"Các khoản hoàn trả bạn đã chọn không khớp với tổng số tiền hoàn lại đã chọn."
 
 #: pretix/control/views/orders.py
 msgid "The payment has been created successfully."
@@ -28752,6 +28872,12 @@ msgid ""
 msgstr "Mã thông báo khẩn cấp cho người dùng này là  \"{mã thông báo} \"."
 
 #: pretix/control/views/users.py
+#, fuzzy
+#| msgid "The password has been reset."
+msgid "The drift values for TOTP devices have been reset."
+msgstr "Mật khẩu đã được đặt lại."
+
+#: pretix/control/views/users.py
 msgid "The new user has been created."
 msgstr "Người dùng mới đã được tạo."
 
@@ -28762,6 +28888,14 @@ msgstr "Hạn ngạch dự trữ"
 #: pretix/control/views/vouchers.py
 msgid "Bypass quota"
 msgstr "Hạn ngạch bỏ qua"
+
+#: pretix/control/views/vouchers.py
+msgid "Budget"
+msgstr ""
+
+#: pretix/control/views/vouchers.py
+msgid "Budget used"
+msgstr ""
 
 #: pretix/control/views/vouchers.py
 msgid "The requested voucher does not exist."
@@ -28926,12 +29060,11 @@ msgstr "Nhận phòng tự động"
 
 #: pretix/plugins/autocheckin/apps.py pretix/plugins/badges/apps.py
 #: pretix/plugins/banktransfer/apps.py pretix/plugins/checkinlists/apps.py
-#: pretix/plugins/manualpayment/apps.py pretix/plugins/paypal/apps.py
-#: pretix/plugins/paypal2/apps.py pretix/plugins/pretixdroid/apps.py
-#: pretix/plugins/reports/apps.py pretix/plugins/returnurl/apps.py
-#: pretix/plugins/sendmail/apps.py pretix/plugins/statistics/apps.py
-#: pretix/plugins/stripe/apps.py pretix/plugins/ticketoutputpdf/apps.py
-#: pretix/plugins/webcheckin/apps.py
+#: pretix/plugins/manualpayment/apps.py pretix/plugins/paypal2/apps.py
+#: pretix/plugins/pretixdroid/apps.py pretix/plugins/reports/apps.py
+#: pretix/plugins/returnurl/apps.py pretix/plugins/sendmail/apps.py
+#: pretix/plugins/statistics/apps.py pretix/plugins/stripe/apps.py
+#: pretix/plugins/ticketoutputpdf/apps.py pretix/plugins/webcheckin/apps.py
 msgid "the pretix team"
 msgstr "Nhóm Pretix"
 
@@ -29510,7 +29643,6 @@ msgstr "Đầu vào của bạn không hợp lệ, vui lòng xem bên dưới đ
 #: pretix/plugins/banktransfer/refund_export.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
 msgid "Payer"
@@ -30047,8 +30179,7 @@ msgstr "Kiểm tra"
 msgid "Automatically checked in"
 msgstr "Tự động đăng ký"
 
-#: pretix/plugins/checkinlists/exporters.py pretix/plugins/paypal/payment.py
-#: pretix/plugins/paypal2/payment.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/paypal2/payment.py
 msgid "Secret"
 msgstr "Bí mật"
 
@@ -30110,164 +30241,6 @@ msgid "A fully customizable payment method for manual processing."
 msgstr ""
 "Một phương thức thanh toán hoàn toàn có thể tùy chỉnh để xử lý thủ công."
 
-#: pretix/plugins/paypal/apps.py pretix/plugins/paypal/payment.py
-#: pretix/plugins/paypal2/apps.py pretix/plugins/paypal2/payment.py
-#: pretix/plugins/stripe/payment.py
-msgid "PayPal"
-msgstr "PayPal"
-
-#: pretix/plugins/paypal/apps.py
-msgid ""
-"Accept payments with your PayPal account. PayPal is one of the most popular "
-"payment methods world-wide."
-msgstr "Chấp nhận thanh toán bằng tài khoản PayPal của bạn."
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid ""
-"The PayPal sandbox is being used, you can test without actually sending "
-"money but you will need a PayPal sandbox user to log in."
-msgstr ""
-"Hộp cát PayPal đang được sử dụng, bạn có thể kiểm tra mà không thực sự gửi "
-"tiền nhưng bạn sẽ cần người dùng hộp cát PayPal để đăng nhập."
-
-#: pretix/plugins/paypal/payment.py
-msgid "PayPal account"
-msgstr "Tài khoản PayPal"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "Click here for a tutorial on how to obtain the required keys"
-msgstr "Bấm vào đây để hướng dẫn về cách lấy các khóa cần thiết"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-#: pretix/plugins/stripe/payment.py
-msgid "Endpoint"
-msgstr "Điểm cuối"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "Reference prefix"
-msgstr "Tiền tố tham khảo"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid ""
-"Any value entered here will be added in front of the regular booking "
-"reference containing the order number."
-msgstr ""
-"Bất kỳ giá trị nào được nhập vào đây sẽ được thêm vào phía trước tham chiếu "
-"đặt phòng thông thường có chứa số đặt hàng."
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "Reference postfix"
-msgstr "Postfix tham chiếu"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid ""
-"Any value entered here will be added behind the regular booking reference "
-"containing the order number."
-msgstr ""
-"Bất kỳ giá trị nào được nhập vào đây sẽ được thêm vào phía sau tham chiếu "
-"đặt phòng thông thường có chứa số đơn đặt hàng."
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "Disconnect from PayPal"
-msgstr "Ngắt kết nối với PayPal"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "We had trouble communicating with PayPal"
-msgstr "Chúng tôi gặp khó khăn khi giao tiếp với PayPal"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid ""
-"We were unable to process your payment. See below for details on how to "
-"proceed."
-msgstr "Chúng tôi không thể xử lý thanh toán của bạn."
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid ""
-"PayPal has not yet approved the payment. We will inform you as soon as the "
-"payment completed."
-msgstr "PayPal chưa chấp thuận thanh toán."
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-#, python-brace-format
-msgid "Refunding the amount via PayPal failed: {}"
-msgstr "Hoàn trả số tiền qua PayPal không thành công: {}"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "The payment for this invoice has already been received."
-msgstr "Khoản thanh toán cho hóa đơn này đã được nhận."
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "PayPal payment ID"
-msgstr "ID thanh toán PayPal"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "PayPal sale ID"
-msgstr "ID bán PayPal"
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
-msgid ""
-"The total amount listed above will be withdrawn from your PayPal account "
-"after the confirmation of your purchase."
-msgstr ""
-"Tổng số tiền được liệt kê ở trên sẽ được rút khỏi tài khoản PayPal của bạn "
-"sau khi xác nhận mua hàng của bạn."
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html
-msgid ""
-"After you clicked continue, we will redirect you to PayPal to fill in your "
-"payment details. You will then be redirected back here to review and confirm "
-"your order."
-msgstr ""
-"Sau khi bạn nhấp vào Tiếp tục, chúng tôi sẽ chuyển hướng bạn đến PayPal để "
-"điền vào chi tiết thanh toán của bạn."
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
-msgid "Sale ID"
-msgstr "ID bán"
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
-msgid "Last update"
-msgstr "Cập nhật lần cuối"
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html
-msgid "Total value"
-msgstr "Tổng giá trị"
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html
-msgid ""
-"Our attempt to execute your Payment via PayPal has failed. Please try again "
-"or contact us."
-msgstr ""
-"Nỗ lực của chúng tôi để thực hiện thanh toán của bạn thông qua PayPal đã "
-"thất bại."
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
-msgid ""
-"We're waiting for an answer from PayPal regarding your payment. Please "
-"contact us, if this takes more than a few hours."
-msgstr "Chúng tôi đang chờ câu trả lời từ PayPal về khoản thanh toán của bạn."
-
-#: pretix/plugins/paypal/views.py pretix/plugins/paypal2/views.py
-msgid "Invalid response from PayPal received."
-msgstr "Phản hồi không hợp lệ từ PayPal nhận được."
-
-#: pretix/plugins/paypal/views.py pretix/plugins/paypal2/views.py
-msgid "It looks like you canceled the PayPal payment"
-msgstr "Có vẻ như bạn đã hủy thanh toán PayPal"
-
-#: pretix/plugins/paypal/views.py pretix/plugins/paypal2/views.py
-msgid "Your PayPal account has been disconnected."
-msgstr "Tài khoản PayPal của bạn đã bị ngắt kết nối."
-
 #: pretix/plugins/paypal2/apps.py
 msgid ""
 "Accept payments with your PayPal account. In addition to regular PayPal "
@@ -30277,9 +30250,22 @@ msgid ""
 "methods world-wide."
 msgstr "Chấp nhận thanh toán bằng tài khoản PayPal của bạn."
 
+#: pretix/plugins/paypal2/apps.py pretix/plugins/paypal2/payment.py
+#: pretix/plugins/stripe/payment.py
+msgid "PayPal"
+msgstr "PayPal"
+
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal Merchant ID"
 msgstr "ID thương gia PayPal"
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Click here for a tutorial on how to obtain the required keys"
+msgstr "Bấm vào đây để hướng dẫn về cách lấy các khóa cần thiết"
+
+#: pretix/plugins/paypal2/payment.py pretix/plugins/stripe/payment.py
+msgid "Endpoint"
+msgstr "Điểm cuối"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -30361,6 +30347,30 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/paypal2/payment.py
+msgid "Reference prefix"
+msgstr "Tiền tố tham khảo"
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"Any value entered here will be added in front of the regular booking "
+"reference containing the order number."
+msgstr ""
+"Bất kỳ giá trị nào được nhập vào đây sẽ được thêm vào phía trước tham chiếu "
+"đặt phòng thông thường có chứa số đặt hàng."
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Reference postfix"
+msgstr "Postfix tham chiếu"
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"Any value entered here will be added behind the regular booking reference "
+"containing the order number."
+msgstr ""
+"Bất kỳ giá trị nào được nhập vào đây sẽ được thêm vào phía sau tham chiếu "
+"đặt phòng thông thường có chứa số đơn đặt hàng."
+
+#: pretix/plugins/paypal2/payment.py
 msgid "-- Automatic --"
 msgstr "-Tự động-"
 
@@ -30380,6 +30390,10 @@ msgstr ""
 #, python-brace-format
 msgid "Connect with {icon} PayPal"
 msgstr "Kết nối với {icon} paypal"
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Disconnect from PayPal"
+msgstr "Ngắt kết nối với PayPal"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -30418,12 +30432,24 @@ msgid "An error occurred during connecting with PayPal, please try again."
 msgstr "Đã xảy ra lỗi trong quá trình kết nối với PayPal, vui lòng thử lại."
 
 #: pretix/plugins/paypal2/payment.py
+msgid ""
+"The PayPal sandbox is being used, you can test without actually sending "
+"money but you will need a PayPal sandbox user to log in."
+msgstr ""
+"Hộp cát PayPal đang được sử dụng, bạn có thể kiểm tra mà không thực sự gửi "
+"tiền nhưng bạn sẽ cần người dùng hộp cát PayPal để đăng nhập."
+
+#: pretix/plugins/paypal2/payment.py
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
 msgid ""
 "Your payment has failed due to a known issue within PayPal. Please try "
 "again, there is a high chance of the payment succeeding on a second or third "
 "attempt. You can also try other payment methods, if available."
 msgstr "Thanh toán của bạn đã thất bại do một vấn đề đã biết trong PayPal."
+
+#: pretix/plugins/paypal2/payment.py
+msgid "We had trouble communicating with PayPal"
+msgstr "Chúng tôi gặp khó khăn khi giao tiếp với PayPal"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -30436,11 +30462,40 @@ msgstr "Bạn có thể cần kích hoạt JavaScript cho thanh toán PayPal."
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
+"We were unable to process your payment. See below for details on how to "
+"proceed."
+msgstr "Chúng tôi không thể xử lý thanh toán của bạn."
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"PayPal has not yet approved the payment. We will inform you as soon as the "
+"payment completed."
+msgstr "PayPal chưa chấp thuận thanh toán."
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
 "Refunding the amount via PayPal failed: The original payment does not "
 "contain the required information to issue an automated refund."
 msgstr ""
 "Hoàn trả số tiền thông qua PayPal không thành công: Khoản thanh toán ban đầu "
 "không chứa thông tin cần thiết để cấp tiền hoàn lại tự động."
+
+#: pretix/plugins/paypal2/payment.py
+#, python-brace-format
+msgid "Refunding the amount via PayPal failed: {}"
+msgstr "Hoàn trả số tiền qua PayPal không thành công: {}"
+
+#: pretix/plugins/paypal2/payment.py
+msgid "The payment for this invoice has already been received."
+msgstr "Khoản thanh toán cho hóa đơn này đã được nhận."
+
+#: pretix/plugins/paypal2/payment.py
+msgid "PayPal payment ID"
+msgstr "ID thanh toán PayPal"
+
+#: pretix/plugins/paypal2/payment.py
+msgid "PayPal sale ID"
+msgstr "ID bán PayPal"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal APM"
@@ -30537,6 +30592,14 @@ msgstr ""
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
 msgid ""
+"The total amount listed above will be withdrawn from your PayPal account "
+"after the confirmation of your purchase."
+msgstr ""
+"Tổng số tiền được liệt kê ở trên sẽ được rút khỏi tài khoản PayPal của bạn "
+"sau khi xác nhận mua hàng của bạn."
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
+msgid ""
 "After placing your order, you will be able to select your desired payment "
 "method, including PayPal."
 msgstr ""
@@ -30577,6 +30640,11 @@ msgstr ""
 "bại."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
+msgid "Sale ID"
+msgstr "ID bán"
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 msgid "Capture status"
 msgstr "Trạng thái chụp"
 
@@ -30585,6 +30653,17 @@ msgid ""
 "This payment is being reviewed by PayPal. Until the review is lifted, the "
 "money will not be disbursed and the order remain in its pending state."
 msgstr "Khoản thanh toán này đang được PayPal xem xét."
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
+msgid "Last update"
+msgstr "Cập nhật lần cuối"
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html
+msgid "Total value"
+msgstr "Tổng giá trị"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html
@@ -30619,6 +30698,12 @@ msgid ""
 "to resolve this case."
 msgstr ""
 
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
+msgid ""
+"We're waiting for an answer from PayPal regarding your payment. Please "
+"contact us, if this takes more than a few hours."
+msgstr "Chúng tôi đang chờ câu trả lời từ PayPal về khoản thanh toán của bạn."
+
 #: pretix/plugins/paypal2/views.py
 msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
@@ -30648,6 +30733,18 @@ msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr "Tài khoản PayPal của bạn hiện được kết nối với Pretix."
+
+#: pretix/plugins/paypal2/views.py
+msgid "Invalid response from PayPal received."
+msgstr "Phản hồi không hợp lệ từ PayPal nhận được."
+
+#: pretix/plugins/paypal2/views.py
+msgid "It looks like you canceled the PayPal payment"
+msgstr "Có vẻ như bạn đã hủy thanh toán PayPal"
+
+#: pretix/plugins/paypal2/views.py
+msgid "Your PayPal account has been disconnected."
+msgstr "Tài khoản PayPal của bạn đã bị ngắt kết nối."
 
 #: pretix/plugins/pretixdroid/apps.py
 msgid "Old check-in device API"
@@ -32841,7 +32938,6 @@ msgstr ""
 #: pretix/presale/forms/order.py
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "plus taxes"
 msgstr "cộng với thuế"
 
@@ -33306,6 +33402,35 @@ msgstr ""
 "Vui lòng truy cập cài đặt thanh toán và kích hoạt một hoặc nhiều nhà cung "
 "cấp thanh toán."
 
+#: pretix/presale/templates/pretixpresale/event/checkout_payment.html
+msgid ""
+"Not sure yet? You can complete your order first and then select a payment "
+"method later."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/checkout_payment.html
+msgid ""
+"To do so, please first remove the payment methods you already selected above."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/checkout_payment.html
+#, fuzzy, python-format
+#| msgid "Your event needs to be over to use this feature."
+msgid "Your payment needs to be completed within %(minutes)s minutes."
+msgstr "Sự kiện của bạn cần phải kết thúc để sử dụng tính năng này."
+
+#: pretix/presale/templates/pretixpresale/event/checkout_payment.html
+#, fuzzy, python-format
+#| msgid "Your event needs to be over to use this feature."
+msgid "Your payment needs to be completed by %(deadline)s."
+msgstr "Sự kiện của bạn cần phải kết thúc để sử dụng tính năng này."
+
+#: pretix/presale/templates/pretixpresale/event/checkout_payment.html
+#, fuzzy
+#| msgid "Proceed with checkout"
+msgid "Proceed without selection"
+msgstr "Tiến hành thanh toán"
+
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html
 msgid "Before we continue, we need you to answer some questions."
 msgstr ""
@@ -33378,14 +33503,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, fuzzy, python-format
 msgid "minimum amount to order: %(num)s"
 msgstr "Số tiền tối thiểu để đặt hàng: %(num) s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgctxt "price"
 msgid "free"
 msgstr "Miễn phí"
@@ -33414,66 +33537,56 @@ msgstr "ẩn các biến thể"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "Original price:"
 msgstr "Giá gốc:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "New price:"
 msgstr "Giá mới:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, fuzzy, python-format
 msgid "Modify price for %(item)s, at least %(price)s"
 msgstr "sửa đổi giá cho %(mặt hàng) s, ít nhất là %(giá) s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, fuzzy, python-format
 msgid "Modify price for %(item)s"
 msgstr "sửa đổi giá cho %(mục) s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "incl. taxes"
 msgstr "Bao gồm."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, fuzzy, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(name)s"
 msgstr "<strong> plus </strong> %(tỷ lệ) s %% %(tên) s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, fuzzy, python-format
 msgid "incl. %(rate)s%% %(name)s"
 msgstr "Bao gồm."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgctxt "checkbox"
 msgid "Select"
 msgstr "Chọn"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "Decrease quantity"
 msgstr "Giảm số lượng"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "Increase quantity"
 msgstr "Tăng số lượng"
 
@@ -33948,12 +34061,10 @@ msgid "Your order qualifies for a discount"
 msgstr "Đơn hàng của bạn đủ điều kiện để giảm giá"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "Uncategorized items"
 msgstr "Các mặt hàng chưa được phân loại"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, fuzzy, python-format
 msgid "Show full-size image of %(item)s"
 msgstr "Hiển thị hình ảnh kích thước đầy đủ của %(mục) s"
@@ -33966,19 +34077,16 @@ msgid_plural "%(amount)s× in your cart"
 msgstr[0] "Không có sản phẩm"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, fuzzy, python-format
 msgid "%(value)s incl. taxes"
 msgstr "%(giá trị) s bao gồm."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, fuzzy, python-format
 msgid "%(value)s without taxes"
 msgstr "%(giá trị) s không có thuế"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, fuzzy, python-format
 msgid "Set price in %(currency)s for %(item)s"
 msgstr "Đặt giá tính theo %(tiền tệ) s cho %(mục) s"
@@ -34694,11 +34802,6 @@ msgid ""
 msgstr ""
 "Bạn đã nhập mã chứng từ cho phép bạn mua một trong các sản phẩm sau ở mức "
 "giá được chỉ định:"
-
-#: pretix/presale/templates/pretixpresale/event/voucher.html
-#, fuzzy, python-format
-msgid "from %(minprice)s"
-msgstr "từ %(minprice) s"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html
 #, fuzzy, python-format
@@ -35680,6 +35783,40 @@ msgstr "Viết quyền truy cập"
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#~ msgid ""
+#~ "This option currently only affects the calendar of this event series, not "
+#~ "the organizer-wide calendar."
+#~ msgstr ""
+#~ "Tùy chọn này hiện chỉ ảnh hưởng đến lịch của chuỗi sự kiện này, không "
+#~ "phải là lịch toàn bộ tổ chức."
+
+#~ msgid ""
+#~ "Accept payments with your PayPal account. PayPal is one of the most "
+#~ "popular payment methods world-wide."
+#~ msgstr "Chấp nhận thanh toán bằng tài khoản PayPal của bạn."
+
+#~ msgid "PayPal account"
+#~ msgstr "Tài khoản PayPal"
+
+#~ msgid ""
+#~ "After you clicked continue, we will redirect you to PayPal to fill in "
+#~ "your payment details. You will then be redirected back here to review and "
+#~ "confirm your order."
+#~ msgstr ""
+#~ "Sau khi bạn nhấp vào Tiếp tục, chúng tôi sẽ chuyển hướng bạn đến PayPal "
+#~ "để điền vào chi tiết thanh toán của bạn."
+
+#~ msgid ""
+#~ "Our attempt to execute your Payment via PayPal has failed. Please try "
+#~ "again or contact us."
+#~ msgstr ""
+#~ "Nỗ lực của chúng tôi để thực hiện thanh toán của bạn thông qua PayPal đã "
+#~ "thất bại."
+
+#, fuzzy, python-format
+#~ msgid "from %(minprice)s"
+#~ msgstr "từ %(minprice) s"
 
 #~ msgid ""
 #~ "Our attempt to execute your payment via PayPal has failed. Please try "

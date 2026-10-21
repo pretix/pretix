@@ -601,6 +601,32 @@ def filter_subevents_with_plugins(subevents, sales_channel=None):
     return subevents
 
 
+def should_hide_subevent(settings, subevent, voucher=None):
+    hide = False
+    if settings.event_list_available_only:
+        hide = (
+            # Presale is over → the subevent is not available → hide
+            subevent.presale_has_ended or
+            # Not a single product is available on this sales channel → hide
+            # Note that means there could be products which are ignored for calendar availability (Quota.ignore_for_event_availability)
+            # or products only visible with a voucher. However, for customers with these scenarios, the event_list_available_only
+            # makes only very little sense as it would never do anything, so the flag can just be removed -- or the products should
+            # be made visible so people know why there are no products. In case a voucher is already entered on the calendar view,
+            # this is already respected and subevents are shown correctly.
+            subevent.best_availability_state is None or
+            (
+                # Sold out → hide, unless we have a voucher active that can bypass all quotas
+                (not voucher or not voucher.allow_ignore_quota) and
+                subevent.best_availability_state < Quota.AVAILABILITY_RESERVED
+            )
+        )
+
+    if settings.event_calendar_future_only:
+        if (subevent.date_to or subevent.date_from) < time_machine_now():
+            hide = True
+    return hide
+
+
 def add_subevents_for_days(qs, before, after, ebd, timezones, sales_channel, event=None, cart_namespace=None,
                            voucher=None):
     qs = qs.filter(active=True, is_public=True).filter(
@@ -640,19 +666,8 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, sales_channel, eve
             kwargs['cart_namespace'] = cart_namespace
 
         s = event.settings if event else se.event.settings
-
-        if s.event_list_available_only:
-            hide = se.presale_has_ended or (
-                (not voucher or not voucher.allow_ignore_quota) and
-                se.best_availability_state is not None and
-                se.best_availability_state < Quota.AVAILABILITY_RESERVED
-            )
-            if hide:
-                continue
-
-        if s.event_calendar_future_only:
-            if (se.date_to or se.date_from) < time_machine_now():
-                continue
+        if should_hide_subevent(s, se, voucher):
+            continue
 
         timezones.add(s.timezone)
         tz = ZoneInfo(s.timezone)

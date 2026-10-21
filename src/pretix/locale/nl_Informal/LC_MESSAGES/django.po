@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-24 15:35+0000\n"
+"POT-Creation-Date: 2026-09-30 07:26+0000\n"
 "PO-Revision-Date: 2026-03-31 17:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
@@ -200,7 +200,7 @@ msgid "Allowed Post Logout URIs list, space separated"
 msgstr "Lijst met toegestane URI's na uitloggen, gescheiden door spaties"
 
 #: pretix/api/models.py pretix/base/models/customers.py
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
+#: pretix/plugins/paypal2/payment.py
 msgid "Client ID"
 msgstr "Klant-ID"
 
@@ -1797,6 +1797,22 @@ msgstr "ID's voor betalingstoewijzing"
 msgid "Payment providers"
 msgstr "Betaalaanbieders"
 
+#: pretix/base/exporters/invoices.py pretix/base/models/orders.py
+msgid "Transmission type"
+msgstr "Type transmissie"
+
+#: pretix/base/exporters/invoices.py
+#, fuzzy
+#| msgid "Transmission type"
+msgid "Transmission status"
+msgstr "Type transmissie"
+
+#: pretix/base/exporters/invoices.py
+#, fuzzy
+#| msgid "Transmission type"
+msgid "Transmission date"
+msgstr "Type transmissie"
+
 #: pretix/base/exporters/invoices.py
 msgid "Cancellation"
 msgstr "Annulering"
@@ -2462,7 +2478,6 @@ msgstr "Evenement"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html
 #: pretix/plugins/banktransfer/refund_export.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html
@@ -2486,7 +2501,6 @@ msgstr "Oude gegevens"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "Quantity"
 msgstr "Hoeveelheid"
 
@@ -2574,7 +2588,6 @@ msgstr "Bestelling"
 
 #: pretix/base/exporters/orderlist.py
 #: pretix/control/templates/pretixcontrol/search/payments.html
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
 msgid "Payment ID"
 msgstr "Betalings-ID"
@@ -4457,6 +4470,12 @@ msgstr "Installatiedatum"
 msgid "Initialization date"
 msgstr "Initialisatiedatum"
 
+#: pretix/base/models/devices.py
+#, fuzzy
+#| msgid "Save to profile"
+msgid "Security profile"
+msgstr "Opslaan in profiel"
+
 #: pretix/base/models/discount.py
 msgctxt "subevent"
 msgid "Dates can be mixed without limitation"
@@ -5909,6 +5928,12 @@ msgid "Maximum value"
 msgstr "Maximumwaarde"
 
 #: pretix/base/models/items.py
+#, fuzzy
+#| msgid "Maximum length"
+msgid "Minimum length"
+msgstr "Maximale lengte"
+
+#: pretix/base/models/items.py
 msgid "Maximum length"
 msgstr "Maximale lengte"
 
@@ -5975,6 +6000,12 @@ msgstr "De maximale datum mag niet vóór de minimale waarde liggen."
 
 #: pretix/base/models/items.py
 msgid "The maximum value must not be lower than the minimum value."
+msgstr "De maximumwaarde mag niet lager zijn dan de minimumwaarde."
+
+#: pretix/base/models/items.py
+#, fuzzy
+#| msgid "The maximum value must not be lower than the minimum value."
+msgid "The maximum length must not be shorter than the minimum length."
 msgstr "De maximumwaarde mag niet lager zijn dan de minimumwaarde."
 
 #: pretix/base/models/items.py
@@ -6527,10 +6558,6 @@ msgid "This reference will be printed on your invoice for your convenience."
 msgstr ""
 "Deze referentie wordt voor je op de factuur afgedrukt en kan je voor je "
 "eigen administratie gebruiken."
-
-#: pretix/base/models/orders.py
-msgid "Transmission type"
-msgstr "Type transmissie"
 
 #: pretix/base/models/orders.py
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html
@@ -10619,6 +10646,19 @@ msgstr ""
 "geaccepteerd na de 'Laatste betaaldatum' (zie boven)."
 
 #: pretix/base/settings.py
+#, fuzzy
+#| msgid "Generate invoices for Sales channels"
+msgid "Allow postponed payment choice for sales channels"
+msgstr "Genereer facturen voor verkoopkanalen"
+
+#: pretix/base/settings.py
+msgid ""
+"If postponed payment is allowed on a sales channel, customers can complete "
+"their order without selecting a payment method. This is useful whenever "
+"orders are not created by the same person who is making the payment."
+msgstr ""
+
+#: pretix/base/settings.py
 msgid "Show start date"
 msgstr "Toon startdatum"
 
@@ -11255,14 +11295,6 @@ msgstr ""
 #: pretix/base/settings.py
 msgid "Hide all unavailable dates from calendar or list views"
 msgstr "Verberg alle niet beschikbare datums uit kalender- en lijstweergaven"
-
-#: pretix/base/settings.py
-msgid ""
-"This option currently only affects the calendar of this event series, not "
-"the organizer-wide calendar."
-msgstr ""
-"Deze optie heeft momenteel alleen invloed op de kalender van deze "
-"evenementenreeks, niet op de kalender van de organisator."
 
 #: pretix/base/settings.py
 msgid "Hide all past dates from calendar"
@@ -16958,6 +16990,11 @@ msgstr "derde"
 
 #: pretix/control/forms/rrule.py
 msgctxt "rrule"
+msgid "fourth"
+msgstr ""
+
+#: pretix/control/forms/rrule.py
+msgctxt "rrule"
 msgid "last"
 msgstr "laatste"
 
@@ -18066,6 +18103,30 @@ msgid "Queued emails have been aborted."
 msgstr "De e-mails in de wachtrij zijn geannuleerd."
 
 #: pretix/control/logdisplay.py
+#, fuzzy
+#| msgid "The property has been created."
+msgid "An organizer meta property has been created."
+msgstr "De eigenschap is aangemaakt."
+
+#: pretix/control/logdisplay.py
+#, fuzzy
+#| msgid "The selected property has been deleted."
+msgid "An organizer meta property has been deleted."
+msgstr "De geselecteerde eigenschap is verwijderd."
+
+#: pretix/control/logdisplay.py
+#, fuzzy
+#| msgid "The organizer has been changed."
+msgid "An organizer meta property has been changed."
+msgstr "De organisator is gewijzigd."
+
+#: pretix/control/logdisplay.py
+#, fuzzy
+#| msgid "The product has been reordered."
+msgid "An organizer meta property has been reordered."
+msgstr "Het product is opnieuw besteld."
+
+#: pretix/control/logdisplay.py
 msgid "Gift card acceptance for another organizer has been added."
 msgstr ""
 "De acceptatie van cadeaubonnen voor een andere organisator is toegevoegd."
@@ -18274,6 +18335,10 @@ msgstr "Je twee-factor-noodtokens zijn opnieuw gegenereerd."
 #: pretix/control/logdisplay.py
 msgid "A two-factor emergency code has been generated."
 msgstr "Er is een tweefactornoodcode gegenereerd."
+
+#: pretix/control/logdisplay.py
+msgid "Drift and throttle values for two-factor devices have been reset."
+msgstr ""
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -19140,6 +19205,89 @@ msgstr ""
 "Je geeft deze applicatie op eigen risico toegang tot je account."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
+#: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
+#: pretix/control/templates/pretixcontrol/checkin/list_delete.html
+#: pretix/control/templates/pretixcontrol/checkin/reset.html
+#: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
+#: pretix/control/templates/pretixcontrol/email_setup_simple.html
+#: pretix/control/templates/pretixcontrol/event/tax_delete.html
+#: pretix/control/templates/pretixcontrol/item/delete.html
+#: pretix/control/templates/pretixcontrol/items/category_delete.html
+#: pretix/control/templates/pretixcontrol/items/discount_delete.html
+#: pretix/control/templates/pretixcontrol/items/question_delete.html
+#: pretix/control/templates/pretixcontrol/items/quota_delete.html
+#: pretix/control/templates/pretixcontrol/items/quota_delete_bulk.html
+#: pretix/control/templates/pretixcontrol/oauth/app_delete.html
+#: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html
+#: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html
+#: pretix/control/templates/pretixcontrol/order/change.html
+#: pretix/control/templates/pretixcontrol/order/change_contact.html
+#: pretix/control/templates/pretixcontrol/order/change_locale.html
+#: pretix/control/templates/pretixcontrol/order/change_questions.html
+#: pretix/control/templates/pretixcontrol/order/extend.html
+#: pretix/control/templates/pretixcontrol/order/pay.html
+#: pretix/control/templates/pretixcontrol/order/pay_complete.html
+#: pretix/control/templates/pretixcontrol/order/reactivate.html
+#: pretix/control/templates/pretixcontrol/order/refund_choose.html
+#: pretix/control/templates/pretixcontrol/order/refund_done.html
+#: pretix/control/templates/pretixcontrol/order/refund_process.html
+#: pretix/control/templates/pretixcontrol/order/refund_start.html
+#: pretix/control/templates/pretixcontrol/orders/bulk_action.html
+#: pretix/control/templates/pretixcontrol/orders/export_delete.html
+#: pretix/control/templates/pretixcontrol/orders/refunds.html
+#: pretix/control/templates/pretixcontrol/organizers/channel_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html
+#: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/device_revoke.html
+#: pretix/control/templates/pretixcontrol/organizers/export_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/gate_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/property_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html
+#: pretix/control/templates/pretixcontrol/organizers/team_delete.html
+#: pretix/control/templates/pretixcontrol/pdf/index.html
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html
+#: pretix/control/templates/pretixcontrol/subevents/delete.html
+#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html
+#: pretix/control/templates/pretixcontrol/subevents/edit.html
+#: pretix/control/templates/pretixcontrol/user/2fa_delete.html
+#: pretix/control/templates/pretixcontrol/user/2fa_disable.html
+#: pretix/control/templates/pretixcontrol/user/2fa_enable.html
+#: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html
+#: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html
+#: pretix/control/templates/pretixcontrol/user/change_email.html
+#: pretix/control/templates/pretixcontrol/user/change_password.html
+#: pretix/control/templates/pretixcontrol/user/confirmation_code_dialog.html
+#: pretix/control/templates/pretixcontrol/vouchers/delete.html
+#: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html
+#: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html
+#: pretix/control/templates/pretixcontrol/waitinglist/delete.html
+#: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html
+#: pretix/control/templates/pretixcontrol/waitinglist/edit.html
+#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html
+#: pretix/plugins/badges/templates/pretixplugins/badges/delete.html
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html
+#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html
+#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html
+#: pretix/presale/templates/pretixpresale/event/order_change.html
+#: pretix/presale/templates/pretixpresale/event/order_modify.html
+#: pretix/presale/templates/pretixpresale/event/order_pay.html
+#: pretix/presale/templates/pretixpresale/event/order_pay_change.html
+#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html
+#: pretix/presale/templates/pretixpresale/event/position_change.html
+#: pretix/presale/templates/pretixpresale/event/position_modify.html
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
+#, fuzzy
+#| msgid "Authorized apps"
+msgid "Authorize"
+msgstr "Geautoriseerde apps"
+
+#: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html
 msgid "Error:"
 msgstr "Fout:"
 
@@ -19532,82 +19680,6 @@ msgstr[0] ""
 msgstr[1] ""
 "Weet je zeker dat je de check-ins van <strong>%(count)s tickets</strong> "
 "definitief wilt verwijderen?"
-
-#: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
-#: pretix/control/templates/pretixcontrol/checkin/list_delete.html
-#: pretix/control/templates/pretixcontrol/checkin/reset.html
-#: pretix/control/templates/pretixcontrol/datasync/control_order_info.html
-#: pretix/control/templates/pretixcontrol/email_setup_simple.html
-#: pretix/control/templates/pretixcontrol/event/tax_delete.html
-#: pretix/control/templates/pretixcontrol/item/delete.html
-#: pretix/control/templates/pretixcontrol/items/category_delete.html
-#: pretix/control/templates/pretixcontrol/items/discount_delete.html
-#: pretix/control/templates/pretixcontrol/items/question_delete.html
-#: pretix/control/templates/pretixcontrol/items/quota_delete.html
-#: pretix/control/templates/pretixcontrol/items/quota_delete_bulk.html
-#: pretix/control/templates/pretixcontrol/oauth/app_delete.html
-#: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html
-#: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html
-#: pretix/control/templates/pretixcontrol/order/change.html
-#: pretix/control/templates/pretixcontrol/order/change_contact.html
-#: pretix/control/templates/pretixcontrol/order/change_locale.html
-#: pretix/control/templates/pretixcontrol/order/change_questions.html
-#: pretix/control/templates/pretixcontrol/order/extend.html
-#: pretix/control/templates/pretixcontrol/order/pay.html
-#: pretix/control/templates/pretixcontrol/order/pay_complete.html
-#: pretix/control/templates/pretixcontrol/order/reactivate.html
-#: pretix/control/templates/pretixcontrol/order/refund_choose.html
-#: pretix/control/templates/pretixcontrol/order/refund_done.html
-#: pretix/control/templates/pretixcontrol/order/refund_process.html
-#: pretix/control/templates/pretixcontrol/order/refund_start.html
-#: pretix/control/templates/pretixcontrol/orders/bulk_action.html
-#: pretix/control/templates/pretixcontrol/orders/export_delete.html
-#: pretix/control/templates/pretixcontrol/orders/refunds.html
-#: pretix/control/templates/pretixcontrol/organizers/channel_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html
-#: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/device_revoke.html
-#: pretix/control/templates/pretixcontrol/organizers/export_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/gate_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/property_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html
-#: pretix/control/templates/pretixcontrol/organizers/team_delete.html
-#: pretix/control/templates/pretixcontrol/pdf/index.html
-#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html
-#: pretix/control/templates/pretixcontrol/subevents/delete.html
-#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html
-#: pretix/control/templates/pretixcontrol/subevents/edit.html
-#: pretix/control/templates/pretixcontrol/user/2fa_delete.html
-#: pretix/control/templates/pretixcontrol/user/2fa_disable.html
-#: pretix/control/templates/pretixcontrol/user/2fa_enable.html
-#: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html
-#: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html
-#: pretix/control/templates/pretixcontrol/user/change_email.html
-#: pretix/control/templates/pretixcontrol/user/change_password.html
-#: pretix/control/templates/pretixcontrol/user/confirmation_code_dialog.html
-#: pretix/control/templates/pretixcontrol/vouchers/delete.html
-#: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html
-#: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html
-#: pretix/control/templates/pretixcontrol/waitinglist/delete.html
-#: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html
-#: pretix/control/templates/pretixcontrol/waitinglist/edit.html
-#: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html
-#: pretix/plugins/badges/templates/pretixplugins/badges/delete.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html
-#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html
-#: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html
-#: pretix/presale/templates/pretixpresale/event/order_change.html
-#: pretix/presale/templates/pretixpresale/event/order_modify.html
-#: pretix/presale/templates/pretixpresale/event/order_pay.html
-#: pretix/presale/templates/pretixpresale/event/order_pay_change.html
-#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html
-#: pretix/presale/templates/pretixpresale/event/position_change.html
-#: pretix/presale/templates/pretixpresale/event/position_modify.html
-msgid "Cancel"
-msgstr "Annuleren"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html
@@ -22148,8 +22220,12 @@ msgstr ""
 "verwijzen."
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
+#, fuzzy
+#| msgid ""
+#| "We strongly recommend against using short forms of more then 16 "
+#| "characters."
 msgid ""
-"We strongly recommend against using short forms of more then 16 characters."
+"We strongly recommend against using short forms of more than 16 characters."
 msgstr "We raden sterk af om korte vormen te gebruiken van meer dan 16 tekens."
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
@@ -27770,6 +27846,7 @@ msgid "Add a new device"
 msgstr "Nieuw apparaat toevoegen"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html
+#: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Emergency tokens"
 msgstr "Noodtokens"
 
@@ -28031,6 +28108,30 @@ msgstr "Werk als andere gebruiker"
 #: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Authentication backend"
 msgstr "Authenticatie-backend"
+
+#: pretix/control/templates/pretixcontrol/users/form.html
+msgid "Reset drift and throttle"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/users/form.html
+#, fuzzy
+#| msgid "Disable two-factor authentication"
+msgid "Available two-factor authentication methods"
+msgstr "Twee-factor-authenticatie uitschakelen"
+
+#: pretix/control/templates/pretixcontrol/users/form.html
+#, fuzzy, python-format
+#| msgid "Expired since %(date)s"
+msgid "1 failed attempt since %(date)s"
+msgid_plural "%(cnt)s failed attempts since %(date)s"
+msgstr[0] "Verlopen sinds %(date)s"
+msgstr[1] "Verlopen sinds %(date)s"
+
+#: pretix/control/templates/pretixcontrol/users/form.html
+#, fuzzy, python-format
+#| msgid "Valid until %(date)s"
+msgid "Currently locked until %(date)s"
+msgstr "Geldig tot %(date)s"
 
 #: pretix/control/templates/pretixcontrol/users/form.html
 msgid "Team memberships"
@@ -28570,6 +28671,22 @@ msgstr ""
 #: pretix/control/views/auth.py
 msgid "Invalid code, please try again."
 msgstr "Ongeldige code, probeer het opnieuw."
+
+#: pretix/control/views/auth.py
+#, fuzzy, python-brace-format
+#| msgid "Invalid code, please try again."
+msgid "Invalid code. Please try again after waiting {value} minute."
+msgid_plural "Invalid code. Please try again after waiting {value} minutes."
+msgstr[0] "Ongeldige code, probeer het opnieuw."
+msgstr[1] "Ongeldige code, probeer het opnieuw."
+
+#: pretix/control/views/auth.py
+#, fuzzy, python-brace-format
+#| msgid "Invalid code, please try again."
+msgid "Invalid code. Please try again after waiting {value} second."
+msgid_plural "Invalid code. Please try again after waiting {value} seconds."
+msgstr[0] "Ongeldige code, probeer het opnieuw."
+msgstr[1] "Ongeldige code, probeer het opnieuw."
 
 #: pretix/control/views/checkin.py
 msgid "The selected check-ins have been reverted."
@@ -29472,6 +29589,13 @@ msgstr ""
 "Je hebt een bestelling geplaatst in een evenement met een andere valuta."
 
 #: pretix/control/views/orders.py
+#, fuzzy
+#| msgid "You entered an order in an event with a different currency."
+msgid "You entered an order in an event that you do not have access to."
+msgstr ""
+"Je hebt een bestelling geplaatst in een evenement met een andere valuta."
+
+#: pretix/control/views/orders.py
 msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
@@ -29486,6 +29610,12 @@ msgid ""
 msgstr ""
 "Je koos een gedeeltelijke terugbetaling voor een betalingsmethode die alleen "
 "volledige terugbetalingen ondersteunt."
+
+#: pretix/control/views/orders.py
+msgid "The refunds you selected do not match the selected total refund amount."
+msgstr ""
+"De terugbetalingen die je koos komen niet overeen met het gekozen totale "
+"terug te betalen bedrag."
 
 #: pretix/control/views/orders.py
 #, python-brace-format
@@ -29541,12 +29671,6 @@ msgstr ""
 "bestellingen in onze winkel.\n"
 "\n"
 "De organisatie van {event}"
-
-#: pretix/control/views/orders.py
-msgid "The refunds you selected do not match the selected total refund amount."
-msgstr ""
-"De terugbetalingen die je koos komen niet overeen met het gekozen totale "
-"terug te betalen bedrag."
 
 #: pretix/control/views/orders.py
 msgid "The payment has been created successfully."
@@ -30350,6 +30474,12 @@ msgstr ""
 "deze gebruiker blijven actief."
 
 #: pretix/control/views/users.py
+#, fuzzy
+#| msgid "The password has been reset."
+msgid "The drift values for TOTP devices have been reset."
+msgstr "Het wachtwoord is opnieuw ingesteld."
+
+#: pretix/control/views/users.py
 msgid "The new user has been created."
 msgstr "De nieuwe gebruiker is aangemaakt."
 
@@ -30360,6 +30490,16 @@ msgstr "Reserveer quotum"
 #: pretix/control/views/vouchers.py
 msgid "Bypass quota"
 msgstr "Quota omzeilen"
+
+#: pretix/control/views/vouchers.py
+#, fuzzy
+#| msgid "Widget"
+msgid "Budget"
+msgstr "Widget"
+
+#: pretix/control/views/vouchers.py
+msgid "Budget used"
+msgstr ""
 
 #: pretix/control/views/vouchers.py
 msgid "The requested voucher does not exist."
@@ -30518,12 +30658,11 @@ msgstr "Automatisch inchecken"
 
 #: pretix/plugins/autocheckin/apps.py pretix/plugins/badges/apps.py
 #: pretix/plugins/banktransfer/apps.py pretix/plugins/checkinlists/apps.py
-#: pretix/plugins/manualpayment/apps.py pretix/plugins/paypal/apps.py
-#: pretix/plugins/paypal2/apps.py pretix/plugins/pretixdroid/apps.py
-#: pretix/plugins/reports/apps.py pretix/plugins/returnurl/apps.py
-#: pretix/plugins/sendmail/apps.py pretix/plugins/statistics/apps.py
-#: pretix/plugins/stripe/apps.py pretix/plugins/ticketoutputpdf/apps.py
-#: pretix/plugins/webcheckin/apps.py
+#: pretix/plugins/manualpayment/apps.py pretix/plugins/paypal2/apps.py
+#: pretix/plugins/pretixdroid/apps.py pretix/plugins/reports/apps.py
+#: pretix/plugins/returnurl/apps.py pretix/plugins/sendmail/apps.py
+#: pretix/plugins/statistics/apps.py pretix/plugins/stripe/apps.py
+#: pretix/plugins/ticketoutputpdf/apps.py pretix/plugins/webcheckin/apps.py
 msgid "the pretix team"
 msgstr "het pretix-team"
 
@@ -31123,7 +31262,6 @@ msgstr "Je invoer was ongeldig, zie hieronder voor details."
 #: pretix/plugins/banktransfer/refund_export.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
 msgid "Payer"
@@ -31680,8 +31818,7 @@ msgstr "Uitgecheckt"
 msgid "Automatically checked in"
 msgstr "Automatisch ingecheckt"
 
-#: pretix/plugins/checkinlists/exporters.py pretix/plugins/paypal/payment.py
-#: pretix/plugins/paypal2/payment.py
+#: pretix/plugins/checkinlists/exporters.py pretix/plugins/paypal2/payment.py
 msgid "Secret"
 msgstr "Geheim"
 
@@ -31745,174 +31882,6 @@ msgstr "Alleen geslaagde scans"
 msgid "A fully customizable payment method for manual processing."
 msgstr "Een volledig aanpasbare betaalmethode voor handmatige verwerking."
 
-#: pretix/plugins/paypal/apps.py pretix/plugins/paypal/payment.py
-#: pretix/plugins/paypal2/apps.py pretix/plugins/paypal2/payment.py
-#: pretix/plugins/stripe/payment.py
-msgid "PayPal"
-msgstr "PayPal"
-
-#: pretix/plugins/paypal/apps.py
-msgid ""
-"Accept payments with your PayPal account. PayPal is one of the most popular "
-"payment methods world-wide."
-msgstr ""
-"Accepteer betalingen met je PayPal-account. PayPal is wereldwijd een van de "
-"populairste betaalmethoden."
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid ""
-"The PayPal sandbox is being used, you can test without actually sending "
-"money but you will need a PayPal sandbox user to log in."
-msgstr ""
-"De PayPal-sandbox wordt gebruikt. Je kan betalingen testen zonder "
-"daadwerkelijk geld over te maken, maar je zal een PayPal-sandboxgebruiker "
-"nodig hebben om in te loggen."
-
-#: pretix/plugins/paypal/payment.py
-msgid "PayPal account"
-msgstr "PayPal-account"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "Click here for a tutorial on how to obtain the required keys"
-msgstr "Klik hier voor instructies over hoe de benodigde sleutels te krijgen"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-#: pretix/plugins/stripe/payment.py
-msgid "Endpoint"
-msgstr "Endpoint"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "Reference prefix"
-msgstr "Kenmerk-voorvoegsel"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid ""
-"Any value entered here will be added in front of the regular booking "
-"reference containing the order number."
-msgstr ""
-"Als je hier een waarde invoert zal deze waarde voor het normale kenmerk met "
-"het bestelnummer worden ingevoegd."
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "Reference postfix"
-msgstr "Referentie-postfix"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid ""
-"Any value entered here will be added behind the regular booking reference "
-"containing the order number."
-msgstr ""
-"Elke waarde die hier wordt ingevoerd, wordt toegevoegd achter de reguliere "
-"boekingsreferentie met het ordernummer."
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "Disconnect from PayPal"
-msgstr "Verbinding met PayPal verbreken"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "We had trouble communicating with PayPal"
-msgstr "We hadden problemen met de communicatie met PayPal"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid ""
-"We were unable to process your payment. See below for details on how to "
-"proceed."
-msgstr ""
-"We konden je betaling niet verwerken. Zie hieronder voor details over hoe "
-"verder te gaan."
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid ""
-"PayPal has not yet approved the payment. We will inform you as soon as the "
-"payment completed."
-msgstr ""
-"PayPal heeft de betaling nog niet goedgekeurd. We zullen het aan je melden "
-"zodra de betaling is voltooid."
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-#, python-brace-format
-msgid "Refunding the amount via PayPal failed: {}"
-msgstr "Het bedrag via PayPal terugbetalen is mislukt: {}"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "The payment for this invoice has already been received."
-msgstr "De betaling voor deze factuur is al ontvangen."
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "PayPal payment ID"
-msgstr "PayPal-betalingskenmerk"
-
-#: pretix/plugins/paypal/payment.py pretix/plugins/paypal2/payment.py
-msgid "PayPal sale ID"
-msgstr "PayPal-verkoopkenmerk"
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
-msgid ""
-"The total amount listed above will be withdrawn from your PayPal account "
-"after the confirmation of your purchase."
-msgstr ""
-"Het totaalbedrag dat hierboven staat aangegeven zal van je PayPal-account "
-"worden afgeschreven na de bevestiging van je aankoop."
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html
-msgid ""
-"After you clicked continue, we will redirect you to PayPal to fill in your "
-"payment details. You will then be redirected back here to review and confirm "
-"your order."
-msgstr ""
-"Als je verdergaat sturen we je door naar PayPal om de betalingsgegevens in "
-"te vullen. Hierna zal je naar deze website worden teruggestuurd om de "
-"bestelling te controleren en te bevestigen."
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
-msgid "Sale ID"
-msgstr "Verkoopkenmerk"
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
-msgid "Last update"
-msgstr "Laatste update"
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html
-msgid "Total value"
-msgstr "Totale waarde"
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html
-msgid ""
-"Our attempt to execute your Payment via PayPal has failed. Please try again "
-"or contact us."
-msgstr ""
-"Onze poging om je betaling bij PayPal uit te voeren is mislukt. Probeer het "
-"opnieuw of neem contact met ons op."
-
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
-msgid ""
-"We're waiting for an answer from PayPal regarding your payment. Please "
-"contact us, if this takes more than a few hours."
-msgstr ""
-"We wachten op een antwoord van PayPal over je betaling. Neem contact met ons "
-"op als dit langer dan een paar uur duurt."
-
-#: pretix/plugins/paypal/views.py pretix/plugins/paypal2/views.py
-msgid "Invalid response from PayPal received."
-msgstr "Ongeldige reactie van PayPal ontvangen."
-
-#: pretix/plugins/paypal/views.py pretix/plugins/paypal2/views.py
-msgid "It looks like you canceled the PayPal payment"
-msgstr "Het lijkt erop dat je de PayPal-betaling hebt geannuleerd"
-
-#: pretix/plugins/paypal/views.py pretix/plugins/paypal2/views.py
-msgid "Your PayPal account has been disconnected."
-msgstr "De verbinding met je PayPal-account is verbroken."
-
 #: pretix/plugins/paypal2/apps.py
 msgid ""
 "Accept payments with your PayPal account. In addition to regular PayPal "
@@ -31927,9 +31896,22 @@ msgstr ""
 "PayPal-rekening nodig. PayPal is wereldwijd een van de populairste "
 "betaalmethoden."
 
+#: pretix/plugins/paypal2/apps.py pretix/plugins/paypal2/payment.py
+#: pretix/plugins/stripe/payment.py
+msgid "PayPal"
+msgstr "PayPal"
+
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal Merchant ID"
 msgstr "PayPal-handelaars-ID"
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Click here for a tutorial on how to obtain the required keys"
+msgstr "Klik hier voor instructies over hoe de benodigde sleutels te krijgen"
+
+#: pretix/plugins/paypal2/payment.py pretix/plugins/stripe/payment.py
+msgid "Endpoint"
+msgstr "Endpoint"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -32017,6 +31999,30 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/paypal2/payment.py
+msgid "Reference prefix"
+msgstr "Kenmerk-voorvoegsel"
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"Any value entered here will be added in front of the regular booking "
+"reference containing the order number."
+msgstr ""
+"Als je hier een waarde invoert zal deze waarde voor het normale kenmerk met "
+"het bestelnummer worden ingevoegd."
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Reference postfix"
+msgstr "Referentie-postfix"
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"Any value entered here will be added behind the regular booking reference "
+"containing the order number."
+msgstr ""
+"Elke waarde die hier wordt ingevoerd, wordt toegevoegd achter de reguliere "
+"boekingsreferentie met het ordernummer."
+
+#: pretix/plugins/paypal2/payment.py
 msgid "-- Automatic --"
 msgstr "-- Automatisch --"
 
@@ -32038,6 +32044,10 @@ msgstr ""
 #, python-brace-format
 msgid "Connect with {icon} PayPal"
 msgstr "Verbinden met {icon} PayPal"
+
+#: pretix/plugins/paypal2/payment.py
+msgid "Disconnect from PayPal"
+msgstr "Verbinding met PayPal verbreken"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -32079,6 +32089,15 @@ msgstr ""
 "opnieuw."
 
 #: pretix/plugins/paypal2/payment.py
+msgid ""
+"The PayPal sandbox is being used, you can test without actually sending "
+"money but you will need a PayPal sandbox user to log in."
+msgstr ""
+"De PayPal-sandbox wordt gebruikt. Je kan betalingen testen zonder "
+"daadwerkelijk geld over te maken, maar je zal een PayPal-sandboxgebruiker "
+"nodig hebben om in te loggen."
+
+#: pretix/plugins/paypal2/payment.py
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
 msgid ""
 "Your payment has failed due to a known issue within PayPal. Please try "
@@ -32089,6 +32108,10 @@ msgstr ""
 "het nog eens, de kans is groot dat de betaling bij een tweede of derde "
 "poging wel slaagt. Je kunt ook andere betaalmethoden proberen, indien "
 "beschikbaar."
+
+#: pretix/plugins/paypal2/payment.py
+msgid "We had trouble communicating with PayPal"
+msgstr "We hadden problemen met de communicatie met PayPal"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
@@ -32103,12 +32126,45 @@ msgstr "Mogelijk moet je JavaScript inschakelen voor PayPal-betalingen."
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
+"We were unable to process your payment. See below for details on how to "
+"proceed."
+msgstr ""
+"We konden je betaling niet verwerken. Zie hieronder voor details over hoe "
+"verder te gaan."
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
+"PayPal has not yet approved the payment. We will inform you as soon as the "
+"payment completed."
+msgstr ""
+"PayPal heeft de betaling nog niet goedgekeurd. We zullen het aan je melden "
+"zodra de betaling is voltooid."
+
+#: pretix/plugins/paypal2/payment.py
+msgid ""
 "Refunding the amount via PayPal failed: The original payment does not "
 "contain the required information to issue an automated refund."
 msgstr ""
 "Het terugbetalen van het bedrag via PayPal is mislukt: de oorspronkelijke "
 "betaling bevat niet de vereiste informatie om een automatische terugbetaling "
 "uit te voeren."
+
+#: pretix/plugins/paypal2/payment.py
+#, python-brace-format
+msgid "Refunding the amount via PayPal failed: {}"
+msgstr "Het bedrag via PayPal terugbetalen is mislukt: {}"
+
+#: pretix/plugins/paypal2/payment.py
+msgid "The payment for this invoice has already been received."
+msgstr "De betaling voor deze factuur is al ontvangen."
+
+#: pretix/plugins/paypal2/payment.py
+msgid "PayPal payment ID"
+msgstr "PayPal-betalingskenmerk"
+
+#: pretix/plugins/paypal2/payment.py
+msgid "PayPal sale ID"
+msgstr "PayPal-verkoopkenmerk"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal APM"
@@ -32201,6 +32257,14 @@ msgstr "We zullen dan je PayPal-rekening belasten en de bestelling afronden."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
 msgid ""
+"The total amount listed above will be withdrawn from your PayPal account "
+"after the confirmation of your purchase."
+msgstr ""
+"Het totaalbedrag dat hierboven staat aangegeven zal van je PayPal-account "
+"worden afgeschreven na de bevestiging van je aankoop."
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
+msgid ""
 "After placing your order, you will be able to select your desired payment "
 "method, including PayPal."
 msgstr ""
@@ -32243,6 +32307,11 @@ msgstr ""
 "ook een andere betaalmethode proberen, als je dat liever hebt."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
+msgid "Sale ID"
+msgstr "Verkoopkenmerk"
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 msgid "Capture status"
 msgstr "Betaalstatus"
 
@@ -32254,6 +32323,17 @@ msgstr ""
 "Deze betaling wordt momenteel gecontroleerd door PayPal. Totdat de controle "
 "is afgerond, wordt het geld niet uitbetaald en blijft de bestelling in "
 "behandeling."
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
+msgid "Last update"
+msgstr "Laatste update"
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html
+msgid "Total value"
+msgstr "Totale waarde"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html
@@ -32287,6 +32367,14 @@ msgid ""
 "twice in case PayPal allows your initial payment attempt. Please contact us "
 "to resolve this case."
 msgstr ""
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
+msgid ""
+"We're waiting for an answer from PayPal regarding your payment. Please "
+"contact us, if this takes more than a few hours."
+msgstr ""
+"We wachten op een antwoord van PayPal over je betaling. Neem contact met ons "
+"op als dit langer dan een paar uur duurt."
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
@@ -32327,6 +32415,18 @@ msgid ""
 msgstr ""
 "Je PayPal-account is nu verbonden met pretix. Je kan hieronder de "
 "instellingen wijzigen."
+
+#: pretix/plugins/paypal2/views.py
+msgid "Invalid response from PayPal received."
+msgstr "Ongeldige reactie van PayPal ontvangen."
+
+#: pretix/plugins/paypal2/views.py
+msgid "It looks like you canceled the PayPal payment"
+msgstr "Het lijkt erop dat je de PayPal-betaling hebt geannuleerd"
+
+#: pretix/plugins/paypal2/views.py
+msgid "Your PayPal account has been disconnected."
+msgstr "De verbinding met je PayPal-account is verbroken."
 
 #: pretix/plugins/pretixdroid/apps.py
 msgid "Old check-in device API"
@@ -34593,7 +34693,6 @@ msgstr ""
 #: pretix/presale/forms/order.py
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "plus taxes"
 msgstr "excl. belasting"
 
@@ -35056,6 +35155,35 @@ msgstr ""
 "Ga naar de betalingsinstellingen en activeer een of meerdere "
 "betalingsproviders."
 
+#: pretix/presale/templates/pretixpresale/event/checkout_payment.html
+msgid ""
+"Not sure yet? You can complete your order first and then select a payment "
+"method later."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/checkout_payment.html
+msgid ""
+"To do so, please first remove the payment methods you already selected above."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/checkout_payment.html
+#, fuzzy, python-format
+#| msgid "Your event needs to be over to use this feature."
+msgid "Your payment needs to be completed within %(minutes)s minutes."
+msgstr "Je evenement moet afgelopen zijn om deze functie te kunnen gebruiken."
+
+#: pretix/presale/templates/pretixpresale/event/checkout_payment.html
+#, fuzzy, python-format
+#| msgid "Your event needs to be over to use this feature."
+msgid "Your payment needs to be completed by %(deadline)s."
+msgstr "Je evenement moet afgelopen zijn om deze functie te kunnen gebruiken."
+
+#: pretix/presale/templates/pretixpresale/event/checkout_payment.html
+#, fuzzy
+#| msgid "Proceed with reset"
+msgid "Proceed without selection"
+msgstr "Ga door met resetten"
+
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html
 msgid "Before we continue, we need you to answer some questions."
 msgstr "Om verder te gaan moet je enkele vragen beantwoorden."
@@ -35131,14 +35259,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
 msgid "minimum amount to order: %(num)s"
 msgstr "minimumhoeveelheid om te bestellen: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgctxt "price"
 msgid "free"
 msgstr "gratis"
@@ -35167,66 +35293,56 @@ msgstr "Verberg varianten"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "Original price:"
 msgstr "Oorspronkelijke prijs:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "New price:"
 msgstr "Nieuwe prijs:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
 msgid "Modify price for %(item)s, at least %(price)s"
 msgstr "Wijzig de prijs voor %(item)s, minimaal %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
 msgid "Modify price for %(item)s"
 msgstr "Verander prijs voor %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "incl. taxes"
 msgstr "incl. belasting"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(name)s"
 msgstr "<strong>plus</strong> %(rate)s%% %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
 msgid "incl. %(rate)s%% %(name)s"
 msgstr "incl. %(rate)s%% %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgctxt "checkbox"
 msgid "Select"
 msgstr "Selecteer"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "Decrease quantity"
 msgstr "Hoeveelheid verminderen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "Increase quantity"
 msgstr "Hoeveelheid verhogen"
 
@@ -35731,12 +35847,10 @@ msgid "Your order qualifies for a discount"
 msgstr "Je bestelling komt in aanmerking voor korting"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 msgid "Uncategorized items"
 msgstr "Niet-gecategoriseerde items"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
 msgid "Show full-size image of %(item)s"
 msgstr "Volledige afbeelding van %(item)s weergeven"
@@ -35749,19 +35863,16 @@ msgstr[0] "%(amount)s× in je winkelwagen"
 msgstr[1] "%(amount)s× in je winkelwagen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
 msgid "%(value)s incl. taxes"
 msgstr "%(value)s incl. belastingen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
 msgid "%(value)s without taxes"
 msgstr "%(value)s zonder belastingen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
 msgid "Set price in %(currency)s for %(item)s"
 msgstr "Stel de prijs in %(currency)s vast voor %(item)s"
@@ -36521,11 +36632,6 @@ msgid ""
 msgstr ""
 "Je hebt een vouchercode ingevoerd die je een van de volgende producten voor "
 "de opgegeven prijs laat kopen:"
-
-#: pretix/presale/templates/pretixpresale/event/voucher.html
-#, python-format
-msgid "from %(minprice)s"
-msgstr "vanaf %(minprice)s"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html
 #, python-format
@@ -37544,6 +37650,43 @@ msgstr "Schrijftoegang"
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#~ msgid ""
+#~ "This option currently only affects the calendar of this event series, not "
+#~ "the organizer-wide calendar."
+#~ msgstr ""
+#~ "Deze optie heeft momenteel alleen invloed op de kalender van deze "
+#~ "evenementenreeks, niet op de kalender van de organisator."
+
+#~ msgid ""
+#~ "Accept payments with your PayPal account. PayPal is one of the most "
+#~ "popular payment methods world-wide."
+#~ msgstr ""
+#~ "Accepteer betalingen met je PayPal-account. PayPal is wereldwijd een van "
+#~ "de populairste betaalmethoden."
+
+#~ msgid "PayPal account"
+#~ msgstr "PayPal-account"
+
+#~ msgid ""
+#~ "After you clicked continue, we will redirect you to PayPal to fill in "
+#~ "your payment details. You will then be redirected back here to review and "
+#~ "confirm your order."
+#~ msgstr ""
+#~ "Als je verdergaat sturen we je door naar PayPal om de betalingsgegevens "
+#~ "in te vullen. Hierna zal je naar deze website worden teruggestuurd om de "
+#~ "bestelling te controleren en te bevestigen."
+
+#~ msgid ""
+#~ "Our attempt to execute your Payment via PayPal has failed. Please try "
+#~ "again or contact us."
+#~ msgstr ""
+#~ "Onze poging om je betaling bij PayPal uit te voeren is mislukt. Probeer "
+#~ "het opnieuw of neem contact met ons op."
+
+#, python-format
+#~ msgid "from %(minprice)s"
+#~ msgstr "vanaf %(minprice)s"
 
 #~ msgid ""
 #~ "Our attempt to execute your payment via PayPal has failed. Please try "

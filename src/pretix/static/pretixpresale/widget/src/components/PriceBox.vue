@@ -86,7 +86,8 @@ const taxline = computed(() => {
 	}
 })
 
-const showTaxline = computed(() => props.price.rate !== '0' && props.price.gross !== '0.00')
+// rate can either be "0.00" or "0" => parseFloat to check
+const showTaxline = computed(() => Number.parseFloat(props.price.rate) && Number.parseFloat(props.price.gross))
 </script>
 <template lang="pug">
 .pretix-widget-pricebox

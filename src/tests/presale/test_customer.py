@@ -721,9 +721,21 @@ def _cross_domain_login(env, client, client2, org_alt=False):
         else:
             KnownDomain.objects.create(domainname='event.test', organizer=env[0], event=env[1])
 
-    # Log in on org domain
+    # Start session on event domain
     path = '/conf/' if org_alt else '/'
-    r = client.post(f'/account/login?next=https://event.test{path}redeem&request_cross_domain_customer_auth=true', {
+    r = client2.post(f'{path}account/loginstart', {
+        'next': f'https://event.test{path}redeem',
+    }, HTTP_HOST='event.test')
+    assert r.status_code == 302
+    u = urlparse(r.headers['Location'])
+    assert u.netloc == 'org.test'
+    assert u.path == '/account/login'
+    assert 'request_cross_domain_customer_auth=' in u.query
+    assert 'request_cross_domain_customer_auth_nonce=' in u.query
+    assert 'next=' in u.query
+
+    # Log in on org domain
+    r = client.post(f'{u.path}?{u.query}', {
         'email': 'john@example.org',
         'password': 'foo',
     }, HTTP_HOST='org.test')
@@ -734,6 +746,7 @@ def _cross_domain_login(env, client, client2, org_alt=False):
     assert u.path == path + 'redeem'
     q = parse_qs(u.query)
     assert 'cross_domain_customer_auth' in q
+    assert 'cross_domain_customer_auth_nonce' in q
 
     # Take session over to event domain
     r = client2.get(f'{path}?{u.query}', HTTP_HOST='event.test')
@@ -745,7 +758,7 @@ def _cross_domain_login(env, client, client2, org_alt=False):
 def test_cross_domain_login(env, client, client2):
     _cross_domain_login(env, client, client2)
 
-    # Logged in on evnet domain
+    # Logged in on event domain
     r = client.get('/', HTTP_HOST='event.test')
     assert r.status_code == 200
     assert b'john@example.org' in r.content
@@ -896,7 +909,14 @@ def test_cross_domain_login_with_sso(env, client, client2, provider):
         },
     )
 
-    url = f'/account/login/{provider.pk}/?next=https://event.test/redeem&request_cross_domain_customer_auth=true'
+    r = client2.post('/account/loginstart', {"next": "https://event.test/redeem"}, follow=False, HTTP_HOST='event.test')
+    assert r.status_code == 302
+    assert "/account/login" in r['Location']
+
+    u = urlparse(r.headers['Location'])
+    nonce = parse_qs(u.query)['request_cross_domain_customer_auth_nonce'][0]
+    url = (f'/account/login/{provider.pk}/?next=https://event.test/redeem&request_cross_domain_customer_auth=true&'
+           f'request_cross_domain_customer_auth_nonce={nonce}')
     r = client.get(url, follow=False, HTTP_HOST='org.test')
     assert r.status_code == 302
     assert "/authorize" in r['Location']
@@ -910,6 +930,7 @@ def test_cross_domain_login_with_sso(env, client, client2, provider):
     assert u.path == '/redeem'
     q = parse_qs(u.query)
     assert 'cross_domain_customer_auth' in q
+    assert 'cross_domain_customer_auth_nonce' in q
 
     # Take session over to event domain
     r = client2.get(f'/?{u.query}', HTTP_HOST='event.test')

@@ -703,7 +703,7 @@ def test_event_delete_with_clone(token_client, organizer, event, meta_prop):
 
 
 @pytest.mark.django_db
-def test_event_update(token_client, organizer, event, item, meta_prop):
+def test_event_update(token_client, team, organizer, event, item, meta_prop, meta_prop_choices):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
         {
@@ -786,6 +786,26 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
         {
             "meta_data": {
+                meta_prop.name: "Workshop",
+                meta_prop_choices.name: "B"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data["meta_data"] == {
+        meta_prop.name: "Workshop",
+        meta_prop_choices.name: "B"
+    }
+    with scopes_disabled():
+        assert organizer.events.get(slug=resp.data['slug']).meta_values.filter(
+            property__name=meta_prop_choices.name, value="B"
+        ).exists()
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "meta_data": {
             }
         },
         format='json'
@@ -795,6 +815,51 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
         assert not organizer.events.get(slug=resp.data['slug']).meta_values.filter(
             property__name=meta_prop.name
         ).exists()
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "meta_data": {
+                meta_prop_choices.name: "invalid"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"meta_data":["Meta data property \'department\' does not allow value \'invalid\'."]}'
+
+    meta_prop_choices.protected = True
+    meta_prop_choices.save()
+    team.all_organizer_permissions = False
+    team.limit_organizer_permissions = {}
+    team.save()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "meta_data": {
+                meta_prop_choices.name: "A"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200   # silently ignored
+    assert resp.data["meta_data"] == {}
+
+    team.all_organizer_permissions = True
+    team.save()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "meta_data": {
+                meta_prop_choices.name: "A"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data["meta_data"] == {
+        meta_prop_choices.name: "A"
+    }
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
@@ -1434,8 +1499,12 @@ def test_get_event_settings(token_client, organizer, event):
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
     )
     assert resp.status_code == 200
-    assert resp.data['imprint_url'] == "https://example.org"
-    assert resp.data['contact_url'] == "https://example.org/contact"
+    assert resp.data['imprint_url'] == {
+        "en": "https://example.org",
+    }
+    assert resp.data['contact_url'] == {
+        "en": "https://example.org/contact",
+    }
     assert resp.data['seating_allow_blocked_seats_for_channel'] == []
 
     resp = token_client.get(
@@ -1443,7 +1512,9 @@ def test_get_event_settings(token_client, organizer, event):
     )
     assert resp.status_code == 200
     assert resp.data['imprint_url'] == {
-        "value": "https://example.org",
+        "value": {
+            "en": "https://example.org",
+        },
         "label": "Imprint URL",
         "help_text": "This should point e.g. to a part of your website that has your contact details and legal "
                      "information.",
@@ -1478,8 +1549,12 @@ def test_patch_event_settings(token_client, organizer, event, team):
         format='json'
     )
     assert resp.status_code == 200
-    assert resp.data['contact_url'] == "https://example.com/contact"
-    assert resp.data['imprint_url'] == "https://example.com"
+    assert resp.data['contact_url'] == {
+        "en": "https://example.com/contact",
+    }
+    assert resp.data['imprint_url'] == {
+        "en": "https://example.com",
+    }
     assert resp.data['seating_allow_blocked_seats_for_channel'] == ['web']
     assert not resp.data['reusable_media_active']
     event.settings.flush()
@@ -1542,8 +1617,12 @@ def test_patch_event_settings(token_client, organizer, event, team):
         format='json'
     )
     assert resp.status_code == 200
-    assert resp.data['contact_url'] == "https://example.org/contact"
-    assert resp.data['imprint_url'] == "https://example.org"
+    assert resp.data['contact_url'] == {
+        "en": "https://example.org/contact",
+    }
+    assert resp.data['imprint_url'] == {
+        "en": "https://example.org",
+    }
     event.settings.flush()
     assert event.settings.contact_url == 'https://example.org/contact'
     assert event.settings.imprint_url == 'https://example.org'

@@ -38,7 +38,7 @@ def env():
     o = Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal'
+        date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal2'
     )
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     t = Team.objects.create(organizer=event.organizer, all_event_permissions=True)
@@ -69,7 +69,7 @@ def env():
 def refund_huf(env):
     event = Event.objects.create(
         organizer=env[0].organizer, name='Dummy', slug='dummy2', currency='HUF',
-        date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal'
+        date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal2'
     )
     order = Order.objects.create(
         code='HUFFY', event=event, email='admin@localhost',

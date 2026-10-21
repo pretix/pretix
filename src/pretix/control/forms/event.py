@@ -400,10 +400,10 @@ class EventMetaValueForm(forms.ModelForm):
         if self.disabled:
             self.fields['value'].widget.attrs['readonly'] = 'readonly'
 
-    def clean_slug(self):
+    def clean_value(self):
         if self.disabled:
             return self.instance.value if self.instance else None
-        return self.cleaned_data['slug']
+        return self.cleaned_data['value']
 
     class Meta:
         model = EventMetaValue
@@ -838,9 +838,10 @@ class CancelSettingsForm(SettingsForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.obj.settings.giftcard_expiry_years is not None:
-            self.fields['cancel_allow_user_paid_refund_as_giftcard'].help_text = gettext(
-                'You have configured gift cards to be valid {} years plus the year the gift card is issued in.'
-            ).format(self.obj.settings.giftcard_expiry_years)
+            self.fields['cancel_allow_user_paid_refund_as_giftcard'].help_text = format_html(
+                gettext('You have configured gift cards to be valid {} years plus the year the gift card is issued in.'),
+                self.obj.settings.giftcard_expiry_years
+            )
 
 
 class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
@@ -855,14 +856,21 @@ class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'payment_term_accept_late',
         'payment_pending_hidden',
         'payment_explanation',
+        'payment_choice_postpone_allowed_channels',
         'tax_rule_payment',
     ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        channels = list(self.obj.organizer.sales_channels.all())
+        self.fields['payment_choice_postpone_allowed_channels'].choices = [
+            (c.identifier, c.label) for c in channels
+            if c.type_instance.payment_restrictions_supported
+        ]
+
         self.term_channel_fields = {}
-        for c in self.obj.organizer.sales_channels.all():
+        for c in channels:
             if c.type_instance.payment_restrictions_supported and c.identifier != "web":
                 # At the moment, it seems sufficient to allow this for the same channel types as other payment settings
                 # We can always introduce more flags later if needed
@@ -1628,10 +1636,15 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
             self._set_field_placeholders(k, v, rich=k.startswith('mail_text_') and k not in self.plain_rendering)
 
         for k, v in list(self.fields.items()):
-            if k.endswith('_attendee') and not event.settings.attendee_emails_asked:
-                # If we don't ask for attendee emails, we can't send them anything and we don't need to clutter
-                # the user interface with it
-                del self.fields[k]
+            if k.endswith('_attendee'):
+                if not event.settings.attendee_emails_asked:
+                    # If we don't ask for attendee emails, we can't send them anything and we don't need to clutter
+                    # the user interface with it
+                    del self.fields[k]
+                elif 'subject' in k and k.replace("subject", "send") in self.fields:
+                    v.widget.attrs["data-display-dependency"] = f'#id_{k.replace("subject", "send")}'
+                elif 'text' in k and k.replace("text", "send") in self.fields:
+                    v.widget.attrs["data-display-dependency"] = f'#id_{k.replace("text", "send")}'
 
 
 class TicketSettingsForm(SettingsForm):

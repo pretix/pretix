@@ -362,7 +362,8 @@ def mark_order_refunded(order, user=None, auth=None, api_token=None):
 
 def mark_order_expired(order, user=None, auth=None):
     """
-    Mark this order as expired. This sets the payment status and returns the order object.
+    Mark this order as expired. This sets the order status, generates an invoice cancellation
+    and returns the order object.
     :param order: The order to change
     :param user: The user that performed the change
     """
@@ -964,7 +965,7 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
 
 
 def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: List[dict], address: InvoiceAddress,
-                             meta_info: dict, event: Event, require_approval=False):
+                             meta_info: dict, event: Event, sales_channel: SalesChannel, require_approval=False):
     fees = []
     # Pre-rounding, pre-fee total is used for fee calculation
     total = sum([c.gross_price_before_rounding for c in positions])
@@ -1024,7 +1025,14 @@ def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: Li
         payments_assigned += to_pay
         p['payment_amount'] = to_pay
 
-    if total != payments_assigned and not require_approval:
+    allow_postponed_payment = (
+        require_approval or
+        (
+            sales_channel.identifier in event.settings.payment_choice_postpone_allowed_channels and not payment_requests
+        )
+    )
+
+    if total != payments_assigned and not allow_postponed_payment:
         raise OrderError(_("The selected payment methods do not cover the total balance."))
 
     return fees
@@ -1046,7 +1054,15 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
 
     # Final calculation of fees, also performs final rounding
     try:
-        fees = _apply_rounding_and_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
+        fees = _apply_rounding_and_fees(
+            positions,
+            payment_requests,
+            address,
+            meta_info,
+            event,
+            sales_channel=sales_channel,
+            require_approval=require_approval
+        )
     except TaxRule.SaleNotAllowed:
         raise OrderError(error_messages['country_blocked'])
 
@@ -2464,7 +2480,11 @@ class OrderChangeManager:
                 self.order.log_action('pretix.event.order.changed.feevalue', user=self.user, auth=self.auth, data={
                     'fee': fee.pk,
                     'old_price': fee.value,
-                    'new_price': op.value.gross
+                    'new_price': op.value.gross,
+                    'old_tax_rate': fee.tax_rate,
+                    'new_tax_rate': op.value.rate,
+                    'old_tax_value': fee.tax_value,
+                    'new_tax_value': op.value.tax,
                 })
                 fee.value = op.value.gross
                 fee._calculate_tax()
@@ -2474,9 +2494,13 @@ class OrderChangeManager:
                 self.order.log_action('pretix.event.order.changed.price', user=self.user, auth=self.auth, data={
                     'position': position.pk,
                     'positionid': position.positionid,
-                    'old_price': position.price,
                     'addon_to': position.addon_to_id,
-                    'new_price': op.price.gross
+                    'old_price': position.price,
+                    'new_price': op.price.gross,
+                    'old_tax_rate': position.tax_rate,
+                    'new_tax_rate': op.price.rate,
+                    'old_tax_value': position.tax_value,
+                    'new_tax_value': op.price.tax,
                 })
                 position.price = op.price.gross
                 position.price_includes_rounding_correction = Decimal("0.00")
@@ -2491,25 +2515,43 @@ class OrderChangeManager:
             elif isinstance(op, self.TaxRuleOperation):
                 if isinstance(op.position, OrderPosition):
                     position = position_cache.setdefault(op.position.pk, op.position)
-                    self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data={
+                    log = {
                         'position': position.pk,
                         'positionid': position.positionid,
                         'addon_to': position.addon_to_id,
                         'old_taxrule': position.tax_rule.pk if position.tax_rule else None,
-                        'new_taxrule': op.tax_rule.pk
-                    })
+                        'new_taxrule': op.tax_rule.pk,
+                        'old_price': position.price,
+                        'old_tax_rate': position.tax_rate,
+                        'old_tax_value': position.tax_value,
+                    }
                     position._calculate_tax(op.tax_rule)
                     position.save()
+                    log.update({
+                        'new_price': position.price,
+                        'new_tax_rate': position.tax_rate,
+                        'new_tax_value': position.tax_value,
+                    })
+                    self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data=log)
                 elif isinstance(op.position, OrderFee):
                     fee = fee_cache.setdefault(op.position.pk, op.position)
-                    self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data={
+                    log = {
                         'fee': fee.pk,
                         'fee_type': fee.fee_type,
                         'old_taxrule': fee.tax_rule.pk if fee.tax_rule else None,
-                        'new_taxrule': op.tax_rule.pk
-                    })
+                        'new_taxrule': op.tax_rule.pk,
+                        'old_price': fee.value,
+                        'old_tax_rate': fee.tax_rate,
+                        'old_tax_value': fee.tax_value,
+                    }
                     fee._calculate_tax(op.tax_rule)
                     fee.save()
+                    log.update({
+                        'new_price': fee.value,
+                        'new_tax_rate': fee.tax_rate,
+                        'new_tax_value': fee.tax_value,
+                    })
+                    self.order.log_action('pretix.event.order.changed.tax_rule', user=self.user, auth=self.auth, data=log)
             elif isinstance(op, self.CancelFeeOperation):
                 fee = fee_cache.setdefault(op.fee.pk, op.fee)
                 self.order.log_action('pretix.event.order.changed.cancelfee', user=self.user, auth=self.auth, data={

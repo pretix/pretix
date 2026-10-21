@@ -56,18 +56,11 @@ from pretix.base.services.placeholders import FormPlaceholderMixin  # noqa
 class BaseMailForm(FormPlaceholderMixin, forms.Form):
     subject = forms.CharField(label=_("Subject"))
     message = forms.CharField(label=_("Message"))
-    attachment = CachedFileField(
-        label=_("Attachment"),
-        required=False,
-        ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_EMAIL_ATTACHMENT,
-        help_text=_('Sending an attachment increases the chance of your email not arriving or being sorted into spam folders. We recommend only using PDFs '
-                    'of no more than 2 MB in size.'),
-        max_size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT
-    )
 
     def __init__(self, *args, **kwargs):
         event = self.event = kwargs.pop('event')
         context_parameters = kwargs.pop('context_parameters')
+        request = kwargs.pop('request')
         super().__init__(*args, **kwargs)
         self.fields['subject'] = I18nFormField(
             label=_('Subject'),
@@ -78,6 +71,16 @@ class BaseMailForm(FormPlaceholderMixin, forms.Form):
             label=_('Message'),
             widget=I18nMarkdownTextarea, required=True,
             locales=event.settings.get('locales'),
+        )
+        self.fields['attachment'] = CachedFileField(
+            label=_("Attachment"),
+            required=False,
+            ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_EMAIL_ATTACHMENT,
+            help_text=_(
+                'Sending an attachment increases the chance of your email not arriving or being sorted into spam folders. We recommend only using PDFs '
+                'of no more than 2 MB in size.'),
+            max_size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT,
+            request=request,
         )
         self._set_field_placeholders('subject', context_parameters, rich=False)
         self._set_field_placeholders('message', context_parameters, rich=True)
@@ -158,7 +161,12 @@ class OrderMailForm(BaseMailForm):
         ),
         label=pgettext_lazy('sendmail_form', 'Restrict to products'),
         required=True,
-        queryset=Item.objects.none()
+        queryset=Item.objects.none(),
+        help_text=pgettext_lazy(
+            'sendmail_form',
+            'There may be multiple mails sent out to the same mail address if one order contains multiple attendee '
+            'products for it, if you restrict to products while also restricting mails to attendees only. '
+            'This is intended, as every one of those get linked to their own separate order page restricted to only that product.')
     )
     filter_checkins = forms.BooleanField(
         label=_('Filter check-in status'),
@@ -371,6 +379,11 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
             del self.fields['subevent']
 
         self.fields['limit_products'].queryset = Item.objects.filter(event=self.event)
+        self.fields['limit_products'].help_text = pgettext_lazy(
+            'sendmail_form',
+            'There may be multiple mails sent out to the same mail address if one order contains multiple attendee '
+            'products for it, if you restrict to products while also restricting mails to attendees only. '
+            'This is intended, as every one of those get linked to their own separate order page restricted to only that product.')
 
         self.fields['schedule_type'] = forms.ChoiceField(
             label=_('Type of schedule time'),

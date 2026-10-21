@@ -44,6 +44,7 @@ from django.db.models import Count, F, Max
 from django.db.models.functions import Upper
 from django.forms.utils import ErrorDict
 from django.urls import reverse
+from django.utils.html import escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelChoiceField
@@ -176,7 +177,7 @@ class VoucherForm(I18nModelForm):
                 required=False,
                 widget=forms.TextInput(attrs={'data-seat-guid-field': '1'}),
                 initial=self.instance.seat.seat_guid if self.instance.seat else '',
-                help_text=str(self.instance.seat) if self.instance.seat else '',
+                help_text=escape(str(self.instance.seat) if self.instance.seat else ''),
             )
 
     def parse_itemvar(self, data):
