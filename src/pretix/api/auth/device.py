@@ -76,7 +76,7 @@ class DeviceTokenAuthentication(TokenAuthentication):
             except DeviceLastSeen.DoesNotExist:
                 # First request from device, create model, ignore result. Use get_or_create to be safe
                 # against concurrent create requests
-                DeviceLastSeen.objects.get_or_create(device=device, last_seen=now())
+                DeviceLastSeen.objects.get_or_create(device=device, defaults={"last_seen": now()})
             else:
                 if now() - last_seen_obj.last_seen < timedelta(seconds=10):
                     # We don't need to know the last seen info of a device to more precision than this,
