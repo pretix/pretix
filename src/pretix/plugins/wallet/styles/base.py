@@ -1,6 +1,6 @@
 import enum
 from functools import cached_property
-from typing import Any, BinaryIO, Literal, TypedDict
+from typing import TypedDict
 from django.contrib.staticfiles import finders
 
 import jsonschema
@@ -19,6 +19,7 @@ from ..placeholders import (
     get_wallet_placeholder_renderer,
     get_wallet_placeholders,
 )
+from .settings import SettingsField, SettingsFile, ImageSettingsField
 
 
 class WalletPlatform:
@@ -299,173 +300,6 @@ class ImageFieldGroup(PlaceholderFieldGroup):
         super().__init__(content_type=self.content_type, display=self.display, **kwargs)
 
 
-SettingType = Literal["image", "text", "float", "color", "bool"]
-
-
-class SettingsField:
-    identifier: str
-    label: str
-    type: SettingType
-    help_text: str | None
-    required: bool
-    default: Any
-
-    def asdict(self, locales: list[str]):
-        return {
-            "identifier": self.identifier,
-            "label": self.label,
-            "type": self.type,
-            "help_text": self.help_text,
-            "required": self.required,
-            "default": self.default,
-        }
-
-    def layout_schema(self) -> dict[str, Any] | None:
-        raise NotImplementedError()
-
-
-class TextSettingsField(SettingsField):
-    default: str | None
-
-    def __init__(
-        self,
-        identifier: str,
-        label: str,
-        help_text: str | None = None,
-        required: bool = False,
-        default: str | None = None,
-    ):
-        self.identifier = identifier
-        self.label = label
-        self.type = "text"
-        self.help_text = help_text
-        self.required = required
-        self.default = default
-
-    def layout_schema(self) -> dict[str, Any] | None:
-        schema = {"type": "string"}
-        if not self.required:
-            schema = {"oneOf": [schema, {"type": "null"}]}
-        return schema
-
-
-class ColorSettingsField(SettingsField):
-    def __init__(
-        self,
-        identifier: str,
-        label: str,
-        help_text: str | None = None,
-        required: bool = False,
-        default: str | None = None,
-    ):
-        self.identifier = identifier
-        self.label = label
-        self.type = "color"
-        self.help_text = help_text
-        self.required = required
-        self.default = default
-
-    def layout_schema(self) -> dict[str, Any] | None:
-        # TODO: validate that '#' + 6 hex chars
-        schema = {"type": "string"}
-        if not self.required:
-            schema = {"oneOf": [schema, {"type": "null"}]}
-        return schema
-
-
-class ImageSettingsField(SettingsField):
-    _default: str | File | None
-
-    def __init__(
-        self,
-        identifier: str,
-        label: str,
-        help_text: str | None = None,
-        default: str | File | None = None,
-    ):
-        self.identifier = identifier
-        self.label = label
-        self.type = "image"
-        self.help_text = help_text
-        self.required = False
-        self._default = default
-
-    @property
-    def default(self):
-        if isinstance(self._default, str):
-            return static(self._default)
-        elif isinstance(self._default, File):
-            return self._default.url
-
-    def layout_schema(self):
-        return
-
-
-class FloatSettingsField(SettingsField):
-    min: float | None
-    max: float | None
-
-    def __init__(
-        self,
-        identifier: str,
-        label: str,
-        help_text=None,
-        required: bool = False,
-        min: float | None = None,
-        max: float | None = None,
-        default: str | None = None,
-    ):
-        self.type = "float"
-        self.identifier = identifier
-        self.label = label
-        self.help_text = help_text
-        self.required = required
-        self.min = min
-        self.max = max
-        self.default = default
-
-    def layout_schema(self):
-        schema: dict[str, Any] = {"type": "number"}
-        if self.min is not None:
-            schema["minimum"] = self.min
-        if self.max is not None:
-            schema["maximum"] = self.max
-        if not self.required:
-            schema = {"oneOf": [schema, {"type": "null"}]}
-        return schema
-
-    def asdict(self, locales: list[str]):
-        return super().asdict(locales) | {"min": self.min, "max": self.max}
-
-
-class BooleanSettingsField(SettingsField):
-    def __init__(
-        self,
-        identifier: str,
-        label: str,
-        help_text: str | None = None,
-        default: bool = False,
-    ):
-        self.type = "bool"
-        self.identifier = identifier
-        self.label = label
-        self.help_text = help_text
-        self.required = False
-        self.default = default
-
-    def layout_schema(self):
-        return {"type": "boolean"}
-
-
-class SettingsFile:
-    url: str
-    file: BinaryIO
-
-    def __init__(self, url, file):
-        self.url = url
-        self.file = file
-
-
 class PassStyle:
     identifier: str  # unique within platform
     name: str
@@ -501,7 +335,9 @@ class PassStyle:
     def preview_data(self) -> dict:
         return {}
 
-    def get_cleaned_setting(self, setting_identifier: str) -> SettingsFile | str | float | bool | None:
+    def get_cleaned_setting(
+        self, setting_identifier: str
+    ) -> SettingsFile | str | float | bool | None:
         if not self.layout:
             raise ValueError("`layout` needs to be set")
 
@@ -510,21 +346,14 @@ class PassStyle:
         if not setting:
             return None
 
-        if isinstance(setting, ImageSettingsField):
-            if setting.identifier in self.file_settings:
-                return SettingsFile(self.file_settings[setting.identifier].url, self.file_settings[setting.identifier])
-            elif isinstance(setting._default, File):
-                return SettingsFile(setting._default.url, setting._default)
-            elif isinstance(setting._default, str):
-                return SettingsFile(static(setting._default), File(None, finders.find(setting._default)))
+        if setting.type == "image":
+            val = self.file_settings.get(setting.identifier)
         else:
-            if val := self.layout.get("settings", {}).get(
+            val = self.layout.get("settings", {}).get(
                 setting.identifier, setting.default
-            ):
-                return val
+            )
 
-            if setting.default:
-                return setting.default
+        return setting.clean(val)
 
     def asdict(self):
         context = LayoutContext(
@@ -681,9 +510,11 @@ class PassStyle:
                     f"Group {group.identifier} needs at least {group.min_entries} entries, but only {len(fields[group.identifier])} were provided"
                 )
 
-            if overflow_group := self.layout["fieldgroups"][group.identifier][
-                "overflow"
-            ]:
+            if (
+                overflow_group := self.layout["fieldgroups"]
+                .get(group.identifier, {})
+                .get("overflow")
+            ):
                 fields.setdefault(overflow_group, [])
                 fields[overflow_group] += fields[group.identifier][group.max_entries :]
             fields[group.identifier] = fields[group.identifier][: group.max_entries]
