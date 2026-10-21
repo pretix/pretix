@@ -250,6 +250,8 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         if request.POST.get("background", "").strip():
             try:
                 cf = CachedFile.objects.get(id=request.POST.get("background"), web_download=True)
+                if not cf.allowed_for_session(request, "ticketoutput-pdf-background"):
+                    cf = None
             except CachedFile.DoesNotExist:
                 pass
 
@@ -305,7 +307,7 @@ class FontsCSSView(TemplateView):
 
 class PdfView(TemplateView):
     def get(self, request, *args, **kwargs):
-        cf = get_object_or_404(CachedFile, id=kwargs.get("filename"), filename="background_preview.pdf")
+        cf = get_object_or_404(CachedFile, id=kwargs.get("filename"), filename="background_preview.pdf", web_download=True)
         if not cf.allowed_for_session(request, "ticketoutput-pdf-background"):
             raise PermissionDenied()
         resp = FileResponse(cf.file, filename=cf.filename, content_type='application/pdf')
