@@ -27,6 +27,7 @@ from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
 
+from pretix.base.forms import SecretKeySettingsField
 from pretix.base.models import Event
 from pretix.base.settings import SettingsSandbox
 from pretix.base.ticketoutput import BaseTicketOutput
@@ -194,9 +195,8 @@ class AppleWalletTicketOutput(WalletOutput):
                 ),
                 (
                     "wallet_apple_key_password",
-                    forms.CharField(
+                    SecretKeySettingsField(
                         label=_("Apple Wallet Pass key password"),
-                        widget=forms.PasswordInput(render_value=True),
                         required=False,
                         help_text=_(
                             "Optional, only necessary if the key entered above requires a password to use."

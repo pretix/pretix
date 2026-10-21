@@ -14,7 +14,8 @@ const store = createWalletStore({
 		"input[name=csrfmiddlewaretoken]",
 	)?.value!!,
 	layoutId: mountEl.dataset.layoutId!,
-	baseUrl: mountEl.dataset.baseUrl!
+	baseUrl: mountEl.dataset.baseUrl!,
+	previewUrl: mountEl.dataset.previewUrl!,
 });
 store.load();
 const app = createApp(App);

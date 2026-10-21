@@ -1,4 +1,8 @@
-from pretix.plugins.wallet.styles.apple import SignedZipFile, StringResource, AppleWalletEventTicket
+from pretix.plugins.wallet.styles.apple import (
+    SignedZipFile,
+    StringResource,
+    AppleWalletEventTicket,
+)
 from django.utils.translation import gettext as _
 import pytest
 from i18nfield.strings import LazyI18nString
@@ -10,11 +14,12 @@ import io
 import zipfile
 import json
 import jsonschema
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 @pytest.fixture
 def pkpass_context():
-    key_pw = b"TESTPW"
+    key_pw = "TESTPW"
     now = datetime.datetime.now()
     ca_key = rsa.generate_private_key(public_exponent=65537, key_size=4096)
     ca_cert = (
@@ -50,12 +55,12 @@ def pkpass_context():
         .sign(ca_key, hashes.SHA256())
     )
 
-    ca_cert_pem = cert.public_bytes(encoding=serialization.Encoding.PEM)
+    ca_cert_pem = ca_cert.public_bytes(encoding=serialization.Encoding.PEM)
     cert_pem = cert.public_bytes(encoding=serialization.Encoding.PEM)
     key_pem = key.private_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PrivateFormat.TraditionalOpenSSL,
-        encryption_algorithm=serialization.BestAvailableEncryption(key_pw),
+        encryption_algorithm=serialization.BestAvailableEncryption(key_pw.encode()),
     )
     return {
         "ca_certificate": ca_cert_pem,
@@ -63,6 +68,25 @@ def pkpass_context():
         "key": key_pem,
         "password": key_pw,
     }
+
+
+@pytest.fixture
+def apple_env(env, pkpass_context):
+    event, user, organizer = env
+    event.settings.wallet_apple_ca_certificate = SimpleUploadedFile(
+        "file.dat", "", pkpass_context["ca_certificate"]
+    )
+    # event.settings.wallet_apple_certificate = SimpleUploadedFile("", "", pkpass_context['certificate'])
+    # event.settings.wallet_apple_key = SimpleUploadedFile("", "", pkpass_context['key'])
+    event.settings.wallet_apple_key_password = pkpass_context["password"]
+
+    #     self.event.settings.wallet_apple_ca_certificate.read(),
+    # self.event.settings.wallet_apple_certificate.read(),
+    # self.event.settings.wallet_apple_key.read(),
+    # self.event.settings.wallet_apple_key_password,
+    #     "passTypeIdentifier": self.event.settings.wallet_apple_pass_type_id,
+    # "teamIdentifier": self.event.settings.wallet_apple_team_id,
+    return event, user, organizer
 
 
 def test_signed_zip(pkpass_context):
@@ -84,7 +108,7 @@ def test_signed_zip(pkpass_context):
     pkpass.add_file("test", b"test content")
     generated_pass = pkpass.finish()
 
-    with zipfile.ZipFile(io.BytesIO(generated_pass), "r") as zip_file:
+    with zipfile.ZipFile(SimpleUploadedFile("", "", generated_pass), "r") as zip_file:
         assert set(zip_file.namelist()) == {"test", "manifest.json", "signature"}
         with zip_file.open("manifest.json") as f:
             manifest = json.load(f)
@@ -99,7 +123,7 @@ def test_signed_zip(pkpass_context):
     pkpass.add_file("test/test", "test content")
     generated_pass = pkpass.finish()
 
-    with zipfile.ZipFile(io.BytesIO(generated_pass), "r") as zip_file:
+    with zipfile.ZipFile(SimpleUploadedFile("", "", generated_pass), "r") as zip_file:
         assert set(zip_file.namelist()) == {"test/test", "manifest.json", "signature"}
         with zip_file.open("manifest.json") as f:
             manifest = json.load(f)
@@ -148,7 +172,6 @@ def test_stringresource_escaping(input, output):
     assert stringfiles["en"] == f'"{output}" = "test";'
 
 
-
 def test_stringresource_additional_locale():
     resource = StringResource(locales=["de", "en", "fr"])
     resource.add_entry("TEST", LazyI18nString({"de": "test-de", "en": "test-en"}))
@@ -159,26 +182,52 @@ def test_stringresource_additional_locale():
     assert stringfiles["en"] == '"TEST" = "test-en";'
     assert stringfiles["fr"] == '"TEST" = "test-en";'
 
-def test_generate_pass_json():
-    context = {
-        "placeholders": {
-            "text": {"test_placeholder": {"evaluate": lambda: "test placeholder"}}
-        },
-        "description": "Ticket for Test",
-        "organizationName": "TestOrg",
-        "serialNumber": "1",
-        "passTypeIdentifier": "pass.test.test",
-        "teamIdentifier": "ABCDEF123456"
+
+def get_value(strings, key):
+    if key in strings.entries:
+        return str(strings.entries[key])
+    return key
+
+
+@pytest.mark.django_db
+def test_generate_pass_json(apple_env, order):
+    event, user, organizer = apple_env
+
+    layout = {
+        "fieldgroups": {
+            "primary": {
+                "entries": [
+                    {"type": "placeholder", "label": "test", "content": "event_slug"},
+                    {
+                        "label": {"de": "test-de", "en": "test-en"},
+                        "type": "custom",
+                        "content": "test content",
+                    },
+                ]
+            }
+        }
     }
-    layout = {"fieldgroups": {"primary": {"entries": [{"type": "placeholder", "label": "test", "content": "test_placeholder"}, {"type": "text", "label": {"de":"test-de", "en": "test-en"}, "content": "test content"}]}}}
-    style = AppleWalletEventTicket()
-    schema = style.layout_schema(context)
-    jsonschema.validate(schema, layout)
+    style = AppleWalletEventTicket(event, layout)
+    style.validate()
 
-    result = style.generate_pass_json(layout, context)
+    op = order.positions.first()
+    fields = style.get_pass_fields(op)
+    strings = StringResource(locales=["de", "en"])
+    result = style.generate_pass_json(fields, op, strings)
 
-    required_fields = ["description", "formatVersion", "organizationName", "passTypeIdentifier", "serialNumber", "teamIdentifier"]
+    required_fields = [
+        "description",
+        "formatVersion",
+        "organizationName",
+        "passTypeIdentifier",
+        "serialNumber",
+        "teamIdentifier",
+    ]
     for field in required_fields:
         assert field in result
 
-    assert result['formatVersion'] == 1
+    assert result["formatVersion"] == 1
+
+    assert len(result["eventTicket"]["primaryFields"])
+    assert get_value(strings, result["eventTicket"]["primaryFields"][0]["value"]) == "dummy"
+    assert get_value(strings, result["eventTicket"]["primaryFields"][0]["label"]) == "test"
