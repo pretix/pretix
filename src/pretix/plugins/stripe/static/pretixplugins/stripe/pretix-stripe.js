@@ -172,6 +172,9 @@ var pretixstripe = {
 						})
 
 						pretixstripe.affirm.mount('#stripe-affirm')
+						pretixstripe.affirm.on('ready', function () {
+							$('.stripe-container').closest('form').find('.checkout-button-row .btn-primary').prop('disabled', false)
+						})
 					}
 					if ($('#stripe-klarna').length) {
 						try {
@@ -183,6 +186,9 @@ var pretixstripe = {
 							})
 
 							pretixstripe.klarna.mount('#stripe-klarna')
+							pretixstripe.klarna.on('ready', function () {
+								$('.stripe-container').closest('form').find('.checkout-button-row .btn-primary').prop('disabled', false)
+							})
 						} catch (e) {
 							console.error(e)
 							$('#stripe-klarna').html('<div class=\'alert alert-danger\'>Technical error, please contact support: ' + e + '</div>')
