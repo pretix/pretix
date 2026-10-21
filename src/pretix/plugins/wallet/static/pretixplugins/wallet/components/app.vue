@@ -36,7 +36,7 @@ function openForm(url: string, data: Record<string, string | object>) {
 
 async function openPreview(e: Event) {
 	e.preventDefault();
-	openForm("../../preview/", {
+	openForm(store.previewUrl, {
 		csrfmiddlewaretoken: store.csrfToken,
 		id: store.layoutId,
 		...(await store.serializeCurrentPlatformLayout()),
@@ -119,7 +119,6 @@ const previewRenderers = {
 	min-height: 0;
 
 	border: solid 1px #949494;
-	border-radius: 1em;
 	padding: 1em;
 
 	overflow: hidden;

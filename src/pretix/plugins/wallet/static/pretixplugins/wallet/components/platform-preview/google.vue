@@ -55,6 +55,10 @@ const qrcode = computed(() => store.renderedFieldGroups["code"]?.[0]);
 	grid-template-columns: repeat(auto-fit, minmax(auto, 360px));
 	align-items: start;
 
+	.pass-container {
+		border-radius: 1em;
+	}
+
 	.google-main {
 		--background-color: attr(data-background-color type(<color>));
 		color: contrast-color(var(--background-color));
