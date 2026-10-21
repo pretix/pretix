@@ -160,7 +160,11 @@ class CustomerListExporter(OrganizerLevelExportMixin, MultiSheetListExporter):
             ]
             if name_scheme and len(name_scheme['fields']) > 1:
                 for k, label, w in name_scheme['fields']:
-                    row.append(obj.attendee_name_parts.get(k, ''))
+                    row.append(
+                        obj.attendee_name_parts.get(k, '')
+                        if obj.attendee_name_parts
+                        else ''
+                    )
             yield row
 
     def get_filename(self):
