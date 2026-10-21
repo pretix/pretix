@@ -633,6 +633,9 @@ class ImportView(ListView):
 
 class OrganizerBanktransferView:
     def dispatch(self, request, *args, **kwargs):
+        # Users can use the bank transfer views if they have sufficient permission for at least one event.
+        # Yes, this allows them to cauase changes in events they don't have access to. This is an accepted
+        # risk because every other way, the bank transfer feature becomes basically unusable.
         has_any_event_perm = request.user.get_events_with_permission(
             "event.orders:write", request=request
         ).filter(organizer=request.organizer).exists()
