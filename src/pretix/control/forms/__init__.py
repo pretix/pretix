@@ -172,7 +172,7 @@ class CachedFileInput(forms.ClearableFileInput):
         from ...base.models import CachedFile
         v = super().value_from_datadict(data, files, name)
         if v is None and data.get(name + '-cachedfile'):  # An explicit "[x] clear" would be False, not None
-            v = CachedFile.objects.filter(id=data[name + '-cachedfile']).first()
+            v = CachedFile.objects.filter(id=data[name + '-cachedfile'], web_download=True).first()
             if not v.allowed_for_session(self.request):
                 v = None
         return v
