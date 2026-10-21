@@ -244,7 +244,7 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or event or exhibitor does not exist **or** you have no permission to view it.
 
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/(exhibitor_id)/leads/(id)
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/(exhibitor_id)/leads/(id)/
 
    Returns information on one lead, identified by its exhibitor and lead ID.
 
@@ -252,7 +252,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/exhibitors/1/leads/1 HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/exhibitors/1/leads/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
