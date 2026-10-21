@@ -5,14 +5,11 @@ import logging
 import tempfile
 import zipfile
 from typing import Any
-
+from .settings import convert_to_png
 import cryptography
 import cryptography.hazmat.primitives.hashes
 import cryptography.hazmat.primitives.serialization.pkcs7
 import cryptography.x509
-from django.conf import settings
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.forms import ValidationError
 from django.utils.encoding import force_bytes
 from django.utils.translation import gettext as _
 
@@ -23,11 +20,13 @@ from pretix.plugins.wallet.i18n import (
     Localizable,
     MaybeTranslatedString,
 )
-from pretix.plugins.wallet.styles.base import (
+from .settings import (
     ColorSettingsField,
+    FloatSettingsField,
+)
+from pretix.plugins.wallet.styles.base import (
     FieldGroup,
     FieldGroupDisplay,
-    FloatSettingsField,
     ImageSettingsField,
     PassStyle,
     PlaceholderFieldEntry,
@@ -135,33 +134,6 @@ class SignedZipFile:
         self.manifest[filename] = hashlib.sha1(content).hexdigest()
 
 
-def convert_to_png(file, max_size=None):
-    # TODO: move validation to upload
-    try:
-        from PIL import Image, ImageOps
-    except ImportError:
-        return file
-
-    file.open("rb")
-    file.seek(0)
-    try:
-        with (
-            Image.open(file, formats=settings.PILLOW_FORMATS_IMAGE) as im,
-            tempfile.NamedTemporaryFile("rb", suffix=".png") as tmpfile,
-        ):
-            im = ImageOps.exif_transpose(im)
-            if max_size:
-                im.thumbnail(max_size, resample=Image.Resampling.BICUBIC)
-            im.save(tmpfile.name)
-            tmpfile.seek(0)
-            return SimpleUploadedFile("picture.png", tmpfile.read(), "image png")
-    except IOError:
-        logger.exception("Could not convert image to PNG.")
-        raise ValidationError(
-            _("The file you uploaded could not be converted to PNG format.")
-        )
-
-
 class AppleWalletStyle(PassStyle):
     @property
     def settings(self):
@@ -191,7 +163,9 @@ class AppleWalletStyle(PassStyle):
                 ),
                 default=self.event.settings.primary_color,
             ),
-            ColorSettingsField(identifier="label_color", label=_("Label Color")),
+            ColorSettingsField(
+                identifier="label_color", label=_("Label Color"), default="#000000"
+            ),
             FloatSettingsField(
                 identifier="lat",
                 label=_("Latitude"),
@@ -324,12 +298,12 @@ class AppleWalletStyle(PassStyle):
 
         if file := self.get_cleaned_setting("logo"):
             logo = convert_to_png(
-                file.file, (480, 150)
+                file, (480, 150)
             )  # TODO: check max_size against apple HIG
 
         if file := self.get_cleaned_setting("icon"):
             icon = convert_to_png(
-                file.file, max_size=(87, 87)
+                file, max_size=(87, 87)
             )  # TODO: check max_size against apple HIG
 
         pkpass.add_file("icon.png", icon.read())
@@ -337,7 +311,7 @@ class AppleWalletStyle(PassStyle):
 
         if file := self.get_cleaned_setting("background"):
             background = convert_to_png(
-                file.file, max_size=(540, 660)
+                file, max_size=(540, 660)
             )  # TODO: check max_size against apple HIG
             pkpass.add_file("background.png", background.read())
 

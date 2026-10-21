@@ -31,11 +31,8 @@ from pretix.plugins.wallet.i18n import (
 )
 from pretix.plugins.wallet.models import GoogleWalletInstance
 from pretix.plugins.wallet.styles.base import (
-    BooleanSettingsField,
-    ColorSettingsField,
     FieldGroup,
     FieldGroupDisplay,
-    FloatSettingsField,
     ImageSettingsField,
     PassStyle,
     PlaceholderFieldEntry,
@@ -43,6 +40,7 @@ from pretix.plugins.wallet.styles.base import (
     TextFieldGroup,
     WalletPlatform,
 )
+from .settings import BooleanSettingsField, ColorSettingsField, FloatSettingsField
 
 
 def _get_instance_uuid():
@@ -169,9 +167,19 @@ class GoogleWalletEventTicketStyle(PassStyle):
                 label=_("Background Color"),
                 default=self.event.settings.primary_color,
             ),
-            FloatSettingsField(identifier="lat", label=_("Latitude"), min=-90, max=90, default=self.event.geo_lat),
             FloatSettingsField(
-                identifier="long", label=_("Longitude"), min=-180, max=180, default=self.event.geo_lon
+                identifier="lat",
+                label=_("Latitude"),
+                min=-90,
+                max=90,
+                default=self.event.geo_lat,
+            ),
+            FloatSettingsField(
+                identifier="long",
+                label=_("Longitude"),
+                min=-180,
+                max=180,
+                default=self.event.geo_lon,
             ),
             BooleanSettingsField(
                 identifier="shimmer", label=_("Add shimmer animation around barcode")
@@ -250,13 +258,17 @@ class GoogleWalletEventTicketStyle(PassStyle):
 
         if hero := self.get_cleaned_setting("hero"):
             output_class.hero_image(
-                urljoin(eventreverse_absolute(self.event, "presale:event.index"), hero.url),
+                urljoin(
+                    eventreverse_absolute(self.event, "presale:event.index"), hero.url
+                ),
                 self.event.name,
             )
 
         if logo := self.get_cleaned_setting("logo"):
             output_class.logo(
-                urljoin(eventreverse_absolute(self.event, "presale:event.index"), logo.url),
+                urljoin(
+                    eventreverse_absolute(self.event, "presale:event.index"), logo.url
+                ),
                 self.event.name,
             )
 

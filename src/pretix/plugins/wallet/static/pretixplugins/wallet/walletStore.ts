@@ -49,6 +49,7 @@ export function createWalletStore(config: {
 	csrfToken: string;
 	layoutId: string;
 	baseUrl: string;
+	previewUrl: string;
 }) {
 	return createStore({
 		state: () => ({
