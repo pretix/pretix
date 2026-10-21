@@ -107,6 +107,42 @@ prop                                  integer                    Internal ID in 
 value                                 string                     Value's human-readable name
 ===================================== ========================== =======================================================
 
+Rule resource
+-------------
+The rule resource contains the following public fields:
+
+ .. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+id                                    integer                    Internal ID in pretix
+available                             boolean                    Will the resource be available in the generated availabilities?
+start                                 datetime                   The rule's start date
+end                                   datetim                    The rule's end date
+weekdays                              list of integers           The list of weekdays this rule should work for
+timezone                              string                     Rule timezone name
+starttime                             time                       The start time for generated availabilities
+endtime                               time                       The end time for generated availabilities
+===================================== ========================== =======================================================
+
+
+Shift resource
+--------------
+The shift resource contains the following public fields:
+
+ .. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+id                                    integer                    Internal ID in pretix
+available                             boolean                    Will the resource be available during this shift?
+start                                 string                     The shift's start date
+end                                   time                       The shift's end date
+timezone                              string                     Shift timezone name
+===================================== ========================== =======================================================
+
 Planning resource
 -----------------
 
@@ -1092,6 +1128,407 @@ Endpoints
    :statuscode 403: The requested organizer, property, or value does not exist **or** you have no permission to view it.
    :statuscode 404: The requested value does not exist
 
+.. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/rules/
+
+   Returns a list of all rules for a resource.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/resources/7/rules/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 1,
+            "available": true,
+            "start": "2026-03-01T09:00:00Z",
+            "end": null,
+            "weekdays": ["0", "1", "2"]
+            "timezone": "Europe/Berlin",
+            "starttime": "09:00",
+            "endtime": "17:00"
+          }
+        ]
+      }
+
+   :query page: The page number in case of a multi-page result set, default is 1
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource: The ``id`` field of a valid resource
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+
+.. http:post:: /api/v1/organizers/(organizer)/resources/(resource)/rules/
+
+   Create a rule for the resource's availability.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/resources/7/rules/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+      {
+          "available": true,
+          "start": "2026-03-01T09:00:00Z",
+          "end": null,
+          "weekdays": ["0", "1", "2"]
+          "timezone": "Europe/Berlin",
+          "starttime": "09:00",
+          "endtime": "17:00"
+      }
+
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "available": true,
+        "start": "2026-03-01T09:00:00Z",
+        "end": null,
+        "weekdays": ["0", "1", "2"]
+        "timezone": "Europe/Berlin",
+        "starttime": "09:00",
+        "endtime": "17:00"
+      }
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource: The ``id`` field of a valid resource
+   :statuscode 201: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+
+.. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/rules/(id)/
+
+   Returns information on one rule, identified by its ID.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/resources/7/rules/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "available": true,
+        "start": "2026-03-01T09:00:00Z",
+        "end": null,
+        "weekdays": ["0", "1", "2"]
+        "timezone": "Europe/Berlin",
+        "starttime": "09:00",
+        "endtime": "17:00"
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param resource: The ``id`` field of a valid resource
+   :param id: The ``id`` field of the rule to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or resource or rule does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested rule does not exist
+
+.. http:patch:: /api/v1/organizers/(organizer)/resources/(resource)/rules/(id)/
+
+   Update a rule. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
+   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
+   want to change.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/resources/7/rules/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 34
+
+      {
+        "available": false
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: text/javascript
+
+      {
+        "id": 1,
+        "available": false,
+        "start": "2026-03-01T09:00:00Z",
+        "end": null,
+        "weekdays": ["0", "1", "2"]
+        "timezone": "Europe/Berlin",
+        "starttime": "09:00",
+        "endtime": "17:00"
+      }
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource: The ``id`` field of a valid resource
+   :param id: The ``id`` field of the planning to update
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or resource or rule does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested rule does not exist
+
+.. http:delete:: /api/v1/organizers/(organizer)/resources/(resource)/rules/(id)/
+
+   Delete a rule.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/resources/7/rules/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 OK
+      Vary: Accept
+      Content-Type: text/javascript
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource: The ``id`` field of a valid resource
+   :param id: The ``id`` field of the rule to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or resource or rule does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested planning does not exist
+
+.. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/
+
+   Returns a list of all shifts for a resource.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/resources/7/shifts/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 1,
+            "available": true,
+            "start": "2026-03-01T09:00:00Z",
+            "end": "2026-03-01T17:00:00Z",
+            "timezone": "Europe/Berlin",
+          }
+        ]
+      }
+
+   :query page: The page number in case of a multi-page result set, default is 1
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource: The ``id`` field of a valid resource
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+
+.. http:post:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/
+
+   Create a shift for the resource.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/resources/7/shifts/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+      {
+            "available": true,
+            "start": "2026-03-01T09:00:00Z",
+            "end": "2026-03-01T17:00:00Z",
+            "timezone": "Europe/Berlin",
+      }
+
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "available": true,
+        "start": "2026-03-01T09:00:00Z",
+        "end": "2026-03-01T17:00:00Z",
+        "timezone": "Europe/Berlin",
+      }
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource: The ``id`` field of a valid resource
+   :statuscode 201: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+
+.. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/(id)/
+
+   Returns information on one shift, identified by its ID.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/resources/7/shifts/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "available": true,
+        "start": "2026-03-01T09:00:00Z",
+        "end": "2026-03-01T17:00:00Z",
+        "timezone": "Europe/Berlin",
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param resource: The ``id`` field of a valid resource
+   :param id: The ``id`` field of the shift to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested shift does not exist
+
+.. http:patch:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/(id)/
+
+   Update a shift. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
+   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
+   want to change.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/resources/7/shifts/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 34
+
+      {
+        "available": false
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: text/javascript
+
+      {
+        "id": 1,
+        "available": false,
+        "start": "2026-03-01T09:00:00Z",
+        "end": "2026-03-01T17:00:00Z",
+        "timezone": "Europe/Berlin",
+      }
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource: The ``id`` field of a valid resource
+   :param id: The ``id`` field of the planning to update
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or resource or shift does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested shift does not exist
+
+.. http:delete:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/(id)/
+
+   Delete a shift.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/resources/7/shifts/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 OK
+      Vary: Accept
+      Content-Type: text/javascript
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource: The ``id`` field of a valid resource
+   :param id: The ``id`` field of the shift to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or resource or shift does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested shift does not exist
+
 .. http:get:: /api/v1/organizers/(organizer)/plannings/
 
    Returns a list of all plannings for an organizer.
@@ -1285,7 +1722,7 @@ Endpoints
 
    :param organizer: The ``slug`` field of a valid organizer
    :param id: The ``id`` field of the planning to cancel
-   :statuscode 200: no error
+   :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or planning does not exist **or** you have no permission to view it.
    :statuscode 404: The requested planning does not exist
