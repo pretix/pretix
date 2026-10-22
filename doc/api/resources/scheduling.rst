@@ -3,7 +3,11 @@ Scheduling
 
 .. note:: This API is only available when the plugin **pretix-scheduling** is installed (pretix Hosted and Enterprise only).
 
-The scheduling plugin allows you to manage resources, their types, and any plannings.
+The scheduling plugin lets you book people, rooms, equipment, and other resources for the dates of your event. 
+Resources belong to a resource type, which defines the emails sent when a resource is booked, and the properties they can have, such as a guide's language.
+A resource's availability is defined by rules, which repeat on certain weekdays across a date range, and shifts, which cover a single period of time.
+A planning books a resource for a date to fill one of its requirements.
+Each resource can also have managers, who are invited by email.
 
 The plugin exposes a REST API, that requires the usual :ref:`rest-auth`.
 
@@ -119,7 +123,7 @@ Field                                 Type                       Description
 id                                    integer                    Internal ID in pretix
 available                             boolean                    Will the resource be available in the generated availabilities?
 start                                 datetime                   The rule's start date
-end                                   datetim                    The rule's end date
+end                                   datetime                   The rule's end date
 weekdays                              list of integers           The list of weekdays this rule should work for
 timezone                              string                     Rule timezone name
 starttime                             time                       The start time for generated availabilities
@@ -138,8 +142,8 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
 available                             boolean                    Will the resource be available during this shift?
-start                                 string                     The shift's start date
-end                                   time                       The shift's end date
+start                                 datetime                   The shift's start date
+end                                   datetime                   The shift's end date
 timezone                              string                     Shift timezone name
 ===================================== ========================== =======================================================
 
@@ -154,7 +158,7 @@ The planning resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
-resource                              integer                    Internal ID in pretix for the planning's organizer
+resource                              integer                    Internal ID in pretix for the planning's resource
 requirement                           integer                    Internal ID in pretix for the planning's requirement
 subevent                              integer                    Internal ID in pretix for the planning's subevent
 status                                string                     Status for the planning, can be one of ``requested``,
