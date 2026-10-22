@@ -167,6 +167,13 @@ class SubEventBulkEditForm(I18nModelForm):
                 required=False,
             )
 
+            self.fields[k + '_rel'] = RelativeDateTimeField(
+                label=self._meta.model._meta.get_field(k).verbose_name,
+                help_text=self._meta.model._meta.get_field(k).help_text + " " + _("If base your relative date on one that is not defined on the event, it will fall back to the event’s start."),
+                required=False,
+                limit_choices=('event__' + k, 'event__date_from', 'event__date_to'),
+            )
+
     class Meta:
         model = SubEvent
         localized_fields = '__all__'
@@ -247,6 +254,18 @@ class SubEventBulkEditForm(I18nModelForm):
                     )
                     setattr(obj, k.replace('_time', ''), newval)
                 fields.add(k.replace('_time', ''))
+            elif k.endswith('_rel'):
+                target_key = k[:-4]
+                for obj in objs:
+                    cval = self.cleaned_data[k]
+                    if cval is None:
+                        newval = None
+                        if not self._meta.model._meta.get_field(target_key, '').null:
+                            continue
+                    else:
+                        newval = cval.datetime(obj)
+                    setattr(obj, target_key, newval)
+                fields.add(target_key)
             else:
                 fields.add(k)
                 for obj in objs:
