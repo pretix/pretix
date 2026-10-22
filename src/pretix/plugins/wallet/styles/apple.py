@@ -326,6 +326,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 max_entries=1,
                 display=FieldGroupDisplay.PLAIN,
                 context_args={"order_position"},
+                can_overflow=False
             ),
             TextFieldGroup(
                 identifier="header",

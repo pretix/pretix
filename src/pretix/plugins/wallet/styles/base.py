@@ -12,8 +12,10 @@ from pretix.base.models import OrderPosition
 
 from ..i18n import MaybeTranslatedString, localizable_to_dict
 from ..placeholders import (
-    WalletPlaceholderRenderer, get_available_context,
-    get_wallet_placeholder_renderer, get_wallet_placeholders,
+    WalletPlaceholderRenderer,
+    get_available_context,
+    get_wallet_placeholder_renderer,
+    get_wallet_placeholders,
 )
 from .settings import SettingsField, SettingsFile
 
@@ -58,7 +60,12 @@ class FieldGroup:
     ) -> dict:
         raise NotImplementedError()
 
-    def asdict(self, locales: list[str], context: LayoutContext):
+    def asdict(
+        self,
+        locales: list[str],
+        context: LayoutContext,
+        remaining_fields: list["FieldGroup"],
+    ):
         return {
             "type": self.type.value,
             "identifier": self.identifier,
@@ -151,9 +158,9 @@ class PredefinedFieldGroup(FieldGroup):
     ):
         return {"type": "object", "properties": {"active": {"type": "boolean"}}}
 
-    def asdict(self, locales: list[str], context: LayoutContext):
+    def asdict(self, *args, **kwargs):
         return {
-            **super().asdict(locales, context),
+            **super().asdict(*args, **kwargs),
             "default_active": self.default_active,
         }
 
@@ -168,6 +175,7 @@ class PlaceholderFieldGroup(FieldGroup):
     context_args: set[
         str
     ]  # what context arguments are available when rendering this fieldgroup
+    can_overflow: bool
 
     def __init__(
         self,
@@ -181,6 +189,7 @@ class PlaceholderFieldGroup(FieldGroup):
         max_entries=None,
         display=FieldGroupDisplay.WITH_LABEL,
         context_args: set[str] | None = None,
+        can_overflow: bool = True,
     ):
         super().__init__(identifier, name, description, required)
         self.content_type = content_type
@@ -189,13 +198,19 @@ class PlaceholderFieldGroup(FieldGroup):
         self.max_entries = max_entries
         self.display = display
         self.context_args = context_args or set()
+        self.can_overflow = can_overflow
 
         if self.required and (self.min_entries is None or self.min_entries < 1):
             self.min_entries = 1
 
-    def asdict(self, locales: list[str], context: LayoutContext):
+    def asdict(
+        self,
+        locales: list[str],
+        context: LayoutContext,
+        remaining_fields: list[FieldGroup],
+    ):
         return {
-            **super().asdict(locales, context),
+            **super().asdict(locales, context, remaining_fields),
             "content_type": self.content_type.value,
             "default_entries": [x.asdict(locales) for x in self.default_entries],
             "display": self.display.value,
@@ -205,6 +220,9 @@ class PlaceholderFieldGroup(FieldGroup):
                 get_available_context(
                     self.context_args, context["placeholder_renderer"].transformations
                 )
+            ),
+            "overflows": self.overflows(
+                remaining_fields, context, self.available_placeholders(context)
             ),
         }
 
@@ -219,6 +237,20 @@ class PlaceholderFieldGroup(FieldGroup):
             if renderer.is_available(x, self.context_args)
         ]
         return available_placeholders
+
+    def overflows(self, remaining_fields, context, available_placeholders):
+        if self.can_overflow:
+            return [
+                f.identifier
+                for f in remaining_fields
+                if isinstance(f, PlaceholderFieldGroup)
+                and f.content_type == self.content_type
+                and f.display == self.display
+                and set(available_placeholders)
+                <= set(f.available_placeholders(context))
+            ]
+        else:
+            return []
 
     def layout_schema(
         self,
@@ -236,14 +268,9 @@ class PlaceholderFieldGroup(FieldGroup):
                         {"type": "null"},
                         {
                             "type": "string",
-                            "enum": [
-                                f.identifier
-                                for f in remaining_fields
-                                if isinstance(f, PlaceholderFieldGroup)
-                                and f.content_type == self.content_type
-                                and f.display == self.display
-                                and set(available_placeholders) <= set(f.available_placeholders(context))
-                            ],
+                            "enum": self.overflows(
+                                remaining_fields, context, available_placeholders
+                            ),
                         },
                     ]
                 },
@@ -366,7 +393,12 @@ class PassStyle:
             "identifier": self.identifier,
             "name": self.name,
             "fieldgroups": [
-                x.asdict(self.event.settings.locales, context) for x in self.fieldgroups
+                x.asdict(
+                    self.event.settings.locales,
+                    context,
+                    remaining_fields=self.fieldgroups[i:],
+                )
+                for i, x in enumerate(self.fieldgroups, 1)
             ],
             "preview_renderer": self.preview_renderer,
             "preview_data": self.preview_data,

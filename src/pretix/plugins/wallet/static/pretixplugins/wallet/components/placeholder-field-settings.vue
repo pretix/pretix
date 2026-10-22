@@ -14,16 +14,15 @@ const interpolate = (window as any).interpolate;
 
 const props = defineProps<{
     fieldgroup: PlaceholderFieldGroupDefinition;
-    overflows: FieldGroupDefinition[];
 }>();
 const fieldConfig = defineModel<PlaceholderFieldGroupConfig>({
     required: true,
 });
 
 const overflowOptions = computed((): Array<[string | null, string]> => {
-    if (props.overflows.length) {
+    if (props.fieldgroup.overflows.length > 0) {
         return [
-            ...props.overflows.map((x): [string, string] => [x.identifier, x.name]),
+            ...props.fieldgroup.overflows.map((x): [string, string] => [x, store.fieldgroups[x]?.name]),
             [null, "Do not overflow"],
         ];
     } else {
