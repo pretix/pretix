@@ -1,15 +1,14 @@
-from ast import Call
-from typing import Any, BinaryIO, Callable, Literal, Protocol, runtime_checkable
-from django.utils.translation import gettext as _
-from django.core.files import File
-from django.templatetags.static import static
-from django.contrib.staticfiles import finders
-from django.db.models.fields.files import FieldFile
 import tempfile
+from typing import Any, Callable, Literal, Protocol, runtime_checkable
+
 from django.conf import settings
-from django.conf import settings
+from django.contrib.staticfiles import finders
+from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db.models.fields.files import FieldFile
 from django.forms import ValidationError
+from django.templatetags.static import static
+from django.utils.translation import gettext as _
 
 SettingType = Literal["image", "text", "float", "color", "bool"]
 JsonSerializable = int | bool | float | str | None
@@ -72,6 +71,7 @@ class TextSettingsField(SettingsField[str]):
             schema = {"oneOf": [schema, {"type": "null"}]}
         return schema
 
+
 class ColorSettingsField(SettingsField[str]):
     def __init__(
         self,
@@ -132,6 +132,7 @@ class FloatSettingsField(SettingsField[float]):
     def asdict(self, locales: list[str]):
         return super().asdict(locales) | {"min": self.min, "max": self.max}
 
+
 class BooleanSettingsField(SettingsField[bool]):
     def __init__(
         self,
@@ -150,12 +151,14 @@ class BooleanSettingsField(SettingsField[bool]):
     def layout_schema(self):
         return {"type": "boolean"}
 
+
 @runtime_checkable
 class UrlAndReadFile(Protocol):
     url: str
     open: Callable
     seek: Callable
     read: Callable
+
 
 class SettingsFile:
     url: str
@@ -164,6 +167,7 @@ class SettingsFile:
     def __init__(self, url, file):
         self.url = url
         self.file = file
+
 
 class ImageSettingsField(SettingsField[SettingsFile, FieldFile]):
     default: str | UrlAndReadFile | None = None
@@ -189,7 +193,6 @@ class ImageSettingsField(SettingsField[SettingsFile, FieldFile]):
             self.default = default
         elif default:
             raise ValueError("Unsupported `default`")
-
 
     def get_default(self):
         if isinstance(self.default, str):
