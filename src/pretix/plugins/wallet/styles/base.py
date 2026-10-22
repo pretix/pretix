@@ -1,12 +1,10 @@
 import enum
 from functools import cached_property
 from typing import TypedDict
-from django.contrib.staticfiles import finders
 
 import jsonschema
 from django.core.exceptions import ValidationError
 from django.core.files import File
-from django.templatetags.static import static
 from i18nfield.strings import LazyI18nString
 
 from pretix.api.helpers import handle_file_upload
@@ -14,12 +12,10 @@ from pretix.base.models import OrderPosition
 
 from ..i18n import MaybeTranslatedString, localizable_to_dict
 from ..placeholders import (
-    WalletPlaceholderRenderer,
-    get_available_context,
-    get_wallet_placeholder_renderer,
-    get_wallet_placeholders,
+    WalletPlaceholderRenderer, get_available_context,
+    get_wallet_placeholder_renderer, get_wallet_placeholders,
 )
-from .settings import SettingsField, SettingsFile, ImageSettingsField
+from .settings import SettingsField, SettingsFile
 
 
 class WalletPlatform:
@@ -389,7 +385,7 @@ class PassStyle:
                         group.identifier: group.layout_schema(
                             context=context, remaining_fields=self.fieldgroups[i:]
                         )
-                        for (i, group) in enumerate(self.fieldgroups)
+                        for (i, group) in enumerate(self.fieldgroups, 1)
                     },
                     "required": [
                         group.identifier for group in self.fieldgroups if group.required
@@ -494,7 +490,7 @@ class PassStyle:
         if not self.layout:
             raise ValueError("`layout` needs to be set")
 
-        context = get_wallet_placeholder_renderer(order_position=op)
+        context = get_wallet_placeholder_renderer(event=self.event, order_position=op)
 
         fields = {}
         for group in self.fieldgroups:
