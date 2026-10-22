@@ -1,29 +1,22 @@
-from pretix.plugins.wallet.styles.base import (
-    PassStyle,
-    PredefinedFieldGroup,
-    WalletPlatform,
-    PlaceholderFieldGroup,
-    FieldContentType,
-    FieldGroupType,
-    FieldEntryType,
-    FieldGroupDisplay
-)
-from django.utils.translation import gettext as _
+import datetime
+from decimal import Decimal
+
 import jsonschema
 import pytest
+from django.utils.translation import gettext as _
+from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.primitives import serialization, hashes
-from cryptography import x509
-import datetime
-import io
-import zipfile
-import json
-from pretix.plugins.wallet.placeholders import WalletPlaceholderRenderer, FunctionalContextTransformation, PlaceholderContextTransformation, get_available_context, get_transformed_context
-from pretix.base.models import Organizer, Event, Item, Order, User, InvoiceAddress
-from django_scopes import scopes_disabled, scope
-from django.utils.timezone import now
-from decimal import Decimal
+
+from pretix.base.models import InvoiceAddress, Order
+from pretix.plugins.wallet.placeholders.base import (
+    FunctionalContextTransformation, get_available_context,
+    get_transformed_context,
+)
+from pretix.plugins.wallet.styles.base import (
+    FieldGroup, FieldGroupDisplay, ImageFieldGroup, PassStyle, TextFieldGroup,
+    WalletPlatform,
+)
+
 
 class WalletTestPlatform(WalletPlatform):
     identifier = "test_platform"
@@ -41,31 +34,38 @@ class TicketTestStyle(PassStyle):
     platform = WalletTestPlatform
     identifier = "test_ticket"
     name = _("Test Wallet Style Ticket")
-    fieldgroups = [
-        PlaceholderFieldGroup(
-            identifier="text1",
-            name=_("Text 1"),
-            content_type=FieldContentType.TEXT,
-            required=True,
-        ),
-        PlaceholderFieldGroup(
-            identifier="text2",
-            name=_("Text 2"),
-            content_type=FieldContentType.TEXT,
-            required=False,
-            display=FieldGroupDisplay.PLAIN,
-        ),
-        PlaceholderFieldGroup(
-            identifier="image1",
-            name=_("Image 1"),
-            content_type=FieldContentType.IMAGE,
-            required=False,
-            display=FieldGroupDisplay.PLAIN,
-        ),
-    ]
+
+    @property
+    def fieldgroups(self) -> list[FieldGroup]:
+        return [
+            TextFieldGroup(
+                identifier="text1",
+                name=_("Text 1"),
+                required=True,
+                context_args={"event"},
+            ),
+            TextFieldGroup(
+                identifier="text2",
+                name=_("Text 2"),
+                required=False,
+                context_args={"event"},
+            ),
+            TextFieldGroup(
+                identifier="plain1",
+                name=_("Plain 2"),
+                required=False,
+                display=FieldGroupDisplay.PLAIN,
+                context_args={"event"},
+            ),
+            ImageFieldGroup(
+                identifier="image1",
+                name=_("Image 1"),
+                required=False,
+            ),
+        ]
 
     def generate(self, op):
-        fields = self.get_pass_fields({})
+        fields = self.get_pass_fields(op)
         return fields
 
 
@@ -79,9 +79,8 @@ def layout_context():
 
 
 def test_schema_generation_minimal():
-    style = MinimalTestStyle
-    context = {}
-    schema = style.layout_schema(context)
+    style = MinimalTestStyle(None, None)
+    schema = style.layout_schema()
     assert isinstance(schema, dict)
     assert "properties" in schema
     assert "fieldgroups" in schema["properties"]
@@ -91,8 +90,8 @@ def test_schema_generation_minimal():
 
 
 def test_schema_ticket_generation(layout_context):
-    style = TicketTestStyle
-    schema = style.layout_schema(layout_context)
+    style = TicketTestStyle(None, None)
+    schema = style.layout_schema()
     assert isinstance(schema, dict)
     assert "properties" in schema
     assert "fieldgroups" in schema["properties"]
@@ -108,7 +107,7 @@ def test_schema_ticket_generation(layout_context):
                         {
                             "type": "placeholder",
                             "label": "test",
-                            "content": "test_placeholder",
+                            "content": "event_slug",
                         }
                     ]
                 }
@@ -121,7 +120,7 @@ def test_schema_ticket_generation(layout_context):
                         {
                             "type": "placeholder",
                             "label": {"de": "test-de", "en": "test-en"},
-                            "content": "test_placeholder",
+                            "content": "event_slug",
                         }
                     ]
                 }
@@ -131,7 +130,7 @@ def test_schema_ticket_generation(layout_context):
             "fieldgroups": {
                 "text1": {
                     "entries": [
-                        {"type": "text", "label": "test", "content": "test content"}
+                        {"type": "custom", "label": "test", "content": "test content"}
                     ]
                 }
             }
@@ -143,9 +142,9 @@ def test_schema_ticket_generation(layout_context):
                         {
                             "type": "placeholder",
                             "label": {"de": "test-de", "en": "test-en"},
-                            "content": "test_placeholder",
+                            "content": "event_slug",
                         },
-                        {"type": "text", "label": "test", "content": "test content"},
+                        {"type": "custom", "label": "test", "content": "test content"},
                     ]
                 }
             }
@@ -157,9 +156,9 @@ def test_schema_ticket_generation(layout_context):
                         {
                             "type": "placeholder",
                             "label": {"de": "test-de", "en": "test-en"},
-                            "content": "test_placeholder",
+                            "content": "event_slug",
                         },
-                        {"type": "text", "label": "test", "content": "test content"},
+                        {"type": "custom", "label": "test", "content": "test content"},
                     ],
                     "overflow": "text2",
                 }
@@ -167,10 +166,11 @@ def test_schema_ticket_generation(layout_context):
         },
     ],
 )
-def test_schema_ticket_valid(layout_context, layout):
-    style = TicketTestStyle
-    schema = style.layout_schema(layout_context)
-
+@pytest.mark.django_db
+def test_schema_ticket_valid(env, layout):
+    event, *_ = env
+    style = TicketTestStyle(event, layout)
+    schema = style.layout_schema()
     jsonschema.validate(layout, schema)
 
 
@@ -260,30 +260,32 @@ def test_schema_ticket_valid(layout_context, layout):
         },
     ],
 )
-def test_schema_ticket_invalid(layout_context, layout):
-    style = TicketTestStyle
-    schema = style.layout_schema(layout_context)
+@pytest.mark.django_db
+def test_schema_ticket_invalid(env, layout):
+    style = TicketTestStyle(env[0])
+    schema = style.layout_schema()
 
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.validate(layout, schema)
 
 
-def test_style_representation():
-    style = TicketTestStyle
+@pytest.mark.django_db
+def test_style_representation(env):
+    style = TicketTestStyle(env[0])
     style_dict = style.asdict()
-    assert style_dict["platform"] == "test_platform"
+
     assert style_dict["identifier"] == "test_ticket"
     assert style_dict["name"] == _("Test Wallet Style Ticket")
 
     assert style_dict["fieldgroups"][0]["identifier"] == "text1"
     assert style_dict["fieldgroups"][0]["name"] == "Text 1"
     assert style_dict["fieldgroups"][0]["content_type"] == "text"
-    assert style_dict["fieldgroups"][0]["labels"] == True
-    assert style_dict["fieldgroups"][0]["required"] == True
+    assert style_dict["fieldgroups"][0]["display"] == "with_label"
+    assert style_dict["fieldgroups"][0]["required"] is True
 
 
-def test_layout_generate(layout_context):
-    style = TicketTestStyle
+@pytest.mark.django_db
+def test_layout_generate(env, order):
     layout = {
         "fieldgroups": {
             "text1": {
@@ -291,49 +293,61 @@ def test_layout_generate(layout_context):
                     {
                         "type": "placeholder",
                         "label": {"de": "test-de", "en": "test-en"},
-                        "content": "test_placeholder",
+                        "content": "event_slug",
                     },
-                    {"type": "text", "label": "test", "content": "test content"},
+                    {"type": "content", "label": "test", "content": "test content"},
                 ],
                 "overflow": "text2",
             }
         }
     }
-    # TODO: create event and pass here
-    pass_layout = style(event=None, layout=layout)
-    generated_pass = pass_layout.generate(layout_context)
+    style = TicketTestStyle(env[0], layout)
+    generated_pass = style.generate(order.positions.first())
 
-    assert (
-        generated_pass
-        == "Generated Pass: Test Wallet Style Ticket\n\nGroup: Text 1\ntest-en: test placeholder\ntest: test content\n\n"
-    )
+    assert generated_pass == {
+        "text1": [
+            {
+                "label": LazyI18nString({"de": "test-de", "en": "test-en"}),
+                "value": "dummy",
+            }
+        ],
+        "text2": [
+            {
+                "label": LazyI18nString({"de": "test-de", "en": "test-en"}),
+                "value": "dummy",
+            }
+        ],
+        "plain1": [],
+        "image1": [],
+    }
 
 
 def test_placeholder_transformation_graph():
     context = {"order_position"}
-    trans1 = FunctionalContextTransformation("order", {"order_position"}, lambda order_position: order_position.order)
-    trans2 = FunctionalContextTransformation("event", {"order"}, lambda order: order.event)
-    trans3 = FunctionalContextTransformation("name", {"invoice_address"}, lambda invoice_address: "name")
-    assert get_available_context(context, [trans1, trans2]) == {"order_position", "order", "event"}
-    assert get_available_context(context, [trans2, trans1]) == {"order_position", "order", "event"}
-    assert get_available_context(context, [trans1, trans2, trans3]) == {"order_position", "order", "event"}
-
-@pytest.fixture
-def env():
-    o = Organizer.objects.create(name='Dummy', slug='dummy')
-    prop1 = o.meta_properties.get_or_create(name="Test")[0]
-    prop2 = o.meta_properties.get_or_create(name="Website")[0]
-    event = Event.objects.create(
-        organizer=o, name='Dummy', slug='dummy',
-        date_from=now()
+    trans1 = FunctionalContextTransformation(
+        "order", {"order_position"}, lambda order_position: order_position.order
     )
-    event.meta_values.update_or_create(property=prop1, defaults={'value': "*Beep*"})
-    event.meta_values.update_or_create(property=prop2, defaults={'value': "https://example.com"})
-    user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    user.email = 'dummy@dummy.dummy'
-    user.save()
-    with scope(organizer=o):
-        yield event, user, o
+    trans2 = FunctionalContextTransformation(
+        "event", {"order"}, lambda order: order.event
+    )
+    trans3 = FunctionalContextTransformation(
+        "name", {"invoice_address"}, lambda invoice_address: "name"
+    )
+    assert get_available_context(context, [trans1, trans2]) == {
+        "order_position",
+        "order",
+        "event",
+    }
+    assert get_available_context(context, [trans2, trans1]) == {
+        "order_position",
+        "order",
+        "event",
+    }
+    assert get_available_context(context, [trans1, trans2, trans3]) == {
+        "order_position",
+        "order",
+        "event",
+    }
 
 
 @pytest.fixture
@@ -374,16 +388,25 @@ def order(env, item):
     )
     return o
 
+
 @pytest.mark.django_db
 def test_placeholder_transformation_calculation(order):
     op = order.positions.first()
     event = order.event
     context_args = {"order_position": op}
-    trans1 = FunctionalContextTransformation("order", {"order_position"}, lambda order_position: order_position.order)
-    trans2 = FunctionalContextTransformation("event", {"order"}, lambda order: order.event)
-    trans3 = FunctionalContextTransformation("name", {"invoice_address"}, lambda invoice_address: "name")
+    trans1 = FunctionalContextTransformation(
+        "order", {"order_position"}, lambda order_position: order_position.order
+    )
+    trans2 = FunctionalContextTransformation(
+        "event", {"order"}, lambda order: order.event
+    )
+    trans3 = FunctionalContextTransformation(
+        "name", {"invoice_address"}, lambda invoice_address: "name"
+    )
     expected_context = {"order_position": op, "order": order, "event": event}
     assert get_transformed_context(context_args, [trans1, trans2]) == expected_context
     assert get_transformed_context(context_args, [trans2, trans1]) == expected_context
-    assert get_transformed_context(context_args, [trans1, trans2, trans3]) == expected_context
-
+    assert (
+        get_transformed_context(context_args, [trans1, trans2, trans3])
+        == expected_context
+    )

@@ -2,10 +2,9 @@ import hashlib
 import io
 import json
 import logging
-import tempfile
 import zipfile
 from typing import Any
-from .settings import convert_to_png
+
 import cryptography
 import cryptography.hazmat.primitives.hashes
 import cryptography.hazmat.primitives.serialization.pkcs7
@@ -15,24 +14,15 @@ from django.utils.translation import gettext as _
 
 from pretix.base.models import OrderPosition
 from pretix.plugins.wallet.i18n import (
-    FormattingLocalizableString,
-    GettextLocalizableString,
-    Localizable,
+    FormattingLocalizableString, GettextLocalizableString,
     MaybeTranslatedString,
 )
-from .settings import (
-    ColorSettingsField,
-    FloatSettingsField,
-)
 from pretix.plugins.wallet.styles.base import (
-    FieldGroup,
-    FieldGroupDisplay,
-    ImageSettingsField,
-    PassStyle,
-    PlaceholderFieldEntry,
-    TextFieldGroup,
-    WalletPlatform,
+    FieldGroup, FieldGroupDisplay, ImageSettingsField, PassStyle,
+    PlaceholderFieldEntry, TextFieldGroup, WalletPlatform,
 )
+
+from .settings import ColorSettingsField, FloatSettingsField, convert_to_png
 
 logger = logging.getLogger()
 
@@ -455,15 +445,12 @@ class AppleWalletEventTicket(AppleWalletStyle):
         converted = []
         for i, f in enumerate(fields):
             converted_field = {**f, "key": f"{prefix}-{i}"}
-            if "label" in converted_field and isinstance(
-                converted_field["label"], Localizable
-            ):
+            if "label" in converted_field:
                 strings.add_entry(f"{prefix}-{i}-label", converted_field["label"])
                 converted_field["label"] = f"{prefix}-{i}-label"
 
-            if isinstance(converted_field["value"], Localizable):
-                strings.add_entry(f"{prefix}-{i}-value", converted_field["value"])
-                converted_field["value"] = f"{prefix}-{i}-value"
+            strings.add_entry(f"{prefix}-{i}-value", converted_field["value"])
+            converted_field["value"] = f"{prefix}-{i}-value"
             converted.append(converted_field)
         return converted
 
