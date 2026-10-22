@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-10-22 13:45+0000\n"
+"PO-Revision-Date: 2026-10-22 23:00+0000\n"
 "Last-Translator: IÑIGO ANSA <kaixo@golocalsansebastian.com>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/"
 "eu/>\n"
@@ -6230,7 +6230,7 @@ msgstr "Amaiera"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 msgid "queued"
-msgstr ""
+msgstr "zerrendan"
 
 #: pretix/base/models/mail.py
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
@@ -14803,7 +14803,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py
 msgid "European Union"
-msgstr ""
+msgstr "Europar Batasuna"
 
 #: pretix/control/forms/event.py
 msgid "Any customer"
