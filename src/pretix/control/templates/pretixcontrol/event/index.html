@@ -7,6 +7,15 @@
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
     <h1>
+        {% if has_domain and not request.event.live %}
+            <button type="submit" class="btn btn-lg btn-primary pull-right hidden-xs" id="button-shop" form="gotoshopform">
+               <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+            </button>
+        {% else %}
+            <a href="{% eventurl request.event "presale:event.index" %}" class="btn btn-lg btn-primary pull-right hidden-xs" target="_blank">
+                <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+            </a>
+        {% endif %}
         {{ request.event.name }}
         <small>
             {% if request.event.has_subevents %}
@@ -17,6 +26,17 @@
             <span id="warnings_loading" class="fa fa-cog fa-spin"></span>
         </small>
     </h1>
+    <p class="visible-xs">
+        {% if has_domain and not request.event.live %}
+            <button type="submit" class="btn btn-lg btn-primary" id="button-shop" form="gotoshopform">
+               <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+            </button>
+        {% else %}
+            <a href="{% eventurl request.event "presale:event.index" %}" class="btn btn-lg btn-primary" target="_blank">
+                <i class="fa fa-eye"></i> {% trans "Go to shop" %}
+            </a>
+        {% endif %}
+    </p>
     <div class="helper-space-below">
         {% trans "Shop URL:" %}
         <span id="shop_url" class="text-muted">{% abseventurl request.event "presale:event.index" %}</span>

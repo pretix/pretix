@@ -10,9 +10,8 @@ html.rtl {
   }
 
 
-  .navbar-top-links li:last-child {
-    margin-left: 15px;
-    margin-right: 0;
+  .navbar-header :not(.navbar-toggle) + .navbar-toggle {
+    margin-left: inherit; margin-right: auto;
   }
 
   .sidebar .context-selector a span.caret {
