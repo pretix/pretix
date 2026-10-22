@@ -12,7 +12,7 @@ from pretix.plugins.wallet.i18n import (
     FormattingLocalizableString, GettextLocalizableString, LazyLocalizable,
 )
 from pretix.plugins.wallet.styles.base import (
-    FieldGroup, FieldGroupDisplay, ImageSettingsField, PassStyle,
+    FieldGroup, FieldGroupDisplay, PassStyle,
     PlaceholderFieldEntry, PredefinedFieldGroup, TextFieldGroup,
     WalletPlatform,
 )
@@ -22,7 +22,7 @@ from .google_wallet import (
     EventTicketObject, State,
 )
 from .settings import (
-    BooleanSettingsField, ColorSettingsField, FloatSettingsField,
+    BooleanSettingsField, ColorSettingsField, FloatSettingsField, ImageSettingsField
 )
 
 
