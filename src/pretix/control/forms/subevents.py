@@ -154,6 +154,7 @@ class SubEventBulkEditForm(I18nModelForm):
             self.fields[k].required = False
 
         for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end'):
+            # TODO: remove _day and _time fields, once this is deployed
             self.fields[k + '_day'] = forms.DateField(
                 label=self._meta.model._meta.get_field(k).verbose_name,
                 help_text=self._meta.model._meta.get_field(k).help_text,
