@@ -2817,9 +2817,14 @@ class SSOProviderCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
         return get_object_or_404(CustomerSSOProvider, organizer=self.request.organizer, pk=self.kwargs.get('provider'))
 
     def get_success_url(self):
-        return reverse('control:organizer.ssoproviders', kwargs={
-            'organizer': self.request.organizer.slug,
+        return reverse('control:organizer.ssoprovider.edit', kwargs={
+            'organizer': self.request.organizer.slug, 'provider': self.object.pk,
         })
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['redirect_uri'] = _('(will be generated)')
+        return ctx
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -2950,8 +2955,11 @@ class SSOClientCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
         secret = form.instance.set_client_secret()
         messages.success(
             self.request,
-            _('The SSO client has been created. Please note down the following client secret, it will never be shown '
-              'again: {secret}').format(secret=secret)
+            _('The SSO client has been created.') + ' ' +
+            _('Please note down the following client secret, it will never be shown again.') + '\n\n' +
+            _('Base URL / issuer') + f': {form.initial["disp_base_url"]}\n\n' +
+            _('Client ID') + f': {form.instance.client_id}\n\n' +
+            _('Client secret') + f': {secret}'
         )
         form.instance.organizer = self.request.organizer
         ret = super().form_valid(form)
@@ -3000,8 +3008,9 @@ class SSOClientUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
             secret = form.instance.set_client_secret()
             messages.success(
                 self.request,
-                _('Your changes have been saved. Please note down the following client secret, it will never be shown '
-                  'again: {secret}').format(secret=secret)
+                _('Your changes have been saved.') + ' ' +
+                _('Please note down the following client secret, it will never be shown again.') + '\n\n' +
+                _('Client secret') + f': {secret}'
             )
         else:
             messages.success(
