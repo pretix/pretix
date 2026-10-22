@@ -99,7 +99,7 @@ class BaseTicketOutput:
     def get_tickets_to_print(self, order):
         return order.positions_with_tickets
 
-    def generate_order(self, order: Order) -> Tuple[str, str, str]:
+    def generate_order(self, order: Order) -> Tuple[str, str, str | bytes]:
         """
         This method is the same as order() but should not generate one file per order position
         but instead one file for the full order.

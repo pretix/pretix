@@ -1,7 +1,8 @@
-from .placeholders import get_wallet_placeholder_renderer, get_wallet_placeholders
+from . import base, placeholders
 from .base import WalletPlaceholderRenderer, get_available_context
-from . import base
-from . import placeholders
+from .placeholders import (
+    get_wallet_placeholder_renderer, get_wallet_placeholders,
+)
 
 __all__ = [
     "base",

@@ -1,11 +1,10 @@
 from datetime import timedelta
 
 import pytest
-
-from pretix.base.models import Organizer, Event, User, Order
-from decimal import Decimal
-from django_scopes import scope
 from django.utils.timezone import now
+from django_scopes import scope
+
+from pretix.base.models import Event, Order, Organizer, User
 
 
 @pytest.fixture
@@ -25,9 +24,6 @@ def env():
     user.save()
     with scope(organizer=organizer):
         yield event, user, organizer
-
-
-
 
 
 @pytest.fixture

@@ -1,14 +1,15 @@
+import enum
+import time
 from datetime import datetime
 from typing import Iterable
-
-from pretix.plugins.wallet.i18n import MaybeTranslatedString, localizable_to_dict
-import enum
 
 from google.auth import crypt, jwt
 from google.auth.transport.requests import AuthorizedSession
 from google.oauth2 import service_account
 
-import time
+from pretix.plugins.wallet.i18n import (
+    MaybeTranslatedString, localizable_to_dict,
+)
 
 
 class ReviewStatus(enum.StrEnum):
