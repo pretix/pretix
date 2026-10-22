@@ -55,12 +55,12 @@
                         <div class="col-md-8 col-sm-6 col-xs-12">
                             {% if item.picture %}
                                 <a href="{{ item.picture.url }}" class="productpicture"
-                                data-title="{{ item.name|force_escape|force_escape }}"
+                                    data-title="{{ item.name|force_escape|force_escape }}"
                                         {# Yes, double-escape to prevent XSS in lightbox #}
-                                data-lightbox="{{ item.id }}"
-                                aria-label="{% blocktrans trimmed with item=item.name %}Show full-size image of {{ item }}{% endblocktrans %}">
+                                    data-lightbox="{{ item.id }}"
+                                    aria-label="{% blocktrans trimmed with item=item.name %}Show full-size image of {{ item }}{% endblocktrans %}">
                                     <img src="{{ item.picture|thumb:'60x60^' }}"
-                                        alt="{{ item.name }}"/>
+                                         alt="{{ item.name }}"/>
                                 </a>
                             {% endif %}
                             <div class="product-description {% if item.picture %}with-picture{% endif %}">
@@ -187,23 +187,23 @@
                                         <div class="input-group input-group-price">
                                             <span class="input-group-addon">{{ event.currency }}</span>
                                             <input type="number" class="form-control input-item-price"
-                                                id="{{ form_prefix }}price-variation-{{ item.pk }}-{{ var.pk }}"
-                                                already-in-cart="{{ cart.itemvarsums|getitem:var|default:0 }}"
-                                                {% if not ev.presale_is_running %}disabled{% endif %}
-                                                placeholder="0"
-                                                min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
-                                                name="{{ form_prefix }}price_{{ item.id }}_{{ var.id }}"
-                                                {% if var.suggested_price.gross != var.display_price.gross %}
-                                                    {% if event.settings.display_net_prices %}
-                                                        title="{% blocktrans trimmed with item=var.value price=var.display_price.net|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
+                                                    id="{{ form_prefix }}price-variation-{{ item.pk }}-{{ var.pk }}"
+                                                    already-in-cart="{{ cart.itemvarsums|getitem:var|default:0 }}"
+                                                    {% if not ev.presale_is_running %}disabled{% endif %}
+                                                    placeholder="0"
+                                                    min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
+                                                    name="{{ form_prefix }}price_{{ item.id }}_{{ var.id }}"
+                                                    {% if var.suggested_price.gross != var.display_price.gross %}
+                                                        {% if event.settings.display_net_prices %}
+                                                            title="{% blocktrans trimmed with item=var.value price=var.display_price.net|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
+                                                        {% else %}
+                                                            title="{% blocktrans trimmed with item=var.value price=var.display_price.gross|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
+                                                        {% endif %}
                                                     {% else %}
-                                                        title="{% blocktrans trimmed with item=var.value price=var.display_price.gross|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
+                                                        title="{% blocktrans trimmed with item=var.value %}Modify price for {{ item }}{% endblocktrans %}"
                                                     {% endif %}
-                                                {% else %}
-                                                    title="{% blocktrans trimmed with item=var.value %}Modify price for {{ item }}{% endblocktrans %}"
-                                                {% endif %}
-                                                step="any"
-                                                value="{% if event.settings.display_net_prices %}{{ var.suggested_price.net|money_numberfield:event.currency }}{% else %}{{ var.suggested_price.gross|money_numberfield:event.currency }}{% endif %}"
+                                                    step="any"
+                                                    value="{% if event.settings.display_net_prices %}{{ var.suggested_price.net|money_numberfield:event.currency }}{% else %}{{ var.suggested_price.gross|money_numberfield:event.currency }}{% endif %}"
                                             >
                                         </div>
                                         <p>
@@ -242,7 +242,7 @@
                                 </div>
                                 {% if var.cached_availability.0 == 100 and not item.current_unavailability_reason and not var.current_unavailability_reason %}
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
-                                       {% if max_choices == 1 and not form_prefix %}
+                                        {% if max_choices == 1 and not form_prefix %}
                                             {# items_from_post_data which parses _selected_item does not support form_prefix at the moment #}
                                             <label>
                                                 <input type="radio" name="{{ form_prefix }}_selected_item"
@@ -269,7 +269,7 @@
                                                         id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                         name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                         aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend {{ form_prefix }}item-{{ item.pk }}-legend"
-                                                        {% if var.description %} aria-describedby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
+                                                        {% if var.description %}aria-describedby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
                                                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                     {% trans "Select" context "checkbox" %}
                                                 </label>
@@ -311,12 +311,12 @@
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         {% if item.picture %}
                             <a href="{{ item.picture.url }}" class="productpicture"
-                            data-title="{{ item.name|force_escape|force_escape }}"
+                                data-title="{{ item.name|force_escape|force_escape }}"
                                     {# Yes, double-escape to prevent XSS in lightbox #}
-                            data-lightbox="{{ item.id }}"
-                            aria-label="{% blocktrans trimmed with item=item.name %}Show full-size image of {{ item }}{% endblocktrans %}">
+                                data-lightbox="{{ item.id }}"
+                                aria-label="{% blocktrans trimmed with item=item.name %}Show full-size image of {{ item }}{% endblocktrans %}">
                                 <img src="{{ item.picture|thumb:'60x60^' }}"
-                                    alt="{{ item.name }}"/>
+                                     alt="{{ item.name }}"/>
                             </a>
                         {% endif %}
                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
@@ -375,22 +375,22 @@
                             <div class="input-group input-group-price">
                                 <span class="input-group-addon" aria-hidden="true">{{ event.currency }}</span>
                                 <input type="number" class="form-control input-item-price" placeholder="0"
-                                    id="{{ form_prefix }}price-item-{{ item.pk }}"
-                                    {% if not ev.presale_is_running %}disabled{% endif %}
-                                    already-in-cart="{{ cart.itemvarsums|getitem:item|default:0 }}"
-                                    min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
-                                    name="{{ form_prefix }}price_{{ item.id }}"
-                                    {% if item.suggested_price.gross != item.display_price.gross %}
-                                        {% if event.settings.display_net_prices %}
+                                        id="{{ form_prefix }}price-item-{{ item.pk }}"
+                                        {% if not ev.presale_is_running %}disabled{% endif %}
+                                        already-in-cart="{{ cart.itemvarsums|getitem:item|default:0 }}"
+                                        min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
+                                        name="{{ form_prefix }}price_{{ item.id }}"
+                                        {% if item.suggested_price.gross != item.display_price.gross %}
+                                            {% if event.settings.display_net_prices %}
                                                 title="{% blocktrans trimmed with item=item.name price=item.display_price.net|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
+                                            {% else %}
+                                                title="{% blocktrans trimmed with item=item.name price=item.display_price.gross|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
+                                            {% endif %}
                                         {% else %}
-                                            title="{% blocktrans trimmed with item=item.name price=item.display_price.gross|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
+                                            title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
                                         {% endif %}
-                                    {% else %}
-                                        title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
-                                    {% endif %}
-                                    value="{% if event.settings.display_net_prices %}{{ item.suggested_price.net|money_numberfield:event.currency }}{% else %}{{ item.suggested_price.gross|money_numberfield:event.currency }}{% endif %}"
-                                    step="any">
+                                        value="{% if event.settings.display_net_prices %}{{ item.suggested_price.net|money_numberfield:event.currency }}{% else %}{{ item.suggested_price.gross|money_numberfield:event.currency }}{% endif %}"
+                                        step="any">
                             </div>
                             <p>
                         {% elif not item.display_price.gross %}
@@ -453,7 +453,7 @@
                                             already-in-cart="{{ cart.itemvarsums|getitem:item|default:0 }}"
                                             name="{{ form_prefix }}item_{{ item.id }}" id="{{ form_prefix }}item_{{ item.id }}"
                                             aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend"
-                                            {% if item.description %} aria-describedby="{{ form_prefix }}item-{{ item.id }}-description"{% endif %}>
+                                            {% if item.description %}aria-describedby="{{ form_prefix }}item-{{ item.id }}-description"{% endif %}>
                                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                             {% trans "Select" context "checkbox" %}
                                     </label>
