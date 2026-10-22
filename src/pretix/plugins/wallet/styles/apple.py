@@ -18,9 +18,10 @@ from pretix.plugins.wallet.i18n import (
     MaybeTranslatedString,
 )
 from pretix.plugins.wallet.styles.base import (
-    FieldGroup, FieldGroupDisplay, ImageSettingsField, PassStyle,
+    FieldGroup, FieldGroupDisplay, PassStyle,
     PlaceholderFieldEntry, TextFieldGroup, WalletPlatform,
 )
+from pretix.plugins.wallet.styles.settings import ImageSettingsField
 
 from .settings import ColorSettingsField, FloatSettingsField, convert_to_png
 
