@@ -41,7 +41,6 @@ from importlib import import_module
 from urllib.parse import urlencode
 
 import isoweek
-from dateutil import parser
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -73,7 +72,7 @@ from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_public_ical
 from pretix.presale.productlist import (
-    item_group_by_category, prepare_item_list_for_shop,
+    get_item_option_count, item_group_by_category, prepare_item_list_for_shop,
 )
 from pretix.presale.signals import seatingframe_html_head
 from pretix.presale.views.organizer import (
@@ -228,7 +227,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                             break
 
             items = [i for i in items if not i.requires_seat]
-            context['itemnum'] = len(items)
+            context['itemnum'] = get_item_option_count(items)
             context['allfree'] = all(
                 item.display_price.gross == Decimal('0.00') and not item.mandatory_priced_addons
                 for item in items if not item.has_variations
@@ -249,6 +248,10 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
 
         templating_context = PlaceholderContext(event_or_subevent=self.subevent or self.request.event, event=self.request.event)
+
+        for field in ('presale_has_ended_text',):
+            context[field] = templating_context.format(str(self.request.event.settings[field]))
+
         if self.subevent:
             context['frontpage_text'] = templating_context.format(str(self.subevent.frontpage_text))
         else:
@@ -590,7 +593,9 @@ class EventAuth(View):
 class TimemachineForm(forms.Form):
     now_dt = forms.SplitDateTimeField(
         label=_('Fake date time'),
-        widget=SplitDateTimePickerWidget(),
+        widget=SplitDateTimePickerWidget(
+            min_date=date(2000, 1, 1),
+        ),
         initial=lambda: now().astimezone(get_current_timezone()),
     )
 
@@ -604,12 +609,14 @@ class EventTimeMachine(EventViewMixin, TemplateView):
             raise PermissionDenied(_('You are not allowed to access time machine mode.'))
         if not request.event.testmode:
             raise PermissionDenied(_('This feature is only available in test mode.'))
+
+        initial = {}
+        if now_dt := request.session.get(f'timemachine_now_dt:{request.event.pk}', None):
+            initial['now_dt'] = datetime.fromisoformat(now_dt)
+
         self.timemachine_form = TimemachineForm(
             data=request.method == 'POST' and request.POST or None,
-            initial=(
-                {'now_dt': parser.parse(request.session.get(f'timemachine_now_dt:{request.event.pk}', None))}
-                if request.session.get(f'timemachine_now_dt:{request.event.pk}', None) else {}
-            )
+            initial=initial
         )
 
     def get_context_data(self, **kwargs):
@@ -623,7 +630,7 @@ class EventTimeMachine(EventViewMixin, TemplateView):
             messages.success(self.request, _('Time machine disabled!'))
             return redirect(self.get_success_url())
         elif self.timemachine_form.is_valid():
-            request.session[f'timemachine_now_dt:{request.event.pk}'] = str(self.timemachine_form.cleaned_data['now_dt'])
+            request.session[f'timemachine_now_dt:{request.event.pk}'] = self.timemachine_form.cleaned_data['now_dt'].isoformat()
             return redirect(eventreverse(request.event, "presale:event.index"))
         else:
             return self.get(request)

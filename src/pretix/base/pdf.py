@@ -801,6 +801,18 @@ def generate_compressed_addon_list(op, order, event, only_checked_in=False):
     return addonlist
 
 
+def get_sizebox(page: pypdf.PageObject):
+    mediabox = page.mediabox
+    cropbox = page.cropbox
+
+    return pypdf.generic.RectangleObject((
+        max(mediabox[0], cropbox[0]),
+        max(mediabox[1], cropbox[1]),
+        min(mediabox[2], cropbox[2]),
+        min(mediabox[3], cropbox[3]),
+    ))
+
+
 class Renderer:
 
     def __init__(self, event, layout, background_file):
@@ -1079,7 +1091,7 @@ class Renderer:
         fontsize = float(o['fontsize'])
         height = float(o['height']) * mm
         width = float(o['width']) * mm
-        while True:
+        for _i in range(25):  # try adapting the font size at most 25 times
             p, ad, lineheight = self._text_paragraph(op, order, o, override_fontsize=fontsize)
             w, h = p.wrapOn(canvas, width, 1000 * mm)
             widths = p.getActualLineWidths0()
@@ -1153,11 +1165,10 @@ class Renderer:
                 elif o['type'] == "poweredby":
                     self._draw_poweredby(canvas, op, o)
                 if self.bg_pdf:
-                    page_size = (
-                        self.bg_pdf.pages[0].mediabox[2] - self.bg_pdf.pages[0].mediabox[0],
-                        self.bg_pdf.pages[0].mediabox[3] - self.bg_pdf.pages[0].mediabox[1]
-                    )
-                    if self.bg_pdf.pages[0].get('/Rotate') in (90, 270):
+                    first_page = self.bg_pdf.pages[0]
+                    sizebox = get_sizebox(first_page)
+                    page_size = (sizebox.width, sizebox.height)
+                    if first_page.rotation in (90, 270):
                         # swap dimensions due to pdf being rotated
                         page_size = page_size[::-1]
                     canvas.setPageSize(page_size)
@@ -1312,14 +1323,18 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
 
 
 def _merge_with_correct_page_media_box(output: pypdf.PdfWriter, fg_page: pypdf.PageObject, bg_page: pypdf.PageObject):
-    if bg_page.rotation != 0:
-        bg_page.transfer_rotation_to_content()
-    media_box = bg_page.mediabox
+    """
+    Adds fg_page to output, merging bg_page behind it.
+
+    If bg_page has a non-zero mergebox/cropbox or is rotated via /Rotate, a transformation is applied to fix this."""
     trsf = pypdf.Transformation()
-    if media_box.bottom != 0:
-        trsf = trsf.translate(0, -media_box.bottom)
-    if media_box.left != 0:
-        trsf = trsf.translate(-media_box.left, 0)
+    if bg_page.rotation != 0:
+        trsf = trsf.rotate(-bg_page.rotation)
+
+    mb = get_sizebox(bg_page)
+    pt1 = trsf.apply_on(mb.lower_left)
+    pt2 = trsf.apply_on(mb.upper_right)
+    trsf = trsf.translate(-min(pt1[0], pt2[0]), -min(pt1[1], pt2[1]))
 
     fg_page = output.add_page(fg_page)
     fg_page.merge_transformed_page(bg_page, trsf, over=False, expand=False)

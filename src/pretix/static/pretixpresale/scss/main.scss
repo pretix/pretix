@@ -221,6 +221,11 @@ footer nav .btn-link {
         /*border-bottom: 2px solid $brand-primary;*/
         font-weight: bold;
     }
+    .btn-link {
+        padding: 0;
+        margin-left: 5px;
+        vertical-align: top;
+    }
     img {
         vertical-align: baseline;
     }
@@ -650,6 +655,35 @@ h2 .label {
 
 .account-addresses address::first-line {
     font-weight: bold;
+}
+
+
+.helper-position-relative {
+    position: relative;
+}
+.helper-display-block {
+    display: block !important;
+}
+.helper-display-inline {
+    display: inline !important;
+}
+.helper-display-inline-block {
+    display: inline-block !important;
+}
+.helper-display-none-soft {
+    display: none;
+}
+.helper-display-none {
+    display: none !important;
+}
+.helper-width-auto {
+    width: auto;
+}
+.helper-width-100 {
+    width: 100%;
+}
+.helper-space-below {
+    margin-bottom: 10px;
 }
 
 

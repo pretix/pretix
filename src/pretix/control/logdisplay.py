@@ -717,6 +717,10 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
     'pretix.organizer.export.schedule.failed': _('A scheduled export has failed: {reason}.'),
     'pretix.organizer.outgoingmails.retried': _('Failed emails have been scheduled to be retried.'),
     'pretix.organizer.outgoingmails.aborted': _('Queued emails have been aborted.'),
+    'pretix.property.created': _('An organizer meta property has been created.'),
+    'pretix.property.deleted': _('An organizer meta property has been deleted.'),
+    'pretix.property.changed': _('An organizer meta property has been changed.'),
+    'pretix.property.reordered': _('An organizer meta property has been reordered.'),
     'pretix.giftcards.acceptance.added': _('Gift card acceptance for another organizer has been added.'),
     'pretix.giftcards.acceptance.removed': _('Gift card acceptance for another organizer has been removed.'),
     'pretix.giftcards.acceptance.acceptor.invited': _('A new gift card acceptor has been invited.'),
@@ -774,6 +778,7 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
     'pretix.user.settings.2fa.disabled': _('Two-factor authentication has been disabled.'),
     'pretix.user.settings.2fa.regenemergency': _('Your two-factor emergency codes have been regenerated.'),
     'pretix.user.settings.2fa.emergency': _('A two-factor emergency code has been generated.'),
+    'pretix.user.settings.2fa.resetdrift': _('Drift and throttle values for two-factor devices have been reset.'),
     'pretix.user.settings.2fa.device.added': _('A new two-factor authentication device "{name}" has been added to '
                                                'your account.'),
     'pretix.user.settings.2fa.device.deleted': _('The two-factor authentication device "{name}" has been removed '

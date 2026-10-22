@@ -34,6 +34,7 @@
 
 import datetime
 import os
+import quopri
 import re
 import socket
 from contextlib import contextmanager
@@ -316,8 +317,10 @@ def _extract_html(mail):
         if "multipart/related" in mimetype:
             for sp in content._payload:
                 if isinstance(sp, MIMEText):
-                    return sp._payload
-                    break
+                    if sp.get('content-transfer-encoding').startswith('quoted-printable'):
+                        return quopri.decodestring(sp.get_payload()).decode()
+                    else:
+                        return sp.get_payload()
         elif "text/html" in mimetype:
             return content
 
@@ -639,6 +642,8 @@ def assert_mail_connection(res, should_connect, use_ssl):
     True, False
 ])
 def test_private_smtp_ip(res, use_ssl, settings):
+    settings.EMAIL_HOST_USER = ''
+    settings.EMAIL_HOST_PASSWORD = ''
     settings.EMAIL_CUSTOM_SMTP_BACKEND = 'pretix.base.email.CheckPrivateNetworkSmtpBackend'
     settings.MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = False
     with assert_mail_connection(res=res, should_connect=False, use_ssl=use_ssl), pytest.raises(match="Request to .* blocked"):
@@ -662,6 +667,8 @@ def test_private_smtp_ip(res, use_ssl, settings):
     True, False
 ])
 def test_public_smtp_ip(use_ssl, allow_private, settings):
+    settings.EMAIL_HOST_USER = ''
+    settings.EMAIL_HOST_PASSWORD = ''
     settings.EMAIL_CUSTOM_SMTP_BACKEND = 'pretix.base.email.CheckPrivateNetworkSmtpBackend'
     settings.MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = allow_private
 
@@ -711,3 +718,29 @@ def test_send_mail_private_ip(res, use_ssl, allow_private_networks, env):
             assert m.status == OutgoingMail.STATUS_SENT
         else:
             assert m.status == OutgoingMail.STATUS_FAILED
+
+
+@pytest.mark.django_db
+def test_mail_encoding(env, mailoutbox):
+    m = OutgoingMail.objects.create(
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test öäü testtesttest',
+        body_html='Test <b>ÖÄÜ</b>',
+        sender='sender@example.com',
+    )
+    assert m.status == OutgoingMail.STATUS_QUEUED
+    mail_send_task.apply(kwargs={
+        'outgoing_mail': m.pk,
+    }, max_retries=0)
+    m.refresh_from_db()
+    assert m.status == OutgoingMail.STATUS_SENT
+
+    assert len(mailoutbox) == 1
+    mail_plain = mailoutbox[0].message().as_string()
+
+    assert "ä" not in mail_plain
+    assert "Ä" not in mail_plain
+    assert "Test =C3=B6=C3=A4=C3=BC" in mail_plain
+    assert "Test <b>=C3=96=C3=84=C3=9C</b>" in mail_plain
+    assert max(len(x) for x in mail_plain.splitlines()) <= 76

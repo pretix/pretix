@@ -401,6 +401,9 @@ let form_handlers = function (el) {
 				if (tagName !== 'div' && tagName !== 'button') {
 					$toggling = dependent.closest('.form-group')
 				}
+				if ($toggling.find(".has-error").length > 0) {
+					enabled = true  // Don't hide error message that makes form unsubmittable
+				}
 				if (ev) {
 					if (enabled) {
 						$toggling.stop().slideDown()
@@ -810,7 +813,13 @@ function setup_basics (el) {
 			return
 		}
 
-		$('<li><a href="#' + scrollTarget.id + '">' + $.trim(label) + '</a> – ' + description + '</li>')
+		$('<li></li>')
+			.append(
+				$('<a></a>').attr("href", "#" + scrollTarget.id).text($.trim(label))
+			)
+			.append(
+				document.createTextNode(' - ' + description)
+			)
 			.appendTo(alert.querySelector('ul') || $('<ul>').appendTo(alert))
 			.find('a').on('click', function (e) {
 				$panel.collapse('show')

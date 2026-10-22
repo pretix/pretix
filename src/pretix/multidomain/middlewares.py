@@ -302,19 +302,6 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
             # Content varies with the CSRF cookie, so set the Vary header.
             patch_vary_headers(response, ('Cookie',))
 
-    def process_response(self, request, response):
-        if (
-            not settings.CSRF_USE_SESSIONS
-            and request.is_secure()
-            and settings.CSRF_COOKIE_NAME in response.cookies
-            and response.cookies[settings.CSRF_COOKIE_NAME].value
-        ):
-            logger.warning("Usage of djangos CsrfViewMiddleware detected (legacy cookie found in response). "
-                           "This may be caused by using csrf_project or requires_csrf_token from django.views.decorators.csrf. "
-                           "Use the pretix.multidomain.middlewares equivalent instead.")
-
-        return super().process_response(request, response)
-
 
 def handle_duplicated_csrftoken(request, response):
     # Due to a Safari bug, in some browser, two csrftoken cookies can exist:

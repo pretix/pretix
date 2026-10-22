@@ -778,9 +778,9 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["events"] = self.request.user.get_events_with_permission(
-            "event.settings.general:write", request=self.request
-        ).filter(organizer=self.request.organizer)
+        # Assumption: Who has access to modify organizer settings may see all events and disable/enable plugins
+        # for them. Otherwise, inconsistent situations occur.
+        kwargs["events"] = self.request.organizer.events.all()
         kwargs["initial"] = {
             "events": self.request.organizer.events.filter(plugins__regex='(^|,)' + self.plugin.module + '(,|$)')
         }
@@ -2202,7 +2202,7 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
                 owner=self.request.user,
                 timezone=str(get_current_timezone()),
             )
-        if not self.scheduled:
+        if not self.scheduled and not self.scheduled_copy_from:
             initial = {
                 "mail_subject": gettext("Export: {title}").format(title=self.exporter.verbose_name),
                 "mail_template": gettext(
@@ -2817,9 +2817,14 @@ class SSOProviderCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
         return get_object_or_404(CustomerSSOProvider, organizer=self.request.organizer, pk=self.kwargs.get('provider'))
 
     def get_success_url(self):
-        return reverse('control:organizer.ssoproviders', kwargs={
-            'organizer': self.request.organizer.slug,
+        return reverse('control:organizer.ssoprovider.edit', kwargs={
+            'organizer': self.request.organizer.slug, 'provider': self.object.pk,
         })
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['redirect_uri'] = _('(will be generated)')
+        return ctx
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -2950,8 +2955,11 @@ class SSOClientCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
         secret = form.instance.set_client_secret()
         messages.success(
             self.request,
-            _('The SSO client has been created. Please note down the following client secret, it will never be shown '
-              'again: {secret}').format(secret=secret)
+            _('The SSO client has been created.') + ' ' +
+            _('Please note down the following client secret, it will never be shown again.') + '\n\n' +
+            _('Base URL / issuer') + f': {form.initial["disp_base_url"]}\n\n' +
+            _('Client ID') + f': {form.instance.client_id}\n\n' +
+            _('Client secret') + f': {secret}'
         )
         form.instance.organizer = self.request.organizer
         ret = super().form_valid(form)
@@ -3000,8 +3008,9 @@ class SSOClientUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
             secret = form.instance.set_client_secret()
             messages.success(
                 self.request,
-                _('Your changes have been saved. Please note down the following client secret, it will never be shown '
-                  'again: {secret}').format(secret=secret)
+                _('Your changes have been saved.') + ' ' +
+                _('Please note down the following client secret, it will never be shown again.') + '\n\n' +
+                _('Client secret') + f': {secret}'
             )
         else:
             messages.success(

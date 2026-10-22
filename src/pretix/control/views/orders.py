@@ -1177,6 +1177,8 @@ class OrderRefundView(OrderView):
         manual_value = formats.sanitize_separators(manual_value)
         try:
             manual_value = Decimal(manual_value)
+            if manual_value < Decimal("0.00"):
+                raise TypeError("Please do not use negative numbers")
         except (DecimalException, TypeError):
             messages.error(self.request, _('You entered an invalid number.'))
             is_valid = False
@@ -1206,6 +1208,8 @@ class OrderRefundView(OrderView):
         giftcard_value = formats.sanitize_separators(giftcard_value)
         try:
             giftcard_value = Decimal(giftcard_value)
+            if giftcard_value < Decimal("0.00"):
+                raise TypeError("Please do not use negative numbers")
         except (DecimalException, TypeError):
             messages.error(self.request, _('You entered an invalid number.'))
             is_valid = False
@@ -1255,6 +1259,8 @@ class OrderRefundView(OrderView):
         offsetting_value = formats.sanitize_separators(offsetting_value)
         try:
             offsetting_value = Decimal(offsetting_value)
+            if offsetting_value < Decimal("0.00"):
+                raise TypeError("Please do not use negative numbers")
         except (DecimalException, TypeError):
             messages.error(self.request, _('You entered an invalid number.'))
             is_valid = False
@@ -1271,6 +1277,9 @@ class OrderRefundView(OrderView):
                     if offset_order.event.currency != self.request.event.currency:
                         messages.error(self.request, _('You entered an order in an event with a different currency.'))
                         is_valid = False
+                    if not self.request.user.has_event_permission(self.request.organizer, offset_order.event, 'event.orders:write', request=self.request):
+                        messages.error(self.request, _('You entered an order in an event that you do not have access to.'))
+                        is_valid = False
                     refunds.append(OrderRefund(
                         order=order,
                         payment=None,
@@ -1286,10 +1295,13 @@ class OrderRefundView(OrderView):
                     ))
 
         for identifier, prov in self.request.event.get_payment_providers().items():
+            # prof = process form, not a typo for prov(ider)
             prof_value = self.request.POST.get(f'newrefund-{identifier}', '0') or '0'
             prof_value = formats.sanitize_separators(prof_value)
             try:
                 prof_value = Decimal(prof_value)
+                if prof_value < Decimal("0.00"):
+                    raise TypeError("Please do not use negative numbers")
             except (DecimalException, TypeError):
                 messages.error(self.request, _('You entered an invalid number.'))
                 is_valid = False
@@ -1313,6 +1325,8 @@ class OrderRefundView(OrderView):
             value = formats.sanitize_separators(value)
             try:
                 value = Decimal(value)
+                if value < Decimal("0.00"):
+                    raise TypeError("Please do not use negative numbers")
             except (DecimalException, TypeError):
                 messages.error(self.request, _('You entered an invalid number.'))
                 is_valid = False
@@ -1342,7 +1356,12 @@ class OrderRefundView(OrderView):
                     ))
 
         any_success = False
-        if refund_selected == full_refund and is_valid:
+        if refund_selected != full_refund:
+            messages.error(self.request, _('The refunds you selected do not match the selected total refund '
+                                           'amount.'))
+            is_valid = False
+
+        if is_valid:
             for r in refunds:
                 r.save()
                 order.log_action('pretix.event.order.refund.created', {
@@ -1414,9 +1433,6 @@ class OrderRefundView(OrderView):
                             )
                         }))
             return redirect(self.get_order_url())
-        else:
-            messages.error(self.request, _('The refunds you selected do not match the selected total refund '
-                                           'amount.'))
 
     def post(self, *args, **kwargs):
         if self.start_form.is_valid():

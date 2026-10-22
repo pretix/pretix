@@ -146,7 +146,7 @@ class PeppolIdValidator:
                                   params={"number": prefix})
 
         if self.validate_online:
-            base_hostnames = ['edelivery.tech.ec.europa.eu', 'acc.edelivery.tech.ec.europa.eu']
+            base_hostnames = ['participant.sml.prod.tech.peppol.org', 'participant.sml.test.tech.peppol.org']
             smp_id = base64.b32encode(hashlib.sha256(value.lower().encode()).digest()).decode().rstrip("=")
             for base_hostname in base_hostnames:
                 smp_domain = f'{smp_id}.iso6523-actorid-upis.{base_hostname}'

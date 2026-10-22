@@ -114,7 +114,7 @@ td(
 )
 	.pretix-widget-event-calendar-day(v-if="day", :aria-label="dateStr") {{ daynum }}
 	.pretix-widget-event-calendar-events(v-if="day")
-		EventCalendarEvent(v-for="e in day.events", :key="e.event_url", :event="e")
+		EventCalendarEvent(v-for="e in day.events", :key="e.event_url+'-'+(e.subevent||'')", :event="e")
 </template>
 <style lang="sass">
 </style>

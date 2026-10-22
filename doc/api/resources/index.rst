@@ -12,6 +12,7 @@ at :ref:`plugin-docs`.
    organizers
    events
    subevents
+   event_meta_properties
    taxrules
    categories
    items

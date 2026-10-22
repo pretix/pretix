@@ -600,12 +600,16 @@ class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileFiel
             image = ImageOps.exif_transpose(image)
 
             if f._cropdata:
-                image = image.crop((
-                    f._cropdata.get('x', 0),
-                    f._cropdata.get('y', 0),
-                    f._cropdata.get('x', 0) + f._cropdata.get('width', image.width),
-                    f._cropdata.get('y', 0) + f._cropdata.get('height', image.height),
-                ))
+                left = int(f._cropdata.get('x', 0))
+                top = int(f._cropdata.get('y', 0))
+                right = left + int(f._cropdata.get('width', image.width))
+                bottom = top + int(f._cropdata.get('height', image.height))
+                if left >= image.width or top >= image.height or right > image.width or bottom > image.height:
+                    raise ValidationError(
+                        self.error_messages['max_dimension'],
+                        code='max_dimension',
+                    )
+                image = image.crop((left, top, right, bottom))
                 with BytesIO() as output:
                     # This might use a lot of memory, but temporary files are not a good option since
                     # we don't control the cleanup
@@ -1202,8 +1206,9 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
             return field
 
     def clean(self):
-        from pretix.base.addressvalidation import \
-            validate_address  # local import to prevent impact on startup time
+        from pretix.base.addressvalidation import (  # local import to prevent impact on startup time
+            validate_address,
+        )
 
         d = super().clean()
 
@@ -1444,8 +1449,9 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         self.fields['transmission_type'].widget.attrs['data-trigger-address-info'] = 'on'
 
     def clean(self):
-        from pretix.base.addressvalidation import \
-            validate_address  # local import to prevent impact on startup time
+        from pretix.base.addressvalidation import (  # local import to prevent impact on startup time
+            validate_address,
+        )
 
         data = self.cleaned_data
 
@@ -1499,7 +1505,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 "vat_id": _("This field is required.")
             })
 
-        if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
+        if self.validate_vat_id and self.instance.vat_id_validated and not any(v in self.changed_data for v in ('is_business', 'vat_id', 'country')):
             pass  # Skip re-validation if it is validated
         elif self.validate_vat_id and vat_id_applicable:
             try:

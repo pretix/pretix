@@ -3,16 +3,23 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "SSO providers" %}{% endblock %}
 {% block inner %}
-    <h1>{% trans "SSO providers" %}</h1>
+    <h1>{% trans "SSO providers" %} <small> &mdash; {% blocktrans %}
+    	Connect to an external login provider
+    {% endblocktrans %}</small></h1>
     <p>
         {% blocktrans trimmed %}
             You can connect existing Single-Sign-On (SSO) providers to allow your customers to log in using your own
             account system.
         {% endblocktrans %}
     </p>
+    <p>
+        {% blocktrans trimmed with url="https://docs.pretix.eu/guides/customer-accounts/#using-pretix-as-an-sso-client" %}
+            For more information, refer to our documentation on <a href="{{ url }}" target="_blank">Using pretix as an SSO client</a>.
+        {% endblocktrans %}
+    </p>
     <a href="{% url "control:organizer.ssoprovider.add" organizer=request.organizer.slug %}" class="btn btn-default">
         <span class="fa fa-plus"></span>
-        {% trans "Create a new SSO provider" %}
+        {% trans "Connect to an external SSO provider" %}
     </a>
     <table class="table table-condensed table-hover">
         <thead>

@@ -97,7 +97,7 @@ var pretixpaypal = {
 
 		let sdk_url = 'https://www.paypal.com/sdk/js'
 			+ '?client-id=' + pretixpaypal.client_id
-			+ '&components=buttons,funding-eligibility'
+			+ '&components=buttons,funding-eligibility,messages'
 			+ '&currency=' + pretixpaypal.currency
 
 		if (pretixpaypal.locale) {
@@ -195,6 +195,12 @@ var pretixpaypal = {
 				label: 'pay',
 				tagline: false
 			},
+			message: {
+				amount: undefined,
+				align: 'center',
+				color: 'black',
+				position: 'bottom'
+			},
 			createOrder: function (data, actions) {
 				if (pretixpaypal.order_id) {
 					return pretixpaypal.order_id
@@ -285,6 +291,18 @@ var pretixpaypal = {
 
 			if (button.isEligible()) {
 				eligibles.push(gettext(pretixpaypal.apm_map[fundingSource] || fundingSource))
+
+				if (fundingSource === 'paylater') {
+					pretixpaypal.paypal.Messages({
+						pageType: 'payment',
+						style: {
+							layout: 'text',
+							logo: {
+								type: 'none',
+							}
+						}
+					}).render('.pp-message');
+				}
 			}
 		})
 

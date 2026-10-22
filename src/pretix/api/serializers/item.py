@@ -261,7 +261,9 @@ class ItemAddOnSerializer(serializers.ModelSerializer):
     def validate(self, data):
         data = super().validate(data)
 
-        ItemAddOn.clean_max_min_count(data.get('max_count'), data.get('min_count'))
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+        ItemAddOn.clean_max_min_count(full_data.get('max_count'), full_data.get('min_count'))
 
         return data
 
@@ -376,7 +378,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     def validate_bundles(self, value):
         if not self.instance:
             for b_data in value:
-                ItemBundle.clean_itemvar(self.context['event'], b_data['bundled_item'], b_data['bundled_variation'])
+                ItemBundle.clean_itemvar(self.context['event'], b_data.get('bundled_item'), b_data.get('bundled_variation'))
         return value
 
     def validate_addons(self, value):

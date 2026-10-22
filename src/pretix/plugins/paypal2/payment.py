@@ -68,7 +68,7 @@ from pretix.plugins.paypal2.client.core.paypal_http_client import (
 from pretix.plugins.paypal2.client.customer.partner_referral_create_request import (
     PartnerReferralCreateRequest,
 )
-from pretix.plugins.paypal.models import ReferencedPayPalObject
+from pretix.plugins.paypal2.models import ReferencedPayPalObject
 
 logger = logging.getLogger('pretix.plugins.paypal2')
 
@@ -109,7 +109,6 @@ class PaypalSettingsHolder(BasePaymentProvider):
                 ('client_id',
                  forms.CharField(
                      label=_('Client ID'),
-                     max_length=80,
                      min_length=80,
                      help_text=format_html(
                          '<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>',

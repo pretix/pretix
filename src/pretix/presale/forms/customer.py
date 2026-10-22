@@ -30,7 +30,7 @@ from django.contrib.auth.password_validation import (
 )
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core import signing
-from django.utils.html import escape
+from django.utils.html import escape, format_html
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
@@ -81,7 +81,8 @@ class AuthenticationForm(forms.Form):
         self.request = request
         self.customer_cache = None
         super().__init__(*args, **kwargs)
-        self.fields['password'].help_text = "<a target='_blank' href='{}'>{}</a>".format(
+        self.fields['password'].help_text = format_html(
+            "<a target='_blank' href='{}'>{}</a>",
             eventreverse_absolute(False, 'presale:organizer.customer.resetpw', kwargs={
                 'organizer': request.organizer.slug,
             }),

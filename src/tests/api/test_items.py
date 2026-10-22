@@ -1000,7 +1000,6 @@ def test_item_create_with_bundle(token_client, organizer, event, item, category,
             "bundles": [
                 {
                     "bundled_item": i.pk,
-                    "bundled_variation": None,
                     "count": 2,
                     "designated_price": "3.00",
                 }
@@ -1925,6 +1924,14 @@ def test_addons_create(token_client, organizer, event, item, category, category2
 
 @pytest.mark.django_db
 def test_addons_update(token_client, organizer, event, item, addon):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug, item.pk, addon.pk),
+        {
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/addons/{}/'.format(organizer.slug, event.slug, item.pk, addon.pk),
         {

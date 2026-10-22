@@ -219,8 +219,14 @@ def test_specific_organizer_permission(event, user):
 def test_organizer_permissions_multiple_teams(event, user):
     team1 = Team.objects.create(organizer=event.organizer, limit_organizer_permissions={"organizer.settings.general:write": True})
     team2 = Team.objects.create(organizer=event.organizer, limit_organizer_permissions={"organizer.events:create": True})
+    assert set(event.organizer.get_users_with_permission('organizer.settings.general:write')) == set()
+    assert set(event.organizer.get_users_with_permission(None)) == set()
     team1.members.add(user)
+    assert set(event.organizer.get_users_with_permission('organizer.settings.general:write')) == {user}
+    assert set(event.organizer.get_users_with_permission(None)) == {user}
+    assert set(event.organizer.get_users_with_permission('organizer.events:create')) == set()
     team2.members.add(user)
+    assert set(event.organizer.get_users_with_permission('organizer.events:create')) == {user}
     orga2 = Organizer.objects.create(slug='d2', name='d2')
     team3 = Team.objects.create(organizer=orga2, limit_organizer_permissions={"organizer.teams:write": True})
     team3.members.add(user)

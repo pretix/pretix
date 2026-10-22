@@ -173,7 +173,7 @@ Datetime              String in ISO 8601 format    ``"2017-12-27T10:00:00Z"``
                       with timezone (normally UTC) ``"2017-12-27T10:00:00.596934Z"``,
                                                    ``"2017-12-27T10:00:00+02:00"``
 Date                  String in ISO 8601 format    ``2017-12-27``
-Multi-lingual string  Object of strings            ``{"en": "red", "de": "rot", "de_Informal": "rot"}``
+Multi-lingual string  Object of strings            ``{"en": "red", "de": "rot", "de-informal": "rot"}``
 Money                 String with decimal number   ``"23.42"``
 Currency              String with ISO 4217 code    ``"EUR"``, ``"USD"``
 Relative datetime     *either* String in ISO 8601  ``"2017-12-27T10:00:00.596934Z"``,
