@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-09-04 14:29+0000\n"
-"Last-Translator: Albizuri <oier@puntu.eus>\n"
-"Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
-">\n"
+"PO-Revision-Date: 2026-10-22 13:45+0000\n"
+"Last-Translator: IÑIGO ANSA <kaixo@golocalsansebastian.com>\n"
+"Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/"
+"eu/>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -36,8 +36,9 @@ msgid "Arabic"
 msgstr "Arabiera"
 
 #: pretix/_base_settings.py
+#, fuzzy
 msgid "Basque"
-msgstr ""
+msgstr "Euskera"
 
 #: pretix/_base_settings.py
 msgid "Catalan"
@@ -1171,10 +1172,9 @@ msgid "Check-in datetime on list {}"
 msgstr "Izen-emate zerrendak"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy, python-brace-format
-#| msgid "Question {val}"
+#, python-brace-format
 msgid "Question: {name}"
-msgstr "Galdera {val}"
+msgstr "Galdera {name}"
 
 #: pretix/base/datasync/sourcefields.py pretix/base/settings.py
 msgid "Given name"
@@ -1295,7 +1295,7 @@ msgstr ""
 #: pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/organizers/customers.html
 msgid "Customers"
-msgstr ""
+msgstr "Bezeroak"
 
 #: pretix/base/exporters/customers.py pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
@@ -3096,7 +3096,7 @@ msgstr "Helbide elektronikoa"
 #: pretix/base/forms/auth.py pretix/control/forms/orders.py
 #: pretix/control/templates/pretixcontrol/shredder/download.html
 msgid "Confirmation code"
-msgstr ""
+msgstr "Baieztatze kodea"
 
 #: pretix/base/forms/questions.py
 #, fuzzy
@@ -3162,7 +3162,7 @@ msgstr ""
 
 #: pretix/base/forms/questions.py
 msgid "Street"
-msgstr ""
+msgstr "Kalea"
 
 #: pretix/base/forms/questions.py
 msgid "State"
@@ -3430,11 +3430,9 @@ msgid "Exchange System (SdI)"
 msgstr ""
 
 #: pretix/base/invoicing/national.py
-#, fuzzy
-#| msgid "Gift card code"
 msgctxt "italian_invoice"
 msgid "Fiscal code"
-msgstr "Opari-txartelaren kodea"
+msgstr "Kode fiskala"
 
 #: pretix/base/invoicing/national.py
 msgctxt "italian_invoice"
@@ -3761,10 +3759,8 @@ msgid "The relevant plugin is currently not active."
 msgstr "Produktu hau ez dago eskuragarri."
 
 #: pretix/base/logentrytypes.py
-#, fuzzy
-#| msgid "Order deleted"
 msgid "(deleted)"
-msgstr "Ezabatutako eskaera"
+msgstr "(Ezabatutako eskaera)"
 
 #: pretix/base/logentrytypes.py
 #, python-brace-format
@@ -6240,7 +6236,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 msgid "being sent"
-msgstr ""
+msgstr "bidaltzen"
 
 #: pretix/base/models/mail.py
 #, fuzzy
@@ -6264,7 +6260,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 msgid "sent"
-msgstr ""
+msgstr "bidalita"
 
 #: pretix/base/models/mail.py
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
@@ -6642,7 +6638,7 @@ msgstr "Egiaztatzeak huts egin du"
 #: pretix/base/models/orders.py pretix/control/views/event.py
 #: pretix/control/views/organizer.py
 msgid "Other"
-msgstr ""
+msgstr "Beste bat"
 
 #: pretix/base/models/organizer.py
 msgid ""
@@ -6799,7 +6795,7 @@ msgstr "Ordainketa itzuli"
 #, fuzzy
 #| msgid "Tax rate"
 msgid "Tax free"
-msgstr "Zerga-tasa"
+msgstr "Zergarik ez"
 
 #: pretix/base/models/tax.py
 msgctxt "tax_code"
@@ -18749,7 +18745,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/auth/login.html
 #: pretix/control/templates/pretixcontrol/auth/register.html
 msgid "Register"
-msgstr ""
+msgstr "Berretsi"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html
 msgid ""
@@ -21609,7 +21605,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html
 #, python-format
 msgid "Currently available: %(num)s"
-msgstr ""
+msgstr "Ezkuragarri: %(num)s"
 
 #: pretix/control/templates/pretixcontrol/global_license.html
 msgid ""
