@@ -3,9 +3,8 @@ from functools import cached_property
 from typing import Any
 
 from django.core.files import File
-from ..i18n import (
-    MaybeTranslatedString,
-)
+
+from ..i18n import MaybeTranslatedString
 
 
 class BaseWalletPlaceholder:

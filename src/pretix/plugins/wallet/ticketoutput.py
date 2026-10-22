@@ -19,24 +19,33 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import json
 import logging
+import os
+import tempfile
+import zipfile
 from collections import OrderedDict
+from functools import cached_property
 
 from django import forms
+from django.conf import settings
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
 
 from pretix.base.forms import SecretKeySettingsField
-from pretix.base.models import Event
+from pretix.base.models import Event, Order
 from pretix.base.settings import SettingsSandbox
 from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.control.forms import ClearableBasenameFileInput
 from pretix.plugins.wallet.styles.base import WalletPlatform
 
 from .forms import CertificateFileField, validate_rsa_privkey
+from .models import GoogleWalletInstance, WalletPlatformLayout
 from .styles.apple import ApplePlatform
 from .styles.google import GooglePlatform
+from .styles.google_wallet import ButtonJWT, Comms, Resource
 
 logger = logging.getLogger("pretix.plugins.wallet")
 
@@ -67,15 +76,26 @@ class WalletOutput(BaseTicketOutput):
             "ticketoutput", WalletSettingsHolder.identifier, event
         )
 
-    def generate(self, op):
+    def get_layout(self, op):
         if hasattr(op.item, "walletlayout"):
             wallet_layout = op.item.walletlayout.layout
         else:
             wallet_layout = op.event.wallet_layouts.get(default=True)
-        platform_layout = get_object_or_404(
+        platform_layout: WalletPlatformLayout = get_object_or_404(
             wallet_layout.platform_layouts, platform=self.platform.identifier
         )
-        return platform_layout.pass_layout.generate(op)
+        return platform_layout.pass_layout
+
+    def generate(self, position):
+        return self.get_layout(position).generate(position)
+
+
+def dedup(list):
+    new = []
+    for i in list:
+        if not any(x.data == i.data for x in new):
+            new.append(i)
+    return new
 
 
 class GoogleWalletTicketOutput(WalletOutput):
@@ -141,12 +161,79 @@ class GoogleWalletTicketOutput(WalletOutput):
             ]
         )
 
+    @cached_property
+    def comms(self):
+        return Comms(
+            json.loads(self.event.settings.get("wallet_google_credentials").read())
+        )
+
+    def put_item_cached(self, resource: Resource, object):
+        with transaction.atomic():
+            instance, created = GoogleWalletInstance.objects.get_or_create(
+                event=self.event,
+                resource=resource,
+                identifier=object.id,
+                defaults={"data": object.data},
+            )
+            if created or instance.data != object.data:
+                result = self.comms.put_item(resource, object.id, object.data)
+                instance.data = object.data
+                instance.save(update_fields=["data"])
+                return result
+
+    def generate(self, position):
+        class_object, ticket_object = self.get_layout(position).generate(position)
+        self.put_item_cached(Resource.EVENT_TICKET_CLASS, class_object)
+        self.put_item_cached(Resource.EVENT_TICKET_OBJECT, ticket_object)
+
+        generated_jwt = self.comms.sign_jwt(
+            ButtonJWT(
+                origins=[settings.SITE_URL],
+                issuer=self.comms.client_email,
+                payload={"eventTicketObjects": [ticket_object]},
+            ).serialize()
+        )
+
+        return (
+            "googlepaypass",
+            "text/uri-list",
+            "https://pay.google.com/gp/v/save/%s" % generated_jwt,
+        )
+
+    def generate_order(self, order: Order):
+        class_objects = []
+        ticket_objects = []
+        for position in self.get_tickets_to_print(order):
+            class_object, ticket_object = self.get_layout(position).generate(position)
+            class_objects.append(class_object)
+            ticket_objects.append(ticket_object)
+
+        for co in dedup(class_objects):
+            self.put_item_cached(Resource.EVENT_TICKET_CLASS, co)
+        for to in dedup(ticket_objects):
+            self.put_item_cached(Resource.EVENT_TICKET_OBJECT, to)
+
+        generated_jwt = self.comms.sign_jwt(
+            ButtonJWT(
+                origins=[settings.SITE_URL],
+                issuer=self.comms.client_email,
+                payload={"eventTicketObjects": ticket_objects},
+            ).serialize()
+        )
+
+        return (
+            "googlepaypass",
+            "text/uri-list",
+            "https://pay.google.com/gp/v/save/%s" % generated_jwt,
+        )
+
 
 class AppleWalletTicketOutput(WalletOutput):
     identifier = "wallet_apple"
     verbose_name = _("Apple")
     download_button_text = "Add to Apple Wallet"
     platform = ApplePlatform
+    multi_download_enabled = True
 
     @classmethod
     def get_global_settings(cls, **kwargs):
@@ -205,6 +292,18 @@ class AppleWalletTicketOutput(WalletOutput):
                 ),
             ]
         )
+
+    def generate_order(self, order: Order):
+        with tempfile.NamedTemporaryFile() as d:
+            with zipfile.ZipFile(d, 'w') as zipf:
+                for pos in self.get_tickets_to_print(order):
+                    fname, __, content = self.generate(pos)
+                    zipf.writestr('{}-{}{}'.format(
+                        order.code, pos.positionid, os.path.splitext(fname)[1]
+                    ), content)
+
+            d.seek(0)
+            return '{}-{}.pkpasses'.format(order.code, self.identifier), 'application/vnd.apple.pkpasses', d.read()
 
 
 OUTPUTS = [WalletSettingsHolder, GoogleWalletTicketOutput, AppleWalletTicketOutput]
