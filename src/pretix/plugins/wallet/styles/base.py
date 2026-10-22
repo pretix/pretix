@@ -208,11 +208,7 @@ class PlaceholderFieldGroup(FieldGroup):
             ),
         }
 
-    def layout_schema(
-        self,
-        remaining_fields: list["FieldGroup"],
-        context: LayoutContext,
-    ):
+    def available_placeholders(self, context):
         content_type_placeholders = (
             context["placeholders"].get(self.content_type.value, {}).values()
         )
@@ -222,6 +218,15 @@ class PlaceholderFieldGroup(FieldGroup):
             for x in content_type_placeholders
             if renderer.is_available(x, self.context_args)
         ]
+        return available_placeholders
+
+    def layout_schema(
+        self,
+        remaining_fields: list["FieldGroup"],
+        context: LayoutContext,
+    ):
+        available_placeholders = self.available_placeholders(context)
+
         return {
             "type": "object",
             "properties": {
@@ -237,6 +242,7 @@ class PlaceholderFieldGroup(FieldGroup):
                                 if isinstance(f, PlaceholderFieldGroup)
                                 and f.content_type == self.content_type
                                 and f.display == self.display
+                                and set(available_placeholders) <= set(f.available_placeholders(context))
                             ],
                         },
                     ]

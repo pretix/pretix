@@ -9,11 +9,16 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.models import InvoiceAddress, Order
 from pretix.plugins.wallet.placeholders.base import (
-    FunctionalContextTransformation, get_available_context,
+    FunctionalContextTransformation,
+    get_available_context,
     get_transformed_context,
 )
 from pretix.plugins.wallet.styles.base import (
-    FieldGroup, FieldGroupDisplay, ImageFieldGroup, PassStyle, TextFieldGroup,
+    FieldGroup,
+    FieldGroupDisplay,
+    ImageFieldGroup,
+    PassStyle,
+    TextFieldGroup,
     WalletPlatform,
 )
 
@@ -47,6 +52,18 @@ class TicketTestStyle(PassStyle):
             TextFieldGroup(
                 identifier="text2",
                 name=_("Text 2"),
+                required=False,
+                context_args={"event"},
+            ),
+            TextFieldGroup(
+                identifier="text3",
+                name=_("Text 3"),
+                required=False,
+                context_args={"order_position"},
+            ),
+            TextFieldGroup(
+                identifier="text4",
+                name=_("Text 4"),
                 required=False,
                 context_args={"event"},
             ),
@@ -164,6 +181,29 @@ def test_schema_ticket_generation(layout_context):
                 }
             }
         },
+        {
+            "fieldgroups": {
+                "text1": {
+                    "entries": [
+                        {
+                            "type": "placeholder",
+                            "label": "test",
+                            "content": "event_slug",
+                        }
+                    ],
+                },
+                "text2": {
+                    "entries": [
+                        {
+                            "type": "placeholder",
+                            "label": "test",
+                            "content": "event_slug",
+                        }
+                    ],
+                    "overflow": "text3",
+                },
+            }
+        },
     ],
 )
 @pytest.mark.django_db
@@ -258,6 +298,29 @@ def test_schema_ticket_valid(env, layout):
                 },
             }
         },
+        {
+            "fieldgroups": {
+                "text1": {
+                    "entries": [
+                        {
+                            "type": "placeholder",
+                            "label": "test",
+                            "content": "test_placeholder",
+                        }
+                    ],
+                },
+                "text3": {
+                    "entries": [
+                        {
+                            "type": "placeholder",
+                            "label": "test",
+                            "content": "test_placeholder",
+                        }
+                    ],
+                    "overflow": "text4",
+                },
+            }
+        },
     ],
 )
 @pytest.mark.django_db
@@ -317,6 +380,8 @@ def test_layout_generate(env, order):
                 "value": "dummy",
             }
         ],
+        "text3": [],
+        "text4": [],
         "plain1": [],
         "image1": [],
     }
