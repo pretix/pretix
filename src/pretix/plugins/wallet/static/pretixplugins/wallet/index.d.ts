@@ -47,6 +47,7 @@ type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
 	min_entries: number | null;
 	max_entries: number | null;
 	context_args: string[];
+	overflows: string[];
 };
 
 type PredefinedFieldGroupDefinition = BaseFieldGroupDefinition & {
