@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load eventsignal %}
 {% if has_overpaid_orders %}
     <div class="alert alert-warning">
         {% blocktrans trimmed %}
@@ -56,3 +57,4 @@
            class="btn btn-primary">{% trans "Show sync problems" %}</a>
     </div>
 {% endif %}
+{% eventsignal request.event "pretix.control.signals.event_dashboard_top" request=request %}
