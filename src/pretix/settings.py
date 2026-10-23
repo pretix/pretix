@@ -506,7 +506,8 @@ REST_FRAMEWORK = {
         'pretix.testutils.api.UploadRenderer',
     ],
     'EXCEPTION_HANDLER': 'pretix.api.exception.custom_exception_handler',
-    'UNICODE_JSON': False
+    'UNICODE_JSON': False,
+    'LIST_SERIALIZER_ERRORS_AS_DICT': False
 }
 
 
