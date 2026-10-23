@@ -218,8 +218,6 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
             if self.instance is None:
                 raise ValidationError(_('Events cannot be created as \'live\'. Quotas and payment must be added to the '
                                         'event before sales can go live.'))
-            else:
-                self.instance.clean_live()
         return value
 
     @cached_property
@@ -428,6 +426,11 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         if plugins is not None:
             event.set_active_plugins(plugins)
             event.save()
+
+        live = validated_data.get('live') or event.live
+        if live:
+            event.refresh_from_db()
+            event.clean_live()
 
         return event
 
