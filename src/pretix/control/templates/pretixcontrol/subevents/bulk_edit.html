@@ -127,28 +127,8 @@
                     {% bootstrap_field form.date_admission_time layout="bulkedit_inline" form_group_class="" %}
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-md-3 control-label" for="{{ form.presale_start_day.id_for_label }}">
-                    {{ form.presale_start_day.label }}
-                </label>
-                <div class="col-md-5">
-                    {% bootstrap_field form.presale_start_day layout="bulkedit_inline" form_group_class="" %}
-                </div>
-                <div class="col-md-4">
-                    {% bootstrap_field form.presale_start_time layout="bulkedit_inline" form_group_class="" %}
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-3 control-label" for="{{ form.presale_end_day.id_for_label }}">
-                    {{ form.presale_end_day.label }}
-                </label>
-                <div class="col-md-5">
-                    {% bootstrap_field form.presale_end_day layout="bulkedit_inline" form_group_class="" %}
-                </div>
-                <div class="col-md-4">
-                    {% bootstrap_field form.presale_end_time layout="bulkedit_inline" form_group_class="" %}
-                </div>
-            </div>
+            {% bootstrap_field form.presale_start_rel layout="bulkedit" placeholder=datetime_sample %}
+            {% bootstrap_field form.presale_end_rel layout="bulkedit" placeholder=datetime_sample %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Item prices" %}</legend>

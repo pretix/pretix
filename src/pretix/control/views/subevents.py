@@ -44,7 +44,7 @@ from django.db import transaction
 from django.db.models import (
     Count, Exists, F, OuterRef, Prefetch, ProtectedError, Subquery,
 )
-from django.db.models.functions import Coalesce, TruncDate, TruncTime
+from django.db.models.functions import Coalesce, TruncDate, TruncTime, Extract
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -1590,12 +1590,20 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                 # as well in all cases we are concerned about
                 # See also: https://code.djangoproject.com/ticket/31948
                 k + '_day': TruncDate(k)
-                for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end')
+                for k in ('date_from', 'date_to', 'date_admission')
             },
             **{
                 k + '_time': TruncTime(k)
-                for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end')
+                for k in ('date_from', 'date_to', 'date_admission')
             },
+            **{
+                k + '_rel_min': Extract(F('date_from') - F(k), 'epoch') / 60
+                for k in ['presale_start', "presale_end"]
+            },
+            **{
+                k + '_rel_days': Extract(F('date_from__date') - F(f"{k}__date"), 'days')
+                for k in ['presale_start', "presale_end"]
+            }
         )
 
         fields = {
@@ -1613,16 +1621,51 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             'date_to_time',
             'date_admission_day',
             'date_admission_time',
-            'presale_start_day',
-            'presale_start_time',
-            'presale_end_day',
-            'presale_end_time',
         }
         for k in fields:
             existing_values = list(qs.order_by(k).values(k).annotate(c=Count('*')))
             if len(existing_values) == 1:
                 initial[k] = existing_values[0][k]
             elif len(existing_values) > 1:
+                mixed_values.add(k)
+                initial[k] = None
+
+        for k in ['presale_start', "presale_end"]:
+            existing_fixed_values = list(qs.order_by(k).values(k).annotate(c=Count('*')))
+            existing_rel_days_values = list(qs.order_by(f'{k}_rel_days').values(f'{k}_rel_days').annotate(c=Count("*")))
+            existing_rel_min_values = list(qs.order_by(f'{k}_rel_min').values(f'{k}_rel_min').annotate(c=Count("*")))
+
+            if len(existing_fixed_values) == 1:
+                if existing_fixed_values[0][k]:
+                    initial[f"{k}_rel"] = RelativeDateWrapper(existing_fixed_values[0][k])
+                else:
+                    initial[f"{k}_rel"] = None
+
+            elif len(existing_rel_min_values) == 1:
+                if rel_min := existing_rel_min_values[0][f'{k}_rel_min']:
+                    initial[f"{k}_rel"] = RelativeDateWrapper(RelativeDate(
+                        days=0,
+                        base_date_name='event__date_from',
+                        time=None,
+                        minutes=abs(rel_min),
+                        is_after=rel_min < 0,
+                    ))
+                else:
+                    initial[f"{k}_rel"] = None
+
+            elif len(existing_rel_days_values) == 1:
+                if rel_days := existing_rel_days_values[0][f'{k}_rel_days']:
+                    initial[f"{k}_rel"] = RelativeDateWrapper(RelativeDate(
+                        days=abs(rel_days),
+                        base_date_name='event__date_from',
+                        time=None,
+                        minutes=None,
+                        is_after=rel_days < 0,
+                    ))
+                else:
+                    initial[f"{k}_rel"] = None
+
+            elif len(existing_fixed_values) > 1 or len(existing_rel_days_values) > 1 or len(existing_rel_min_values) > 1:
                 mixed_values.add(k)
                 initial[k] = None
 
