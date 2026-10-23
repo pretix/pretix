@@ -300,14 +300,17 @@ def ensure_no_queries():
     an error.
     :return:
     """
-    def blocker(*args, **kwargs):
-        if settings.DEBUG or "PYTEST_CURRENT_TEST" in os.environ and "ENSURE_NO_QUERIES_OVERRIDE" not in os.environ:
-            raise RuntimeError(f"Unexpected DB query: {args[1]}")
-        logger.error("Unexpected DB query: %s", args[1])
+
+    def blocker(execute, sql, params, many, context):
+        in_test = "PYTEST_CURRENT_TEST" in os.environ
+        overridden = "ENSURE_NO_QUERIES_OVERRIDE" in os.environ
+        if settings.DEBUG or (in_test and not overridden):
+            raise RuntimeError(f"Unexpected DB query: {sql}")
+        logger.error("Unexpected DB query: %s", sql)
+        return execute(sql, params, many, context)
 
     with connection.execute_wrapper(blocker):
         yield
-
 
 @contextlib.contextmanager
 def conditional_atomic(do_atomic, **kwargs):

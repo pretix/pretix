@@ -699,7 +699,7 @@ class TestCancellationRule:
 
             assert cancellation.cancellation_possible is True
 
-            position_rule_results = cancellation.position_result.position_rule_results[1]
+            position_rule_results = cancellation.position_result.position_rule_results[order_position.pk]
             assert len(position_rule_results) == 2
             assert position_rule_results[0].cancellation_possible is True
             assert position_rule_results[1].cancellation_possible is False

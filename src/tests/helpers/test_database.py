@@ -23,7 +23,7 @@ def test_raises_runtime_error_in_debug(settings):
     with pytest.raises(RuntimeError, match="Unexpected DB query"):
         with scopes_disabled():
             with ensure_no_queries():
-                Event.objects.exists()
+                Event.objects.count()
 
 
 @pytest.mark.django_db
