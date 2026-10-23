@@ -263,6 +263,7 @@ urlpatterns = [
             name='organizer.export.scheduled.delete'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/ticket_select2$', typeahead.ticket_select2, name='organizer.ticket_select2'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/datasync/failedjobs/$', datasync.OrganizerFailedSyncJobsView.as_view(), name='organizer.datasync.failedjobs'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/qrcode.(?P<filetype>(png|jpeg|gif|svg))$', organizer.OrganizerQRCode.as_view(), name='organizer.qrcode'),
     re_path(r'^nav/typeahead/$', typeahead.nav_context_list, name='nav.typeahead'),
     re_path(r'^events/$', main.EventList.as_view(), name='events'),
     re_path(r'^events/add$', main.EventWizard.as_view(), name='events.add'),
