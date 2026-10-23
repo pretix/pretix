@@ -111,21 +111,21 @@ class RelativeDate:
     base_date_name: str = 'event__date_from__'
 
     def __post_init__(self) -> None:
-        if self.is_after and not self._choice.supports_after:
+        if self.is_after and not self.choice.supports_after:
             raise ValueError(
                 "The selected base date and attribute combination does not support relative dates placed after the base date"
             )
-        if not self.is_after and not self._choice.supports_before:
+        if not self.is_after and not self.choice.supports_before:
             raise ValueError(
                 "The selected base date and attribute combination does not support relative dates placed before the base date")
 
     @property
-    def _choice(self):
+    def choice(self):
         return BaseChoice.find(BASE_CHOICES, self.base_date_name)
 
     @property
     def key(self):
-        return self._choice.key
+        return self.choice.key
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, RelativeDate):
@@ -141,7 +141,7 @@ class RelativeDate:
         """
         from .models import Event, Order, SubEvent
 
-        choice = self._choice
+        choice = self.choice
 
         if choice.base == "order" and isinstance(base, Order):
             event = base.event
@@ -210,13 +210,13 @@ class RelativeDate:
         if self.minutes is not None:
             return 'RELDATE/minutes/{}/{}/{}'.format(  #
                 self.minutes,
-                self._choice.key,
+                self.choice.key,
                 'after' if self.is_after else '',
             )
         return 'RELDATE/{}/{}/{}/{}'.format(  #
             self.days,
             self.time.strftime('%H:%M:%S') if self.time else '-',
-            self._choice.key,
+            self.choice.key,
             'after' if self.is_after else '',
         )
 
@@ -269,6 +269,15 @@ class RelativeDateWrapper:
 
     def __init__(self, data: Union[datetime.datetime, RelativeDate]):
         self.data = data
+
+    @property
+    def choice(self) -> Literal["datetime", "date"] | BaseChoice:
+        if isinstance(self.data, datetime.datetime):
+            return "datetime"
+        elif isinstance(self.data, datetime.date):
+            return "date"
+        else:
+            return self.data.choice
 
     def date(self, base: "Event | Order | SubEvent") -> datetime.date:
         """

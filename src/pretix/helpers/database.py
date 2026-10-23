@@ -20,6 +20,8 @@
 # <https://www.gnu.org/licenses/>.
 #
 import contextlib
+import logging
+import os
 
 from django.conf import settings
 from django.contrib.postgres.indexes import BrinIndex
@@ -29,6 +31,8 @@ from django.db.models import (
     Aggregate, Expression, F, Field, JSONField, Lookup, OrderBy, Value,
 )
 from django.utils.functional import lazy
+
+logger = logging.getLogger(__name__)
 
 
 class DummyRollbackException(Exception):
@@ -287,6 +291,26 @@ def get_deterministic_ordering(model, ordering):
             ordering.append("-pk")
     return ordering
 
+
+@contextlib.contextmanager
+def ensure_no_queries():
+    """
+    Ensures that no database queries are being made in that context.
+    Raises a RuntimeError if running in DEBUG mode, otherwise logs
+    an error.
+    :return:
+    """
+
+    def blocker(execute, sql, params, many, context):
+        in_test = "PYTEST_CURRENT_TEST" in os.environ
+        overridden = "ENSURE_NO_QUERIES_OVERRIDE" in os.environ
+        if settings.DEBUG or (in_test and not overridden):
+            raise RuntimeError(f"Unexpected DB query: {sql}")
+        logger.error("Unexpected DB query: %s", sql)
+        return execute(sql, params, many, context)
+
+    with connection.execute_wrapper(blocker):
+        yield
 
 @contextlib.contextmanager
 def conditional_atomic(do_atomic, **kwargs):
