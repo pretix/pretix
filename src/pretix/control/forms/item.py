@@ -60,12 +60,13 @@ from pretix.base.models import (
     Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
     QuestionOption, Quota,
 )
-from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
+from pretix.base.models.items import (
+    ItemAddOn, ItemBundle, ItemMetaValue, Questionnaire,
+)
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
-    ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,
-    SalesChannelCheckboxSelectMultiple, SplitDateTimeField,
-    SplitDateTimePickerWidget,
+    ButtonGroupRadioSelect, ExtFileField, SalesChannelCheckboxSelectMultiple,
+    SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2, Select2ItemVarMulti
 from pretix.helpers.models import modelcopy
@@ -153,53 +154,10 @@ class QuestionForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance.container_type == Question.ContainerType.ORDERPOSITION:
-            self.fields['items'].queryset = self.instance.event.items.all()
-            self.fields['items'].required = True
-        else:
-            del self.fields['items']
-            del self.fields['ask_during_checkin']
+        if self.instance.container_type != Question.ContainerType.ORDERPOSITION:
             del self.fields['show_during_checkin']
             del self.fields['print_on_invoice']
-        self.fields['dependency_question'].widget.attrs['data-container-type'] = self.instance.container_type
-        self.fields['dependency_question'].queryset = self.instance.event.questions.filter(
-            type__in=(Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE),
-            ask_during_checkin=False,
-            container_type=self.instance.container_type,
-        )
-        if self.instance.pk:
-            self.fields['dependency_question'].queryset = self.fields['dependency_question'].queryset.exclude(
-                pk=self.instance.pk
-            )
         self.fields['identifier'].required = False
-        self.fields['dependency_values'].required = False
-        self.fields['help_text'].widget.attrs['rows'] = 3
-
-    def clean_dependency_values(self):
-        val = self.data.getlist('dependency_values')
-        return val
-
-    def clean_dependency_question(self):
-        dep = val = self.cleaned_data.get('dependency_question')
-        if dep:
-            if dep.ask_during_checkin:
-                raise ValidationError(_('Question cannot depend on a question asked during check-in.'))
-
-            seen_ids = {self.instance.pk} if self.instance else set()
-            while dep:
-                if dep.pk in seen_ids:
-                    raise ValidationError(_('Circular dependency between questions detected.'))
-                seen_ids.add(dep.pk)
-                dep = dep.dependency_question
-        return val
-
-    def clean_ask_during_checkin(self):
-        val = self.cleaned_data.get('ask_during_checkin')
-
-        if val and self.cleaned_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
-            raise ValidationError(_('This type of question cannot be asked during check-in.'))
-
-        return val
 
     def clean_show_during_checkin(self):
         val = self.cleaned_data.get('show_during_checkin')
@@ -233,16 +191,10 @@ class QuestionForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'question',
-            'help_text',
             'type',
-            'required',
-            'ask_during_checkin',
             'show_during_checkin',
             'hidden',
             'identifier',
-            'items',
-            'dependency_question',
-            'dependency_values',
             'print_on_invoice',
             'valid_number_min',
             'valid_number_max',
@@ -259,17 +211,11 @@ class QuestionForm(I18nModelForm):
             'valid_datetime_max': SplitDateTimePickerWidget(without_seconds=True),
             'valid_date_min': DatePickerWidget(),
             'valid_date_max': DatePickerWidget(),
-            'items': forms.CheckboxSelectMultiple(
-                attrs={'class': 'scrolling-multiple-choice'}
-            ),
-            'dependency_values': forms.SelectMultiple,
             'help_text': I18nMarkdownTextarea,
         }
         field_classes = {
             'valid_datetime_min': SplitDateTimeField,
             'valid_datetime_max': SplitDateTimeField,
-            'items': ItemMultipleChoiceField,
-            'dependency_question': SafeModelChoiceField,
         }
 
 
@@ -447,13 +393,20 @@ class ItemCreateForm(I18nModelForm):
                                         help_text=_('Select this option e.g. for t-shirts that come in multiple sizes. '
                                                     'You can select the variations in the next step.'),
                                         required=False)
+    questionnaires = SafeModelMultipleChoiceField(
+        queryset=Questionnaire.objects.none(),
+        required=False,
+        label=_('Questionnaires'),
+        widget=forms.CheckboxSelectMultiple(attrs={
+            'class': 'scrolling-multiple-choice'
+        }),
+    )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs['event']
         self.user = kwargs.pop('user')
         kwargs.setdefault('initial', {})
         kwargs['initial'].setdefault('admission', True)
-        kwargs['initial'].setdefault('personalized', True)
         super().__init__(*args, **kwargs)
 
         self.fields['category'].queryset = self.instance.event.categories.all()
@@ -468,6 +421,8 @@ class ItemCreateForm(I18nModelForm):
             }
         )
         self.fields['category'].widget.choices = self.fields['category'].choices
+
+        self.fields['questionnaires'].queryset = self.instance.event.questionnaires.all()
 
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
         change_decimal_field(self.fields['default_price'], self.instance.event.currency)
@@ -575,9 +530,14 @@ class ItemCreateForm(I18nModelForm):
                 self.instance.picture.save(os.path.basename(src.picture.name), src.picture)
 
         self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
-        if not self.instance.admission:
-            self.instance.personalized = False
         instance = super().save(*args, **kwargs)
+
+        instance.questionnaires.clear()
+        instance.questionnaires.add(*self.cleaned_data['questionnaires'])
+        try:
+            Questionnaire.check_constraints(self.event)
+        except ValidationError as exc:
+            raise ValidationError({'questionnaires': exc})
 
         if not self.event.has_subevents and not self.cleaned_data.get('has_variations'):
             if self.cleaned_data.get('quota_option') == self.EXISTING and self.cleaned_data.get('quota_add_existing') is not None:
@@ -702,6 +662,14 @@ class ItemUpdateForm(I18nModelForm):
         max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
         required=False,
     )
+    questionnaires = SafeModelMultipleChoiceField(
+        queryset=Questionnaire.objects.none(),
+        required=False,
+        label=_('Questionnaires'),
+        widget=forms.CheckboxSelectMultiple(attrs={
+            'class': 'scrolling-multiple-choice'
+        }),
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -797,6 +765,9 @@ class ItemUpdateForm(I18nModelForm):
         )
         self.fields['category'].widget.choices = self.fields['category'].choices
 
+        self.fields['questionnaires'].queryset = self.instance.event.questionnaires.all()
+        self.initial['questionnaires'] = self.instance.questionnaires.values_list('pk', flat=True)
+
         self.fields['free_price_suggestion'].widget.attrs['data-display-dependency'] = '#id_free_price'
 
         self.fields['validity_dynamic_start_choice'] = forms.TypedChoiceField(
@@ -891,6 +862,16 @@ class ItemUpdateForm(I18nModelForm):
 
         return d
 
+    def save(self, *args, **kwargs):
+        instance = super().save(*args, **kwargs)
+        instance.questionnaires.clear()
+        instance.questionnaires.add(*self.cleaned_data['questionnaires'])
+        try:
+            Questionnaire.check_constraints(self.event)
+        except ValidationError as exc:
+            raise ValidationError({'questionnaires': exc})
+        return instance
+
     class Meta:
         model = Item
         localized_fields = '__all__'
@@ -902,7 +883,6 @@ class ItemUpdateForm(I18nModelForm):
             'all_sales_channels',
             'limit_sales_channels',
             'admission',
-            'personalized',
             'description',
             'picture',
             'default_price',
@@ -1197,6 +1177,10 @@ class ItemAddOnForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['addon_category'].queryset = self.event.categories.all()
+        self.fields['addon_category'].help_text = format_html('<a href="{}" data-iframe-dialog="true" data-iframe-dialog-target="<[name$=addon_category]" target="_blank">{}</a>', reverse('control:event.items.categories.add', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                }), _("Create a new category"))
         self.fields['addon_category'].widget = Select2(
             attrs={
                 'data-model-select2': 'generic',

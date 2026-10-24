@@ -1,0 +1,11 @@
+{% extends "error.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% load static %}
+
+{% block content %}
+    <h1>{% trans "Please wait..." %}</h1>
+    {{ notify_info|json_script:"notify_info" }}
+    <script type="text/javascript" src="{% static "pretixcontrol/js/notify_parent.js" %}"></script>
+{% endblock %}

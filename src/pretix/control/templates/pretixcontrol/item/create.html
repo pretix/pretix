@@ -64,47 +64,7 @@
                 </div>
             </div>
 
-            <div class="form-group" data-display-dependency="#admission_on">
-                <label class="col-md-3 control-label">{% trans "Personalization" %}</label>
-                <div class="col-md-9">
-                    <div class="big-radio radio">
-                        <label>
-                            <input type="radio" value="on" name="{{ form.personalized.html_name }}" {% if form.personalized.value %}checked{% endif %}>
-                            <span class="fa fa-fw fa-id-card-o"></span>
-                            <strong>{% trans "Personalized ticket" %}</strong><br>
-                            <div class="help-block">
-                                {% blocktrans trimmed %}
-                                    When this ticket is purchased, the system will ask for a name or other details according
-                                    to your event settings.
-                                {% endblocktrans %}
-                                {% if not request.event.settings.attendee_names_asked and not request.event.settings.attendee_emails_asked and not request.event.settings.attendee_company_asked and not request.event.settings.attendee_addresses_asked %}
-                                    <br>
-                                    <span class="text-warning">
-                                        <span class="fa fa-warning" aria-hidden="true"></span>
-                                        {% trans "This will currently have no effect since all data fields are turned off in event settings." %}
-                                    </span>
-                                    <a href="{% url "control:event.settings" organizer=request.event.organizer.slug event=request.event.slug %}#tab-0-2-open"
-                                       class="btn btn-default btn-xs" target="_blank">{% trans "Change settings" %}</a>
-                               {% endif %}
-                            </div>
-                        </label>
-                    </div>
-                    <div class="big-radio radio">
-                        <label>
-                            <input type="radio" value="" name="{{ form.personalized.html_name }}" {% if not form.personalized.value %}checked{% endif %}>
-                            <span class="fa fa-fw fa-circle-o"></span>
-                            <strong>{% trans "Non-personalized ticket" %}</strong>
-                            <div class="help-block">
-                                {% blocktrans trimmed %}
-                                    The system will not ask for a name or other attendee details. This only affects
-                                    system-provided fields, you can still add your own questions.
-                                {% endblocktrans %}
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
+            {% bootstrap_field form.questionnaires layout="control" %}
             {% bootstrap_field form.category layout="control" %}
 
             <div class="form-group">

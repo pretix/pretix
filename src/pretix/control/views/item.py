@@ -39,7 +39,7 @@ from itertools import groupby
 from json.decoder import JSONDecodeError
 
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
 from django.db import models, transaction
 from django.db.models import (
@@ -56,7 +56,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.generic import FormView, ListView, View
+from django.views.generic import FormView, ListView, TemplateView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django_countries.fields import Country
 
@@ -65,14 +65,15 @@ from pretix.api.serializers.item import (
     ItemVariationSerializer,
 )
 from pretix.base.forms import I18nFormSet
-from pretix.base.forms.questions import get_fake_attendee_questions
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, LogEntry,
-    OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
-    SeatCategoryMapping, Voucher,
+    OrderPosition, Question, QuestionAnswer, QuestionnaireChild,
+    QuestionOption, Quota, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
+from pretix.base.models.items import (
+    ItemAddOn, ItemBundle, ItemMetaValue, Questionnaire,
+)
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
@@ -94,6 +95,7 @@ from pretix.helpers.models import modelcopy
 
 from ...helpers import GroupConcat
 from ...helpers.compat import CompatDeleteView
+from ...helpers.i18n import i18n_all_from_gettext
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
 
@@ -437,66 +439,7 @@ class QuestionList(ListView):
     template_name = 'pretixcontrol/items/questions.html'
 
     def get_queryset(self):
-        return self.request.event.questions.prefetch_related('items')
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-
-        questions = get_fake_attendee_questions(self.request.event.settings)
-
-        questions += list(ctx['questions'])
-        questions.sort(key=lambda q: q.position)
-        ctx['questions'] = questions
-        return ctx
-
-
-@transaction.atomic
-@event_permission_required("event.items:write")
-@require_http_methods(["POST"])
-def reorder_questions(request, organizer, event):
-    try:
-        ids = json.loads(request.body.decode('utf-8'))['ids']
-    except (JSONDecodeError, KeyError, ValueError):
-        return HttpResponseBadRequest("expected JSON: {ids:[]}")
-
-    qs = request.event.questions.filter(container_type=request.GET['container_type'])
-
-    # filter system_questions - normal questions are int/digit, system_questions strings
-    custom_question_ids = [i for i in ids if i.isdigit()]
-    input_questions = list(qs.filter(id__in=custom_question_ids))
-
-    if len(input_questions) != len(custom_question_ids):
-        raise Http404(_("Some of the provided object ids are invalid."))
-
-    if len(input_questions) != qs.count():
-        raise Http404(_("Not all objects have been selected."))
-
-    for q in input_questions:
-        pos = ids.index(str(q.pk))
-        if pos != q.position:  # Save unneccessary UPDATE queries
-            q.position = pos
-            q.save(update_fields=['position'])
-            q.log_action(
-                'pretix.event.question.reordered', user=request.user, data={
-                    'position': pos,
-                }
-            )
-
-    if request.GET['container_type'] == Question.ContainerType.ORDERPOSITION:
-        system_question_order = {}
-        for s in ('attendee_name_parts', 'attendee_email', 'company', 'street', 'zipcode', 'city', 'country'):
-            if s in ids:
-                system_question_order[s] = ids.index(s)
-            else:
-                system_question_order[s] = -1
-        request.event.settings.system_question_order = system_question_order
-        request.event.log_action(
-            'pretix.event.settings', user=request.user, data={
-                'system_question_order': system_question_order,
-            }
-        )
-
-    return HttpResponse()
+        return self.request.event.questions.all()
 
 
 class QuestionDelete(EventPermissionRequiredMixin, CompatDeleteView):
@@ -515,7 +458,7 @@ class QuestionDelete(EventPermissionRequiredMixin, CompatDeleteView):
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
-        context['dependent'] = list(self.get_object().items.all())
+        # TODO(questionnaires)  context['dependent'] = list(self.get_object().items.all())
         context['edit_url'] = reverse('control:event.items.questions.edit', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -614,7 +557,7 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
             question=self.object, orderposition__isnull=False,
         )
         qs = qs.filter(orderposition__in=opqs)
-        op_cnt = opqs.filter(item__in=self.object.items.all()).count()
+        op_cnt = 0  # TODO opqs.filter(item__in=self.object.items.all()).count()
 
         if self.object.type == Question.TYPE_FILE:
             qs = [
@@ -659,7 +602,7 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-        ctx['items'] = self.object.items.exists()
+        # TODO(questionnaires) ctx['items'] = self.object.items.exists()
         ctx['has_subevents'] = self.request.event.has_subevents
         stats = self.get_answer_statistics()
         ctx['stats'], ctx['total'] = stats
@@ -764,6 +707,22 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
             self.save_formset(form.instance)
 
         return ret
+
+
+def textchoices_to_json(choices, event):
+    return [(c.name, c.value, i18n_all_from_gettext(c.label, event.settings.locales)) for c in choices]
+
+
+class QuestionnairesEditor(EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_change_items'
+    template_name = 'pretixcontrol/items/questionnaires.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['questionnaire_type_choices'] = textchoices_to_json(Questionnaire.QuestionnaireType, self.request.event)
+        ctx['system_question_choices'] = textchoices_to_json(QuestionnaireChild.SystemQuestion, self.request.event)
+        ctx['question_type_choices'] = textchoices_to_json(Question.FieldType, self.request.event)
+        return ctx
 
 
 class QuotaQueryMixin:
@@ -1371,9 +1330,10 @@ class ItemCreate(EventPermissionRequiredMixin, MetaDataEditorMixin, CreateView):
             initial['tax_rule'] = trs[0]
 
         if self.copy_from:
-            fields = ('name', 'internal_name', 'category', 'admission', 'personalized', 'default_price', 'tax_rule')
+            fields = ('name', 'internal_name', 'category', 'admission', 'default_price', 'tax_rule')
             for f in fields:
                 initial[f] = getattr(self.copy_from, f)
+            initial['questionnaires'] = self.copy_from.questionnaires.values_list('pk', flat=True)
             initial['copy_from'] = self.copy_from
             initial['has_variations'] = self.copy_from.variations.exists()
 
@@ -1407,7 +1367,7 @@ class ItemCreate(EventPermissionRequiredMixin, MetaDataEditorMixin, CreateView):
         return super().form_invalid(form)
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data()
+        ctx = super().get_context_data(**kwargs)
         ctx['meta_forms'] = self.meta_forms
         return ctx
 
@@ -1415,9 +1375,11 @@ class ItemCreate(EventPermissionRequiredMixin, MetaDataEditorMixin, CreateView):
         self.object = None
         form = self.get_form()
         if form.is_valid() and all([f.is_valid() for f in self.meta_forms]):
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+            try:
+                return self.form_valid(form)
+            except ValidationError as e:
+                form.add_error(None, e)
+        return self.form_invalid(form)
 
 
 class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataEditorMixin, UpdateView):
@@ -1481,9 +1443,11 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
         self.get_object()
         form = self.get_form()
         if self.is_valid(form) and all([f.is_valid() for f in self.meta_forms]):
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+            try:
+                return self.form_valid(form)
+            except ValidationError as exc:
+                form.add_error(None, exc)
+        return self.form_invalid(form)
 
     def save_formset(self, key, log_base, attr='item', order=True, serializer=None,
                      rm_verb='removed'):
@@ -1532,7 +1496,6 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
     @transaction.atomic
     def form_valid(self, form):
         self.save_meta()
-        messages.success(self.request, _('Your changes have been saved.'))
 
         change_data = {
             k: form.cleaned_data.get(k)
@@ -1592,7 +1555,9 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
             else:
                 v.save()
 
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        messages.success(self.request, _('Your changes have been saved.'))
+        return response
 
     def form_invalid(self, form):
         messages.error(self.request, _('We could not save your changes. See below for details.'))
@@ -1605,7 +1570,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
         return o
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data()
+        ctx = super().get_context_data(**kwargs)
         ctx['plugin_forms'] = self.plugin_forms
         ctx['meta_forms'] = self.meta_forms
         ctx['formsets'] = self.formsets
