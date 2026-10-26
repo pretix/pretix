@@ -142,11 +142,13 @@ class Image(dict):
         )
 
 
-class GoogleWalletObjectMixin:
-    locales: set[str]
-    default_locale: str
+class BaseGoogleWalletObject:
+    resource: Resource
     id: str
     data: dict
+
+    locales: set[str]
+    default_locale: str
 
     def _localized_string(self, string: MaybeTranslatedString):
         return localized_string(string, self.locales, self.default_locale)
@@ -171,7 +173,9 @@ class GoogleWalletObjectMixin:
             return self.data
 
 
-class EventTicketClass(GoogleWalletObjectMixin):
+class EventTicketClass(BaseGoogleWalletObject):
+    resource = Resource.EVENT_TICKET_CLASS
+
     def __init__(
         self,
         issuer_name: str,
@@ -279,7 +283,9 @@ class EventTicketClass(GoogleWalletObjectMixin):
         )
 
 
-class EventTicketObject(GoogleWalletObjectMixin):
+class EventTicketObject(BaseGoogleWalletObject):
+    resource = Resource.EVENT_TICKET_OBJECT
+
     def __init__(
         self,
         object_id: str,
@@ -362,7 +368,7 @@ class ButtonJWT(dict):
         self,
         issuer,
         origins,
-        payload: dict[str, list[GoogleWalletObjectMixin]],
+        payload: dict[str, list[BaseGoogleWalletObject]],
         precreated=True,
     ):
         serialized_payload = {}

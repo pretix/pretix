@@ -37,7 +37,7 @@ function addEntry() {
 watchEffect(() => {
     if (!fieldConfig.value) {
         fieldConfig.value = {
-            overflow: null,
+            overflow: props.fieldgroup.default_overflow,
             entries: JSON.parse(JSON.stringify(props.fieldgroup.default_entries)),
         };
     }

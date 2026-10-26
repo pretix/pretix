@@ -12,7 +12,7 @@ function getDefaultFieldgroupState(
 		return { active: fieldgroup.required || fieldgroup.default_active };
 	} else if (fieldgroup.type == "placeholder") {
 		return {
-			overflow: null,
+			overflow: fieldgroup.default_overflow,
 			entries: JSON.parse(JSON.stringify(fieldgroup.default_entries)),
 		};
 	}
@@ -297,6 +297,32 @@ export function createWalletStore(config: {
 					})
 					.catch(alert);
 			},
+			serializeFieldgroups(platform, layout: PlatformLayout) {
+				const styleDefinition = this.getPlatform(platform).styles[layout.style];
+
+				return Object.fromEntries(
+					Object.entries(layout.fieldgroups)
+						.map(([k, v]) => {
+							const fieldgroupDefinition = styleDefinition.fieldgroups.find(
+								(x) => x.identifier == k,
+							);
+							if (!fieldgroupDefinition) {
+								return;
+							}
+							if (fieldgroupDefinition.type == "placeholder") {
+								v = v as PlaceholderFieldGroupConfig;
+								v = {
+									...v,
+									entries: v.entries.filter(
+										(x) => x.type != "placeholder" || !!x.content,
+									),
+								};
+							}
+							return [k, v];
+						})
+						.filter((x) => !!x),
+				);
+			},
 			async serializePlatformLayout(platform, layout: PlatformLayout) {
 				const uploadedFiles = Object.fromEntries(
 					(
@@ -318,7 +344,7 @@ export function createWalletStore(config: {
 					style: layout.style,
 					file_settings: uploadedFiles,
 					layout: {
-						fieldgroups: layout.fieldgroups,
+						fieldgroups: this.serializeFieldgroups(platform, layout),
 						settings: layout.settings,
 					},
 				};
@@ -350,11 +376,16 @@ export function createWalletStore(config: {
 						body: JSON.stringify(serializedLayout),
 					},
 				)
-					.then((x) => x.json())
-					.catch((x) => alert(x))
+					.then((x) => {
+						if (!x.ok) {
+							throw new Error(`Response status: ${x.status}`);
+						}
+						return x.json();
+					})
 					.then((x) => {
 						this.parseServerLayout(x);
-					});
+					})
+					.catch((x) => alert(x));
 			},
 		},
 	});
