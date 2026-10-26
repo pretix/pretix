@@ -312,6 +312,7 @@ def ensure_no_queries():
     with connection.execute_wrapper(blocker):
         yield
 
+
 @contextlib.contextmanager
 def conditional_atomic(do_atomic, **kwargs):
     if do_atomic:
