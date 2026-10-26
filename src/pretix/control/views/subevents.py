@@ -44,7 +44,7 @@ from django.db import transaction
 from django.db.models import (
     Count, Exists, F, OuterRef, Prefetch, ProtectedError, Subquery,
 )
-from django.db.models.functions import Coalesce, TruncDate, TruncTime, Extract
+from django.db.models.functions import Coalesce, Extract, TruncDate, TruncTime
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -1583,6 +1583,22 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         mixed_values = set()
         qs = self.get_queryset()
 
+        fields = {
+            'name',
+            'location',
+            'frontpage_text',
+            'comment',
+            'geo_lat',
+            'geo_lon',
+            'is_public',
+            'active',
+            'date_from_day',
+            'date_from_time',
+            'date_to_day',
+            'date_to_time',
+        }
+        rel_fields = {'date_admission', 'presale_start', 'presale_end'}
+
         qs = qs.annotate(
             **{
                 # TODO: Once we're on Django 3.2, pass a tzinfo parameter
@@ -1598,30 +1614,14 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             },
             **{
                 k + '_rel_min': Extract(F('date_from') - F(k), 'epoch') / 60
-                for k in ['presale_start', "presale_end"]
+                for k in rel_fields
             },
             **{
                 k + '_rel_days': Extract(F('date_from__date') - F(f"{k}__date"), 'days')
-                for k in ['presale_start', "presale_end"]
+                for k in rel_fields
             }
         )
 
-        fields = {
-            'name',
-            'location',
-            'frontpage_text',
-            'comment',
-            'geo_lat',
-            'geo_lon',
-            'is_public',
-            'active',
-            'date_from_day',
-            'date_from_time',
-            'date_to_day',
-            'date_to_time',
-            'date_admission_day',
-            'date_admission_time',
-        }
         for k in fields:
             existing_values = list(qs.order_by(k).values(k).annotate(c=Count('*')))
             if len(existing_values) == 1:
@@ -1630,7 +1630,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                 mixed_values.add(k)
                 initial[k] = None
 
-        for k in ['presale_start', "presale_end"]:
+        for k in rel_fields:
             existing_fixed_values = list(qs.order_by(k).values(k).annotate(c=Count('*')))
             existing_rel_days_values = list(qs.order_by(f'{k}_rel_days').values(f'{k}_rel_days').annotate(c=Count("*")))
             existing_rel_min_values = list(qs.order_by(f'{k}_rel_min').values(f'{k}_rel_min').annotate(c=Count("*")))

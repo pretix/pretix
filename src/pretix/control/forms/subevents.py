@@ -153,7 +153,7 @@ class SubEventBulkEditForm(I18nModelForm):
             self.fields[k].widget.is_required = False
             self.fields[k].required = False
 
-        for k in ('date_from', 'date_to', 'date_admission'):
+        for k in ('date_from', 'date_to'):
             self.fields[k + '_day'] = forms.DateField(
                 label=self._meta.model._meta.get_field(k).verbose_name,
                 help_text=self._meta.model._meta.get_field(k).help_text,
@@ -167,15 +167,12 @@ class SubEventBulkEditForm(I18nModelForm):
                 required=False,
             )
 
-        for k in ('presale_start', 'presale_end'):
+        for k in ('date_admission', 'presale_start', 'presale_end'):
             self.fields[k + '_rel'] = RelativeDateTimeField(
                 label=self._meta.model._meta.get_field(k).verbose_name,
-                help_text=(
-                    self._meta.model._meta.get_field(k).help_text + " "
-                    + _("If base your relative date on one that is not defined on the event, it will fall back to the event's start.")
-                ),
+                help_text=self._meta.model._meta.get_field(k).help_text,
                 required=False,
-                limit_choices=('event__date_from', 'event__date_to'),
+                limit_choices=('event__date_from'),
             )
 
     class Meta:
