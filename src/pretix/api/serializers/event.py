@@ -35,10 +35,13 @@
 import logging
 
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import (
+    PermissionDenied, ValidationError as DjangoValidationError,
+)
 from django.db import transaction
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
+from django.utils.html import strip_tags
 from django.utils.translation import gettext as _
 from django_countries.serializers import CountryFieldMixin
 from pytz import common_timezones
@@ -218,8 +221,6 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
             if self.instance is None:
                 raise ValidationError(_('Events cannot be created as \'live\'. Quotas and payment must be added to the '
                                         'event before sales can go live.'))
-            else:
-                self.instance.clean_live()
         return value
 
     @cached_property
@@ -428,6 +429,14 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         if plugins is not None:
             event.set_active_plugins(plugins)
             event.save()
+
+        live = validated_data.get('live') or event.live
+        if live:
+            event.refresh_from_db()
+            try:
+                event.clean_live()
+            except DjangoValidationError as e:
+                raise ValidationError({'live': [strip_tags(m) for m in e.messages]})
 
         return event
 

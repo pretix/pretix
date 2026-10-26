@@ -1071,6 +1071,99 @@ def test_event_update_live_free_product(token_client, organizer, event, free_ite
 
 
 @pytest.mark.django_db
+def test_event_update_live_required_meta_data_missing(token_client, organizer, event, free_quota):
+    organizer.meta_properties.create(name="required_prop", required=True)
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "live": True
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert list(resp.data.keys()) == ['live']
+    assert len(resp.data['live']) == 1
+    assert '<a' not in resp.data['live'][0]
+    assert 'required_prop' in resp.data['live'][0]
+    event.refresh_from_db()
+    assert not event.live
+
+
+@pytest.mark.django_db
+def test_event_update_live_required_meta_data_set_in_same_request(token_client, organizer, event, free_quota):
+    organizer.meta_properties.create(name="required_prop", required=True)
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "live": True,
+            "meta_data": {
+                "type": "Conference",
+                "required_prop": "set",
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data['live'] is True
+    event.refresh_from_db()
+    assert event.live
+    with scopes_disabled():
+        assert event.meta_values.filter(property__name="required_prop", value="set").exists()
+
+
+@pytest.mark.django_db
+def test_live_event_update_removing_required_meta_data(token_client, organizer, event, free_quota):
+    prop = organizer.meta_properties.create(name="required_prop", required=True)
+    with scopes_disabled():
+        event.meta_values.create(property=prop, value="set")
+    event.live = True
+    event.save()
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "meta_data": {
+                "type": "Conference",
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert list(resp.data.keys()) == ['live']
+    assert 'required_prop' in resp.data['live'][0]
+
+    event.refresh_from_db()
+    assert event.live
+    with scopes_disabled():
+        assert event.meta_values.filter(property__name="required_prop", value="set").exists()
+
+
+@pytest.mark.django_db
+def test_live_event_update_removing_required_meta_data_while_going_offline(token_client, organizer, event, free_quota):
+    prop = organizer.meta_properties.create(name="required_prop", required=True)
+    with scopes_disabled():
+        event.meta_values.create(property=prop, value="set")
+    event.live = True
+    event.save()
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "live": False,
+            "meta_data": {
+                "type": "Conference",
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.refresh_from_db()
+    assert not event.live
+    with scopes_disabled():
+        assert not event.meta_values.filter(property__name="required_prop").exists()
+
+
+@pytest.mark.django_db
 def test_event_update_plugins(token_client, organizer, event, free_item, free_quota):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
