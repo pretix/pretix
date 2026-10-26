@@ -14,12 +14,17 @@ from django.utils.translation import gettext as _
 
 from pretix.base.models import OrderPosition
 from pretix.plugins.wallet.i18n import (
-    FormattingLocalizableString, GettextLocalizableString,
+    FormattingLocalizableString,
+    GettextLocalizableString,
     MaybeTranslatedString,
 )
 from pretix.plugins.wallet.styles.base import (
-    FieldGroup, FieldGroupDisplay, PassStyle,
-    PlaceholderFieldEntry, TextFieldGroup, WalletPlatform,
+    FieldGroup,
+    FieldGroupDisplay,
+    PassStyle,
+    PlaceholderFieldEntry,
+    TextFieldGroup,
+    WalletPlatform,
 )
 from pretix.plugins.wallet.styles.settings import ImageSettingsField
 
@@ -326,7 +331,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 max_entries=1,
                 display=FieldGroupDisplay.PLAIN,
                 context_args={"order_position"},
-                can_overflow=False
+                can_overflow=False,
             ),
             TextFieldGroup(
                 identifier="header",
@@ -339,6 +344,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                         label=GettextLocalizableString.gettext("Admission"),
                     ),
                 ],
+                default_overflow="back",
             ),
             TextFieldGroup(
                 identifier="primary",
@@ -353,6 +359,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 description=_("These fields appear prominently featured on the pass."),
                 required=True,
                 context_args={"order_position"},
+                default_overflow="back",
             ),
             TextFieldGroup(
                 identifier="secondary",
@@ -365,6 +372,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                         label=GettextLocalizableString.gettext("Product"),
                     )
                 ],
+                default_overflow="back",
             ),
             # TODO: validation of max field count if combined "Coupons, store cards, and generic passes
             # with a square barcode can have a total of up to four secondary and auxiliary fields, combined."
@@ -390,6 +398,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
                         label=GettextLocalizableString.gettext("To"),
                     ),
                 ],
+                default_overflow="back",
             ),
             TextFieldGroup(
                 identifier="code",

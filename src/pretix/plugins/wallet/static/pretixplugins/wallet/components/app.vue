@@ -64,7 +64,7 @@ const previewRenderers = {
     template(v-if="!store.loaded") {{ gettext("Loading...") }}
     form(v-else @submit.prevent="store.save")
         .form-group
-            Input(label="Name" v-model="store.name")
+            Input(label="Name" v-model="store.name" required="true")
         nav
             ul.nav.nav-tabs
                 li(v-for="platform in store.platforms" :class="{'active': store.platform.identifier === platform.identifier}")

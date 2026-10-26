@@ -45,7 +45,7 @@ from .forms import CertificateFileField, validate_rsa_privkey
 from .models import GoogleWalletInstance, WalletPlatformLayout
 from .styles.apple import ApplePlatform
 from .styles.google import GooglePlatform
-from .styles.google_wallet import ButtonJWT, Comms, Resource
+from .styles.google_wallet import ButtonJWT, Comms, BaseGoogleWalletObject
 
 logger = logging.getLogger("pretix.plugins.wallet")
 
@@ -167,24 +167,24 @@ class GoogleWalletTicketOutput(WalletOutput):
             json.loads(self.event.settings.get("wallet_google_credentials").read())
         )
 
-    def put_item_cached(self, resource: Resource, object):
+    def put_item_cached(self, object: BaseGoogleWalletObject):
         with transaction.atomic():
             instance, created = GoogleWalletInstance.objects.get_or_create(
                 event=self.event,
-                resource=resource,
+                resource=object.resource,
                 identifier=object.id,
                 defaults={"data": object.data},
             )
             if created or instance.data != object.data:
-                result = self.comms.put_item(resource, object.id, object.data)
+                result = self.comms.put_item(object.resource, object.id, object.data)
                 instance.data = object.data
                 instance.save(update_fields=["data"])
                 return result
 
     def generate(self, position):
         class_object, ticket_object = self.get_layout(position).generate(position)
-        self.put_item_cached(Resource.EVENT_TICKET_CLASS, class_object)
-        self.put_item_cached(Resource.EVENT_TICKET_OBJECT, ticket_object)
+        self.put_item_cached(class_object)
+        self.put_item_cached(ticket_object)
 
         generated_jwt = self.comms.sign_jwt(
             ButtonJWT(
@@ -209,9 +209,9 @@ class GoogleWalletTicketOutput(WalletOutput):
             ticket_objects.append(ticket_object)
 
         for co in dedup(class_objects):
-            self.put_item_cached(Resource.EVENT_TICKET_CLASS, co)
+            self.put_item_cached(co)
         for to in dedup(ticket_objects):
-            self.put_item_cached(Resource.EVENT_TICKET_OBJECT, to)
+            self.put_item_cached(to)
 
         generated_jwt = self.comms.sign_jwt(
             ButtonJWT(

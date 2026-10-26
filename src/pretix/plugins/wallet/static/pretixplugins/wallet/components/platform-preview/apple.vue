@@ -29,7 +29,7 @@ const theme = computed(() => {
                 .f-row.head-row
                     img.logo(:src="store.getSettingValue('logo')?.url")
                     div.logo-text {{ store.renderedFieldGroups['logo_text']?.[0]?.content }}
-                    FieldGroupEntries.header(fieldgroup="header")
+                    FieldGroupEntries.header.f-row(fieldgroup="header")
 
                 .f-column
                     FieldGroupEntries.primary(fieldgroup="primary")
@@ -80,7 +80,7 @@ const theme = computed(() => {
 		font-size: 1.5em;
 		font-weight: bold;
 		min-height: 2lh;
-		flex: 1 1 3;
+		flex: 1 1;
 		align-content: center;
 		text-wrap: nowrap;
 	}
@@ -89,6 +89,7 @@ const theme = computed(() => {
 		text-align: end;
 		line-height: 1.25;
 		gap: 0.25rem;
+		justify-content: end;
 		.pass-content {
 			font-size: 1.25em;
 		}
