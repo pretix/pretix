@@ -1336,6 +1336,8 @@ class ItemVariation(models.Model):
                     quotacounter[q] += b.count
 
         for q, n in quotacounter.items():
+            if n == 0:
+                continue
             a = q.availability(count_waitinglist=count_waitinglist, _cache=_cache)
             if a[1] is None:
                 continue
