@@ -38,7 +38,7 @@ dependencies = [
   "defusedcsv>=3.0.0",
   "dnspython==2.*",
   "Django[argon2]==5.2.*,>=5.2.17",
-  "django-bootstrap3==26.2",
+  "django-bootstrap3==26.3",
   "django-compressor==4.6.0",
   "django-countries==9.1.*",
   "django-filter==26.2",
