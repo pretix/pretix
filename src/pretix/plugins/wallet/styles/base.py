@@ -176,6 +176,7 @@ class PlaceholderFieldGroup(FieldGroup):
         str
     ]  # what context arguments are available when rendering this fieldgroup
     can_overflow: bool
+    default_overflow: str | None
 
     def __init__(
         self,
@@ -190,6 +191,7 @@ class PlaceholderFieldGroup(FieldGroup):
         display=FieldGroupDisplay.WITH_LABEL,
         context_args: set[str] | None = None,
         can_overflow: bool = True,
+        default_overflow: str | None = None
     ):
         super().__init__(identifier, name, description, required)
         self.content_type = content_type
@@ -199,6 +201,7 @@ class PlaceholderFieldGroup(FieldGroup):
         self.display = display
         self.context_args = context_args or set()
         self.can_overflow = can_overflow
+        self.default_overflow = default_overflow
 
         if self.required and (self.min_entries is None or self.min_entries < 1):
             self.min_entries = 1
@@ -224,6 +227,7 @@ class PlaceholderFieldGroup(FieldGroup):
             "overflows": self.overflows(
                 remaining_fields, context, self.available_placeholders(context)
             ),
+            "default_overflow": self.default_overflow
         }
 
     def available_placeholders(self, context):
