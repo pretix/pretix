@@ -48,6 +48,7 @@ type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
 	max_entries: number | null;
 	context_args: string[];
 	overflows: string[];
+	default_overflow: string | null;
 };
 
 type PredefinedFieldGroupDefinition = BaseFieldGroupDefinition & {
@@ -101,7 +102,7 @@ type LayoutData = {
 
 type PlatformLayout = {
 	style: string;
-	fieldgroups: {};
+	fieldgroups: Record<string, FieldGroupConfig>;
 	settings: {};
 	file_settings: Record<string, WalletFile>;
 };
