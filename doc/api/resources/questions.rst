@@ -8,10 +8,19 @@
 Questions
 =========
 
+   .. warning:: This resource is **deprecated**. It is only provided for compatibility with existing applications
+                and should not be used in new development.
+
+                New applications must use the :ref:`rest-datafields` and :ref:`rest-questionnaires` resources.
+
+                This resource will only work on events where the :ref:`questionnaire configuration <rest-questionnaires>`
+                is compatible with the old data model.
+                If incompatible configuration is detected, these endpoints return HTTP 410.
+
 Resource description
 --------------------
 
-Questions define additional fields that need to be filled out by customers during checkout.
+Questions define additional fields related to an order position that need to be filled out by customers during checkout.
 The question resource contains the following public fields:
 
 .. rst-class:: rest-resource-table
@@ -83,6 +92,10 @@ dependency_value                      string                     An old version 
 .. versionchanged:: 2023.8
 
    The ``show_during_checkin`` attribute has been added.
+
+.. versionchanged:: 2026.[TODO]
+
+   The questions resource was deprecated and replaced by the :ref:`rest-datafields` and :ref:`rest-questionnaires` resources.
 
 Endpoints
 ---------
@@ -249,6 +262,9 @@ Endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/questions/
 
+   .. warning:: This endpoint is **deprecated**. Instead, create a :ref:`data field <rest-datafields>` first, then add
+                it to a :ref:`questionnaire <rest-questionnaires>`.
+
    Creates a new question
 
    **Example request**:
@@ -351,6 +367,9 @@ Endpoints
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/questions/(id)/
 
+   .. warning:: This endpoint is **deprecated**. Instead, update the relevant :ref:`data field <rest-datafields>`, or
+                the reference to it inside a :ref:`questionnaire <rest-questionnaires>`.
+
    Update a question. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
@@ -436,6 +455,9 @@ Endpoints
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
 
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/questions/(id)/
+
+   .. warning:: This endpoint is **deprecated**. Instead, remove the questionnaire child from its :ref:`questionnaire <rest-questionnaires>`,
+                or delete the relevant :ref:`data field <rest-datafields>`.
 
    Delete a question.
 
