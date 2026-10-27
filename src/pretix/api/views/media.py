@@ -39,7 +39,7 @@ from pretix.api.serializers.media import (
 )
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
-    Checkin, GiftCard, GiftCardAcceptance, GiftCardTransaction, OrderPosition,
+    Checkin, GiftCardAcceptance, GiftCardTransaction, OrderPosition,
     ReusableMedium,
 )
 from pretix.base.models.orders import PrintLog
@@ -88,7 +88,7 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
             ),
             Prefetch(
                 'linked_giftcard',
-                queryset=GiftCard.objects.annotate(
+                queryset=self.request.organizer.accepted_gift_cards.annotate(
                     cached_value=Coalesce(Subquery(s), Decimal('0.00'))
                 )
             )

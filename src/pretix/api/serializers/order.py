@@ -1235,6 +1235,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             return None
         if pp not in self.context['event'].get_payment_providers():
             raise ValidationError('The given payment provider is not known.')
+        if pp == "giftcard":
+            raise serializers.ValidationError("Cannot create giftcard payment. Use `use_gift_cards` instead")
+
         return pp
 
     def validate_payment_info(self, info):
@@ -1954,10 +1957,15 @@ class OrderPaymentCreateSerializer(I18nAwareModelSerializer):
         model = OrderPayment
         fields = ('state', 'amount', 'payment_date', 'provider', 'info')
 
+    def validate_provider(self, value):
+        if value == "giftcard":
+            raise serializers.ValidationError("Cannot create giftcard payment")
+        return value
+
     def create(self, validated_data):
-        order = OrderPayment(order=self.context['order'], **validated_data)
-        order.save()
-        return order
+        payment = OrderPayment(order=self.context['order'], **validated_data)
+        payment.save()
+        return payment
 
 
 class OrderRefundCreateSerializer(I18nAwareModelSerializer):
@@ -1968,6 +1976,12 @@ class OrderRefundCreateSerializer(I18nAwareModelSerializer):
     class Meta:
         model = OrderRefund
         fields = ('state', 'source', 'amount', 'payment', 'execution_date', 'provider', 'info', 'comment')
+
+    def validate_provider(self, value):
+        if value == "giftcard":
+            raise serializers.ValidationError("Cannot create giftcard payment")
+
+        return value
 
     def create(self, validated_data):
         pid = validated_data.pop('payment', None)

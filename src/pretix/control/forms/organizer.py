@@ -38,7 +38,6 @@ from urllib.parse import urlparse
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db.models import Q
 from django.forms import formset_factory, inlineformset_factory
 from django.forms.utils import ErrorDict
 from django.urls import reverse
@@ -70,9 +69,9 @@ from pretix.base.forms.widgets import (
     SplitDateTimePickerWidget, format_placeholders_help_text,
 )
 from pretix.base.models import (
-    Customer, Device, Event, EventMetaProperty, Gate, GiftCard,
-    GiftCardAcceptance, Membership, MembershipType, OrderPosition, Organizer,
-    ReusableMedium, SalesChannel, Team,
+    Customer, Device, Event, EventMetaProperty, Gate, GiftCard, Membership,
+    MembershipType, OrderPosition, Organizer, ReusableMedium, SalesChannel,
+    Team,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink, TeamQuerySet
@@ -893,15 +892,7 @@ class GiftCardCreateForm(forms.ModelForm):
 
     def clean_secret(self):
         s = self.cleaned_data['secret']
-        if GiftCard.objects.filter(
-                secret__iexact=s
-        ).filter(
-            Q(issuer=self.organizer) |
-            Q(issuer__in=GiftCardAcceptance.objects.filter(
-                acceptor=self.organizer,
-                active=True,
-            ).values_list('issuer', flat=True))
-        ).exists():
+        if self.organizer.accepted_gift_cards.filter(secret__iexact=s).exists():
             raise ValidationError(
                 _('A gift card with the same secret already exists in your or an affiliated organizer account.')
             )
