@@ -53,7 +53,7 @@ from pretix.api.serializers import (
     CompatDecimalField, SalesChannelMigrationMixin,
 )
 from pretix.api.serializers.event import MetaDataField
-from pretix.api.serializers.fields import UploadedFileField
+from pretix.api.serializers.fields import UploadedFileField, WritableSerializerMethodField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.forms.questions import REQUIRED_NAME_PARTS
 from pretix.base.models import (
@@ -309,6 +309,8 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     program_times = InlineItemProgramTimeSerializer(many=True, required=False)
     tax_rate = ItemTaxRateField(source='*', read_only=True, max_digits=7, decimal_places=4)
     meta_data = MetaDataField(required=False, source='*')
+    personalized = WritableSerializerMethodField(required=False)
+    questionnaires = serializers.PrimaryKeyRelatedField(many=True, queryset=Questionnaire.objects.none(), allow_null=True, required=False)
     picture = UploadedFileField(required=False, allow_null=True, allowed_types=(
         'image/png', 'image/jpeg', 'image/gif'
     ), max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE)
@@ -336,7 +338,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
                   'grant_membership_duration_months', 'validity_mode', 'validity_fixed_from', 'validity_fixed_until',
                   'validity_dynamic_duration_minutes', 'validity_dynamic_duration_hours', 'validity_dynamic_duration_days',
                   'validity_dynamic_duration_months', 'validity_dynamic_start_choice', 'validity_dynamic_start_choice_day_limit',
-                  'media_policy', 'media_type')
+                  'media_policy', 'media_type', 'questionnaires')
         read_only_fields = ('has_variations',)
 
     def __init__(self, *args, **kwargs):
@@ -344,10 +346,34 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         self.fields['default_price'].allow_null = False
         self.fields['default_price'].required = True
         if not self.read_only:
+            self.fields['questionnaires'].child_relation.queryset = self.context['event'].questionnaires.filter(type__startswith='P')
             self.fields['require_membership_types'].queryset = self.context['event'].organizer.membership_types.all()
             self.fields['grant_membership_type'].queryset = self.context['event'].organizer.membership_types.all()
             self.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
             self.fields['variations'].child.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
+
+    def get_personalized(self, item):
+        return QuestionnaireChild.objects.filter(questionnaire__items=item, system_datafield__in=('attendee_name_parts', 'attendee_email')).exists()
+
+    def put_personalized(self, item, new_value):
+        if item and new_value != self.get_personalized(item):
+            raise ValidationError('Deprecated field "personalized" can not be updated.')
+        if new_value and not item:
+            try:
+                return {'questionnaires': [self.context['request'].event.questionnaires.get(
+                    type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE,
+                    internal_name='Attendee data',  # TODO(questionnaires): how to deal with localized internal name? maybe add a Questionnaire.identifier?
+                )]}
+            except Questionnaire.DoesNotExist:
+                raise ValidationError({'personalized': 'To create new products with personalized=True, a questionnaire named "Attendee data" must exist.'})
+        return {}
+
+    def to_internal_value(self, data):
+        if data.get('admission') and data.get('personalized') is None and 'questionnaires' not in data and not self.instance:
+            # Backwards compatibility
+            data['personalized'] = True
+
+        return super().to_internal_value(data)
 
     def validate(self, data):
         data = super().validate(data)
@@ -358,15 +384,6 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         Item.clean_per_order(data.get('min_per_order'), data.get('max_per_order'))
         Item.clean_available(data.get('available_from'), data.get('available_until'))
         Item.clean_media_settings(self.context['event'], data.get('media_policy'), data.get('media_type'), data.get('issue_giftcard'))
-
-        if data.get('personalized') and not data.get('admission'):
-            raise ValidationError(_('Only admission products can currently be personalized.'))
-
-        if data.get('admission') and 'personalized' not in data and not self.instance:
-            # Backwards compatibility
-            data['personalized'] = True
-        elif 'admission' in data and not data['admission']:
-            data['personalized'] = False
 
         if data.get('issue_giftcard'):
             if data.get('tax_rule') and data.get('tax_rule').rate > 0:
@@ -433,9 +450,11 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         picture = validated_data.pop('picture', None)
         require_membership_types = validated_data.pop('require_membership_types', [])
         limit_sales_channels = validated_data.pop('limit_sales_channels', [])
+        questionnaires = validated_data.pop('questionnaires', [])
         item = Item.objects.create(**validated_data)
         if limit_sales_channels and not validated_data.get('all_sales_channels'):
             item.limit_sales_channels.add(*limit_sales_channels)
+        item.questionnaires.add(*questionnaires)
         if picture:
             item.picture.save(os.path.basename(picture.name), picture)
         if require_membership_types:
@@ -474,9 +493,11 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
                     value=value,
                     item=item
                 )
+
         return item
 
     def update(self, instance, validated_data):
+        validated_data.pop('compat_personalized', None)
         meta_data = validated_data.pop('meta_data', None)
         picture = validated_data.pop('picture', None)
         item = super().update(instance, validated_data)
@@ -580,9 +601,6 @@ class LegacyDependencyValueField(serializers.CharField):
 
     def to_representation(self, obj):
         return obj[0] if obj else None
-
-    def to_internal_value(self, data):
-        return [data] if data else []
 
 
 class QuestionFormSerializer(I18nAwareModelSerializer):

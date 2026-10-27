@@ -379,8 +379,6 @@ class Item(LoggedModel):
     :type tax_rate: decimal.Decimal
     :param admission: ``True``, if this item allows persons to enter the event (as opposed to e.g. merchandise)
     :type admission: bool
-    :param personalized: ``True``, if attendee information should be collected for this ticket
-    :type personalized: bool
     :param picture: A product picture to be shown next to the product description
     :type picture: File
     :param available_from: The date this product goes on sale
@@ -533,12 +531,13 @@ class Item(LoggedModel):
         ),
         default=False
     )
-    personalized = models.BooleanField(
+    tbd_personalized = models.BooleanField(  # TODO(questionnaires): field to be deleted
         verbose_name=_("Is a personalized ticket"),
         help_text=_(
             'Whether or not buying this product allows to enter attendee information'
         ),
-        default=False
+        default=False,
+        db_column='personalized',
     )
     generate_tickets = models.BooleanField(
         verbose_name=_("Generate tickets"),
