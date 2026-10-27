@@ -92,9 +92,9 @@ from pretix.base.services.invoices import (
     regenerate_invoice, transmit_invoice,
 )
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, _order_placed_email,
-    _order_placed_email_attendee, approve_order, cancel_order, deny_order,
-    extend_order, mark_order_expired, mark_order_refunded, reactivate_order,
+    OrderChangeManager, OrderError, _attendee_mail_send_helper,
+    _order_placed_email, approve_order, cancel_order, deny_order, extend_order,
+    mark_order_expired, mark_order_refunded, reactivate_order,
 )
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate
@@ -805,17 +805,42 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                     log_entry, invoice, [payment] if payment else [], is_free=free_flow
                 )
                 if email_attendees:
-                    for p in order.positions.all():
-                        if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-                            _order_placed_email_attendee(request.event, order, p, email_attendees_template, subject_attendees_template,
-                                                         log_entry, is_free=free_flow)
+                    ev = request.event
+                    # todo re note: order_placed_email for attendees (formerly services/orders _order_placed_email_attendee)
+                    _attendee_mail_send_helper(
+                        event=ev,
+                        order=order,
+                        positions=order.positions.all(),
+                        template=email_attendees_template,
+                        subject=subject_attendees_template,
+                        log_entry_type=log_entry,
+                        attach_tickets=True,
+                        attach_ical=ev.settings.mail_attach_ical and (
+                            not ev.settings.mail_attach_ical_paid_only or
+                            free_flow or
+                            order.valid_if_pending
+                        ),
+                        attach_other_files=[a for a in [
+                            ev.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
+                        ] if a],
+                    )
 
                 if not free_flow and order.status == Order.STATUS_PAID and payment:
                     payment._send_paid_mail(invoice, None, '')
                     if self.request.event.settings.mail_send_order_paid_attendee:
-                        for p in order.positions.all():
-                            if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-                                payment._send_paid_mail_attendee(p, None)
+                        ev = request.event
+                        # todo re note: paid_mail for attendees (formerly models/orders _send_paid_mail_attendee)
+                        _attendee_mail_send_helper(
+                            event=ev,
+                            order=order,
+                            positions=order.positions.all(),
+                            template=ev.settings.mail_text_order_paid_attendee,
+                            subject=ev.settings.mail_subject_order_paid_attendee,
+                            log_entry_type='pretix.event.order.email.order_paid',
+                            invoices=[],
+                            attach_tickets=True,
+                            attach_ical=ev.settings.mail_attach_ical
+                        )
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
