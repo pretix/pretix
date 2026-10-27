@@ -863,6 +863,21 @@ def test_order_create_payment_provider_optional_free(token_client, organizer, ev
 
 
 @pytest.mark.django_db
+def test_order_create_payment_provider_giftcard_forbidden(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['payment_provider'] = 'giftcard'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'payment_provider': ["Cannot create giftcard payment. Use `use_gift_cards` instead"]}
+
+
+@pytest.mark.django_db
 def test_order_create_payment_info_optional(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
