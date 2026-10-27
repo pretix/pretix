@@ -10,7 +10,7 @@ from pretix.plugins.wallet.styles.google_wallet import (
     GooglePaySignatureManager, Resource,
 )
 
-logger = logging.getLogger("pretix.plugins.wallet.apple")
+logger = logging.getLogger("pretix.plugins.wallet.google")
 
 
 class CallbackView(APIView):
@@ -22,7 +22,7 @@ class CallbackView(APIView):
         webhook_json = GooglePaySignatureManager(
             request.event.settings.wallet_google_issuer_id
         ).unseal(request.data)
-        print(webhook_json)
+
         object = (
             GoogleWalletInstance.objects.select_for_update(of=OF_SELF)
             .filter(

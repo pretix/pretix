@@ -37,8 +37,10 @@ class WalletPlatform:
         )
         return platform_layout
 
-    def generate(self, position):
-        return self.get_layout(position).pass_layout.generate(position)
+    def generate(self, position, layout):
+        if not layout:
+            layout = self.get_layout(position).pass_layout
+        return layout.generate(position)
 
 
 class LayoutContext(TypedDict):
