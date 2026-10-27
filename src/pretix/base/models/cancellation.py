@@ -77,7 +77,6 @@ class Cancellation(models.Model):
     )
     evaluation_ts = models.DateTimeField(
         verbose_name=_("Cancellation datetime"),
-        auto_now_add=True,
     )
 
     state = models.CharField(
@@ -151,7 +150,7 @@ class CancellationRule(models.Model):
         allowed_until: Optional[RelativeDateWrapper]
         except_after: Optional[RelativeDateWrapper]
 
-    # --- position-only fields ---
+    # position-only fields
     fee_percentage_per_position = models.DecimalField(
         max_digits=5,
         decimal_places=2,
@@ -176,7 +175,7 @@ class CancellationRule(models.Model):
         "ItemVariation", blank=True, verbose_name=_("Variations")
     )
 
-    # --- process-only fields ---
+    # process-only fields
     subevent_variant = models.CharField(
         max_length=8,
         choices=SUBEVENT_VARIANT_CHOICES,
@@ -191,13 +190,15 @@ class CancellationRule(models.Model):
     fee_cancellation_process = models.DecimalField(
         max_digits=13,
         decimal_places=2,
-        verbose_name=_("Absolute fee per Cancellation"),
+        verbose_name=_("Absolute fee per cancellation"),
         default=Decimal("0.00"),
         validators=[MinValueValidator(Decimal("0.00"))],
     )
 
     fee_mode = models.CharField(
         verbose_name=_("The method with which process and position fees are combined."),
+        help_text=_("Process fees can either be used to set the minimum cancellation fee that is charded or "
+                    "they can be charged in addition to all position fees."),
         choices=[
             (FeeType.MINIMUM, FeeType.MINIMUM.label),
             (FeeType.ADDITIONAL, FeeType.ADDITIONAL.label),
@@ -249,23 +250,15 @@ class CancellationRule(models.Model):
                     "Fee mode is not valid on a process rule."
                 )
             if self.fee_percentage_per_position or self.fee_absolute_per_position:
-                errors["fee_percentage_per_position"] = _(
-                    "Position fees must be unset on a process rule."
-                )
+                errors["fee_percentage_per_position"] = _("Position fees must be unset on a process rule.")
             if self.pk and (self.limit_products.exists() or self.limit_variations.exists()):
-                errors["limit_products"] = _(
-                    "Product/variation limits are not valid on a process rule."
-                )
+                errors["limit_products"] = _("Product/variation limits are not valid on a process rule.")
 
         if self.type == CheckTypes.POSITION:
             if self.fee_cancellation_process:
-                errors["fee_cancellation_process"] = _(
-                    "Process fee must be unset on a position rule."
-                )
+                errors["fee_cancellation_process"] = _("Process fee must be unset on a position rule.")
             if self.fee_mode:
-                errors["fee_mode"] = _(
-                    "Fee mode is not valid on a position rule."
-                )
+                errors["fee_mode"] = _("Fee mode is not valid on a position rule.")
 
         if errors:
             raise ValidationError(errors)
@@ -377,7 +370,7 @@ class PositionCancellationRule(CancellationRule):
 
         if self.fee_percentage_per_position and self.fee_absolute_per_position:
             raise NotImplementedError(
-                "Combination of fee_percentage_per position and fee_absolute_per_position is not valid")
+                _("Combination of fee_percentage_per position and fee_absolute_per_position is not valid"))
         elif self.fee_absolute_per_position != Decimal(0.00):
             return RuleResult.from_absolute_fee(
                 id=self.id,
