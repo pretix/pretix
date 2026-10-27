@@ -39,9 +39,12 @@ from django.utils.translation import gettext_lazy as _
 from pretix.base.cancellation import (
     CancellationResult, CheckResult, CheckTypes, FeeType, RuleResult,
 )
-from pretix.base.models import Event, Item, ItemVariation, Order, OrderPosition
+
 from pretix.base.reldate import ModelRelativeDateTimeField, RelativeDateWrapper
 from pretix.helpers import ensure_no_queries
+
+if TYPE_CHECKING:
+    from pretix.base.models import Order, OrderPosition
 
 
 class Cancellation(models.Model):
@@ -58,19 +61,19 @@ class Cancellation(models.Model):
     )
 
     event = models.ForeignKey(
-        Event,
+        "Event",
         verbose_name=_("Event"),
         related_name="cancellations",
         on_delete=models.CASCADE
     )
     order = models.ForeignKey(
-        Order,
+        "Order",
         verbose_name=_("Order"),
         related_name="cancellations",
         on_delete=models.CASCADE
     )
     keep = models.ManyToManyField(
-        to=OrderPosition,
+        to="OrderPosition",
         verbose_name=_("Positions to keep"),
     )
     evaluation_ts = models.DateTimeField(
@@ -130,7 +133,7 @@ class CancellationRule(models.Model):
     )
 
     event = models.ForeignKey(
-        Event,
+        "Event",
         verbose_name=_("Event"),
         related_name="cancellation_rules",
         on_delete=models.CASCADE
@@ -169,9 +172,9 @@ class CancellationRule(models.Model):
         verbose_name=_("All products and variations"),
         default=True,
     )
-    limit_products = models.ManyToManyField(Item, verbose_name=_("Products"), blank=True)
+    limit_products = models.ManyToManyField("Item", verbose_name=_("Products"), blank=True)
     limit_variations = models.ManyToManyField(
-        ItemVariation, blank=True, verbose_name=_("Variations")
+        "ItemVariation", blank=True, verbose_name=_("Variations")
     )
 
     # --- process-only fields ---
@@ -216,7 +219,7 @@ class CancellationRule(models.Model):
     @staticmethod
     def _resolve_date_field_common(
             date_field: RelativeDateWrapper,
-            order: Order,
+            order: "Order",
             resolve_subevent: Callable[[Any], Any],
     ) -> datetime.date | datetime.datetime:
         reldate_type = date_field.choice
@@ -301,7 +304,7 @@ class PositionCancellationRule(CancellationRule):
         self.full_clean()
         super().save(*args, **kwargs)
 
-    def _position_matches_rule(self, position: OrderPosition) -> Optional[CheckResult]:
+    def _position_matches_rule(self, position: "OrderPosition") -> Optional[CheckResult]:
         with ensure_no_queries():
             res = CheckResult(
                 id=f"position_rule_{self.id}",
@@ -323,13 +326,14 @@ class PositionCancellationRule(CancellationRule):
             return None
 
     @staticmethod
-    def _resolve_date_field(date_field: RelativeDateWrapper, order: Order,
-                            position: OrderPosition) -> datetime.date | datetime.datetime:
+    def _resolve_date_field(date_field: RelativeDateWrapper, order: "Order",
+                            position: "OrderPosition") -> datetime.date | datetime.datetime:
         return CancellationRule._resolve_date_field_common(
             date_field, order, resolve_subevent=lambda _reldate_type: position.subevent
         )
 
-    def _evaluate_cancellation_moment(self, position: OrderPosition, check_ts: datetime.datetime) -> List[CheckResult]:
+    def _evaluate_cancellation_moment(self, position: "OrderPosition", check_ts: datetime.datetime) -> List[
+        CheckResult]:
         check_results = []
 
         order = position.order
@@ -364,7 +368,7 @@ class PositionCancellationRule(CancellationRule):
 
         return check_results
 
-    def evaluate_position_rule(self, order: Order, _keep: Set[OrderPosition], position: OrderPosition,
+    def evaluate_position_rule(self, order: "Order", _keep: Set["OrderPosition"], position: "OrderPosition",
                                check_ts: datetime.datetime) -> Optional[RuleResult]:
         rule_check_results = []
         match = self._position_matches_rule(position)
@@ -422,7 +426,7 @@ class ProcessCancellationRule(CancellationRule):
         super().save(*args, **kwargs)
 
     @staticmethod
-    def _resolve_date_field(date_field: RelativeDateWrapper, order: Order,
+    def _resolve_date_field(date_field: RelativeDateWrapper, order: "Order",
                             mode: Literal["EARLIEST", "LATEST"] | str) -> datetime.date | datetime.datetime:
         if mode not in ('EARLIEST', 'LATEST'):
             raise ValidationError('Mode is invalid')
@@ -448,7 +452,7 @@ class ProcessCancellationRule(CancellationRule):
 
         return CancellationRule._resolve_date_field_common(date_field, order, resolve_subevent)
 
-    def _evaluate_cancellation_moment(self, order: Order, check_ts: datetime.datetime) -> List[CheckResult]:
+    def _evaluate_cancellation_moment(self, order: "Order", check_ts: datetime.datetime) -> List[CheckResult]:
 
         check_results: List[CheckResult] = []
 
@@ -481,7 +485,7 @@ class ProcessCancellationRule(CancellationRule):
                 )
         return check_results
 
-    def evaluate_process_rule(self, order: Order, _keep: Set[OrderPosition], position_fees: Decimal,
+    def evaluate_process_rule(self, order: "Order", _keep: Set["OrderPosition"], position_fees: Decimal,
                               check_ts: datetime.datetime) -> Optional[RuleResult]:
         fee_mode = self.fee_mode
         if fee_mode not in (FeeType.MINIMUM, FeeType.ADDITIONAL):
