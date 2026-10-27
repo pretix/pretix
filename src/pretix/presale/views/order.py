@@ -1225,7 +1225,6 @@ class OrderDownloadMixin:
 
         if not self.output.is_cacheable:
             cf = CachedFile(web_download=True, date=now(), expires=now() + timedelta(hours=2))
-            cf.bind_to_session(request)
             cf.save()
         else:
             cf = None

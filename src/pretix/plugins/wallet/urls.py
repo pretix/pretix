@@ -22,9 +22,13 @@
 from django.urls import re_path
 
 from pretix.api.urls import event_router
+from pretix.plugins.wallet.views.google import CallbackView
 
 from .api import WalletLayoutViewSet
-from .views import (
+from .views.apple import (
+    DeviceGetUpdatablePassesView, DeviceRegistrationView, GetPassView, LogView,
+)
+from .views.control import (
     LayoutCreateView, LayoutDelete, LayoutEditorView, LayoutListView,
     LayoutPreviewView, LayoutSetDefault,
 )
@@ -59,6 +63,34 @@ urlpatterns = [
         r"^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/delete/(?P<layout>[^/]+)/$",
         LayoutDelete.as_view(),
         name="delete",
+    ),
+]
+
+event_patterns = [
+    re_path(
+        r"_wallet/apple/v1/devices/(?P<device_library_identifier>[^/]+)/registrations/(?P<pass_type_identifier>[^/]+)/(?P<serial_number>[^/]+)$",
+        DeviceRegistrationView.as_view(),
+        name="apple_register",
+    ),
+    re_path(
+        r"_wallet/apple/v1/devices/(?P<device_library_identifier>[^/]+)/registrations/(?P<pass_type_identifier>[^/]+)$",
+        DeviceGetUpdatablePassesView.as_view(),
+        name="apple_get-updatable",
+    ),
+    re_path(
+        r"_wallet/apple/v1/passes/(?P<pass_type_identifier>[^/]+)/(?P<serial_number>[^/]+)$",
+        GetPassView.as_view(),
+        name="apple_get-pass",
+    ),
+    re_path(
+        r"_wallet/apple/v1/log$",
+        LogView.as_view(),
+        name="apple_log",
+    ),
+    re_path(
+        r"_wallet/google/callback$",
+        CallbackView.as_view(),
+        name="google_webhook",
     ),
 ]
 

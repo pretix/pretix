@@ -1,6 +1,11 @@
+import json
 import uuid
+from functools import cached_property
+from typing import Iterable
 from urllib.parse import urljoin
 
+from django.conf import settings
+from django.db import transaction
 from django.utils import translation
 from django.utils.formats import date_format
 from django.utils.translation import gettext as _
@@ -11,18 +16,20 @@ from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.wallet.i18n import (
     FormattingLocalizableString, GettextLocalizableString, LazyLocalizable,
 )
+from pretix.plugins.wallet.models import GoogleWalletInstance
 from pretix.plugins.wallet.styles.base import (
-    FieldGroup, FieldGroupDisplay, PassStyle,
-    PlaceholderFieldEntry, PredefinedFieldGroup, TextFieldGroup,
-    WalletPlatform,
+    FieldGroup, FieldGroupDisplay, PassStyle, PlaceholderFieldEntry,
+    PredefinedFieldGroup, TextFieldGroup, WalletPlatform,
 )
 
 from .google_wallet import (
-    AnimationType, ConfirmationCodeLabel, DoorsOpenLabel, EventTicketClass,
-    EventTicketObject, State,
+    AnimationType, BaseGoogleWalletObject, ButtonJWT, Comms,
+    ConfirmationCodeLabel, DoorsOpenLabel, EventTicketClass, EventTicketObject,
+    State,
 )
 from .settings import (
-    BooleanSettingsField, ColorSettingsField, FloatSettingsField, ImageSettingsField
+    BooleanSettingsField, ColorSettingsField, FloatSettingsField,
+    ImageSettingsField,
 )
 
 
@@ -36,7 +43,7 @@ def _get_instance_uuid():
 
 def get_class_id(event: Event, op: OrderPosition):
     instance_uuid = _get_instance_uuid()
-    issuer_id = event.settings.get("wallet_google_issuer_id")
+    issuer_id = event.settings.wallet_google_issuer_id
     return "%s.pretix-%s-%s-%s-%s-%s" % (
         issuer_id,
         instance_uuid,
@@ -49,7 +56,7 @@ def get_class_id(event: Event, op: OrderPosition):
 
 def get_object_id(op: OrderPosition):
     instance_uuid = _get_instance_uuid()
-    issuer_id = op.order.event.settings.get("wallet_google_issuer_id")
+    issuer_id = op.order.event.settings.wallet_google_issuer_id
 
     return "%s.pretix-%s-%s-%s-%s-%s-1" % (
         issuer_id,
@@ -80,9 +87,87 @@ def get_translated_string(string, locale):
     return translated
 
 
+def dedup(list):
+    new = []
+    for i in list:
+        if not any(x.data == i.data for x in new):
+            new.append(i)
+    return new
+
+
 class GooglePlatform(WalletPlatform):
     identifier = "google"
     name = _("Google")
+
+    @cached_property
+    def comms(self):
+        return Comms(
+            json.loads(self.event.settings.get("wallet_google_credentials").read())
+        )
+
+    def put_item_cached(self, object: BaseGoogleWalletObject):
+        with transaction.atomic():
+            instance, created = GoogleWalletInstance.objects.get_or_create(
+                event=self.event,
+                resource=object.resource,
+                identifier=object.id,
+                defaults={"data": object.data},
+            )
+            if created or instance.data != object.data:
+                result = self.comms.put_item(object.resource, object.id, object.data)
+                instance.data = object.data
+                instance.save(update_fields=["data"])
+                return result
+
+    def generate(self, position, layout: PassStyle | None = None):
+        if not layout:
+            layout = self.get_layout(position).pass_layout
+        class_object, ticket_object = layout.generate(position)
+        self.put_item_cached(class_object)
+        self.put_item_cached(ticket_object)
+
+        generated_jwt = self.comms.sign_jwt(
+            ButtonJWT(
+                origins=[settings.SITE_URL],
+                issuer=self.comms.client_email,
+                payload={"eventTicketObjects": [ticket_object]},
+            ).serialize()
+        )
+
+        return (
+            "googlepaypass",
+            "text/uri-list",
+            "https://pay.google.com/gp/v/save/%s" % generated_jwt,
+        )
+
+    def generate_ops(self, ops: Iterable[OrderPosition]):
+        class_objects = []
+        ticket_objects = []
+        for position in ops:
+            class_object, ticket_object = self.get_layout(
+                position
+            ).pass_layout.generate(position)
+            class_objects.append(class_object)
+            ticket_objects.append(ticket_object)
+
+        for co in dedup(class_objects):
+            self.put_item_cached(co)
+        for to in dedup(ticket_objects):
+            self.put_item_cached(to)
+
+        generated_jwt = self.comms.sign_jwt(
+            ButtonJWT(
+                origins=[settings.SITE_URL],
+                issuer=self.comms.client_email,
+                payload={"eventTicketObjects": ticket_objects},
+            ).serialize()
+        )
+
+        return (
+            "googlepaypass",
+            "text/uri-list",
+            "https://pay.google.com/gp/v/save/%s" % generated_jwt,
+        )
 
 
 class GoogleWalletEventTicketStyle(PassStyle):
@@ -247,8 +332,12 @@ class GoogleWalletEventTicketStyle(PassStyle):
                     DoorsOpenLabel.DOORS_OPEN,
                 )
 
-        # TODO: callback url
-        # output_class.callback_url(eventreverse_absolute(event.organizer,"plugins:wallet:google_webhook",))
+        output_class.callback_url(
+            eventreverse_absolute(
+                self.event,
+                "plugins:wallet:google_webhook",
+            )
+        )
 
         return output_class
 

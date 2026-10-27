@@ -1,8 +1,15 @@
+import base64
+import datetime
 import enum
+import json
+import struct
 import time
-from datetime import datetime
 from typing import Iterable
 
+import requests
+from Crypto.Hash import SHA256
+from Crypto.PublicKey import ECC
+from Crypto.Signature import DSS
 from google.auth import crypt, jwt
 from google.auth.transport.requests import AuthorizedSession
 from google.oauth2 import service_account
@@ -437,3 +444,73 @@ class Comms:
             return False
 
         return encoded.decode("utf-8")
+
+
+def pack(string):
+    ret = struct.pack("<Q", len(string))[:4] + bytes(string, "utf-8")
+    return ret
+
+
+class GooglePaySignatureManager:
+    ROOT_KEYS_URL = "https://pay.google.com/gp/m/issuer/keys"
+    SENDER_ID = "GooglePayPasses"
+    PROTOCOL = "ECv2SigningOnly"
+
+    def __init__(self, recipient_id: str):
+        self.recipient_id = recipient_id
+
+    def root_keys(self):
+        r = requests.get(self.ROOT_KEYS_URL)
+        r.raise_for_status()
+        return r.json()["keys"]
+
+    def verify_signature(self, keys, salt, message, signatures):
+        salt = b"".join(pack(x) for x in salt)
+        for key in keys:
+            if datetime.datetime.fromtimestamp(
+                int(key["keyExpiration"]) / 1000, tz=datetime.UTC
+            ) > datetime.datetime.now(datetime.UTC):
+                pk = ECC.import_key(base64.b64decode(key["keyValue"]))
+                verifier = DSS.new(pk, "fips-186-3", "der")
+                for signature in signatures:
+                    try:
+                        verifier.verify(
+                            SHA256.new(salt + pack(self.PROTOCOL) + pack(message)),
+                            base64.b64decode(signature),
+                        )
+                        return message
+                    except ValueError:
+                        continue
+        raise ValueError("No valid signature found")
+
+    def unseal(self, data):
+        for k in (
+            "signature",
+            "intermediateSigningKey",
+            "protocolVersion",
+            "signedMessage",
+        ):
+            if k not in data:
+                raise ValueError(f"Missing key: {k}")
+
+        intermediate = self.verify_signature(
+            self.root_keys(),
+            [self.SENDER_ID],
+            data["intermediateSigningKey"]["signedKey"],
+            data["intermediateSigningKey"]["signatures"],
+        )
+        intermediateSigningKey = json.loads(intermediate)
+        message = self.verify_signature(
+            [intermediateSigningKey],
+            [self.SENDER_ID, self.recipient_id],
+            data["signedMessage"],
+            [data["signature"]],
+        )
+        message = json.loads(message)
+
+        if datetime.datetime.fromtimestamp(
+            int(message["expTimeMillis"]) / 1000, tz=datetime.UTC
+        ) <= datetime.datetime.now(datetime.UTC):
+            raise ValueError("stale event")
+
+        return message

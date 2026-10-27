@@ -24,11 +24,11 @@ from pretix.helpers.database import rolledback_transaction
 from pretix.helpers.models import modelclone
 from pretix.plugins.wallet.i18n import localizable_to_dict
 
-from .models import WalletLayout
-from .placeholders import (
+from ..models import WalletLayout
+from ..placeholders import (
     get_wallet_placeholder_renderer, get_wallet_placeholders,
 )
-from .styles import (
+from ..styles import (
     AVAILABLE_PLATFORMS, AVAILABLE_STYLES, AVAILABLE_STYLES_DICT,
 )
 
@@ -187,7 +187,7 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
         platform = None
         for p in AVAILABLE_PLATFORMS:
             if p.identifier == platform_id:
-                platform = p
+                platform = p(event)
         if not platform:
             raise BadRequest("Unknown platform")
         if style_id not in AVAILABLE_STYLES_DICT[platform_id]:
@@ -208,7 +208,7 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
             layout = style(event, layout, file_settings)
             layout.validate()
 
-            fname, mimet, data = layout.generate(p)
+            fname, mimet, data = platform.generate(p, layout)
             if mimet == "text/uri-list":
                 return redirect(data)
             resp = HttpResponse(data, content_type=mimet)

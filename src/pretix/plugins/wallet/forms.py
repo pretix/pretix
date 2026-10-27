@@ -116,7 +116,7 @@ class WalletLayoutItemForm(forms.ModelForm):
         queryset=WalletLayout.objects.none(),
         label=_("Wallet Layout"),
         empty_label=_("(Event default)"),
-        required=False
+        required=False,
     )
 
     class Meta:
