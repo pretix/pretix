@@ -889,6 +889,9 @@ class ItemUpdateForm(I18nModelForm):
 
         Item.clean_media_settings(self.event, d.get('media_policy'), d.get('media_type'), d.get('issue_giftcard'))
 
+        if d.get('free_price_suggestion') and d.get('free_price_suggestion') < d.get('default_price'):
+            self.add_error('free_price_suggestion', _("Your price suggestion cannot be less than the default price. "))
+
         return d
 
     class Meta:
@@ -1126,6 +1129,14 @@ class ItemVariationForm(I18nModelForm):
                     "If a valid membership is required, at least one valid membership type needs to be selected."
                 )
             )
+
+        if (
+            d.get('free_price_suggestion')
+            and d.get('default_price')
+            and d.get('free_price_suggestion') < d.get('default_price')
+        ):
+            self.add_error('free_price_suggestion', _("Your price suggestion cannot be less than the default price. "))
+
         return d
 
     def save(self, commit=True):
