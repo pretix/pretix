@@ -73,6 +73,14 @@ def _validate_sample_lines(sample_lines, rounding_mode):
         assert sum(line.price for line in sample_lines) == Decimal("500.00")
         assert sum(line.tax_value for line in sample_lines) == Decimal("79.83")
         assert sum(line.price - line.tax_value for line in sample_lines) == Decimal("420.17")
+    elif rounding_mode == "sum_by_gross":
+        for line in sample_lines:
+            assert line.price == Decimal("100.00")
+            # net price may vary
+            assert line.tax_rate == Decimal("19.00")
+        assert sum(line.price for line in sample_lines) == Decimal("500.00")
+        assert sum(line.tax_value for line in sample_lines) == Decimal("79.83")
+        assert sum(line.price - line.tax_value for line in sample_lines) == Decimal("420.17")
 
 
 @pytest.mark.django_db
@@ -86,8 +94,13 @@ def test_simple_case_by_net(sample_lines):
 
 
 @pytest.mark.django_db
-def test_simple_case_by_gross(sample_lines):
+def test_simple_case_net_by_gross(sample_lines):
     _validate_sample_lines(sample_lines, "sum_by_net_keep_gross")
+
+
+@pytest.mark.django_db
+def test_simple_case_by_gross(sample_lines):
+    _validate_sample_lines(sample_lines, "sum_by_gross")
 
 
 @pytest.mark.django_db
@@ -96,6 +109,7 @@ def test_simple_case_switch_rounding(sample_lines):
     _validate_sample_lines(sample_lines, "sum_by_net_keep_gross")
     _validate_sample_lines(sample_lines, "line")
     _validate_sample_lines(sample_lines, "sum_by_net")
+    _validate_sample_lines(sample_lines, "sum_by_gross")
 
 
 @pytest.mark.django_db
@@ -135,6 +149,24 @@ def test_revert_net_keep_gross_rounding_to_single_line(sample_lines):
 
 
 @pytest.mark.django_db
+def test_revert_gross_rounding_to_single_line(sample_lines):
+    l = OrderPosition(
+        price=Decimal("100.00"),
+        price_includes_rounding_correction=Decimal("0.00"),
+        tax_value=Decimal("15.96"),
+        tax_value_includes_rounding_correction=Decimal("-0.01"),
+        tax_rate=Decimal("19.00"),
+        tax_code="S",
+    )
+    apply_rounding("sum_by_gross", None, "EUR", [l])
+    assert l.price == Decimal("100.00")
+    assert l.price_includes_rounding_correction == Decimal("0.00")
+    assert l.tax_value == Decimal("15.97")
+    assert l.tax_value_includes_rounding_correction == Decimal("0.00")
+    assert l.tax_rate == Decimal("19.00")
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize("rounding_mode", [
     "sum_by_net",
     "sum_by_net_keep_gross",
@@ -149,6 +181,24 @@ def test_rounding_of_impossible_gross_price(rounding_mode):
     assert l.price_includes_rounding_correction == Decimal("0.01")
     assert l.tax_value == Decimal("1.51")
     assert l.tax_value_includes_rounding_correction == Decimal("0.01")
+    assert l.tax_rate == Decimal("7.00")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("rounding_mode", [
+    "sum_by_gross",
+    "line",
+])
+def test_rounding_of_impossible_gross_price_possible_when_not_rounding_by_net(rounding_mode):
+    l = OrderPosition(
+        price=Decimal("23.00"),
+    )
+    l._calculate_tax(tax_rule=TaxRule(rate=Decimal("7.00")), invoice_address=InvoiceAddress())
+    apply_rounding(rounding_mode, None, "EUR", [l])
+    assert l.price == Decimal("23.00")
+    assert l.price_includes_rounding_correction == Decimal("0.00")
+    assert l.tax_value == Decimal("1.50")
+    assert l.tax_value_includes_rounding_correction == Decimal("0.00")
     assert l.tax_rate == Decimal("7.00")
 
 

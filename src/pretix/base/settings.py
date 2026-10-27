@@ -83,7 +83,7 @@ ROUNDING_MODES = (
     ('sum_by_net', _('Compute taxes based on net total')),
     ('sum_by_net_only_business', _('For business customers, compute taxes based on net total. For individuals, use line-based rounding')),
     ('sum_by_net_keep_gross', _('Compute taxes based on net total with stable gross prices')),
-    # We could also have sum_by_gross, but we're not aware of any use-cases for it
+    ('sum_by_gross', _('Compute taxes based on gross total')),
 )
 
 
