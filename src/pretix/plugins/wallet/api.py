@@ -57,7 +57,7 @@ class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
             request = self.context["request"]
             ret["file_settings"][file_setting.key] = {
                 "url": request.build_absolute_uri(url),
-                "name": os.path.basename(file_setting.file.name).split('.', 1)[-1]
+                "name": os.path.basename(file_setting.file.name).split(".", 1)[-1],
             }
         return ret
 
@@ -89,9 +89,7 @@ class WalletLayoutSerializer(I18nAwareModelSerializer):
                         obj.file_settings.filter(key=key).delete()
 
                     elif file != "keep":
-                        file_setting, _ = obj.file_settings.get_or_create(
-                            key=key
-                        )
+                        file_setting, _ = obj.file_settings.get_or_create(key=key)
                         file_setting.file.save(os.path.basename(file.name), file)
 
         instance.platform_layouts.exclude(

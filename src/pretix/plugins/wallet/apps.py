@@ -26,16 +26,17 @@ from pretix import __version__ as version
 
 
 class WalletApp(AppConfig):
-    name = 'pretix.plugins.wallet'
+    name = "pretix.plugins.wallet"
     verbose_name = _("wallet")
 
     class PretixPluginMeta:
         name = _("wallet")
         author = _("the pretix team")
         version = version
-        category = 'FORMAT'
-        description = _("Issue wallet passes for tickets (e.g. apple wallet, google wallet)")
+        category = "FORMAT"
+        description = _(
+            "Issue wallet passes for tickets (e.g. apple wallet, google wallet)"
+        )
 
     def ready(self):
         from . import receivers  # NOQA
-
