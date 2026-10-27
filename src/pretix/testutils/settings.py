@@ -81,6 +81,8 @@ CACHES = {
 DATABASE_REPLICA = 'default'
 DATABASES['default']['CONN_MAX_AGE'] = 0
 DATABASES.pop('replica', None)
+if 'pool' in DATABASES['default']['OPTIONS']:
+    DATABASES['default']['OPTIONS']['pool']['max_size'] = 5
 
 MIDDLEWARE.insert(0, 'pretix.testutils.middleware.DebugFlagMiddleware')
 
