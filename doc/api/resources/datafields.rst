@@ -4,15 +4,15 @@
 Data fields
 =========
 
-There are two different resource paths for data fields, depending on whether the data field is attached
-to orders or order positions. Therefore, each endpoint below has two different URLs.
-
 Resource description
 --------------------
 
 Data fields define additional fields related to an order or an order position.
 By referencing data fields in a questionnaire, you can have customers or staff fill them out -- during or
 after checkout (web or POS), during check-in in the ticket scanner app, or in the backend.
+
+There are two different resource paths for data fields, depending on whether the data field is attached
+to orders or order positions. Therefore, each endpoint below has two different URLs.
 
 The data field resource contains the following public fields:
 
@@ -45,7 +45,7 @@ print_on_invoice                      boolean                    If ``true``, th
                                                                  invoices.
 options                               list of objects            In case of data field type ``C`` or ``M``, this lists the
                                                                  available objects. Only writable during creation,
-                                                                 use separate endpoint to modify this later.
+                                                                 use :ref:`separate endpoint <rest-datafieldoptions>` to modify this later.
 ├ id                                  integer                    Internal ID of the option
 ├ position                            integer                    An integer, used for sorting
 ├ identifier                          string                     An arbitrary string that can be used for matching with

@@ -4,14 +4,15 @@
 Data field options
 ================
 
+Resource description
+--------------------
+
+:ref:`Data fields <rest-datafields>` of type "choice" or "multiple choice" can have different options attached.
+
 As with data fields, data field options exist on two resource paths, depending on whether
 the data field is attached to orders or order positions. Therefore, each endpoint below has two
 different URLs.
 
-Resource description
---------------------
-
-Data fields of type "choice" or "multiple choice" can have different options attached.
 The options resource contains the following public fields:
 
 .. rst-class:: rest-resource-table
