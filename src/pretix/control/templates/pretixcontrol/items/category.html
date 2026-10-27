@@ -45,6 +45,9 @@
             {% endif %}
         </div>
 		<div class="form-group submit-group">
+            {% if category %}
+                <a title="{% trans "Delete" %}" href="{% url "control:event.items.categories.delete" organizer=request.event.organizer.slug event=request.event.slug category=category.id %}" class="btn btn-danger btn-lg pull-left"><i class="fa fa-trash"></i> {% trans "Delete" %}</a>
+            {% endif %}
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
             </button>
