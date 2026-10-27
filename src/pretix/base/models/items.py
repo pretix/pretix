@@ -2162,7 +2162,10 @@ class QuestionnaireChild(LoggedModel):
 
     @property
     def cooked_id(self):
-        return QuestionnaireChild.cook_id_from_parts(self.questionnaire_id, self.user_datafield_id, self.system_datafield)
+        if self.user_datafield_id or self.system_datafield:
+            return QuestionnaireChild.cook_id_from_parts(self.questionnaire_id, self.user_datafield_id, self.system_datafield)
+        else:
+            return None
 
     @staticmethod
     def cook_id_from_parts(qid, dfid, sys_df):

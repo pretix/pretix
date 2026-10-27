@@ -891,7 +891,7 @@ class InlineQuestionnaireChildSerializer(I18nAwareModelSerializer):
     datafield = DatafieldRelatedField(allow_null=True, source='*', queryset=Question.objects.none())
     dependency_question = DatafieldRelatedField(allow_null=True, required=False, queryset=Question.objects.none())
     rendered_help_text = RenderedMarkdownField(read_only=True, source='help_text')
-    cooked_id = serializers.IntegerField(read_only=True)
+    cooked_id = serializers.IntegerField(read_only=True, allow_null=True)
 
     class Meta:
         model = QuestionnaireChild
