@@ -52,13 +52,13 @@ from pretix.base.forms import SafeSessionWizardView
 from pretix.base.i18n import language
 from pretix.base.models import Event, EventMetaValue, Organizer, Quota, Team
 from pretix.base.models.organizer import TeamQuerySet
-from pretix.base.services.quotas import QuotaAvailability
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
 )
 from pretix.control.forms.filter import EventFilterForm
 from pretix.control.permissions import OrganizerPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
+from pretix.control.views.utils import prepare_quotas_for_boxes
 
 
 class EventList(PaginationMixin, ListView):
@@ -117,19 +117,7 @@ class EventList(PaginationMixin, ListView):
             s.first_quotas = s.first_quotas[:4]
             quotas += list(s.first_quotas)
 
-        qa = QuotaAvailability(early_out=False)
-        for q in quotas:
-            qa.queue(q)
-        qa.compute()
-
-        for q in quotas:
-            q.cached_avail = qa.results[q]
-            q.cached_availability_paid_orders = qa.count_paid_orders.get(q, 0)
-            if q.size is not None:
-                q.percent_paid = min(
-                    100,
-                    round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
-                )
+        prepare_quotas_for_boxes(quotas)
         return ctx
 
     @cached_property
