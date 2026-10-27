@@ -26,7 +26,8 @@ from django.contrib.postgres.indexes import BrinIndex
 from django.core.exceptions import FieldDoesNotExist, ImproperlyConfigured
 from django.db import connection, transaction
 from django.db.models import (
-    Aggregate, Expression, F, Field, JSONField, Lookup, OrderBy, Value,
+    Aggregate, Expression, F, Field, Func, IntegerField, JSONField, Lookup,
+    OrderBy, Value,
 )
 from django.utils.functional import lazy
 
@@ -313,3 +314,13 @@ class IgnoreOnSQLiteMixin:
 
 class BrinIndexIgnoredOnSQLite(IgnoreOnSQLiteMixin, BrinIndex):
     pass
+
+
+class UnixTimestamp(Func):
+    output_field = IntegerField()
+
+    def as_postgresql(self, compiler, connection):
+        return self.as_sql(compiler, connection, template="EXTRACT(epoch from %(expressions)s)")
+
+    def as_sqlite(self, compiler, connection):
+        return self.as_sql(compiler, connection, function="unixepoch")

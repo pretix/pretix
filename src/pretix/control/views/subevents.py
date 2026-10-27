@@ -44,7 +44,7 @@ from django.db import transaction
 from django.db.models import (
     Count, Exists, F, OuterRef, Prefetch, ProtectedError, Subquery,
 )
-from django.db.models.functions import Coalesce, Extract, TruncDate, TruncTime
+from django.db.models.functions import Coalesce, TruncDate, TruncTime
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -85,6 +85,7 @@ from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
 from pretix.helpers import GroupConcat
 from pretix.helpers.compat import CompatDeleteView
+from pretix.helpers.database import UnixTimestamp
 from pretix.helpers.i18n import get_format_without_seconds
 from pretix.helpers.models import modelcopy
 
@@ -1601,23 +1602,19 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
         qs = qs.annotate(
             **{
-                # TODO: Once we're on Django 3.2, pass a tzinfo parameter
-                # Before Django 3.2, it uses the current timezone, which is hopefully fine
-                # as well in all cases we are concerned about
-                # See also: https://code.djangoproject.com/ticket/31948
-                k + '_day': TruncDate(k)
+                k + '_day': TruncDate(k, tzinfo=self.request.event.timezone)
                 for k in ('date_from', 'date_to', 'date_admission')
             },
             **{
-                k + '_time': TruncTime(k)
+                k + '_time': TruncTime(k, tzinfo=self.request.event.timezone)
                 for k in ('date_from', 'date_to', 'date_admission')
             },
             **{
-                k + '_rel_min': Extract(F('date_from') - F(k), 'epoch') / 60
+                k + '_rel_min': (UnixTimestamp('date_from') - UnixTimestamp(k)) / 60
                 for k in rel_fields
             },
             **{
-                k + '_rel_days': Extract(F('date_from__date') - F(f"{k}__date"), 'days')
+                k + '_rel_days': TruncDate('date_from', tzinfo=self.request.event.timezone) - TruncDate(k, tzinfo=self.request.event.timezone)
                 for k in rel_fields
             }
         )
@@ -1656,11 +1653,11 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             elif len(existing_rel_days_values) == 1:
                 if rel_days := existing_rel_days_values[0][f'{k}_rel_days']:
                     initial[f"{k}_rel"] = RelativeDateWrapper(RelativeDate(
-                        days=abs(rel_days),
+                        days=abs(rel_days.days),
                         base_date_name='event__date_from',
                         time=None,
                         minutes=None,
-                        is_after=rel_days < 0,
+                        is_after=rel_days.days < 0,
                     ))
                 else:
                     initial[f"{k}_rel"] = None

@@ -172,7 +172,7 @@ class SubEventBulkEditForm(I18nModelForm):
                 label=self._meta.model._meta.get_field(k).verbose_name,
                 help_text=self._meta.model._meta.get_field(k).help_text,
                 required=False,
-                limit_choices=('event__date_from'),
+                limit_choices=('event__date_from',),
             )
 
     class Meta:
