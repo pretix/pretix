@@ -332,7 +332,7 @@ class EventTicketObject(BaseGoogleWalletObject):
     def ticket_number(self, ticket_number: str):
         self.data["ticket_number"] = ticket_number
 
-    def valid_time_interval(self, start: datetime | None, end: datetime | None):
+    def valid_time_interval(self, start: datetime.datetime | None, end: datetime.datetime | None):
         self.data.setdefault("validTimeInterval", {})
         if start:
             self.data["validTimeInterval"]["start"] = {"date": start.isoformat()}
