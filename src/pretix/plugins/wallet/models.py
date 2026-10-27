@@ -142,7 +142,7 @@ class GoogleWalletInstance(models.Model):
     resource = models.CharField()
     identifier = models.CharField()
     data = models.JSONField()
-    usages = models.IntegerField()
+    usages = models.IntegerField(default=0)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
