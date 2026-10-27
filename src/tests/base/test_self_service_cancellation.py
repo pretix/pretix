@@ -40,7 +40,7 @@ from pretix.base.models.cancellation import (
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.cancellation import (
-    Checks, _prefetch_order, collect_cancellation_checks,
+    CollectedChecks, _prefetch_order, collect_cancellation_checks,
     evaluate_cancellation, signal_listener_position_not_used,
 )
 from pretix.helpers import ensure_no_queries
@@ -354,14 +354,14 @@ class TestCancellationRule:
 
         @pytest.mark.django_db
         def test_prefetch_no_checks_collected(self, event, order):
-            checks = Checks(position=[], process=[])
+            checks = CollectedChecks(position=[], process=[])
             with scope(organizer=event.organizer):
                 prefetched_order = _prefetch_order(event, order, checks)
                 assert prefetched_order.id == order.id
 
         @pytest.mark.django_db
         def test_prefetch_incl_values_select_related(self, event, order):
-            checks = Checks(
+            checks = CollectedChecks(
                 position=[
                     make_cancellation_check('pos_1', CheckTypes.POSITION, True,
                                             prefetches=[lambda: Prefetch('all_positions')],
@@ -381,7 +381,7 @@ class TestCancellationRule:
         @pytest.mark.django_db
         def test_ticket_not_used(self, event, order, order_position, checkin_list):
             position_not_used_check = signal_listener_position_not_used(event)
-            checks = Checks(position=[position_not_used_check], process=[])
+            checks = CollectedChecks(position=[position_not_used_check], process=[])
             keep = set()
 
             with scope(organizer=event.organizer):

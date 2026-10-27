@@ -39,7 +39,6 @@ from django.utils.translation import gettext_lazy as _
 from pretix.base.cancellation import (
     CancellationResult, CheckResult, CheckTypes, FeeType, RuleResult,
 )
-
 from pretix.base.reldate import ModelRelativeDateTimeField, RelativeDateWrapper
 from pretix.helpers import ensure_no_queries
 
@@ -332,8 +331,8 @@ class PositionCancellationRule(CancellationRule):
             date_field, order, resolve_subevent=lambda _reldate_type: position.subevent
         )
 
-    def _evaluate_cancellation_moment(self, position: "OrderPosition", check_ts: datetime.datetime) -> List[
-        CheckResult]:
+    def _evaluate_cancellation_moment(self, position: "OrderPosition", check_ts: datetime.datetime) \
+            -> List[CheckResult]:
         check_results = []
 
         order = position.order

@@ -20,11 +20,13 @@
 # <https://www.gnu.org/licenses/>.
 #
 from __future__ import annotations
+
 import datetime
 from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import (
-    Callable, Dict, List, Literal, NewType, Optional, Protocol, Set, TypeAlias, TYPE_CHECKING
+    TYPE_CHECKING, Callable, Dict, List, Literal, NewType, Optional, Protocol,
+    Set, TypeAlias, cast,
 )
 
 from django.core.exceptions import ValidationError
@@ -37,45 +39,48 @@ from pretix.base.decimal import round_decimal
 if TYPE_CHECKING:
     from pretix.base.models import Order, OrderPosition
 
-    # An Order that has gone through services.cancellation._prefetch_order,
     PrefetchedOrder = NewType("PrefetchedOrder", Order)
+    PrefetchedPosition = NewType("PrefetchedPosition", OrderPosition)
+else:
+    # use object instead of concrete Models to avoid import loops
+    PrefetchedOrder = NewType("PrefetchedOrder", object)
+    PrefetchedPosition = NewType("PrefetchedPosition", object)
 
 """
 The cancellation system consists out of two parts, Checks and Rules.
 
 Checks are there to uphold the business logic. For example:
 - Giftcards can only be canceled if they weren't used yet
-- A ticket can only be canceled if it wasn't checked in yet 
+- A ticket can only be canceled if it wasn't checked in yet
 - The item can be canceled at all
 
-Checks follow from the business logic of pretix, the activated plugins, as well as the general 
+Checks follow from the business logic of pretix, the activated plugins, as well as the general
 configuration of the event - they cannot be configured by the user directly.
 
-The signal `self_service_cancellation_checks` can be used by plugins to provide their own 
+The signal `self_service_cancellation_checks` can be used by plugins to provide their own
 checks to the cancellation process in the form of CancellationCheck objects.
-
 
 Rules are the user configurable aspect of the cancellation process.
 They have configurable time windows, which item they apply to, if they allow the cancellation and possible fees.
 The ruling is stored in a RuleResult.
 
 Both Checks and Rules exist in a per-position and a per-process form.
-A PositionRule could add an extra cancelation fee for an Item, while a ProcessRule can add a flat fee
+A PositionRule could add an extra cancellation fee for an Item, while a ProcessRule can add a flat fee
 for cancelling at all.
 
-The evaluation of Rules and Checks is handled in `services/cancellation.py`, but follows this schema 
+The evaluation of Rules and Checks is handled in `services/cancellation.py`, but follows this schema
 
 When a customer triggers a self service cancellation, we will:
 1. Per position, resulting in a `PositionResult` each
-    a. Evaluate all per position `CancellationChecks` 
+    a. Evaluate all per position `CancellationChecks`
     b. Evaluate all per position `CancellationRules` and compute the fees
     c. Choose for each position the cheapest `CancellationRules` position result available
-    
+
 2. Once per process, resulting in a `ProcessResult`
-    a. Evaluate all per process `CancellationChecks` 
-    b. Evaluate all per process `CancellationRules` 
-    c. Choose the cheapest `CancellationRules` process result available, using the previously generated `ProcessResults`  
-    
+    a. Evaluate all per process `CancellationChecks`
+    b. Evaluate all per process `CancellationRules`
+    c. Choose the cheapest `CancellationRules` process result available, using the previously generated `ProcessResults`
+
 3. Combine both the `PositionResults` and `ProcessResult` into a `CancellationResult`
 """
 
@@ -96,7 +101,9 @@ class PositionCheckFn(Protocol):
     """
     Check to see if an individual position can be canceled.
     """
-    def __call__(self, order: PrefetchedOrder, keep: PositionSet, position: "OrderPosition", check_ts: datetime.datetime,
+
+    def __call__(self, order: PrefetchedOrder, keep: PositionSet, position: PrefetchedPosition,
+                 check_ts: datetime.datetime,
                  /) -> Optional[CheckResult]:
         """
         :param order: The order the position is part of. Should be the prefetched object
@@ -112,7 +119,9 @@ class ProcessCheckFn(Protocol):
     """
     Check to see if a cancellation request for this Order is possible.
     """
-    def __call__(self, order: PrefetchedOrder, keep: PositionSet, check_ts: datetime.datetime, /) -> Optional[CheckResult]:
+
+    def __call__(self, order: "PrefetchedOrder", keep: PositionSet, check_ts: datetime.datetime, /) \
+            -> Optional[CheckResult]:
         """
         :param order: The Order the cancellation is for
         :param keep: The OrderPositions that aren't getting canceled
@@ -133,10 +142,14 @@ class CancellationCheck:
     prefetches: List[Callable[[], Prefetch]] = field(default_factory=list)
     related_selects: List[str] = field(default_factory=list)
 
-    def evaluate(self, order: "Order", keep: PositionSet,
+    def evaluate(self, order: PrefetchedOrder, keep: PositionSet,
                  position: "OrderPosition | None", check_ts: datetime.datetime) -> Optional[CheckResult]:
         if position and self.type == CheckTypes.POSITION:
-            return self.check_fn(order, keep, position, check_ts)
+            prefetched_position = cast(PrefetchedPosition,
+                                       next((p for p in order.positions.all() if p.pk == position.pk), None))
+            if prefetched_position is None:
+                raise ValidationError(f"OrderPosition {position.pk} does not belong to order {order.code}")
+            return self.check_fn(order, keep, prefetched_position, check_ts)
         elif position is None and self.type == CheckTypes.PROCESS:
             return self.check_fn(order, keep, check_ts)
         else:
