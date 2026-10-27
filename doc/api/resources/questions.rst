@@ -8,14 +8,14 @@
 Questions
 =========
 
-   .. warning:: This resource is **deprecated**. It is only provided for compatibility with existing applications
-                and should not be used in new development.
+.. warning:: This resource is **deprecated**. It is only provided for compatibility with existing applications
+             and should not be used in new development.
 
-                New applications must use the :ref:`rest-datafields` and :ref:`rest-questionnaires` resources.
+             New applications must use the :ref:`rest-datafields` and :ref:`rest-questionnaires` resources.
 
-                This resource will only work on events where the :ref:`questionnaire configuration <rest-questionnaires>`
-                is compatible with the old data model.
-                If incompatible configuration is detected, these endpoints return HTTP 410.
+             This resource will only work on events where the :ref:`questionnaire configuration <rest-questionnaires>`
+             is compatible with the old data model.
+             If incompatible configuration is detected, these endpoints return HTTP 410.
 
 Resource description
 --------------------
