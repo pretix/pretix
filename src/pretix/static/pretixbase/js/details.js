@@ -55,44 +55,17 @@ setup_collapsible_details = function (el) {
 	})
 
 	let isOpera = Object.prototype.toString.call(window.opera) == '[object Opera]'
-	el.find('details summary').click(function (e) {
-		if (this.tagName !== 'A' && $(e.target).closest('a').length > 0) {
-			return true
-		}
-		let $details = $(this).closest('details')
-		let isOpen = $details.prop('open')
-		let $detailsNotSummary = $details.children(':not(summary)')
-		if ($detailsNotSummary.is(':animated')) {
-			e.preventDefault()
-			return false
-		}
-		if (isOpen) {
-			$details.removeClass('details-open')
-			$detailsNotSummary.stop().show().slideUp(500, function () {
-				$details.prop('open', false)
-			})
-		} else {
-			$detailsNotSummary.stop().hide()
-			$details.prop('open', true)
-			$details.addClass('details-open')
-			$detailsNotSummary.slideDown()
-		}
-		e.preventDefault()
-		return false
-	}).keyup(function (event) {
-		if (32 == event.keyCode || (13 == event.keyCode && !isOpera)) {
-			// Space or Enter is pressed — trigger the `click` event on the `summary` element
-			// Opera already seems to trigger the `click` event when Enter is pressed
-			event.preventDefault()
-			$(this).click()
-		}
-	})
-
 	$('details').each(function () {
 		let $details = $(this),
 			$detailsSummary = $('summary', $details).first(),
 			$detailsNotSummary = $details.children(':not(summary)')
-		$details.prop('open', typeof $details.attr('open') == 'string')
+		var open = typeof $details.attr('open') == 'string'
+		var stateKey = null
+		if ($details.attr('data-stateful')) {
+			stateKey = 'ui-details-state-' + $details.attr('data-stateful')
+			if (localStorage[stateKey]) open = localStorage[stateKey] === 'open'
+		}
+		$details.prop('open', open)
 		if (!$details.prop('open')) {
 			if ($details.find('.has-error, .alert-danger').length) {
 				$details.addClass('details-open')
@@ -108,6 +81,36 @@ setup_collapsible_details = function (el) {
 			'aria-controls': $details.attr('id')
 		}).prop('tabIndex', 0).bind('selectstart dragstart mousedown', function () {
 			return false
+		}).click(function (e) {
+			if (this.tagName !== 'A' && $(e.target).closest('a[href]').length > 0) {
+				return true
+			}
+			let isOpen = $details.prop('open')
+			if ($detailsNotSummary.is(':animated')) {
+				e.preventDefault()
+				return false
+			}
+			if (isOpen) {
+				$details.removeClass('details-open')
+				$detailsNotSummary.stop().show().slideUp(500, function () {
+					$details.prop('open', false)
+				})
+			} else {
+				$detailsNotSummary.stop().hide()
+				$details.prop('open', true)
+				$details.addClass('details-open')
+				$detailsNotSummary.slideDown()
+			}
+			if (stateKey) localStorage[stateKey] = isOpen ? 'closed' : 'open'
+			e.preventDefault()
+			return false
+		}).keyup(function (event) {
+			if (32 == event.keyCode || (13 == event.keyCode && !isOpera)) {
+				// Space or Enter is pressed — trigger the `click` event on the `summary` element
+				// Opera already seems to trigger the `click` event when Enter is pressed
+				event.preventDefault()
+				$(this).click()
+			}
 		})
 	})
 
