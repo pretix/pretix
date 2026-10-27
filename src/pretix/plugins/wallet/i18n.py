@@ -9,8 +9,7 @@ type MaybeTranslatedString = str | Localizable
 
 @runtime_checkable
 class Localizable(Protocol):
-    def localize(self, lng: str) -> str:
-        ...
+    def localize(self, lng: str) -> str: ...
 
 
 # marked Promise so DjangoJSONEncoder automatically transforms it into a string

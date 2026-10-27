@@ -9,28 +9,27 @@ import cryptography
 import cryptography.hazmat.primitives.hashes
 import cryptography.hazmat.primitives.serialization.pkcs7
 import cryptography.x509
+from django.core.files.base import ContentFile
 from django.utils.encoding import force_bytes
 from django.utils.translation import gettext as _
 
 from pretix.base.models import OrderPosition
+from pretix.helpers import OF_SELF
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.wallet.i18n import (
-    FormattingLocalizableString,
-    GettextLocalizableString,
+    FormattingLocalizableString, GettextLocalizableString,
     MaybeTranslatedString,
 )
+from pretix.plugins.wallet.models import AppleWalletPass
 from pretix.plugins.wallet.styles.base import (
-    FieldGroup,
-    FieldGroupDisplay,
-    PassStyle,
-    PlaceholderFieldEntry,
-    TextFieldGroup,
-    WalletPlatform,
+    FieldGroup, FieldGroupDisplay, PassStyle, PlaceholderFieldEntry,
+    TextFieldGroup, WalletPlatform,
 )
 from pretix.plugins.wallet.styles.settings import ImageSettingsField
 
 from .settings import ColorSettingsField, FloatSettingsField, convert_to_png
 
-logger = logging.getLogger()
+logger = logging.getLogger("pretix.plugins.wallet.apple")
 
 
 class ApplePlatform(WalletPlatform):
@@ -181,7 +180,9 @@ class AppleWalletStyle(PassStyle):
     def pass_content(self, fields, strings):
         raise NotImplementedError()
 
-    def generate_pass_json(self, fields, op, strings):
+    def generate_pass_json(
+        self, fields, op, strings, pass_type, team_id, serial_number, auth_token
+    ):
         event = op.subevent or op.order.event
         tz = event.timezone
 
@@ -200,20 +201,16 @@ class AppleWalletStyle(PassStyle):
         )
         strings.add_entry("description", description)
 
-        serialNumber = "%s-%s-%s-%d" % (
-            self.event.organizer.slug,
-            self.event.slug,
-            op.order.code,
-            op.pk,
-        )
-
         pass_json = {
             "formatVersion": 1,
             "description": "description",
             "organizationName": self.event.organizer.name,
-            "passTypeIdentifier": self.event.settings.wallet_apple_pass_type_id,
-            "teamIdentifier": self.event.settings.wallet_apple_team_id,
-            "serialNumber": serialNumber,
+            "passTypeIdentifier": pass_type,
+            "teamIdentifier": team_id,
+            "serialNumber": serial_number,
+            "webServiceURL": eventreverse_absolute(self.event, "presale:event.index")
+            + "_wallet/apple/",
+            "authenticationToken": auth_token,
             **self.pass_content(fields, strings),
         }
 
@@ -278,6 +275,25 @@ class AppleWalletStyle(PassStyle):
         return pass_json
 
     def generate(self, op: OrderPosition):
+        pass_type = self.event.settings.wallet_apple_pass_type_id
+        team_id = self.event.settings.wallet_apple_team_id
+        serial_number = "%s-%s-%s-%d" % (
+            self.event.organizer.slug,
+            self.event.slug,
+            op.order.code,
+            op.pk,
+        )
+
+        pass_obj, _ = AppleWalletPass.objects.select_for_update(
+            of=OF_SELF
+        ).update_or_create(
+            order_position=op,
+            defaults={
+                "serial_number": serial_number,
+                "pass_type": pass_type,
+            },
+        )
+
         order = op.order
         filename = "{}-{}.pkpass".format(order.event.slug, order.code)
 
@@ -290,7 +306,9 @@ class AppleWalletStyle(PassStyle):
         )
         strings = StringResource(locales=self.event.settings.locales)
 
-        pass_json = self.generate_pass_json(fields, op, strings)
+        pass_json = self.generate_pass_json(
+            fields, op, strings, pass_type, team_id, serial_number, pass_obj.token
+        )
 
         if file := self.get_cleaned_setting("logo"):
             logo = convert_to_png(
@@ -315,6 +333,12 @@ class AppleWalletStyle(PassStyle):
             pkpass.add_file(f"{lang}.lproj/pass.strings", content)
         pkpass.add_file("pass.json", json.dumps(pass_json))
         result = pkpass.finish()
+
+        if pass_obj.content:
+            pass_obj.content.delete()
+        pass_obj.content.save(filename, ContentFile(result, name=filename))
+        pass_obj.save()
+
         return filename, "application/vnd.apple.pkpass", result
 
 

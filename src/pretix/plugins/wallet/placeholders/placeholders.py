@@ -202,7 +202,7 @@ def base_text_placeholders(sender: Event, **kwargs):
             lambda seat: (
                 FormattingLocalizableString("{seat}", seat=seat) if seat else None
             ),
-            GettextLocalizableString.gettext("Ground floor, Row 3, Seat 4")
+            GettextLocalizableString.gettext("Ground floor, Row 3, Seat 4"),
         ),
         FunctionalWalletTextPlaceholder(
             "seat_zone",

@@ -5,17 +5,17 @@ from typing import TypedDict
 import jsonschema
 from django.core.exceptions import ValidationError
 from django.core.files import File
+from django.shortcuts import get_object_or_404
 from i18nfield.strings import LazyI18nString
 
 from pretix.api.helpers import handle_file_upload
 from pretix.base.models import OrderPosition
+from pretix.plugins.wallet.models import WalletPlatformLayout
 
 from ..i18n import MaybeTranslatedString, localizable_to_dict
 from ..placeholders import (
-    WalletPlaceholderRenderer,
-    get_available_context,
-    get_wallet_placeholder_renderer,
-    get_wallet_placeholders,
+    WalletPlaceholderRenderer, get_available_context,
+    get_wallet_placeholder_renderer, get_wallet_placeholders,
 )
 from .settings import SettingsField, SettingsFile
 
@@ -23,6 +23,22 @@ from .settings import SettingsField, SettingsFile
 class WalletPlatform:
     identifier: str
     name: str
+
+    def __init__(self, event):
+        self.event = event
+
+    def get_layout(self, op):
+        if hasattr(op.item, "walletlayout"):
+            wallet_layout = op.item.walletlayout.layout
+        else:
+            wallet_layout = op.event.wallet_layouts.get(default=True)
+        platform_layout: WalletPlatformLayout = get_object_or_404(
+            wallet_layout.platform_layouts, platform=self.identifier
+        )
+        return platform_layout
+
+    def generate(self, position):
+        return self.get_layout(position).pass_layout.generate(position)
 
 
 class LayoutContext(TypedDict):
@@ -191,7 +207,7 @@ class PlaceholderFieldGroup(FieldGroup):
         display=FieldGroupDisplay.WITH_LABEL,
         context_args: set[str] | None = None,
         can_overflow: bool = True,
-        default_overflow: str | None = None
+        default_overflow: str | None = None,
     ):
         super().__init__(identifier, name, description, required)
         self.content_type = content_type
@@ -227,7 +243,7 @@ class PlaceholderFieldGroup(FieldGroup):
             "overflows": self.overflows(
                 remaining_fields, context, self.available_placeholders(context)
             ),
-            "default_overflow": self.default_overflow
+            "default_overflow": self.default_overflow,
         }
 
     def available_placeholders(self, context):

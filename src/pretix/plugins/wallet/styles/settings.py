@@ -211,7 +211,9 @@ class ImageSettingsField(SettingsField[SettingsFile, FieldFile]):
             return SettingsFile(self.default.url, self.default)
 
         if isinstance(self.default, str):
-            return SettingsFile(static(self.default), File(None, finders.find(self.default)))
+            return SettingsFile(
+                static(self.default), File(None, finders.find(self.default))
+            )
 
 
 def convert_to_png(file: SettingsFile, max_size=None):

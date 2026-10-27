@@ -22,10 +22,11 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q, constraints
+from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from django_scopes import ScopedManager
 
-from pretix.base.models import LoggedModel
+from pretix.base.models import LoggedModel, OrderPosition
 
 
 class WalletLayout(LoggedModel):
@@ -46,7 +47,10 @@ class WalletLayout(LoggedModel):
                 "event", condition=Q(default=True), name="one_default_wallet_per_event"
             )
         ]
-        ordering = ("-default", "name",)
+        ordering = (
+            "-default",
+            "name",
+        )
 
 
 class WalletPlatformLayout(LoggedModel):
@@ -105,19 +109,41 @@ class WalletLayoutFileSetting(models.Model):
     file = models.FileField()
 
 
-# smth like this for apple, lets see what the best architecture for google will be
-# class AppleWalletPass(models.Model):
-#     platform_layout = models.ForeignKey(WalletPlatformLayout, on_delete=models.PROTECT)
-#     order_position = models.ForeignKey(OrderPosition, on_delete=models.PROTECT)
-#     content = models.BinaryField()
-#     updated_at = models.DateTimeField(null=True, auto_now=True)
-# prob smth like this
+class AppleWalletDevice(models.Model):
+    device_library_id = models.CharField()
+    push_token = models.CharField()
+
+
+def secret_default():
+    return get_random_string(length=64)
+
+
+class AppleWalletPass(models.Model):
+    order_position = models.OneToOneField(OrderPosition, on_delete=models.PROTECT)
+
+    serial_number = models.CharField()
+    pass_type = models.CharField()
+    content = models.FileField()
+    updated_at = models.DateTimeField(auto_now=True)
+
+    token = models.CharField(default=secret_default, unique=True)
+    registered_devices = models.ManyToManyField(
+        AppleWalletDevice, related_name="passes"
+    )
+
+    class Meta:
+        unique_together = [
+            ("pass_type", "serial_number"),
+        ]
+
 
 class GoogleWalletInstance(models.Model):
     event = models.ForeignKey("pretixbase.Event", on_delete=models.CASCADE)
     resource = models.CharField()
     identifier = models.CharField()
     data = models.JSONField()
+    usages = models.IntegerField()
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = (("resource", "identifier"),)
