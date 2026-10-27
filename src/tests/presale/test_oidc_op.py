@@ -72,6 +72,9 @@ def ssoclient(env, client):
 
 @pytest.mark.django_db
 def test_authorize_final_errors(env, client, ssoclient):
+    ssoclient[0].authorization_grant_type = "implicit"
+    ssoclient[0].save()
+
     r = client.get('/bigevents/oauth2/v1/authorize')
     assert r.status_code == 400
     assert b'client_id missing' in r.content
@@ -111,6 +114,9 @@ def test_authorize_final_errors(env, client, ssoclient):
 
 @pytest.mark.django_db
 def test_authorize_basic_redirect_errors(env, client, ssoclient):
+    ssoclient[0].authorization_grant_type = "implicit"
+    ssoclient[0].save()
+
     r = client.get(
         f'/bigevents/oauth2/v1/authorize?client_id={ssoclient[0].client_id}&redirect_uri=https://example.net&response_type=code')
     assert r.status_code == 302
@@ -495,7 +501,28 @@ def test_token_client_secret_post(env, client, ssoclient):
 
 
 @pytest.mark.django_db
+def test_authorize_implicit_flow_not_allowed_for_authcode_client(env, client, ssoclient):
+    r = client.post('/bigevents/account/login', {
+        'email': 'john@example.org',
+        'password': 'foo',
+    })
+    assert r.status_code == 302
+
+    url = f'/bigevents/oauth2/v1/authorize?client_id={ssoclient[0].client_id}&' \
+          f'redirect_uri=https://example.net&' \
+          f'response_type=id_token&' \
+          f'state=STATE&' \
+          f'nonce=NONCE123&' \
+          f'scope=openid+profile+email'
+    r = client.get(url)
+    assert r.status_code == 400
+    assert b'clients with grant type set to authorization code' in r.content
+
+
+@pytest.mark.django_db
 def test_authorize_implicit_flow(env, client, ssoclient):
+    ssoclient[0].authorization_grant_type = "implicit"
+    ssoclient[0].save()
     r = client.post('/bigevents/account/login', {
         'email': 'john@example.org',
         'password': 'foo',
@@ -544,6 +571,8 @@ def test_authorize_implicit_flow(env, client, ssoclient):
 
 @pytest.mark.django_db
 def test_authorize_hybrid_flow(env, client, ssoclient):
+    ssoclient[0].authorization_grant_type = "implicit"
+    ssoclient[0].save()
     r = client.post('/bigevents/account/login', {
         'email': 'john@example.org',
         'password': 'foo',
