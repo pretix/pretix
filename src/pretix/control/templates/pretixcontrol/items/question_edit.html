@@ -5,21 +5,21 @@
 {% load escapejson %}
 {% block title %}
     {% if question %}
-        {% blocktrans with name=question.internal_name %}Data field: {{ name }}{% endblocktrans %}
+        {% blocktrans with name=question.question %}Data field: {{ name }}{% endblocktrans %}
     {% else %}
         {% trans "Create new data field" %}
     {% endif %}
 {% endblock %}
 {% block inside %}
     {% if question %}
-        <h1>{% blocktrans with name=question.internal_name %}Data field: {{ name }}{% endblocktrans %}</h1>
+        <h1>{% blocktrans with name=question.question %}Data field: {{ name }}{% endblocktrans %}</h1>
     {% else %}
         <h1>{% trans "Create new data field" %}</h1>
     {% endif %}
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
-        {% bootstrap_field form.internal_name layout="control" %}
+        {% bootstrap_field form.question layout="control" %}
         {% bootstrap_field form.type layout="control" %}
         <div id="valid-number">
             {% bootstrap_field form.valid_number_min layout="control" %}
@@ -117,7 +117,9 @@
         {% if form.show_during_checkin %}
             {% bootstrap_field form.show_during_checkin layout="control" %}
         {% endif %}
-        {% bootstrap_field form.hidden layout="control" %}
+        {% if form.hidden %}
+            {% bootstrap_field form.hidden layout="control" %}
+        {% endif %}
         {% if form.print_on_invoice %}
             {% bootstrap_field form.print_on_invoice layout="control" %}
         {% endif %}
