@@ -46,6 +46,13 @@
     list-style: none;
     padding: 0;
     margin-bottom: 0;
+    li.events-group {
+      font-size: 12px;
+      margin: 2px 0;
+    }
+    li.events-group:not(:first-child) {
+      margin-top: 10px;
+    }
   }
   a.event {
     --status-bg-color: var(--pretix-brand-primary-tint-90);

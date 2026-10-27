@@ -38,6 +38,7 @@ import operator
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta
 from functools import reduce
+from itertools import groupby
 from urllib.parse import quote, urlencode
 from zoneinfo import ZoneInfo
 
@@ -721,7 +722,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, sales_channel, eve
 
 
 def sort_ev(e):
-    return e['time'] or time(0, 0, 0), str(e['event'].name)
+    return str(e['event'].name), e['time'] or time(0, 0, 0)
 
 
 def days_for_template(ebd, week, future_only=False):
@@ -733,7 +734,7 @@ def days_for_template(ebd, week, future_only=False):
             'day_formatted': date_format(day, day_format),
             'date': day,
             'today': day == now().astimezone(get_current_timezone()).date(),
-            'events': sorted(ebd.get(day), key=sort_ev) if day in ebd else []
+            'events': [(a, list(b)) for a, b in groupby(sorted(ebd.get(day), key=sort_ev) if day in ebd else [], key=lambda e: str(e["event"].name))],
         }
         for day in week.days()
         if not future_only or day >= now().astimezone(get_current_timezone()).date()
