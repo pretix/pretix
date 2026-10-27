@@ -2,7 +2,6 @@ import datetime
 import logging
 
 from django.contrib.auth.models import AnonymousUser
-from django.db.models import Max
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views.decorators.http import condition
@@ -129,15 +128,18 @@ class DeviceGetUpdatablePassesView(APIView):
             raise exceptions.NotFound(_("Unknown device library identifier."))
 
         passes = device.passes.filter(pass_type=pass_type_identifier)
-        if last_update := request.GET.get("previousLastUpdated"):
+        try:
+            last_update = datetime.datetime.fromtimestamp(int(request.GET.get("passesUpdatedSince", 0)), datetime.UTC)
             passes = passes.filter(
-                updated_at__gt=datetime.datetime.fromisoformat(last_update)
+                updated_at__gt=last_update
             )
+        except ValueError:
+            pass
 
         return Response(
             {
                 "serialNumbers": passes.values_list("serial_number", flat=True),
-                "lastUpdated": passes.aggregate(lu=Max("updated_at"))["lu"].isoformat(),
+                "lastUpdated": str(int(datetime.datetime.now(datetime.UTC).timestamp())),
             }
         )
 
