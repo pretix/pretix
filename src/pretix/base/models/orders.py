@@ -754,9 +754,8 @@ class Order(LockModel, LoggedModel):
         """
         Returns whether or not this order can be canceled by the user.
         """
-        from pretix.base.models.cancellation import Cancellation
-        res = Cancellation.evaluate(event=self.event, order=self, keep=set(),
-                                    check_ts=datetime.now(tz=ZoneInfo(self.event.settings.timezone)))
+        from ..services.cancellation import evaluate_cancellation
+        res = evaluate_cancellation(event=self.event, order=self, keep=set(), check_ts=time_machine_now())
         return res.cancellation_possible
 
     def propose_auto_refunds(self, amount: Decimal, payments: list=None):

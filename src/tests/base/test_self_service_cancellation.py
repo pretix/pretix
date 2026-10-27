@@ -30,14 +30,19 @@ from django.db.models import Prefetch
 from django.utils.timezone import now
 from django_scopes import scope
 
+from pretix.base.cancellation import (
+    CancellationCheck, PositionResult, ProcessResult,
+)
 from pretix.base.models import Checkin, Event, Order, OrderPosition, Organizer
 from pretix.base.models.cancellation import (
-    Cancellation, CancellationCheck, CancellationRule, CheckResult, Checks,
-    CheckTypes, FeeType, PositionCancellationRule, PositionResult,
-    ProcessCancellationRule, ProcessResult, RuleResult,
+    CheckResult, CheckTypes, FeeType, PositionCancellationRule,
+    ProcessCancellationRule, RuleResult,
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
-from pretix.base.services.orders import signal_listener_position_not_used
+from pretix.base.services.cancellation import (
+    Checks, _prefetch_order, collect_cancellation_checks,
+    evaluate_cancellation, signal_listener_position_not_used,
+)
 from pretix.helpers import ensure_no_queries
 
 
@@ -231,7 +236,7 @@ class TestPositionResult:
         assert pos_res.fee_value == fee
 
     def test_position_with_no_rule_results_does_not_raise(self):
-        # A position that has check results but no matching rule results at all
+        # A position that has check-results but no matching rule results at all
         # must not blow up min() on [].
         check_results = {1: [make_check_result(True)]}
         rule_results = {1: []}
@@ -337,7 +342,7 @@ class TestCancellationRule:
             return [("", res) for res in received]
 
         with raises:
-            checks = CancellationRule.collect_checks(event=event, send_fn=send_fn)
+            checks = collect_cancellation_checks(event=event, send_fn=send_fn)
 
         for pos in process_checks:
             assert received[pos] in checks.process
@@ -351,7 +356,7 @@ class TestCancellationRule:
         def test_prefetch_no_checks_collected(self, event, order):
             checks = Checks(position=[], process=[])
             with scope(organizer=event.organizer):
-                prefetched_order = CancellationRule.prefetch_order(event, order, checks)
+                prefetched_order = _prefetch_order(event, order, checks)
                 assert prefetched_order.id == order.id
 
         @pytest.mark.django_db
@@ -368,7 +373,7 @@ class TestCancellationRule:
             )
 
             with scope(organizer=event.organizer):
-                prefetched_order = CancellationRule.prefetch_order(event, order, checks)
+                prefetched_order = _prefetch_order(event, order, checks)
                 assert prefetched_order.id == order.id
 
     class TestChecks:
@@ -380,7 +385,7 @@ class TestCancellationRule:
             keep = set()
 
             with scope(organizer=event.organizer):
-                prefetched_order = CancellationRule.prefetch_order(event, order, checks)
+                prefetched_order = _prefetch_order(event, order, checks)
                 with ensure_no_queries():
                     result = position_not_used_check.evaluate(prefetched_order, keep, order_position,
                                                               datetime.now(tz=UTC))
@@ -391,7 +396,7 @@ class TestCancellationRule:
                     position=order_position,
                     successful=True
                 )
-                prefetched_order = CancellationRule.prefetch_order(event, order, checks)
+                prefetched_order = _prefetch_order(event, order, checks)
 
                 with ensure_no_queries():
                     result = position_not_used_check.evaluate(prefetched_order, keep, order_position,
@@ -717,7 +722,7 @@ class TestCancellationRule:
                                                    allowed_until=RelativeDateWrapper(reference_ts - timedelta(days=1)))
 
             with scope(organizer=event.organizer):
-                cancellation = Cancellation.evaluate(event, order, keep=set(), check_ts=check_ts)
+                cancellation = evaluate_cancellation(event, order, keep=set(), check_ts=check_ts)
 
             assert cancellation.cancellation_possible is True
 
