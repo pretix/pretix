@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-10-21 19:00+0000\n"
-"Last-Translator: Daniel Jaraud <acomv41@yahoo.com>\n"
+"PO-Revision-Date: 2026-10-27 17:00+0000\n"
+"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
 "fr/>\n"
 "Language: fr\n"
@@ -1877,7 +1877,7 @@ msgstr "Catégorie de produit"
 #: pretix/control/forms/organizer.py
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 msgid "Internal name"
-msgstr "Commentaire interne"
+msgstr "Nom interne"
 
 #: pretix/base/exporters/items.py pretix/base/models/items.py
 msgid "Item name"
@@ -3839,7 +3839,7 @@ msgstr "Plusieurs produits correspondants ont été trouvés."
 #: pretix/base/models/items.py pretix/base/models/vouchers.py
 #: pretix/base/models/waitinglist.py
 msgid "Product variation"
-msgstr "Variation du produit"
+msgstr "Variantes du produit"
 
 #: pretix/base/modelimport_orders.py
 msgid "The variation can be specified by its internal ID or full name."
@@ -3977,7 +3977,7 @@ msgstr "Un bon de réduction avec ce code existe déjà."
 #: pretix/base/models/vouchers.py pretix/control/views/vouchers.py
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
 msgid "Maximum usages"
-msgstr "Utilisations maximales"
+msgstr "Nombre maximal d'utilisations"
 
 #: pretix/base/modelimport_vouchers.py
 msgid "The maximum number of usages must be set."
@@ -3998,7 +3998,7 @@ msgstr "Réserver un billet à partir du quota"
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 msgid "Allow to bypass quota"
-msgstr "Permettre de contourner le quota"
+msgstr "Autoriser le dépassement du quota"
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
@@ -4006,7 +4006,7 @@ msgstr "Permettre de contourner le quota"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 #: pretix/control/views/vouchers.py
 msgid "Price effect"
-msgstr "Effet prix"
+msgstr "Effet de prix"
 
 #: pretix/base/modelimport_vouchers.py
 #, python-brace-format
@@ -4017,7 +4017,7 @@ msgstr ""
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 msgid "Voucher value"
-msgstr "Valeur du bon"
+msgstr "Valeur du bon d'achat"
 
 #: pretix/base/modelimport_vouchers.py
 msgid "It is pointless to set a value without a price effect."
@@ -4062,7 +4062,7 @@ msgstr "Balise"
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 msgid "Shows hidden products that match this voucher"
-msgstr "Affiche les produits cachés qui correspondent à ce bon"
+msgstr "Affiche les produits masqués correspondant à ce bon de réduction"
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 msgid "Offer all add-on products for free when redeeming this voucher"
@@ -4948,7 +4948,7 @@ msgstr "Destinataires supplémentaires (copie cachée)"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/models.py
 msgid "Subject"
-msgstr "Sujet"
+msgstr "Objet"
 
 #: pretix/base/models/exports.py pretix/control/forms/orders.py
 #: pretix/control/forms/vouchers.py pretix/plugins/sendmail/forms.py
@@ -7043,8 +7043,8 @@ msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
-"S'il est activé, le détenteur de ce code promotionnel peut acheter des "
-"billets, même s'il n'en reste plus."
+"Si cette option est activée, le détenteur de ce code promotionnel peut "
+"acheter des billets, même s'il n'y en a plus en stock."
 
 #: pretix/base/models/vouchers.py pretix/control/forms/vouchers.py
 msgid ""
@@ -7059,12 +7059,14 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py
 msgid "This variation of the product select above is being used."
-msgstr "Cette variante du produit choisi ci-dessus est utilisée."
+msgstr "C'est cette variante du produit sélectionné ci-dessus qui est utilisée."
 
 #: pretix/base/models/vouchers.py
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
-msgstr "Si activé, le bon est valable pour tout produit concerné par ce quota."
+msgstr ""
+"Si cette option est activée, le bon d'achat est valable pour tout produit "
+"concerné par ce quota."
 
 #: pretix/base/models/vouchers.py
 msgid "Specific seat"
@@ -7076,9 +7078,9 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
-"Vous pouvez utiliser cette zone pour regrouper plusieurs pièces "
-"justificatives. Si vous saisissez la même valeur pour plusieurs bons, vous "
-"pouvez obtenir des statistiques sur le nombre de bons échangés, etc."
+"Ce champ vous permet de regrouper plusieurs bons. Si vous saisissez la même "
+"valeur pour plusieurs bons, vous pourrez obtenir des statistiques sur le "
+"nombre de bons utilisés, etc."
 
 #: pretix/base/models/vouchers.py pretix/base/permissions.py
 #: pretix/control/navigation.py
@@ -15142,13 +15144,13 @@ msgstr "Suivi dû"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 #: pretix/plugins/sendmail/models.py
 msgid "All products"
-msgstr "Tous les articles"
+msgstr "Tous les produits"
 
 #: pretix/control/forms/filter.py pretix/control/forms/vouchers.py
 #: pretix/control/views/typeahead.py
 #, python-brace-format
 msgid "{product} – Any variation"
-msgstr "{product} - Toute les variantes"
+msgstr "{product} – N'importe quelle variante"
 
 #: pretix/control/forms/filter.py pretix/control/forms/orders.py
 msgctxt "subevent"
@@ -15414,7 +15416,7 @@ msgstr "Chercher un bon de réduction"
 #: pretix/control/views/typeahead.py pretix/control/views/vouchers.py
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
-msgstr "Tout produit dans le quota \"{quota}\""
+msgstr "Tout produit relevant du contingent « {quota} »"
 
 #: pretix/control/forms/filter.py
 msgid "Refund status"
@@ -17078,15 +17080,15 @@ msgstr "ID de siège spécifique"
 
 #: pretix/control/forms/vouchers.py pretix/presale/forms/waitinglist.py
 msgid "Invalid product selected."
-msgstr "Produit non valide sélectionné."
+msgstr "Produit sélectionné non valide."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "The voucher only matches hidden products but you have not selected that it "
 "should show them."
 msgstr ""
-"Le bon ne correspond qu’aux produits cachés, mais vous n’avez pas "
-"sélectionné qu’il les affiche."
+"Le bon de réduction ne s'applique qu'aux produits masqués, mais vous n'avez "
+"pas choisi de les afficher."
 
 #: pretix/control/forms/vouchers.py
 #, python-format
@@ -28753,8 +28755,8 @@ msgstr "La nouvelle liste d'enregistrement a été créée."
 #: pretix/plugins/stripe/views.py pretix/plugins/ticketoutputpdf/views.py
 msgid "We could not save your changes. See below for details."
 msgstr ""
-"Nous n'avons pas pu enregistrer vos modifications. Voir ci-dessous pour plus "
-"de détails."
+"Nous n'avons pas pu enregistrer vos modifications. Vous trouverez ci-dessous "
+"plus de détails."
 
 #: pretix/control/views/checkin.py
 msgid "The requested list does not exist."
