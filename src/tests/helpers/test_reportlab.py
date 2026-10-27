@@ -20,8 +20,12 @@
 # <https://www.gnu.org/licenses/>.
 #
 import pytest
+from django.contrib.staticfiles import finders
 from django.core.exceptions import SuspiciousFileOperation
+from reportlab.pdfbase import pdfmetrics
 from reportlab.platypus import Paragraph
+
+from pretix.helpers.reportlab import LazyTTFont
 
 
 def test_http_access_disabled(monkeypatch):
@@ -48,3 +52,14 @@ def test_file_access_disabled_direct(monkeypatch):
         Paragraph(
             '<img src="/etc/passwd" />',
         )
+
+
+@pytest.mark.limit_memory("50KB")  # loading Open Sans allocates >300KB
+def test_lazy_font_loading_does_not_load_immediately(monkeypatch):
+    @property
+    def name_prop(self):
+        return 'CachedName'
+
+    monkeypatch.setattr('pretix.helpers.reportlab.LazyTTFontFace.name', name_prop)
+    font = LazyTTFont('Open Sans', finders.find('fonts/OpenSans-Regular.ttf'))
+    pdfmetrics.registerFont(font)
