@@ -4,6 +4,10 @@
 Data field options
 ================
 
+As with data fields, data field options exist on two resource paths, depending on whether
+the data field is attached to orders or order positions. Therefore, each endpoint below has two
+different URLs.
+
 Resource description
 --------------------
 
@@ -26,6 +30,7 @@ Endpoints
 ---------
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/datafields/(datafield)/options/
+              /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(datafield)/options/
 
    Returns a list of all options for a given data field.
 
@@ -82,6 +87,7 @@ Endpoints
    :statuscode 403: The requested organizer/event/data field does not exist **or** you have no permission to view this resource.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/datafields/(datafield)/options/(id)/
+              /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(datafield)/options/(id)/
 
    Returns information on one option, identified by its ID.
 
@@ -117,6 +123,7 @@ Endpoints
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/datafields/(datafield)/options/
+               /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(datafield)/options/
 
    Creates a new option
 
@@ -159,6 +166,7 @@ Endpoints
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/datafields/(datafield)/options/(id)/
+                /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(datafield)/options/(id)/
 
    Update an option. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
@@ -205,6 +213,7 @@ Endpoints
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
 
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/datafields/(datafield)/options/(id)/
+                 /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(datafield)/options/(id)/
 
    Delete an option.
 
