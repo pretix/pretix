@@ -278,7 +278,7 @@
                     </form>
                     {% endif %}
                     {{ line.count }}
-                    {% if editable %}
+                    {% if editable and cart.itemcount < max_items %}
                     <form action="{% eventurl event "presale:event.cart.add" cart_namespace=cart_namespace|default_if_none:"" %}"
                             data-asynctask-headline="{% trans "We're trying to reserve another one for you!" %}"
                             data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"

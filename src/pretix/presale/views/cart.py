@@ -668,8 +668,11 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        voucher_usage_left = self.voucher.max_usages - self.voucher.redeemed
+
         context['voucher'] = self.voucher
-        context['max_choices'] = self.voucher.max_usages - self.voucher.redeemed
+        context['max_choices'] = voucher_usage_left
+        context['max_items'] = min(voucher_usage_left, self.request.event.max_items_per_order)
 
         # Fetch all items
         items, display_add_to_cart = prepare_item_list_for_shop(
