@@ -323,4 +323,4 @@ class UnixTimestamp(Func):
         return self.as_sql(compiler, connection, template="EXTRACT(epoch from %(expressions)s)")
 
     def as_sqlite(self, compiler, connection):
-        return self.as_sql(compiler, connection, function="unixepoch")
+        return self.as_sql(compiler, connection, template="CAST(strftime('%%%%s', datetime(%(expressions)s)) AS INT)")
