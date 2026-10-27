@@ -450,7 +450,7 @@ class CartApplyVoucher(EventViewMixin, CartActionMixin, AsyncAction, View):
 
             if not self.request.event.vouchers.filter(code__iexact=code):
                 try:
-                    gc = self.request.event.organizer.accepted_gift_cards.get(secret=code)
+                    gc = self.request.organizer.accepted_gift_cards.get(secret=code)
                     gcp = GiftCardPayment(self.request.event)
                     if not gcp.is_enabled or not gcp.is_allowed(self.request, Decimal("1.00")):
                         raise ValidationError(error_messages['voucher_invalid'])

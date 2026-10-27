@@ -35,7 +35,9 @@ from tests.plugins.stripe.test_checkout import apple_domain_create
 from tests.plugins.stripe.test_provider import MockedCharge
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition, Team
+from pretix.base.models.giftcards import GiftCard
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
+from pretix.base.models.organizer import Organizer
 
 
 @pytest.fixture
@@ -781,6 +783,28 @@ def test_payment_create_pending(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_payment_create_giftcard(token_client, organizer, event, order):
+    djmail.outbox = []
+    with scopes_disabled():
+        p_before = order.payments.count()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={
+        'provider': 'giftcard',
+        'state': 'confirmed',
+        'amount': order.total,
+        'info': {
+            'foo': 'bar'
+        }
+    })
+    assert resp.status_code == 400
+    order.refresh_from_db()
+    with scopes_disabled():
+        assert order.payments.count() == p_before
+    assert order.status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
 def test_payment_confirm(token_client, organizer, event, order):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/2/confirm/'.format(
         organizer.slug, event.slug, order.code
@@ -873,6 +897,24 @@ def test_payment_refund_fail(token_client, organizer, event, order, monkeypatch)
     assert resp.status_code == 400
     assert resp.data == {'detail': 'Invalid state of payment.'}
 
+    with scopes_disabled():
+        o2 = Organizer.objects.create(name='Dummy 2', slug='dummy2', plugins='pretix.plugins.banktransfer')
+        gc = GiftCard.objects.create(issuer=o2, currency='EUR')
+        p1 = order.payments.create(
+            provider='giftcard',
+            state='confirmed',
+            amount=Decimal('23.00'),
+            payment_date=order.datetime,
+            info=json.dumps({"gift_card": gc.pk})
+        )
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/{}/refund/'.format(
+        organizer.slug, event.slug, order.code, p1.pk
+    ), format='json', data={})
+    assert resp.status_code == 400
+    assert resp.data == {'detail': 'External error: Gift card not found.'}
+    p1.refresh_from_db()
+    assert p1.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+
 
 @pytest.mark.django_db
 def test_payment_refund_success(token_client, organizer, event, order, monkeypatch):
@@ -915,6 +957,22 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
         assert r.comment == "Foo"
+
+    with scopes_disabled():
+        gc = GiftCard.objects.create(issuer=organizer, currency='EUR')
+        p1 = order.payments.create(
+            provider='giftcard',
+            state='confirmed',
+            amount=Decimal('23.00'),
+            payment_date=order.datetime,
+            info=json.dumps({"gift_card": gc.pk})
+        )
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/{}/refund/'.format(
+        organizer.slug, event.slug, order.code, p1.pk
+    ), format='json', data={})
+    assert resp.status_code == 200
+    p1.refresh_from_db()
+    assert p1.state == OrderPayment.PAYMENT_STATE_REFUNDED
 
 
 @pytest.mark.django_db
@@ -1933,6 +1991,42 @@ def test_refund_create_invalid_payment(token_client, organizer, event, order):
         ), format='json', data=res
     )
     assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_refund_create_giftcard(token_client, organizer, event, order):
+    with scopes_disabled():
+        o2 = Organizer.objects.create(name='Dummy 2', slug='dummy2', plugins='pretix.plugins.banktransfer')
+        gc = GiftCard.objects.create(issuer=o2, currency='EUR')
+        p1 = order.payments.create(
+            provider='giftcard',
+            state='confirmed',
+            amount=Decimal('23.00'),
+            payment_date=order.datetime,
+            info=json.dumps({"gift_card": gc.pk})
+        )
+    with scopes_disabled():
+        r_before = order.refunds.count()
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/refunds/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            "state": "created",
+            "provider": "giftcard",
+            "amount": "23.00",
+            "source": "admin",
+            "payment": p1.pk,
+            "info": {
+                "gift_card": gc.pk,
+            }
+        }
+    )
+    assert resp.status_code == 400
+    with scopes_disabled():
+        assert order.refunds.count() == r_before
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PENDING
 
 
 @pytest.mark.django_db

@@ -1510,42 +1510,37 @@ class GiftCardPayment(BasePaymentProvider):
         })
 
     def refund_control_render(self, request, refund) -> str:
-        from .models import GiftCard
-
         if 'gift_card' in refund.info_data:
-            gc = GiftCard.objects.get(pk=refund.info_data.get('gift_card'))
             template = get_template('pretixcontrol/giftcards/payment.html')
-
             ctx = {
                 'request': request,
                 'event': self.event,
-                'gc': gc,
             }
+            try:
+                gc = self.event.organizer.accepted_gift_cards.get(pk=refund.info_data.get('gift_card'))
+                ctx['gc'] = gc
+            except GiftCard.DoesNotExist:
+                pass
             return template.render(ctx)
 
     def payment_control_render(self, request, payment) -> str:
-        from .models import GiftCard
+        template = get_template('pretixcontrol/giftcards/payment.html')
+        ctx = {
+            'request': request,
+            'event': self.event,
+            **({'error': payment.info_data[
+                'error']} if 'error' in payment.info_data else {}),
+            **({'gift_card_secret': payment.info_data[
+                'gift_card_secret']} if 'gift_card_secret' in payment.info_data else {})
+        }
 
-        if any(key in payment.info_data for key in ('gift_card', 'error')):
-            template = get_template('pretixcontrol/giftcards/payment.html')
-            ctx = {
-                'request': request,
-                'event': self.event,
-                **({'error': payment.info_data[
-                    'error']} if 'error' in payment.info_data else {}),
-                **({'gift_card_secret': payment.info_data[
-                    'gift_card_secret']} if 'gift_card_secret' in payment.info_data else {})
-            }
+        try:
+            ctx['gc'] = self.event.organizer.accepted_gift_cards.get(pk=payment.info_data.get('gift_card'))
+        except GiftCard.DoesNotExist:
+            pass
 
-            try:
-                gc = GiftCard.objects.get(pk=payment.info_data.get('gift_card'))
-                ctx = {
-                    'gc': gc,
-                }
-            except GiftCard.DoesNotExist:
-                pass
-            finally:
-                return template.render(ctx)
+        if any(key in ctx for key in ('gc', 'gift_card_secret', 'error')):
+            return template.render(ctx)
 
     def payment_control_render_short(self, payment: OrderPayment) -> str:
         d = payment.info_data
@@ -1555,10 +1550,9 @@ class GiftCardPayment(BasePaymentProvider):
         d = refund.info_data
         return d.get('gift_card_secret', d.get('gift_card_code', self.public_name))
 
-    def api_payment_details(self, payment: OrderPayment):
-        from .models import GiftCard
+    def api_payment_details(self, payment: OrderPayment | OrderRefund):
         try:
-            gc = GiftCard.objects.get(pk=payment.info_data.get('gift_card'))
+            gc = self.event.organizer.accepted_gift_cards.get(pk=payment.info_data.get('gift_card'))
         except GiftCard.DoesNotExist:
             return {
                 **({'error': payment.info_data[
@@ -1681,7 +1675,19 @@ class GiftCardPayment(BasePaymentProvider):
     @transaction.atomic()
     def execute_refund(self, refund: OrderRefund):
         from .models import GiftCard
-        gc = GiftCard.objects.get(pk=refund.info_data.get('gift_card') or refund.payment.info_data.get('gift_card'))
+        try:
+            gc = self.event.organizer.accepted_gift_cards.get(
+                pk=refund.info_data.get('gift_card') or refund.payment.info_data.get('gift_card'),
+                currency=self.event.currency
+            )
+        except GiftCard.DoesNotExist:
+            raise PaymentException(_("Gift card not found."))
+
+        if gc.testmode != refund.order.testmode:
+            raise PaymentException(_("Only test gift card can be used in test mode and vice versa."))
+        if gc.expires and gc.expires < time_machine_now():
+            raise PaymentException(_("This gift card is no longer valid."))
+
         trans = gc.transactions.create(
             value=refund.amount,
             order=refund.order,

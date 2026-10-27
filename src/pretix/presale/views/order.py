@@ -373,7 +373,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
         ctx['user_cancel_allowed'] = self.order.user_cancel_allowed
         for r in ctx['refunds']:
             if r.provider == 'giftcard':
-                gc = GiftCard.objects.get(pk=r.info_data.get('gift_card'))
+                gc = self.request.organizer.accepted_gift_cards.get(pk=r.info_data.get('gift_card'))
                 r.giftcard = gc
 
         return ctx
