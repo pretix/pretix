@@ -261,7 +261,7 @@ class SubEventBulkEditForm(I18nModelForm):
                     cval = self.cleaned_data[k]
                     if cval is None:
                         newval = None
-                        if not self._meta.model._meta.get_field(target_key, '').null:
+                        if not self._meta.model._meta.get_field(target_key).null:
                             continue
                     else:
                         newval = cval.datetime(obj)
