@@ -19,14 +19,17 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import tempfile
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q, constraints
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
-from django_scopes import ScopedManager
+from django_scopes import ScopedManager, scopes_disabled
 
 from pretix.base.models import LoggedModel, OrderPosition
+from pretix.base.models.event import Event
 
 
 class WalletLayout(LoggedModel):
@@ -112,6 +115,32 @@ class WalletLayoutFileSetting(models.Model):
 class AppleWalletDevice(models.Model):
     device_library_id = models.CharField()
     push_token = models.CharField()
+
+    def send_update_apns(self):
+        import ssl
+        import httpx
+        known_certs = set()
+
+        for event in self.passes.values_list("order_position__order__event", flat=True).distinct():
+            with scopes_disabled():
+                event = Event.objects.get(pk=event)
+
+            cert = event.settings.wallet_apple_certificate.read()
+            key = event.settings.wallet_apple_key.read()
+            if cert in known_certs:
+                continue
+
+            ctx = ssl.create_default_context()
+            with tempfile.NamedTemporaryFile("w") as certfile, tempfile.NamedTemporaryFile("w") as keyfile:
+                certfile.write(cert)
+                certfile.flush()
+                keyfile.write(key)
+                keyfile.flush()
+                ctx.load_cert_chain(certfile=certfile.name, keyfile=keyfile.name)
+
+            client = httpx.Client(verify=ctx, http1=False, http2=True)
+            client.post(f'https://api.push.apple.com/3/device/{self.push_token}', json={})
+            known_certs.add(cert)
 
 
 def secret_default():
