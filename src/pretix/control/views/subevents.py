@@ -1620,7 +1620,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         )
 
         for k in fields:
-            existing_values = list(qs.order_by(k).values(k).annotate(c=Count('*')))
+            existing_values = list(qs.order_by(k).values(k).distinct())
             if len(existing_values) == 1:
                 initial[k] = existing_values[0][k]
             elif len(existing_values) > 1:
@@ -1628,9 +1628,9 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                 initial[k] = None
 
         for k in rel_fields:
-            existing_fixed_values = list(qs.order_by(k).values(k).annotate(c=Count('*')))
-            existing_rel_days_values = list(qs.order_by(f'{k}_rel_days').values(f'{k}_rel_days').annotate(c=Count("*")))
-            existing_rel_min_values = list(qs.order_by(f'{k}_rel_min').values(f'{k}_rel_min').annotate(c=Count("*")))
+            existing_fixed_values = list(qs.order_by(k).values(k).distinct())
+            existing_rel_days_values = list(qs.order_by(f'{k}_rel_days').values(f'{k}_rel_days').distinct())
+            existing_rel_min_values = list(qs.order_by(f'{k}_rel_min').values(f'{k}_rel_min').distinct())
 
             if len(existing_fixed_values) == 1:
                 if existing_fixed_values[0][k]:
