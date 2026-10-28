@@ -1393,6 +1393,61 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             assert a.item == self.workshop2
             assert a.variation == self.workshop2a
 
+    def test_quota_sold_out_change_hide_sold_out(self):
+        self.event.settings.hide_sold_out = True
+        self.workshopquota.size = 1
+        self.workshopquota.items.remove(self.workshop2)
+        self.workshopquota.variations.remove(self.workshop2a)
+        self.workshopquota.variations.remove(self.workshop2b)
+        self.workshopquota.save()
+        self.workshopquota2 = Quota.objects.create(event=self.event, name='Workshop 2', size=5)
+        self.workshopquota2.items.add(self.workshop2)
+        self.workshopquota2.variations.add(self.workshop2a)
+        self.workshopquota2.variations.add(self.workshop2b)
+
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.total += Decimal("12")
+            self.order.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')[0].attrs['checked']
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert 'alert-danger' not in response.content.decode()
+
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        assert 'alert-success' in response.content.decode()
+
+        with scopes_disabled():
+            a = self.ticket_pos.addons.get(canceled=False)
+            assert a.item == self.workshop2
+            assert a.variation == self.workshop2a
+
     def _assert_ws2a_not_allowed(self):
         response = self.client.get(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
