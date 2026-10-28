@@ -908,7 +908,7 @@ def test_payment_refund_fail(token_client, organizer, event, order, monkeypatch)
             info=json.dumps({"gift_card": gc.pk})
         )
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/{}/refund/'.format(
-        organizer.slug, event.slug, order.code, p1.pk
+        organizer.slug, event.slug, order.code, p1.local_id
     ), format='json', data={})
     assert resp.status_code == 400
     assert resp.data == {'detail': 'External error: Gift card not found.'}
@@ -968,7 +968,7 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
             info=json.dumps({"gift_card": gc.pk})
         )
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/{}/refund/'.format(
-        organizer.slug, event.slug, order.code, p1.pk
+        organizer.slug, event.slug, order.code, p1.local_id
     ), format='json', data={})
     assert resp.status_code == 200
     p1.refresh_from_db()
