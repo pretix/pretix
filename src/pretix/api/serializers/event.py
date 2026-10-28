@@ -822,6 +822,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'invoice_address_not_asked_free',
         'invoice_show_payments',
         'invoice_reissue_after_modify',
+        'invoice_transmit_after_modify',
         'invoice_include_free',
         'invoice_generate',
         'invoice_generate_only_business',
