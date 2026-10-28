@@ -163,17 +163,17 @@ class LoggingMixin:
                 'secret',
             ]
 
-            def clean_dict_recursive(d):
+            def clean_recursive(d):
                 data = d
                 data_iterator = d.items() if isinstance(d, dict) else enumerate(d)
                 for k, v in data_iterator:
                     if v and any([sensitivekey in str(k) for sensitivekey in sensitivekeys]):
                         data[k] = "********"
                     elif isinstance(v, (list, dict)):
-                        data[k] = clean_dict_recursive(v)
+                        data[k] = clean_recursive(v)
                 return data
 
-            data = clean_dict_recursive(data)
+            data = clean_recursive(data)
 
             logentry.data = json.dumps(data, cls=CustomJSONEncoder, sort_keys=True)
         elif data:
