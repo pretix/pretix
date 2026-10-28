@@ -1308,7 +1308,8 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Automatically transmit cancellation and reissued invoice on address changes"),
             help_text=_("By default, the cancellation and the reissued invoice are not transmitted after a change "
-                        "from the customer. "),
+                        "from the customer. This option only affects transmission methods which do not enforce "
+                        "automatic transmission of invoices."),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_reissue_after_modify'}),
         )
     },
