@@ -1107,6 +1107,48 @@ class SubEventsTest(SoupTest):
             assert self.subevent1.date_to == datetime.datetime(2013, 12, 26, 17, 0, 0, tzinfo=datetime.timezone.utc)
             assert self.subevent2.date_to == datetime.datetime(2013, 12, 27, 17, 0, 0, tzinfo=datetime.timezone.utc)
 
+    def test_edit_bulk_rel(self):
+        with scopes_disabled():
+            self.subevent1.date_from = datetime.datetime(2013, 12, 26, 9, 0, 0, tzinfo=datetime.timezone.utc)
+            self.subevent1.presale_start = datetime.datetime(2013, 12, 16, 0, 0, 0, tzinfo=datetime.timezone.utc)
+            self.subevent1.presale_end = datetime.datetime(2013, 12, 25, 9, 0, 0, tzinfo=datetime.timezone.utc)
+            self.subevent1.save()
+            self.subevent2.date_from = datetime.datetime(2013, 10, 27, 11, 0, 0, tzinfo=datetime.timezone.utc)  # DST change is on 2013-10-27
+            self.subevent2.presale_start = datetime.datetime(2013, 10, 17, 0, 0, 0, tzinfo=datetime.timezone.utc)
+            self.subevent2.presale_end = datetime.datetime(2013, 10, 26, 11, 0, 0, tzinfo=datetime.timezone.utc)
+            self.subevent2.save()
+
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_edit', {
+            '__ALL': 'on',
+        }, follow=True)
+        fields = extract_form_fields(doc)
+        expected = {
+            'bulkedit-presale_start_rel_0': 'relative',
+            'bulkedit-presale_start_rel_2': '10',
+            'bulkedit-presale_start_rel_6': 'event__date_from',
+            'bulkedit-presale_start_rel_8': 'before',
+            'bulkedit-presale_end_rel_0': 'relative_minutes',
+            'bulkedit-presale_end_rel_3': 'event__date_from',
+            'bulkedit-presale_end_rel_5': '1440',
+            'bulkedit-presale_end_rel_7': 'before',
+        }
+        for k, v in expected.items():
+            assert k in fields
+            assert fields[k] == v
+
+        assert fields.get('bulkedit-presale_start_rel_4') != '10:00'
+        fields.update({
+            '_bulk': ['bulkeditpresale_start_rel'],
+            'bulkedit-presale_start_rel_4': '10:00',
+        })
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_edit', fields, follow=True)
+        assert doc.select(".alert-success")
+        with scopes_disabled():
+            self.subevent1.refresh_from_db()
+            self.subevent2.refresh_from_db()
+            assert self.subevent1.presale_start == datetime.datetime(2013, 12, 16, 10, 0, 0, tzinfo=datetime.timezone.utc)
+            assert self.subevent2.presale_start == datetime.datetime(2013, 10, 17, 10, 0, 0, tzinfo=datetime.timezone.utc)
+
     def test_edit_bulk_price(self):
         sei1 = SubEventItem.objects.create(subevent=self.subevent1, item=self.ticket, price=Decimal('4.00'))
         sei2 = SubEventItem.objects.create(subevent=self.subevent2, item=self.ticket, price=Decimal('4.00'))

@@ -85,6 +85,7 @@ from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
 from pretix.helpers import GroupConcat
 from pretix.helpers.compat import CompatDeleteView
+from pretix.helpers.database import UnixTimestamp
 from pretix.helpers.i18n import get_format_without_seconds
 from pretix.helpers.models import modelcopy
 
@@ -1583,21 +1584,6 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         mixed_values = set()
         qs = self.get_queryset()
 
-        qs = qs.annotate(
-            **{
-                # TODO: Once we're on Django 3.2, pass a tzinfo parameter
-                # Before Django 3.2, it uses the current timezone, which is hopefully fine
-                # as well in all cases we are concerned about
-                # See also: https://code.djangoproject.com/ticket/31948
-                k + '_day': TruncDate(k)
-                for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end')
-            },
-            **{
-                k + '_time': TruncTime(k)
-                for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end')
-            },
-        )
-
         fields = {
             'name',
             'location',
@@ -1611,18 +1597,72 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             'date_from_time',
             'date_to_day',
             'date_to_time',
-            'date_admission_day',
-            'date_admission_time',
-            'presale_start_day',
-            'presale_start_time',
-            'presale_end_day',
-            'presale_end_time',
         }
+        rel_fields = {'date_admission', 'presale_start', 'presale_end'}
+
+        qs = qs.annotate(
+            **{
+                k + '_day': TruncDate(k, tzinfo=self.request.event.timezone)
+                for k in ('date_from', 'date_to', 'date_admission')
+            },
+            **{
+                k + '_time': TruncTime(k, tzinfo=self.request.event.timezone)
+                for k in ('date_from', 'date_to', 'date_admission')
+            },
+            **{
+                k + '_rel_min': (UnixTimestamp('date_from') - UnixTimestamp(k)) / 60
+                for k in rel_fields
+            },
+            **{
+                k + '_rel_days': TruncDate('date_from', tzinfo=self.request.event.timezone) - TruncDate(k, tzinfo=self.request.event.timezone)
+                for k in rel_fields
+            }
+        )
+
         for k in fields:
-            existing_values = list(qs.order_by(k).values(k).annotate(c=Count('*')))
+            existing_values = list(qs.order_by(k).values(k).distinct())
             if len(existing_values) == 1:
                 initial[k] = existing_values[0][k]
             elif len(existing_values) > 1:
+                mixed_values.add(k)
+                initial[k] = None
+
+        for k in rel_fields:
+            existing_fixed_values = list(qs.order_by(k).values(k).distinct())
+            existing_rel_days_values = list(qs.order_by(f'{k}_rel_days').values(f'{k}_rel_days').distinct())
+            existing_rel_min_values = list(qs.order_by(f'{k}_rel_min').values(f'{k}_rel_min').distinct())
+
+            if len(existing_fixed_values) == 1:
+                if existing_fixed_values[0][k]:
+                    initial[f"{k}_rel"] = RelativeDateWrapper(existing_fixed_values[0][k])
+                else:
+                    initial[f"{k}_rel"] = None
+
+            elif len(existing_rel_min_values) == 1:
+                if rel_min := existing_rel_min_values[0][f'{k}_rel_min']:
+                    initial[f"{k}_rel"] = RelativeDateWrapper(RelativeDate(
+                        days=0,
+                        base_date_name='event__date_from',
+                        time=None,
+                        minutes=abs(rel_min),
+                        is_after=rel_min < 0,
+                    ))
+                else:
+                    initial[f"{k}_rel"] = None
+
+            elif len(existing_rel_days_values) == 1:
+                if rel_days := existing_rel_days_values[0][f'{k}_rel_days']:
+                    initial[f"{k}_rel"] = RelativeDateWrapper(RelativeDate(
+                        days=abs(rel_days.days),
+                        base_date_name='event__date_from',
+                        time=None,
+                        minutes=None,
+                        is_after=rel_days.days < 0,
+                    ))
+                else:
+                    initial[f"{k}_rel"] = None
+
+            elif len(existing_fixed_values) > 1 or len(existing_rel_days_values) > 1 or len(existing_rel_min_values) > 1:
                 mixed_values.add(k)
                 initial[k] = None
 
