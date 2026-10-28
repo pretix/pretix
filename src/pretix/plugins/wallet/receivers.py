@@ -24,6 +24,10 @@ from django.dispatch import receiver
 
 from pretix.base.signals import (
     register_global_settings, register_ticket_outputs,
+    order_canceled,
+    order_changed,
+    order_paid,
+    periodic_task,
 )
 from pretix.control.signals import item_forms
 
@@ -70,3 +74,9 @@ def control_item_forms(sender, request, item, **kwargs):
         )
     )
     return forms
+
+
+@receiver(periodic_task, dispatch_uid="wallet_periodic")
+def periodic_tasks(sender, **kwargs):
+    # TODO: cleanup
+    pass
