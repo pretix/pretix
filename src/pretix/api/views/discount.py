@@ -62,7 +62,7 @@ class DiscountViewSet(ConditionalListView, viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.request.event.discounts.prefetch_related(
-            'limit_sales_channels',
+            'limit_sales_channels', 'require_membership_types',
         )
 
     @transaction.atomic()
