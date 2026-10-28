@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 07:26+0000\n"
+"POT-Creation-Date: 2026-10-28 10:48+0000\n"
 "PO-Revision-Date: 2025-06-11 02:00+0000\n"
 "Last-Translator: Michael Dao <garudong89@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
@@ -198,11 +198,12 @@ msgid "Allowed Post Logout URIs list, space separated"
 msgstr "Danh sách URI Đăng xuất được cho phép, phân tách bằng dấu cách"
 
 #: pretix/api/models.py pretix/base/models/customers.py
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
 #: pretix/plugins/paypal2/payment.py
 msgid "Client ID"
 msgstr "ID người dùng"
 
-#: pretix/api/models.py
+#: pretix/api/models.py pretix/control/views/organizer.py
 msgid "Client secret"
 msgstr "Bí mật của người dùng"
 
@@ -7557,6 +7558,18 @@ msgstr "Thẻ quà tặng này không được người tổ chức sự kiện 
 #: pretix/base/payment.py
 msgid "This gift card was used in the meantime. Please try again."
 msgstr "Thẻ quà tặng này đã được sử dụng trong lúc này."
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid "Gift card code"
+msgid "Gift card not found."
+msgstr "Mã thẻ quà tặng"
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid "Only test gift cards can be used in test mode."
+msgid "Only test gift card can be used in test mode and vice versa."
+msgstr "Chỉ có thể sử dụng thẻ quà tặng thử nghiệm ở chế độ thử nghiệm."
 
 #: pretix/base/payment.py
 #, fuzzy
@@ -15850,7 +15863,7 @@ msgstr "Điện thoại"
 #, fuzzy
 #| msgid "Target URL"
 msgctxt "sso_oidc"
-msgid "Base URL"
+msgid "Base URL / issuer"
 msgstr "Đường link trỏ tới"
 
 #: pretix/control/forms/organizer.py
@@ -15926,9 +15939,21 @@ msgstr ""
 "Các tham số truy vấn tùy chọn, sẽ được thêm vào các cuộc gọi đến điểm cuối "
 "ủy quyền."
 
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgid "Target URL"
+msgid "Base URL / issuer"
+msgstr "Đường link trỏ tới"
+
 #: pretix/control/forms/organizer.py
 msgid "Invalidate old client secret and generate a new one"
 msgstr "Bí mật khách hàng cũ vô hiệu hóa và tạo một cái mới"
+
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgid "All entries"
+msgid "(will be generated)"
+msgstr "Tất cả các mục"
 
 #: pretix/control/forms/organizer.py
 msgid "Organizer short name"
@@ -17186,7 +17211,7 @@ msgstr "Nhà cung cấp SSO đã được thay đổi."
 msgid "The SSO provider has been deleted."
 msgstr "Nhà cung cấp SSO đã bị xóa."
 
-#: pretix/control/logdisplay.py
+#: pretix/control/logdisplay.py pretix/control/views/organizer.py
 msgid "The SSO client has been created."
 msgstr "Máy khách SSO đã được tạo."
 
@@ -25148,8 +25173,32 @@ msgstr "SSO Client:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
-msgid "Create a new SSO client"
+#, fuzzy
+#| msgid "Create a new SSO client"
+msgid "Create credentials for a new SSO client"
 msgstr "Tạo một ứng dụng khách SSO mới"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+msgid ""
+"After submitting this form, client credentials for your SSO client will be "
+"generated."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a "
+"href=\"%(url)s\">Using pretix as an SSO provider with external SSO clients</"
+"a>."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+msgid ""
+"\n"
+"    \t\"Login with pretix\" in external systems\n"
+"    "
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 msgid ""
@@ -25175,13 +25224,25 @@ msgid "This SSO provider cannot be deleted since it has already been used."
 msgstr "Nhà cung cấp SSO này không thể bị xóa vì nó đã được sử dụng."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
-msgid "SSO provider:"
-msgstr "Nhà cung cấp SSO:"
+#, fuzzy
+#| msgid "Delete SSO provider:"
+msgid "External SSO provider:"
+msgstr "Xóa nhà cung cấp SSO:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
-msgid "Create a new SSO provider"
+#, fuzzy
+#| msgid "Create a new SSO provider"
+msgid "Connect to an external SSO provider"
 msgstr "Tạo một nhà cung cấp SSO mới"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a href=\"%(url)s\" "
+"target=\"_blank\">Using pretix as an SSO client</a>."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #, fuzzy
@@ -25189,6 +25250,13 @@ msgstr "Tạo một nhà cung cấp SSO mới"
 msgctxt "sso"
 msgid "Redirection URL"
 msgstr "Đường link chuyển tiếp"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+msgid ""
+"\n"
+"    \tConnect to an external login provider\n"
+"    "
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 msgid ""
@@ -28571,17 +28639,9 @@ msgid "The provider has been created."
 msgstr "Nhà cung cấp đã được tạo ra."
 
 #: pretix/control/views/organizer.py
-#, fuzzy, python-brace-format
+#, fuzzy
 msgid ""
-"The SSO client has been created. Please note down the following client "
-"secret, it will never be shown again: {secret}"
-msgstr "Khách hàng SSO đã được tạo."
-
-#: pretix/control/views/organizer.py
-#, fuzzy, python-brace-format
-msgid ""
-"Your changes have been saved. Please note down the following client secret, "
-"it will never be shown again: {secret}"
+"Please note down the following client secret, it will never be shown again."
 msgstr "Những thay đổi của bạn đã được lưu."
 
 #: pretix/control/views/organizer.py
@@ -31005,6 +31065,16 @@ msgid "Restrict to products"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py
+msgctxt "sendmail_form"
+msgid ""
+"There may be multiple mails sent out to the same mail address if one order "
+"contains multiple attendee products for it, if you restrict to products "
+"while also restricting mails to attendees only. This is intended, as every "
+"one of those get linked to their own separate order page restricted to only "
+"that product."
+msgstr ""
+
+#: pretix/plugins/sendmail/forms.py
 msgid "Filter check-in status"
 msgstr "Trạng thái đăng ký lọc"
 
@@ -31875,6 +31945,10 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "MobilePay"
+msgstr ""
+
+#: pretix/plugins/stripe/payment.py
+msgid "Wero"
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py
@@ -35783,6 +35857,15 @@ msgstr "Viết quyền truy cập"
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#~ msgid "SSO provider:"
+#~ msgstr "Nhà cung cấp SSO:"
+
+#, fuzzy, python-brace-format
+#~ msgid ""
+#~ "The SSO client has been created. Please note down the following client "
+#~ "secret, it will never be shown again: {secret}"
+#~ msgstr "Khách hàng SSO đã được tạo."
 
 #~ msgid ""
 #~ "This option currently only affects the calendar of this event series, not "

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 07:26+0000\n"
+"POT-Creation-Date: 2026-10-28 10:48+0000\n"
 "PO-Revision-Date: 2026-10-26 23:00+0000\n"
 "Last-Translator: Tim <plicnetwork@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -202,11 +202,12 @@ msgstr ""
 "Lista de URIs después del cierre de sesión permitidas, separadas por espacios"
 
 #: pretix/api/models.py pretix/base/models/customers.py
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
 #: pretix/plugins/paypal2/payment.py
 msgid "Client ID"
 msgstr "ID de cliente"
 
-#: pretix/api/models.py
+#: pretix/api/models.py pretix/control/views/organizer.py
 msgid "Client secret"
 msgstr "Secreto de cliente"
 
@@ -7653,6 +7654,19 @@ msgstr "El organizador de este evento no acepta esta tarjeta de regalo."
 #: pretix/base/payment.py
 msgid "This gift card was used in the meantime. Please try again."
 msgstr "Mientras tanto, esta tarjeta de regalo se utilizó. Inténtalo de nuevo."
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid "Gift card code"
+msgid "Gift card not found."
+msgstr "Código de la tarjeta de regalo"
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid "Only test gift cards can be used in test mode."
+msgid "Only test gift card can be used in test mode and vice versa."
+msgstr ""
+"En el modo de prueba solo se pueden utilizar tarjetas regalo de prueba."
 
 #: pretix/base/payment.py
 msgid ""
@@ -16675,8 +16689,11 @@ msgid "Phone"
 msgstr "Teléfono"
 
 #: pretix/control/forms/organizer.py
+#, fuzzy
+#| msgctxt "sso_oidc"
+#| msgid "Base URL"
 msgctxt "sso_oidc"
-msgid "Base URL"
+msgid "Base URL / issuer"
 msgstr "URL de base"
 
 #: pretix/control/forms/organizer.py
@@ -16749,9 +16766,22 @@ msgstr ""
 "Parámetros de consulta opcionales, que se añadirán a las llamadas al "
 "endpoint de autorización. Introducir como: {example}"
 
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgctxt "sso_oidc"
+#| msgid "Base URL"
+msgid "Base URL / issuer"
+msgstr "URL de base"
+
 #: pretix/control/forms/organizer.py
 msgid "Invalidate old client secret and generate a new one"
 msgstr "Invalidar el antiguo secreto del cliente y generar uno nuevo"
+
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgid "will be retried"
+msgid "(will be generated)"
+msgstr "se volverá a intentar"
 
 #: pretix/control/forms/organizer.py
 msgid "Organizer short name"
@@ -18054,7 +18084,7 @@ msgstr "Se ha cambiado el proveedor SSO."
 msgid "The SSO provider has been deleted."
 msgstr "El proveedor de SSO ha sido eliminado."
 
-#: pretix/control/logdisplay.py
+#: pretix/control/logdisplay.py pretix/control/views/organizer.py
 msgid "The SSO client has been created."
 msgstr "El cliente SSO ha sido creado."
 
@@ -26374,8 +26404,32 @@ msgstr "Cliente SSO:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
-msgid "Create a new SSO client"
+#, fuzzy
+#| msgid "Create a new SSO client"
+msgid "Create credentials for a new SSO client"
 msgstr "Crear un nuevo cliente SSO"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+msgid ""
+"After submitting this form, client credentials for your SSO client will be "
+"generated."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a "
+"href=\"%(url)s\">Using pretix as an SSO provider with external SSO clients</"
+"a>."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+msgid ""
+"\n"
+"    \t\"Login with pretix\" in external systems\n"
+"    "
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 msgid ""
@@ -26400,18 +26454,37 @@ msgid "This SSO provider cannot be deleted since it has already been used."
 msgstr "Este proveedor de SSO no se puede eliminar porque ya se ha utilizado."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
-msgid "SSO provider:"
-msgstr "Proveedores de SSO:"
+#, fuzzy
+#| msgid "Delete SSO provider:"
+msgid "External SSO provider:"
+msgstr "Eliminar proveedor de SSO:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
-msgid "Create a new SSO provider"
+#, fuzzy
+#| msgid "Create a new SSO provider"
+msgid "Connect to an external SSO provider"
 msgstr "Agregar un nuevo proveedor SSO"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a href=\"%(url)s\" "
+"target=\"_blank\">Using pretix as an SSO client</a>."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 msgctxt "sso"
 msgid "Redirection URL"
 msgstr "URL de Redirección"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+msgid ""
+"\n"
+"    \tConnect to an external login provider\n"
+"    "
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 msgid ""
@@ -29952,19 +30025,12 @@ msgid "The provider has been created."
 msgstr "Se ha creado el proveedor."
 
 #: pretix/control/views/organizer.py
-#, python-brace-format
+#, fuzzy
+#| msgid ""
+#| "Your changes have been saved. Please note down the following client "
+#| "secret, it will never be shown again: {secret}"
 msgid ""
-"The SSO client has been created. Please note down the following client "
-"secret, it will never be shown again: {secret}"
-msgstr ""
-"Se ha creado el cliente SSO. Anote el siguiente secreto de cliente; no se "
-"volverá a mostrar nunca más: {secret}"
-
-#: pretix/control/views/organizer.py
-#, python-brace-format
-msgid ""
-"Your changes have been saved. Please note down the following client secret, "
-"it will never be shown again: {secret}"
+"Please note down the following client secret, it will never be shown again."
 msgstr ""
 "Se han guardado los cambios. Anote el siguiente secreto de cliente; no se "
 "volverá a mostrar nunca más: {secret}"
@@ -32512,6 +32578,16 @@ msgid "Restrict to products"
 msgstr "Restringir a productos"
 
 #: pretix/plugins/sendmail/forms.py
+msgctxt "sendmail_form"
+msgid ""
+"There may be multiple mails sent out to the same mail address if one order "
+"contains multiple attendee products for it, if you restrict to products "
+"while also restricting mails to attendees only. This is intended, as every "
+"one of those get linked to their own separate order page restricted to only "
+"that product."
+msgstr ""
+
+#: pretix/plugins/sendmail/forms.py
 msgid "Filter check-in status"
 msgstr "Filtrar el estado del check-in"
 
@@ -33419,6 +33495,10 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py
 msgid "MobilePay"
 msgstr "MobilePay"
+
+#: pretix/plugins/stripe/payment.py
+msgid "Wero"
+msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "Destination"
@@ -37478,6 +37558,17 @@ msgstr "Acceso de escritura"
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#~ msgid "SSO provider:"
+#~ msgstr "Proveedores de SSO:"
+
+#, python-brace-format
+#~ msgid ""
+#~ "The SSO client has been created. Please note down the following client "
+#~ "secret, it will never be shown again: {secret}"
+#~ msgstr ""
+#~ "Se ha creado el cliente SSO. Anote el siguiente secreto de cliente; no se "
+#~ "volverá a mostrar nunca más: {secret}"
 
 #~ msgid ""
 #~ "This option currently only affects the calendar of this event series, not "

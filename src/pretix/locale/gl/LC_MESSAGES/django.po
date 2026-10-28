@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 07:26+0000\n"
+"POT-Creation-Date: 2026-10-28 10:48+0000\n"
 "PO-Revision-Date: 2026-04-21 11:05+0000\n"
 "Last-Translator: Sandra Rial Pérez <sandrarial@gestiontickets.online>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -202,11 +202,12 @@ msgstr ""
 "espazos"
 
 #: pretix/api/models.py pretix/base/models/customers.py
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
 #: pretix/plugins/paypal2/payment.py
 msgid "Client ID"
 msgstr "ID Cliente"
 
-#: pretix/api/models.py
+#: pretix/api/models.py pretix/control/views/organizer.py
 msgid "Client secret"
 msgstr "Clave segreda"
 
@@ -7838,6 +7839,17 @@ msgstr "Este pedido aún no ha sido aprobado por el organizador del evento."
 msgid "This gift card was used in the meantime. Please try again."
 msgstr ""
 "Hubo un error al enviar el correo. Por favor, inténtelo de nuevo más tarde."
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid "Gift card code"
+msgid "Gift card not found."
+msgstr "Código da tarxeta de regalo"
+
+#: pretix/base/payment.py
+#, fuzzy
+msgid "Only test gift card can be used in test mode and vice versa."
+msgstr "Eliminar permanentemente todas las ordenes creadas en modo de prueba"
 
 #: pretix/base/payment.py
 #, fuzzy
@@ -17224,7 +17236,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Target URL"
 msgctxt "sso_oidc"
-msgid "Base URL"
+msgid "Base URL / issuer"
 msgstr "URL destino"
 
 #: pretix/control/forms/organizer.py
@@ -17300,10 +17312,21 @@ msgid ""
 "endpoint. Enter as: {example}"
 msgstr ""
 
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgid "Target URL"
+msgid "Base URL / issuer"
+msgstr "URL destino"
+
 #: pretix/control/forms/organizer.py
 #, fuzzy
 msgid "Invalidate old client secret and generate a new one"
 msgstr "Un nuevo secreto de cliente ha sido generado y ahora es efectivo."
+
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+msgid "(will be generated)"
+msgstr "Importe no reembolsado"
 
 #: pretix/control/forms/organizer.py
 #, fuzzy
@@ -18669,7 +18692,7 @@ msgstr "El orden ha sido cambiado."
 msgid "The SSO provider has been deleted."
 msgstr "La orden ha sido eliminada."
 
-#: pretix/control/logdisplay.py
+#: pretix/control/logdisplay.py pretix/control/views/organizer.py
 #, fuzzy
 msgid "The SSO client has been created."
 msgstr "El evento ha sido creado."
@@ -27472,8 +27495,30 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 #, fuzzy
-msgid "Create a new SSO client"
+msgid "Create credentials for a new SSO client"
 msgstr "Crear un nuevo evento"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+msgid ""
+"After submitting this form, client credentials for your SSO client will be "
+"generated."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a "
+"href=\"%(url)s\">Using pretix as an SSO provider with external SSO clients</"
+"a>."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+msgid ""
+"\n"
+"    \t\"Login with pretix\" in external systems\n"
+"    "
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 msgid ""
@@ -27499,14 +27544,22 @@ msgstr "Un recibo no se puede borrar si ya ha sido canjeado."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #, fuzzy
-msgid "SSO provider:"
-msgstr "Proveedor de pagos:"
+msgid "External SSO provider:"
+msgstr "Borrar producto"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 #, fuzzy
-msgid "Create a new SSO provider"
+msgid "Connect to an external SSO provider"
 msgstr "Crear un nuevo producto"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a href=\"%(url)s\" "
+"target=\"_blank\">Using pretix as an SSO client</a>."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #, fuzzy
@@ -27514,6 +27567,13 @@ msgstr "Crear un nuevo producto"
 msgctxt "sso"
 msgid "Redirection URL"
 msgstr "URI de redirección"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+msgid ""
+"\n"
+"    \tConnect to an external login provider\n"
+"    "
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 msgid ""
@@ -31323,20 +31383,12 @@ msgid "The provider has been created."
 msgstr "Se ha creado la orden."
 
 #: pretix/control/views/organizer.py
-#, python-brace-format
-msgid ""
-"The SSO client has been created. Please note down the following client "
-"secret, it will never be shown again: {secret}"
-msgstr ""
-
-#: pretix/control/views/organizer.py
-#, fuzzy, python-brace-format
+#, fuzzy
 #| msgid ""
 #| "Your changes have been saved. Please note that it can take a short period "
 #| "of time until your changes become active."
 msgid ""
-"Your changes have been saved. Please note down the following client secret, "
-"it will never be shown again: {secret}"
+"Please note down the following client secret, it will never be shown again."
 msgstr ""
 "Os seus cambios foron gardados. Por favor, teña en conta que pode tardar un "
 "curto período de tempo ata que os seus cambios actívense."
@@ -34064,6 +34116,16 @@ msgid "Restrict to products"
 msgstr "Restringir a países"
 
 #: pretix/plugins/sendmail/forms.py
+msgctxt "sendmail_form"
+msgid ""
+"There may be multiple mails sent out to the same mail address if one order "
+"contains multiple attendee products for it, if you restrict to products "
+"while also restricting mails to attendees only. This is intended, as every "
+"one of those get linked to their own separate order page restricted to only "
+"that product."
+msgstr ""
+
+#: pretix/plugins/sendmail/forms.py
 #, fuzzy
 msgid "Filter check-in status"
 msgstr "Estado del registro"
@@ -34988,6 +35050,10 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "MobilePay"
+msgstr ""
+
+#: pretix/plugins/stripe/payment.py
+msgid "Wero"
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py
@@ -39259,6 +39325,10 @@ msgstr "Acceso de escritura"
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr ""
+
+#, fuzzy
+#~ msgid "SSO provider:"
+#~ msgstr "Proveedor de pagos:"
 
 #, fuzzy
 #~ msgid "PayPal account"

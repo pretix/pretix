@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 07:26+0000\n"
+"POT-Creation-Date: 2026-10-28 10:48+0000\n"
 "PO-Revision-Date: 2026-06-01 09:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
@@ -198,11 +198,12 @@ msgid "Allowed Post Logout URIs list, space separated"
 msgstr "공백으로 구분된 허용된 로그아웃 후 URI 목록"
 
 #: pretix/api/models.py pretix/base/models/customers.py
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
 #: pretix/plugins/paypal2/payment.py
 msgid "Client ID"
 msgstr "클라이언트 ID"
 
-#: pretix/api/models.py
+#: pretix/api/models.py pretix/control/views/organizer.py
 msgid "Client secret"
 msgstr "클라이언트 Secret"
 
@@ -7500,6 +7501,18 @@ msgstr "이 기프트 카드는 이벤트 주최자가 받지 않습니다."
 #: pretix/base/payment.py
 msgid "This gift card was used in the meantime. Please try again."
 msgstr "이 기프트 카드는 그동안 사용되었습니다. 다시 시도해 주세요."
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid "Gift card code"
+msgid "Gift card not found."
+msgstr "선물 카드 코드"
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid "Only test gift cards can be used in test mode."
+msgid "Only test gift card can be used in test mode and vice versa."
+msgstr "테스트 모드에서는 테스트 기프트 카드만 사용할 수 있습니다."
 
 #: pretix/base/payment.py
 msgid ""
@@ -16266,8 +16279,11 @@ msgid "Phone"
 msgstr "전화"
 
 #: pretix/control/forms/organizer.py
+#, fuzzy
+#| msgctxt "sso_oidc"
+#| msgid "Base URL"
 msgctxt "sso_oidc"
-msgid "Base URL"
+msgid "Base URL / issuer"
 msgstr "기본 URL (웹사이트나 시스템에서의 기본 주소)"
 
 #: pretix/control/forms/organizer.py
@@ -16349,12 +16365,25 @@ msgstr ""
 "소를 의미)에 호출할 때 추가될 선택적 쿼리 파라미터입니다. 다음 형식으로 입력"
 "하세요: {example}"
 
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgctxt "sso_oidc"
+#| msgid "Base URL"
+msgid "Base URL / issuer"
+msgstr "기본 URL (웹사이트나 시스템에서의 기본 주소)"
+
 #: pretix/control/forms/organizer.py
 msgid "Invalidate old client secret and generate a new one"
 msgstr ""
 "기존 클라이언트 비밀을 무효화하고 새로운 클라이언트 비밀을 생성합니다 ( 이 작"
 "업은 보안이나 인증 정책에 따라 클라이언트의 인증 정보를 갱신하는 과정이고 이"
 "는 보안을 강화하고, 잠재적인 위험을 방지하는 중요한 절차입니다)"
+
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgid "All entries"
+msgid "(will be generated)"
+msgstr "모든 항목"
 
 #: pretix/control/forms/organizer.py
 msgid "Organizer short name"
@@ -17673,7 +17702,7 @@ msgstr "SSO 제공자가 변경되었습니다."
 msgid "The SSO provider has been deleted."
 msgstr "SSO 제공자가 삭제되었습니다."
 
-#: pretix/control/logdisplay.py
+#: pretix/control/logdisplay.py pretix/control/views/organizer.py
 msgid "The SSO client has been created."
 msgstr "SSO 클라이언트가 생성되었습니다."
 
@@ -25371,7 +25400,29 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
-msgid "Create a new SSO client"
+msgid "Create credentials for a new SSO client"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+msgid ""
+"After submitting this form, client credentials for your SSO client will be "
+"generated."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a "
+"href=\"%(url)s\">Using pretix as an SSO provider with external SSO clients</"
+"a>."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+msgid ""
+"\n"
+"    \t\"Login with pretix\" in external systems\n"
+"    "
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
@@ -25394,17 +25445,34 @@ msgid "This SSO provider cannot be deleted since it has already been used."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
-msgid "SSO provider:"
+#, fuzzy
+#| msgid "SSO provider"
+msgid "External SSO provider:"
+msgstr "단일 로그인 제공자"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+msgid "Connect to an external SSO provider"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
-msgid "Create a new SSO provider"
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a href=\"%(url)s\" "
+"target=\"_blank\">Using pretix as an SSO client</a>."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 msgctxt "sso"
 msgid "Redirection URL"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+msgid ""
+"\n"
+"    \tConnect to an external login provider\n"
+"    "
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
@@ -28551,17 +28619,8 @@ msgid "The provider has been created."
 msgstr ""
 
 #: pretix/control/views/organizer.py
-#, python-brace-format
 msgid ""
-"The SSO client has been created. Please note down the following client "
-"secret, it will never be shown again: {secret}"
-msgstr ""
-
-#: pretix/control/views/organizer.py
-#, python-brace-format
-msgid ""
-"Your changes have been saved. Please note down the following client secret, "
-"it will never be shown again: {secret}"
+"Please note down the following client secret, it will never be shown again."
 msgstr ""
 
 #: pretix/control/views/organizer.py
@@ -30840,6 +30899,16 @@ msgid "Restrict to products"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py
+msgctxt "sendmail_form"
+msgid ""
+"There may be multiple mails sent out to the same mail address if one order "
+"contains multiple attendee products for it, if you restrict to products "
+"while also restricting mails to attendees only. This is intended, as every "
+"one of those get linked to their own separate order page restricted to only "
+"that product."
+msgstr ""
+
+#: pretix/plugins/sendmail/forms.py
 msgid "Filter check-in status"
 msgstr ""
 
@@ -31642,6 +31711,10 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "MobilePay"
+msgstr ""
+
+#: pretix/plugins/stripe/payment.py
+msgid "Wero"
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py
