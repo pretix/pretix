@@ -2176,7 +2176,8 @@ class OrderChangeManager:
                 subevent=a.subevent,
                 voucher=None,
                 base_qs=Item.objects.filter(pk=a.item.pk),
-                allow_addons=True
+                allow_addons=True,
+                ignore_hide_sold_out_for_item_ids={a.item.pk}
             )
             if (not items) or items[0].current_unavailability_reason:
                 return False
