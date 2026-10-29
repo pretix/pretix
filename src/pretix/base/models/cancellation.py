@@ -25,7 +25,7 @@ from dataclasses import asdict
 from decimal import Decimal
 from typing import (
     TYPE_CHECKING, Any, Callable, ClassVar, Final, List, Literal, Optional,
-    Set,
+    Set, Union,
 )
 
 from django.core.exceptions import ValidationError
@@ -221,7 +221,7 @@ class CancellationRule(models.Model):
             date_field: RelativeDateWrapper,
             order: "Order",
             resolve_subevent: Callable[[Any], Any],
-    ) -> datetime.date | datetime.datetime:
+    ) -> Union[datetime.date, datetime.datetime]:
         reldate_type = date_field.choice
 
         if reldate_type == "date":
@@ -325,7 +325,7 @@ class PositionCancellationRule(CancellationRule):
 
     @staticmethod
     def _resolve_date_field(date_field: RelativeDateWrapper, order: "Order",
-                            position: "OrderPosition") -> datetime.date | datetime.datetime:
+                            position: "OrderPosition") -> Union[datetime.date, datetime.datetime]:
         return CancellationRule._resolve_date_field_common(
             date_field, order, resolve_subevent=lambda _reldate_type: position.subevent
         )
@@ -337,7 +337,7 @@ class PositionCancellationRule(CancellationRule):
         order = position.order
 
         for limit_name in ('allowed_until', 'except_after'):
-            deadline: RelativeDateWrapper | None = getattr(self, limit_name, None)
+            deadline: Optional[RelativeDateWrapper] = getattr(self, limit_name, None)
             if deadline is not None:
                 deadline_value = self._resolve_date_field(deadline, order, self.subevent_variant)
                 if check_ts <= deadline_value:
@@ -386,7 +386,7 @@ class PositionCancellationRule(CancellationRule):
         if self.fee_percentage_per_position and self.fee_absolute_per_position:
             raise NotImplementedError(
                 "Combination of fee_percentage_per position and fee_absolute_per_position is not valid")
-        elif self.fee_absolute_per_position != Decimal(0.00):
+        elif self.fee_absolute_per_position != Decimal("0"):
             return RuleResult.from_absolute_fee(
                 id=self.id,
                 partial_results=rule_check_results,
@@ -434,7 +434,7 @@ class ProcessCancellationRule(CancellationRule):
 
     @staticmethod
     def _resolve_date_field(date_field: RelativeDateWrapper, order: "Order",
-                            mode: Literal["EARLIEST", "LATEST"] | str) -> datetime.date | datetime.datetime:
+                            mode: Union[Literal["EARLIEST", "LATEST"], str]) -> Union[datetime.date, datetime.datetime]:
         if mode not in ('EARLIEST', 'LATEST'):
             raise ValidationError('Mode is invalid')
 
@@ -446,7 +446,7 @@ class ProcessCancellationRule(CancellationRule):
 
         def resolve_subevent(reldate_type):
             base_event = order.event
-            base_value: None | datetime.date = None
+            base_value: Optional[datetime.date] = None
             for pos in order.positions.all():
                 e = pos.subevent if pos.subevent else pos.event
                 value = getattr(e, reldate_type.attribute)
@@ -464,7 +464,7 @@ class ProcessCancellationRule(CancellationRule):
         check_results: List[CheckResult] = []
 
         for limit_name in ('allowed_until', 'except_after'):
-            deadline: RelativeDateWrapper | None = getattr(self, limit_name, None)
+            deadline: Optional[RelativeDateWrapper] = getattr(self, limit_name, None)
             if deadline is not None:
                 deadline_value = self._resolve_date_field(deadline, order, self.subevent_variant)
                 if check_ts <= deadline_value:
@@ -493,7 +493,7 @@ class ProcessCancellationRule(CancellationRule):
                 check_results.append(
                     CheckResult(
                         id=f"process_rule_{self.id}_{limit_name}",
-                        reason=_("No {limit_name} limit defined".format(limit_name=limit_name)),
+                        reason=_("No {limit_name} limit defined").format(limit_name=limit_name),
                         cancellation_possible=True
                     )
                 )

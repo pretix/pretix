@@ -26,11 +26,10 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import (
     TYPE_CHECKING, Callable, Dict, List, Literal, NewType, Optional, Protocol,
-    Set, TypeAlias, cast,
+    Set, Tuple, TypeAlias, Union, cast,
 )
 
 from django.core.exceptions import ValidationError
-from django.db import models
 from django.db.models import Prefetch
 from django.utils.translation import gettext_lazy as _
 
@@ -86,15 +85,22 @@ When a customer triggers a self service cancellation, we will:
 
 PositionSet: TypeAlias = Set["OrderPosition"]
 
+CheckType = Literal["position", "process"]
 
-class CheckTypes(models.TextChoices):
+
+class CheckTypes:
     """
     Position checks are applied to each position individually, ensuring that cancellation of this position doesn't
     break any business logic.
-    Process checks are applied to the cancellation request at a whole.
+    Process checks are applied to the cancellation request as a whole.
     """
-    POSITION = "position", _("Order Position Cancellation Check")
-    PROCESS = "process", _("Cancellation Process Check")
+    POSITION: CheckType = "position"
+    PROCESS: CheckType = "process"
+
+    CHECK_TYPE_CHOICES: Tuple[Tuple[CheckType, str], ...] = (
+        (POSITION, _("Order Position Cancellation Check")),
+        (PROCESS, _("Cancellation Process Check")),
+    )
 
 
 class PositionCheckFn(Protocol):
@@ -138,12 +144,12 @@ class CancellationCheck:
     """
     id: str
     type: CheckTypes
-    check_fn: PositionCheckFn | ProcessCheckFn = field(compare=False)
+    check_fn: Union[PositionCheckFn, ProcessCheckFn] = field(compare=False)
     prefetches: List[Callable[[], Prefetch]] = field(default_factory=list)
     related_selects: List[str] = field(default_factory=list)
 
     def evaluate(self, order: PrefetchedOrder, keep: PositionSet,
-                 position: "OrderPosition | None", check_ts: datetime.datetime) -> Optional[CheckResult]:
+                 position: Optional["OrderPosition"], check_ts: datetime.datetime) -> Optional[CheckResult]:
         if position and self.type == CheckTypes.POSITION:
             prefetched_position = cast(PrefetchedPosition,
                                        next((p for p in order.positions.all() if p.pk == position.pk), None))
@@ -171,14 +177,24 @@ class CheckResult:
         return cls(**data)
 
 
-class FeeType(models.TextChoices):
+FeeTypeValue = Literal["min_process_fee", "add_process_fee", "position_fee"]
+ProcessFeeTypeValue = Literal["min_process_fee", "add_process_fee"]
+
+
+class FeeType:
     """
     Process fees can be added on top of all position fees, or they
     can set a floor for the minimum cancellation fee that this will incur.
     """
-    MINIMUM = "min_process_fee", _("Minimum total fee")
-    ADDITIONAL = "add_process_fee", _("Additional fee")
-    POSITION = "position_fee", _("Position fee")
+    MINIMUM: FeeTypeValue = "min_process_fee"
+    ADDITIONAL: FeeTypeValue = "add_process_fee"
+    POSITION: FeeTypeValue = "position_fee"
+
+    FEE_TYPE_CHOICES: Tuple[Tuple[FeeTypeValue, str], ...] = (
+        (MINIMUM, _("Minimum total fee")),
+        (ADDITIONAL, _("Additional fee")),
+        (POSITION, _("Position fee")),
+    )
 
 
 @dataclass(frozen=True)
@@ -249,7 +265,7 @@ class RuleResult:
             if reference_price < absolute_fee:
                 fee = absolute_fee - reference_price
             else:
-                fee = Decimal(0)
+                fee = Decimal("0")
         elif fee_type == FeeType.ADDITIONAL:
             fee = absolute_fee
         else:
@@ -287,7 +303,7 @@ class PositionResult:
 
     @property
     def cancellation_possible(self) -> bool:
-        def ok(results: List[CheckResult] | List[RuleResult]) -> bool:
+        def ok(results: Union[List[CheckResult], List[RuleResult]]) -> bool:
             return all([val.cancellation_possible for val in results]) if results else True
 
         return all(
@@ -323,7 +339,7 @@ class ProcessResult:
 
     @property
     def cancellation_possible(self) -> bool:
-        results: List[CheckResult | RuleResult] = [*self.process_check_results]
+        results: List[Union[CheckResult, RuleResult]] = [*self.process_check_results]
         if self.process_rule_results:
             results.append(min(self.process_rule_results))
         return all(res.cancellation_possible for res in results)

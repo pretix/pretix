@@ -167,11 +167,11 @@ class TestRuleResult:
     @pytest.mark.parametrize(
         ("fee_type", "absolute", "reference", "result"),
         [
-            (FeeType.MINIMUM, Decimal("10"), Decimal(1), Decimal(9)),
-            (FeeType.MINIMUM, Decimal(1), Decimal("10"), Decimal("0")),
+            (FeeType.MINIMUM, Decimal("10"), Decimal("1"), Decimal("9")),
+            (FeeType.MINIMUM, Decimal("1"), Decimal("10"), Decimal("0")),
             (FeeType.MINIMUM, Decimal("10"), Decimal("10"), Decimal("0")),
-            (FeeType.ADDITIONAL, Decimal("10"), Decimal(1), Decimal("10")),
-            (FeeType.ADDITIONAL, Decimal(1), Decimal("10"), Decimal(1)),
+            (FeeType.ADDITIONAL, Decimal("10"), Decimal("1"), Decimal("10")),
+            (FeeType.ADDITIONAL, Decimal("1"), Decimal("10"), Decimal("1")),
             (FeeType.ADDITIONAL, Decimal("10"), Decimal("10"), Decimal("10")),
         ],
         ids=[
@@ -197,7 +197,7 @@ class TestRuleResult:
     @pytest.mark.parametrize(
         ("position_price", "percentage", "result"),
         [
-            (Decimal("10"), Decimal("10"), Decimal(1)),
+            (Decimal("10"), Decimal("10"), Decimal("1")),
             (Decimal("10"), Decimal("9.9"), Decimal("0.99"))
         ],
     )
@@ -512,27 +512,21 @@ class TestCancellationRule:
         ):
             with scope(organizer=rdt_events.organizer):
                 date = ProcessCancellationRule._resolve_date_field(rdt_reldate, rdt_order, rdt_mode_variants)
-                match rdt_reldate_variants:
-                    case "date":
-                        assert date == self.REFERENCE_DT
-                    case "datetime":
-                        assert date == self.REFERENCE_DT
-                    case "order":
-                        assert date == self.REFERENCE_DT + timedelta(days=1) + timedelta(hours=6)
-                    case "event":
-                        if rdt_event_variants == "single_event":
-                            assert date == self.REFERENCE_DT + timedelta(days=1)
-                        elif rdt_event_variants == "subevents":
-                            if rdt_mode_variants == "EARLIEST":
-                                assert date == self.REFERENCE_DT + timedelta(days=1)
-                            elif rdt_mode_variants == "LATEST":
-                                assert date == self.REFERENCE_DT + timedelta(days=1) + timedelta(days=2)
-                            else:
-                                raise ValueError("Variant not known")
-                        else:
-                            raise ValueError("Variant not known")
-                    case _:
+                if rdt_reldate_variants in ("date", "datetime"):
+                    assert date == self.REFERENCE_DT
+                elif rdt_reldate_variants == "order":
+                    assert date == self.REFERENCE_DT + timedelta(days=1) + timedelta(hours=6)
+                elif rdt_reldate_variants == "event":
+                    if rdt_event_variants == "single_event":
+                        assert date == self.REFERENCE_DT + timedelta(days=1)
+                    elif rdt_event_variants == "subevents" and rdt_mode_variants == "EARLIEST":
+                        assert date == self.REFERENCE_DT + timedelta(days=1)
+                    elif rdt_event_variants == "subevents" and rdt_mode_variants == "LATEST":
+                        assert date == self.REFERENCE_DT + timedelta(days=1) + timedelta(days=2)
+                    else:
                         raise ValueError("Variant not known")
+                else:
+                    raise ValueError("Variant not known")
 
         @pytest.mark.django_db
         def test_position_rule_resolve_date_field(
@@ -547,22 +541,19 @@ class TestCancellationRule:
             with scope(organizer=rdt_events.organizer):
                 for pos in rdt_order_positions:
                     date = PositionCancellationRule._resolve_date_field(rdt_reldate, rdt_order, pos)
-                    match rdt_reldate_variants:
-                        case "date":
-                            assert date == self.REFERENCE_DT
-                        case "datetime":
-                            assert date == self.REFERENCE_DT
-                        case "order":
-                            assert date == self.REFERENCE_DT + timedelta(days=1) + timedelta(hours=6)
-                        case "event":
-                            if rdt_event_variants == "single_event":
-                                assert date == self.REFERENCE_DT + timedelta(days=1)
-                            elif rdt_event_variants == "subevents":
-                                assert date == pos.subevent.date_from + timedelta(days=1)
-                            else:
-                                raise ValueError("Variant not known")
-                        case _:
+                    if rdt_reldate_variants in ("date", "datetime"):
+                        assert date == self.REFERENCE_DT
+                    elif rdt_reldate_variants == "order":
+                        assert date == self.REFERENCE_DT + timedelta(days=1) + timedelta(hours=6)
+                    elif rdt_reldate_variants == "event":
+                        if rdt_event_variants == "single_event":
+                            assert date == self.REFERENCE_DT + timedelta(days=1)
+                        elif rdt_event_variants == "subevents":
+                            assert date == pos.subevent.date_from + timedelta(days=1)
+                        else:
                             raise ValueError("Variant not known")
+                    else:
+                        raise ValueError("Variant not known")
 
     class TestPositionMatchesRule:
         @pytest.fixture

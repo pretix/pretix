@@ -271,7 +271,7 @@ class RelativeDateWrapper:
         self.data = data
 
     @property
-    def choice(self) -> Literal["datetime", "date"] | BaseChoice:
+    def choice(self) -> Union[Literal["datetime", "date"], BaseChoice]:
         if isinstance(self.data, datetime.datetime):
             return "datetime"
         elif isinstance(self.data, datetime.date):
