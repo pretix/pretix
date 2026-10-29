@@ -155,13 +155,13 @@ class CancellationRule(models.Model):
         max_digits=5,
         decimal_places=2,
         validators=[MinValueValidator(Decimal("0.00")), MaxValueValidator(Decimal("100.00"))],
-        verbose_name=_("Fee Percentage per OrderPosition"),
+        verbose_name=_("Fee percentage per order position"),
         default=Decimal("0.00"),
     )
     fee_absolute_per_position = models.DecimalField(
         max_digits=13,
         decimal_places=2,
-        verbose_name=_("Absolute fee per OrderPosition"),
+        verbose_name=_("Absolute fee per order position"),
         default=Decimal("0.00"),
         validators=[MinValueValidator(Decimal("0.00"))],
     )
