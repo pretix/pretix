@@ -352,7 +352,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
         if self.only_user_visible:
             qqs = qqs.filter(type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE)
         else:
-            qqs = qqs.filter(type__startswith='P')
+            qqs = qqs.filter(type__startswith='position_')
         qqs = qqs.filter(
             Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.order.sales_channel.identifier)
         )

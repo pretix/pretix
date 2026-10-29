@@ -422,7 +422,7 @@ class ItemCreateForm(I18nModelForm):
         )
         self.fields['category'].widget.choices = self.fields['category'].choices
 
-        self.fields['questionnaires'].queryset = self.instance.event.questionnaires.filter(type__startswith='P')
+        self.fields['questionnaires'].queryset = self.instance.event.questionnaires.filter(type__startswith='position_')
 
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
         change_decimal_field(self.fields['default_price'], self.instance.event.currency)
@@ -764,7 +764,7 @@ class ItemUpdateForm(I18nModelForm):
         )
         self.fields['category'].widget.choices = self.fields['category'].choices
 
-        self.fields['questionnaires'].queryset = self.instance.event.questionnaires.filter(type__startswith='P')
+        self.fields['questionnaires'].queryset = self.instance.event.questionnaires.filter(type__startswith='position_')
         self.initial['questionnaires'] = self.instance.questionnaires.values_list('pk', flat=True)
 
         self.fields['free_price_suggestion'].widget.attrs['data-display-dependency'] = '#id_free_price'

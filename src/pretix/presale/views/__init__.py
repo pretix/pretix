@@ -411,7 +411,7 @@ def get_cart_positions(request):
             qqs = request.event.questionnaires.all()
             qqs = qqs.filter(
                 Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=request.sales_channel.identifier),
-                type='PS'
+                type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE,
             )
             request._cart_cache = CartPosition.objects.filter(
                 cart_id=cart_id, event=request.event

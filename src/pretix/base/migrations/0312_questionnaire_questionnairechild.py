@@ -76,7 +76,7 @@ def migrate_questions_forward(apps, schema_editor):
 
             internal_name = label_prefix + ', '.join(str(ii.internal_name or ii.name) for ii in item_infos)
             if all(ii.personalized for ii in item_infos) and len(item_infos) == len(personalized_items):
-                if questionnaire_type == 'PS':
+                if questionnaire_type == Questionnaire.QuestionnaireType.ORDER_POSITION_SALE:
                     # if we have a questionnaire for exactly all personalized items, we just call it "Attendee data"
                     # (same as the default questionnaire for new events)
                     internal_name = _('Attendee data')
@@ -126,7 +126,7 @@ def migrate_questions_forward(apps, schema_editor):
 
             personalized_items = event.items.filter(personalized=True).values_list('id', 'internal_name', 'name', 'personalized', named=True)
 
-            # [PS] presale
+            # [position_checkout] presale
             children = chain((
                 qc_candidate(item, 0, q)
                 for q in get_fake_questions(settings)
@@ -137,32 +137,32 @@ def migrate_questions_forward(apps, schema_editor):
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            create_grouped_item_questionnaires(event, children, '', 'PS', personalized_items)
+            create_grouped_item_questionnaires(event, children, '', Questionnaire.QuestionnaireType.ORDER_POSITION_SALE, personalized_items)
 
-            # [PC] checkin
+            # [position_checkin] checkin
             children = chain((
                 qc_candidate(item, q.id, q)
                 for q in questions.filter(ask_during_checkin=True)
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            create_grouped_item_questionnaires(event, children, _('Check-in questions for '), 'PC', personalized_items)
+            create_grouped_item_questionnaires(event, children, _('Check-in questions for '), Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN, personalized_items)
 
-            # [PH] hidden
+            # [position_hidden] hidden
             children = chain((
                 qc_candidate(item, q.id, q)
                 for q in questions.filter(hidden=True, ask_during_checkin=False)
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            create_grouped_item_questionnaires(event, children, _('Hidden questions for '), 'PH', personalized_items)
+            create_grouped_item_questionnaires(event, children, _('Hidden questions for '), Questionnaire.QuestionnaireType.ORDER_POSITION_HIDDEN, personalized_items)
 
             # [O] get all order-level questions
             questions = list(event.questions.filter(container_type='O', hidden=False).order_by('position'))
             if questions:
                 # create questionnaires and children
                 questionnaire = Questionnaire.objects.create(
-                    event=event, type='OS', position=0, all_sales_channels=True,
+                    event=event, type=Questionnaire.QuestionnaireType.ORDER_SALE, position=0, all_sales_channels=True,
                     internal_name=_('Per-order questions'),
                 )
                 deps = {}

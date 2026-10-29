@@ -346,7 +346,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         self.fields['default_price'].allow_null = False
         self.fields['default_price'].required = True
         if not self.read_only:
-            self.fields['questionnaires'].child_relation.queryset = self.context['event'].questionnaires.filter(type__startswith='P')
+            self.fields['questionnaires'].child_relation.queryset = self.context['event'].questionnaires.filter(type__startswith='position_')
             self.fields['require_membership_types'].queryset = self.context['event'].organizer.membership_types.all()
             self.fields['grant_membership_type'].queryset = self.context['event'].organizer.membership_types.all()
             self.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
@@ -958,7 +958,7 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
                     and any(c['dependency_question'] for c in full_data['children'])):
                 raise ValidationError('Dependencies are not supported during check-in.')
 
-            if (not full_data.get('type').startswith('P')
+            if (not full_data.get('type').startswith('position_')
                     and any(c['system_datafield'] for c in full_data['children'])):
                 raise ValidationError('System data fields are only supported on order positions.')
 

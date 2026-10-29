@@ -1996,11 +1996,11 @@ class QuestionOption(models.Model):
 
 class Questionnaire(LoggedModel):
     class QuestionnaireType(models.TextChoices):
-        ORDER_SALE = "OS", _("Order-wide, before purchase")
-        ORDER_POSITION_SALE = "PS", _("Per product, before purchase")
-        ORDER_POSITION_ATTENDEE_ONLY = "PA", _("Per product, via attendee link")
-        ORDER_POSITION_CHECKIN = "PC", _("Per product, at check-in")
-        ORDER_POSITION_HIDDEN = "PH", _("Per product, hidden")
+        ORDER_SALE = "order_presale", _("Order-wide, before purchase")
+        ORDER_POSITION_SALE = "position_presale", _("Per product, before purchase")
+        ORDER_POSITION_ATTENDEE_ONLY = "position_attendee", _("Per product, via attendee link")
+        ORDER_POSITION_CHECKIN = "position_checkin", _("Per product, at check-in")
+        ORDER_POSITION_HIDDEN = "position_hidden", _("Per product, hidden")
     event = models.ForeignKey(
         Event,
         related_name="questionnaires",

@@ -123,15 +123,15 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 					<span class="fa fa-warning" v-if="questionnaire._err_mes"></span>
 					<span class="fa fa-cog fa-spin" v-if="questionnaire._loading"></span>
 
-          <span class="pull-right" v-if="questionnaire.type === 'PC'">
+          <span class="pull-right" v-if="questionnaire.type === 'position_checkin'">
             <span class="label label-default" data-toggle="tooltip" :title="gettext('Ask during check-in')">
               <span class="fa fa-check-square"></span>
               {{ gettext('Check-in') }}</span>
           </span>
-          <span class="pull-right" v-else-if="questionnaire.type === 'PA'">
+          <span class="pull-right" v-else-if="questionnaire.type === 'position_attendee'">
             <span class="label label-default">{{ gettext('Attendee link') }}</span>
           </span>
-          <span class="pull-right" v-else-if="questionnaire.type === 'PH'">
+          <span class="pull-right" v-else-if="questionnaire.type === 'position_hidden'">
             <span class="label label-default" data-toggle="tooltip" :title="gettext('Hidden question')">
               <span class="fa fa-eye-slash"></span>
               {{ gettext('Hidden') }}

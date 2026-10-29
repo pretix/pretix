@@ -21,13 +21,13 @@ let lastDataRefresh = 0
 async function refreshQuestionnaireList () {
 	const all_questionnaires: QuestionnaireMaybeUnsaved[] = await api.getQuestionnaires();
 
-	order_questionnaires.value = all_questionnaires.filter(q => q.type.startsWith('O'))
-	position_questionnaires.value = all_questionnaires.filter(q => q.type.startsWith('P'))
+	order_questionnaires.value = all_questionnaires.filter(q => q.type.startsWith('order_'))
+	position_questionnaires.value = all_questionnaires.filter(q => q.type.startsWith('position_'))
 	lastDataRefresh = Date.now()
 }
 async function refreshDatafieldList () {
-	order_datafields.value = await api.getDatafields('O')
-	position_datafields.value = (await api.getDatafields('P')).concat(Object.values(SYSTEM_DATAFIELDS))
+	order_datafields.value = await api.getDatafields('order')
+	position_datafields.value = (await api.getDatafields('position')).concat(Object.values(SYSTEM_DATAFIELDS))
 	console.log('datafield list refreshed')
 }
 await Promise.all([refreshQuestionnaireList(), refreshDatafieldList()])
@@ -56,14 +56,14 @@ function saveQuestionnaire(questionnaire) {
 function addPositionQuestionnaire () {
 	position_questionnaires.value.push({
 		all_sales_channels: true, children: [], limit_sales_channels: [], position: position_questionnaires.value.length,
-		items: [], internal_name: "Unnamed questionnaire", type: "PS",
+		items: [], internal_name: "Unnamed questionnaire", type: "position_presale",
 		_new_id: Date.now(),
 	});
 }
 function addOrderQuestionnaire () {
 	order_questionnaires.value.push({
 		all_sales_channels: true, children: [], limit_sales_channels: [], position: order_questionnaires.value.length,
-		items: [], internal_name: "Unnamed questionnaire", type: "OS",
+		items: [], internal_name: "Unnamed questionnaire", type: "order_presale",
 		_new_id: Date.now(),
 	});
 }
