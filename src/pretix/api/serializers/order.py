@@ -607,7 +607,6 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'discount',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
-                  'print_logs', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled',
                   'print_logs', 'downloads', 'answers', 'tax_rule', 'tax_code', 'pseudonymization_id', 'pdf_data', 'seat',
                   'canceled', 'valid_from', 'valid_until', 'blocked', 'voucher_budget_use', 'plugin_data')
         read_only_fields = (
@@ -1035,7 +1034,7 @@ class OrderFeeCreateSerializer(I18nAwareModelSerializer):
     def validate_tax_rule(self, tr):
         if tr and tr.event != self.context['event']:
             raise ValidationError(
-                'The specified tax rate does not belong to this event.'
+                'The specified tax rule does not belong to this event.'
             )
         return tr
 
@@ -1054,13 +1053,23 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     requested_valid_from = serializers.DateTimeField(required=False, allow_null=True)
     use_reusable_medium = serializers.PrimaryKeyRelatedField(queryset=ReusableMedium.objects.none(),
                                                              required=False, allow_null=True)
+    tax_rate = serializers.DecimalField(required=False, decimal_places=4, max_digits=7)
+    tax_value = serializers.DecimalField(required=False, decimal_places=2, max_digits=13)
+    price_includes_rounding_correction = serializers.DecimalField(required=False, decimal_places=2, max_digits=13)
+    tax_value_includes_rounding_correction = serializers.DecimalField(required=False, decimal_places=2, max_digits=13)
 
     class Meta:
         model = OrderPosition
-        fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
-                  'company', 'street', 'zipcode', 'city', 'country', 'state', 'is_bundled',
-                  'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher', 'valid_from', 'valid_until',
-                  'requested_valid_from', 'use_reusable_medium', 'discount')
+        fields = (
+            'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
+            'company', 'street', 'zipcode', 'city', 'country', 'state', 'is_bundled',
+            'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher', 'valid_from', 'valid_until',
+            'requested_valid_from', 'use_reusable_medium', 'discount', 'tax_rule',
+            # These are currently undocumented and only used by pretixPOS. The backend still calculates these values, but the
+            # results must match exactly, otherwise the operation is aborted to avoid diverging tax values between POS reports
+            # and backend reports.
+            'tax_rate', 'tax_code', 'tax_value', 'price_includes_rounding_correction', 'tax_value_includes_rounding_correction',
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1097,6 +1106,13 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 'The specified item is not active.'
             )
         return item
+
+    def validate_tax_rule(self, tax_rule):
+        if tax_rule.event != self.context['event']:
+            raise ValidationError(
+                'The specified tax rule does not belong to this event.'
+            )
+        return tax_rule
 
     def validate_subevent(self, subevent):
         if self.context['event'].has_subevents:
@@ -1603,7 +1619,14 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 pos_data['attendee_name_parts'] = {
                     '_legacy': attendee_name
                 }
-            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k not in ('answers', '_quotas', 'use_reusable_medium')})
+            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k not in (
+                'answers',
+                '_quotas',
+                'use_reusable_medium',
+                'tax_value',
+                'price_includes_rounding_correction',
+                'tax_value_includes_rounding_correction',
+            )})
             if simulate:
                 pos.order = order._wrapped
             else:
@@ -1646,7 +1669,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     if not pos.item.tax_rule or pos.item.tax_rule.price_includes_tax:
                         price_after_voucher = max(pos.price, pos.voucher.calculate_price(listed_price))
                     else:
-                        pos._calculate_tax(invoice_address=ia)
+                        pos._calculate_tax(invoice_address=ia, tax_rule=pos_data.get('tax_rule'))
                         price_after_voucher = max(pos.price - pos.tax_value, pos.voucher.calculate_price(listed_price))
                 else:
                     price_after_voucher = listed_price
@@ -1678,7 +1701,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             answers_data = pos_data.pop('answers', [])
             use_reusable_medium = pos_data.pop('use_reusable_medium', None)
             pos = pos_data['__instance']
-            pos._calculate_tax(invoice_address=ia)
+            pos._calculate_tax(invoice_address=ia, tax_rule=pos_data.get('tax_rule', None))
 
             if simulate:
                 pos = WrappedModel(pos)
@@ -1819,6 +1842,26 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 line.save(update_fields=[
                     "value", "value_includes_rounding_correction", "tax_value", "tax_value_includes_rounding_correction"
                 ])
+
+        for i, pos_data in enumerate(positions_data):
+            pos = pos_data['__instance']
+            if 'tax_rate' in pos_data and pos_data['tax_rate'] != pos.tax_rate:
+                raise ValidationError(f'Tax rate {pos_data["tax_rate"]} in position {pos.positionid} does not match backend value {pos.tax_rate}.')
+            if 'tax_code' in pos_data and pos_data['tax_code'] != pos.tax_code:
+                raise ValidationError(f'Tax code {pos_data["tax_code"]} in position {pos.positionid} does not match backend value {pos.tax_code}.')
+            if 'tax_value' in pos_data and pos_data['tax_value'] != pos.tax_value:
+                raise ValidationError(f'Tax value {pos_data["tax_value"]} in position {pos.positionid} does not match backend value {pos.tax_value}.')
+            if 'price_includes_rounding_correction' in pos_data and pos_data['price_includes_rounding_correction'] != pos.price_includes_rounding_correction:
+                raise ValidationError(
+                    f'Price rounding {pos_data['price_includes_rounding_correction']} in position {pos.positionid} does not '
+                    f'match backend value {pos.price_includes_rounding_correction}.'
+                )
+            if ('tax_value_includes_rounding_correction' in pos_data and
+                    pos_data['tax_value_includes_rounding_correction'] != pos.tax_value_includes_rounding_correction):
+                raise ValidationError(
+                    f'Tax rounding {pos_data['tax_value_includes_rounding_correction']} in position {pos.positionid} does not '
+                    f'match backend value {pos.tax_value_includes_rounding_correction}.'
+                )
 
         order.total = sum([c.price for c in pos_map.values()]) + sum([f.value for f in fees])
         if simulate:

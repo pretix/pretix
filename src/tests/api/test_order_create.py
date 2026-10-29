@@ -1013,6 +1013,30 @@ def test_order_create_tax_rules(token_client, organizer, event, item, quota, que
 
 
 @pytest.mark.django_db
+def test_order_create_tax_rule_explicit(token_client, organizer, event, item, quota, question, taxrule):
+    item.tax_rule = None
+    item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['tax_rule'] = taxrule.pk
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['tax_rule'] = taxrule.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos = o.positions.first()
+    assert pos.item == item
+    assert pos.tax_rate == Decimal('19.00')
+    assert pos.tax_value == Decimal('3.67')
+    assert pos.tax_rule == taxrule
+
+
+@pytest.mark.django_db
 def test_order_create_fee_type_validation(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['fees'][0]['fee_type'] = 'unknown'
@@ -1136,6 +1160,7 @@ def test_order_create_tax_rule_wrong_event(token_client, organizer, event, item,
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['fees'][0]['tax_rule'] = taxrule2.pk
     res['positions'][0]['item'] = item.pk
+    res['positions'][0]['tax_rule'] = taxrule2.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -1143,7 +1168,10 @@ def test_order_create_tax_rule_wrong_event(token_client, organizer, event, item,
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'fees': [{'tax_rule': ['The specified tax rate does not belong to this event.']}]}
+    assert resp.data == {
+        'positions': [{'tax_rule': ['The specified tax rule does not belong to this event.']}],
+        'fees': [{'tax_rule': ['The specified tax rule does not belong to this event.']}],
+    }
 
 
 @pytest.mark.django_db
@@ -3693,3 +3721,41 @@ def test_order_create_use_gift_card_invalid_secret(token_client, organizer, even
         assert o.payments.count() == 2
         assert o.payments.all()[0].state == OrderPayment.PAYMENT_STATE_FAILED
         assert o.payments.all()[1].state == OrderPayment.PAYMENT_STATE_CONFIRMED
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("rounding_mode,field,right,wrong,error", [
+    ("line", "tax_rate", "19.00", "22.00", "Tax rate 22.0000 in position 1 does not match backend value 19."),
+    ("line", "tax_value", "2.39", "2.50", "Tax value 2.50 in position 1 does not match backend value 2.39."),
+    ("line", "tax_code", "S/standard", "S/reduced", "Tax code S/reduced in position 1 does not match backend value S/standard."),
+    ("line", "price_includes_rounding_correction", "0.00", "0.01", "Price rounding 0.01 in position 1 does not match backend value 0.00."),
+    ("line", "tax_value_includes_rounding_correction", "0.00", "0.01", "Tax rounding 0.01 in position 1 does not match backend value 0.00."),
+    ("sum_by_net", "tax_value", "2.40", "2.39", "Tax value 2.39 in position 1 does not match backend value 2.40."),
+    ("sum_by_net", "price_includes_rounding_correction", "0.01", "0.00", "Price rounding 0.00 in position 1 does not match backend value 0.01."),
+    ("sum_by_net", "tax_value_includes_rounding_correction", "0.01", "0.00", "Tax rounding 0.00 in position 1 does not match backend value 0.01."),
+])
+def test_order_tax_match_validation(token_client, organizer, event, item, quota, question, taxrule,
+                                    rounding_mode, field, right, wrong, error):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    del res['fees']  # not explicitly supported for this for now
+    res['tax_rounding_mode'] = rounding_mode
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['price'] = "15.00"
+    res['positions'][0]['tax_rule'] = taxrule.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0][field] = wrong
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == [error]
+
+    res['positions'][0][field] = right
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201

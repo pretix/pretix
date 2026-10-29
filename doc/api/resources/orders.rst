@@ -1059,6 +1059,7 @@ Creating orders
       * ``item``
       * ``variation`` (optional)
       * ``price`` (optional, if set to ``null`` or missing the price will be computed from the given product)
+      * ``tax_rule`` (optional, if set to ``null`` or missing the price will be computed from the given product)
       * ``seat`` (The ``seat_guid`` attribute of a seat. Required when the specified ``item`` requires a seat, otherwise must be ``null``.)
       * ``attendee_name`` **or** ``attendee_name_parts`` (optional)
       * ``voucher`` (optional, the ``code`` attribute of a valid voucher)
