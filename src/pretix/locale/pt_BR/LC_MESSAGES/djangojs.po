@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-03-25 08:00+0000\n"
-"Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
+"PO-Revision-Date: 2026-10-30 03:00+0000\n"
+"Last-Translator: vihumelo <victordimelo@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js
 msgid "Marked as paid"
@@ -430,7 +430,7 @@ msgstr "Pressione Ctrl+C para copiar!"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
 msgid "Visualize"
