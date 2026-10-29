@@ -326,12 +326,12 @@ def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_only
 
     elif rounding_mode == "sum_by_gross":
         for (tax_rate, tax_code), lines in groupby(sorted(lines, key=_key), key=_key):
-            lines = list(sorted(lines, key=lambda l: -(l.price - l.price_includes_rounding_correction)))
+            lines = list(sorted(lines, key=lambda l: -(l.gross_price_before_rounding)))
             net_total = sum(
-                l.price - l.price_includes_rounding_correction - l.tax_value + l.tax_value_includes_rounding_correction
+                l.gross_price_before_rounding - l.tax_value_before_rounding
                 for l in lines
             )
-            gross_total = sum(l.price - l.price_includes_rounding_correction for l in lines)
+            gross_total = sum(l.gross_price_before_rounding for l in lines)
             target_net_total = round_decimal(gross_total - (gross_total * (1 - 100 / (100 + tax_rate))), currency)
 
             diff = target_net_total - net_total
@@ -339,16 +339,16 @@ def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_only
             for l in lines:
                 if diff:
                     apply_diff = diff_sgn * minimum_unit
-                    l.price = l.price - l.price_includes_rounding_correction
+                    l.price = l.gross_price_before_rounding
                     l.price_includes_rounding_correction = Decimal("0.00")
-                    l.tax_value = l.tax_value - l.tax_value_includes_rounding_correction - apply_diff
+                    l.tax_value = l.tax_value_before_rounding - apply_diff
                     l.tax_value_includes_rounding_correction = -apply_diff
                     diff -= apply_diff
                     changed.append(l)
                 elif l.price_includes_rounding_correction or l.tax_value_includes_rounding_correction:
-                    l.price = l.price - l.price_includes_rounding_correction
+                    l.price = l.gross_price_before_rounding
                     l.price_includes_rounding_correction = Decimal("0.00")
-                    l.tax_value = l.tax_value - l.tax_value_includes_rounding_correction
+                    l.tax_value = l.tax_value_before_rounding
                     l.tax_value_includes_rounding_correction = Decimal("0.00")
                     changed.append(l)
 
