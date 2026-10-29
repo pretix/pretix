@@ -25,6 +25,7 @@ id                                    integer                    Internal ID of 
 internal_name                         string                     An internal field label
 identifier                            string                     An arbitrary string that can be used for matching with
                                                                  other sources.
+                                                                 Must be unique per event, across all types of data fields.
 type                                  string                     The expected type of data. Valid options:
 
                                                                  * ``N`` – number
@@ -216,7 +217,7 @@ Endpoints
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/datafields/
                /api/v1/organizers/(organizer)/events/(event)/orderdatafields/
 
-   Creates a new question
+   Create a new question
 
    **Example request**:
 

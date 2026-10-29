@@ -42,14 +42,14 @@ Resource description
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
-id                                    integer                    Internal ID of the question
+id                                    integer                    Internal ID of the questionnaire
 type                                  string                     The type of questionnaire. Valid options:
 
-                                                                 * ``OS`` — Order-wide, before purchase
-                                                                 * ``PS`` — Per product, before purchase
-                                                                 * ``PA`` — Per product, via attendee link
-                                                                 * ``PC`` — Per product, at check-in
-                                                                 * ``PH`` — Per product, hidden
+                                                                 * ``order_checkout`` — Order-wide, before purchase
+                                                                 * ``position_checkout`` — Per product, before purchase
+                                                                 * ``position_attendee`` — Per product, via attendee link
+                                                                 * ``position_checkin`` — Per product, at check-in
+                                                                 * ``position_hidden`` — Per product, hidden
 internal_name                         string                     Internal label for the questionnaire
 items                                 list of integers           List of item IDs this questionnaire is assigned to.
 position                              integer                    An integer, used for sorting
@@ -58,9 +58,7 @@ all_sales_channels                    boolean                    If ``true`` (de
 limit_sales_channels                  list of strings            List of sales channel identifiers the questions are asked on
                                                                  if ``all_sales_channels`` is ``false``.
 children                              list of objects            List of all questionnaire children.
-                                                                 available objects. Only writable during creation,
-                                                                 use separate endpoint to modify this later.
-├ datafield                           string                     Reference to a datafield (see above)
+├ datafield                           string                     Reference to a data field (see above)
 ├ required                            boolean                    If ``true``, the question needs to be filled out.
 ├ label                               multi-lingual string       The field label shown to the customer
 ├ help_text                           multi-lingual string       The help text shown to the customer
@@ -73,7 +71,7 @@ children                              list of objects            List of all que
                                                                  question, this should be ``["True"]`` or ``["False"]``.
                                                                  Otherwise, it should be a list of ``identifier`` values
                                                                  of question options.
-├ rendered_help_text                  multi-lingual string       **Readonly.** Markdown contents from help_text rendered
+├ rendered_help_text                  multi-lingual string       **Read-only.** Markdown contents from help_text rendered
                                                                  to HTML
 ===================================== ========================== =======================================================
 
@@ -221,7 +219,7 @@ Endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/questionnaires/
 
-   Creates a new questionnaire
+   Create a new questionnaire
 
    **Example request**:
 

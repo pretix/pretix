@@ -126,7 +126,7 @@ Endpoints
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/datafields/(datafield)/options/
                /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(datafield)/options/
 
-   Creates a new option
+   Create a new option
 
    **Example request**:
 
