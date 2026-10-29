@@ -43,7 +43,7 @@ watch(() => props.questionnaire.children, () => {
 function addExistingDatafield (field) {
 	props.questionnaire.children.push({
 		_cid: useId(),
-		datafield: field.id,
+		datafield: field.identifier,
 		required: false,
 		label: field.question ?? {en: field.internal_name},
 		help_text: {},
@@ -202,15 +202,29 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
     <NativeDialog ref="dlgAddExisting" class="modal-card"
                   :title="gettext('Add existing data field')">
 
+        <h4>{{ gettext('System fields') }}</h4>
 				<div class="list-group">
-					<a href="javascript:" @click="addExistingDatafield(field)" v-for="field in datafields" class="list-group-item">{{ field.internal_name ?? i18n_any(field.question) }}</a>
+          <template v-for="field in datafields">
+					  <a v-if="field.identifier.startsWith('@')"
+               href="javascript:" @click="addExistingDatafield(field)"
+               class="list-group-item">{{ field.internal_name ?? i18n_any(field.question) }}</a>
+          </template>
 				</div>
+
+        <h4>{{ gettext('User-defined data fields') }}</h4>
+				<div class="list-group">
+          <template v-for="field in datafields">
+					  <a v-if="!field.identifier.startsWith('@')"
+               href="javascript:" @click="addExistingDatafield(field)"
+               class="list-group-item">{{ field.internal_name ?? i18n_any(field.question) }}</a>
+          </template>
+        </div>
 
         <button @click="dlgAddExisting.close()" class="btn btn-default pull-right">{{ gettext('Cancel') }}</button>
     </NativeDialog>
 
     <NativeDialog ref="dlgAddTextblock" class="modal-card"
-                  :title="gettext('Add sub heading')">
+                  :title="gettext('Add text block')">
 
         <div class="form-group">
           <label class="col-md-3 control-label">

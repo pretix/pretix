@@ -1644,14 +1644,14 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
     @cached_property
     def answer_cache(self):
         return {
-            "attendee_name_parts": self.attendee_name,
-            "attendee_email": self.attendee_email,
-            "company": self.company,
-            "street": self.street,
-            "zipcode": self.zipcode,
-            "city": self.city,
-            "state": self.state,
-            "country": str(self.country),
+            "@attendee_name_parts": self.attendee_name,
+            "@attendee_email": self.attendee_email,
+            "@company": self.company,
+            "@street": self.street,
+            "@zipcode": self.zipcode,
+            "@city": self.city,
+            "@state": self.state,
+            "@country": str(self.country),
             **{aw.question_id: aw for aw in getattr(self, 'answerlist', self.answers.all())},
         }
 
@@ -1667,24 +1667,24 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
             raise ValueError('Questionnaire child without datafield has no answer')
 
     def get_system_answer(self, system_datafield_name):
-        if system_datafield_name == 'attendee_name_parts':
+        if system_datafield_name == QuestionnaireChild.SystemDatafield.ATTENDEE_NAME_PARTS:
             return self.attendee_name
-        elif system_datafield_name == 'attendee_email':
+        elif system_datafield_name == QuestionnaireChild.SystemDatafield.ATTENDEE_EMAIL:
             return self.attendee_email
-        elif system_datafield_name == 'company':
+        elif system_datafield_name == QuestionnaireChild.SystemDatafield.COMPANY:
             return self.company
-        elif system_datafield_name == 'street':
+        elif system_datafield_name == QuestionnaireChild.SystemDatafield.STREET:
             return self.street
-        elif system_datafield_name == 'zipcode':
+        elif system_datafield_name == QuestionnaireChild.SystemDatafield.ZIPCODE:
             return self.zipcode
-        elif system_datafield_name == 'city':
+        elif system_datafield_name == QuestionnaireChild.SystemDatafield.CITY:
             return self.city
-        elif system_datafield_name == 'state':
+        elif system_datafield_name == QuestionnaireChild.SystemDatafield.STATE:
             return self.state
-        elif system_datafield_name == 'country':
+        elif system_datafield_name == QuestionnaireChild.SystemDatafield.COUNTRY:
             return str(self.country)
         else:
-            raise ValueError('Unknown system question name')
+            raise ValueError('Unknown system datafield name')
 
     @property
     def net_price(self):

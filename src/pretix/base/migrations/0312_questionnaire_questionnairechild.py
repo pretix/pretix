@@ -26,20 +26,20 @@ def get_fake_questions(settings):
     _ = LazyI18nString.from_gettext
 
     if b(settings.get('attendee_names_asked', 'True')):
-        fq.append(FakeQuestion('attendee_name_parts', _('Attendee name'), sqo.get('attendee_name_parts', 0), b(settings.get('attendee_names_required'))))
+        fq.append(FakeQuestion('@attendee_name_parts', _('Attendee name'), sqo.get('attendee_name_parts', 0), b(settings.get('attendee_names_required'))))
 
     if b(settings.get('attendee_emails_asked')):
-        fq.append(FakeQuestion('attendee_email', _('Attendee email'), sqo.get('attendee_email', 0), b(settings.get('attendee_emails_required'))))
+        fq.append(FakeQuestion('@attendee_email', _('Attendee email'), sqo.get('attendee_email', 0), b(settings.get('attendee_emails_required'))))
 
     if b(settings.get('attendee_company_asked')):
-        fq.append(FakeQuestion('company', _('Company'), sqo.get('company', 0), b(settings.get('attendee_company_required'))))
+        fq.append(FakeQuestion('@company', _('Company'), sqo.get('company', 0), b(settings.get('attendee_company_required'))))
 
     if b(settings.get('attendee_addresses_asked')):
-        fq.append(FakeQuestion('street', _('Street'), sqo.get('street', 0), b(settings.get('attendee_addresses_required'))))
-        fq.append(FakeQuestion('zipcode', _('ZIP code'), sqo.get('zipcode', 0), b(settings.get('attendee_addresses_required'))))
-        fq.append(FakeQuestion('city', _('City'), sqo.get('city', 0), b(settings.get('attendee_addresses_required'))))
-        fq.append(FakeQuestion('state', _('State'), sqo.get('country', 0), b(settings.get('attendee_addresses_required'))))
-        fq.append(FakeQuestion('country', _('Country'), sqo.get('country', 0), b(settings.get('attendee_addresses_required'))))
+        fq.append(FakeQuestion('@street', _('Street'), sqo.get('street', 0), b(settings.get('attendee_addresses_required'))))
+        fq.append(FakeQuestion('@zipcode', _('ZIP code'), sqo.get('zipcode', 0), b(settings.get('attendee_addresses_required'))))
+        fq.append(FakeQuestion('@city', _('City'), sqo.get('city', 0), b(settings.get('attendee_addresses_required'))))
+        fq.append(FakeQuestion('@state', _('State'), sqo.get('country', 0), b(settings.get('attendee_addresses_required'))))
+        fq.append(FakeQuestion('@country', _('Country'), sqo.get('country', 0), b(settings.get('attendee_addresses_required'))))
     return fq
 
 

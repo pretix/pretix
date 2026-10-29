@@ -6,9 +6,11 @@ import {sort, numericComp, groupBy} from './helper';
 import {Category, GroupedItems, Item, SalesChannel} from "./model";
 
 const sales_channels_list = ref<SalesChannel[]>();
+const all_items = ref<Record<string, Item>>()
 const grouped_items = ref<GroupedItems>()
 
 provide('pretix:env:organizer:sales_channels', sales_channels_list)
+provide('pretix:env:event:items', all_items)
 provide('pretix:env:event:grouped_items', grouped_items)
 
 async function loadEnvironmentData() {
@@ -19,6 +21,8 @@ async function loadEnvironmentData() {
 	categories['null'] = { position: -1, internal_name: gettext('Uncategorized'), name: null, id: null };
 	sort(items_list, numericComp(item => categories[item.category]?.position), numericComp(item => item.position));
 	grouped_items.value = [...groupBy(items_list, item => categories[item.category])]
+  all_items.value = Object.fromEntries(items_list.map(item => [item.id, item]));
+  console.log('all_items', all_items.value)
 }
 loadEnvironmentData()
 

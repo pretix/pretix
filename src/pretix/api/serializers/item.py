@@ -353,7 +353,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
             self.fields['variations'].child.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
 
     def get_personalized(self, item):
-        return QuestionnaireChild.objects.filter(questionnaire__items=item, system_datafield__in=('attendee_name_parts', 'attendee_email')).exists()
+        return QuestionnaireChild.objects.filter(questionnaire__items=item, system_datafield__in=('@attendee_name_parts', '@attendee_email')).exists()
 
     def put_personalized(self, item, new_value):
         if item and new_value != self.get_personalized(item):
@@ -567,29 +567,32 @@ class InlineQuestionOptionSerializer(I18nAwareModelSerializer):
         fields = ('id', 'identifier', 'answer', 'position')
 
 
-class DatafieldRelatedField(serializers.PrimaryKeyRelatedField):
+class DatafieldRelatedField(serializers.SlugRelatedField):
     default_error_messages = {
         'invalid_choice': _('"{input}" is not a valid choice.')
     }
+    def __init__(self, *args, **kwargs):
+        super().__init__(slug_field='identifier', **kwargs)
+
     def to_representation(self, qc):
         if not qc:
             return None
         elif qc.system_datafield:
             return qc.system_datafield
         elif qc.user_datafield_id:
-            return qc.user_datafield_id
+            return qc.user_datafield.identifier
         else:
             return None
 
     def to_internal_value(self, data):
-        if type(data) == int:
-            return {'user_datafield': super().to_internal_value(data), 'system_datafield': None}
-        elif type(data) == str:
-            if data not in QuestionnaireChild.SystemQuestion.values:
+        if data is None:
+            return {'user_datafield': None, 'system_datafield': None}
+        elif type(data) == str and data.startswith('@'):
+            if data not in QuestionnaireChild.SystemDatafield.values:
                 self.fail("invalid_choice", input=data)
             return {'user_datafield': None, 'system_datafield': data}
-        elif data is None:
-            return {'user_datafield': None, 'system_datafield': None}
+        elif type(data) == str:
+            return {'user_datafield': super().to_internal_value(data), 'system_datafield': None}
         else:
             self.fail('incorrect_type', data_type=type(data).__name__)
 
@@ -655,7 +658,7 @@ class QuestionFormSerializer(I18nAwareModelSerializer):
             return None
 
     def get_identifier(self, qc):
-        return qc.user_datafield.identifier if qc.user_datafield else f'@{qc.system_datafield}'
+        return qc.user_datafield.identifier if qc.user_datafield else qc.system_datafield
 
     @property
     def data(self):
@@ -678,7 +681,7 @@ class QuestionFormSerializer(I18nAwareModelSerializer):
                         part["type"] = Question.FieldType.CHOICE
                         part["options"] = [{"id": idx + 1, "identifier": k, "answer": i18n_all_from_gettext(v, settings.locales), "position": idx + 1} for idx, (k, v) in
                                            enumerate(PERSON_NAME_SALUTATIONS)]
-                    part["id"] = QuestionnaireChild.cook_id_from_parts(row['questionnaire_id'], None, part["identifier"][1:])
+                    part["id"] = QuestionnaireChild.cook_id_from_parts(row['questionnaire_id'], None, part["identifier"])
                     part["required"] = part["required"] and k in REQUIRED_NAME_PARTS
                     mangled_results.append(part)
                     pos_offset += 1
@@ -744,7 +747,7 @@ class POSCompatQuestionSerializer(QuestionFormSerializer):
             return None
 
     def get_identifier(self, qc):
-        return qc.user_datafield.identifier if qc.user_datafield else f'@{qc.system_datafield}'
+        return qc.user_datafield.identifier if qc.user_datafield else qc.system_datafield
 
     def empty(self, qc):
         return None
@@ -772,7 +775,7 @@ class POSCompatQuestionSerializer(QuestionFormSerializer):
                         part["type"] = Question.FieldType.CHOICE
                         part["options"] = [{"id": idx + 1, "identifier": k, "answer": i18n_all_from_gettext(v, settings.locales), "position": idx + 1} for idx, (k, v) in
                                            enumerate(PERSON_NAME_SALUTATIONS)]
-                    part["id"] = QuestionnaireChild.cook_id_from_parts(row['questionnaire_id'], None, part["identifier"][1:])
+                    part["id"] = QuestionnaireChild.cook_id_from_parts(row['questionnaire_id'], None, part["identifier"])
                     part["required"] = part["required"] and k in REQUIRED_NAME_PARTS
                     mangled_results.append(part)
                     pos_offset += 1

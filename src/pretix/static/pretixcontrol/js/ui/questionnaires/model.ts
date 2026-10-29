@@ -49,7 +49,7 @@ export type Questionnaire = {
 }
 
 export type QuestionnaireChild = {
-	datafield: string | number,
+	datafield: string | null,
 	required: boolean,
 	label: I18nString,
 	help_text: I18nString,

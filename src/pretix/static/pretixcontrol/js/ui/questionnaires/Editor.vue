@@ -4,11 +4,12 @@ import * as api from './api';
 import {Datafield, Questionnaire} from './model';
 import {i18n_any, sort, numericComp, groupBy, SYSTEM_DATAFIELDS} from './helper';
 import { gettext } from './gettextstub';
-import {inject, nextTick, onMounted, onUnmounted, ref} from 'vue';
+import {computed, inject, nextTick, onMounted, onUnmounted, ref} from 'vue';
 import { SlickList, SlickItem } from 'vue-slicksort';
 import { ProgressBar } from "./ProgressBar";
 
 const grouped_items = inject('pretix:env:event:grouped_items')
+const all_items = inject('pretix:env:event:items')
 
 type QuestionnaireMaybeUnsaved = Omit<Questionnaire, 'id'> & { _new_id?: number, id?: number };
 const order_questionnaires = ref<QuestionnaireMaybeUnsaved[]>();
@@ -120,6 +121,7 @@ onMounted(() => window.addEventListener('focus', windowFocused))
 onUnmounted(() => window.removeEventListener('focus', windowFocused))
 
 const selected_product = ref("")
+const selected_product_details = computed(() => selected_product.value ? all_items.value[selected_product.value] : null)
 const preview_mode = ref(false)
 </script>
 
@@ -214,7 +216,7 @@ const preview_mode = ref(false)
 	<div :class="`questionnaires-editor ${selected_product ? 'product-selected':''} ${preview_mode ? 'preview-mode':''}`">
 		<div class="filter-row" v-if="preview_mode">
 			<button class="btn btn-default" @click="preview_mode = false"><span class="fa fa-chevron-left"></span> {{ gettext('Back') }}</button>
-			Previewing questionnaires for product {{ selected_product }}
+			Preview of questionnaires for product <em>{{ selected_product_details?.internal_name || i18n_any(selected_product_details?.name) }}</em>
 		</div>
 		<div class="filter-row" v-else>
 			Questionnaires for product:
@@ -234,7 +236,7 @@ const preview_mode = ref(false)
 			<details class="panel panel-default details-open" open>
 				<summary class="panel-heading">
 					<h4 class="panel-title">
-						<strong>Product {{ selected_product }}</strong>
+						<strong>{{ selected_product_details?.internal_name || i18n_any(selected_product_details?.name) }}</strong>
 					</h4>
 				</summary>
 

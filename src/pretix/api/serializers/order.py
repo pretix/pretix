@@ -251,7 +251,7 @@ class MixedAnswerListSerializer(ListSerializer):
                     answer["user_datafield_id"] = qc.user_datafield_id
                     answers.append(answer)
             elif (sys_answer := instance.get_system_answer(qc.system_datafield)) is not None:
-                if qc.system_datafield == 'attendee_name_parts':
+                if qc.system_datafield == QuestionnaireChild.SystemDatafield.ATTENDEE_NAME_PARTS:
                     name_parts = instance.attendee_name_parts
                     settings = self.context['event'].settings
                     for k, v, w, *__ in PERSON_NAME_SCHEMES.get(settings.name_scheme)['fields']:
@@ -271,20 +271,18 @@ class MixedAnswerListSerializer(ListSerializer):
                             answers.append({
                                 "question": QuestionnaireChild.cook_id_from_parts(qc.questionnaire_id, None, f'{qc.system_datafield}:{k}'),
                                 "answer": name_parts[k],
-                                "question_identifier": f'@{qc.system_datafield}:{k}',
+                                "question_identifier": f'{qc.system_datafield}:{k}',
                                 "options": options,
                                 "option_identifiers": options_ident,
                                 "questionnaire_id": qc.questionnaire_id,
-                                "system_datafield": f'{qc.system_datafield}:{k}',
                             })
                 answers.append({
                     "question": qc.cooked_id,
                     "answer": sys_answer,
-                    "question_identifier": f'@{qc.system_datafield}',
+                    "question_identifier": f'{qc.system_datafield}',
                     "options": [],
                     "option_identifiers": [],
                     "questionnaire_id": qc.questionnaire_id,
-                    "system_datafield": qc.system_datafield,
                 })
         return answers
 
@@ -297,23 +295,23 @@ class MixedAnswerListSerializer(ListSerializer):
             try:
                 qid, dfid, sys_df = QuestionnaireChild.uncook_id(answer["question"])
             except ValueError:
-                if type(answer["question"]) is str and answer["question"].lstrip("@") in QuestionnaireChild.SYSTEM_DATAFIELD_NUMBERS:
-                    qid, dfid, sys_df = None, None, answer["question"].lstrip("@")
+                if type(answer["question"]) is str and answer["question"] in QuestionnaireChild.SYSTEM_DATAFIELD_NUMBERS:
+                    qid, dfid, sys_df = None, None, answer["question"]
                 else:
                     raise ValidationError('Invalid question ID')
             if dfid:
                 answer["question"] = dfid
                 answers.append(answer)
-            elif sys_df == "country":
-                result[sys_df] = Country(answer["answer"])
-            elif sys_df == "attendee_name_parts:salutation":
+            elif sys_df == "@country":
+                result['country'] = Country(answer["answer"])
+            elif sys_df == "@attendee_name_parts:salutation":
                 attendee_name_parts['salutation'] =  PERSON_NAME_SALUTATIONS[answer["options"][0] - 1][0]
-            elif sys_df == "attendee_name_parts:title" and settings.name_scheme_titles:
+            elif sys_df == "@attendee_name_parts:title" and settings.name_scheme_titles:
                 attendee_name_parts['title'] =  PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1][answer["options"][0] - 1]
-            elif sys_df.startswith("attendee_name_parts:"):
-                attendee_name_parts[sys_df[len("attendee_name_parts:"):]] = answer["answer"]
+            elif sys_df.startswith("@attendee_name_parts:"):
+                attendee_name_parts[sys_df[len("@attendee_name_parts:"):]] = answer["answer"]
             else:
-                result[sys_df] = answer["answer"]
+                result[sys_df[1:]] = answer["answer"]
         result["answers"] = super().to_internal_value(answers)
         if attendee_name_parts:
             result["attendee_name_parts"] = attendee_name_parts

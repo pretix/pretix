@@ -76,6 +76,7 @@ from pretix.helpers.daterange import daterange
 from pretix.helpers.hierarkey import clean_filename
 from pretix.helpers.json import CustomJSONEncoder, safe_string
 from pretix.helpers.thumb import get_thumbnail
+from . import QuestionnaireChild
 
 from ..settings import settings_hierarkey
 from .organizer import Organizer, Team
@@ -739,7 +740,7 @@ class Event(EventMixin, LoggedModel):
         self.settings.mail_send_download_reminder_attendee = True
         from . import Questionnaire
         q = self.questionnaires.create(internal_name=str(_('Attendee data')), type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE, position=0)
-        q.children.create(label=str(_('Attendee name')), system_datafield='attendee_name_parts', position=0)
+        q.children.create(label=str(_('Attendee name')), system_datafield=QuestionnaireChild.SystemDatafield.ATTENDEE_NAME_PARTS, position=0)
 
     @property
     def social_image(self):

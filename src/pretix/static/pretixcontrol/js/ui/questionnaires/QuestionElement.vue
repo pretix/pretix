@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { i18n_any, QUESTION_TYPE, QUESTION_TYPE_LABEL, SYSTEM_DATAFIELDS } from './helper';
+import {
+  i18n_any,
+  QUESTION_TYPE,
+  QUESTION_TYPE_LABEL,
+  QUESTION_TYPE_LABEL_FROM_VALUE,
+  SYSTEM_DATAFIELDS
+} from './helper';
 import NativeDialog from './NativeDialog.vue';
 import I18nTextField from './I18nTextField.vue';
 import {useId, ref, computed} from 'vue'
@@ -16,13 +22,14 @@ const question = ref(props.question);
 
 const dlgEditDatafield = ref()
 
-const df = computed(() => typeof question.value.datafield === 'number' ?
-		props.datafields.find(el => el.id === question.value.datafield) :
-	typeof question.value.datafield === 'string' ?
+const df = computed(() => question.value.datafield === null ?
+    null :
+    question.value.datafield.startsWith('@') ?
 		SYSTEM_DATAFIELDS[question.value.datafield] :
-		null);
+		props.datafields.find(el => el.identifier === question.value.datafield)
+);
 
-const dependency_values_options = computed(() => props.datafields.find(el => el.id === question.value.dependency_question)?.options);
+const dependency_values_options = computed(() => props.datafields.find(el => el.identifier === question.value.dependency_question)?.options);
 const dependency_values_resolved = computed(() => question.value.dependency_values.map(ident => i18n_any(dependency_values_options.value.find(opt => opt.identifier === ident)?.answer) ?? ident));
 
 if (!question.value.label) question.value.label = {};
@@ -106,28 +113,20 @@ const editor = ref();
             Data field
           </label>
           <div class="col-md-9">
-            <p class="form-control-static">
-							<template v-if="typeof question.datafield === 'number'">
-								{{ df.internal_name }}
-								<div>
-									<a class="btn btn-sm btn-default" href="javascript:" @click="dlgEditDatafield.open(getDatafieldEditUrl(df.id))"><span class="fa fa-wrench"></span> Manage data field details</a>
-									<a class="btn btn-sm btn-default" :href="getDatafieldViewUrl(df.id)" target="_blank"><span class="fa fa-external-link"></span> View answers</a>
-								</div>
+            <div class="form-control-static">
+							<template v-if="question.datafield.startsWith('@')">
+								{{ i18n_any(df.question) }} <span class="label label-default pull-right">{{gettext('System-defined field')}}</span>
 							</template>
 							<template v-else>
-								{{ question.datafield }}
+								{{ df.internal_name }}
 							</template>
-						</p>
-          </div>
-        </div>
-        <div class="form-group" v-if="df">
-          <label class="col-md-3 control-label">
-            Data field type
-          </label>
-          <div class="col-md-9">
-            <select v-model="df.type" class="form-control" disabled>
-              <option v-for="(label, type) in QUESTION_TYPE_LABEL" :value="QUESTION_TYPE[type]">{{ label }}</option>
-            </select>
+              <div class="text-muted"><small>{{ gettext('Internal reference') }}: <code>{{ df.identifier }}</code> &middot; {{ gettext('Question type') }}: {{ QUESTION_TYPE_LABEL_FROM_VALUE[df.type] }}
+              </small></div>
+              <div v-if="!question.datafield.startsWith('@')">
+                <a class="btn btn-sm btn-default" href="javascript:" @click="dlgEditDatafield.open(getDatafieldEditUrl(df.id))"><span class="fa fa-wrench"></span> Manage data field details</a>
+                <a class="btn btn-sm btn-default" :href="getDatafieldViewUrl(df.id)" target="_blank"><span class="fa fa-external-link"></span> View answers</a>
+              </div>
+						</div>
           </div>
         </div>
         <div class="form-group" v-if="df">

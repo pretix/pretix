@@ -2093,30 +2093,30 @@ class Questionnaire(LoggedModel):
 
 
 class QuestionnaireChild(LoggedModel):
-    class SystemQuestion(models.TextChoices):
-        ATTENDEE_NAME_PARTS = 'attendee_name_parts', _('Attendee name')
-        ATTENDEE_EMAIL = 'attendee_email', _('Attendee email')
-        COMPANY = 'company', _('Company')
-        STREET = 'street', _('Street')
-        ZIPCODE = 'zipcode', _('ZIP code')
-        CITY = 'city', _('City')
-        STATE = 'state', _('State')
-        COUNTRY = 'country', _('Country')
+    class SystemDatafield(models.TextChoices):
+        ATTENDEE_NAME_PARTS = '@attendee_name_parts', _('Attendee name')
+        ATTENDEE_EMAIL = '@attendee_email', _('Attendee email')
+        COMPANY = '@company', _('Company')
+        STREET = '@street', _('Street')
+        ZIPCODE = '@zipcode', _('ZIP code')
+        CITY = '@city', _('City')
+        STATE = '@state', _('State')
+        COUNTRY = '@country', _('Country')
 
     # _name_schemes_all_fields = sorted(list(set(k for scheme in PERSON_NAME_SCHEMES.values() for k, v, w, *__ in scheme['fields'])))
     _name_schemes_all_fields = ['calling_name', 'degree', 'family_name', 'full_name', 'given_name',
                                 'latin_transcription', 'middle_name', 'salutation', 'title']
     SYSTEM_DATAFIELD_NUMBERS = [
-       SystemQuestion.ATTENDEE_NAME_PARTS.value,
-       SystemQuestion.ATTENDEE_EMAIL.value,
-       SystemQuestion.COMPANY.value,
-       SystemQuestion.STREET.value,
-       SystemQuestion.ZIPCODE.value,
-       SystemQuestion.CITY.value,
-       SystemQuestion.STATE.value,
-       SystemQuestion.COUNTRY.value,
+       SystemDatafield.ATTENDEE_NAME_PARTS.value,
+       SystemDatafield.ATTENDEE_EMAIL.value,
+       SystemDatafield.COMPANY.value,
+       SystemDatafield.STREET.value,
+       SystemDatafield.ZIPCODE.value,
+       SystemDatafield.CITY.value,
+       SystemDatafield.STATE.value,
+       SystemDatafield.COUNTRY.value,
     ] + [
-        'attendee_name_parts:' + field
+        '@attendee_name_parts:' + field
         for field in _name_schemes_all_fields
     ]
 
@@ -2137,7 +2137,7 @@ class QuestionnaireChild(LoggedModel):
     )
     system_datafield = models.CharField(
         max_length=25,
-        choices=SystemQuestion.choices,
+        choices=SystemDatafield.choices,
         null=True, blank=True,
     )
     required = models.BooleanField(
@@ -2159,6 +2159,15 @@ class QuestionnaireChild(LoggedModel):
 
     class Meta:
         ordering = ('position', 'id')
+
+    @property
+    def form_field_name(self):
+        if self.user_datafield_id:
+            return 'question_%s' % self.user_datafield_id
+        elif self.system_datafield:
+            return self.system_datafield[1:]
+        else:
+            return 'text_%s' % self.position
 
     @property
     def cooked_id(self):

@@ -720,7 +720,7 @@ class QuestionnairesEditor(EventPermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['questionnaire_type_choices'] = textchoices_to_json(Questionnaire.QuestionnaireType, self.request.event)
-        ctx['system_question_choices'] = textchoices_to_json(QuestionnaireChild.SystemQuestion, self.request.event)
+        ctx['system_question_choices'] = textchoices_to_json(QuestionnaireChild.SystemDatafield, self.request.event)
         ctx['question_type_choices'] = textchoices_to_json(Question.FieldType, self.request.event)
         return ctx
 

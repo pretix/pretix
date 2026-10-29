@@ -881,7 +881,7 @@ class BaseQuestionsForm(forms.Form):
             field.answer = answers[0]
 
         if qc.dependency_question_id:
-            field.widget.attrs['data-question-dependency'] = f"question_{qc.dependency_question.user_datafield_id}" if qc.dependency_question.user_datafield_id else qc.dependency_question.system_datafield
+            field.widget.attrs['data-question-dependency'] = qc.dependency_question.form_field_name
             field.widget.attrs['data-question-dependency-values'] = escapejson_attr(json.dumps(qc.dependency_values))
             if datafield.type != 'M':
                 field.widget.attrs['required'] = qc.required and not self.all_optional
@@ -984,9 +984,9 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
             for child in getattr(questionnaire, 'childlist', questionnaire.children.all()):
                 if child.user_datafield:
                     df = child.user_datafield
-                    self.fields['question_%s' % df.id] = self.build_user_question_field(request, event, answerlist, child, df)
+                    self.fields[child.form_field_name] = self.build_user_question_field(request, event, answerlist, child, df)
                 else:
-                    self.fields['text_%d' % idx] = self.build_text_block(request, event, child)
+                    self.fields[child.form_field_name] = self.build_text_block(request, event, child)
                     idx += 1
 
     def clean(self):
@@ -1024,17 +1024,15 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
         if cartpos and item.validity_mode == Item.VALIDITY_MODE_DYNAMIC and item.validity_dynamic_start_choice:
             self.fields['requested_valid_from'] = self.build_requested_valid_from_field(event, pos, item)
 
-        idx = 0
         for questionnaire in questionnaires:
             for child in getattr(questionnaire, 'childlist', questionnaire.children.all()):
                 if child.user_datafield:
                     df = child.user_datafield
-                    self.fields['question_%s' % df.id] = self.build_user_question_field(request, event, pos.answerlist, child, df)
+                    self.fields[child.form_field_name] = self.build_user_question_field(request, event, pos.answerlist, child, df)
                 elif child.system_datafield:
-                    self.fields[child.system_datafield] = self.build_system_question_field(request, event, pos, child)
+                    self.fields[child.form_field_name] = self.build_system_question_field(request, event, pos, child)
                 else:
-                    self.fields['text_%d' % idx] = self.build_text_block(request, event, child)
-                    idx += 1
+                    self.fields[child.form_field_name] = self.build_text_block(request, event, child)
 
         responses = question_form_fields.send(sender=event, position=pos)
         data = pos.meta_info_data
@@ -1099,8 +1097,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
             )
 
     def build_system_question_field(self, request, event, pos, qc):
-        field_name = qc.system_datafield
-        if field_name == 'attendee_name_parts':
+        if qc.system_datafield == QuestionnaireChild.SystemDatafield.ATTENDEE_NAME_PARTS:
             return NamePartsFormField(
                 max_length=255,
                 required=qc.required and not self.all_optional,
@@ -1110,7 +1107,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                 help_text=rich_text(qc.help_text),
                 initial=pos.attendee_name_parts,
             )
-        if field_name == 'attendee_email':
+        if qc.system_datafield == QuestionnaireChild.SystemDatafield.ATTENDEE_EMAIL:
             return forms.EmailField(
                 required=qc.required and not self.all_optional,
                 label=escape(qc.label),
@@ -1122,7 +1119,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                     }
                 )
             )
-        if field_name == 'company':
+        if qc.system_datafield == QuestionnaireChild.SystemDatafield.COMPANY:
             return forms.CharField(
                 required=qc.required and not self.all_optional,
                 label=escape(qc.label),
@@ -1131,7 +1128,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                 initial=pos.company,
             )
 
-        if field_name == 'street':
+        if qc.system_datafield == QuestionnaireChild.SystemDatafield.STREET:
             return forms.CharField(
                 required=qc.required and not self.all_optional,
                 label=escape(qc.label),
@@ -1143,7 +1140,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                 }),
                 initial=pos.street,
             )
-        if field_name == 'zipcode':
+        if qc.system_datafield == QuestionnaireChild.SystemDatafield.ZIPCODE:
             return forms.CharField(
                 required=False,
                 max_length=30,
@@ -1154,7 +1151,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                     'autocomplete': 'postal-code',
                 }),
             )
-        if field_name == 'city':
+        if qc.system_datafield == QuestionnaireChild.SystemDatafield.CITY:
             return forms.CharField(
                 required=False,
                 label=escape(qc.label),
@@ -1165,7 +1162,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                     'autocomplete': 'address-level2',
                 }),
             )
-        if field_name == 'country':
+        if qc.system_datafield == QuestionnaireChild.SystemDatafield.COUNTRY:
             country = pos.country or guess_country_from_request(request, event)
             return CountryField(
                 countries=CachedCountries
@@ -1179,7 +1176,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                     'data-trigger-address-info': 'on',
                 }),
             )
-        if field_name == 'state':
+        if qc.system_datafield == QuestionnaireChild.SystemDatafield.STATE:
             country = pos.country or guess_country_from_request(request, event)
             c = [('', '---')]
             fprefix = str(self.prefix) + '-' if self.prefix is not None and self.prefix != '-' else ''
