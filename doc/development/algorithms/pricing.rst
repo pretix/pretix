@@ -284,10 +284,36 @@ In this algorithm, the tax value and gross total are computed from the sum of th
 of some of the tickets will be changed automatically by the minimum currency unit (e.g. €0.01) such that the resulting
 gross prices stay the same.
 
-**This is less confusing to consumers and the end result is still compliant to EN 16931, so we recommend this for e-invoicing when (primarily) consumers are involved.**
+**This is a bit less confusing to consumers and the end result is still compliant to EN 16931, so we recommend this for e-invoicing when (primarily) consumers are involved.**
+
+However, confusion for consumers can still arise when a price cannot be represented by a net price.
+For example, you cannot sell a single ticket for 15.00 with a 19 % tax rate, because 12.60 * 1.19 = 14.99 and 12.61 * 1.19 = 15.01, so a total gross price of 15.00 is impossible to reach and the system will round to a different gross price.
 
 The main downside is that it might be confusing when selling to business customers, since the prices of the identical tickets appear to be different.
 Full computation for the example above:
+
+ ========== ========== ============================= ============================== =============
+   Product   Tax rate                     Net price                            Tax   Gross price
+ ========== ========== ============================= ============================== =============
+  Ticket A       19 %   84.04 (incl. 0.01 rounding)   15.96 (incl. -0.01 rounding)        100.00
+  Ticket B       19 %   84.04 (incl. 0.01 rounding)   15.96 (incl. -0.01 rounding)        100.00
+  Ticket C       19 %                         84.03                          15.97        100.00
+  Ticket D       19 %                         84.03                          15.97        100.00
+  Ticket E       19 %                         84.03                          15.97        100.00
+       Sum                                   420.17                          79.83        500.00
+ ========== ========== ============================= ============================== =============
+
+Compute taxes based on gross total
+""""""""""""""""""""""""""""""""""
+
+Algorithm identifier: ``sum_by_gross``
+
+In this algorithm, the net prices of some the individual lines will be modified such that the end values will be consistent with a computation from the gross sum.
+This will lead to different net prices to be shown for tickets of the same type, but the gross price will stay always the same.
+
+**This is the most sensible algorithm when dealing mostly with consumer or when advertising gross prices, and you still need to issue e-invoices. Technically, it is incompliant with EN 16931, but at least for Germany, the Federal Ministry of Finance (BMF) allows to use it until end of 2027 in lieu of a better solution.**
+
+For the example above:
 
  ========== ========== ============================= ============================== =============
    Product   Tax rate                     Net price                            Tax   Gross price

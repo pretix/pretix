@@ -990,10 +990,17 @@ class TaxSettingsForm(EventSettingsValidationMixin, SettingsForm):
                 "invoices. This can cause the payment amount to change when the invoice address is changed."
             ),
             "sum_by_net_keep_gross": _(
-                "Recommended for e-invoicing when you primarily sell to consumers. "
+                "Recommended for e-invoicing when you primarily sell to consumers and need invoices compliant with EN 16931. "
                 "The gross or net price of some products may be changed automatically to ensure correct "
                 "rounding of the order total. The system attempts to keep gross prices as configured whenever "
                 "possible. Gross prices may still change if they are impossible to derive from a rounded net price."
+            ),
+            "sum_by_gross": _(
+                "Recommended for e-invoicing when you primarily sell to consumers or advertise gross prices. "
+                "The net price of some products may be changed to ensure correct rounding, while the gross "
+                "prices will be kept as configured. This actual payment amount always stays as expected. This is "
+                "technically not compliant with European e-invoicing standards, but e.g. allowed within Germany at "
+                "least until end of 2027."
             ),
         }
         self.fields["tax_rounding"].choices = (
