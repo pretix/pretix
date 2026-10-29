@@ -264,6 +264,8 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
             )
         )
 
+    profile['oidc_claims'] = userinfo
+
     return profile
 
 
