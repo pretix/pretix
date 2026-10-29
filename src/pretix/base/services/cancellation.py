@@ -408,7 +408,8 @@ def signal_listener_process_cancel_allowed(sender: Event, **kwargs) -> Cancellat
 
 
 def process_cancellation_in_progress(order: PrefetchedOrder, keep: PositionSet, check_ts: datetime.datetime):
-    if any([c.state not in [Cancellation.PERFORMED, Cancellation.CANCELLED] for c in order.cancellations.all()]):
+    if any([c.state not in [Cancellation.STATE_PERFORMED, Cancellation.STATE_ABORTED] for c in
+            order.cancellations.all()]):
         return CheckResult(
             id="pretixbase_process_cancellation_in_progress",
             reason=_("Cancellation request already in progress"),

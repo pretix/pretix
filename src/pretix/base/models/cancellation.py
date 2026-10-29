@@ -34,7 +34,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Prefetch
 from django.utils.timezone import make_aware
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.cancellation import (
     CancellationResult, CheckResult, CheckTypes, FeeType, RuleResult,
@@ -47,16 +47,16 @@ if TYPE_CHECKING:
 
 
 class Cancellation(models.Model):
-    CREATED: Final = "CREATED"
-    APPROVAL_PENDING: Final = "APPROVAL_PENDING"
-    PERFORMED: Final = "PERFORMED"
-    CANCELLED: Final = "CANCELLED"
+    STATE_CREATED: Final = "created"
+    STATE_APPROVAL_PENDING: Final = "approval_pending"
+    STATE_PERFORMED: Final = "performed"
+    STATE_ABORTED: Final = "aborted"
 
-    CANCELLATION_STATE = (
-        (CREATED, _("Created")),
-        (APPROVAL_PENDING, _("Approval pending")),
-        (PERFORMED, _("Performed")),
-        (CANCELLED, _("Cancelled")),
+    CANCELLATION_CHOICES = (
+        (STATE_CREATED, _("Created")),
+        (STATE_APPROVAL_PENDING, _("Approval pending")),
+        (STATE_PERFORMED, _("Performed")),
+        (STATE_ABORTED, _("Aborted")),
     )
 
     event = models.ForeignKey(
@@ -75,14 +75,14 @@ class Cancellation(models.Model):
         to="OrderPosition",
         verbose_name=_("Positions to keep"),
     )
-    evaluation_ts = models.DateTimeField(
+    evaluated_at = models.DateTimeField(
         verbose_name=_("Cancellation datetime"),
     )
 
     state = models.CharField(
         max_length=16,
-        choices=CANCELLATION_STATE,
-        default=CREATED,
+        choices=CANCELLATION_CHOICES,
+        default=STATE_CREATED,
         verbose_name=_("State of the cancellation"),
     )
 
@@ -122,12 +122,12 @@ class CancellationRuleManager(models.Manager.from_queryset(CancellationRuleQuery
 
 
 class CancellationRule(models.Model):
-    EARLIEST: Final = "EARLIEST"
-    LATEST: Final = "LATEST"
+    VARIANT_EARLIEST: Final = "earliest"
+    VARIANT_LATEST: Final = "latest"
 
     SUBEVENT_VARIANT_CHOICES = (
-        (EARLIEST, _("Earliest")),
-        (LATEST, _("Latest")),
+        (VARIANT_EARLIEST, _("Earliest")),
+        (VARIANT_LATEST, _("Latest")),
     )
 
     event = models.ForeignKey(
@@ -179,12 +179,12 @@ class CancellationRule(models.Model):
     subevent_variant = models.CharField(
         max_length=8,
         choices=SUBEVENT_VARIANT_CHOICES,
-        default=EARLIEST,
-        verbose_name=_("Subevent variant"),
-        help_text=_("An order can contain tickets for multiple different events if the event has "
-                    "subevents enabled. This choice controls if the order position for the earliest "
-                    "or the latest point in time in the order is used to determine the allowed until and "
-                    "except after dates.")
+        default=VARIANT_EARLIEST,
+        verbose_name=pgettext_lazy("subevent", "Multiple date handling"),
+        help_text=pgettext_lazy("subevent", "An order can contain order positions for multiple different dates."
+                                            "This choice controls if the order position for the earliest "
+                                            "or the latest date in the order is used to determine the allowed until and "
+                                            "except after dates.")
     )
 
     fee_cancellation_process = models.DecimalField(
@@ -250,15 +250,15 @@ class CancellationRule(models.Model):
                     "Fee mode is not valid on a process rule."
                 )
             if self.fee_percentage_per_position or self.fee_absolute_per_position:
-                errors["fee_percentage_per_position"] = _("Position fees must be unset on a process rule.")
+                errors["fee_percentage_per_position"] = "Position fees must be unset on a process rule."
             if self.pk and (self.limit_products.exists() or self.limit_variations.exists()):
-                errors["limit_products"] = _("Product/variation limits are not valid on a process rule.")
+                errors["limit_products"] = "Product/variation limits are not valid on a process rule."
 
         if self.type == CheckTypes.POSITION:
             if self.fee_cancellation_process:
-                errors["fee_cancellation_process"] = _("Process fee must be unset on a position rule.")
+                errors["fee_cancellation_process"] = "Process fee must be unset on a position rule."
             if self.fee_mode:
-                errors["fee_mode"] = _("Fee mode is not valid on a position rule.")
+                errors["fee_mode"] = "Fee mode is not valid on a position rule."
 
         if errors:
             raise ValidationError(errors)
@@ -266,6 +266,12 @@ class CancellationRule(models.Model):
 
 class PositionCancellationRuleManager(CancellationRuleManager):
     check_type = CheckTypes.POSITION
+
+
+limit_names = {
+    'allowed_until': _("allowed-until"),
+    'except_after': _("except-after"),
+}
 
 
 class PositionCancellationRule(CancellationRule):
@@ -330,30 +336,39 @@ class PositionCancellationRule(CancellationRule):
 
         order = position.order
 
-        for param in ('allowed_until', 'except_after'):
-            value: RelativeDateWrapper | None = getattr(self, param, None)
-            if value is not None:
-                if check_ts <= self._resolve_date_field(value, order, position):
+        for limit_name in ('allowed_until', 'except_after'):
+            deadline: RelativeDateWrapper | None = getattr(self, limit_name, None)
+            if deadline is not None:
+                deadline_value = self._resolve_date_field(deadline, order, self.subevent_variant)
+                if check_ts <= deadline_value:
                     check_results.append(
                         CheckResult(
-                            id=f"position_rule_{self.id}_{param}",
-                            reason=_("{} is earlier than {} cutoff {}".format(check_ts, param, value)),
+                            id=f"position_rule_{self.id}_{limit_name}",
+                            reason=_("{evaluated_at} is earlier than {limit_name} deadline {deadline}").format(
+                                evaluated_at=check_ts,
+                                limit_name=limit_names[limit_name],
+                                deadline=deadline_value,
+                            ),
                             cancellation_possible=True
                         )
                     )
                 else:
                     check_results.append(
                         CheckResult(
-                            id=f"position_rule_{self.id}_{param}",
-                            reason=_("{} is later than {} cutoff {}".format(check_ts, param, value)),
+                            id=f"position_rule_{self.id}_{limit_name}",
+                            reason=_("{evaluated_at} is later than {limit_name} deadline {deadline}").format(
+                                evaluated_at=check_ts,
+                                limit_name=limit_names[limit_name],
+                                deadline=deadline_value,
+                            ),
                             cancellation_possible=False
                         )
                     )
             else:
                 check_results.append(
                     CheckResult(
-                        id=f"position_rule_{self.id}_{param}",
-                        reason=_("No {} limit defined".format(param)),
+                        id=f"position_rule_{self.id}_{limit_name}",
+                        reason=_("No {limit_name} limit defined").format(limit_name=limit_names[limit_name]),
                         cancellation_possible=True
                     )
                 )
@@ -370,7 +385,7 @@ class PositionCancellationRule(CancellationRule):
 
         if self.fee_percentage_per_position and self.fee_absolute_per_position:
             raise NotImplementedError(
-                _("Combination of fee_percentage_per position and fee_absolute_per_position is not valid"))
+                "Combination of fee_percentage_per position and fee_absolute_per_position is not valid")
         elif self.fee_absolute_per_position != Decimal(0.00):
             return RuleResult.from_absolute_fee(
                 id=self.id,
@@ -448,30 +463,37 @@ class ProcessCancellationRule(CancellationRule):
 
         check_results: List[CheckResult] = []
 
-        for param in ('allowed_until', 'except_after'):
-            value: RelativeDateWrapper | None = getattr(self, param, None)
-            if value is not None:
-                if check_ts <= self._resolve_date_field(value, order, self.subevent_variant):
+        for limit_name in ('allowed_until', 'except_after'):
+            deadline: RelativeDateWrapper | None = getattr(self, limit_name, None)
+            if deadline is not None:
+                deadline_value = self._resolve_date_field(deadline, order, self.subevent_variant)
+                if check_ts <= deadline_value:
                     check_results.append(
                         CheckResult(
-                            id=f"process_rule_{self.id}_{param}",
-                            reason=_("{} is earlier than {} cutoff {}".format(check_ts, param, value)),
+                            id=f"process_rule_{self.id}_{limit_name}",
+                            reason=_("{evaluated_at} is earlier than {limit_name} deadline {deadline}").format(
+                                evaluated_at=check_ts,
+                                limit_name=limit_names[limit_name],
+                                deadline=deadline_value),
                             cancellation_possible=True
                         )
                     )
                 else:
                     check_results.append(
                         CheckResult(
-                            id=f"process_rule_{self.id}_{param}",
-                            reason=_("{} is later than {} cutoff {}".format(check_ts, param, value)),
+                            id=f"process_rule_{self.id}_{limit_name}",
+                            reason=_("{evaluated_at} is later than {limit_name} deadline {deadline}").format(
+                                evaluated_at=check_ts,
+                                limit_name=limit_names[limit_name],
+                                deadline=deadline_value),
                             cancellation_possible=False
                         )
                     )
             else:
                 check_results.append(
                     CheckResult(
-                        id=f"process_rule_{self.id}_{param}",
-                        reason=_("No {} limit defined".format(param)),
+                        id=f"process_rule_{self.id}_{limit_name}",
+                        reason=_("No {limit_name} limit defined".format(limit_name=limit_name)),
                         cancellation_possible=True
                     )
                 )

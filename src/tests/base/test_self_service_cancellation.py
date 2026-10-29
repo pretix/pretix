@@ -137,7 +137,7 @@ class TestRuleResult:
     def test_rule_result_cancellation_possible(self, partial_results: List[bool], expected: bool):
         check_results = [make_check_result(state) for state in partial_results]
 
-        result = RuleResult(id=1, partial_results=check_results, fee_type=FeeType.POSITION, fee=Decimal(0))
+        result = RuleResult(id=1, partial_results=check_results, fee_type=FeeType.POSITION, fee=Decimal("0"))
         assert result.cancellation_possible == expected
 
     @pytest.mark.parametrize(
@@ -167,12 +167,12 @@ class TestRuleResult:
     @pytest.mark.parametrize(
         ("fee_type", "absolute", "reference", "result"),
         [
-            (FeeType.MINIMUM, Decimal(10), Decimal(1), Decimal(9)),
-            (FeeType.MINIMUM, Decimal(1), Decimal(10), Decimal(0)),
-            (FeeType.MINIMUM, Decimal(10), Decimal(10), Decimal(0)),
-            (FeeType.ADDITIONAL, Decimal(10), Decimal(1), Decimal(10)),
-            (FeeType.ADDITIONAL, Decimal(1), Decimal(10), Decimal(1)),
-            (FeeType.ADDITIONAL, Decimal(10), Decimal(10), Decimal(10)),
+            (FeeType.MINIMUM, Decimal("10"), Decimal(1), Decimal(9)),
+            (FeeType.MINIMUM, Decimal(1), Decimal("10"), Decimal("0")),
+            (FeeType.MINIMUM, Decimal("10"), Decimal("10"), Decimal("0")),
+            (FeeType.ADDITIONAL, Decimal("10"), Decimal(1), Decimal("10")),
+            (FeeType.ADDITIONAL, Decimal(1), Decimal("10"), Decimal(1)),
+            (FeeType.ADDITIONAL, Decimal("10"), Decimal("10"), Decimal("10")),
         ],
         ids=[
             "minimum-absolute-less-than-reference",
@@ -197,8 +197,8 @@ class TestRuleResult:
     @pytest.mark.parametrize(
         ("position_price", "percentage", "result"),
         [
-            (Decimal(10), Decimal(10), Decimal(1)),
-            (Decimal(10), Decimal("9.9"), Decimal("0.99"))
+            (Decimal("10"), Decimal("10"), Decimal(1)),
+            (Decimal("10"), Decimal("9.9"), Decimal("0.99"))
         ],
     )
     def test_from_relative_fee(self, position_price, percentage, result):
@@ -215,18 +215,23 @@ class TestPositionResult:
     @pytest.mark.parametrize(
         ("check_results", "rule_results", "cancellation_possible", "fee"),
         [
-            ({1: [make_check_result(True)]}, {1: [make_rule_result(Decimal(10), possible=True)]}, True, Decimal(10)),
-            ({1: [make_check_result(False)]}, {1: [make_rule_result(Decimal(10), possible=True)]}, False, Decimal(10)),
-            ({1: [make_check_result(False)]}, {1: [make_rule_result(Decimal(10), possible=False)]}, False, Decimal(0)),
+            ({1: [make_check_result(True)]}, {1: [make_rule_result(Decimal("10"), possible=True)]}, True,
+             Decimal("10")),
+            ({1: [make_check_result(False)]}, {1: [make_rule_result(Decimal("10"), possible=True)]}, False,
+             Decimal("10")),
+            ({1: [make_check_result(False)]}, {1: [make_rule_result(Decimal("10"), possible=False)]}, False,
+             Decimal("0")),
             ({1: [make_check_result(True), make_check_result(False)]},
-             {1: [make_rule_result(Decimal(10), possible=True)]},
-             False, Decimal(10)),
+             {1: [make_rule_result(Decimal("10"), possible=True)]},
+             False, Decimal("10")),
             ({1: [make_check_result(True)]},
-             {1: [make_rule_result(Decimal(10), possible=False), make_rule_result(Decimal(5), possible=True)]}, True,
-             Decimal(5)),
+             {1: [make_rule_result(Decimal("10"), possible=False), make_rule_result(Decimal("5"), possible=True)]},
+             True,
+             Decimal("5")),
             ({1: [make_check_result(True)]},
-             {1: [make_rule_result(Decimal(10), possible=False), make_rule_result(Decimal(5), possible=False)]}, False,
-             Decimal(0)),
+             {1: [make_rule_result(Decimal("10"), possible=False), make_rule_result(Decimal("5"), possible=False)]},
+             False,
+             Decimal("0")),
 
         ],
     )
@@ -244,35 +249,35 @@ class TestPositionResult:
         pos_res = PositionResult(position_check_results=check_results, position_rule_results=rule_results)
 
         assert pos_res.cancellation_possible is True
-        assert pos_res.fee_value == Decimal(0)
+        assert pos_res.fee_value == Decimal("0")
 
     def test_mixed_positions_one_without_rule_results(self):
         # One position has rules, another has none.
         # The empty one shouldn't crash the overall evaluation or affect the other.
         check_results = {1: [make_check_result(True)], 2: []}
-        rule_results = {1: [make_rule_result(Decimal(10), possible=True)], 2: []}
+        rule_results = {1: [make_rule_result(Decimal("10"), possible=True)], 2: []}
 
         pos_res = PositionResult(position_check_results=check_results, position_rule_results=rule_results)
 
         assert pos_res.cancellation_possible is True
-        assert pos_res.fee_value == Decimal(10)
+        assert pos_res.fee_value == Decimal("10")
 
 
 class TestProcessResults:
     @pytest.mark.parametrize(
         ("check_results", "rule_results", "cancellation_possible", "fee"),
         [
-            ([make_check_result(True)], [make_rule_result(Decimal(10), possible=True)], True, Decimal(10)),
-            ([make_check_result(False)], [make_rule_result(Decimal(10), possible=True)], False, Decimal(10)),
-            ([make_check_result(False)], [make_rule_result(Decimal(10), possible=False)], False, Decimal(0)),
-            ([make_check_result(True), make_check_result(False)], [make_rule_result(Decimal(10), possible=True)],
-             False, Decimal(10)),
+            ([make_check_result(True)], [make_rule_result(Decimal("10"), possible=True)], True, Decimal("10")),
+            ([make_check_result(False)], [make_rule_result(Decimal("10"), possible=True)], False, Decimal("10")),
+            ([make_check_result(False)], [make_rule_result(Decimal("10"), possible=False)], False, Decimal("0")),
+            ([make_check_result(True), make_check_result(False)], [make_rule_result(Decimal("10"), possible=True)],
+             False, Decimal("10")),
             ([make_check_result(True)],
-             [make_rule_result(Decimal(10), possible=False), make_rule_result(Decimal(5), possible=True)], True,
-             Decimal(5)),
+             [make_rule_result(Decimal("10"), possible=False), make_rule_result(Decimal("5"), possible=True)], True,
+             Decimal("5")),
             ([make_check_result(True)],
-             [make_rule_result(Decimal(10), possible=False), make_rule_result(Decimal(5), possible=False)], False,
-             Decimal(0)),
+             [make_rule_result(Decimal("10"), possible=False), make_rule_result(Decimal("5"), possible=False)], False,
+             Decimal("0")),
         ],
     )
     def test_process_results(self, check_results, rule_results, cancellation_possible, fee):
