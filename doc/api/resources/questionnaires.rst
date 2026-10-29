@@ -45,8 +45,8 @@ Field                                 Type                       Description
 id                                    integer                    Internal ID of the questionnaire
 type                                  string                     The type of questionnaire. Valid options:
 
-                                                                 * ``order_checkout`` — Order-wide, before purchase
-                                                                 * ``position_checkout`` — Per product, before purchase
+                                                                 * ``order_presale`` — Order-wide, before purchase
+                                                                 * ``position_presale`` — Per product, before purchase
                                                                  * ``position_attendee`` — Per product, via attendee link
                                                                  * ``position_checkin`` — Per product, at check-in
                                                                  * ``position_hidden`` — Per product, hidden
@@ -107,7 +107,7 @@ Endpoints
         "results": [
           {
             "id": 1,
-            "type": "PS",
+            "type": "position_presale",
             "internal_name": "Attendee data",
             "items": [1, 2],
             "position": 0,
@@ -136,7 +136,7 @@ Endpoints
           },
           {
             "id": 2,
-            "type": "OS",
+            "type": "order_presale",
             "internal_name": "Per-order questions",
             "items": [],
             "position": 0,
@@ -191,7 +191,7 @@ Endpoints
 
       {
         "id": 2,
-        "type": "OS",
+        "type": "order_presale",
         "internal_name": "Per-order questions",
         "items": [],
         "position": 0,
@@ -231,7 +231,7 @@ Endpoints
       Content-Type: application/json
 
       {
-        "type": "OS",
+        "type": "order_presale",
         "internal_name": "Per-order questions",
         "position": 0,
         "all_sales_channels": true,
@@ -254,7 +254,7 @@ Endpoints
 
       {
         "id": 2,
-        "type": "OS",
+        "type": "order_presale",
         "internal_name": "Per-order questions",
         "items": [],
         "position": 0,
@@ -313,7 +313,7 @@ Endpoints
 
       {
         "id": 2,
-        "type": "OS",
+        "type": "order_presale",
         "internal_name": "Questions asked per order",
         "items": [],
         "position": 0,
