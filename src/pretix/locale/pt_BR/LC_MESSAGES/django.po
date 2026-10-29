@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 10:48+0000\n"
-"PO-Revision-Date: 2026-09-02 08:35+0000\n"
-"Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
+"PO-Revision-Date: 2026-10-30 03:00+0000\n"
+"Last-Translator: vihumelo <victordimelo@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.8.1\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -411,7 +411,7 @@ msgstr ""
 #: pretix/api/serializers/organizer.py pretix/control/views/organizer.py
 #, python-format
 msgid "You've been invited to join %(organizer)s"
-msgstr ""
+msgstr "Você recebeu um convite para integrar %(organizer)s"
 
 #: pretix/api/serializers/organizer.py pretix/control/views/organizer.py
 msgid "This user already has been invited for this team."
@@ -607,6 +607,9 @@ msgid ""
 "This includes related events like creation, deletion, opening or closing of "
 "quotas. No webhook is sent for changes to the resulting availability."
 msgstr ""
+"Isso inclui eventos relacionados, como a criação, exclusão, abertura ou "
+"fechamento de cotas. Nenhum webhook é enviado em decorrência de alterações "
+"na disponibilidade."
 
 #: pretix/api/webhooks.py
 msgid "Shop taken live"
@@ -1678,7 +1681,7 @@ msgstr "Endereço"
 #: pretix/base/settings.py pretix/control/forms/filter.py
 #: pretix/plugins/checkinlists/exporters.py pretix/plugins/reports/exporters.py
 msgid "ZIP code"
-msgstr "Código Postal"
+msgstr "CEP"
 
 #: pretix/base/exporters/invoices.py pretix/base/exporters/orderlist.py
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
@@ -3622,6 +3625,9 @@ msgid ""
 "The Peppol participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"Nosso sistema não reconhece o prefixo %(number)s do identificador de "
+"participante da Peppol. Se você tem certeza de que esse identificador está "
+"correto, entre em contato conosco."
 
 #: pretix/base/invoicing/peppol.py
 #, python-format
@@ -5600,6 +5606,9 @@ msgid ""
 "prior to their usage. Therefore, the selected media policy does not make "
 "sense for this media type."
 msgstr ""
+"O tipo de mídia selecionado exige que todas as mídias sejam cadastradas no "
+"sistema antes de serem utilizadas. Portanto, a política de mídia selecionada "
+"não é adequada para esse tipo de mídia."
 
 #: pretix/base/models/items.py
 msgid ""
@@ -5821,7 +5830,7 @@ msgstr "Código do país (ISO 3166-1 alfa-2)"
 
 #: pretix/base/models/items.py
 msgid "Asked on"
-msgstr ""
+msgstr "Pergunta feita em"
 
 #: pretix/base/models/items.py pretix/base/models/organizer.py
 msgid ""
@@ -6171,12 +6180,12 @@ msgstr "retornou"
 #: pretix/base/models/media.py
 msgctxt "reusable_medium"
 msgid "Claim token"
-msgstr ""
+msgstr "Token de vinculação"
 
 #: pretix/base/models/media.py
 msgctxt "reusable_medium"
 msgid "Label"
-msgstr ""
+msgstr "Rótulo"
 
 #: pretix/base/models/media.py
 #, fuzzy
@@ -6190,6 +6199,9 @@ msgid ""
 "validity. If multiple tickets are valid at once, this will lead to failed "
 "check-ins."
 msgstr ""
+"Se você vincular mais de um ingresso, certifique-se de que os períodos de "
+"validade não se sobreponham. Se vários ingressos estiverem válidos ao mesmo "
+"tempo, poderão ocorrer falhas no check-in."
 
 #: pretix/base/models/memberships.py
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
@@ -8119,6 +8131,8 @@ msgstr "Apenas API"
 msgid ""
 "Menu item will only show up if the user has permission for general settings."
 msgstr ""
+"Esta opção só será exibida no menu se o usuário tiver permissão para acessar "
+"as configurações gerais."
 
 #: pretix/base/permissions.py
 msgctxt "permission_level"
@@ -8136,6 +8150,8 @@ msgid ""
 "This includes access to all settings not listed explicitly below, including "
 "plugin settings."
 msgstr ""
+"Isso inclui o acesso a todas as configurações que não estão explicitamente "
+"listadas abaixo, incluindo as configurações dos plugins."
 
 #: pretix/base/permissions.py
 #: pretix/control/templates/pretixcontrol/event/payment.html
@@ -8165,7 +8181,7 @@ msgstr "Produtos, cotas e perguntas"
 
 #: pretix/base/permissions.py
 msgid "Also includes related objects like categories or discounts."
-msgstr ""
+msgstr "Também inclui elementos relacionados, como categorias ou descontos."
 
 #: pretix/base/permissions.py
 msgctxt "permission_level"
@@ -8219,12 +8235,14 @@ msgstr "Acessar eventos existentes"
 #: pretix/base/permissions.py
 msgctxt "permission_level"
 msgid "Access existing and create new events"
-msgstr ""
+msgstr "Acessar eventos existentes e criar novos eventos"
 
 #: pretix/base/permissions.py
 msgid ""
 "The level of access to events is determined in detail by the settings below."
 msgstr ""
+"O nível de acesso aos eventos é definido detalhadamente pelas configurações "
+"abaixo."
 
 #: pretix/base/permissions.py pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/event/invoicing.html
@@ -8241,12 +8259,17 @@ msgid ""
 "This includes access to all organizer-level functionality not listed "
 "explicitly below, including plugin settings."
 msgstr ""
+"Isso inclui o acesso a todas as funcionalidades disponíveis no nível do "
+"organizador que não estejam explicitamente listadas abaixo, incluindo as "
+"configurações dos plugins."
 
 #: pretix/base/permissions.py
 msgid ""
 "Includes the ability to give someone (including oneself) additional "
 "permissions."
 msgstr ""
+"Inclui a possibilidade de conceder permissões adicionais a alguém (inclusive "
+"a si mesmo)."
 
 #: pretix/base/permissions.py pretix/control/navigation.py
 msgid "Devices"
@@ -8257,6 +8280,8 @@ msgid ""
 "Includes the ability to give access to events and data oneself does not have "
 "access to."
 msgstr ""
+"Inclui a possibilidade de conceder acesso a eventos e dados aos quais você "
+"mesmo não tem acesso."
 
 #: pretix/base/permissions.py
 #, fuzzy
@@ -8349,22 +8374,22 @@ msgstr "Não definido"
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative date cannot be expressed as \"before\" for \"{}\""
-msgstr ""
+msgstr "Uma data relativa não pode ser expressa como \"antes de\" para \"{}\""
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative date cannot be expressed as \"after\" for \"{}\""
-msgstr ""
+msgstr "Uma data relativa não pode ser expressa como \"depois de\" para \"{}\""
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative time cannot be expressed as \"before\" for \"{}\""
-msgstr ""
+msgstr "Um tempo relativo não pode ser expresso como \"antes de\" para \"{}\""
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative time cannot be expressed as \"after\" for \"{}\""
-msgstr ""
+msgstr "Um tempo relativo não pode ser expresso como \"depois de\" para \"{}\""
 
 #: pretix/base/secrets.py
 msgid "Random (default, works with all pretix apps)"
@@ -8385,7 +8410,7 @@ msgstr "Evento cancelado"
 
 #: pretix/base/services/cancelevent.py
 msgid "Confirm event cancellation and bulk refund"
-msgstr ""
+msgstr "Confirmar o cancelamento do evento e o reembolso em massa"
 
 #: pretix/base/services/cart.py pretix/base/services/modelimport.py
 #: pretix/base/services/orders.py
@@ -8933,13 +8958,15 @@ msgstr "Você precisa responder a perguntas para concluir este check-in."
 
 #: pretix/base/services/checkin.py
 msgid "Ticket needs to be exchanged to a suitable medium."
-msgstr ""
+msgstr "O ingresso precisa ser trocado por um meio adequado."
 
 #: pretix/base/services/checkin.py
 msgid ""
 "This ticket has already been exchanged for a reusable medium that now needs "
 "to be used instead."
 msgstr ""
+"Este ingresso já foi trocado por uma mídia reutilizável, que agora deve ser "
+"utilizado em seu lugar."
 
 #: pretix/base/services/checkin.py
 msgid "This ticket has already been redeemed."
@@ -9105,62 +9132,44 @@ msgid "You are receiving this email because you placed an order for {event}."
 msgstr "Você está recebendo este email porque fez um pedido para {event}."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "Invalid input type."
 msgid "Invalid medium type."
-msgstr "Tipo de entrada inválido."
+msgstr "Tipo de mídia inválido."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid "Medium type is not enabled for organizer."
-msgstr ""
-"O tipo de mídia selecionado não está habilitado nas configurações do "
-"organizador."
+msgstr "O tipo de mídia não está habilitado para o organizador."
 
 #: pretix/base/services/media.py
 msgid "Incorrect medium type for product."
-msgstr ""
+msgstr "Tipo de mídia incorreto para o produto."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "This ticket has already been redeemed."
 msgid "Ticket is already exchanged for reusable medium."
-msgstr "Este ingresso já foi resgatado."
+msgstr "Este ingresso já foi trocado por uma mídia reutilizável."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "Reusable Medium ID"
 msgid "Reusable medium not found."
-msgstr "ID de mídia reutilizável"
+msgstr "Mídia reutilizável não encontrada."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "The reusable medium has been created."
 msgid "Reusable medium is inactive or expired."
-msgstr "A mídia reutilizável foi criada."
+msgstr "A mídia reutilizável está inativa ou expirada."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "The reusable medium has been created."
 msgid "Reusable medium not found and could not be created."
-msgstr "A mídia reutilizável foi criada."
+msgstr "A mídia reutilizável não foi encontrada e não pôde ser criada."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "Reusable media type"
 msgid "Reusable medium already exists."
-msgstr "Tipo de mídia reutilizável"
+msgstr "A mídia reutilizável já existe."
 
 #: pretix/base/services/media.py
-#, fuzzy
-#| msgid "The reusable medium has been created."
 msgid "Reusable medium could not be created."
-msgstr "A mídia reutilizável foi criada."
+msgstr "Não foi possível criar a mídia reutilizável."
 
 #: pretix/base/services/media.py
 msgid "Product does not support medium exchange."
-msgstr ""
+msgstr "O produto não permite a troca por mídia."
 
 #: pretix/base/services/memberships.py
 #, python-brace-format
@@ -9325,6 +9334,8 @@ msgstr "Um cupom não pode ser criado sem um código."
 msgid ""
 "Voucher codes must be unique. Code \"{code}\" already exists in this import."
 msgstr ""
+"Os códigos dos cupons devem ser únicos. O código \"{code}\" já existe nesta "
+"importação."
 
 #: pretix/base/services/modelimport.py
 #, python-brace-format
@@ -9333,13 +9344,19 @@ msgid ""
 msgid_plural ""
 "Voucher codes must be unique. Import contains existing voucher codes {code}."
 msgstr[0] ""
+"Os códigos dos cupons devem ser únicos. A importação contém um código de "
+"cupom já existente: {code}."
 msgstr[1] ""
+"Os códigos dos cupons devem ser únicos. A importação contém códigos de "
+"cupons já existentes: {code}."
 
 #: pretix/base/services/modelimport.py
 msgid ""
 "Vouchers could not be imported, probably due to a voucher code already being "
 "in use."
 msgstr ""
+"Não foi possível importar os cupons, provavelmente porque um dos códigos já "
+"está em uso."
 
 #: pretix/base/services/orders.py
 msgid ""
@@ -9917,7 +9934,7 @@ msgstr ""
 
 #: pretix/base/settings.py
 msgid "Enforce the usage of issued reusable media for check-in"
-msgstr ""
+msgstr "Exigir o uso de mídias reutilizáveis emitidas para realizar o check-in"
 
 #: pretix/base/settings.py
 msgid ""
@@ -9925,6 +9942,10 @@ msgid ""
 "medium has been created and linked to a ticket. Keeping this option turned "
 "off will treat the reusable medium and ticket as equals."
 msgstr ""
+"Se esta opção estiver ativada, o código de barras do ingresso não será mais "
+"aceito caso uma mídia reutilizável tenha sido criada e vinculada a ele. Se a "
+"opção permanecer desativada, a mídia reutilizável e o ingresso serão "
+"considerados equivalentes."
 
 #: pretix/base/settings.py
 msgid "Length of barcodes"
@@ -10392,12 +10413,12 @@ msgstr ""
 
 #: pretix/base/settings.py
 msgid "No dates match your criteria."
-msgstr ""
+msgstr "Nenhuma data corresponde aos seus critérios."
 
 #: pretix/base/settings.py
 msgctxt "subevents"
 msgid "Text for empty date results"
-msgstr ""
+msgstr "Texto exibido quando a data não retorna resultados"
 
 #: pretix/base/settings.py
 msgctxt "subevents"
@@ -10408,6 +10429,11 @@ msgid ""
 "touch with you to arrange further dates. We do not recommend more than one "
 "or two sentences."
 msgstr ""
+"Este texto será exibido quando o calendário ou a lista de datas estiver "
+"vazio, por exemplo, quando não houver datas disponíveis em determinado mês "
+"ou quando um filtro selecionado pelo usuário não retornar resultados. Você "
+"pode usar esse espaço para informar como entrar em contato com você para "
+"combinar novas datas. Recomendamos usar apenas uma ou duas frases."
 
 #: pretix/base/settings.py
 msgid "Guidance text"
@@ -10593,6 +10619,9 @@ msgid ""
 "their order without selecting a payment method. This is useful whenever "
 "orders are not created by the same person who is making the payment."
 msgstr ""
+"Se o pagamento posterior for permitido em um canal de vendas, os clientes "
+"poderão concluir seus pedidos sem selecionar uma forma de pagamento. Isso é "
+"útil quando a pessoa que faz o pedido não é a mesma que realiza o pagamento."
 
 #: pretix/base/settings.py
 msgid "Show start date"
@@ -11561,6 +11590,10 @@ msgid ""
 "the email address above. Please note that you still need to add a contact "
 "email address that will be shared with all emails you send."
 msgstr ""
+"Se você configurar esta opção, o link de contato no rodapé direcionará para "
+"o endereço informado aqui, em vez de utilizar o endereço de e-mail acima. "
+"Observe que ainda será necessário informar um endereço de e-mail de contato, "
+"que será incluído em todos os e-mails enviados."
 
 #: pretix/base/settings.py pretix/control/forms/event.py
 msgid "Imprint URL"
@@ -13156,7 +13189,7 @@ msgstr ""
 #: pretix/base/settings.py
 #, python-brace-format
 msgid "VAT-ID is not supported for \"{}\"."
-msgstr ""
+msgstr "O VAT-ID não é compatível para \"{}\"."
 
 #: pretix/base/settings.py
 msgid "The last payment date cannot be before the end of presale."
@@ -13451,6 +13484,8 @@ msgid ""
 "Don't share this code with anyone. The %(instance)s team will never ask you "
 "for it."
 msgstr ""
+"Não compartilhe este código com ninguém. A equipe do %(instance)s nunca "
+"solicitará esse código."
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 #: pretix/base/templates/pretixbase/email/export_failed.txt
@@ -13459,6 +13494,8 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team"
 msgstr ""
+"Obrigado,\n"
+"Time %(instance)s"
 
 #: pretix/base/templates/pretixbase/email/email_footer.html
 #, python-format
@@ -14021,6 +14058,8 @@ msgid ""
 "You entered an URL, which is not allowed. Please remove %(match)s from your "
 "input."
 msgstr ""
+"Você inseriu uma URL, o que não é permitido. Remova %(match)s do texto "
+"informado."
 
 #: pretix/base/views/errors.py
 msgid ""
@@ -14281,6 +14320,8 @@ msgid ""
 "You cannot choose a team that would give you more access than you have on "
 "the event you are copying."
 msgstr ""
+"Você não pode escolher um time que lhe conceda um nível de acesso superior "
+"ao que você possui no evento que está copiando."
 
 #: pretix/control/forms/event.py
 msgid "Copy configuration from"
@@ -14295,6 +14336,8 @@ msgid ""
 "You cannot choose an event on which you have less access than the team you "
 "selected in the previous step."
 msgstr ""
+"Você não pode escolher um evento no qual tenha um nível de acesso inferior "
+"ao do time selecionado na etapa anterior."
 
 #: pretix/control/forms/event.py pretix/control/forms/item.py
 #: pretix/control/forms/subevents.py
@@ -14397,7 +14440,7 @@ msgstr "Data de pagamento"
 
 #: pretix/control/forms/event.py
 msgid "same as above"
-msgstr ""
+msgstr "o mesmo que acima"
 
 #: pretix/control/forms/event.py
 #, fuzzy
@@ -14479,6 +14522,13 @@ msgid ""
 "configured whenever possible. Gross prices may still change if they are "
 "impossible to derive from a rounded net price."
 msgstr ""
+"Recomendado para a emissão de faturas eletrônicas quando você vende "
+"principalmente para consumidores finais. Os preços brutos ou líquidos de "
+"alguns produtos podem ser ajustados automaticamente para garantir o "
+"arredondamento correto do total do pedido. O sistema procura manter os "
+"preços brutos conforme configurados sempre que possível. No entanto, esses "
+"preços ainda podem sofrer alterações quando não for possível calculá-los a "
+"partir de um preço líquido arredondado."
 
 #: pretix/control/forms/event.py
 msgid "Generate invoices for Sales channels"
@@ -16648,7 +16698,7 @@ msgstr "Você pode definir apenas um domínio de organizador."
 
 #: pretix/control/forms/organizer.py
 msgid "Provided by a plugin"
-msgstr ""
+msgstr "Fornecido por um plugin"
 
 #: pretix/control/forms/organizer.py
 msgid ""
@@ -16906,7 +16956,7 @@ msgstr "terceiro"
 #: pretix/control/forms/rrule.py
 msgctxt "rrule"
 msgid "fourth"
-msgstr ""
+msgstr "quarto"
 
 #: pretix/control/forms/rrule.py
 msgctxt "rrule"
@@ -16925,7 +16975,7 @@ msgstr "Dia do fim de semana"
 #: pretix/control/forms/subevents.py
 msgctxt "subevent"
 msgid "Skip dates that overlap with any existing date"
-msgstr ""
+msgstr "Ignorar datas que se sobreponham a qualquer data existente"
 
 #: pretix/control/forms/subevents.py
 msgctxt "subevent"
@@ -16935,6 +16985,10 @@ msgid ""
 "This respects even inactive dates and works best if all dates have both a "
 "start and end time."
 msgstr ""
+"Isso pode ser útil se todas as datas ocorrerem no mesmo local e você quiser "
+"evitar a criação de datas recorrentes que entrem em conflito com eventos "
+"especiais já existentes. Essa opção também considera as datas inativas e "
+"funciona melhor quando todas as datas têm horários de início e término."
 
 #: pretix/control/forms/subevents.py
 msgid "Keep the current values"
@@ -16984,6 +17038,9 @@ msgid ""
 "because at least one of the selected vouchers has already been redeemed "
 "%(max_redeemed)s times."
 msgstr ""
+"Você não pode reduzir o número máximo de resgates para %(max_usages)s, pois "
+"pelo menos um dos cupons selecionados já foi resgatato %(max_redeemed)s "
+"vezes."
 
 #: pretix/control/forms/vouchers.py
 #, fuzzy
@@ -17017,6 +17074,8 @@ msgid ""
 "Changing the maximum number of usages in bulk is not supported if any of the "
 "selected vouchers is assigned a seat."
 msgstr ""
+"Não é possível alterar em massa o número máximo de utilizações se algum dos "
+"cupons selecionados estiver vinculado a um assento."
 
 #: pretix/control/forms/vouchers.py
 msgctxt "subevent"
@@ -17024,18 +17083,24 @@ msgid ""
 "Changing the date in bulk is not supported if any of the selected vouchers "
 "is assigned a seat."
 msgstr ""
+"Não é possível alterar a data em massa se algum dos cupons selecionados "
+"estiver vinculado a um assento."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "Changing the product to a quota is not supported if any of the selected "
 "vouchers is assigned a seat."
 msgstr ""
+"Não é possível alterar o produto para uma cota se algum dos cupons "
+"selecionados estiver vinculado a um assento."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "This change cannot be completed because not all assigned seats of the "
 "vouchers are still available"
 msgstr ""
+"Esta alteração não pode ser concluída porque nem todos os assentos "
+"vinculados aos cupons ainda estão disponíveis"
 
 #: pretix/control/forms/vouchers.py
 msgid "Codes"
@@ -18198,6 +18263,8 @@ msgid ""
 "The ticket #{positionid} was exchanged for reusable medium "
 "{medium_identifier}."
 msgstr ""
+"O ingresso #{positionid} foi trocado pela mídia reutilizável "
+"{medium_identifier}."
 
 #: pretix/control/logdisplay.py
 msgid "The medium has been connected to a new gift card."
@@ -18255,6 +18322,8 @@ msgstr "Um código de emergência de dois fatores foi gerado."
 #: pretix/control/logdisplay.py
 msgid "Drift and throttle values for two-factor devices have been reset."
 msgstr ""
+"Os dados de sincronização e de controle de tentativas dos dispositivos de "
+"autenticação de dois fatores foram redefinidos."
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -20067,6 +20136,8 @@ msgid ""
 "This ticket needs to be exchanged into a <strong>%(media_type)s</strong> "
 "reusable medium. <strong>%(media_policy)s</strong>."
 msgstr ""
+"Este ingresso precisa ser trocado por uma mídia reutilizável do tipo <strong>"
+"%(media_type)s</strong>. <strong>%(media_policy)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html
 msgid "Special attention required"
@@ -20322,6 +20393,18 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team\n"
 msgstr ""
+"Olá,\n"
+"\n"
+"Recebemos uma solicitação para redefinir a senha da sua conta %(instance)s. "
+"Para definir uma nova senha, acesse o link abaixo:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Se você não fez essa solicitação, pode ignorar este e-mail com segurança — "
+"sua senha não será alterada.\n"
+"\n"
+"Obrigado,\n"
+"Equipe %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt
 #, fuzzy, python-format
@@ -20385,14 +20468,17 @@ msgid ""
 "\n"
 "We noticed a new sign-in to your %(instance)s account:\n"
 msgstr ""
+"Olá,\n"
+"\n"
+"Identificamos um novo acesso à sua conta %(instance)s:\n"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 msgid "Browser"
-msgstr ""
+msgstr "Navegador"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 msgid "Operating system"
-msgstr ""
+msgstr "Sistema operacional"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 #, python-format
@@ -20407,6 +20493,14 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team\n"
 msgstr ""
+"Se foi você, nenhuma ação é necessária.\n"
+"\n"
+"Se você não reconhece este acesso, altere sua senha imediatamente:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Obrigado,\n"
+"Equipe %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt
 #, fuzzy, python-format
@@ -22387,6 +22481,9 @@ msgid ""
 "debugging problems in your pretix installation, and verifying that your "
 "usage of pretix is in compliance with the Enterprise license you purchased."
 msgstr ""
+"Isso tem duas finalidades: coletar informações úteis que possam ajudar a "
+"diagnosticar problemas na sua instalação do pretix e verificar se o uso do "
+"pretix está em conformidade com a licença Enterprise que você adquiriu."
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html
 msgid "First month of license term:"
