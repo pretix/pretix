@@ -804,14 +804,17 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         ):
             if qc.user_datafield_id and (str(qc.user_datafield_id) in answers_data or str(qc.cooked_id) in answers_data):
                 try:
-                    ans = answers_data.get(str(qc.user_datafield_id), answers_data[str(qc.cooked_id)])
+                    try:
+                        ans = answers_data[str(qc.user_datafield_id)]
+                    except KeyError:
+                        ans = answers_data[str(qc.cooked_id)]
                     if qc.user_datafield.type == Question.TYPE_FILE:
                         if ans:
                             given_answers[qc.user_datafield] = _handle_file_upload(ans, user, auth)
                         else:
                             given_answers[qc.user_datafield] = None
                     else:
-                        given_answers[qc.user_datafield] = qc.user_datafield.clean_answer(ans)
+                        given_answers[qc.user_datafield] = qc.clean_answer(ans)
                 except (ValidationError, BaseValidationError):
                     pass
 
@@ -878,7 +881,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'require_attention': op.require_checkin_attention,
                 'checkin_texts': op.checkin_texts,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
-                'questions': POSCompatQuestionSerializer.mangle_results(op.order.event, (qs.to_representation(q) for q in e.positiondatafields)),  # TODO(questionnaires)
+                'questions': POSCompatQuestionSerializer.mangle_results(op.order.event, (qs.to_representation(q) for q in e.questions)),  # TODO(questionnaires)
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         except RequiredMediaExchangeError as e:

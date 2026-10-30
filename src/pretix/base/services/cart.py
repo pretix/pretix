@@ -1414,7 +1414,7 @@ class CartManager:
                             q = cp.item.questions.filter(ask_during_checkin=False, identifier__iexact=k[9:]).first()
                             if q:
                                 try:
-                                    cp._answers[q] = q.clean_answer(v)
+                                    cp._answers[q] = q.clean_answer(v)  # TODO(questionnaires)  -  switch to row.clean_answer
                                 except ValidationError:
                                     pass
 

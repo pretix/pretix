@@ -1805,10 +1805,6 @@ class Question(LoggedModel):  # TODO(questionnaires)  -  rename to Datafield ?
         return self.sortkey < other.sortkey
 
     def clean_answer(self, answer):
-        # TODO(questionnaires) - we don't have Question.required any more - do we actually need this check? if yes, pass in required from caller
-        # if self.required:
-        #     if not answer or (self.type == Question.TYPE_BOOLEAN and answer not in ("true", "True", True)):
-        #         raise ValidationError(_('An answer to this question is required to proceed.'))
         if not answer:
             if self.type == Question.TYPE_BOOLEAN:
                 return False
@@ -2193,6 +2189,16 @@ class QuestionnaireRow(LoggedModel):
                 return qid, None, QuestionnaireRow.SYSTEM_DATAFIELD_NUMBERS[dfid]
         else:
             return None, id, None
+
+    def clean_answer(self, answer):
+        if not self.user_datafield:
+            raise ValueError('QuestionnaireRow.clean_answer is only implemented for rows referencing a user datafield')
+
+        if self.required:
+            if not answer or (self.user_datafield.type == Question.TYPE_BOOLEAN and answer not in ("true", "True", True)):
+                raise ValidationError(_('An answer to this question is required to proceed.'))
+
+        return self.user_datafield.clean_answer(answer)
 
 
 class Quota(LoggedModel):
