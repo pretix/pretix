@@ -5,10 +5,10 @@ Questionnaires
 =========
 
 Questionnaires are attached to one or more products, and a product can have multiple questionnaires.
-They consist of questionnaire children, each of which can be one of the following:
+They consist of questionnaire rows, each of which can be one of the following:
 
 Reference to system field
-    To reference a system field, use one of the identifier strings from the table below in the child's `datafield` attribute.
+    To reference a system field, use one of the identifier strings from the table below in the row's `datafield` attribute.
     Currently, system fields are only defined on order positions, not on orders.
 
     =============== =========================== ============================
@@ -26,11 +26,11 @@ Reference to system field
 
 
 Reference to user-defined data field
-    To reference a :ref:`user-defined data field <rest-datafields>`, use its internal reference (`identifier`) in the child's `datafield` attribute.
+    To reference a :ref:`user-defined data field <rest-datafields>`, use its internal reference (`identifier`) in the row's `datafield` attribute.
 
 
 Static explanation text / subheading
-    To add a static text block, set the child's `datafield` attribute to `null`.
+    To add a static text block, set the row's `datafield` attribute to `null`.
 
 
 Resource description
@@ -57,12 +57,12 @@ all_sales_channels                    boolean                    If ``true`` (de
                                                                  are asked on all sales channels.
 limit_sales_channels                  list of strings            List of sales channel identifiers the questions are asked on
                                                                  if ``all_sales_channels`` is ``false``.
-children                              list of objects            List of all questionnaire children.
+rows                              list of objects            List of all questionnaire rows.
 ├ datafield                           string                     Reference to a data field (see above)
 ├ required                            boolean                    If ``true``, the question needs to be filled out.
 ├ label                               multi-lingual string       The field label shown to the customer
 ├ help_text                           multi-lingual string       The help text shown to the customer
-├ dependency_question                 string                     ``datafield`` reference of a different child of the same
+├ dependency_question                 string                     ``datafield`` reference of a different row in the same
                                                                  questionnaire.
                                                                  The current question will only be shown if the question
                                                                  given in this attribute is set to one of the values given
@@ -113,7 +113,7 @@ Endpoints
             "position": 0,
             "all_sales_channels": true,
             "limit_sales_channels": [],
-            "children": [
+            "rows": [
               {
                 "datafield": "@attendee_name_parts",
                 "required": false,
@@ -142,7 +142,7 @@ Endpoints
             "position": 0,
             "all_sales_channels": true,
             "limit_sales_channels": [],
-            "children": [
+            "rows": [
               {
                 "datafield": "87Y8DCS9",
                 "required": false,
@@ -197,7 +197,7 @@ Endpoints
         "position": 0,
         "all_sales_channels": true,
         "limit_sales_channels": [],
-        "children": [
+        "rows": [
           {
             "datafield": "87Y8DCS9",
             "required": false,
@@ -235,7 +235,7 @@ Endpoints
         "internal_name": "Per-order questions",
         "position": 0,
         "all_sales_channels": true,
-        "children": [
+        "rows": [
           {
             "datafield": "87Y8DCS9",
             "required": false,
@@ -260,7 +260,7 @@ Endpoints
         "position": 0,
         "all_sales_channels": true,
         "limit_sales_channels": [],
-        "children": [
+        "rows": [
           {
             "datafield": "87Y8DCS9",
             "required": false,
@@ -287,8 +287,8 @@ Endpoints
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
-   You can only change all ``children`` en bloc, or keep all of them unchanged in case of a ``PATCH``. If you
-   change ``children``, you need to specify all fields of the resource.
+   You can only change all ``rows`` en bloc, or keep all of them unchanged in case of a ``PATCH``. If you
+   change ``rows``, you need to specify all fields of the resource.
 
    **Example request**:
 
@@ -319,7 +319,7 @@ Endpoints
         "position": 0,
         "all_sales_channels": true,
         "limit_sales_channels": [],
-        "children": [
+        "rows": [
           {
             "datafield": "87Y8DCS9",
             "required": false,
