@@ -3902,6 +3902,7 @@ def test_order_expect_total(token_client, organizer, event, item, quota, questio
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['price'] = "15.00"
     res['positions'][0]['tax_rule'] = taxrule.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
     res['total'] = "15.00"
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
