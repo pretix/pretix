@@ -37,7 +37,7 @@ const props = defineProps<{
 			</select>
 		</div>
 	</div>
-	<div class="form-group" v-if="questionnaire.type === 'order_presale' || questionnaire.type === 'position_presale'">
+	<div class="form-group" v-if="questionnaire.type === 'order_purchase' || questionnaire.type === 'position_purchase'">
 		<label class="col-md-3 control-label">
 			{{ gettext('Sales channels') }}
 		</label>
