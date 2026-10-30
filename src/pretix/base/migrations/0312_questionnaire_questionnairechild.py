@@ -195,7 +195,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('internal_name', models.CharField(max_length=255)),
-                ('type', models.CharField(max_length=5)),
+                ('type', models.CharField(max_length=25)),
                 ('position', models.PositiveIntegerField(default=0)),
                 ('all_sales_channels', models.BooleanField(default=True)),
                 ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='questionnaires', to='pretixbase.event')),

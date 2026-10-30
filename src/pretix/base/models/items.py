@@ -2011,7 +2011,7 @@ class Questionnaire(LoggedModel):
         max_length=255,
     )
     type = models.CharField(
-        max_length=5,
+        max_length=25,
         choices=QuestionnaireType.choices,
         verbose_name=_("Questionnaire type")
     )
@@ -2153,7 +2153,7 @@ class QuestionnaireRow(LoggedModel):
         null=True, blank=True,
     )
     dependency_question = models.ForeignKey(
-        'pretix.base.models.items.QuestionnaireRow', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
+        'QuestionnaireRow', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
     )
     dependency_values = MultiStringField(default=[])
 
