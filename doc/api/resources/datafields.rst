@@ -68,8 +68,8 @@ referenced_by_questionnaires          list of integers           **Read-only.** 
 Endpoints
 ---------
 
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/datafields/
-              /api/v1/organizers/(organizer)/events/(event)/orderdatafields/
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/datafields/position/
+              /api/v1/organizers/(organizer)/events/(event)/datafields/order/
 
    Returns a list of all data fields within a given event.
 
@@ -77,7 +77,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/datafields/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/datafields/position/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -147,8 +147,8 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/datafields/(id)/
-              /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(id)/
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/datafields/position/(id)/
+              /api/v1/organizers/(organizer)/events/(event)/datafields/order/(id)/
 
    Returns information on one data field, identified by its ID.
 
@@ -156,7 +156,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/datafields/1/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/datafields/position/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -214,8 +214,8 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
-.. http:post:: /api/v1/organizers/(organizer)/events/(event)/datafields/
-               /api/v1/organizers/(organizer)/events/(event)/orderdatafields/
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/datafields/position/
+               /api/v1/organizers/(organizer)/events/(event)/datafields/order/
 
    Create a new question
 
@@ -223,7 +223,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      POST /api/v1/organizers/bigevents/events/sampleconf/datafields/ HTTP/1.1
+      POST /api/v1/organizers/bigevents/events/sampleconf/datafields/position/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
@@ -301,8 +301,8 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
 
-.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/datafields/(id)/
-                /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(id)/
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/datafields/position/(id)/
+                /api/v1/organizers/(organizer)/events/(event)/datafields/order/(id)/
 
    Update a data field. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
@@ -315,7 +315,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      PATCH /api/v1/organizers/bigevents/events/sampleconf/datafields/1/ HTTP/1.1
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/datafields/position/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
@@ -380,8 +380,8 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
 
-.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/datafields/(id)/
-                 /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(id)/
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/datafields/position/(id)/
+                 /api/v1/organizers/(organizer)/events/(event)/datafields/order/(id)/
 
    Delete a data field.
 
@@ -389,7 +389,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      DELETE /api/v1/organizers/bigevents/events/sampleconf/datafields/1/ HTTP/1.1
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/datafields/position/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 

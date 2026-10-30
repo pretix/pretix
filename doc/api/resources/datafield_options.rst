@@ -30,8 +30,8 @@ answer                                multi-lingual string       The displayed v
 Endpoints
 ---------
 
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/datafields/(datafield)/options/
-              /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(datafield)/options/
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/datafields/position/(datafield)/options/
+              /api/v1/organizers/(organizer)/events/(event)/datafields/order/(datafield)/options/
 
    Returns a list of all options for a given data field.
 
@@ -39,7 +39,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/datafields/11/options/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/datafields/position/11/options/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -87,8 +87,8 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event/data field does not exist **or** you have no permission to view this resource.
 
-.. http:get:: /api/v1/organizers/(organizer)/events/(event)/datafields/(datafield)/options/(id)/
-              /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(datafield)/options/(id)/
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/datafields/position/(datafield)/options/(id)/
+              /api/v1/organizers/(organizer)/events/(event)/datafields/order/(datafield)/options/(id)/
 
    Returns information on one option, identified by its ID.
 
@@ -96,7 +96,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/sampleconf/datafields/1/options/1/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/datafields/position/1/options/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -123,8 +123,8 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
-.. http:post:: /api/v1/organizers/(organizer)/events/(event)/datafields/(datafield)/options/
-               /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(datafield)/options/
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/datafields/position/(datafield)/options/
+               /api/v1/organizers/(organizer)/events/(event)/datafields/order/(datafield)/options/
 
    Create a new option
 
@@ -132,7 +132,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      POST /api/v1/organizers/bigevents/events/sampleconf/datafields/1/options/ HTTP/1.1
+      POST /api/v1/organizers/bigevents/events/sampleconf/datafields/position/1/options/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
@@ -166,8 +166,8 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
 
-.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/datafields/(datafield)/options/(id)/
-                /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(datafield)/options/(id)/
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/datafields/position/(datafield)/options/(id)/
+                /api/v1/organizers/(organizer)/events/(event)/datafields/order/(datafield)/options/(id)/
 
    Update an option. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
@@ -179,7 +179,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      PATCH /api/v1/organizers/bigevents/events/sampleconf/datafields/1/options/1/ HTTP/1.1
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/datafields/position/1/options/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
@@ -213,8 +213,8 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
 
-.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/datafields/(datafield)/options/(id)/
-                 /api/v1/organizers/(organizer)/events/(event)/orderdatafields/(datafield)/options/(id)/
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/datafields/position/(datafield)/options/(id)/
+                 /api/v1/organizers/(organizer)/events/(event)/datafields/order/(datafield)/options/(id)/
 
    Delete an option.
 
@@ -222,7 +222,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      DELETE /api/v1/organizers/bigevents/events/sampleconf/datafields/1/options/1/ HTTP/1.1
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/datafields/position/1/options/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
