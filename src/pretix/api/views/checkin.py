@@ -65,7 +65,7 @@ from pretix.api.views.order import OrderPositionFilter
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Checkin, CheckinList, Device, Event, Order, OrderPosition,
-    Question, Questionnaire, QuestionnaireChild, ReusableMedium,
+    Question, Questionnaire, QuestionnaireRow, ReusableMedium,
     RevokedTicketSecret, TeamAPIToken,
 )
 from pretix.base.models.orders import PrintLog
@@ -799,7 +799,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     # 5. Pre-validate all incoming answers, handle file upload
     given_answers = {}
     if answers_data:
-        for qc in QuestionnaireChild.objects.filter(
+        for qc in QuestionnaireRow.objects.filter(
                 questionnaire__items__in=[op.item], questionnaire__type=Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
         ):
             if qc.user_datafield_id and (str(qc.user_datafield_id) in answers_data or str(qc.cooked_id) in answers_data):

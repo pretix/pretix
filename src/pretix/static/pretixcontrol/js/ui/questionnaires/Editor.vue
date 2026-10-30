@@ -42,7 +42,7 @@ function saveQuestionnaire(questionnaire) {
 	}
 	result = result.then(d => {
 		questionnaire.id = d.id
-		questionnaire.children = d.children
+		questionnaire.rows = d.rows
 		questionnaire._err_mes = null
 		questionnaire._loading = false
 		return d;
@@ -55,14 +55,14 @@ function saveQuestionnaire(questionnaire) {
 }
 function addPositionQuestionnaire () {
 	position_questionnaires.value.push({
-		all_sales_channels: true, children: [], limit_sales_channels: [], position: position_questionnaires.value.length,
+		all_sales_channels: true, rows: [], limit_sales_channels: [], position: position_questionnaires.value.length,
 		items: [], internal_name: "Unnamed questionnaire", type: "position_purchase",
 		_new_id: Date.now(),
 	});
 }
 function addOrderQuestionnaire () {
 	order_questionnaires.value.push({
-		all_sales_channels: true, children: [], limit_sales_channels: [], position: order_questionnaires.value.length,
+		all_sales_channels: true, rows: [], limit_sales_channels: [], position: order_questionnaires.value.length,
 		items: [], internal_name: "Unnamed questionnaire", type: "order_purchase",
 		_new_id: Date.now(),
 	});

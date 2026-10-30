@@ -83,7 +83,7 @@ from pretix.base.invoicing.transmission import (
     get_transmission_types, transmission_types,
 )
 from pretix.base.models import (
-    InvoiceAddress, Item, Question, Questionnaire, QuestionnaireChild,
+    InvoiceAddress, Item, Question, Questionnaire, QuestionnaireRow,
     QuestionOption,
 )
 from pretix.base.models.tax import ask_for_vat_id
@@ -963,7 +963,7 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
             Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=container.sales_channel.identifier),
             event=event, type=Questionnaire.QuestionnaireType.ORDER_SALE,
         ).order_by('position').prefetch_related(
-            Prefetch('children', QuestionnaireChild.objects.prefetch_related(
+            Prefetch('rows', QuestionnaireRow.objects.prefetch_related(
                 Prefetch('user_datafield', Question.objects.prefetch_related(
                     Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
                         # This prefetch statement is utter bullshit, but it actually prevents Django from doing
@@ -975,18 +975,18 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
                     )))
                 ))
             ),
-            to_attr='childlist')
+            to_attr='questionnairerowlist')
         )
         answerlist = container.answers.prefetch_related('options')
 
         idx = 0
         for questionnaire in questionnaires:
-            for child in getattr(questionnaire, 'childlist', questionnaire.children.all()):
-                if child.user_datafield:
-                    df = child.user_datafield
-                    self.fields[child.form_field_name] = self.build_user_question_field(request, event, answerlist, child, df)
+            for qrow in getattr(questionnaire, 'questionnairerowlist', questionnaire.rows.all()):
+                if qrow.user_datafield:
+                    df = qrow.user_datafield
+                    self.fields[qrow.form_field_name] = self.build_user_question_field(request, event, answerlist, qrow, df)
                 else:
-                    self.fields[child.form_field_name] = self.build_text_block(request, event, child)
+                    self.fields[qrow.form_field_name] = self.build_text_block(request, event, qrow)
                     idx += 1
 
     def clean(self):
@@ -1025,14 +1025,14 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
             self.fields['requested_valid_from'] = self.build_requested_valid_from_field(event, pos, item)
 
         for questionnaire in questionnaires:
-            for child in getattr(questionnaire, 'childlist', questionnaire.children.all()):
-                if child.user_datafield:
-                    df = child.user_datafield
-                    self.fields[child.form_field_name] = self.build_user_question_field(request, event, pos.answerlist, child, df)
-                elif child.system_datafield:
-                    self.fields[child.form_field_name] = self.build_system_question_field(request, event, pos, child)
+            for qrow in getattr(questionnaire, 'questionnairerowlist', questionnaire.rows.all()):
+                if qrow.user_datafield:
+                    df = qrow.user_datafield
+                    self.fields[qrow.form_field_name] = self.build_user_question_field(request, event, pos.answerlist, qrow, df)
+                elif qrow.system_datafield:
+                    self.fields[qrow.form_field_name] = self.build_system_question_field(request, event, pos, qrow)
                 else:
-                    self.fields[child.form_field_name] = self.build_text_block(request, event, child)
+                    self.fields[qrow.form_field_name] = self.build_text_block(request, event, qrow)
 
         responses = question_form_fields.send(sender=event, position=pos)
         data = pos.meta_info_data
@@ -1097,7 +1097,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
             )
 
     def build_system_question_field(self, request, event, pos, qc):
-        if qc.system_datafield == QuestionnaireChild.SystemDatafield.ATTENDEE_NAME_PARTS:
+        if qc.system_datafield == QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS:
             return NamePartsFormField(
                 max_length=255,
                 required=qc.required and not self.all_optional,
@@ -1107,7 +1107,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                 help_text=rich_text(qc.help_text),
                 initial=pos.attendee_name_parts,
             )
-        if qc.system_datafield == QuestionnaireChild.SystemDatafield.ATTENDEE_EMAIL:
+        if qc.system_datafield == QuestionnaireRow.SystemDatafield.ATTENDEE_EMAIL:
             return forms.EmailField(
                 required=qc.required and not self.all_optional,
                 label=escape(qc.label),
@@ -1119,7 +1119,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                     }
                 )
             )
-        if qc.system_datafield == QuestionnaireChild.SystemDatafield.COMPANY:
+        if qc.system_datafield == QuestionnaireRow.SystemDatafield.COMPANY:
             return forms.CharField(
                 required=qc.required and not self.all_optional,
                 label=escape(qc.label),
@@ -1128,7 +1128,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                 initial=pos.company,
             )
 
-        if qc.system_datafield == QuestionnaireChild.SystemDatafield.STREET:
+        if qc.system_datafield == QuestionnaireRow.SystemDatafield.STREET:
             return forms.CharField(
                 required=qc.required and not self.all_optional,
                 label=escape(qc.label),
@@ -1140,7 +1140,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                 }),
                 initial=pos.street,
             )
-        if qc.system_datafield == QuestionnaireChild.SystemDatafield.ZIPCODE:
+        if qc.system_datafield == QuestionnaireRow.SystemDatafield.ZIPCODE:
             return forms.CharField(
                 required=False,
                 max_length=30,
@@ -1151,7 +1151,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                     'autocomplete': 'postal-code',
                 }),
             )
-        if qc.system_datafield == QuestionnaireChild.SystemDatafield.CITY:
+        if qc.system_datafield == QuestionnaireRow.SystemDatafield.CITY:
             return forms.CharField(
                 required=False,
                 label=escape(qc.label),
@@ -1162,7 +1162,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                     'autocomplete': 'address-level2',
                 }),
             )
-        if qc.system_datafield == QuestionnaireChild.SystemDatafield.COUNTRY:
+        if qc.system_datafield == QuestionnaireRow.SystemDatafield.COUNTRY:
             country = pos.country or guess_country_from_request(request, event)
             return CountryField(
                 countries=CachedCountries
@@ -1176,7 +1176,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
                     'data-trigger-address-info': 'on',
                 }),
             )
-        if qc.system_datafield == QuestionnaireChild.SystemDatafield.STATE:
+        if qc.system_datafield == QuestionnaireRow.SystemDatafield.STATE:
             country = pos.country or guess_country_from_request(request, event)
             c = [('', '---')]
             fprefix = str(self.prefix) + '-' if self.prefix is not None and self.prefix != '-' else ''

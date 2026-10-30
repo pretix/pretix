@@ -37,7 +37,7 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, Question, QuestionAnswer,
-    Questionnaire, QuestionnaireChild, QuestionOption,
+    Questionnaire, QuestionnaireRow, QuestionOption,
 )
 from pretix.base.models.customers import AttendeeProfile
 from pretix.base.models.orders import CheckoutSession, Order
@@ -364,7 +364,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
                      to_attr='answerlist'),
             Prefetch('item__questionnaires',
                      qqs.prefetch_related(
-                         Prefetch('children', QuestionnaireChild.objects.prefetch_related(
+                         Prefetch('rows', QuestionnaireRow.objects.prefetch_related(
                              Prefetch('user_datafield', Question.objects.prefetch_related(
                                  Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
                                      # This prefetch statement is utter bullshit, but it actually prevents Django from doing
@@ -376,7 +376,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
                                  )))
                              ))
                          ),
-                         to_attr='childlist')
+                         to_attr='questionnairerowlist')
                      ),
                      to_attr='relevant_questionnaires')
         ))

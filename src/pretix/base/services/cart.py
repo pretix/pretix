@@ -1410,7 +1410,7 @@ class CartManager:
                         for k, v in self._widget_data.items():
                             if not k.startswith('question-'):
                                 continue
-                            # TODO(questionnaires)  -  switch to QuestionnaireChild
+                            # TODO(questionnaires)  -  switch to QuestionnaireRow
                             q = cp.item.questions.filter(ask_during_checkin=False, identifier__iexact=k[9:]).first()
                             if q:
                                 try:

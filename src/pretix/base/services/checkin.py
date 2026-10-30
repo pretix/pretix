@@ -55,7 +55,7 @@ from django_scopes import scope, scopes_disabled
 
 from pretix.base.models import (
     Checkin, CheckinList, Device, Event, Gate, Item, ItemVariation, Order,
-    OrderPosition, Questionnaire, QuestionnaireChild, QuestionOption,
+    OrderPosition, Questionnaire, QuestionnaireRow, QuestionOption,
 )
 from pretix.base.signals import checkin_created, periodic_task
 from pretix.helpers import OF_SELF
@@ -1033,7 +1033,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
 
     # Do this outside of transaction so it is saved even if the checkin fails for some other reason
     checkin_questions = list(
-        QuestionnaireChild.objects.filter(
+        QuestionnaireRow.objects.filter(
             questionnaire__event=clist.event, questionnaire__type=Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN,
             questionnaire__items__in=[op.item_id],
         ).select_related('user_datafield', 'questionnaire')

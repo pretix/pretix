@@ -52,7 +52,7 @@ def migrate_questions_forward(apps, schema_editor):
     Item = apps.get_model("pretixbase", "Item")
     Question = apps.get_model("pretixbase", "Question")
     Questionnaire = apps.get_model("pretixbase", "Questionnaire")
-    QuestionnaireChild = apps.get_model("pretixbase", "QuestionnaireChild")
+    QuestionnaireRow = apps.get_model("pretixbase", "QuestionnaireRow")
     EventSettingsStore = apps.get_model('pretixbase', 'Event_SettingsStore')
 
     qc_candidate = namedtuple('qc_candidate', ['item_info', 'question_id', 'question'])
@@ -83,33 +83,33 @@ def migrate_questions_forward(apps, schema_editor):
                 else:
                     internal_name = _('personalized products')
 
-            # create questionnaires and children
+            # create questionnaires and rows
             questionnaire = Questionnaire.objects.create(
                 event=event, type=questionnaire_type, position=0, all_sales_channels=True,
                 internal_name=internal_name
             )
             questionnaire.items.set([ii.id for ii in item_infos])
             deps = {}
-            for position, child in enumerate(questions):
-                print(position, child)
-                if isinstance(child, FakeQuestion):
-                    QuestionnaireChild.objects.create(
+            for position, question in enumerate(questions):
+                print(position, question)
+                if isinstance(question, FakeQuestion):
+                    QuestionnaireRow.objects.create(
                         questionnaire=questionnaire,
                         position=position + 1,
-                        system_datafield=child.id,
-                        required=child.required,
-                        label=child.question,
+                        system_datafield=question.id,
+                        required=question.required,
+                        label=question.question,
                     )
                 else:
-                    deps[child.id] = QuestionnaireChild.objects.create(
+                    deps[question.id] = QuestionnaireRow.objects.create(
                         questionnaire=questionnaire,
                         position=position + 1,
-                        user_datafield=child,
-                        required=child.required,
-                        label=child.question,
-                        help_text=child.help_text,
-                        dependency_question=deps[child.dependency_question.id] if child.dependency_question else None,
-                        dependency_values=child.dependency_values,
+                        user_datafield=question,
+                        required=question.required,
+                        label=question.question,
+                        help_text=question.help_text,
+                        dependency_question=deps[question.dependency_question.id] if question.dependency_question else None,
+                        dependency_values=question.dependency_values,
                     )
 
     for event in Event.objects.iterator():
@@ -127,7 +127,7 @@ def migrate_questions_forward(apps, schema_editor):
             personalized_items = event.items.filter(personalized=True).values_list('id', 'internal_name', 'name', 'personalized', named=True)
 
             # [position_checkout] presale
-            children = chain((
+            rows = chain((
                 qc_candidate(item, 0, q)
                 for q in get_fake_questions(settings)
                 for item in personalized_items
@@ -137,45 +137,45 @@ def migrate_questions_forward(apps, schema_editor):
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            create_grouped_item_questionnaires(event, children, '', Questionnaire.QuestionnaireType.ORDER_POSITION_SALE, personalized_items)
+            create_grouped_item_questionnaires(event, rows, '', Questionnaire.QuestionnaireType.ORDER_POSITION_SALE, personalized_items)
 
             # [position_checkin] checkin
-            children = chain((
+            rows = chain((
                 qc_candidate(item, q.id, q)
                 for q in questions.filter(ask_during_checkin=True)
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            create_grouped_item_questionnaires(event, children, _('Check-in questions for '), Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN, personalized_items)
+            create_grouped_item_questionnaires(event, rows, _('Check-in questions for '), Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN, personalized_items)
 
             # [position_hidden] hidden
-            children = chain((
+            rows = chain((
                 qc_candidate(item, q.id, q)
                 for q in questions.filter(hidden=True, ask_during_checkin=False)
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            create_grouped_item_questionnaires(event, children, _('Hidden questions for '), Questionnaire.QuestionnaireType.ORDER_POSITION_HIDDEN, personalized_items)
+            create_grouped_item_questionnaires(event, rows, _('Hidden questions for '), Questionnaire.QuestionnaireType.ORDER_POSITION_HIDDEN, personalized_items)
 
             # [O] get all order-level questions
             questions = list(event.questions.filter(container_type='O', hidden=False).order_by('position'))
             if questions:
-                # create questionnaires and children
+                # create questionnaires and rows
                 questionnaire = Questionnaire.objects.create(
                     event=event, type=Questionnaire.QuestionnaireType.ORDER_SALE, position=0, all_sales_channels=True,
                     internal_name=_('Per-order questions'),
                 )
                 deps = {}
-                for position, child in enumerate(questions):
-                    deps[child.id] = QuestionnaireChild.objects.create(
+                for position, question in enumerate(questions):
+                    deps[question.id] = QuestionnaireRow.objects.create(
                         questionnaire=questionnaire,
                         position=position + 1,
-                        user_datafield=child,
-                        required=child.required,
-                        label=child.question,
-                        help_text=child.help_text,
-                        dependency_question=deps[child.dependency_question.id] if child.dependency_question else None,
-                        dependency_values=child.dependency_values,
+                        user_datafield=question,
+                        required=question.required,
+                        label=question.question,
+                        help_text=question.help_text,
+                        dependency_question=deps[question.dependency_question.id] if question.dependency_question else None,
+                        dependency_values=question.dependency_values,
                     )
 
 
@@ -208,7 +208,7 @@ class Migration(migrations.Migration):
             bases=(models.Model, pretix.base.models.base.LoggingMixin),
         ),
         migrations.CreateModel(
-            name='QuestionnaireChild',
+            name='QuestionnaireRow',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
                 ('position', models.PositiveIntegerField(default=0)),
@@ -217,8 +217,8 @@ class Migration(migrations.Migration):
                 ('label', i18nfield.fields.I18nTextField()),
                 ('help_text', i18nfield.fields.I18nTextField(null=True)),
                 ('dependency_values', pretix.base.models.fields.MultiStringField(default=[])),
-                ('dependency_question', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='dependent_questions', to='pretixbase.questionnairechild')),
-                ('questionnaire', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='children', to='pretixbase.questionnaire')),
+                ('dependency_question', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='dependent_questions', to='pretixbase.questionnairerow')),
+                ('questionnaire', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='rows', to='pretixbase.questionnaire')),
                 ('user_datafield', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='references', to='pretixbase.question')),
             ],
             options={

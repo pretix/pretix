@@ -60,7 +60,7 @@ from pretix.base.models import (
     CartPosition, Device, Item, ItemAddOn, ItemBundle, ItemCategory,
     ItemProgramTime, ItemVariation, Question, QuestionOption, Quota,
 )
-from pretix.base.models.items import Questionnaire, QuestionnaireChild
+from pretix.base.models.items import Questionnaire, QuestionnaireRow
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.i18n import i18ncomp
@@ -472,7 +472,7 @@ with scopes_disabled():
         ask_during_checkin = django_filters.BooleanFilter(method='ask_during_checkin_qs')
 
         class Meta:
-            model = QuestionnaireChild
+            model = QuestionnaireRow
             fields = ['required']
 
         def ask_during_checkin_qs(self, qs, name, value):
@@ -494,7 +494,7 @@ class DeprecationWarningMixin:
 
 class POSCompatQuestionViewSet(DeprecationWarningMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = POSCompatQuestionSerializer
-    queryset = QuestionnaireChild.objects.none()
+    queryset = QuestionnaireRow.objects.none()
     permission = None
     sales_channel_ident = None
 
@@ -511,7 +511,7 @@ class POSCompatQuestionViewSet(DeprecationWarningMixin, viewsets.ReadOnlyModelVi
         )
 
     def get_queryset(self):
-        return QuestionnaireChild.objects.filter(
+        return QuestionnaireRow.objects.filter(
             # only matching sales channel
             Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels__identifier=self.sales_channel_ident),
             # only real questions, no text blocks
@@ -533,7 +533,7 @@ class POSCompatQuestionViewSet(DeprecationWarningMixin, viewsets.ReadOnlyModelVi
 
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
 
-        qid, dfid, sys_df = QuestionnaireChild.uncook_id(self.kwargs[lookup_url_kwarg])
+        qid, dfid, sys_df = QuestionnaireRow.uncook_id(self.kwargs[lookup_url_kwarg])
         print(self.kwargs[lookup_url_kwarg], qid, dfid, sys_df)
         if qid and sys_df:
             obj = get_object_or_404(queryset, questionnaire__pk=qid, system_datafield=sys_df)
@@ -608,7 +608,7 @@ class BaseDatafieldViewSet(viewsets.ModelViewSet):
 
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
 
-        qid, dfid, sys_df = QuestionnaireChild.uncook_id(self.kwargs[lookup_url_kwarg])
+        qid, dfid, sys_df = QuestionnaireRow.uncook_id(self.kwargs[lookup_url_kwarg])
         self.via_questionnaire_id = qid
         obj = get_object_or_404(queryset, pk=dfid)
 
@@ -833,7 +833,7 @@ class QuestionnaireViewSet(ConditionalListView, viewsets.ModelViewSet):
     write_permission = 'event.items:write'
 
     def get_queryset(self):
-        return self.request.event.questionnaires.prefetch_related('children').all()
+        return self.request.event.questionnaires.prefetch_related('rows').all()
 
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
@@ -871,7 +871,7 @@ class QuestionFormView(generics.GenericAPIView):
     # like POSCompatQuestionViewSet, but less compat
 
     serializer_class = QuestionFormSerializer
-    queryset = QuestionnaireChild.objects.none()
+    queryset = QuestionnaireRow.objects.none()
     permission = None
     sales_channel_ident = None
 
@@ -888,7 +888,7 @@ class QuestionFormView(generics.GenericAPIView):
         )
 
     def get_queryset(self):
-        return QuestionnaireChild.objects.filter(
+        return QuestionnaireRow.objects.filter(
             Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels__identifier=self.sales_channel_ident),
             questionnaire__event=self.request.event,
             # legacy compat only for position-level questions
@@ -907,7 +907,7 @@ class QuestionFormView(generics.GenericAPIView):
 
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
 
-        qid, dfid, sys_df = QuestionnaireChild.uncook_id(self.kwargs[lookup_url_kwarg])
+        qid, dfid, sys_df = QuestionnaireRow.uncook_id(self.kwargs[lookup_url_kwarg])
         print(self.kwargs[lookup_url_kwarg], qid, dfid, sys_df)
         if qid and sys_df:
             obj = get_object_or_404(queryset, questionnaire__pk=qid, system_datafield=sys_df)

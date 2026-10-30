@@ -96,7 +96,7 @@ from ._transactions import (
 from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
 from .items import (
-    Item, ItemVariation, Question, QuestionnaireChild, QuestionOption, Quota,
+    Item, ItemVariation, Question, QuestionnaireRow, QuestionOption, Quota,
 )
 
 logger = logging.getLogger(__name__)
@@ -1608,37 +1608,37 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
         # answers of other items in the same cart if the question objects have been
         # selected via prefetch_related
         if hasattr(self.item, 'relevant_questionnaires'):
-            children = list(copy.copy(qc) for qq in self.item.relevant_questionnaires for qc in qq.childlist)
+            qrows = list(copy.copy(qc) for qq in self.item.relevant_questionnaires for qc in qq.questionnairerowlist)
         else:
-            children = QuestionnaireChild.objects.filter(questionnaire__event_id=self.item.event_id, questionnaire__items__in=[self.item.id])
+            qrows = QuestionnaireRow.objects.filter(questionnaire__event_id=self.item.event_id, questionnaire__items__in=[self.item.id])
             if questionnaire_type is not None:
-                children = children.filter(questionnaire__type=questionnaire_type)
+                qrows = qrows.filter(questionnaire__type=questionnaire_type)
             if sales_channel is not None:
-                children = children.filter(Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels=sales_channel))
+                qrows = qrows.filter(Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels=sales_channel))
 
-            children = list(children)
+            qrows = list(qrows)
 
-        qc_cache = {
-            q.pk: q for q in children
+        row_cache = {
+            q.pk: q for q in qrows
         }
 
-        def qc_is_visible(parentid, qvals):
-            if parentid not in qc_cache:
+        def row_is_visible(parentid, qvals):
+            if parentid not in row_cache:
                 return False
-            parentqc = qc_cache[parentid]
-            if parentqc.dependency_question_id and not qc_is_visible(parentqc.dependency_question_id, parentqc.dependency_values):
+            parentrow = row_cache[parentid]
+            if parentrow.dependency_question_id and not row_is_visible(parentrow.dependency_question_id, parentrow.dependency_values):
                 return False
-            answer_values = self.get_dependency_answer_values(parentqc)
+            answer_values = self.get_dependency_answer_values(parentrow)
             return answer_values and any(qval in answer_values for qval in qvals)
 
         self.questions = []
-        for qc in children:
+        for qrow in qrows:
             try:
-                qc.answer = self.answer_cache[qc.user_datafield_id or qc.system_datafield]
+                qrow.answer = self.answer_cache[qrow.user_datafield_id or qrow.system_datafield]
             except KeyError:
                 continue
-            if not qc.dependency_question_id or qc_is_visible(qc.dependency_question_id, qc.dependency_values):
-                self.questions.append(qc)
+            if not qrow.dependency_question_id or row_is_visible(qrow.dependency_question_id, qrow.dependency_values):
+                self.questions.append(qrow)
         return self.questions
 
     @cached_property
@@ -1667,21 +1667,21 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
             raise ValueError('Questionnaire child without datafield has no answer')
 
     def get_system_answer(self, system_datafield_name):
-        if system_datafield_name == QuestionnaireChild.SystemDatafield.ATTENDEE_NAME_PARTS:
+        if system_datafield_name == QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS:
             return self.attendee_name
-        elif system_datafield_name == QuestionnaireChild.SystemDatafield.ATTENDEE_EMAIL:
+        elif system_datafield_name == QuestionnaireRow.SystemDatafield.ATTENDEE_EMAIL:
             return self.attendee_email
-        elif system_datafield_name == QuestionnaireChild.SystemDatafield.COMPANY:
+        elif system_datafield_name == QuestionnaireRow.SystemDatafield.COMPANY:
             return self.company
-        elif system_datafield_name == QuestionnaireChild.SystemDatafield.STREET:
+        elif system_datafield_name == QuestionnaireRow.SystemDatafield.STREET:
             return self.street
-        elif system_datafield_name == QuestionnaireChild.SystemDatafield.ZIPCODE:
+        elif system_datafield_name == QuestionnaireRow.SystemDatafield.ZIPCODE:
             return self.zipcode
-        elif system_datafield_name == QuestionnaireChild.SystemDatafield.CITY:
+        elif system_datafield_name == QuestionnaireRow.SystemDatafield.CITY:
             return self.city
-        elif system_datafield_name == QuestionnaireChild.SystemDatafield.STATE:
+        elif system_datafield_name == QuestionnaireRow.SystemDatafield.STATE:
             return self.state
-        elif system_datafield_name == QuestionnaireChild.SystemDatafield.COUNTRY:
+        elif system_datafield_name == QuestionnaireRow.SystemDatafield.COUNTRY:
             return str(self.country)
         else:
             raise ValueError('Unknown system datafield name')

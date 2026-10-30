@@ -1680,7 +1680,7 @@ class Question(LoggedModel):  # TODO(questionnaires)  -  rename to Datafield ?
         choices=FieldType.choices,
         verbose_name=_("Question type")
     )
-    tbd_required = models.BooleanField(  # TODO(questionnaires) : to be removed, -> QuestionnaireChild
+    tbd_required = models.BooleanField(  # TODO(questionnaires) : to be removed, -> QuestionnaireRow
         default=False,
         verbose_name=_("Required question"),
         db_column="required",
@@ -1692,7 +1692,7 @@ class Question(LoggedModel):  # TODO(questionnaires)  -  rename to Datafield ?
     #     blank=True,
     #     help_text=_('This question will be asked to buyers of the selected products')
     # )
-    tbd_position = models.PositiveIntegerField(  # TODO(questionnaires) : to be removed, -> Questionnaire + QuestionnaireChild
+    tbd_position = models.PositiveIntegerField(  # TODO(questionnaires) : to be removed, -> Questionnaire + QuestionnaireRow
         default=0,
         verbose_name=_("Position"),
         db_column="position",
@@ -1717,10 +1717,10 @@ class Question(LoggedModel):  # TODO(questionnaires)  -  rename to Datafield ?
         verbose_name=_('Print answer on invoices'),
         default=False
     )
-    dependency_question = models.ForeignKey(  # TODO(questionnaires) : to be removed, -> QuestionnaireChild
+    dependency_question = models.ForeignKey(  # TODO(questionnaires) : to be removed, -> QuestionnaireRow
         'Question', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
     )
-    dependency_values = MultiStringField(default=[])  # TODO(questionnaires) : to be removed, -> QuestionnaireChild
+    dependency_values = MultiStringField(default=[])  # TODO(questionnaires) : to be removed, -> QuestionnaireRow
     valid_number_min = models.DecimalField(decimal_places=6, max_digits=30, null=True, blank=True,
                                            verbose_name=_('Minimum value'),
                                            help_text=_('Currently not supported in our apps and during check-in'))
@@ -2066,14 +2066,14 @@ class Questionnaire(LoggedModel):
     @staticmethod
     def check_constraints(event):
         errors = set()
-        all_questionnaires = Questionnaire.objects.filter(event=event).prefetch_related('children', 'items')
+        all_questionnaires = Questionnaire.objects.filter(event=event).prefetch_related('rows', 'items')
         all_sales_channels = event.sales_channels.all()
         for (sales_channel, type, item_id, sdf, udf), fields in groupby(sorted(
             (sales_channel, q.type, item.id, c.system_datafield or '', c.user_datafield_id or 0, q, item)
             for q in all_questionnaires
             for sales_channel in (q.limit_sales_channels if not q.all_sales_channels else all_sales_channels).values_list('pk', flat=True)
             for item in q.items.all()
-            for c in q.children.all()
+            for c in q.rows.all()
         ), key=lambda d: (d[0], d[1], d[2], d[3], d[4])):
             fields = list(fields)
             if len(fields) > 1:
@@ -2092,7 +2092,7 @@ class Questionnaire(LoggedModel):
             raise ValidationError(list(errors))
 
 
-class QuestionnaireChild(LoggedModel):
+class QuestionnaireRow(LoggedModel):
     class SystemDatafield(models.TextChoices):
         ATTENDEE_NAME_PARTS = '@attendee_name_parts', _('Attendee name')
         ATTENDEE_EMAIL = '@attendee_email', _('Attendee email')
@@ -2122,7 +2122,7 @@ class QuestionnaireChild(LoggedModel):
 
     questionnaire = models.ForeignKey(
         Questionnaire,
-        related_name="children",
+        related_name="rows",
         on_delete=models.CASCADE
     )
     position = models.PositiveIntegerField(
@@ -2153,7 +2153,7 @@ class QuestionnaireChild(LoggedModel):
         null=True, blank=True,
     )
     dependency_question = models.ForeignKey(
-        'QuestionnaireChild', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
+        'pretix.base.models.items.QuestionnaireRow', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
     )
     dependency_values = MultiStringField(default=[])
 
@@ -2172,13 +2172,13 @@ class QuestionnaireChild(LoggedModel):
     @property
     def cooked_id(self):
         if self.user_datafield_id or self.system_datafield:
-            return QuestionnaireChild.cook_id_from_parts(self.questionnaire_id, self.user_datafield_id, self.system_datafield)
+            return QuestionnaireRow.cook_id_from_parts(self.questionnaire_id, self.user_datafield_id, self.system_datafield)
         else:
             return None
 
     @staticmethod
     def cook_id_from_parts(qid, dfid, sys_df):
-        df_id = dfid + 100 if dfid else QuestionnaireChild.SYSTEM_DATAFIELD_NUMBERS.index(sys_df)
+        df_id = dfid + 100 if dfid else QuestionnaireRow.SYSTEM_DATAFIELD_NUMBERS.index(sys_df)
         assert qid < 1000000000
         return qid * 1000000000 + df_id
 
@@ -2190,7 +2190,7 @@ class QuestionnaireChild(LoggedModel):
             if dfid >= 100:
                 return qid, dfid - 100, None
             else:
-                return qid, None, QuestionnaireChild.SYSTEM_DATAFIELD_NUMBERS[dfid]
+                return qid, None, QuestionnaireRow.SYSTEM_DATAFIELD_NUMBERS[dfid]
         else:
             return None, id, None
 

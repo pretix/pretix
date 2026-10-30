@@ -1093,7 +1093,7 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
 
         for cp in self._positions_for_questions:
             qc_cache = {
-                qc.pk: qc for qq in cp.item.relevant_questionnaires for qc in qq.childlist
+                qc.pk: qc for qq in cp.item.relevant_questionnaires for qc in qq.questionnairerowlist
             }
 
             def question_is_visible(parentid, qvals):
@@ -1113,7 +1113,7 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
 
             if not self.all_optional:
                 for qq in cp.item.relevant_questionnaires:
-                    for qc in qq.childlist:
+                    for qc in qq.questionnairerowlist:
                         if qc.user_datafield_id and question_is_required(qc) and qc.user_datafield_id not in cp.answer_cache:
                             if warn:
                                 messages.warning(request, _('Please fill in answers to all required questions.'))

@@ -58,7 +58,7 @@ from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
     CachedFile, Checkin, Customer, Device, GiftCard, Invoice, InvoiceAddress,
     InvoiceLine, Item, ItemVariation, Order, OrderPosition, Question,
-    QuestionAnswer, QuestionnaireChild, ReusableMedium, SalesChannel, Seat,
+    QuestionAnswer, QuestionnaireRow, ReusableMedium, SalesChannel, Seat,
     SubEvent, TaxRule, Voucher,
 )
 from pretix.base.models.orders import (
@@ -242,7 +242,7 @@ class MixedAnswerListSerializer(ListSerializer):
     def to_representation(self, instance):
         answers = super().to_representation(instance.answers)
         answers_dict = {answer["question"]: answer for answer in answers}
-        for qc in QuestionnaireChild.objects.filter(questionnaire__items__id=instance.item_id):
+        for qc in QuestionnaireRow.objects.filter(questionnaire__items__id=instance.item_id):
             if qc.user_datafield_id:
                 if answer := answers_dict.get(qc.user_datafield_id):
                     answer = dict(answer)
@@ -251,7 +251,7 @@ class MixedAnswerListSerializer(ListSerializer):
                     answer["user_datafield_id"] = qc.user_datafield_id
                     answers.append(answer)
             elif (sys_answer := instance.get_system_answer(qc.system_datafield)) is not None:
-                if qc.system_datafield == QuestionnaireChild.SystemDatafield.ATTENDEE_NAME_PARTS:
+                if qc.system_datafield == QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS:
                     name_parts = instance.attendee_name_parts
                     settings = self.context['event'].settings
                     for k, v, w, *__ in PERSON_NAME_SCHEMES.get(settings.name_scheme)['fields']:
@@ -269,7 +269,7 @@ class MixedAnswerListSerializer(ListSerializer):
                             except ValueError:
                                 pass
                             answers.append({
-                                "question": QuestionnaireChild.cook_id_from_parts(qc.questionnaire_id, None, f'{qc.system_datafield}:{k}'),
+                                "question": QuestionnaireRow.cook_id_from_parts(qc.questionnaire_id, None, f'{qc.system_datafield}:{k}'),
                                 "answer": name_parts[k],
                                 "question_identifier": f'{qc.system_datafield}:{k}',
                                 "options": options,
@@ -293,9 +293,9 @@ class MixedAnswerListSerializer(ListSerializer):
         settings = self.context['event'].settings
         for answer in data["answers"]:
             try:
-                qid, dfid, sys_df = QuestionnaireChild.uncook_id(answer["question"])
+                qid, dfid, sys_df = QuestionnaireRow.uncook_id(answer["question"])
             except ValueError:
-                if type(answer["question"]) is str and answer["question"] in QuestionnaireChild.SYSTEM_DATAFIELD_NUMBERS:
+                if type(answer["question"]) is str and answer["question"] in QuestionnaireRow.SYSTEM_DATAFIELD_NUMBERS:
                     qid, dfid, sys_df = None, None, answer["question"]
                 else:
                     raise ValidationError('Invalid question ID')

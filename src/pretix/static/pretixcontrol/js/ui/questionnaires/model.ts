@@ -45,10 +45,10 @@ export type Questionnaire = {
 	position: number,
 	all_sales_channels: boolean,
 	limit_sales_channels: string[],
-	children: QuestionnaireChild[],
+	rows: QuestionnaireRow[],
 }
 
-export type QuestionnaireChild = {
+export type QuestionnaireRow = {
 	datafield: string | null,
 	required: boolean,
 	label: I18nString,

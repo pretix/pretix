@@ -61,7 +61,7 @@ from pretix.base.models import (
     ItemVariation, ItemVariationMetaValue, Question, QuestionAnswer,
     QuestionOption, Quota, SalesChannel,
 )
-from pretix.base.models.items import Questionnaire, QuestionnaireChild
+from pretix.base.models.items import Questionnaire, QuestionnaireRow
 from pretix.base.settings import (
     PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
 )
@@ -353,7 +353,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
             self.fields['variations'].child.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
 
     def get_personalized(self, item):
-        return QuestionnaireChild.objects.filter(questionnaire__items=item, system_datafield__in=('@attendee_name_parts', '@attendee_email')).exists()
+        return QuestionnaireRow.objects.filter(questionnaire__items=item, system_datafield__in=('@attendee_name_parts', '@attendee_email')).exists()
 
     def put_personalized(self, item, new_value):
         if item and new_value != self.get_personalized(item):
@@ -588,7 +588,7 @@ class DatafieldRelatedField(serializers.SlugRelatedField):
         if data is None:
             return {'user_datafield': None, 'system_datafield': None}
         elif type(data) == str and data.startswith('@'):
-            if data not in QuestionnaireChild.SystemDatafield.values:
+            if data not in QuestionnaireRow.SystemDatafield.values:
                 self.fail("invalid_choice", input=data)
             return {'user_datafield': None, 'system_datafield': data}
         elif type(data) == str:
@@ -631,7 +631,7 @@ class QuestionFormSerializer(I18nAwareModelSerializer):
     options = InlineQuestionOptionSerializer(source='user_datafield.options', many=True, required=False, default=[])
 
     class Meta:
-        model = QuestionnaireChild
+        model = QuestionnaireRow
         fields = ('datafield', 'label', 'type', 'required', 'help_text', 'items', 'options', 'position',
                   'show_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
                   'print_on_invoice', 'valid_number_min',
@@ -646,7 +646,7 @@ class QuestionFormSerializer(I18nAwareModelSerializer):
         if isinstance(instance, QuestionAnswer):
             position = instance.cartposition if instance.cartposition_id else instance.orderposition
             print('searching ', repr(instance), repr(position), repr(instance.question), instance.pk, position.item_id, self.context)   # TODO remove print
-            qcs = list(QuestionnaireChild.objects.filter(user_datafield_id=instance.question_id, questionnaire__items__in=[position.item_id]))
+            qcs = list(QuestionnaireRow.objects.filter(user_datafield_id=instance.question_id, questionnaire__items__in=[position.item_id]))
             return next((qc for qc in qcs if qc.questionnaire.type == self.context.get('preferred_questionnaire_type', Questionnaire.QuestionnaireType.ORDER_POSITION_SALE)), qcs[0])
 
         return super().get_attribute(instance)
@@ -681,7 +681,7 @@ class QuestionFormSerializer(I18nAwareModelSerializer):
                         part["type"] = Question.FieldType.CHOICE
                         part["options"] = [{"id": idx + 1, "identifier": k, "answer": i18n_all_from_gettext(v, settings.locales), "position": idx + 1} for idx, (k, v) in
                                            enumerate(PERSON_NAME_SALUTATIONS)]
-                    part["id"] = QuestionnaireChild.cook_id_from_parts(row['questionnaire_id'], None, part["identifier"])
+                    part["id"] = QuestionnaireRow.cook_id_from_parts(row['questionnaire_id'], None, part["identifier"])
                     part["required"] = part["required"] and k in REQUIRED_NAME_PARTS
                     mangled_results.append(part)
                     pos_offset += 1
@@ -720,7 +720,7 @@ class POSCompatQuestionSerializer(QuestionFormSerializer):
     options = InlineQuestionOptionSerializer(source='user_datafield.options', many=True, required=False, default=[])
 
     class Meta:
-        model = QuestionnaireChild
+        model = QuestionnaireRow
         fields = ('id', 'question', 'type', 'required', 'items', 'options', 'position',
                   'ask_during_checkin', 'show_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
                   'hidden', 'dependency_value', 'print_on_invoice', 'help_text', 'valid_number_min',
@@ -735,7 +735,7 @@ class POSCompatQuestionSerializer(QuestionFormSerializer):
         if isinstance(instance, QuestionAnswer):
             position = instance.cartposition if instance.cartposition_id else instance.orderposition
             print('searching ', repr(instance), repr(position), repr(instance.question), instance.pk, position.item_id, self.context)   # TODO remove print
-            qcs = list(QuestionnaireChild.objects.filter(user_datafield_id=instance.question_id, questionnaire__items__in=[position.item_id]))
+            qcs = list(QuestionnaireRow.objects.filter(user_datafield_id=instance.question_id, questionnaire__items__in=[position.item_id]))
             return next((qc for qc in qcs if qc.questionnaire.type == self.context.get('preferred_questionnaire_type', Questionnaire.QuestionnaireType.ORDER_POSITION_SALE)), qcs[0])
 
         return super().get_attribute(instance)
@@ -775,7 +775,7 @@ class POSCompatQuestionSerializer(QuestionFormSerializer):
                         part["type"] = Question.FieldType.CHOICE
                         part["options"] = [{"id": idx + 1, "identifier": k, "answer": i18n_all_from_gettext(v, settings.locales), "position": idx + 1} for idx, (k, v) in
                                            enumerate(PERSON_NAME_SALUTATIONS)]
-                    part["id"] = QuestionnaireChild.cook_id_from_parts(row['questionnaire_id'], None, part["identifier"])
+                    part["id"] = QuestionnaireRow.cook_id_from_parts(row['questionnaire_id'], None, part["identifier"])
                     part["required"] = part["required"] and k in REQUIRED_NAME_PARTS
                     mangled_results.append(part)
                     pos_offset += 1
@@ -890,14 +890,14 @@ class RenderedMarkdownField(serializers.CharField):
         return rich_text(value)
 
 
-class InlineQuestionnaireChildSerializer(I18nAwareModelSerializer):
+class InlineQuestionnaireRowSerializer(I18nAwareModelSerializer):
     datafield = DatafieldRelatedField(allow_null=True, source='*', queryset=Question.objects.none())
     dependency_question = DatafieldRelatedField(allow_null=True, required=False, queryset=Question.objects.none())
     rendered_help_text = RenderedMarkdownField(read_only=True, source='help_text')
     cooked_id = serializers.IntegerField(read_only=True, allow_null=True)
 
     class Meta:
-        model = QuestionnaireChild
+        model = QuestionnaireRow
         fields = ('datafield', 'required', 'label', 'help_text', 'dependency_question', 'dependency_values', 'rendered_help_text', 'cooked_id')
 
     def __init__(self, *args, **kwargs):
@@ -925,10 +925,10 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Questionnaire
-        fields = ('id', 'type', 'internal_name', 'items', 'position', 'all_sales_channels', 'limit_sales_channels', 'children')
+        fields = ('id', 'type', 'internal_name', 'items', 'position', 'all_sales_channels', 'limit_sales_channels', 'rows')
 
     def __init__(self, *args, **kwargs):
-        self.fields['children'] = InlineQuestionnaireChildSerializer(many=True, required=True, context=kwargs['context'], partial=False)
+        self.fields['rows'] = InlineQuestionnaireRowSerializer(many=True, required=True, context=kwargs['context'], partial=False)
         self.fields['items'].child_relation.queryset = kwargs['context']['event'].items.all()
         self.fields['limit_sales_channels'].child_relation.queryset = kwargs['context']['event'].organizer.sales_channels.all()
         super().__init__(*args, **kwargs)
@@ -955,14 +955,14 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
             #Question.clean_items(event, full_data.get('items') or [])
 
             if (full_data.get('type') == Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
-                    and any(c['dependency_question'] for c in full_data['children'])):
+                    and any(c['dependency_question'] for c in full_data['rows'])):
                 raise ValidationError('Dependencies are not supported during check-in.')
 
             if (not full_data.get('type').startswith('position_')
-                    and any(c['system_datafield'] for c in full_data['children'])):
+                    and any(c['system_datafield'] for c in full_data['rows'])):
                 raise ValidationError('System data fields are only supported on order positions.')
 
-            system_fields = set(c['system_datafield'] for c in full_data['children'])
+            system_fields = set(c['system_datafield'] for c in full_data['rows'])
             if ('zipcode' in system_fields or 'state' in system_fields or 'street' in system_fields or 'city' in system_fields) and 'country' not in system_fields:
                 raise ValidationError('The system data fields "street", "zip code", "city", and "state" can only be used in combination with the "country" field.')
 
@@ -970,9 +970,9 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        children_data = validated_data.pop('children') if 'children' in validated_data else []
+        rows_data = validated_data.pop('rows') if 'rows' in validated_data else []
         questionnaire = super().create(validated_data)
-        self.set_children(questionnaire, children_data)
+        self.set_rows(questionnaire, rows_data)
         try:
             Questionnaire.check_constraints(questionnaire.event)
         except ValidationError as e:
@@ -981,20 +981,20 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        children_data = validated_data.pop('children', None)
+        rows_data = validated_data.pop('rows', None)
         questionnaire = super().update(instance, validated_data)
-        if children_data is not None:
-            self.set_children(questionnaire, children_data)
+        if rows_data is not None:
+            self.set_rows(questionnaire, rows_data)
         try:
             Questionnaire.check_constraints(questionnaire.event)
         except ValidationError as e:
             raise DrfValidationError(as_serializer_error(e))
         return questionnaire
 
-    def set_children(self, questionnaire, new_data):
+    def set_rows(self, questionnaire, new_data):
         result = {}
-        child_serializer = self.fields['children'].child
-        existing_children = questionnaire.children.all()
+        child_serializer = self.fields['rows'].child
+        existing_rows = questionnaire.rows.all()
         def q(qc):
             return qc['user_datafield'] or qc['system_datafield']
         for i, d in enumerate(new_data):
@@ -1004,7 +1004,7 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
             d.setdefault('help_text', None)
             d.setdefault('dependency_question', None)
             d.setdefault('dependency_values', None)
-        for existing, update_data in zip_longest(existing_children, new_data):
+        for existing, update_data in zip_longest(existing_rows, new_data):
             if update_data:
                 if update_data.get('dependency_question'):
                     try:

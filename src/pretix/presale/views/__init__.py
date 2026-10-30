@@ -54,7 +54,7 @@ from pretix.base.models import (
     CartPosition, Customer, InvoiceAddress, ItemAddOn, OrderFee, Question,
     QuestionAnswer, Questionnaire, QuestionOption, TaxRule,
 )
-from pretix.base.models.items import QuestionnaireChild
+from pretix.base.models.items import QuestionnaireRow
 from pretix.base.models.orders import CheckoutSession
 from pretix.base.services.cart import get_fees
 from pretix.base.services.pricing import apply_rounding
@@ -435,7 +435,7 @@ def get_cart_positions(request):
                          to_attr='answerlist'),
                 Prefetch('item__questionnaires',
                          qqs.prefetch_related(
-                             Prefetch('children', QuestionnaireChild.objects.prefetch_related(
+                             Prefetch('rows', QuestionnaireRow.objects.prefetch_related(
                                  Prefetch('user_datafield', Question.objects.prefetch_related(
                                      Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
                                          # This prefetch statement is utter bullshit, but it actually prevents Django from doing
@@ -447,7 +447,7 @@ def get_cart_positions(request):
                                      )))
                                  ))
                              ),
-                             to_attr='childlist')
+                             to_attr='questionnairerowlist')
                          ),
                          to_attr='relevant_questionnaires')
             )

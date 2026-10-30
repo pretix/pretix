@@ -34,14 +34,14 @@ const emit = defineEmits(['update', 'invalidate:datafields', 'invalidate:questio
 const sales_channels: Ref<SalesChannel[]> = inject('pretix:env:organizer:sales_channels')
 
 let nextId = 1;
-watch(() => props.questionnaire.children, () => {
-	for (let qc of props.questionnaire.children) {
+watch(() => props.questionnaire.rows, () => {
+	for (let qc of props.questionnaire.rows) {
 		if (!qc._cid) qc._cid = id + (++nextId);
 	}
 })
 
 function addExistingDatafield (field) {
-	props.questionnaire.children.push({
+	props.questionnaire.rows.push({
 		_cid: useId(),
 		datafield: field.identifier,
 		required: false,
@@ -61,7 +61,7 @@ function showAddTextblockDialog () {
 }
 
 function addTextblock () {
-	props.questionnaire.children.push({
+	props.questionnaire.rows.push({
 		_cid: useId(),
 		datafield: null,
 		required: false,
@@ -163,14 +163,14 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
         <p v-else>{{ questionnaire._err_mes }}</p>
       </div>
       <div class="form-horizontal" :id="`questionListParent${props.questionnaire.id}`">
-				<SlickList axis="y" v-model:list="props.questionnaire.children" useDragHandle :appendTo="`#questionListParent${props.questionnaire.id}`" @update:list="emit('update')">
-					<SlickItem v-for="(child, index) in props.questionnaire.children" :key="child._cid" :index="index">
+				<SlickList axis="y" v-model:list="props.questionnaire.rows" useDragHandle :appendTo="`#questionListParent${props.questionnaire.id}`" @update:list="emit('update')">
+					<SlickItem v-for="(child, index) in props.questionnaire.rows" :key="child._cid" :index="index">
 						<QuestionElement
 										:datafields="props.datafields"
 										:question="child"
 										:editable="true"
-										:possible_dependencies="props.questionnaire.children.slice(0, index)"
-										@remove-self="questionnaire.children.splice(index, 1); emit('update')"
+										:possible_dependencies="props.questionnaire.rows.slice(0, index)"
+										@remove-self="questionnaire.rows.splice(index, 1); emit('update')"
 										@update="emit('update')"
 										@invalidate:datafields="emit('invalidate:datafields')"/>
 					</SlickItem>
