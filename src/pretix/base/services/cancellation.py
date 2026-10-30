@@ -67,7 +67,7 @@ class CollectedChecks:
 
 
 def evaluate_cancellation(event: Event, order: Order, keep: Set[OrderPosition],
-                          check_ts: datetime.datetime) -> "CancellationResult":
+                          check_at: datetime.datetime) -> "CancellationResult":
     # validate that all keep order positions are part of the order
     for p in keep:
         if p.order_id != order.id:
@@ -102,13 +102,13 @@ def evaluate_cancellation(event: Event, order: Order, keep: Set[OrderPosition],
 
         # evaluate the system/plugin checks for the position
         for check in collected_checks.position:
-            res = check.evaluate(order=order, keep=keep, position=position, check_ts=check_ts)
+            res = check.evaluate(order=order, keep=keep, position=position, check_at=check_at)
             if res is not None:
                 position_check_results[position.id].append(res)
 
         # evaluate all customer specified rules for this position
         for rule in position_rules:
-            result = rule.evaluate_position_rule(order, keep, position, check_ts)
+            result = rule.evaluate_position_rule(order, keep, position, check_at)
             if result is not None:
                 position_rule_results[position.id].append(result)
 
@@ -124,13 +124,13 @@ def evaluate_cancellation(event: Event, order: Order, keep: Set[OrderPosition],
 
     # evaluate all system/plugin provided checks for the cancellation process
     for check in collected_checks.process:
-        res = check.evaluate(order=order, keep=keep, position=None, check_ts=check_ts)
+        res = check.evaluate(order=order, keep=keep, position=None, check_at=check_at)
         if res is not None:
             process_check_results.append(res)
 
     # evaluate all customer specified rules for the cancellation process
     for rule in process_rules:
-        result = rule.evaluate_process_rule(order, keep, temp_position_fees, check_ts)
+        result = rule.evaluate_process_rule(order, keep, temp_position_fees, check_at)
         if result is not None:
             process_rule_results.append(result)
 
@@ -143,9 +143,9 @@ def evaluate_cancellation(event: Event, order: Order, keep: Set[OrderPosition],
 
 
 def prepare_cancellation(event: Event, order: Order, keep: Set[OrderPosition],
-                         check_ts: datetime.datetime) -> Cancellation:
-    res = evaluate_cancellation(event=event, order=order, keep=set(), check_ts=check_ts)
-    c = Cancellation(event=event, order=order, result=res, evaluation_ts=check_ts)
+                         check_at: datetime.datetime) -> Cancellation:
+    res = evaluate_cancellation(event=event, order=order, keep=set(), check_at=check_at)
+    c = Cancellation(event=event, order=order, result=res, evaluated_at=check_at)
     c.save()
     c.keep.add(*keep)
     return c
@@ -201,13 +201,13 @@ def _prefetch_order(event: Event, order: Order, checks: CollectedChecks) -> "Pre
 
 
 def position_not_used_cancellation_check(order: "PrefetchedOrder", keep: PositionSet, position: "PrefetchedPosition",
-                                         check_ts: datetime.datetime) -> Optional[CheckResult]:
+                                         check_at: datetime.datetime) -> Optional[CheckResult]:
     if position in keep:
         return None
 
     used_checkin = next(
         (c for c in position.all_checkins.all() if
-         c.successful and c.list.consider_tickets_used and c.datetime < check_ts),
+         c.successful and c.list.consider_tickets_used and c.datetime < check_at),
         None,
     )
     if used_checkin is not None:
@@ -234,7 +234,7 @@ def signal_listener_position_not_used(sender: Event, **kwargs) -> CancellationCh
 
 
 def position_not_blocked_check(order: Order, keep: PositionSet, position: OrderPosition,
-                               check_ts: datetime.datetime) -> Optional[CheckResult]:
+                               check_at: datetime.datetime) -> Optional[CheckResult]:
     if position in keep:
         return None
 
@@ -256,7 +256,7 @@ def signal_listener_position_not_blocked(sender: Event, **kwargs) -> Cancellatio
 
 
 def position_giftcard_not_used(order: PrefetchedOrder, keep: PositionSet, position: PrefetchedPosition,
-                               check_ts: datetime.datetime) -> Optional[CheckResult]:
+                               check_at: datetime.datetime) -> Optional[CheckResult]:
     if position in keep:
         return None
 
@@ -287,7 +287,7 @@ def signal_listener_position_giftcard_not_used(sender: Event, **kwargs) -> Cance
 
 
 def position_membership_not_used(order: PrefetchedOrder, keep: PositionSet, position: PrefetchedPosition,
-                                 check_ts: datetime.datetime) -> Optional[CheckResult]:
+                                 check_at: datetime.datetime) -> Optional[CheckResult]:
     if position in keep:
         return None
 
@@ -321,7 +321,7 @@ def signal_position_membership_not_used(sender: Event, **kwargs) -> Cancellation
 
 
 def position_item_allow_cancel(order: PrefetchedOrder, keep: PositionSet, position: PrefetchedPosition,
-                               check_ts: datetime.datetime) -> Optional[CheckResult]:
+                               check_at: datetime.datetime) -> Optional[CheckResult]:
     if position in keep:
         return None
 
@@ -342,7 +342,7 @@ def signal_position_item_allow_cancel(sender: Event, **kwargs) -> CancellationCh
                              ])
 
 
-def process_order_payment_state(order: PrefetchedOrder, keep: PositionSet, check_ts: datetime.datetime):
+def process_order_payment_state(order: PrefetchedOrder, keep: PositionSet, check_at: datetime.datetime):
     if order.status == Order.STATUS_PAID:
         if order.total == Decimal("0.00"):
             return CheckResult(
@@ -388,7 +388,7 @@ def signal_listener_process_order_payment_state(sender: Event, **kwargs) -> Canc
                              )
 
 
-def process_cancel_allowed(order: PrefetchedOrder, keep: PositionSet, check_ts: datetime.datetime) -> CheckResult:
+def process_cancel_allowed(order: PrefetchedOrder, keep: PositionSet, check_at: datetime.datetime) -> CheckResult:
     cancel_allowed = order.cancel_allowed()
 
     return CheckResult(
@@ -407,7 +407,7 @@ def signal_listener_process_cancel_allowed(sender: Event, **kwargs) -> Cancellat
                              )
 
 
-def process_cancellation_in_progress(order: PrefetchedOrder, keep: PositionSet, check_ts: datetime.datetime):
+def process_cancellation_in_progress(order: PrefetchedOrder, keep: PositionSet, check_at: datetime.datetime):
     if any([c.state not in [Cancellation.STATE_PERFORMED, Cancellation.STATE_ABORTED] for c in
             order.cancellations.all()]):
         return CheckResult(

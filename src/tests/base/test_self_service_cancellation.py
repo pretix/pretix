@@ -108,16 +108,16 @@ def make_rule_result(fee, *, possible: bool = True, fee_type: FeeType = FeeType.
 
 def make_cancellation_check(id: str, type: CheckTypes, result: bool, prefetches=None,
                             related_selects=None,
-                            check_ts: datetime = datetime.now(tz=UTC)) -> CancellationCheck:
+                            check_at: datetime = datetime.now(tz=UTC)) -> CancellationCheck:
     if related_selects is None:
         related_selects = []
     if prefetches is None:
         prefetches = []
 
-    def position_check_fn(_order, _keep, _position, _check_ts=check_ts):
+    def position_check_fn(_order, _keep, _position, _check_at=check_at):
         return make_check_result(result, id=id)
 
-    def check_fn(_order, _keep, _check_ts=check_ts):
+    def check_fn(_order, _keep, _check_at=check_at):
         return make_check_result(result, id=id)
 
     if type == CheckTypes.POSITION:
@@ -665,7 +665,7 @@ class TestCancellationRule:
         )
         def test_evaluate_cancellation_moment(self, event, order, order_position, rule_type_variants, attr, delta,
                                               allowed):
-            reference_ts = datetime(2020, 10, 1, hour=0, minute=0, second=0, microsecond=0, tzinfo=UTC)
+            reference = datetime(2020, 10, 1, hour=0, minute=0, second=0, microsecond=0, tzinfo=UTC)
 
             with scope(organizer=event.organizer):
                 if rule_type_variants == 'position':
@@ -677,16 +677,16 @@ class TestCancellationRule:
                 else:
                     raise ValueError("Unknown cancellation rule type: {}".format(rule_type_variants))
 
-                setattr(r, attr, RelativeDateWrapper(reference_ts))
+                setattr(r, attr, RelativeDateWrapper(reference))
                 r.save()
                 rule = rule_object.objects.get(id=r.id)
 
                 with ensure_no_queries():
                     if rule_type_variants == 'position':
-                        res = rule._evaluate_cancellation_moment(position=order_position, check_ts=reference_ts + delta)
+                        res = rule._evaluate_cancellation_moment(position=order_position, check_at=reference + delta)
                     elif rule_type_variants == "process":
                         res = rule._evaluate_cancellation_moment(order=order,
-                                                                 check_ts=reference_ts + delta)
+                                                                 check_at=reference + delta)
                     else:
                         raise ValueError("Unknown cancellation rule type: {}".format(rule_type_variants))
 
@@ -700,25 +700,25 @@ class TestCancellationRule:
 
         @pytest.mark.django_db
         def test_evaluate_simple_e2e(self, event, order, order_position):
-            reference_ts = datetime(2020, 10, 1, hour=0, minute=0, second=0, microsecond=0, tzinfo=UTC)
+            reference = datetime(2020, 10, 1, hour=0, minute=0, second=0, microsecond=0, tzinfo=UTC)
 
-            check_ts = reference_ts - timedelta(hours=1)
+            check_at = reference - timedelta(hours=1)
 
             PositionCancellationRule.objects.create(event=event, all_products=True,
                                                     fee_absolute_per_position=Decimal("10.00"),
-                                                    allowed_until=RelativeDateWrapper(reference_ts))
+                                                    allowed_until=RelativeDateWrapper(reference))
             PositionCancellationRule.objects.create(event=event, all_products=True,
                                                     fee_absolute_per_position=Decimal("10.00"),
-                                                    allowed_until=RelativeDateWrapper(reference_ts - timedelta(days=1)))
+                                                    allowed_until=RelativeDateWrapper(reference - timedelta(days=1)))
             ProcessCancellationRule.objects.create(event=event, fee_cancellation_process=Decimal("10.00"),
                                                    fee_mode=FeeType.ADDITIONAL,
-                                                   allowed_until=RelativeDateWrapper(reference_ts))
+                                                   allowed_until=RelativeDateWrapper(reference))
             ProcessCancellationRule.objects.create(event=event, fee_cancellation_process=Decimal("10.00"),
                                                    fee_mode=FeeType.ADDITIONAL,
-                                                   allowed_until=RelativeDateWrapper(reference_ts - timedelta(days=1)))
+                                                   allowed_until=RelativeDateWrapper(reference - timedelta(days=1)))
 
             with scope(organizer=event.organizer):
-                cancellation = evaluate_cancellation(event, order, keep=set(), check_ts=check_ts)
+                cancellation = evaluate_cancellation(event, order, keep=set(), check_at=check_at)
 
             assert cancellation.cancellation_possible is True
 

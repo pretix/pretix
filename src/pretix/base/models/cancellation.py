@@ -330,7 +330,7 @@ class PositionCancellationRule(CancellationRule):
             date_field, order, resolve_subevent=lambda _reldate_type: position.subevent
         )
 
-    def _evaluate_cancellation_moment(self, position: "OrderPosition", check_ts: datetime.datetime) \
+    def _evaluate_cancellation_moment(self, position: "OrderPosition", check_at: datetime.datetime) \
             -> List[CheckResult]:
         check_results = []
 
@@ -340,12 +340,12 @@ class PositionCancellationRule(CancellationRule):
             deadline: Optional[RelativeDateWrapper] = getattr(self, limit_name, None)
             if deadline is not None:
                 deadline_value = self._resolve_date_field(deadline, order, self.subevent_variant)
-                if check_ts <= deadline_value:
+                if check_at <= deadline_value:
                     check_results.append(
                         CheckResult(
                             id=f"position_rule_{self.id}_{limit_name}",
                             reason=_("{evaluated_at} is earlier than {limit_name} deadline {deadline}").format(
-                                evaluated_at=check_ts,
+                                evaluated_at=check_at,
                                 limit_name=limit_names[limit_name],
                                 deadline=deadline_value,
                             ),
@@ -357,7 +357,7 @@ class PositionCancellationRule(CancellationRule):
                         CheckResult(
                             id=f"position_rule_{self.id}_{limit_name}",
                             reason=_("{evaluated_at} is later than {limit_name} deadline {deadline}").format(
-                                evaluated_at=check_ts,
+                                evaluated_at=check_at,
                                 limit_name=limit_names[limit_name],
                                 deadline=deadline_value,
                             ),
@@ -376,12 +376,12 @@ class PositionCancellationRule(CancellationRule):
         return check_results
 
     def evaluate_position_rule(self, order: "Order", _keep: Set["OrderPosition"], position: "OrderPosition",
-                               check_ts: datetime.datetime) -> Optional[RuleResult]:
+                               check_at: datetime.datetime) -> Optional[RuleResult]:
         rule_check_results = []
         match = self._position_matches_rule(position)
         if match:
             rule_check_results.append(match)
-        rule_check_results.extend(self._evaluate_cancellation_moment(position, check_ts))
+        rule_check_results.extend(self._evaluate_cancellation_moment(position, check_at))
 
         if self.fee_percentage_per_position and self.fee_absolute_per_position:
             raise NotImplementedError(
@@ -459,7 +459,7 @@ class ProcessCancellationRule(CancellationRule):
 
         return CancellationRule._resolve_date_field_common(date_field, order, resolve_subevent)
 
-    def _evaluate_cancellation_moment(self, order: "Order", check_ts: datetime.datetime) -> List[CheckResult]:
+    def _evaluate_cancellation_moment(self, order: "Order", check_at: datetime.datetime) -> List[CheckResult]:
 
         check_results: List[CheckResult] = []
 
@@ -467,12 +467,12 @@ class ProcessCancellationRule(CancellationRule):
             deadline: Optional[RelativeDateWrapper] = getattr(self, limit_name, None)
             if deadline is not None:
                 deadline_value = self._resolve_date_field(deadline, order, self.subevent_variant)
-                if check_ts <= deadline_value:
+                if check_at <= deadline_value:
                     check_results.append(
                         CheckResult(
                             id=f"process_rule_{self.id}_{limit_name}",
                             reason=_("{evaluated_at} is earlier than {limit_name} deadline {deadline}").format(
-                                evaluated_at=check_ts,
+                                evaluated_at=check_at,
                                 limit_name=limit_names[limit_name],
                                 deadline=deadline_value),
                             cancellation_possible=True
@@ -483,7 +483,7 @@ class ProcessCancellationRule(CancellationRule):
                         CheckResult(
                             id=f"process_rule_{self.id}_{limit_name}",
                             reason=_("{evaluated_at} is later than {limit_name} deadline {deadline}").format(
-                                evaluated_at=check_ts,
+                                evaluated_at=check_at,
                                 limit_name=limit_names[limit_name],
                                 deadline=deadline_value),
                             cancellation_possible=False
@@ -500,12 +500,12 @@ class ProcessCancellationRule(CancellationRule):
         return check_results
 
     def evaluate_process_rule(self, order: "Order", _keep: Set["OrderPosition"], position_fees: Decimal,
-                              check_ts: datetime.datetime) -> Optional[RuleResult]:
+                              check_at: datetime.datetime) -> Optional[RuleResult]:
         fee_mode = self.fee_mode
         if fee_mode not in (FeeType.MINIMUM, FeeType.ADDITIONAL):
             raise ValueError(f"Unexpected fee_mode: {fee_mode!r}")
 
-        check_results: List[CheckResult] = self._evaluate_cancellation_moment(order, check_ts)
+        check_results: List[CheckResult] = self._evaluate_cancellation_moment(order, check_at)
 
         return RuleResult.from_process_fee(
             id=self.id,

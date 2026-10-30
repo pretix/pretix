@@ -109,13 +109,13 @@ class PositionCheckFn(Protocol):
     """
 
     def __call__(self, order: PrefetchedOrder, keep: PositionSet, position: PrefetchedPosition,
-                 check_ts: datetime.datetime,
+                 check_at: datetime.datetime,
                  /) -> Optional[CheckResult]:
         """
         :param order: The order the position is part of. Should be the prefetched object
         :param keep: OrderPositions of this position that are not getting canceled
         :param position: OrderPosition that should be canceled and for which this check should be evaluated
-        :param check_ts: The time for which this check should be evaluated
+        :param check_at: The time for which this check should be evaluated
         :return: None if the check doesn't apply otherwise a CheckResult Object
         """
         ...
@@ -126,12 +126,12 @@ class ProcessCheckFn(Protocol):
     Check to see if a cancellation request for this Order is possible.
     """
 
-    def __call__(self, order: "PrefetchedOrder", keep: PositionSet, check_ts: datetime.datetime, /) \
+    def __call__(self, order: "PrefetchedOrder", keep: PositionSet, check_at: datetime.datetime, /) \
             -> Optional[CheckResult]:
         """
         :param order: The Order the cancellation is for
         :param keep: The OrderPositions that aren't getting canceled
-        :param check_ts: The time for which this check should be evaluated
+        :param check_at: The time for which this check should be evaluated
         :return:
         """
         ...
@@ -149,15 +149,15 @@ class CancellationCheck:
     related_selects: List[str] = field(default_factory=list)
 
     def evaluate(self, order: PrefetchedOrder, keep: PositionSet,
-                 position: Optional["OrderPosition"], check_ts: datetime.datetime) -> Optional[CheckResult]:
+                 position: Optional["OrderPosition"], check_at: datetime.datetime) -> Optional[CheckResult]:
         if position and self.type == CheckTypes.POSITION:
             prefetched_position = cast(PrefetchedPosition,
                                        next((p for p in order.positions.all() if p.pk == position.pk), None))
             if prefetched_position is None:
                 raise ValidationError(f"OrderPosition {position.pk} does not belong to order {order.code}")
-            return self.check_fn(order, keep, prefetched_position, check_ts)
+            return self.check_fn(order, keep, prefetched_position, check_at)
         elif position is None and self.type == CheckTypes.PROCESS:
-            return self.check_fn(order, keep, check_ts)
+            return self.check_fn(order, keep, check_at)
         else:
             raise ValidationError("Type of the rule doesn't match the check_fn")
 
