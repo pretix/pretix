@@ -20,212 +20,24 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-import logging
-import os
-import tempfile
-import zipfile
-from collections import OrderedDict
-from typing import Tuple
-
-from django import forms
 from django.template.loader import render_to_string
 from django.utils.translation import gettext as _
 
-from pretix.base.forms import SecretKeySettingsField
-from pretix.base.models import Event, Order
-from pretix.base.settings import SettingsSandbox
 from pretix.base.ticketoutput import BaseTicketOutput
-from pretix.control.forms import ClearableBasenameFileInput
-from pretix.plugins.wallet.styles.base import WalletPlatform
-
-from .forms import CertificateFileField, validate_rsa_privkey
-from .styles.apple import ApplePlatform
-from .styles.google import GooglePlatform
-
-logger = logging.getLogger("pretix.plugins.wallet")
-
 
 class WalletSettingsHolder(BaseTicketOutput):
+    """
+    Mock ticket output provider for control settings
+    TODO: replace with custom view?
+    """
     identifier = "wallet"
-    verbose_name = _("Wallet Output")
+    verbose_name = _("Wallet")
 
     is_meta = True
     is_enabled = False
-    preview_allowed = (
-        False  # TODO: implement own preview view or hide button for meta-outputs
-    )
+    preview_allowed = False
 
     def settings_content_render(self, request) -> str:
         return render_to_string(
             "pretixplugins/wallet/settings_content.html", {"request": request}
         )
-
-
-class WalletOutput(BaseTicketOutput):
-    settings_form_fields = []
-    platform: WalletPlatform
-
-    def __init__(self, event: Event):
-        super().__init__(event)
-        self.settings = SettingsSandbox(
-            "ticketoutput", WalletSettingsHolder.identifier, event
-        )
-
-
-class GoogleWalletTicketOutput(WalletOutput):
-    identifier = "wallet_google"
-    verbose_name = _("Google")
-    download_button_text = "Add to Google Wallet"
-    platform = GooglePlatform
-    is_cacheable = False
-
-    @property
-    def confirmation_text(self) -> str | None:
-        return _(
-            "Please be aware, that contrary to other virtual wallets/passes (like Apple Wallet), Google Wallet Passes are not "
-            "handled offline. Every pass that is created, has to be transmitted to Google Inc.\n"
-            "\n"
-            'By clicking "Confirm" below, we will transfer some of your personal information, which is '
-            "necessary to provide you with your Google Wallet Pass, to Google Inc.\n"
-            "\n"
-            "Please be aware, that there is no way to delete the data, once it has been transmitted.\n"
-        )
-
-    @classmethod
-    def get_global_settings(cls, **kwargs):
-        return OrderedDict(
-            [
-                (
-                    "wallet_google_issuer_id",
-                    forms.CharField(
-                        label=_("Google Wallet Issuer/Merchant ID"),
-                        help_text=_(
-                            # TODO: update text
-                            "After getting accepted by Google into the Google Pay API for Passes program, "
-                            "your Issuer ID can be found in the Merchant center at "
-                            "https://wallet.google.com/merchant/walletobjects/"
-                        ),
-                        required=False,
-                    ),
-                ),
-                (
-                    "wallet_google_credentials",
-                    forms.FileField(
-                        label=_("Google Wallet Service Account Credentials"),
-                        help_text=_(
-                            "Please paste the contents of the JSON credentials file "
-                            "of the service account you tied to your Google Pay API "
-                            "for Passes Issuer ID"
-                        ),
-                        required=False,
-                        # TODO: add validator
-                        # validators=[validate_json_credentials]
-                    ),
-                ),
-                (
-                    "wallet_google_instance_uuid",
-                    forms.CharField(
-                        label=_("Google Wallet Pass Instance UUID"),
-                        help_text=_(
-                            "Instance-specific part to be added to the wallet ids"
-                        ),
-                        required=False,
-                    ),
-                ),
-            ]
-        )
-
-    def generate(self, position):
-        return self.platform(self.event).generate(position)
-
-    def generate_order(self, order: Order) -> Tuple[str, str, str | bytes]:
-        return self.platform(self.event).generate_ops(self.get_tickets_to_print(order))
-
-
-class AppleWalletTicketOutput(WalletOutput):
-    identifier = "wallet_apple"
-    verbose_name = _("Apple")
-    download_button_text = "Add to Apple Wallet"
-    platform = ApplePlatform
-    multi_download_enabled = True
-    is_cacheable = False
-
-    @classmethod
-    def get_global_settings(cls, **kwargs):
-        return OrderedDict(
-            [
-                (
-                    "wallet_apple_team_id",
-                    forms.CharField(
-                        label=_("Apple Wallet Pass team ID"),
-                        required=False,
-                    ),
-                ),
-                (
-                    "wallet_apple_pass_type_id",
-                    forms.CharField(
-                        label=_("Apple Wallet Pass type"),
-                        required=False,
-                    ),
-                ),
-                (
-                    "wallet_apple_certificate",
-                    CertificateFileField(
-                        label=_("Apple Wallet Pass certificate file"),
-                        required=False,
-                    ),
-                ),
-                (
-                    "wallet_apple_ca_certificate",
-                    CertificateFileField(
-                        label=_("Apple Wallet Pass CA Certificate"),
-                        help_text=_(
-                            "You can download the current CA certificate from apple at "
-                            "https://www.apple.com/certificateauthority/AppleWWDRCAG4.cer"
-                        ),
-                        required=False,
-                    ),
-                ),
-                (
-                    "wallet_apple_key",
-                    forms.FileField(
-                        label=_("Apple Wallet Pass secret key"),
-                        required=False,
-                        validators=[validate_rsa_privkey],
-                        widget=ClearableBasenameFileInput,
-                    ),
-                ),
-                (
-                    "wallet_apple_key_password",
-                    SecretKeySettingsField(
-                        label=_("Apple Wallet Pass key password"),
-                        required=False,
-                        help_text=_(
-                            "Optional, only necessary if the key entered above requires a password to use."
-                        ),
-                    ),
-                ),
-            ]
-        )
-
-    def generate_order(self, order: Order):
-        with tempfile.NamedTemporaryFile() as d:
-            with zipfile.ZipFile(d, "w") as zipf:
-                for pos in self.get_tickets_to_print(order):
-                    fname, __, content = self.platform(self.event).generate(pos)
-                    zipf.writestr(
-                        "{}-{}{}".format(
-                            order.code, pos.positionid, os.path.splitext(fname)[1]
-                        ),
-                        content,
-                    )
-
-            d.seek(0)
-            return (
-                "{}-{}.pkpasses".format(order.code, self.identifier),
-                "application/vnd.apple.pkpasses",
-                d.read(),
-            )
-
-
-OUTPUTS = [WalletSettingsHolder, GoogleWalletTicketOutput, AppleWalletTicketOutput]

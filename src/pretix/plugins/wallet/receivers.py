@@ -33,29 +33,19 @@ from pretix.control.signals import item_forms
 
 from .forms import WalletLayoutItemForm
 from .models import WalletLayoutItem
-from .ticketoutput import OUTPUTS
+from .ticketoutput import WalletSettingsHolder
+from .platforms import AVAILABLE_PLATFORMS
 
+@receiver(register_ticket_outputs, dispatch_uid="output_wallet")
+def register_output(sender, **kwargs):
+    return WalletSettingsHolder
 
-def connect_signals():
-    for output in OUTPUTS:
-        # DIY functools.partial to make get_defining_app happy
-        def get_register_func(o):
-            def register(sender, **kwargs):
-                return o
-
-            return register
-
-        register_ticket_outputs.connect(
-            get_register_func(output), dispatch_uid=f"wallet_output_{output.identifier}"
+for platform in AVAILABLE_PLATFORMS:
+    if hasattr(platform, "get_global_settings"):
+        register_global_settings.connect(
+            platform.get_global_settings,
+            dispatch_uid=f"wallet_global_settings_{platform.identifier}",
         )
-        if hasattr(output, "get_global_settings"):
-            register_global_settings.connect(
-                output.get_global_settings,
-                dispatch_uid=f"wallet_global_settings_{output.identifier}",
-            )
-
-
-connect_signals()
 
 
 @receiver(item_forms, dispatch_uid="pretix_wallet_item_forms")
@@ -78,5 +68,5 @@ def control_item_forms(sender, request, item, **kwargs):
 
 @receiver(periodic_task, dispatch_uid="wallet_periodic")
 def periodic_tasks(sender, **kwargs):
-    # TODO: cleanup
-    pass
+    from .tasks import send_update_apns
+    send_update_apns.apply_async()
