@@ -581,7 +581,7 @@ def images_from_questions(sender, *args, **kwargs):
             return a.file
 
     d = {}
-    for q in sender.questions.all():
+    for q in sender.positiondatafields.all():
         if q.type != Question.TYPE_FILE:
             continue
         d['question_{}'.format(q.identifier)] = {
@@ -619,7 +619,7 @@ def variables_from_questions(sender, *args, **kwargs):
             return a.to_string_i18n()
 
     d = {}
-    for q in sender.questions.all():
+    for q in sender.positiondatafields.all():
         if q.type == Question.TYPE_FILE:
             continue
         d['question_{}'.format(q.identifier)] = {

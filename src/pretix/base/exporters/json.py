@@ -155,7 +155,20 @@ class JSONExporter(BaseExporter):
                         'ask_during_checkin': question.ask_during_checkin,
                         'help_text': str(question.help_text),
                         'type': question.type
-                    } for question in self.event.questions.all()
+                    } for question in self.event.positiondatafields.all()
+                ],
+                'orderdatafields': [
+                    {
+                        'id': question.id,
+                        'identifier': question.identifier,
+                        'required': question.required,
+                        'question': str(question.question),
+                        'position': question.position,
+                        'hidden': question.hidden,
+                        'ask_during_checkin': question.ask_during_checkin,
+                        'help_text': str(question.help_text),
+                        'type': question.type
+                    } for question in self.event.orderdatafields.all()
                 ],
                 'orders': [
                     {

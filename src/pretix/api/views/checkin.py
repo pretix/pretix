@@ -878,7 +878,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'require_attention': op.require_checkin_attention,
                 'checkin_texts': op.checkin_texts,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
-                'questions': POSCompatQuestionSerializer.mangle_results(op.order.event, (qs.to_representation(q) for q in e.questions)),  # TODO(questionnaires)
+                'questions': POSCompatQuestionSerializer.mangle_results(op.order.event, (qs.to_representation(q) for q in e.positiondatafields)),  # TODO(questionnaires)
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         except RequiredMediaExchangeError as e:

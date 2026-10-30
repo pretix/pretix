@@ -617,7 +617,7 @@ def get_data_fields(event, for_model=None):
                 get_enum_opts(q),
                 partial(lambda qq, position: get_position_answer(position, qq.identifier), q),
             )
-            for q in event.questions.filter(~Q(type=Question.TYPE_FILE), container_type=Question.ContainerType.ORDERPOSITION).prefetch_related("options")
+            for q in event.positiondatafields.filter(~Q(type=Question.TYPE_FILE)).prefetch_related("options")
         ]
         + [
             DataFieldInfo(
@@ -629,7 +629,7 @@ def get_data_fields(event, for_model=None):
                 get_enum_opts(q),
                 partial(lambda qq, order: get_order_answer(order, qq.identifier), q),
             )
-            for q in event.questions.filter(~Q(type=Question.TYPE_FILE), container_type=Question.ContainerType.ORDER).prefetch_related("options")
+            for q in event.orderdatafields.filter(~Q(type=Question.TYPE_FILE)).prefetch_related("options")
         ]
     )
     if not any(field_name == "given_name" for field_name, label, weight in name_scheme["fields"]):

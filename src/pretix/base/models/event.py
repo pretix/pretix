@@ -1554,6 +1554,16 @@ class Event(EventMixin, LoggedModel):
             if presale_start > presale_end:
                 raise ValidationError(_('The event\'s presale cannot end before it starts.'))
 
+    @property
+    def orderdatafields(self):
+        from . import Question
+        return self.questions.filter(container_type=Question.ContainerType.ORDER)
+
+    @property
+    def positiondatafields(self):
+        from . import Question
+        return self.questions.filter(container_type=Question.ContainerType.ORDERPOSITION)
+
 
 class SubEvent(EventMixin, LoggedModel):
     """

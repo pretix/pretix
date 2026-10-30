@@ -107,7 +107,7 @@ class BaseQuestionsViewMixin:
             )
             form.pos = cartpos or orderpos
             form.show_copy_answers_to_addon_button = form.pos.addon_to and (
-                set(form.pos.addon_to.item.questions.all()) & set(form.pos.item.questions.all()) or
+                set(form.pos.addon_to.item.questionnaires.all()) & set(form.pos.item.questionnaires.all()) or
                 (form.pos.addon_to.item.ask_attendee_data and form.pos.item.ask_attendee_data and (
                     self.request.event.settings.attendee_names_asked or
                     self.request.event.settings.attendee_emails_asked or

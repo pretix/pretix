@@ -810,7 +810,7 @@ def get_order_import_columns(event):
         Expires(event),
         Comment(event),
     ]
-    for q in event.questions.prefetch_related('options').exclude(type=Question.TYPE_FILE):
+    for q in event.positiondatafields.prefetch_related('options').exclude(type=Question.TYPE_FILE):
         default.append(QuestionColumn(event, q))
 
     for recv, resp in order_import_columns.send(sender=event):
