@@ -41,7 +41,7 @@ from json import loads
 from pathlib import Path
 from urllib.parse import urlparse
 
-import importlib_metadata as metadata
+from importlib import metadata
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.crypto import get_random_string
 from kombu import Queue
