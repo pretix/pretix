@@ -109,7 +109,7 @@ class DeviceRegistrationView(APIView):
         device.passes.remove(request.auth)
         if not device.passes.exists():
             device.delete()
-        # TODO: also delete pass if no devices are registered anymore?
+
         return Response({})
 
 

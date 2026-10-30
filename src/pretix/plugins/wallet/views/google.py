@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 
 from pretix.helpers.database import OF_SELF
 from pretix.plugins.wallet.models import GoogleWalletInstance
-from pretix.plugins.wallet.styles.google_wallet import (
+from ..platforms.google.google_wallet import (
     GooglePaySignatureManager, Resource,
 )
 

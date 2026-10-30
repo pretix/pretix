@@ -575,6 +575,19 @@
                                                     </button>
                                                 </form>
                                             {% endfor %}
+                                            {% for b in wallet_buttons %}
+                                                {% comment %} TODO(wallet): move view to core {% endcomment %}
+                                                <form action="{% url "plugins:wallet:event.order.wallet.get" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk platform=b.identifier %}"
+                                                        method="post" data-asynctask data-asynctask-download
+                                                        class="form-inline helper-display-inline">
+                                                    {% csrf_token %}
+                                                    <button type="submit"
+                                                            class="btn btn-xs btn-default {{ b.attributes.class }}"
+                                                            {% include "pretixbase/fragments/attributes.html" with attributes=b.attributes %}>
+                                                        {{ b.content }}
+                                                    </button>
+                                                </form>
+                                            {% endfor %}
                                         {% endif %}
                                         <button type="submit" data-toggle="qrcode" data-qrcode="{{ line.secret }}"
                                                 class="btn btn-xs btn-default">

@@ -15,7 +15,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.models import CachedFile
-from pretix.plugins.wallet.styles.apple import (
+from pretix.plugins.wallet.platforms.apple import (
     AppleWalletEventTicket, SignedZipFile, StringResource,
 )
 

@@ -8,7 +8,7 @@ from rest_framework import serializers, viewsets
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 
 from .models import WalletLayout, WalletPlatformLayout
-from .styles import AVAILABLE_PLATFORMS, AVAILABLE_STYLES_DICT
+from .platforms import AVAILABLE_PLATFORMS, AVAILABLE_STYLES_DICT
 
 
 class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):

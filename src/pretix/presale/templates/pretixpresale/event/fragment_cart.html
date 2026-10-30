@@ -231,6 +231,25 @@
                             </button>
                         </form>
                     {% endfor %}
+                    {% for b in wallet_buttons %}
+                        {% comment %} TODO(wallet): move view to core {% endcomment %}
+                        <form
+                            action="{% if position_page and line.addon_to %}
+                                {% eventurl event "plugins:wallet:presale_event.order.position.wallet.get" secret=line.addon_to.web_secret order=order.code platform=b.identifier pid=line.pk position=line.addon_to.positionid %}
+                            {% elif position_page %}
+                                {% eventurl event "plugins:wallet:presale_event.order.position.wallet.get" secret=line.web_secret order=order.code platform=b.identifier pid=line.pk position=line.positionid %}
+                            {% else %}
+                                {% eventurl event "plugins:wallet:presale_event.order.wallet.get" secret=order.secret order=order.code platform=b.identifier position=line.pk %}
+                            {% endif %}"
+                                method="post" data-asynctask data-asynctask-download class="download-btn-form">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="btn btn-sm btn-default {{ b.attributes.class }}"
+                                    {% include "pretixbase/fragments/attributes.html" with attributes=b.attributes %}>
+                                {{ b.content }}
+                            </button>
+                        </form>
+                    {% endfor %}
                 {% endif %}
                 </div>
             {% elif line.addon_to %}

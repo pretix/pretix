@@ -6,14 +6,22 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import BadRequest
 from django.db import transaction
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
-    CreateView, DeleteView, DetailView, ListView, View,
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    View,
 )
+from pretix.base.models.orders import OrderPosition
+from pretix.base.views.tasks import AsyncAction
+from pretix.control.views.orders import OrderView
+from pretix.plugins.wallet.tasks import get_pass
 from pretix_vrpayment_wero.payment import HttpRequest
 
 from pretix.base.i18n import language
@@ -26,10 +34,13 @@ from pretix.plugins.wallet.i18n import localizable_to_dict
 
 from ..models import WalletLayout
 from ..placeholders import (
-    get_wallet_placeholder_renderer, get_wallet_placeholders,
+    get_wallet_placeholder_renderer,
+    get_wallet_placeholders,
 )
-from ..styles import (
-    AVAILABLE_PLATFORMS, AVAILABLE_STYLES, AVAILABLE_STYLES_DICT,
+from ..platforms import (
+    AVAILABLE_PLATFORMS,
+    AVAILABLE_STYLES,
+    AVAILABLE_STYLES_DICT,
 )
 
 
@@ -268,3 +279,49 @@ class LayoutDelete(WalletLayoutMixin, DeleteView):
 
         messages.success(self.request, _("The selected layout been deleted."))
         return redirect(self.get_success_url())
+
+class OrderDownloadMixin:
+    task = get_pass
+
+    def get_success_message(self, value):
+        return ""
+
+    def get_success_url(self, value):
+        return value
+
+    @cached_property
+    def platform(self):
+        for p in AVAILABLE_PLATFORMS:
+            if p.identifier == self.kwargs.get("platform"):
+                return p(self.request.event)
+
+
+class WalletGetView(OrderDownloadMixin, AsyncAction, OrderView):
+    permission = "event.orders:read"
+
+    def get_error_url(self):
+        return self.get_order_url()
+
+    @cached_property
+    def order_position(self):
+        try:
+            return self.order.positions.get(pk=self.kwargs.get("position"))
+        except OrderPosition.DoesNotExist:
+            return None
+
+    def post(self, request, *args, **kwargs):
+        if not self.platform:
+            return self.error(_("You requested an invalid wallet platform."))
+        if not self.order_position:
+            raise Http404(
+                _("Unknown order code or not authorized to access this order.")
+            )
+
+        if "position" in kwargs:
+            if not self.order_position.generate_ticket:
+                return self.error(_("Ticket download is not enabled for this product."))
+            return self.do(
+                "orderposition", self.order_position.pk, self.platform.identifier
+            )
+        else:
+            return self.do("order", self.order.pk, self.platform.identifier)

@@ -57,8 +57,8 @@ RE_ASYNC_ID = re.compile(r"^[a-zA-Z0-9\-]+$")
 
 
 class AsyncMixin:
-    success_url = None
-    error_url = None
+    success_url: str | None = None
+    error_url: str | None = None
     known_errortypes = []
 
     def get_success_url(self, value):

@@ -439,11 +439,7 @@ class Comms:
         return result.json()
 
     def sign_jwt(self, payload):
-        encoded = jwt.encode(self._signer, payload)
-        if not encoded:
-            return False
-
-        return encoded.decode("utf-8")
+        return jwt.encode(self._signer, payload).decode()
 
 
 def pack(string):

@@ -23,15 +23,25 @@ from django.urls import re_path
 
 from pretix.api.urls import event_router
 from pretix.plugins.wallet.views.google import CallbackView
+import pretix
 
 from .api import WalletLayoutViewSet
 from .views.apple import (
-    DeviceGetUpdatablePassesView, DeviceRegistrationView, GetPassView, LogView,
+    DeviceGetUpdatablePassesView,
+    DeviceRegistrationView,
+    GetPassView,
+    LogView,
 )
 from .views.control import (
-    LayoutCreateView, LayoutDelete, LayoutEditorView, LayoutListView,
-    LayoutPreviewView, LayoutSetDefault,
+    LayoutCreateView,
+    LayoutDelete,
+    LayoutEditorView,
+    LayoutListView,
+    LayoutPreviewView,
+    LayoutSetDefault,
+    WalletGetView
 )
+from .views.presale import PresaleWalletGetPass, PresaleWalletGetPassPosition
 
 urlpatterns = [
     re_path(
@@ -64,6 +74,12 @@ urlpatterns = [
         LayoutDelete.as_view(),
         name="delete",
     ),
+    re_path(
+        # TODO(wallet): actually provide this view
+        r"^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/orders/(?P<code>[0-9A-Z]+)/wallet/(?P<position>\d+)/(?P<platform>[^/]+)/$",
+        WalletGetView.as_view(),
+        name="event.order.wallet.get",
+    ),
 ]
 
 event_patterns = [
@@ -91,6 +107,22 @@ event_patterns = [
         r"_wallet/google/callback$",
         CallbackView.as_view(),
         name="google_webhook",
+    ),
+    # TODO(wallet): actually provide these views
+    re_path(
+        r"^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<position>[0-9]+)/(?P<platform>[^/]+)$",
+        PresaleWalletGetPass.as_view(),
+        name="presale_event.order.wallet.get",
+    ),
+    re_path(
+        r"^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<platform>[^/]+)$",
+        PresaleWalletGetPass.as_view(),
+        name="presale_event.order.wallet.get.combined",
+    ),
+    re_path(
+        r"^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<pid>[0-9]+)/(?P<platform>[^/]+)$",
+        PresaleWalletGetPassPosition.as_view(),
+        name="presale_event.order.position.wallet.get",
     ),
 ]
 

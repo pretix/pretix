@@ -111,7 +111,7 @@ from pretix.base.services.stats import order_overview
 from pretix.base.services.tax import (
     VATIDFinalError, VATIDTemporaryError, validate_vat_id,
 )
-from pretix.base.services.tickets import generate
+from pretix.base.services.tickets import generate, get_download_buttons, get_wallet_buttons
 from pretix.base.signals import order_modified, register_ticket_outputs
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import markdown_compile_email
@@ -568,6 +568,7 @@ class OrderDetail(OrderView):
         pending_sum = self.order.pending_sum
         ctx['overpaid'] = pending_sum * -1
         ctx['download_buttons'] = self.download_buttons
+        ctx['wallet_buttons'] = self.wallet_buttons
         ctx['payment_refund_sum'] = self.order.payment_refund_sum
         ctx['pending_sum'] = pending_sum
         ctx['uncancelled_invoice'] = self.order.invoices.exclude(
@@ -578,22 +579,11 @@ class OrderDetail(OrderView):
 
     @cached_property
     def download_buttons(self):
-        buttons = []
+        return get_download_buttons(self.request.event, show_disabled=True)
 
-        responses = register_ticket_outputs.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
-            if provider.is_meta:
-                continue
-            buttons.append({
-                'text': provider.download_button_text or 'Ticket',
-                'icon': provider.download_button_icon or 'fa-download',
-                'identifier': provider.identifier,
-                'multi': provider.multi_download_enabled,
-                'javascript_required': provider.javascript_required,
-                'confirmation_text': provider.confirmation_text
-            })
-        return buttons
+    @cached_property
+    def wallet_buttons(self):
+        return get_wallet_buttons(self.request.event)
 
     def get_items(self):
         queryset = self.object.all_positions
