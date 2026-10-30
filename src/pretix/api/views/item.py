@@ -50,7 +50,7 @@ from rest_framework.response import Response
 from pretix.api.exceptions import CompatException
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.item import (
-    CompatDatafieldSerializer, DatafieldSerializer, ItemAddOnSerializer,
+    CompatQuestionSerializer, DatafieldSerializer, ItemAddOnSerializer,
     ItemBundleSerializer, ItemCategorySerializer, ItemProgramTimeSerializer,
     ItemSerializer, ItemVariationSerializer, POSCompatQuestionSerializer,
     QuestionFormSerializer, QuestionnaireSerializer, QuestionOptionSerializer, QuotaSerializer,
@@ -467,6 +467,169 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
 
 
 with scopes_disabled():
+    class DatafieldFilter(FilterSet):
+        class Meta:
+            model = Question
+            fields = ['identifier']
+
+
+class BaseDatafieldViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = DatafieldSerializer
+    queryset = Question.objects.none()
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
+    filterset_class = DatafieldFilter
+    ordering_fields = ('id')
+    ordering = ('id')
+    permission = None
+
+    def get_queryset(self):
+        return self.request.event.questions.filter(container_type=self.container_type).prefetch_related('options')
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        lookup_value = self.kwargs[lookup_url_kwarg]
+
+        try:
+            numeric_id = int(lookup_value)
+        except ValueError:
+            obj = get_object_or_404(queryset, identifier=lookup_value)
+        else:
+            qid, dfid, sys_df = QuestionnaireRow.uncook_id(numeric_id)
+            self.via_questionnaire_id = qid
+            obj = get_object_or_404(queryset, pk=dfid)
+
+        # May raise a permission denied
+        self.check_object_permissions(self.request, obj)
+
+        return obj
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        ctx['container_type'] = self.container_type
+        return ctx
+
+
+class BaseWritableDatafieldViewSet(BaseDatafieldViewSet, viewsets.ModelViewSet):
+    write_permission = 'event.items:write'
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.question.added',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.question.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    @transaction.atomic()
+    def perform_destroy(self, instance):
+        instance.log_action(
+            'pretix.event.question.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
+        )
+        super().perform_destroy(instance)
+
+
+class PositionDatafieldViewSet(ConditionalListView, BaseWritableDatafieldViewSet):
+    container_type = Question.ContainerType.ORDERPOSITION
+
+
+class OrderDatafieldViewSet(ConditionalListView, BaseWritableDatafieldViewSet):
+    container_type = Question.ContainerType.ORDER
+
+
+def ordered_union(*lists):
+    from graphlib import TopologicalSorter
+    items_set = {item for lst in lists for __ignore, item in lst}
+    dependencies = {item: set() for item in items_set}
+    for lst in lists:
+        for i in range(1, len(lst)):
+            current_item = lst[i][1]
+            previous_item = lst[i - 1][1]
+            dependencies[current_item].add(previous_item)
+    ts = TopologicalSorter(dependencies)
+    try:
+        return list(ts.static_order())
+    except ValueError:
+        raise CompatException("Questionnaire configuration incompatible with old data model due to conflicting field orders.")
+
+
+class DeprecationWarningMixin:
+    def finalize_response(self, request, response, *args, **kwargs):
+        if self.deprecation_warning and isinstance(getattr(response, 'data', None), Mapping) and not 'x-deprecated' in response.headers:
+            response.data = {
+                'deprecation_warning': self.deprecation_warning,
+                **response.data
+            }
+            response.headers['x-deprecated'] = self.deprecation_warning
+        return super().finalize_response(request, response, *args, **kwargs)
+
+
+class CompatListMixin(DeprecationWarningMixin):
+    deprecation_warning = (
+        f'This API endpoint is deprecated and will be removed in the future. It only works as long as '
+        f'your event\'s questionnaire configuration is compatible with the old data model. '
+        f'Please switch to the .../datafields/ and .../questionnaires/ endpoints.'
+    )
+
+    @property
+    def ignore_errors(self):
+        return self.request.query_params.get('ignore_errors', '') == 'true'
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['ignore_errors'] = self.ignore_errors
+        return ctx
+
+    def do_the_topo_sort(self, queryset):
+        products = {}
+        for df in queryset:
+            for qc in df.referenced_by.all():
+                for item_id in qc.questionnaire.items.values_list('pk', flat=True):
+                    k = (qc.questionnaire.type, item_id)
+                    products[k] = products.get(k, []) + [((qc.questionnaire.position, qc.position), df)]
+        for q in products.values():
+            q.sort()
+        try:
+            result = ordered_union(*products.values())
+            for i, d in enumerate(result):
+                d.position = i
+        except ValueError:
+            if self.ignore_errors:
+                pass
+            else:
+                raise
+        return result
+
+    def list(self, request, **kwargs):
+        logger.info('Returning compatible datafield list on %s/%s', request.organizer.slug, request.event.slug)
+
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.do_the_topo_sort(queryset)
+        serializer = self.get_serializer(queryset, many=True)
+        resultlist = serializer.data
+        return Response({
+            'count': len(resultlist), 'next': None, 'previous': None,
+            'results': resultlist,
+        })
+
+
+with scopes_disabled():
     class CompatDatafieldFilter(FilterSet):
         identifier = django_filters.CharFilter(field_name='question__identifier')
         ask_during_checkin = django_filters.BooleanFilter(method='ask_during_checkin_qs')
@@ -481,15 +644,37 @@ with scopes_disabled():
             )
 
 
-class DeprecationWarningMixin:
-    def finalize_response(self, request, response, *args, **kwargs):
-        if self.deprecation_warning and isinstance(getattr(response, 'data', None), Mapping) and not 'x-deprecated' in response.headers:
-            response.data = {
-                'deprecation_warning': self.deprecation_warning,
-                **response.data
-            }
-            response.headers['x-deprecated'] = self.deprecation_warning
-        return super().finalize_response(request, response, *args, **kwargs)
+class CompatQuestionViewSet(ConditionalListView, CompatListMixin, BaseDatafieldViewSet):
+    container_type = Question.ContainerType.ORDERPOSITION
+    serializer_class = CompatQuestionSerializer
+    filterset_class = CompatDatafieldFilter
+    pagination_class = None
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related('referenced_by', 'referenced_by__questionnaire')
+
+    def _check_defer(self, mode, request, *args, **kwargs):
+        sales_channel_ident = request.query_params.get('sales_channel', None)
+        if sales_channel_ident is None and isinstance(request.auth, Device):
+            sales_channel_ident = 'pretixpos' if request.auth.software_brand.startswith("pretixPOS") else 'web'
+        if sales_channel_ident:
+            logger.info('Returning app compatible question %s for %s (device: %r %s %s) on %s/%s',  mode, sales_channel_ident, request.auth, getattr(request.auth, 'software_brand', ''), getattr(request.auth, 'software_version', ''), request.organizer.slug, request.event.slug)
+            return POSCompatQuestionViewSet.as_view(
+                {'get': mode}, sales_channel_ident=sales_channel_ident
+            )(*self.args, request=request._request, **self.kwargs)
+
+    def list(self, request, *args, **kwargs):
+        if response := self._check_defer('list', request, *args, **kwargs):
+            return response
+
+        logger.info('Returning compatible datafield list on %s/%s', request.organizer.slug, request.event.slug)
+        return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        if response := self._check_defer('retrieve', request, *args, **kwargs):
+            return response
+
+        return super().retrieve(request, *args, **kwargs)
 
 
 class POSCompatQuestionViewSet(DeprecationWarningMixin, viewsets.ReadOnlyModelViewSet):
@@ -582,182 +767,7 @@ class POSCompatQuestionViewSet(DeprecationWarningMixin, viewsets.ReadOnlyModelVi
         super().perform_destroy(instance)
 
 
-with scopes_disabled():
-    class DatafieldFilter(FilterSet):
-        class Meta:
-            model = Question
-            fields = ['identifier']
-
-
-class BaseDatafieldViewSet(viewsets.ModelViewSet):
-    serializer_class = DatafieldSerializer
-    queryset = Question.objects.none()
-    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
-    filterset_class = DatafieldFilter
-    ordering_fields = ('id')
-    ordering = ('id')
-    permission = None
-    write_permission = 'event.items:write'
-
-    def get_queryset(self):
-        return self.request.event.questions.filter(container_type=self.container_type).prefetch_related('options')
-
-    def get_object(self):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
-
-        qid, dfid, sys_df = QuestionnaireRow.uncook_id(self.kwargs[lookup_url_kwarg])
-        self.via_questionnaire_id = qid
-        obj = get_object_or_404(queryset, pk=dfid)
-
-        # May raise a permission denied
-        self.check_object_permissions(self.request, obj)
-
-        return obj
-
-    @transaction.atomic()
-    def perform_create(self, serializer):
-        serializer.save(event=self.request.event)
-        serializer.instance.log_action(
-            'pretix.event.question.added',
-            user=self.request.user,
-            auth=self.request.auth,
-            data=self.request.data
-        )
-
-    def get_serializer_context(self):
-        ctx = super().get_serializer_context()
-        ctx['event'] = self.request.event
-        ctx['container_type'] = self.container_type
-        return ctx
-
-    @transaction.atomic()
-    def perform_update(self, serializer):
-        serializer.save(event=self.request.event)
-        serializer.instance.log_action(
-            'pretix.event.question.changed',
-            user=self.request.user,
-            auth=self.request.auth,
-            data=self.request.data
-        )
-
-    @transaction.atomic()
-    def perform_destroy(self, instance):
-        instance.log_action(
-            'pretix.event.question.deleted',
-            user=self.request.user,
-            auth=self.request.auth,
-        )
-        super().perform_destroy(instance)
-
-
-class PositionDatafieldViewSet(ConditionalListView, BaseDatafieldViewSet):
-    container_type = Question.ContainerType.ORDERPOSITION
-
-
-class OrderDatafieldViewSet(ConditionalListView, BaseDatafieldViewSet):
-    container_type = Question.ContainerType.ORDER
-
-
-def ordered_union(*lists):
-    from graphlib import TopologicalSorter
-    items_set = {item for lst in lists for __ignore, item in lst}
-    dependencies = {item: set() for item in items_set}
-    for lst in lists:
-        for i in range(1, len(lst)):
-            current_item = lst[i][1]
-            previous_item = lst[i - 1][1]
-            dependencies[current_item].add(previous_item)
-    ts = TopologicalSorter(dependencies)
-    try:
-        return list(ts.static_order())
-    except ValueError:
-        raise CompatException("Questionnaire configuration incompatible with old data model due to conflicting field orders.")
-
-
-class CompatListMixin:
-    deprecation_warning = (
-        f'This API endpoint is deprecated and will be removed in the future. It only works as long as '
-        f'your event\'s questionnaire configuration is compatible with the old data model. '
-        f'Please switch to the .../datafields/ and .../questionnaires/ endpoints.'
-    )
-
-    @property
-    def ignore_errors(self):
-        return self.request.query_params.get('ignore_errors', '') == 'true'
-
-    def get_serializer_context(self):
-        ctx = super().get_serializer_context()
-        ctx['ignore_errors'] = self.ignore_errors
-        return ctx
-
-    def do_the_topo_sort(self, queryset):
-        products = {}
-        for df in queryset:
-            for qc in df.referenced_by.all():
-                for item_id in qc.questionnaire.items.values_list('pk', flat=True):
-                    k = (qc.questionnaire.type, item_id)
-                    products[k] = products.get(k, []) + [((qc.questionnaire.position, qc.position), df)]
-        for q in products.values():
-            q.sort()
-        try:
-            result = ordered_union(*products.values())
-            for i, d in enumerate(result):
-                d.position = i
-        except ValueError:
-            if self.ignore_errors:
-                pass
-            else:
-                raise
-        return result
-
-    def list(self, request, **kwargs):
-        logger.info('Returning compatible datafield list on %s/%s', request.organizer.slug, request.event.slug)
-
-        queryset = self.filter_queryset(self.get_queryset())
-        queryset = self.do_the_topo_sort(queryset)
-        serializer = self.get_serializer(queryset, many=True)
-        resultlist = serializer.data
-        return Response({
-            'count': len(resultlist), 'next': None, 'previous': None,
-            'results': resultlist,
-        })
-
-
-class CompatDatafieldViewSet(ConditionalListView, DeprecationWarningMixin, CompatListMixin, BaseDatafieldViewSet):
-    container_type = Question.ContainerType.ORDERPOSITION
-    serializer_class = CompatDatafieldSerializer
-    pagination_class = None
-
-    def get_queryset(self):
-        return super().get_queryset().prefetch_related('referenced_by', 'referenced_by__questionnaire')
-
-    def _check_defer(self, mode, request, *args, **kwargs):
-        sales_channel_ident = request.query_params.get('sales_channel', None)
-        if sales_channel_ident is None and isinstance(request.auth, Device):
-            sales_channel_ident = 'pretixpos' if request.auth.software_brand.startswith("pretixPOS") else 'web'
-        if sales_channel_ident:
-            logger.info('Returning app compatible question %s for %s (device: %r %s %s) on %s/%s',  mode,sales_channel_ident, request.auth, getattr(request.auth, 'software_brand', ''), getattr(request.auth, 'software_version', ''), request.organizer.slug, request.event.slug)
-            return POSCompatQuestionViewSet.as_view(
-                {'get': mode}, sales_channel_ident=sales_channel_ident
-            )(*self.args, request=request._request, **self.kwargs)
-
-    def list(self, request, *args, **kwargs):
-        if response := self._check_defer('list', request, *args, **kwargs):
-            return response
-
-        logger.info('Returning compatible datafield list on %s/%s', request.organizer.slug, request.event.slug)
-        return super().list(request, *args, **kwargs)
-
-    def retrieve(self, request, *args, **kwargs):
-        if response := self._check_defer('retrieve', request, *args, **kwargs):
-            return response
-
-        return super().retrieve(request, *args, **kwargs)
-
-
-class QuestionOptionViewSet(viewsets.ModelViewSet):
+class BaseDatafieldOptionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionOptionSerializer
     queryset = QuestionOption.objects.none()
     filter_backends = (DjangoFilterBackend, TotalOrderingFilter,)
@@ -766,19 +776,25 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
     permission = None
     write_permission = 'event.items:write'
 
+    def get_question(self):
+        return get_object_or_404(
+            Question,
+            Q(pk=self.kwargs['question']) | Q(identifier=self.kwargs['question']),
+            event=self.request.event, container_type=self.container_type,
+        )
+
     def get_queryset(self):
-        q = get_object_or_404(Question, pk=self.kwargs['question'], event=self.request.event)
-        return q.options.all()
+        return self.get_question().options.all()
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
-        ctx['question'] = get_object_or_404(Question, pk=self.kwargs['question'], event=self.request.event)
+        ctx['question'] = self.get_question()
         return ctx
 
     @transaction.atomic()
     def perform_create(self, serializer):
-        q = get_object_or_404(Question, pk=self.kwargs['question'], event=self.request.event)
+        q = self.get_question()
         serializer.save(question=q)
         q.log_action(
             'pretix.event.question.option.added',
@@ -806,6 +822,14 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
             data={'id': instance.pk}
         )
         super().perform_destroy(instance)
+
+
+class OrderDatafieldOptionViewSet(BaseDatafieldOptionViewSet):
+    container_type = Question.ContainerType.ORDER
+
+
+class PositionDatafieldOptionViewSet(BaseDatafieldOptionViewSet):
+    container_type = Question.ContainerType.ORDERPOSITION
 
 
 with scopes_disabled():

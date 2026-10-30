@@ -693,6 +693,104 @@ class QuestionFormSerializer(I18nAwareModelSerializer):
         return mangled_results
 
 
+class DatafieldSerializer(I18nAwareModelSerializer):
+    internal_name = serializers.CharField(allow_null=True, source='question', read_only=True)
+    options = InlineQuestionOptionSerializer(many=True, required=False)
+    identifier = serializers.CharField(allow_null=True)
+
+    referenced_by_questionnaires = MergeField('referenced_by', serializers.IntegerField(source='questionnaire.id'), mode='list')
+    questionnaire_types = MergeField('referenced_by', serializers.CharField(source='questionnaire.type'), mode='list')
+
+    class Meta:
+        model = Question
+        fields = ('id', 'internal_name', 'identifier', 'type',
+                  'show_during_checkin',
+                  'hidden', 'print_on_invoice', 'valid_number_min',
+                  'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
+                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait',
+                  'referenced_by_questionnaires', 'questionnaire_types',
+                  'options')
+
+    def validate_identifier(self, value):
+        Question._clean_identifier(self.context['event'], value, self.instance)
+        return value
+
+    def validate_type(self, value):
+        if self.instance:
+            self.instance.clean_type_change(self.instance.type, value)
+        return value
+
+    def validate(self, data):
+        data = super().validate(data)
+        if self.instance and 'options' in data:
+            raise ValidationError(_('Updating options via PATCH/PUT is not supported. Please use the dedicated'
+                                    ' nested endpoint.'))
+
+        event = self.context['event']
+
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+
+        if full_data.get('ask_during_checkin') and full_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
+            raise ValidationError(_('This type of question cannot be asked during check-in.'))
+
+        if full_data.get('show_during_checkin') and full_data.get('type') in Question.SHOW_DURING_CHECKIN_UNSUPPORTED:
+            raise ValidationError(_('This type of question cannot be shown during check-in.'))
+
+        Question.clean_items(event, full_data.get('items') or [])
+        return data
+
+    def validate_options(self, value):
+        if not self.instance:
+            known = []
+            for opt_data in value:
+                if opt_data.get('identifier'):
+                    QuestionOption.clean_identifier(self.context['event'], opt_data.get('identifier'), self.instance,
+                                                    known)
+                    known.append(opt_data.get('identifier'))
+        return value
+
+    @transaction.atomic
+    def create(self, validated_data):
+        options_data = validated_data.pop('options') if 'options' in validated_data else []
+        items = validated_data.pop('items', [])
+
+        question = Question.objects.create(**validated_data, container_type=self.context['container_type'])
+        question.items.set(items)
+        for opt_data in options_data:
+            QuestionOption.objects.create(question=question, **opt_data)
+        return question
+
+
+class CompatQuestionSerializer(DatafieldSerializer):
+    question = MergeField('referenced_by', I18nField(source='label'), mode='consensus')
+    required = MergeField('referenced_by', serializers.BooleanField(), mode='consensus')
+    items = MergeField('referenced_by', serializers.PrimaryKeyRelatedField(source='questionnaire.items', many=True, queryset=Item.objects.none(), allow_null=True, required=False), mode='union')
+    position = serializers.IntegerField(required=False, read_only=True, default=0)
+    ask_during_checkin = MergeField('referenced_by', serializers.BooleanField(source='questionnaire.ask_during_checkin'), mode='bool_or')
+
+    dependency_question = MergeField('referenced_by', serializers.IntegerField(source='dependency_question.user_datafield_id', required=False, default=None, allow_null=True), mode='consensus')
+    dependency_values = MergeField('referenced_by', serializers.JSONField(), mode='consensus')
+    dependency_value = MergeField('referenced_by', LegacyDependencyValueField(source='dependency_values'), mode='consensus')
+    help_text = MergeField('referenced_by', I18nField(), mode='consensus')
+
+    class Meta:
+        model = Question
+        fields = (
+            'id', 'question', 'type', 'required', 'items', 'options', 'position',
+            'ask_during_checkin', 'show_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
+            'hidden', 'dependency_value', 'print_on_invoice', 'help_text', 'valid_number_min',
+            'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
+            'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait',
+            # new
+            #'internal_name', 'referenced_by_questionnaires', 'questionnaire_types',
+        )
+
+    def __init__(self, *args, **kwargs):
+        self.fields['items'].inner_field.child_relation.queryset = kwargs['context']['event'].items.all()
+        super().__init__(*args, **kwargs)
+
+
 class POSCompatQuestionSerializer(QuestionFormSerializer):
     id = serializers.IntegerField(source='cooked_id', read_only=True)
     question = I18nField(source='label', allow_null=True)
@@ -785,104 +883,6 @@ class POSCompatQuestionSerializer(QuestionFormSerializer):
                     row['type'] = Question.FieldType.COUNTRYCODE
                 mangled_results.append(row)
         return mangled_results
-
-
-class DatafieldSerializer(I18nAwareModelSerializer):
-    internal_name = serializers.CharField(allow_null=True, source='question', read_only=True)
-    options = InlineQuestionOptionSerializer(many=True, required=False)
-    identifier = serializers.CharField(allow_null=True)
-
-    referenced_by_questionnaires = MergeField('referenced_by', serializers.IntegerField(source='questionnaire.id'), mode='list')
-    questionnaire_types = MergeField('referenced_by', serializers.CharField(source='questionnaire.type'), mode='list')
-
-    class Meta:
-        model = Question
-        fields = ('id', 'internal_name', 'identifier', 'type',
-                  'show_during_checkin',
-                  'hidden', 'print_on_invoice', 'valid_number_min',
-                  'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
-                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait',
-                  'referenced_by_questionnaires', 'questionnaire_types',
-                  'options')
-
-    def validate_identifier(self, value):
-        Question._clean_identifier(self.context['event'], value, self.instance)
-        return value
-
-    def validate_type(self, value):
-        if self.instance:
-            self.instance.clean_type_change(self.instance.type, value)
-        return value
-
-    def validate(self, data):
-        data = super().validate(data)
-        if self.instance and 'options' in data:
-            raise ValidationError(_('Updating options via PATCH/PUT is not supported. Please use the dedicated'
-                                    ' nested endpoint.'))
-
-        event = self.context['event']
-
-        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
-        full_data.update(data)
-
-        if full_data.get('ask_during_checkin') and full_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
-            raise ValidationError(_('This type of question cannot be asked during check-in.'))
-
-        if full_data.get('show_during_checkin') and full_data.get('type') in Question.SHOW_DURING_CHECKIN_UNSUPPORTED:
-            raise ValidationError(_('This type of question cannot be shown during check-in.'))
-
-        Question.clean_items(event, full_data.get('items') or [])
-        return data
-
-    def validate_options(self, value):
-        if not self.instance:
-            known = []
-            for opt_data in value:
-                if opt_data.get('identifier'):
-                    QuestionOption.clean_identifier(self.context['event'], opt_data.get('identifier'), self.instance,
-                                                    known)
-                    known.append(opt_data.get('identifier'))
-        return value
-
-    @transaction.atomic
-    def create(self, validated_data):
-        options_data = validated_data.pop('options') if 'options' in validated_data else []
-        items = validated_data.pop('items', [])
-
-        question = Question.objects.create(**validated_data, container_type=self.context['container_type'])
-        question.items.set(items)
-        for opt_data in options_data:
-            QuestionOption.objects.create(question=question, **opt_data)
-        return question
-
-
-class CompatDatafieldSerializer(DatafieldSerializer):
-    question = MergeField('referenced_by', I18nField(source='label'), mode='consensus')
-    required = MergeField('referenced_by', serializers.BooleanField(), mode='consensus')
-    items = MergeField('referenced_by', serializers.PrimaryKeyRelatedField(source='questionnaire.items', many=True, queryset=Item.objects.none(), allow_null=True, required=False), mode='union')
-    position = serializers.IntegerField(required=False, read_only=True, default=0)
-    ask_during_checkin = MergeField('referenced_by', serializers.BooleanField(source='questionnaire.ask_during_checkin'), mode='bool_or')
-
-    dependency_question = MergeField('referenced_by', serializers.IntegerField(source='dependency_question.user_datafield_id', required=False, default=None, allow_null=True), mode='consensus')
-    dependency_values = MergeField('referenced_by', serializers.JSONField(), mode='consensus')
-    dependency_value = MergeField('referenced_by', LegacyDependencyValueField(source='dependency_values'), mode='consensus')
-    help_text = MergeField('referenced_by', I18nField(), mode='consensus')
-
-    class Meta:
-        model = Question
-        fields = (
-            'id', 'question', 'type', 'required', 'items', 'options', 'position',
-            'ask_during_checkin', 'show_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
-            'hidden', 'dependency_value', 'print_on_invoice', 'help_text', 'valid_number_min',
-            'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
-            'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait',
-            # new
-            #'internal_name', 'referenced_by_questionnaires', 'questionnaire_types',
-        )
-
-    def __init__(self, *args, **kwargs):
-        self.fields['items'].inner_field.child_relation.queryset = kwargs['context']['event'].items.all()
-        super().__init__(*args, **kwargs)
 
 
 class RenderedMarkdownField(serializers.CharField):

@@ -212,11 +212,6 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
         return data
 
 
-class AnswerQuestionIdentifierField(serializers.Field):
-    def to_representation(self, instance: QuestionAnswer):
-        return instance.question.identifier
-
-
 class AnswerQuestionOptionsIdentifierField(serializers.Field):
     def to_representation(self, instance: QuestionAnswer):
         if isinstance(instance, WrappedModel) or instance.pk:
@@ -242,7 +237,10 @@ class MixedAnswerListSerializer(ListSerializer):
     def to_representation(self, instance):
         answers = super().to_representation(instance.answers)
         answers_dict = {answer["question"]: answer for answer in answers}
-        for qc in QuestionnaireRow.objects.filter(questionnaire__items__id=instance.item_id):
+        for qc in QuestionnaireRow.objects.filter(
+                Q(system_datafield__isnull=False) | Q(user_datafield_id__isnull=False),
+                questionnaire__items__id=instance.item_id
+        ):
             if qc.user_datafield_id:
                 if answer := answers_dict.get(qc.user_datafield_id):
                     answer = dict(answer)
@@ -319,8 +317,14 @@ class MixedAnswerListSerializer(ListSerializer):
 
 
 class AnswerSerializer(I18nAwareModelSerializer):
-    question_identifier = AnswerQuestionIdentifierField(source='*', read_only=True)
+    datafield = serializers.SlugRelatedField(slug_field='identifier', source='question', queryset=Question.objects.none())
+    question_identifier = serializers.SlugRelatedField(slug_field='identifier', source='question', read_only=True)
     option_identifiers = AnswerQuestionOptionsIdentifierField(source='*', read_only=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if event := self.context.get('event'):
+            self.fields['datafield'].queryset = event.questions.filter(container_type=Question.ContainerType.ORDERPOSITION)
 
     def to_representation(self, instance):
         r = super().to_representation(instance)
@@ -335,7 +339,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = QuestionAnswer
-        fields = ('question', 'answer', 'question_identifier', 'options', 'option_identifiers')
+        fields = ('datafield', 'answer', 'options', 'option_identifiers', 'question', 'question_identifier')
 
     def validate_question(self, q):
         if q.event != self.context['event']:
