@@ -30,6 +30,7 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from i18nfield.rest_framework import I18nField
 from i18nfield.strings import LazyI18nString
 from tests.const import SAMPLE_PNG
 
@@ -936,6 +937,18 @@ def question(event, item):
     return q, a1, a2, row
 
 
+def assert_questions_response(questions, df, qrow):
+    assert len(questions) == 1
+    serialized = DatafieldSerializer(df).data
+    for k in ('type', 'options', 'show_during_checkin', 'identifier', 'print_on_invoice', 'valid_number_min', 'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max', 'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait'):
+        assert questions[0][k] == serialized[k]
+    for k in ('id', 'items', 'position', 'ask_during_checkin', 'dependency_question', 'dependency_values', 'hidden', 'dependency_value'):
+        assert k in questions[0]
+    assert questions[0]['required'] == qrow.required
+    assert questions[0]['question'] == I18nField().to_representation(qrow.label)
+    assert questions[0]['help_text'] == I18nField().to_representation(qrow.help_text)
+
+
 @pytest.mark.django_db
 def test_question_number(token_client, organizer, clist, event, order, question):
     with scopes_disabled():
@@ -948,12 +961,7 @@ def test_question_number(token_client, organizer, clist, event, order, question)
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert len(resp.data['questions']) == 1
-        assert resp.data['questions'][0]['id']
-        assert resp.data['questions'][0]['identifier'] == question[0].identifier
-        assert resp.data['questions'][0]['required'] == True
-        assert resp.data['questions'][0]['type'] == 'N'
-        assert resp.data['questions'][0]['question'] == {'en': 'Size'}
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: "3.24"}})
     assert resp.status_code == 201
@@ -970,12 +978,7 @@ def test_question_choice(token_client, organizer, clist, event, order, question)
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert len(resp.data['questions']) == 1
-        assert resp.data['questions'][0]['id']
-        assert resp.data['questions'][0]['identifier'] == question[0].identifier
-        assert resp.data['questions'][0]['required'] == True
-        assert resp.data['questions'][0]['type'] == 'C'
-        assert resp.data['questions'][0]['question'] == {'en': 'Size'}
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: str(question[1].pk)}})
     assert resp.status_code == 201
@@ -993,12 +996,7 @@ def test_question_choice_identifier(token_client, organizer, clist, event, order
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert len(resp.data['questions']) == 1
-        assert resp.data['questions'][0]['id']
-        assert resp.data['questions'][0]['identifier'] == question[0].identifier
-        assert resp.data['questions'][0]['required'] == True
-        assert resp.data['questions'][0]['type'] == 'C'
-        assert resp.data['questions'][0]['question'] == {'en': 'Size'}
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: str(question[1].identifier)}})
     assert resp.status_code == 201
@@ -1016,12 +1014,7 @@ def test_question_invalid(token_client, organizer, clist, event, order, question
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert len(resp.data['questions']) == 1
-        assert resp.data['questions'][0]['id']
-        assert resp.data['questions'][0]['identifier'] == question[0].identifier
-        assert resp.data['questions'][0]['required'] == True
-        assert resp.data['questions'][0]['type'] == 'C'
-        assert resp.data['questions'][0]['question'] == {'en': 'Size'}
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
 
 @pytest.mark.django_db
@@ -1035,23 +1028,13 @@ def test_question_required(token_client, organizer, clist, event, order, questio
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert len(resp.data['questions']) == 1
-        assert resp.data['questions'][0]['id']
-        assert resp.data['questions'][0]['identifier'] == question[0].identifier
-        assert resp.data['questions'][0]['required'] == True
-        assert resp.data['questions'][0]['type'] == 'C'
-        assert resp.data['questions'][0]['question'] == {'en': 'Size'}
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: ""}})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert len(resp.data['questions']) == 1
-        assert resp.data['questions'][0]['id']
-        assert resp.data['questions'][0]['identifier'] == question[0].identifier
-        assert resp.data['questions'][0]['required'] == True
-        assert resp.data['questions'][0]['type'] == 'C'
-        assert resp.data['questions'][0]['question'] == {'en': 'Size'}
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
 
 @pytest.mark.django_db
@@ -1065,12 +1048,7 @@ def test_question_optional(token_client, organizer, clist, event, order, questio
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert len(resp.data['questions']) == 1
-        assert resp.data['questions'][0]['id']
-        assert resp.data['questions'][0]['identifier'] == question[0].identifier
-        assert resp.data['questions'][0]['required'] == False
-        assert resp.data['questions'][0]['type'] == 'C'
-        assert resp.data['questions'][0]['question'] == {'en': 'Size'}
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: ""}})
     assert resp.status_code == 201
@@ -1088,12 +1066,7 @@ def test_question_multiple_choice(token_client, organizer, clist, event, order, 
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert len(resp.data['questions']) == 1
-        assert resp.data['questions'][0]['id']
-        assert resp.data['questions'][0]['identifier'] == question[0].identifier
-        assert resp.data['questions'][0]['required'] == True
-        assert resp.data['questions'][0]['type'] == 'M'
-        assert resp.data['questions'][0]['question'] == {'en': 'Size'}
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: "{},{}".format(question[1].pk, question[2].pk)}})
     assert resp.status_code == 201
@@ -1126,12 +1099,7 @@ def test_question_upload(token_client, organizer, clist, event, order, question)
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert len(resp.data['questions']) == 1
-        assert resp.data['questions'][0]['id']
-        assert resp.data['questions'][0]['identifier'] == question[0].identifier
-        assert resp.data['questions'][0]['required'] == True
-        assert resp.data['questions'][0]['type'] == 'F'
-        assert resp.data['questions'][0]['question'] == {'en': 'Size'}
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: "invalid"}})
     assert resp.status_code == 400
@@ -1158,12 +1126,7 @@ def test_question_upload_optional(token_client, organizer, clist, event, order, 
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert len(resp.data['questions']) == 1
-        assert resp.data['questions'][0]['id']
-        assert resp.data['questions'][0]['identifier'] == question[0].identifier
-        assert resp.data['questions'][0]['required'] == False
-        assert resp.data['questions'][0]['type'] == 'F'
-        assert resp.data['questions'][0]['question'] == {'en': 'Size'}
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: ""}})
     assert resp.status_code == 201

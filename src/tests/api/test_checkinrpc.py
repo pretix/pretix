@@ -30,10 +30,11 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from freezegun import freeze_time
+from i18nfield.rest_framework import I18nField
 from i18nfield.strings import LazyI18nString
 from tests.const import SAMPLE_PNG
 
-from pretix.api.serializers.item import QuestionSerializer
+from pretix.api.serializers.item import DatafieldSerializer
 from pretix.base.models import (
     Checkin, InvoiceAddress, Item, Order, OrderPosition, ReusableMedium,
 )
@@ -618,11 +619,25 @@ def test_require_paid(token_client, organizer, clist, event, order):
 
 @pytest.fixture
 def question(event, item):
-    q = event.questions.create(question=LazyI18nString('Size'), type='C', required=True, ask_during_checkin=True)
+    q = event.questions.create(question='Clothes Size', type='C')
     a1 = q.options.create(answer=LazyI18nString("M"))
     a2 = q.options.create(answer=LazyI18nString("L"))
-    q.items.add(item)
-    return q, a1, a2
+    questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Checkin questions')
+    row = questionnaire.rows.create(user_datafield=q, label=LazyI18nString('Size'), required=True)
+    questionnaire.items.add(item)
+    return q, a1, a2, row
+
+
+def assert_questions_response(questions, df, qrow):
+    assert len(questions) == 1
+    serialized = DatafieldSerializer(df).data
+    for k in ('type', 'options', 'show_during_checkin', 'identifier', 'print_on_invoice', 'valid_number_min', 'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max', 'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait'):
+        assert questions[0][k] == serialized[k]
+    for k in ('id', 'items', 'position', 'ask_during_checkin', 'dependency_question', 'dependency_values', 'hidden', 'dependency_value'):
+        assert k in questions[0]
+    assert questions[0]['required'] == qrow.required
+    assert questions[0]['question'] == I18nField().to_representation(qrow.label)
+    assert questions[0]['help_text'] == I18nField().to_representation(qrow.help_text)
 
 
 @pytest.mark.django_db
@@ -637,9 +652,9 @@ def test_question_number(token_client, organizer, clist, event, order, question)
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
-    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {question[0].pk: "3.24"}})
+    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {resp.data['questions'][0]['id']: "3.24"}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
     with scopes_disabled():
@@ -654,9 +669,9 @@ def test_question_choice(token_client, organizer, clist, event, order, question)
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
-    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {question[0].pk: str(question[1].pk)}})
+    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {resp.data['questions'][0]['id']: str(question[1].pk)}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
     with scopes_disabled():
@@ -672,9 +687,9 @@ def test_question_choice_identifier(token_client, organizer, clist, event, order
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
-    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {question[0].pk: str(question[1].identifier)}})
+    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {resp.data['questions'][0]['id']: str(question[1].identifier)}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
     with scopes_disabled():
@@ -690,43 +705,55 @@ def test_question_invalid(token_client, organizer, clist, event, order, question
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+        assert_questions_response(resp.data['questions'], question[0], question[3])
+
+
+@pytest.mark.django_db
+def test_question_datafield_pk(token_client, organizer, clist, event, order, question):
+    with scopes_disabled():
+        p = order.positions.first()
+    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {question[0].pk: str(question[1].pk)}})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert order.positions.first().answers.get(question=question[0]).answer == 'M'
+        assert list(order.positions.first().answers.get(question=question[0]).options.all()) == [question[1]]
 
 
 @pytest.mark.django_db
 def test_question_required(token_client, organizer, clist, event, order, question):
     with scopes_disabled():
         p = order.positions.first()
-    question[0].required = True
-    question[0].save()
+    question[3].required = True
+    question[3].save()
 
     resp = _redeem(token_client, organizer, clist, p.secret, {})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
-    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {question[0].pk: ""}})
+    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {resp.data['questions'][0]['id']: ""}})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
 
 @pytest.mark.django_db
 def test_question_optional(token_client, organizer, clist, event, order, question):
     with scopes_disabled():
         p = order.positions.first()
-    question[0].required = False
-    question[0].save()
+    question[3].required = False
+    question[3].save()
 
     resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {}})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
-    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {question[0].pk: ""}})
+    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {resp.data['questions'][0]['id']: ""}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
 
@@ -742,10 +769,10 @@ def test_question_multiple_choice(token_client, organizer, clist, event, order, 
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
     resp = _redeem(token_client, organizer, clist, p.secret,
-                   {'answers': {question[0].pk: "{},{}".format(question[1].pk, question[2].pk)}})
+                   {'answers': {resp.data['questions'][0]['id']: "{},{}".format(question[1].pk, question[2].pk)}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
     with scopes_disabled():
@@ -755,7 +782,7 @@ def test_question_multiple_choice(token_client, organizer, clist, event, order, 
 
 
 @pytest.mark.django_db
-def test_question_upload(token_client, organizer, clist, event, order, question):
+def test_question_upload_cooked_id(token_client, organizer, clist, event, order, question):
     r = token_client.post(
         '/api/v1/upload',
         data={
@@ -777,7 +804,44 @@ def test_question_upload(token_client, organizer, clist, event, order, question)
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+        assert_questions_response(resp.data['questions'], question[0], question[3])
+
+    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {resp.data['questions'][0]['id']: "invalid"}})
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+
+    resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {resp.data['questions'][0]['id']: file_id_png}})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert order.positions.first().answers.get(question=question[0]).answer.startswith('file://')
+        assert order.positions.first().answers.get(question=question[0]).file
+
+
+@pytest.mark.django_db
+def test_question_upload_datafield_pk(token_client, organizer, clist, event, order, question):
+    r = token_client.post(
+        '/api/v1/upload',
+        data={
+            'media_type': 'image/png',
+            'file': ContentFile(SAMPLE_PNG)
+        },
+        format='upload',
+        HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',
+    )
+    assert r.status_code == 201
+    file_id_png = r.data['id']
+
+    with scopes_disabled():
+        p = order.positions.first()
+    question[0].type = 'F'
+    question[0].save()
+
+    resp = _redeem(token_client, organizer, clist, p.secret, {})
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    with scopes_disabled():
+        assert_questions_response(resp.data['questions'], question[0], question[3])
 
     resp = _redeem(token_client, organizer, clist, p.secret, {'answers': {question[0].pk: "invalid"}})
     assert resp.status_code == 400
