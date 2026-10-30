@@ -13,9 +13,9 @@ Questions
 
              New applications must use the :ref:`rest-datafields` and :ref:`rest-questionnaires` resources.
 
-             This resource will only work on events where the :ref:`questionnaire configuration <rest-questionnaires>`
-             is compatible with the old data model.
-             If incompatible configuration is detected, these endpoints return HTTP 410.
+             This resource will continue to work in read-only mode on events where the
+             :ref:`questionnaire configuration <rest-questionnaires>` is compatible with the old data model.
+             If incompatible configuration is detected, all endpoints return HTTP 410.
 
 Resource description
 --------------------
@@ -262,7 +262,7 @@ Endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/questions/
 
-   .. warning:: This endpoint is **deprecated**. Instead, create a :ref:`data field <rest-datafields>` first, then add
+   .. warning:: This endpoint is **deprecated** and will be deactivated on XX. December 2026. Instead, create a :ref:`data field <rest-datafields>` first, then add
                 it to a :ref:`questionnaire <rest-questionnaires>`.
 
    Creates a new question
@@ -367,7 +367,7 @@ Endpoints
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/questions/(id)/
 
-   .. warning:: This endpoint is **deprecated**. Instead, update the relevant :ref:`data field <rest-datafields>`, or
+   .. warning:: This endpoint is **deprecated** and will be deactivated on XX. December 2026. Instead, update the relevant :ref:`data field <rest-datafields>`, or
                 the reference to it inside a :ref:`questionnaire <rest-questionnaires>`.
 
    Update a question. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
@@ -456,7 +456,7 @@ Endpoints
 
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/questions/(id)/
 
-   .. warning:: This endpoint is **deprecated**. Instead, remove the questionnaire child from its :ref:`questionnaire <rest-questionnaires>`,
+   .. warning:: This endpoint is **deprecated** and will be deactivated on XX. December 2026. Instead, remove the questionnaire child from its :ref:`questionnaire <rest-questionnaires>`,
                 or delete the relevant :ref:`data field <rest-datafields>`.
 
    Delete a question.
