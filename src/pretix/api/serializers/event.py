@@ -991,6 +991,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'system_question_order',
         'tax_rule_payment',
         'tax_rule_cancellation',
+        'tax_rounding',
     ]
 
     def __init__(self, *args, **kwargs):
