@@ -1,16 +1,16 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block title %}{% trans "Delete question" %}{% endblock %}
+{% block title %}{% trans "data field" %}{% endblock %}
 {% block inside %}
-	<h1>{% trans "Delete question" %}</h1>
+	<h1>{% trans "Delete data field" %}</h1>
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
-		<p>{% blocktrans %}Are you sure you want to delete the question <strong>{{ question }}</strong>?{% endblocktrans %}</p>
+		<p>{% blocktrans %}Are you sure you want to delete the data field <strong>{{ question }}</strong>?{% endblocktrans %}</p>
 		{% if dependent|length > 0 %}
 			<div class="alert alert-warning">
 				<p>{% blocktrans %}All answers to the question given by the buyers of the following products will be <strong>lost</strong>.{% endblocktrans %}
-					{% blocktrans with url=edit_url|add:"#tab-0-1-open" %}If you want to keep the answers, <a href="{{url}}">edit the question</a> and set it to hidden.{% endblocktrans %}
+					{% blocktrans with url=edit_url|add:"#tab-0-1-open" %}If you want to keep the answers, <a href="{{url}}">edit the data field</a> and set it to hidden.{% endblocktrans %}
 				</p>
 			</div>
             <ul>
@@ -24,7 +24,7 @@
                 {% trans "Cancel" %}
             </a>
             <button type="submit" class="btn btn-danger btn-save">
-                {% trans "Delete question and all answers" %}
+                {% trans "Delete data field and all answers" %}
             </button>
 		</div>
 	</form>

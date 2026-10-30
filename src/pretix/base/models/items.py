@@ -41,6 +41,7 @@ import warnings
 from collections import Counter, OrderedDict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
+from itertools import groupby
 from typing import Optional, Tuple
 from zoneinfo import ZoneInfo
 
@@ -378,8 +379,6 @@ class Item(LoggedModel):
     :type tax_rate: decimal.Decimal
     :param admission: ``True``, if this item allows persons to enter the event (as opposed to e.g. merchandise)
     :type admission: bool
-    :param personalized: ``True``, if attendee information should be collected for this ticket
-    :type personalized: bool
     :param picture: A product picture to be shown next to the product description
     :type picture: File
     :param available_from: The date this product goes on sale
@@ -532,12 +531,13 @@ class Item(LoggedModel):
         ),
         default=False
     )
-    personalized = models.BooleanField(
+    tbd_personalized = models.BooleanField(  # TODO(questionnaires): field to be deleted
         verbose_name=_("Is a personalized ticket"),
         help_text=_(
             'Whether or not buying this product allows to enter attendee information'
         ),
-        default=False
+        default=False,
+        db_column='personalized',
     )
     generate_tickets = models.BooleanField(
         verbose_name=_("Generate tickets"),
@@ -1565,12 +1565,14 @@ class ItemBundle(models.Model):
             raise ValidationError(_('The count needs to be equal to or greater than zero.'))
 
 
-class Question(LoggedModel):
+class Question(LoggedModel):  # TODO(questionnaires)  -  rename to Datafield ?
     """
-    A question is an input field that can be used to extend a ticket by custom information,
-    e.g. "Attendee age". The answers are found next to the position. The answers may be found
-    in QuestionAnswers, attached to OrderPositions/CartPositions. A question can allow one of
-    several input types, currently:
+    A question is a data field that can be used to extend an order or a ticket by custom
+    information, e.g. "Attendee age". To be actually useful, questions need to be added to
+    one or multiple Questionnaires. The answers may be found in QuestionAnswers, attached
+    to Orders, OrderPositions or CartPositions.
+
+    A question can allow one of several input types, currently:
 
     * a number (``TYPE_NUMBER``)
     * a one-line string (``TYPE_STRING``)
@@ -1590,7 +1592,7 @@ class Question(LoggedModel):
     :param required: Whether answering this question is required for submitting an order including
                      items associated with this question.
     :type required: bool
-    :param items: A set of ``Items`` objects that this question should be applied to
+    :param items: TO BE REMOVED
     :param ask_during_checkin: Whether to ask this question during check-in instead of during check-out.
     :type ask_during_checkin: bool
     :param show_during_checkin: Whether to show the answer to this question during check-in.
@@ -1607,6 +1609,22 @@ class Question(LoggedModel):
     class ContainerType(models.TextChoices):
         ORDER = "O", _("Order")
         ORDERPOSITION = "P", _("Order position")
+
+    class FieldType(models.TextChoices):
+        NUMBER = "N", _("Number")
+        STRING = "S", _("Text (one line)")
+        TEXT = "T", _("Multiline text")
+        BOOLEAN = "B", _("Yes/No")
+        CHOICE = "C", _("Choose one from a list")
+        CHOICE_MULTIPLE = "M", _("Choose multiple from a list")
+        FILE = "F", _("File upload")
+        DATE = "D", _("Date")
+        TIME = "H", _("Time")
+        DATETIME = "W", _("Date and time")
+        COUNTRYCODE = "CC", _("Country code (ISO 3166-1 alpha-2)")
+        PHONENUMBER = "TEL", _("Phone number")
+
+    # compat
     TYPE_NUMBER = "N"
     TYPE_STRING = "S"
     TYPE_TEXT = "T"
@@ -1619,20 +1637,8 @@ class Question(LoggedModel):
     TYPE_DATETIME = "W"
     TYPE_COUNTRYCODE = "CC"
     TYPE_PHONENUMBER = "TEL"
-    TYPE_CHOICES = (
-        (TYPE_NUMBER, _("Number")),
-        (TYPE_STRING, _("Text (one line)")),
-        (TYPE_TEXT, _("Multiline text")),
-        (TYPE_BOOLEAN, _("Yes/No")),
-        (TYPE_CHOICE, _("Choose one from a list")),
-        (TYPE_CHOICE_MULTIPLE, _("Choose multiple from a list")),
-        (TYPE_FILE, _("File upload")),
-        (TYPE_DATE, _("Date")),
-        (TYPE_TIME, _("Time")),
-        (TYPE_DATETIME, _("Date and time")),
-        (TYPE_COUNTRYCODE, _("Country code (ISO 3166-1 alpha-2)")),
-        (TYPE_PHONENUMBER, _("Phone number")),
-    )
+    TYPE_CHOICES = FieldType.choices
+
     UNLOCALIZED_TYPES = [TYPE_DATE, TYPE_TIME, TYPE_DATETIME]
     ASK_DURING_CHECKIN_UNSUPPORTED = []
     SHOW_DURING_CHECKIN_UNSUPPORTED = [TYPE_FILE]
@@ -1648,8 +1654,8 @@ class Question(LoggedModel):
         verbose_name=_("Asked on"),
         default=ContainerType.ORDERPOSITION,
     )
-    question = I18nTextField(
-        verbose_name=_("Question")
+    question = I18nTextField(  # TODO(questionnaires) : to be renamed to 'internal_name'
+        verbose_name=_("Internal name"),
     )
     identifier = models.CharField(
         max_length=190,
@@ -1663,42 +1669,46 @@ class Question(LoggedModel):
             ),
         ],
     )
-    help_text = I18nTextField(
-        verbose_name=_("Help text"),
-        help_text=_("If the question needs to be explained or clarified, do it here!"),
-        null=True, blank=True,
-    )
+    #help_text = I18nTextField(
+    #    # TODO(questionnaires) : to be removed
+    #    verbose_name=_("Help text"),
+    #    help_text=_("If the question needs to be explained or clarified, do it here!"),
+    #    null=True, blank=True,
+    #)
     type = models.CharField(
         max_length=5,
-        choices=TYPE_CHOICES,
+        choices=FieldType.choices,
         verbose_name=_("Question type")
     )
-    required = models.BooleanField(
+    tbd_required = models.BooleanField(  # TODO(questionnaires) : to be removed, -> QuestionnaireRow
         default=False,
-        verbose_name=_("Required question")
+        verbose_name=_("Required question"),
+        db_column="required",
     )
-    items = models.ManyToManyField(
-        Item,
-        related_name='questions',
-        verbose_name=_("Products"),
-        blank=True,
-        help_text=_('This question will be asked to buyers of the selected products')
-    )
-    position = models.PositiveIntegerField(
+    # items = models.ManyToManyField(  # TODO(questionnaires) : to be removed, -> Questionnaire
+    #     Item,
+    #     related_name='questions',
+    #     verbose_name=_("Products"),
+    #     blank=True,
+    #     help_text=_('This question will be asked to buyers of the selected products')
+    # )
+    tbd_position = models.PositiveIntegerField(  # TODO(questionnaires) : to be removed, -> Questionnaire + QuestionnaireRow
         default=0,
-        verbose_name=_("Position")
+        verbose_name=_("Position"),
+        db_column="position",
     )
-    ask_during_checkin = models.BooleanField(
+    tbd_ask_during_checkin = models.BooleanField(  # TODO(questionnaires) : to be removed
         verbose_name=_('Ask during check-in instead of in the ticket buying process'),
         help_text=_('Not supported by all check-in apps for all question types.'),
-        default=False
+        default=False,
+        db_column="ask_during_checkin",
     )
     show_during_checkin = models.BooleanField(
         verbose_name=_('Show answer during check-in'),
         help_text=_('Not supported by all check-in apps for all question types.'),
         default=False
     )
-    hidden = models.BooleanField(
+    hidden = models.BooleanField(  # to be removed
         verbose_name=_('Hidden question'),
         help_text=_('This question will only show up in the backend.'),
         default=False
@@ -1707,10 +1717,10 @@ class Question(LoggedModel):
         verbose_name=_('Print answer on invoices'),
         default=False
     )
-    dependency_question = models.ForeignKey(
+    dependency_question = models.ForeignKey(  # TODO(questionnaires) : to be removed, -> QuestionnaireRow
         'Question', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
     )
-    dependency_values = MultiStringField(default=[])
+    dependency_values = MultiStringField(default=[])  # TODO(questionnaires) : to be removed, -> QuestionnaireRow
     valid_number_min = models.DecimalField(decimal_places=6, max_digits=30, null=True, blank=True,
                                            verbose_name=_('Minimum value'),
                                            help_text=_('Currently not supported in our apps and during check-in'))
@@ -1749,9 +1759,9 @@ class Question(LoggedModel):
     objects = ScopedManager(organizer='event__organizer')
 
     class Meta:
-        verbose_name = _("Question")
-        verbose_name_plural = _("Questions")
-        ordering = ('position', 'id')
+        verbose_name = _("Data field")
+        verbose_name_plural = _("Data fields")
+        ordering = ('question', 'id')
         unique_together = (('event', 'identifier'),)
 
     def __str__(self):
@@ -1789,15 +1799,16 @@ class Question(LoggedModel):
 
     @property
     def sortkey(self):
-        return self.position, self.id
+        return self.id
 
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
 
     def clean_answer(self, answer):
-        if self.required:
-            if not answer or (self.type == Question.TYPE_BOOLEAN and answer not in ("true", "True", True)):
-                raise ValidationError(_('An answer to this question is required to proceed.'))
+        # TODO(questionnaires) - we don't have Question.required any more - do we actually need this check? if yes, pass in required from caller
+        # if self.required:
+        #     if not answer or (self.type == Question.TYPE_BOOLEAN and answer not in ("true", "True", True)):
+        #         raise ValidationError(_('An answer to this question is required to proceed.'))
         if not answer:
             if self.type == Question.TYPE_BOOLEAN:
                 return False
@@ -1902,7 +1913,7 @@ class Question(LoggedModel):
         return answer
 
     @staticmethod
-    def clean_items(event, items):
+    def clean_items(event, items):  # TODO(questionnaires) : remove method / move to qc
         for item in items:
             if event != item.event:
                 raise ValidationError(_('One or more items do not belong to this event.'))
@@ -1981,6 +1992,207 @@ class QuestionOption(models.Model):
         verbose_name = _("Question option")
         verbose_name_plural = _("Question options")
         ordering = ('position', 'id')
+
+
+class Questionnaire(LoggedModel):
+    class QuestionnaireType(models.TextChoices):
+        ORDER_SALE = "order_purchase", _("Order-wide, before purchase")
+        ORDER_POSITION_SALE = "position_purchase", _("Per product, before purchase")
+        ORDER_POSITION_ATTENDEE_ONLY = "position_attendee", _("Per product, via attendee link")
+        ORDER_POSITION_CHECKIN = "position_checkin", _("Per product, at check-in")
+        ORDER_POSITION_HIDDEN = "position_hidden", _("Per product, hidden")
+    event = models.ForeignKey(
+        Event,
+        related_name="questionnaires",
+        on_delete=models.CASCADE
+    )
+    internal_name = models.CharField(
+        verbose_name=_("Internal name"),
+        max_length=255,
+    )
+    type = models.CharField(
+        max_length=25,
+        choices=QuestionnaireType.choices,
+        verbose_name=_("Questionnaire type")
+    )
+    items = models.ManyToManyField(
+        Item,
+        related_name='questionnaires',
+        verbose_name=_("Products"),
+        blank=True,
+        help_text=_('This questionnaire will be asked to buyers of the selected products')
+    )
+    position = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Position")
+    )
+    all_sales_channels = models.BooleanField(
+        verbose_name=_("Sell on all sales channels the product is sold on"),
+        default=True,
+    )
+    limit_sales_channels = models.ManyToManyField(
+        "SalesChannel",
+        verbose_name=_("Restrict to specific sales channels"),
+        help_text=_('The sales channel selection for the product as a whole takes precedence, so if a sales channel is '
+                    'selected here but not on product level, the variation will not be available.'),
+        blank=True,
+    )
+
+    class Meta:
+        ordering = ('position', 'id')
+
+    def __str__(self) -> str:
+        return self.internal_name
+
+    @property
+    def sortkey(self):
+        return self.position, self.id
+
+    def __lt__(self, other) -> bool:
+        return self.sortkey < other.sortkey
+
+    @property
+    def ask_before_sale(self):
+        return self.type == Questionnaire.QuestionnaireType.ORDER_POSITION_SALE
+
+    @property
+    def ask_during_checkin(self):
+        return self.type == Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
+
+    @property
+    def hidden(self):
+        return self.type == Questionnaire.QuestionnaireType.ORDER_POSITION_HIDDEN
+
+    @staticmethod
+    def check_constraints(event):
+        errors = set()
+        all_questionnaires = Questionnaire.objects.filter(event=event).prefetch_related('rows', 'items')
+        all_sales_channels = event.sales_channels.all()
+        for (sales_channel, type, item_id, sdf, udf), fields in groupby(sorted(
+            (sales_channel, q.type, item.id, c.system_datafield or '', c.user_datafield_id or 0, q, item)
+            for q in all_questionnaires
+            for sales_channel in (q.limit_sales_channels if not q.all_sales_channels else all_sales_channels).values_list('pk', flat=True)
+            for item in q.items.all()
+            for c in q.rows.all()
+        ), key=lambda d: (d[0], d[1], d[2], d[3], d[4])):
+            fields = list(fields)
+            if len(fields) > 1:
+                sales_channel, type, item_id, sdf, udf, q, item = fields[0]
+                questionnaires = set(q for sc, type, item, sdf, udf, q, item in fields)
+                df_label = _('System data field') + f' "{sdf}"' if sdf else _('User-defined data field') + f' "{str(udf)}"'
+                if len(questionnaires) == 1:
+                    errors.add(_('{datafield} added twice to questionnaire "{questionnaire}"').format(
+                        datafield=df_label, questionnaire=next(str(q) for q in questionnaires)
+                    ))
+                else:
+                    errors.add(_('{datafield} added twice to the same item "{item}" via questionnaires "{questionnaires}"').format(
+                        datafield=df_label, item=str(item), questionnaires='" and "'.join(str(q) for q in questionnaires)
+                    ))
+        if errors:
+            raise ValidationError(list(errors))
+
+
+class QuestionnaireRow(LoggedModel):
+    class SystemDatafield(models.TextChoices):
+        ATTENDEE_NAME_PARTS = '@attendee_name_parts', _('Attendee name')
+        ATTENDEE_EMAIL = '@attendee_email', _('Attendee email')
+        COMPANY = '@company', _('Company')
+        STREET = '@street', _('Street')
+        ZIPCODE = '@zipcode', _('ZIP code')
+        CITY = '@city', _('City')
+        STATE = '@state', _('State')
+        COUNTRY = '@country', _('Country')
+
+    # _name_schemes_all_fields = sorted(list(set(k for scheme in PERSON_NAME_SCHEMES.values() for k, v, w, *__ in scheme['fields'])))
+    _name_schemes_all_fields = ['calling_name', 'degree', 'family_name', 'full_name', 'given_name',
+                                'latin_transcription', 'middle_name', 'salutation', 'title']
+    SYSTEM_DATAFIELD_NUMBERS = [
+       SystemDatafield.ATTENDEE_NAME_PARTS.value,
+       SystemDatafield.ATTENDEE_EMAIL.value,
+       SystemDatafield.COMPANY.value,
+       SystemDatafield.STREET.value,
+       SystemDatafield.ZIPCODE.value,
+       SystemDatafield.CITY.value,
+       SystemDatafield.STATE.value,
+       SystemDatafield.COUNTRY.value,
+    ] + [
+        '@attendee_name_parts:' + field
+        for field in _name_schemes_all_fields
+    ]
+
+    questionnaire = models.ForeignKey(
+        Questionnaire,
+        related_name="rows",
+        on_delete=models.CASCADE
+    )
+    position = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Position")
+    )
+    user_datafield = models.ForeignKey(
+        Question,
+        related_name="referenced_by",
+        on_delete=models.CASCADE,
+        null=True, blank=True,
+    )
+    system_datafield = models.CharField(
+        max_length=25,
+        choices=SystemDatafield.choices,
+        null=True, blank=True,
+    )
+    required = models.BooleanField(
+        default=False,
+        verbose_name=_("Required question")
+    )
+    label = I18nTextField(
+        verbose_name=_("Question")
+    )
+    help_text = I18nTextField(
+        verbose_name=_("Help text"),
+        help_text=_("If the question needs to be explained or clarified, do it here!"),
+        null=True, blank=True,
+    )
+    dependency_question = models.ForeignKey(
+        'QuestionnaireRow', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
+    )
+    dependency_values = MultiStringField(default=[])
+
+    class Meta:
+        ordering = ('position', 'id')
+
+    @property
+    def form_field_name(self):
+        if self.user_datafield_id:
+            return 'question_%s' % self.user_datafield_id
+        elif self.system_datafield:
+            return self.system_datafield[1:]
+        else:
+            return 'text_%s' % self.position
+
+    @property
+    def cooked_id(self):
+        if self.user_datafield_id or self.system_datafield:
+            return QuestionnaireRow.cook_id_from_parts(self.questionnaire_id, self.user_datafield_id, self.system_datafield)
+        else:
+            return None
+
+    @staticmethod
+    def cook_id_from_parts(qid, dfid, sys_df):
+        df_id = dfid + 100 if dfid else QuestionnaireRow.SYSTEM_DATAFIELD_NUMBERS.index(sys_df)
+        assert qid < 1000000000
+        return qid * 1000000000 + df_id
+
+    @staticmethod
+    def uncook_id(id):
+        id = int(id)
+        if id > 1000000000:
+            qid, dfid = divmod(id, 1000000000)
+            if dfid >= 100:
+                return qid, dfid - 100, None
+            else:
+                return qid, None, QuestionnaireRow.SYSTEM_DATAFIELD_NUMBERS[dfid]
+        else:
+            return None, id, None
 
 
 class Quota(LoggedModel):

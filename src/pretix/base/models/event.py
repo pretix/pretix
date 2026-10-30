@@ -737,6 +737,9 @@ class Event(EventMixin, LoggedModel):
         self.settings.mail_send_order_approved_attendee = True
         self.settings.mail_send_order_approved_free_attendee = True
         self.settings.mail_send_download_reminder_attendee = True
+        from . import Questionnaire, QuestionnaireRow
+        q = self.questionnaires.create(internal_name=str(_('Attendee data')), type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE, position=0)
+        q.rows.create(label=str(_('Attendee name')), system_datafield=QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS, position=0)
 
     @property
     def social_image(self):
@@ -1425,6 +1428,10 @@ class Event(EventMixin, LoggedModel):
                 issues.append(response)
 
         return issues
+
+    @property
+    def sales_channels(self):
+        return self.organizer.sales_channels if self.all_sales_channels else self.limit_sales_channels
 
     def get_users_with_any_permission(self):
         """

@@ -4,7 +4,7 @@ function questions_toggle_dependent (ev) {
 			return true
 		}
 
-		let dependency_name = $el.attr('name').split('_')[0] + '_' + $el.attr('data-question-dependency')
+		let dependency_name = $el.attr('name').split('-')[0] + '-' + $el.attr('data-question-dependency')
 		let dependency_values = JSON.parse($el.attr('data-question-dependency-values'))
 		let $dependency_el
 

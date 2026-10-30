@@ -26,6 +26,7 @@ from django.core import signing
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.html import format_html
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +61,7 @@ def redir_view(request):
         u = urllib.parse.urlparse(url)
         return render(request, 'pretixbase/redirect.html', {
             'hostname': u.hostname,
+            'bold_hostname': format_html("<strong>{}</strong>", u.hostname),
             'url': url,
         })
 

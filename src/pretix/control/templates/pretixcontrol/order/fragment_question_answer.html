@@ -20,8 +20,10 @@
         {% endif %}
     {% elif question.type == "M" %}
         {{ answer.to_string_i18n|rich_text_snippet }}
+    {% elif question.type %}
+        {{ answer.to_string_i18n|rich_text_snippet }}
     {% else %}
-        {{ answer.to_string_i18n|linebreaksbr }}
+        {{ answer|linebreaksbr }}
     {% endif %}
 {% else %}
     <em>{% trans "not answered" %}</em>
