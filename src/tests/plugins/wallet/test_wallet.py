@@ -13,7 +13,7 @@ from pretix.plugins.wallet.placeholders.base import (
     get_available_context,
     get_transformed_context,
 )
-from pretix.plugins.wallet.styles.base import (
+from pretix.plugins.wallet.platforms.base import (
     FieldGroup,
     FieldGroupDisplay,
     ImageFieldGroup,

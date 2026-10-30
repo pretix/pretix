@@ -1,6 +1,6 @@
 import enum
 from functools import cached_property
-from typing import TypedDict
+from typing import Iterable, TypedDict
 
 import jsonschema
 from django.core.exceptions import ValidationError
@@ -14,18 +14,35 @@ from pretix.plugins.wallet.models import WalletPlatformLayout
 
 from ..i18n import MaybeTranslatedString, localizable_to_dict
 from ..placeholders import (
-    WalletPlaceholderRenderer, get_available_context,
-    get_wallet_placeholder_renderer, get_wallet_placeholders,
+    WalletPlaceholderRenderer,
+    get_available_context,
+    get_wallet_placeholder_renderer,
+    get_wallet_placeholders,
 )
 from .settings import SettingsField, SettingsFile
-
+from django.utils.translation import gettext as _
+from django.utils.html import format_html
 
 class WalletPlatform:
     identifier: str
     name: str
 
-    def __init__(self, event):
-        self.event = event
+    @classmethod
+    def get_global_settings(cls, **kwargs):
+        """
+        Return a list of fields for the global settings form, as a dict of (setting name, form field).
+        """
+        return {}
+
+    def render_download_button(self) -> tuple[dict[str, str] | None, str]:
+        """
+        Render the download button that should be shown.
+
+        returns: A tuple of (attr, content).
+            attr: the html attributes that should be added to the button element as a dict[str, str] or None
+            content: the content of the button
+        """
+        return None, format_html('<span class="fa fa-download"></span> {}', _('Add to {wallet}').format(wallet=self.name))
 
     def get_layout(self, op):
         if hasattr(op.item, "walletlayout"):
@@ -37,11 +54,34 @@ class WalletPlatform:
         )
         return platform_layout
 
-    def generate(self, position, layout):
+    def generate(self, position, layout=None) -> str:
+        """
+        This method should generate the wallet pass and return a url the user should be sent
+        to to retrieve that pass (e.g. via download or by redirecting to the wallet provider)
+
+        .. note:: You should cache the generated files where possible and only regenerate
+                  if the pass content has changed.
+        """
         if not layout:
             layout = self.get_layout(position).pass_layout
         return layout.generate(position)
 
+    def generate_ops(self, ops: Iterable[OrderPosition]) -> str:
+        """
+        This method should generate the wallet passes for all positions in `ops` and return a
+        url the user should be sent to to retrieve them (e.g. via download or by redirecting
+        to the wallet provider)
+
+        .. note:: You should cache the generated files where possible and only regenerate
+                  if the pass contents have changed.
+        """
+        raise NotImplementedError()
+
+    # TODO: register urls here?
+    def __init__(self, event):
+        self.event = event
+
+    # TODO: is_available : check if all config for platform is set
 
 class LayoutContext(TypedDict):
     placeholders: dict[str, dict]

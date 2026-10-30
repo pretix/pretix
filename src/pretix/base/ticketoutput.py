@@ -241,10 +241,6 @@ class BaseTicketOutput:
         return None
 
     @property
-    def is_cacheable(self) -> bool:
-        return True
-
-    @property
     def preview_allowed(self) -> bool:
         """
         By default, the ``generate()`` method is called for generating a preview in the pretix backend.

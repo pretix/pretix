@@ -87,7 +87,7 @@ from pretix.base.services.orders import (
     change_payment_provider,
 )
 from pretix.base.services.pricing import get_price
-from pretix.base.services.tickets import generate, invalidate_cache
+from pretix.base.services.tickets import generate, get_download_buttons, get_wallet_buttons, invalidate_cache
 from pretix.base.signals import order_modified, register_ticket_outputs
 from pretix.base.templatetags.money import money_filter
 from pretix.base.views.mixins import OrderQuestionsViewMixin
@@ -266,6 +266,7 @@ class TicketPageMixin:
         ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p in positions_with_tickets]
 
         ctx['download_buttons'] = self.download_buttons
+        ctx['wallet_buttons'] = self.wallet_buttons
 
         ctx['backend_user'] = has_event_access_permission(self.request, 'event.orders:read')
 
@@ -273,25 +274,11 @@ class TicketPageMixin:
 
     @cached_property
     def download_buttons(self):
-        buttons = []
+        return get_download_buttons(self.request.event, show_disabled=False)
 
-        responses = register_ticket_outputs.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
-            if not provider.is_enabled:
-                continue
-            buttons.append({
-                'text': provider.download_button_text or 'Download',
-                'multi_text': provider.multi_download_button_text or 'Download',
-                'long_text': provider.long_download_button_text or 'Download',
-                'icon': provider.download_button_icon or 'fa-download',
-                'identifier': provider.identifier,
-                'multi': provider.multi_download_enabled,
-                'javascript_required': provider.javascript_required,
-                'confirmation_text': provider.confirmation_text,
-            })
-        return buttons
-
+    @cached_property
+    def wallet_buttons(self):
+        return get_wallet_buttons(self.request.event)
 
 @method_decorator(xframe_options_exempt, 'dispatch')
 class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin, TemplateView):
@@ -315,6 +302,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
         )
         ctx = super().get_context_data(**kwargs)
 
+        # TODO(wallet): also check for wallet?
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
             [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
         )

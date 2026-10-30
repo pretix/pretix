@@ -72,7 +72,7 @@ class WalletPlatformLayout(LoggedModel):
 
     @property
     def pass_layout(self):
-        from pretix.plugins.wallet.styles import get_style
+        from .platforms import get_style
 
         style = get_style(self.platform, self.style)
         if style:
@@ -115,32 +115,7 @@ class WalletLayoutFileSetting(models.Model):
 class AppleWalletDevice(models.Model):
     device_library_id = models.CharField()
     push_token = models.CharField()
-
-    def send_update_apns(self):
-        import ssl
-        import httpx
-        known_certs = set()
-
-        for event in self.passes.values_list("order_position__order__event", flat=True).distinct():
-            with scopes_disabled():
-                event = Event.objects.get(pk=event)
-
-            cert = event.settings.wallet_apple_certificate.read()
-            key = event.settings.wallet_apple_key.read()
-            if cert in known_certs:
-                continue
-
-            ctx = ssl.create_default_context()
-            with tempfile.NamedTemporaryFile("w") as certfile, tempfile.NamedTemporaryFile("w") as keyfile:
-                certfile.write(cert)
-                certfile.flush()
-                keyfile.write(key)
-                keyfile.flush()
-                ctx.load_cert_chain(certfile=certfile.name, keyfile=keyfile.name)
-
-            client = httpx.Client(verify=ctx, http1=False, http2=True)
-            client.post(f'https://api.push.apple.com/3/device/{self.push_token}', json={})
-            known_certs.add(cert)
+    last_push = models.DateTimeField(auto_now_add=True)
 
 
 def secret_default():
@@ -152,6 +127,7 @@ class AppleWalletPass(models.Model):
 
     serial_number = models.CharField()
     pass_type = models.CharField()
+    manifest = models.CharField()
     content = models.FileField()
     updated_at = models.DateTimeField(auto_now=True)
 

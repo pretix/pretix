@@ -29,11 +29,13 @@
                 {% for provider in providers %}
                     <div class="panel panel-default ticketoutput-panel">
                         <div class="panel-heading">
-                            <a href="{% url "control:event.settings.tickets.preview" event=request.event.slug organizer=request.organizer.slug output=provider.identifier %}"
-                                    class="btn btn-default btn-sm pull-right flip {% if not provider.evaluated_preview_allowed %}disabled{% endif %}"
-                                    target="_blank">
-                                {% trans "Preview" %}
-                            </a>
+                            {% if not provider.is_meta %}
+                                <a href="{% url "control:event.settings.tickets.preview" event=request.event.slug organizer=request.organizer.slug output=provider.identifier %}"
+                                        class="btn btn-default btn-sm pull-right flip {% if not provider.evaluated_preview_allowed %}disabled{% endif %}"
+                                        target="_blank">
+                                    {% trans "Preview" %}
+                                </a>
+                            {% endif %}
                             <h3 class="panel-title">
                                 {% with 'ticketoutput_'|add:provider.identifier|add:'__enabled' as field_name %}
                                     {% bootstrap_field provider.form|getitem:field_name layout='inline' label=provider.verbose_name %}

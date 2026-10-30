@@ -36,7 +36,8 @@
             </p>
         </div>
     </div>
-{% elif can_download and download_buttons and order.count_positions and tickets_with_download  %}
+{# TODO(wallet): restructure if for less duplication #}
+{% elif can_download and download_buttons and order.count_positions and tickets_with_download or can_download and wallet_buttons and order.count_positions and tickets_with_download %}
     <div class="info-download">
         <h3 class="sr-only">{% trans "Ticket download" %}</h3>
         {% if tickets_with_download|length > 1 and can_download_multi %} {# never True on ticket page #}
@@ -53,6 +54,18 @@
                         </button>
                     </form>
                 {% endif %}
+            {% endfor %}
+            {% for b in wallet_buttons %}
+                {# TODO(wallet): move view to core #}
+                <form action="{% eventurl event "plugins:wallet:presale_event.order.wallet.get.combined" secret=order.secret order=order.code platform=b.identifier %}"
+                        method="post" data-asynctask data-asynctask-download class="download-btn-form">
+                    {% csrf_token %}
+                    <button type="submit"
+                            class="btn btn-lg btn-default {{ b.attributes.class }}"
+                            {% include "pretixbase/fragments/attributes.html" with attributes=b.attributes %}>
+                        {{ b.content }}
+                    </button>
+                </form>
             {% endfor %}
             </div>
             <p class="help-block">
@@ -74,6 +87,25 @@
                         </button>
                     </form>
                 {% endfor %}
+                {% for b in wallet_buttons %}
+                    {% comment %} TODO(wallet): move view to core {% endcomment %}
+                    <form
+                        action="{% if position_page and tickets_with_download.0.addon_to %}
+                            {% eventurl event "plugins:wallet:presale_event.order.position.wallet.get" secret=tickets_with_download.0.addon_to.web_secret order=order.code platform=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.addon_to.positionid %}
+                        {% elif position_page %}
+                            {% eventurl event "plugins:wallet:presale_event.order.position.wallet.get" secret=tickets_with_download.0.web_secret order=order.code platform=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.positionid %}
+                        {% else %}
+                            {% eventurl event "plugins:wallet:presale_event.order.wallet.get" secret=order.secret order=order.code platform=b.identifier position=tickets_with_download.0.pk %}
+                        {% endif %}"
+                            method="post" data-asynctask data-asynctask-download class="download-btn-form">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="btn btn-lg btn-default {{ b.attributes.class }}"
+                                {% include "pretixbase/fragments/attributes.html" with attributes=b.attributes %}>
+                            {{ b.content }}
+                        </button>
+                    </form>
+                {% endfor %}
             </div>
             <p class="help-block">
                 {% blocktrans trimmed %}
@@ -81,14 +113,14 @@
                 {% endblocktrans %}
             </p>
         {% else %}
-        <p class="text-muted">
-            {% blocktrans trimmed %}
-                Please have your ticket ready when entering the event.
-            {% endblocktrans %}<br>
-            {% blocktrans trimmed %}
-                Download your tickets using the buttons below.
-            {% endblocktrans %}
-        </p>
+            <p class="text-muted">
+                {% blocktrans trimmed %}
+                    Please have your ticket ready when entering the event.
+                {% endblocktrans %}<br>
+                {% blocktrans trimmed %}
+                    Download your tickets using the buttons below.
+                {% endblocktrans %}
+            </p>
         {% endif %}
     </div>
 {% elif not can_download and plugins_allow_ticket_download and ticket_download_date and event.settings.ticket_download %}
