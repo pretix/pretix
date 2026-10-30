@@ -82,7 +82,7 @@ from pretix.presale.views.organizer import (
 )
 
 from . import (
-    CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart,
+    CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart_positions,
     iframe_entry_view_wrapper,
 )
 
@@ -244,7 +244,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['display_add_to_cart'] = display_add_to_cart
 
         context['cart'] = self.get_cart()
-        context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
+        context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart_positions(self.request))
 
         templating_context = PlaceholderContext(event_or_subevent=self.subevent or self.request.event, event=self.request.event)
         if self.subevent:

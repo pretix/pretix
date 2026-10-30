@@ -71,7 +71,7 @@ from pretix.plugins.paypal2.models import ReferencedPayPalObject
 from pretix.plugins.paypal2.payment import (
     PaypalMethod, PaypalMethod as Paypal, PaypalWallet,
 )
-from pretix.presale.views import get_cart
+from pretix.presale.views import get_cart_positions
 from pretix.presale.views.cart import cart_session
 
 logger = logging.getLogger('pretix.plugins.paypal2')
@@ -130,7 +130,7 @@ class XHRView(View):
 
             cart_total = order.pending_sum + fee
         else:
-            cart = get_cart(request)
+            cart = get_cart_positions(request)
             cart_payments = cart_session(request).get('payments', [])
             multi_use_cart_payments = [p for p in cart_payments if p.get('multi_use_supported')]
             simulated_payments = multi_use_cart_payments + [{

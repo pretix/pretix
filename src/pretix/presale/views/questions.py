@@ -36,7 +36,7 @@ from django.utils.functional import cached_property
 
 from pretix.base.views.mixins import BaseQuestionsViewMixin
 from pretix.presale.forms.checkout import CustomerAwareQuestionsForm
-from pretix.presale.views import get_cart
+from pretix.presale.views import get_cart_positions
 
 
 class CartQuestionsViewMixin(BaseQuestionsViewMixin):
@@ -49,7 +49,7 @@ class CartQuestionsViewMixin(BaseQuestionsViewMixin):
 
     @cached_property
     def _positions_for_questions(self):
-        cart = get_cart(self.request)
+        cart = get_cart_positions(self.request)
         return sorted(list(cart), key=lambda cp: cp.sort_key)
 
     def question_form_kwargs(self, cr):

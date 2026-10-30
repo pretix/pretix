@@ -36,7 +36,7 @@ from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.checkoutflow import get_checkout_flow
 from pretix.presale.views import (
-    allow_frame_if_namespaced, cart_exists, get_cart,
+    allow_frame_if_namespaced, cart_exists, get_cart_positions,
     iframe_entry_view_wrapper,
 )
 
@@ -69,7 +69,7 @@ class CheckoutView(View):
 
         cart_error = None
         try:
-            validate_cart.send(sender=self.request.event, positions=get_cart(request))
+            validate_cart.send(sender=self.request.event, positions=get_cart_positions(request))
         except CartError as e:
             cart_error = e
 
