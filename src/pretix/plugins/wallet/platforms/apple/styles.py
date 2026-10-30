@@ -1,132 +1,28 @@
-import hashlib
-import io
 import json
 import logging
-import zipfile
 from typing import Any
 
-import cryptography
-import cryptography.hazmat.primitives.hashes
-import cryptography.hazmat.primitives.serialization.pkcs7
-import cryptography.x509
 from django.core.files.base import ContentFile
-from django.utils.encoding import force_bytes
 from django.utils.translation import gettext as _
+from django.db import transaction
 
 from pretix.base.models import OrderPosition
 from pretix.helpers import OF_SELF
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.wallet.i18n import (
     FormattingLocalizableString, GettextLocalizableString,
-    MaybeTranslatedString,
 )
-from pretix.plugins.wallet.models import AppleWalletPass
-from pretix.plugins.wallet.styles.base import (
+from ...models import AppleWalletPass
+from ..base import (
     FieldGroup, FieldGroupDisplay, PassStyle, PlaceholderFieldEntry,
-    TextFieldGroup, WalletPlatform,
+    TextFieldGroup,
 )
-from pretix.plugins.wallet.styles.settings import ImageSettingsField
+from ..settings import ImageSettingsField
 
-from .settings import ColorSettingsField, FloatSettingsField, convert_to_png
+from ..settings import ColorSettingsField, FloatSettingsField, convert_to_png
+from .platform import SignedZipFile, StringResource
 
 logger = logging.getLogger("pretix.plugins.wallet.apple")
-
-
-class ApplePlatform(WalletPlatform):
-    identifier = "apple"
-    name = _("Apple")
-
-
-class StringResource:
-    entries: dict[str, MaybeTranslatedString]
-    locales: set[str]
-
-    def __init__(self, locales):
-        self.entries = {}
-        self.locales = set(locales)
-
-    def add_entry(self, key: str, value: MaybeTranslatedString):
-        if key in self.entries:
-            raise ValueError(f"{key} already exists in this StringResource")
-        self.entries[key] = value
-
-    def escape(self, string):
-        return string.translate(
-            str.maketrans({'"': '\\"', "\r": "\\r", "\n": "\\n", "\\": "\\\\"})
-        )
-
-    def generate_resource(self, language):
-        output = ""
-        for key, entry in self.entries.items():
-            if isinstance(entry, str):
-                output += f'"{self.escape(key)}" = "{self.escape(entry)}";\n'
-            else:
-                output += f'"{self.escape(key)}" = "{self.escape(entry.localize(language))}";\n'
-        return output.strip()
-
-    def generate(self):
-        return {language: self.generate_resource(language) for language in self.locales}
-
-
-class SignedZipFile:
-    """Generates a zip-file with manifest and signature as apple expects a pkpass file to be"""
-
-    def __init__(
-        self,
-        ca_certificate: str | bytes,
-        certificate: str | bytes,
-        key: str | bytes,
-        password,
-    ):
-        self.ca_certificate = cryptography.x509.load_pem_x509_certificate(
-            force_bytes(ca_certificate)
-        )
-        self.certificate = cryptography.x509.load_pem_x509_certificate(
-            force_bytes(certificate)
-        )
-        self.key = cryptography.hazmat.primitives.serialization.load_pem_private_key(
-            force_bytes(key), force_bytes(password) if password else None
-        )
-        self.password = password
-
-        self.file = io.BytesIO()
-        self.zip_file = zipfile.ZipFile(self.file, "w")
-        self.manifest = {}
-
-    def sign(self, data: bytes):
-        return (
-            cryptography.hazmat.primitives.serialization.pkcs7.PKCS7SignatureBuilder()
-            .set_data(data)
-            .add_signer(
-                self.certificate,
-                self.key,
-                cryptography.hazmat.primitives.hashes.SHA256(),
-            )
-            .add_certificate(self.ca_certificate)
-            .sign(
-                cryptography.hazmat.primitives.serialization.Encoding.DER,
-                [
-                    cryptography.hazmat.primitives.serialization.pkcs7.PKCS7Options.Binary,
-                    cryptography.hazmat.primitives.serialization.pkcs7.PKCS7Options.DetachedSignature,
-                ],
-            )
-        )
-
-    def finish(self):
-        manifest = json.dumps(self.manifest).encode()
-        signature = self.sign(manifest)
-        self.add_file("manifest.json", manifest)
-        self.add_file("signature", signature)
-        self.zip_file.close()
-        return self.file.getvalue()
-
-    def add_file(self, filename: str, content: str | bytes):
-        if isinstance(content, str):
-            content = content.encode()
-
-        with self.zip_file.open(filename, "w") as f:
-            f.write(content)
-        self.manifest[filename] = hashlib.sha1(content).hexdigest()
 
 
 class AppleWalletStyle(PassStyle):
@@ -274,6 +170,7 @@ class AppleWalletStyle(PassStyle):
 
         return pass_json
 
+    @transaction.atomic
     def generate(self, op: OrderPosition):
         pass_type = self.event.settings.wallet_apple_pass_type_id
         team_id = self.event.settings.wallet_apple_team_id
@@ -286,8 +183,9 @@ class AppleWalletStyle(PassStyle):
 
         pass_obj, _ = AppleWalletPass.objects.select_for_update(
             of=OF_SELF
-        ).update_or_create(
+        ).get_or_create(
             order_position=op,
+            pass_type=pass_type,
             defaults={
                 "serial_number": serial_number,
                 "pass_type": pass_type,
@@ -307,7 +205,7 @@ class AppleWalletStyle(PassStyle):
         strings = StringResource(locales=self.event.settings.locales)
 
         pass_json = self.generate_pass_json(
-            fields, op, strings, pass_type, team_id, serial_number, pass_obj.token
+            fields, op, strings, pass_type, team_id, pass_obj.serial_number, pass_obj.token
         )
 
         if file := self.get_cleaned_setting("logo"):
@@ -332,19 +230,20 @@ class AppleWalletStyle(PassStyle):
         for lang, content in strings.generate().items():
             pkpass.add_file(f"{lang}.lproj/pass.strings", content)
         pkpass.add_file("pass.json", json.dumps(pass_json))
-        result = pkpass.finish()
+        result, manifest = pkpass.finish()
 
-        if pass_obj.content:
+        if pass_obj.content and pass_obj.manifest != manifest:
             pass_obj.content.delete()
-        pass_obj.content.save(filename, ContentFile(result, name=filename))
-        pass_obj.save()
+            pass_obj.content.save(filename, ContentFile(result, name=filename))
+            pass_obj.manifest = manifest
+            pass_obj.save()
 
         return filename, "application/vnd.apple.pkpass", result
 
 
 class AppleWalletEventTicket(AppleWalletStyle):
     identifier = "event_1"
-    name = _("Event Ticket Layout 1")
+    name = _("Event Ticket Layout")
 
     @property
     def fieldgroups(self) -> list[FieldGroup]:

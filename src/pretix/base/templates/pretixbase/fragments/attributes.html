@@ -1,0 +1,1 @@
+{% for key, value in attributes.items %}{% if key != "class" %}{% if value is not False %} {{ key }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endif %}{% endfor %}

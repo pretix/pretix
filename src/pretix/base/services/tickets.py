@@ -270,3 +270,35 @@ def invalidate_cache(event: Event, item: int=None, provider: str=None, order: in
         ct.delete()
     for ct in qsc:
         ct.delete()
+
+def get_download_buttons(event, show_disabled):
+    buttons = []
+
+    responses = register_ticket_outputs.send(event)
+    for receiver, response in responses:
+        provider = response(event)
+        if provider.is_meta:
+            continue
+        if not provider.is_enabled and not show_disabled:
+            continue
+        buttons.append({
+            'text': provider.download_button_text or 'Download',
+            'multi_text': provider.multi_download_button_text or 'Download',
+            'long_text': provider.long_download_button_text or 'Download',
+            'icon': provider.download_button_icon or 'fa-download',
+            'identifier': provider.identifier,
+            'multi': provider.multi_download_enabled,
+            'javascript_required': provider.javascript_required,
+            'confirmation_text': provider.confirmation_text,
+        })
+    return buttons
+
+def get_wallet_buttons(event):
+    # TODO(wallet): implement this
+    from pretix.plugins.wallet.platforms import AVAILABLE_PLATFORMS
+    buttons = []
+    for p in AVAILABLE_PLATFORMS:
+        platform = p(event)
+        attr, cont = platform.render_download_button()
+        buttons.append({"identifier": platform.identifier, "attributes": attr, "content": cont})
+    return buttons

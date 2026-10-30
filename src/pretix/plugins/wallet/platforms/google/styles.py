@@ -1,178 +1,30 @@
-import json
-import uuid
-from functools import cached_property
-from typing import Iterable
 from urllib.parse import urljoin
 
-from django.conf import settings
-from django.db import transaction
-from django.utils import translation
-from django.utils.formats import date_format
 from django.utils.translation import gettext as _
 
-from pretix.base.models import Event, OrderPosition
-from pretix.base.settings import GlobalSettingsObject
+from pretix.base.models import OrderPosition
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.wallet.i18n import (
     FormattingLocalizableString, GettextLocalizableString, LazyLocalizable,
 )
-from pretix.plugins.wallet.models import GoogleWalletInstance
-from pretix.plugins.wallet.styles.base import (
+
+from ..base import (
     FieldGroup, FieldGroupDisplay, PassStyle, PlaceholderFieldEntry,
-    PredefinedFieldGroup, TextFieldGroup, WalletPlatform,
+    PredefinedFieldGroup, TextFieldGroup,
 )
 
 from .google_wallet import (
-    AnimationType, BaseGoogleWalletObject, ButtonJWT, Comms,
-    ConfirmationCodeLabel, DoorsOpenLabel, EventTicketClass, EventTicketObject,
+    AnimationType, ConfirmationCodeLabel, DoorsOpenLabel, EventTicketClass, EventTicketObject,
     State,
 )
-from .settings import (
+
+from ..settings import (
     BooleanSettingsField, ColorSettingsField, FloatSettingsField,
     ImageSettingsField,
 )
-
-
-def _get_instance_uuid():
-    gs = GlobalSettingsObject()
-    if not gs.settings.wallet_google_instance_uuid:
-        gs.settings.wallet_google_instance_uuid = str(uuid.uuid4())
-
-    return gs.settings.wallet_google_instance_uuid
-
-
-def get_class_id(event: Event, op: OrderPosition):
-    instance_uuid = _get_instance_uuid()
-    issuer_id = event.settings.wallet_google_issuer_id
-    return "%s.pretix-%s-%s-%s-%s-%s" % (
-        issuer_id,
-        instance_uuid,
-        event.organizer.slug,
-        event.slug,
-        op.item_id,
-        op.variation_id or 0,
-    )
-
-
-def get_object_id(op: OrderPosition):
-    instance_uuid = _get_instance_uuid()
-    issuer_id = op.order.event.settings.wallet_google_issuer_id
-
-    return "%s.pretix-%s-%s-%s-%s-%s-1" % (
-        issuer_id,
-        instance_uuid,
-        op.order.event.organizer.slug,
-        op.order.event.slug,
-        op.order.code,
-        op.positionid,
-    )
-
-
-def get_translated_dict(string, locales):
-    translated = {}
-
-    for locale in locales:
-        translation.activate(locale)
-        translated[locale] = _(string)
-        translation.deactivate()
-
-    return translated
-
-
-def get_translated_string(string, locale):
-    translation.activate(locale)
-    translated = _(string)
-    translation.deactivate()
-
-    return translated
-
-
-def dedup(list):
-    new = []
-    for i in list:
-        if not any(x.data == i.data for x in new):
-            new.append(i)
-    return new
-
-
-class GooglePlatform(WalletPlatform):
-    identifier = "google"
-    name = _("Google")
-
-    @cached_property
-    def comms(self):
-        return Comms(
-            json.loads(self.event.settings.get("wallet_google_credentials").read())
-        )
-
-    def put_item_cached(self, object: BaseGoogleWalletObject):
-        with transaction.atomic():
-            instance, created = GoogleWalletInstance.objects.get_or_create(
-                event=self.event,
-                resource=object.resource,
-                identifier=object.id,
-                defaults={"data": object.data},
-            )
-            if created or instance.data != object.data:
-                result = self.comms.put_item(object.resource, object.id, object.data)
-                instance.data = object.data
-                instance.save(update_fields=["data"])
-                return result
-
-    def generate(self, position, layout: PassStyle | None = None):
-        if not layout:
-            layout = self.get_layout(position).pass_layout
-        class_object, ticket_object = layout.generate(position)
-        self.put_item_cached(class_object)
-        self.put_item_cached(ticket_object)
-
-        generated_jwt = self.comms.sign_jwt(
-            ButtonJWT(
-                origins=[settings.SITE_URL],
-                issuer=self.comms.client_email,
-                payload={"eventTicketObjects": [ticket_object]},
-            ).serialize()
-        )
-
-        return (
-            "googlepaypass",
-            "text/uri-list",
-            "https://pay.google.com/gp/v/save/%s" % generated_jwt,
-        )
-
-    def generate_ops(self, ops: Iterable[OrderPosition]):
-        class_objects = []
-        ticket_objects = []
-        for position in ops:
-            class_object, ticket_object = self.get_layout(
-                position
-            ).pass_layout.generate(position)
-            class_objects.append(class_object)
-            ticket_objects.append(ticket_object)
-
-        for co in dedup(class_objects):
-            self.put_item_cached(co)
-        for to in dedup(ticket_objects):
-            self.put_item_cached(to)
-
-        generated_jwt = self.comms.sign_jwt(
-            ButtonJWT(
-                origins=[settings.SITE_URL],
-                issuer=self.comms.client_email,
-                payload={"eventTicketObjects": ticket_objects},
-            ).serialize()
-        )
-
-        return (
-            "googlepaypass",
-            "text/uri-list",
-            "https://pay.google.com/gp/v/save/%s" % generated_jwt,
-        )
-
+from .platform import get_class_id, get_object_id
 
 class GoogleWalletEventTicketStyle(PassStyle):
-    platform = GooglePlatform
-
     def generate(self, op):
         self.op = op
 
@@ -383,76 +235,6 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
             PredefinedFieldGroup(identifier="seating", name=_("Seating")),
             PredefinedFieldGroup(identifier="ticket_holder", name=_("Ticket Holder")),
             *super().fieldgroups,
-        ]
-
-    @property
-    def _preview_layout_front_card(self):
-        return [
-            {
-                "fieldgroup": "date",
-                "sample": [
-                    {
-                        "content": date_format(
-                            self.event.date_from.astimezone(self.event.timezone),
-                            "SHORT_DATE_FORMAT",
-                        ),
-                        "label": "Date",
-                    },
-                    {
-                        "content": date_format(
-                            self.event.date_from.astimezone(self.event.timezone),
-                            "TIME_FORMAT",
-                        ),
-                        "label": "Time",
-                    },
-                ],
-            },
-            {
-                "fieldgroup": "seating",
-                "sample": [
-                    {"content": _("Ground floor"), "label": _("Section")},
-                    {"content": "5 / 2", "label": _("Row") + " / " + _("Seat")},
-                ],
-            },
-        ]
-
-    @property
-    def _preview_layout_back_details(self):
-        venue = self.venue()
-        if not venue:
-            venue = _("Sample Conference Center\nHeidelberg, Germany").split("\n", 1)
-        return [
-            {
-                "fieldgroup": "ticket_holder",
-                "sample": [
-                    {"content": _("John Doe"), "label": _("Ticket Holder")},
-                ],
-            },
-            {
-                "fieldgroup": "venue",
-                "sample": [
-                    {"content": venue[1], "label": venue[0]},
-                ],
-            },
-            {
-                "fieldgroup": "date",
-                "sample": [
-                    {
-                        "content": date_format(
-                            self.event.date_from.astimezone(self.event.timezone),
-                            "DATETIME_FORMAT",
-                        ),
-                        "label": _("Event Start Time"),
-                    },
-                ],
-            },
-            {"content": _("Sample product"), "label": _("Ticket Type")},
-            {"content": "ABCDE-1", "label": _("Ticket Number")},
-            {"content": "ABCDE", "label": _("Order Number")},
-            {
-                "content": eventreverse_absolute(self.event, "presale:event.index"),
-                "label": _("Website"),
-            },
         ]
 
     def ticket_holder_name(self, op):
