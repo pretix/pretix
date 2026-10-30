@@ -37,7 +37,7 @@ tax_rule                                integer                    The internal 
 admission                               boolean                    ``true`` for items that grant admission to the event
                                                                    (such as primary tickets) and ``false`` for others
                                                                    (such as add-ons or merchandise).
-personalized                            boolean                    ``true`` for items that require personalization according
+personalized                            boolean                    **DEPRECATED.** ``true`` for items that require personalization according
                                                                    to event settings. Only affects system-level fields, not
                                                                    custom questions. Currently only allowed for products with
                                                                    ``admission`` set to ``true``. For backwards compatibility,
@@ -232,6 +232,17 @@ meta_data                               object                     Values set fo
 .. versionchanged:: 2025.9
 
    The ``program_times`` attribute has been added.
+
+.. versionchanged:: 2026.[TODO]
+
+   The ``personalized`` attribute has been deprecated.
+
+   For compatibility with existing applications:
+
+   * When retrieving products, `personalized` is `True` if any attached questionnaire asks for `attendee_name` and/or `attendee_email`.
+   * When creating a new product, setting the `personalized` field to `True` will attach the questionnaire with `internal_name == "Attendee data"` to the new product.
+   * When updating a product, the `personalized` field cannot be changed. ([TODO]: ignore or raise error?)
+
 
 Notes
 -----
