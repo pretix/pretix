@@ -3821,16 +3821,26 @@ def test_order_create_use_gift_card_invalid_secret(token_client, organizer, even
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("rounding_mode,field,right,wrong,error", [
-    ("line", "tax_value", "2.39", "2.50", "Tax value 2.50 in position 1 does not match backend computation of 2.39."),
-    ("line", "price_includes_rounding_correction", "0.00", "0.01", "Price rounding 0.01 in position 1 does not match backend computation of 0.00."),
-    ("line", "tax_value_includes_rounding_correction", "0.00", "0.01", "Tax rounding 0.01 in position 1 does not match backend computation of 0.00."),
-    ("sum_by_net", "tax_value", "2.40", "2.39", "Tax value 2.39 in position 1 does not match backend computation of 2.40."),
-    ("sum_by_net", "price_includes_rounding_correction", "0.01", "0.00", "Price rounding 0.00 in position 1 does not match backend computation of 0.01."),
-    ("sum_by_net", "tax_value_includes_rounding_correction", "0.01", "0.00", "Tax rounding 0.00 in position 1 does not match backend computation of 0.01."),
+@pytest.mark.parametrize("rounding_mode,data,error", [
+    ("line", {"tax_value": "2.40"}, "Tax value 2.40 in position 1 does not match backend computation of 2.39."),
+    ("line", {"tax_value": "2.39"}, None),
+    ("line", {"price_includes_rounding_correction": "0.01"}, "Price rounding 0.01 in position 1 does not match backend computation of 0.00."),
+    ("line", {"tax_value_includes_rounding_correction": "0.01"}, "Tax rounding 0.01 in position 1 does not match backend computation of 0.00."),
+    ("sum_by_net",
+     {"tax_value": "2.39"},
+     "Tax value 2.39 in position 1 does not match backend computation of 2.40."),
+    ("sum_by_net",
+     {"tax_value": "2.40", "price": "15.01", "price_includes_rounding_correction": "0.01"},
+     None),
+    ("sum_by_net",
+     {"tax_value": "2.40", "price": "15.00", "price_includes_rounding_correction": "0.00"},
+     "Price rounding 0.00 in position 1 does not match backend computation of 0.01."),
+    ("sum_by_net",
+     {"tax_value": "2.40", "price": "15.01", "price_includes_rounding_correction": "0.01", "tax_value_includes_rounding_correction": "0.00"},
+     "Tax rounding 0.00 in position 1 does not match backend computation of 0.01."),
 ])
 def test_order_tax_match_validation(token_client, organizer, event, item, quota, question, taxrule,
-                                    rounding_mode, field, right, wrong, error):
+                                    rounding_mode, data, error):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     del res['fees']
     res['tax_rounding_mode'] = rounding_mode
@@ -3838,35 +3848,43 @@ def test_order_tax_match_validation(token_client, organizer, event, item, quota,
     res['positions'][0]['price'] = "15.00"
     res['positions'][0]['tax_rule'] = taxrule.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
-    res['positions'][0][field] = wrong
+    res['positions'][0].update(data)
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
         ), format='json', data=res
     )
-    assert resp.status_code == 400
-    assert resp.data == [error]
-
-    res['positions'][0][field] = right
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/orders/'.format(
-            organizer.slug, event.slug
-        ), format='json', data=res
-    )
-    assert resp.status_code == 201
+    if error:
+        assert resp.status_code == 400
+        assert resp.data == [error]
+    else:
+        assert resp.status_code == 201
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("rounding_mode,field,right,wrong,error", [
-    ("line", "tax_value", "1.60", "1.61", "Tax value 1.61 in fee does not match backend computation of 1.60."),
-    ("line", "value_includes_rounding_correction", "0.00", "0.01", "Price rounding 0.01 in fee does not match backend computation of 0.00."),
-    ("line", "tax_value_includes_rounding_correction", "0.00", "0.01", "Tax rounding 0.01 in fee does not match backend computation of 0.00."),
-    ("sum_by_net", "tax_value", "1.59", "1.60", "Tax value 1.60 in fee does not match backend computation of 1.59."),
-    ("sum_by_net", "value_includes_rounding_correction", "-0.01", "0.00", "Price rounding 0.00 in fee does not match backend computation of -0.01."),
-    ("sum_by_net", "tax_value_includes_rounding_correction", "-0.01", "0.00", "Tax rounding 0.00 in fee does not match backend computation of -0.01."),
+@pytest.mark.parametrize("rounding_mode,data,error", [
+    ("line", {"tax_value": "1.61"}, "Tax value 1.61 in fee does not match backend computation of 1.60."),
+    ("line", {"tax_value": "1.60"}, None),
+    ("line", {"value_includes_rounding_correction": "0.01"},
+     "Price rounding 0.01 in fee does not match backend computation of 0.00."),
+    ("line", {"tax_value_includes_rounding_correction": "0.01"},
+     "Tax rounding 0.01 in fee does not match backend computation of 0.00."),
+    ("sum_by_net",
+     {"tax_value": "1.60"},
+     "Tax value 1.60 in fee does not match backend computation of 1.59."),
+    ("sum_by_net",
+     {"tax_value": "1.59", "value": "9.99", "value_includes_rounding_correction": "-0.01"},
+     None),
+    ("sum_by_net",
+     {"tax_value": "1.59", "value": "10.00", "value_includes_rounding_correction": "0.00"},
+     "Price rounding 0.00 in fee does not match backend computation of -0.01."),
+    ("sum_by_net",
+     {"tax_value": "1.59", "value": "9.99", "value_includes_rounding_correction": "-0.01",
+      "tax_value_includes_rounding_correction": "0.00"},
+     "Tax rounding 0.00 in fee does not match backend computation of -0.01."),
 ])
 def test_order_tax_match_validation_of_fee(token_client, organizer, event, item, quota, question, taxrule,
-                                           rounding_mode, field, right, wrong, error):
+                                           rounding_mode, data, error):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['tax_rounding_mode'] = rounding_mode
     res['positions'][0]['item'] = item.pk
@@ -3875,27 +3893,22 @@ def test_order_tax_match_validation_of_fee(token_client, organizer, event, item,
     res['positions'][0]['answers'][0]['question'] = question.pk
     res['fees'][0]['value'] = "10.00"
     res['fees'][0]['tax_rule'] = taxrule.pk
-    res['fees'][0][field] = wrong
+    res['fees'][0].update(data)
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
         ), format='json', data=res
     )
-    assert resp.status_code == 400
-    assert resp.data == [error]
-
-    res['fees'][0][field] = right
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/orders/'.format(
-            organizer.slug, event.slug
-        ), format='json', data=res
-    )
-    assert resp.status_code == 201
+    if error:
+        assert resp.status_code == 400
+        assert resp.data == [error]
+    else:
+        assert resp.status_code == 201
 
 
 @pytest.mark.django_db
 def test_order_expect_total(token_client, organizer, event, item, quota, question, taxrule):
-    # Force a rounding difference to make sure its the last step of total computation that is compared
+    # Force a rounding difference to make sure it's the last step of total computation that is compared
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     del res['fees']
     res['tax_rounding_mode'] = "sum_by_net"

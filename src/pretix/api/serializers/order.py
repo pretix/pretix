@@ -1070,6 +1070,10 @@ class OrderFeeCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError({
                 'tax_rate': ['Tax rate cannot be stored without tax rule.']
             })
+
+        if 'value_includes_rounding_correction' in attrs:
+            # Make all computations like discounts on the price before rounding, later compare against rounding again
+            attrs['value'] = attrs['value'] - attrs['value_includes_rounding_correction']
         return attrs
 
 
@@ -1219,6 +1223,10 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError({
                 'tax_rate': ['Tax rate cannot be stored without tax rule.']
             })
+
+        if 'price_includes_rounding_correction' in data:
+            # Make all computations like discounts on the price before rounding, later compare against rounding again
+            data['price'] = data['price'] - data['price_includes_rounding_correction']
 
         return data
 
