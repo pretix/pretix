@@ -598,7 +598,6 @@ class BaseDatafieldViewSet(viewsets.ModelViewSet):
     ordering = ('id')
     permission = None
     write_permission = 'event.items:write'
-    container_type = Question.ContainerType.ORDERPOSITION
 
     def get_queryset(self):
         return self.request.event.questions.filter(container_type=self.container_type).prefetch_related('options')
@@ -653,8 +652,8 @@ class BaseDatafieldViewSet(viewsets.ModelViewSet):
         super().perform_destroy(instance)
 
 
-class DatafieldViewSet(ConditionalListView, BaseDatafieldViewSet):
-    pass
+class PositionDatafieldViewSet(ConditionalListView, BaseDatafieldViewSet):
+    container_type = Question.ContainerType.ORDERPOSITION
 
 
 class OrderDatafieldViewSet(ConditionalListView, BaseDatafieldViewSet):
@@ -727,6 +726,7 @@ class CompatListMixin:
 
 
 class CompatDatafieldViewSet(ConditionalListView, DeprecationWarningMixin, CompatListMixin, BaseDatafieldViewSet):
+    container_type = Question.ContainerType.ORDERPOSITION
     serializer_class = CompatDatafieldSerializer
     pagination_class = None
 
