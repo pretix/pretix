@@ -119,6 +119,11 @@ cancellation_date                     datetime                   Time of order c
 plugin_data                           object                     Additional data added by plugins.
 use_gift_cards                        list of strings            List of unique gift card secrets that are used to pay
                                                                  for this order.
+answers                               list of objects            Values of data fields (answers to user-defined questions)
+├ datafield                           string                     The data field's ``identifier`` (internal reference)
+├ answer                              string                     Text representation of the answer
+├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
+└ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
 ===================================== ========================== =======================================================
 
 
@@ -161,6 +166,10 @@ use_gift_cards                        list of strings            List of unique 
 .. versionchanged:: 2026.03
 
    The ``use_gift_cards`` attribute has been added.
+
+.. versionchanged:: 2026.xx
+
+   The ``answers`` attribute has been added.
 
 .. _order-position-resource:
 
@@ -231,12 +240,13 @@ print_logs                            list of objects            List of print j
 downloads                             list of objects            List of ticket download options
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
 └ url                                 string                     Download URL
-answers                               list of objects            Answers to user-defined questions
-├ question                            integer                    Internal ID of the answered question
-├ answer                              string                     Text representation of the answer (URL if answer is a file)
-├ question_identifier                 string                     The question's ``identifier`` field
+answers                               list of objects            Values of data fields (answers to user-defined questions)
+├ datafield                           string                     The data field's ``identifier`` (internal reference)
+├ answer                              string                     Text representation of the answer
 ├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
-└ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
+├ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
+├ question                            integer                    **Deprecated.** Internal ID of the data field
+└ question_identifier                 string                     **Read-only, deprecated.** The data field's ``identifier`` (internal reference)
 seat                                  objects                    The assigned seat. Can be ``null``.
 ├ id                                  integer                    Internal ID of the seat instance
 ├ name                                string                     Human-readable seat name
@@ -452,10 +462,11 @@ List of all orders
                 ],
                 "answers": [
                   {
+                    "datafield": "WY3TP9SL",
                     "question": 12,
                     "question_identifier": "WY3TP9SL",
                     "answer": "Foo",
-                    "option_idenfiters": [],
+                    "option_identifiers": [],
                     "options": []
                   }
                 ],
@@ -488,7 +499,15 @@ List of all orders
             ],
             "refunds": [],
             "cancellation_date": null,
-            "plugin_data": {}
+            "plugin_data": {},
+            "answers": [
+              {
+                "datafield": "XYZ12345",
+                "answer": "42",
+                "option_identifiers": [],
+                "options": []
+              }
+            ]
           }
         ]
       }
@@ -699,6 +718,7 @@ Fetching individual orders
             ],
             "answers": [
               {
+                "datafield": "WY3TP9SL",
                 "question": 12,
                 "question_identifier": "WY3TP9SL",
                 "answer": "Foo",
@@ -735,7 +755,15 @@ Fetching individual orders
         ],
         "refunds": [],
         "cancellation_date": null,
-        "plugin_data": {}
+        "plugin_data": {},
+        "answers": [
+          {
+            "datafield": "XYZ12345",
+            "answer": "42",
+            "option_identifiers": [],
+            "options": []
+          }
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -1079,7 +1107,7 @@ Creating orders
       * ``discount`` (optional, only possible if ``price`` is set; attention: if this is set to not-``null`` on any position, automatic calculation of discounts will not run)
       * ``answers``
 
-        * ``question``
+        * ``datafield``
         * ``answer``
         * ``options``
 
@@ -1113,6 +1141,12 @@ Creating orders
      The ``use_gift_cards`` attribute can not be combined with ``payment_info`` and ``payment_provider`` fields. If the
      order isn't completely paid after its creation with ``use_gift_cards``, then a subsequent request to the payment
      endpoint is needed.
+
+   * ``answers`` (optional). Values for order-level data fields.
+
+     * ``datafield``
+     * ``answer``
+     * ``options``
 
    If you want to use add-on products, you need to set the ``positionid`` fields of all positions manually
    to incrementing integers starting with ``1``. Then, you can reference one of these
@@ -1161,6 +1195,12 @@ Creating orders
           "internal_reference": "",
           "vat_id": ""
         },
+        "answers": [
+          {
+            "datafield": "XYZ12345",
+            "answer": "42"
+          }
+        ],
         "positions": [
           {
             "positionid": 1,
@@ -1174,7 +1214,7 @@ Creating orders
             "addon_to": null,
             "answers": [
               {
-                "question": 1,
+                "datafield": "WY3TP9SL",
                 "answer": "23",
                 "options": []
               }
@@ -1684,6 +1724,7 @@ List of all order positions
             ],
             "answers": [
               {
+                "datafield": "WY3TP9SL",
                 "question": 12,
                 "question_identifier": "WY3TP9SL",
                 "answer": "Foo",
@@ -1863,6 +1904,7 @@ Fetching individual positions
         ],
         "answers": [
           {
+            "datafield": "WY3TP9SL",
             "question": 12,
             "question_identifier": "WY3TP9SL",
             "answer": "Foo",
@@ -1971,7 +2013,7 @@ Manipulating individual positions
 
    * ``answers``: If specified, you will need to provide **all** answers for this order position.
      Validation is handled the same way as when creating orders through the API. You are therefore
-     expected to provide ``question``, ``answer``, and possibly ``options``. ``question_identifier``
+     expected to provide ``datafield``, ``answer``, and possibly ``options``. ``question`` is deprecated. ``question_identifier``
      and ``option_identifiers`` will be ignored. As a special case, you can submit the magic value
      ``"file:keep"`` as the answer to a file question to keep the current value without re-uploading it.
 
@@ -2067,7 +2109,7 @@ Manipulating individual positions
    * ``state``
 
    * ``answers``: Validation is handled the same way as when creating orders through the API. You are therefore
-     expected to provide ``question``, ``answer``, and possibly ``options``. ``question_identifier``
+     expected to provide ``datafield``, ``answer``, and possibly ``options``. ``question`` is deprecated. ``question_identifier``
      and ``option_identifiers`` will be ignored. As a special case, you can submit the magic value
      ``"file:keep"`` as the answer to a file question to keep the current value without re-uploading it.
 
