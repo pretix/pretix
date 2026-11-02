@@ -10,6 +10,7 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.api.helpers import handle_file_upload
 from pretix.base.models import OrderPosition
+from pretix.base.models.orders import Order
 from pretix.plugins.wallet.models import WalletPlatformLayout
 
 from ..i18n import MaybeTranslatedString, localizable_to_dict
@@ -66,10 +67,10 @@ class WalletPlatform:
             layout = self.get_layout(position).pass_layout
         return layout.generate(position)
 
-    def generate_ops(self, ops: Iterable[OrderPosition]) -> str:
+    def generate_order(self, order: Order) -> str:
         """
-        This method should generate the wallet passes for all positions in `ops` and return a
-        url the user should be sent to to retrieve them (e.g. via download or by redirecting
+        This method should generate the wallet passes for all positions in `order` and return
+        a url the user should be sent to to retrieve them (e.g. via download or by redirecting
         to the wallet provider)
 
         .. note:: You should cache the generated files where possible and only regenerate

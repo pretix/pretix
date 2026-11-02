@@ -1,40 +1,24 @@
 
 
-from django.http import Http404
-from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _
-from django.views.generic import (
-    View,
-)
-from pretix.base.models.orders import OrderPosition
-from pretix.base.services.orders import OrderError
-from pretix.base.views.tasks import AsyncAction
-
 from django.db.models import Q
-
-from django.http import (
-    Http404,
-)
+from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import View
 
-from pretix.base.models import (
-    OrderPosition,
-)
-from pretix.base.services.orders import (
-    OrderError,
-)
+from pretix.base.models import OrderPosition
+from pretix.base.services.orders import OrderError
 from pretix.base.views.tasks import AsyncAction
 from pretix.multidomain.urlreverse import eventreverse
-from pretix.presale.views import (
-    EventViewMixin,
+from pretix.presale.views import EventViewMixin
+from pretix.presale.views.order import (
+    OrderDetailMixin, OrderPositionDetailMixin,
 )
-from pretix.presale.views.order import OrderDetailMixin, OrderPositionDetailMixin
 
 from .control import OrderDownloadMixin
+
 
 class PresaleOrderDownloadMixin(OrderDownloadMixin):
     known_errortypes = ['OrderError']
@@ -85,6 +69,7 @@ class PresaleWalletGetPass(PresaleOrderDownloadMixin, EventViewMixin, OrderDetai
             return self.order.positions.get(pk=self.kwargs.get('position'))
         except OrderPosition.DoesNotExist:
             return None
+
 
 @method_decorator(xframe_options_exempt, 'dispatch')
 class PresaleWalletGetPassPosition(PresaleOrderDownloadMixin, EventViewMixin, OrderPositionDetailMixin, AsyncAction, View):

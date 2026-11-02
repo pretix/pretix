@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     dependencies = [
         (
             "pretixbase",
-            "0312_alter_customer_locale_alter_devicelastseen_device_and_more",
+            "0311_fix_unshredded_invoices",
         ),
         ("wallet", "0003_walletlayoutfilesetting"),
     ]

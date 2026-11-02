@@ -14,6 +14,7 @@ from google.auth import crypt, jwt
 from google.auth.transport.requests import AuthorizedSession
 from google.oauth2 import service_account
 
+from pretix.base.models.orders import OrderPosition
 from pretix.plugins.wallet.i18n import (
     MaybeTranslatedString, localizable_to_dict,
 )
@@ -156,6 +157,7 @@ class BaseGoogleWalletObject:
 
     locales: set[str]
     default_locale: str
+    order_position = None
 
     def _localized_string(self, string: MaybeTranslatedString):
         return localized_string(string, self.locales, self.default_locale)
@@ -235,7 +237,7 @@ class EventTicketClass(BaseGoogleWalletObject):
         }
 
     def security_animation(self, security_animation: AnimationType):
-        self.data["securityAnimation"] = security_animation
+        self.data["securityAnimation"] = {"animationType": security_animation}
 
     def doors_open(
         self,
@@ -300,10 +302,12 @@ class EventTicketObject(BaseGoogleWalletObject):
         state: State,
         locales: set[str],
         default_locale: str,
+        order_position: OrderPosition
     ):
         self.id = object_id
         self.locales = locales
         self.default_locale = default_locale
+        self.order_position = order_position
 
         self.data = {
             "id": object_id,

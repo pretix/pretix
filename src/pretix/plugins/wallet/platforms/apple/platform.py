@@ -2,6 +2,7 @@ import hashlib
 import io
 import json
 import logging
+import tempfile
 import zipfile
 
 import cryptography
@@ -11,13 +12,17 @@ import cryptography.x509
 from django.utils.encoding import force_bytes
 from django.utils.translation import gettext as _
 
+from pretix.base.models.orders import Order
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.wallet.i18n import (
     MaybeTranslatedString,
 )
 from ..base import (
     WalletPlatform,
 )
+from ...models import CombinedAppleWalletPass
 
+from django.core.files.base import ContentFile
 from django import forms
 from django.utils.translation import gettext as _
 
@@ -94,26 +99,44 @@ class ApplePlatform(WalletPlatform):
             ]
         )
 
-    # TODO: generate_ops
-    # def generate_order(self, order: Order):
-    #     with tempfile.TemporaryFile() as d:
-    #         with zipfile.ZipFile(d, "w") as zipf:
-    #             for pos in order.positions_with_tickets:
-    #                 fname, __, content = self.generate(pos)
-    #                 zipf.writestr(
-    #                     "{}-{}{}".format(
-    #                         order.code, pos.positionid, os.path.splitext(fname)[1]
-    #                     ),
-    #                     content,
-    #                 )
+    def generate(self, position, layout=None) -> str:
+        if not layout:
+            layout = self.get_layout(position).pass_layout
+        pass_obj = layout.generate(position)
 
-    #         d.seek(0)
-    #         return (
-    #             "{}-{}.pkpasses".format(order.code, self.identifier),
-    #             "application/vnd.apple.pkpasses",
-    #             d.read(),
-    #         )
+        return eventreverse_absolute(
+            self.event,
+            "plugins:wallet:apple_download",
+            kwargs={"order": position.order.code, "secret": position.order.secret, "position": position.pk},
+        )
 
+    def generate_order(self, order: Order):
+        with tempfile.TemporaryFile() as d:
+            with zipfile.ZipFile(d, "w") as zipf:
+                for pos in order.positions_with_tickets:
+                    pass_obj = self.get_layout(pos).pass_layout.generate(pos)
+                    zipf.writestr(
+                        "{}-{}.pkpass".format(order.code, pos.positionid),
+                        pass_obj.content.read(),
+                    )
+
+            d.seek(0)
+            data = d.read()
+
+        if hasattr(order, "combinedapplewalletpass"):
+            order.combinedapplewalletpass.delete()
+
+        ct = CombinedAppleWalletPass.objects.create(
+            order=order,
+            file=None,
+        )
+        ct.file.save("{}-{}.pkpasses".format(order.code, self.identifier), ContentFile(data))
+
+        return eventreverse_absolute(
+            self.event,
+            "plugins:wallet:apple_download_combined",
+            kwargs={"order": order.code, "secret": order.secret},
+        )
 
 class StringResource:
     entries: dict[str, MaybeTranslatedString]

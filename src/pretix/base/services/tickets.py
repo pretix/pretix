@@ -37,9 +37,9 @@ from pretix.base.models import (
     CachedCombinedTicket, CachedFile, CachedTicket, Event, InvoiceAddress,
     Order, OrderPosition,
 )
-from pretix.base.services.tasks import EventTask, ProfiledTask
+from pretix.base.services.tasks import ProfiledTask, TransactionAwareProfiledEventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
-from pretix.base.signals import register_ticket_outputs
+from pretix.base.signals import register_ticket_outputs, invalidate_ticket_cache
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
 
@@ -250,8 +250,8 @@ def get_tickets_for_order(order, base_position=None):
     return tickets
 
 
-@app.task(base=EventTask, acks_late=True)
-def invalidate_cache(event: Event, item: int=None, provider: str=None, order: int=None, **kwargs):
+@app.task(base=TransactionAwareProfiledEventTask, acks_late=True)
+def invalidate_cache(event: Event, item: int | None=None, provider: str | None=None, order: int | None=None, **kwargs):
     qs = CachedTicket.objects.filter(order_position__order__event=event)
     qsc = CachedCombinedTicket.objects.filter(order__event=event)
 
@@ -270,6 +270,9 @@ def invalidate_cache(event: Event, item: int=None, provider: str=None, order: in
         ct.delete()
     for ct in qsc:
         ct.delete()
+
+    invalidate_ticket_cache.send(event, item=item, provider=provider, order=order)
+
 
 def get_download_buttons(event, show_disabled):
     buttons = []
@@ -292,6 +295,7 @@ def get_download_buttons(event, show_disabled):
             'confirmation_text': provider.confirmation_text,
         })
     return buttons
+
 
 def get_wallet_buttons(event):
     # TODO(wallet): implement this

@@ -1218,3 +1218,12 @@ This signal is sent out each time the information for a Device is modified.
 Both the original and updated versions of the Device are included to allow
 receivers to see what has been updated.
 """
+
+invalidate_ticket_cache = EventPluginSignal()
+"""
+Arguments: ``item: int | None``, ``provider: str | None``, ``order: int | None``
+
+This signal is sent out when the ticket cache is invalidated.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""

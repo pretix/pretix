@@ -12,6 +12,7 @@ from pretix.plugins.wallet.platforms.base import WalletPlatform
 from .models import AppleWalletPass, AppleWalletDevice
 from django_scopes import scopes_disabled
 
+
 @app.task
 @scopes_disabled()
 def send_update_apns():
@@ -58,15 +59,19 @@ def send_update_apns():
             certfile.write(ca_cert)
             certfile.flush()
             ctx.load_cert_chain(
-                certfile=certfile.name, password=event.settings.wallet_apple_key_password
+                certfile=certfile.name,
+                password=event.settings.wallet_apple_key_password,
             )
 
         client = httpx.Client(verify=ctx, http1=False, http2=True)
 
         for device in devices_to_push:
             device.last_push = now()
-            client.post(f"https://api.push.apple.com/3/device/{device.push_token}", json={})
+            client.post(
+                f"https://api.push.apple.com/3/device/{device.push_token}", json={}
+            )
             device.save()
+
 
 def get_platform(event, platform) -> WalletPlatform | None:
     for p in AVAILABLE_PLATFORMS:
@@ -76,11 +81,17 @@ def get_platform(event, platform) -> WalletPlatform | None:
 
 @app.task(base=ProfiledTask)
 def get_pass(model: str, pk: int, platform_identifier: str):
-    if model == 'order':
-        order = Order.objects.select_related('event').get(id=pk)
+    if model == "order":
+        order = Order.objects.select_related("event").get(id=pk)
         platform = get_platform(order.event, platform_identifier)
-        return platform.generate_ops(order.positions_with_tickets)
-    elif model == 'orderposition':
-        position = OrderPosition.objects.select_related('order', 'order__event').get(id=pk)
+        if not platform:
+            return
+        return platform.generate_order(order)
+    elif model == "orderposition":
+        position = OrderPosition.objects.select_related("order", "order__event").get(
+            id=pk
+        )
         platform = get_platform(position.order.event, platform_identifier)
+        if not platform:
+            return
         return platform.generate(position)

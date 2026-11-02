@@ -200,6 +200,7 @@ class GoogleWalletEventTicketStyle(PassStyle):
             State.ACTIVE,
             self.event.settings.locales,
             self.event.settings.locale,
+            order_position=op
         )
         fields = self.get_pass_fields(op)
 

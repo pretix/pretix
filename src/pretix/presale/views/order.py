@@ -43,8 +43,6 @@ import re
 from collections import Counter, OrderedDict, defaultdict
 from decimal import Decimal
 from urllib.parse import quote, urlencode
-from datetime import timedelta
-from uuid import UUID
 
 from django import forms
 from django.conf import settings
@@ -64,14 +62,12 @@ from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import ListView, TemplateView, View
-from pretixeu.views import reverse
 
 from pretix.base.auth import has_event_access_permission
 from pretix.base.models import (
     CachedTicket, Checkin, GiftCard, Invoice, Order, OrderPosition, Quota,
     TaxRule,
 )
-from pretix.base.models.base import CachedFile
 from pretix.base.models.orders import (
     CachedCombinedTicket, InvoiceAddress, OrderFee, OrderPayment, OrderRefund,
     QuestionAnswer,
@@ -1208,32 +1204,15 @@ class OrderDownloadMixin:
         ):
             return self.error(OrderError(_('Please click the link we sent you via email to download your tickets.')))
 
-        if self.output.is_cacheable and (ct := self.get_last_ct()):
+        if ct := self.get_last_ct():
             return self.success(ct)
-
-        if not self.output.is_cacheable:
-            cf = CachedFile(web_download=True, date=now(), expires=now() + timedelta(hours=2))
-            cf.save()
-        else:
-            cf = None
 
         return self.do('orderposition' if 'position' in kwargs else 'order',
                        self.order_position.pk if 'position' in kwargs else self.order.pk,
-                       self.output.identifier, cf.pk if cf else None)
+                       self.output.identifier)
 
     def get_success_url(self, value):
-        if isinstance(value, UUID):
-            cf = CachedFile.objects.filter(pk=value).first()
-        else:
-            cf = None
-
-        if not cf or not cf.allowed_for_session(self.request):
-            return self.get_self_url()
-
-        if cf.type == 'text/uri-list':
-            return cf.file.file.read().decode()
-        else:
-            return reverse('cachedfile.download', kwargs={"id":str(value)})
+        return self.get_self_url()
 
     def get_success_message(self, value):
         return ""
@@ -1275,17 +1254,14 @@ class OrderDownloadMixin:
             return redirect(self.get_success_url(value))
 
     def get_last_ct(self):
-        if self.output.is_cacheable:
-            if 'position' in self.kwargs:
-                ct = CachedTicket.objects.filter(
-                    order_position=self.order_position, provider=self.output.identifier, file__isnull=False
-                ).last()
-            else:
-                ct = CachedCombinedTicket.objects.filter(
-                    order=self.order, provider=self.output.identifier, file__isnull=False
-                ).last()
+        if 'position' in self.kwargs:
+            ct = CachedTicket.objects.filter(
+                order_position=self.order_position, provider=self.output.identifier, file__isnull=False
+            ).last()
         else:
-            ct = None
+            ct = CachedCombinedTicket.objects.filter(
+                order=self.order, provider=self.output.identifier, file__isnull=False
+            ).last()
         if not ct or not ct.file:
             return None
         return ct
