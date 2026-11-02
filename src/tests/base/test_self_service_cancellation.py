@@ -33,15 +33,17 @@ from django_scopes import scope
 from pretix.base.cancellation import (
     CancellationCheck, PositionResult, ProcessResult,
 )
-from pretix.base.models import Checkin, Event, Order, OrderPosition, Organizer
+from pretix.base.models import (
+    CancellationRule, Checkin, Event, Order, OrderPosition, Organizer,
+)
 from pretix.base.models.cancellation import (
     CheckResult, CheckTypes, FeeType, PositionCancellationRule,
     ProcessCancellationRule, RuleResult,
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.cancellation import (
-    CollectedChecks, prefetch_order, collect_cancellation_checks,
-    evaluate_cancellation, signal_listener_position_not_used,
+    CollectedChecks, collect_cancellation_checks, evaluate_cancellation,
+    prefetch_order, signal_listener_position_not_used,
 )
 from pretix.helpers import ensure_no_queries
 
@@ -465,7 +467,7 @@ class TestCancellationRule:
                 admission=True
             )
 
-        @pytest.fixture(params=["EARLIEST", "LATEST"])
+        @pytest.fixture(params=[CancellationRule.VARIANT_LATEST, CancellationRule.VARIANT_EARLIEST])
         def rdt_mode_variants(self, request):
             return request.param
 
@@ -521,9 +523,9 @@ class TestCancellationRule:
                 elif rdt_reldate_variants == "event":
                     if rdt_event_variants == "single_event":
                         assert date == self.REFERENCE_DT + timedelta(days=1)
-                    elif rdt_event_variants == "subevents" and rdt_mode_variants == "EARLIEST":
+                    elif rdt_event_variants == "subevents" and rdt_mode_variants == CancellationRule.VARIANT_EARLIEST:
                         assert date == self.REFERENCE_DT + timedelta(days=1)
-                    elif rdt_event_variants == "subevents" and rdt_mode_variants == "LATEST":
+                    elif rdt_event_variants == "subevents" and rdt_mode_variants == CancellationRule.VARIANT_LATEST:
                         assert date == self.REFERENCE_DT + timedelta(days=1) + timedelta(days=2)
                     else:
                         raise ValueError("Variant not known")

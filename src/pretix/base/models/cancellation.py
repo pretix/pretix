@@ -121,6 +121,9 @@ class CancellationRuleManager(models.Manager.from_queryset(CancellationRuleQuery
         return super().get_queryset().filter(type=self.check_type).order_by("pk")
 
 
+CancellationVariant = Literal["earliest", "latest"]
+
+
 class CancellationRule(models.Model):
     VARIANT_EARLIEST: Final = "earliest"
     VARIANT_LATEST: Final = "latest"
@@ -434,13 +437,13 @@ class ProcessCancellationRule(CancellationRule):
 
     @staticmethod
     def _resolve_date_field(date_field: RelativeDateWrapper, order: "Order",
-                            mode: Union[Literal["EARLIEST", "LATEST"], str]) -> Union[datetime.date, datetime.datetime]:
-        if mode not in ('EARLIEST', 'LATEST'):
+                            mode: CancellationVariant) -> Union[datetime.date, datetime.datetime]:
+        if mode not in (CancellationRule.VARIANT_EARLIEST, CancellationRule.VARIANT_LATEST):
             raise ValidationError('Mode is invalid')
 
         comparators = {
-            "EARLIEST": operator.lt,
-            "LATEST": operator.gt,
+            CancellationRule.VARIANT_EARLIEST: operator.lt,
+            CancellationRule.VARIANT_LATEST: operator.gt,
         }
         compare = comparators[mode]
 

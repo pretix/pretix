@@ -755,7 +755,7 @@ class Order(LockModel, LoggedModel):
         Returns whether or not this order can be canceled by the user.
         """
         from ..services.cancellation import evaluate_cancellation
-        res = evaluate_cancellation(event=self.event, order=self, keep=set(), check_ts=time_machine_now())
+        res = evaluate_cancellation(event=self.event, order=self, keep=set(), check_at=time_machine_now())
         return res.cancellation_possible
 
     def propose_auto_refunds(self, amount: Decimal, payments: list=None):
