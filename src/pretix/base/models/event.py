@@ -83,6 +83,8 @@ from .organizer import Organizer, Team
 if TYPE_CHECKING:
     from hierarkey.proxy import HierarkeyProxy
 
+    from .organizer import SalesChannel
+
 logger = logging.getLogger(__name__)
 
 
@@ -336,12 +338,18 @@ class EventMixin:
         return safe_string(json.dumps(eventdict))
 
     @classmethod
-    def annotated(cls, qs, channel, voucher=None):
+    def annotated(cls, qs, channel: "str | SalesChannel | list[SalesChannel]", voucher=None):
         # Channel can currently be a SalesChannel or a str, since we need that compatibility, but a SalesChannel
         # makes the query SIGNIFICANTLY faster
         from pretix.base.models import Item, ItemVariation, Quota, SalesChannel
 
-        assert isinstance(channel, (SalesChannel, str))
+        assert isinstance(channel, (SalesChannel, str, list))
+
+        if isinstance(channel, SalesChannel):
+            channel = [channel]
+
+        if isinstance(channel, list):
+            assert all(isinstance(c, SalesChannel) for c in channel)
 
         sq_active_item = Item.objects.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher).filter(
             Q(variations__isnull=True)
@@ -364,8 +372,8 @@ class EventMixin:
             q_variation &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel))
             q_variation &= Q(Q(item__all_sales_channels=True) | Q(item__limit_sales_channels__identifier=channel))
         else:
-            q_variation &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels=channel))
-            q_variation &= Q(Q(item__all_sales_channels=True) | Q(item__limit_sales_channels=channel))
+            q_variation &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels__in=channel))
+            q_variation &= Q(Q(item__all_sales_channels=True) | Q(item__limit_sales_channels__in=channel))
 
         if voucher:
             if voucher.variation_id:
@@ -1661,11 +1669,17 @@ class SubEvent(EventMixin, LoggedModel):
         return qs_annotated
 
     @classmethod
-    def annotated(cls, qs, channel, voucher=None):
+    def annotated(cls, qs, channel: "str | SalesChannel | list[SalesChannel]", voucher=None):
         from .items import SubEventItem, SubEventItemVariation
         from .organizer import SalesChannel
 
-        assert isinstance(channel, (str, SalesChannel))
+        assert isinstance(channel, (SalesChannel, str, list))
+
+        if isinstance(channel, SalesChannel):
+            channel = [channel]
+
+        if isinstance(channel, list):
+            assert all(isinstance(c, SalesChannel) for c in channel)
 
         qs = super().annotated(qs, channel, voucher=voucher)
         qs = qs.annotate(

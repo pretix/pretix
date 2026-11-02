@@ -313,7 +313,14 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False, allow_
     # makes the query SIGNIFICANTLY faster
     from .organizer import SalesChannel
 
-    assert isinstance(channel, (SalesChannel, str))
+    assert isinstance(channel, (SalesChannel, str, list))
+
+    if isinstance(channel, SalesChannel):
+        channel = [channel]
+
+    if isinstance(channel, list):
+        assert all(isinstance(c, SalesChannel) for c in channel)
+
     q = (
         # IMPORTANT: If this is updated, also update the ItemVariation query
         # in models/event.py: EventMixin.annotated()
@@ -325,7 +332,7 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False, allow_
     if isinstance(channel, str):
         q &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel))
     else:
-        q &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels=channel))
+        q &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels__in=channel))
 
     if not allow_addons:
         q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
