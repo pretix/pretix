@@ -74,9 +74,7 @@ def evaluate_cancellation(event: Event, order: Order, keep: Set[OrderPosition],
             raise ValidationError("OrderPosition {} does not belong to order {}".format(p.code, order.code))
 
     # exclude canceled positions
-    for p in order.positions.all():
-        if p.canceled:
-            keep.add(p)
+    keep.union(set(order.all_positions.filter(canceled=True)))
 
     # collect all checks, position_rules and process_rules that are applicable
     collected_checks = collect_cancellation_checks(event=event)
