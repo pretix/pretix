@@ -29,8 +29,9 @@ from typing import (
     Set, Tuple, TypeAlias, Union, cast,
 )
 
+from django.db import models
 from django.core.exceptions import ValidationError
-from django.db.models import Prefetch
+from django.db.models import Prefetch,
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.decimal import round_decimal
@@ -88,19 +89,14 @@ PositionSet: TypeAlias = Set["OrderPosition"]
 CheckType = Literal["position", "process"]
 
 
-class CheckTypes:
+class CheckTypes(models.TextChoices):
     """
     Position checks are applied to each position individually, ensuring that cancellation of this position doesn't
     break any business logic.
     Process checks are applied to the cancellation request as a whole.
     """
-    POSITION: CheckType = "position"
-    PROCESS: CheckType = "process"
-
-    CHECK_TYPE_CHOICES: Tuple[Tuple[CheckType, str], ...] = (
-        (POSITION, _("Order Position Cancellation Check")),
-        (PROCESS, _("Cancellation Process Check")),
-    )
+    POSITION = "position", _("Order Position Cancellation Check")
+    PROCESS = "process", _("Cancellation Process Check")
 
 
 class PositionCheckFn(Protocol):
@@ -181,21 +177,14 @@ FeeTypeValue = Literal["min_process_fee", "add_process_fee", "position_fee"]
 ProcessFeeTypeValue = Literal["min_process_fee", "add_process_fee"]
 
 
-class FeeType:
+class FeeType(models.TextChoices):
     """
     Process fees can be added on top of all position fees, or they
     can set a floor for the minimum cancellation fee that this will incur.
     """
-    MINIMUM: FeeTypeValue = "min_process_fee"
-    ADDITIONAL: FeeTypeValue = "add_process_fee"
-    POSITION: FeeTypeValue = "position_fee"
-
-    FEE_TYPE_CHOICES: Tuple[Tuple[FeeTypeValue, str], ...] = (
-        (MINIMUM, _("Minimum total fee")),
-        (ADDITIONAL, _("Additional fee")),
-        (POSITION, _("Position fee")),
-    )
-
+    MINIMUM = "min_process_fee", _("Minimum total fee")
+    ADDITIONAL = "add_process_fee", _("Additional fee")
+    POSITION = "position_fee", _("Position fee")
 
 @dataclass(frozen=True)
 class RuleResult:
