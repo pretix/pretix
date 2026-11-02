@@ -5,6 +5,7 @@ from typing import Any
 from django.core.files.base import ContentFile
 from django.utils.translation import gettext as _
 from django.db import transaction
+from django.urls import reverse
 
 from pretix.base.models import OrderPosition
 from pretix.helpers import OF_SELF
@@ -238,7 +239,7 @@ class AppleWalletStyle(PassStyle):
             pass_obj.manifest = manifest
             pass_obj.save()
 
-        return filename, "application/vnd.apple.pkpass", result
+        return pass_obj
 
 
 class AppleWalletEventTicket(AppleWalletStyle):

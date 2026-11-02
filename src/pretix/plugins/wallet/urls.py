@@ -31,6 +31,8 @@ from .views.apple import (
     DeviceRegistrationView,
     GetPassView,
     LogView,
+    DownloadPassView,
+    DownloadCombinedPassView
 )
 from .views.control import (
     LayoutCreateView,
@@ -108,11 +110,20 @@ event_patterns = [
         CallbackView.as_view(),
         name="google_webhook",
     ),
-    # TODO(wallet): actually provide these views
     re_path(
         r"^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<position>[0-9]+)/(?P<platform>[^/]+)$",
         PresaleWalletGetPass.as_view(),
         name="presale_event.order.wallet.get",
+    ),
+    re_path(
+        r"^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/wallet/apple/download/(?P<position>[0-9]+)/$",
+        DownloadPassView.as_view(),
+        name="apple_download",
+    ),
+    re_path(
+        r"^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/wallet/apple/download/$",
+        DownloadCombinedPassView.as_view(),
+        name="apple_download_combined",
     ),
     re_path(
         r"^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<platform>[^/]+)$",

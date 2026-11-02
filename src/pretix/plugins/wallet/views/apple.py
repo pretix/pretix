@@ -1,10 +1,14 @@
 import datetime
+from functools import cached_property
 import logging
 
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import AnonymousUser
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views.decorators.http import condition
+from django.http.response import Http404
+from django.views import View
 from rest_framework import exceptions, permissions, serializers
 from rest_framework.authentication import (
     BaseAuthentication, get_authorization_header,
@@ -12,8 +16,11 @@ from rest_framework.authentication import (
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from pretix.base.models.orders import OrderPosition
 from pretix.helpers.http import ChunkBasedFileResponse
-from pretix.plugins.wallet.models import AppleWalletDevice, AppleWalletPass
+from pretix.plugins.wallet.models import AppleWalletDevice, AppleWalletPass, CombinedAppleWalletPass
+from pretix.presale.views import EventViewMixin
+from pretix.presale.views.order import OrderDetailMixin
 
 logger = logging.getLogger("pretix.plugins.wallet.apple")
 
@@ -166,5 +173,31 @@ class LogView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = LogEntrySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        logger.debug("Received apple wallet log messages: %s", serializer.data["logs"])
+        logger.info("Received apple wallet log messages: %s", serializer.data["logs"])
         return Response({})
+
+
+class DownloadPassView(EventViewMixin, OrderDetailMixin, View):
+    @cached_property
+    def order_position(self):
+        try:
+            return self.order.positions.get(pk=self.kwargs.get('position'))
+        except OrderPosition.DoesNotExist:
+            return None
+
+    def get(self, request, *args, **kwargs):
+        if not self.order_position:
+            return Http404()
+        pass_obj = get_object_or_404(AppleWalletPass, order_position=self.order_position)
+        resp = ChunkBasedFileResponse(pass_obj.content.file, content_type="application/vnd.apple.pkpass")
+        resp['Content-Disposition'] = 'attachment; filename="{}"'.format(pass_obj.serial_number + ".pkpass").encode('ascii', 'ignore')
+        return resp
+
+
+
+class DownloadCombinedPassView(EventViewMixin, OrderDetailMixin, View):
+    def get(self, request, *args, **kwargs):
+        pass_obj = get_object_or_404(CombinedAppleWalletPass, order=self.order)
+        resp = ChunkBasedFileResponse(pass_obj.file.file, content_type="application/vnd.apple.pkpasses")
+        resp['Content-Disposition'] = 'attachment; filename="{}"'.format(self.order.code + ".pkpasses").encode('ascii', 'ignore')
+        return resp

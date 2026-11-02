@@ -10,6 +10,7 @@ from django.utils.translation import gettext as _
 from django import forms
 
 from pretix.base.models import Event, OrderPosition
+from pretix.base.models.orders import Order
 from pretix.base.settings import GlobalSettingsObject
 from pretix.plugins.wallet.models import GoogleWalletInstance
 from ..base import (
@@ -165,7 +166,7 @@ class GooglePlatform(WalletPlatform):
                 event=self.event,
                 resource=object.resource,
                 identifier=object.id,
-                defaults={"data": object.data},
+                defaults={"data": object.data, "order_position": object.order_position},
             )
             if created or instance.data != object.data:
                 result = self.comms.put_item(object.resource, object.id, object.data)
@@ -207,10 +208,10 @@ class GooglePlatform(WalletPlatform):
 
         return self._get_jwt([ticket_object])
 
-    def generate_ops(self, ops: Iterable[OrderPosition]):
+    def generate_order(self, order: Order):
         class_objects = []
         ticket_objects = []
-        for position in ops:
+        for position in order.positions_with_tickets:
             class_object, ticket_object = self.get_layout(
                 position
             ).pass_layout.generate(position)
