@@ -22,11 +22,11 @@
 
 from django.dispatch import receiver
 
+from pretix.base.models.event import Event
 from pretix.base.signals import (
-    register_global_settings, register_ticket_outputs,
-    order_canceled,
-    order_changed,
-    order_paid,
+    register_global_settings,
+    register_ticket_outputs,
+    invalidate_ticket_cache,
     periodic_task,
 )
 from pretix.control.signals import item_forms
@@ -35,10 +35,18 @@ from .forms import WalletLayoutItemForm
 from .models import WalletLayoutItem
 from .ticketoutput import WalletSettingsHolder
 from .platforms import AVAILABLE_PLATFORMS
+from .tasks import send_update_apns
+from .models import AppleWalletPass, CombinedAppleWalletPass
+from .tasks import get_pass
+from .models import GoogleWalletInstance
+from .platforms.google.google_wallet import Resource
+
+
 
 @receiver(register_ticket_outputs, dispatch_uid="output_wallet")
 def register_output(sender, **kwargs):
     return WalletSettingsHolder
+
 
 for platform in AVAILABLE_PLATFORMS:
     if hasattr(platform, "get_global_settings"):
@@ -66,7 +74,68 @@ def control_item_forms(sender, request, item, **kwargs):
     return forms
 
 
+
 @receiver(periodic_task, dispatch_uid="wallet_periodic")
 def periodic_tasks(sender, **kwargs):
-    from .tasks import send_update_apns
+    # TODO: move to platform?
     send_update_apns.apply_async()
+
+# TODO: move to platform?
+@receiver(invalidate_ticket_cache, dispatch_uid="invalidate_ticket_cache_wallet_apple")
+def invalidate_apple(
+    sender: Event, item: int | None, provider: str | None, order: int | None, **kwargs
+):
+
+    if provider and provider != "wallet":
+        return
+
+    pass_qs = AppleWalletPass.objects.filter(order_position__order__event=sender)
+    passes_qs = CombinedAppleWalletPass.objects.filter(order__event=sender)
+
+    if item:
+        pass_qs = pass_qs.filter(order_position__item_id=item)
+        passes_qs = passes_qs.filter(order__order_position__item_id=item)
+
+    if order:
+        pass_qs = pass_qs.filter(order_position__order_id=order)
+        passes_qs = passes_qs.filter(order_id=order)
+
+    for pass_obj in pass_qs:
+        get_pass.apply_async(
+            kwargs={
+                "model": "orderposition",
+                "pk": pass_obj.order_position_id,
+                "platform_identifier": "apple",
+            }
+        )
+
+    for passes_obj in passes_qs:
+        passes_obj.delete()
+
+
+
+@receiver(invalidate_ticket_cache, dispatch_uid="invalidate_ticket_cache_wallet_google")
+def invalidate_google(
+    sender: Event, item: int | None, provider: str | None, order: int | None, **kwargs
+):
+
+    if provider and provider != "wallet":
+        return
+
+    inst_qs = GoogleWalletInstance.objects.filter(event=sender, resource=Resource.EVENT_TICKET_OBJECT).exclude(usages=0, order_position__isnull=True)
+
+    if item:
+        inst_qs = inst_qs.filter(order_position__item_id=item)
+
+    if order:
+        inst_qs = inst_qs.filter(order_position__order_id=order)
+
+    for inst in inst_qs:
+        if inst.order_position_id:
+            get_pass.apply_async(
+                kwargs={
+                    "model": "orderposition",
+                    "pk": inst.order_position_id,
+                    "platform_identifier": "google",
+                }
+            )

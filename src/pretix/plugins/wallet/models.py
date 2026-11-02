@@ -19,17 +19,16 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import tempfile
 
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q, constraints
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
-from django_scopes import ScopedManager, scopes_disabled
+from django_scopes import ScopedManager
 
 from pretix.base.models import LoggedModel, OrderPosition
-from pretix.base.models.event import Event
+from pretix.base.models.orders import Order
 
 
 class WalletLayout(LoggedModel):
@@ -142,8 +141,15 @@ class AppleWalletPass(models.Model):
         ]
 
 
+class CombinedAppleWalletPass(models.Model):
+    order = models.OneToOneField(Order, on_delete=models.CASCADE)
+    file = models.FileField(null=True, blank=True, max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
+
+
 class GoogleWalletInstance(models.Model):
     event = models.ForeignKey("pretixbase.Event", on_delete=models.CASCADE)
+    order_position = models.ForeignKey(OrderPosition, on_delete=models.CASCADE, null=True)
     resource = models.CharField()
     identifier = models.CharField()
     data = models.JSONField()
