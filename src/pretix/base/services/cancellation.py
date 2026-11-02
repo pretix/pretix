@@ -83,7 +83,7 @@ def evaluate_cancellation(event: Event, order: Order, keep: Set[OrderPosition],
     process_rules: QuerySet[ProcessCancellationRule] = ProcessCancellationRule.objects.filter(
         event=event).with_rule_data().all()
 
-    order = _prefetch_order(event, order, collected_checks)
+    order = prefetch_order(event, order, collected_checks)
 
     # keep track of all decisions so we can explain them in the logs
     position_check_results: Dict[int, List[CheckResult]] = {}
@@ -183,7 +183,7 @@ def collect_cancellation_checks(event: Event, send_fn: Callable[
     return CollectedChecks(position=position_checks, process=process_checks)
 
 
-def _prefetch_order(event: Event, order: Order, checks: CollectedChecks) -> "PrefetchedOrder":
+def prefetch_order(event: Event, order: Order, checks: CollectedChecks) -> "PrefetchedOrder":
     prefetches = [pref() for pref in
                   [*checks.prefetches, *PositionCancellationRule.prefetches, *ProcessCancellationRule.prefetches]]
 

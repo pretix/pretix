@@ -26,12 +26,13 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import (
     TYPE_CHECKING, Callable, Dict, List, Literal, NewType, Optional, Protocol,
-    Set, Tuple, TypeAlias, Union, cast,
+    Set, TypeAlias, Union, cast,
 )
 
-from django.db import models
 from django.core.exceptions import ValidationError
-from django.db.models import Prefetch,
+from django.db import models
+from django.db.models import Prefetch
+from django.utils.functional import Promise
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.decimal import round_decimal
@@ -164,7 +165,7 @@ class CheckResult:
     Result of an individual cancellation check.
     """
     id: str
-    reason: str
+    reason: Union[str, Promise]
     cancellation_possible: bool
     type: Literal['check'] = field(default="check")
 
@@ -185,6 +186,7 @@ class FeeType(models.TextChoices):
     MINIMUM = "min_process_fee", _("Minimum total fee")
     ADDITIONAL = "add_process_fee", _("Additional fee")
     POSITION = "position_fee", _("Position fee")
+
 
 @dataclass(frozen=True)
 class RuleResult:
@@ -246,7 +248,7 @@ class RuleResult:
             cls,
             id: int,
             partial_results: List[CheckResult],
-            fee_type: Literal[FeeType.MINIMUM, FeeType.ADDITIONAL],
+            fee_type: FeeType,
             absolute_fee: Decimal,
             reference_price: Decimal
     ) -> "RuleResult":

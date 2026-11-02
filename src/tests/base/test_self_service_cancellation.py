@@ -23,7 +23,7 @@
 import contextlib
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
-from typing import List, Literal, cast
+from typing import List, cast
 
 import pytest
 from django.db.models import Prefetch
@@ -40,7 +40,7 @@ from pretix.base.models.cancellation import (
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.cancellation import (
-    CollectedChecks, _prefetch_order, collect_cancellation_checks,
+    CollectedChecks, prefetch_order, collect_cancellation_checks,
     evaluate_cancellation, signal_listener_position_not_used,
 )
 from pretix.helpers import ensure_no_queries
@@ -185,7 +185,7 @@ class TestRuleResult:
     )
     def test_from_process_fee(
             self,
-            fee_type: Literal[FeeType.MINIMUM, FeeType.ADDITIONAL],
+            fee_type: FeeType,
             absolute: Decimal,
             reference: Decimal,
             result: Decimal
@@ -361,7 +361,7 @@ class TestCancellationRule:
         def test_prefetch_no_checks_collected(self, event, order):
             checks = CollectedChecks(position=[], process=[])
             with scope(organizer=event.organizer):
-                prefetched_order = _prefetch_order(event, order, checks)
+                prefetched_order = prefetch_order(event, order, checks)
                 assert prefetched_order.id == order.id
 
         @pytest.mark.django_db
@@ -378,7 +378,7 @@ class TestCancellationRule:
             )
 
             with scope(organizer=event.organizer):
-                prefetched_order = _prefetch_order(event, order, checks)
+                prefetched_order = prefetch_order(event, order, checks)
                 assert prefetched_order.id == order.id
 
     class TestChecks:
@@ -390,10 +390,11 @@ class TestCancellationRule:
             keep = set()
 
             with scope(organizer=event.organizer):
-                prefetched_order = _prefetch_order(event, order, checks)
+                prefetched_order = prefetch_order(event, order, checks)
                 with ensure_no_queries():
                     result = position_not_used_check.evaluate(prefetched_order, keep, order_position,
                                                               datetime.now(tz=UTC))
+                assert result
                 assert result.cancellation_possible is True
 
                 Checkin.objects.create(
@@ -401,12 +402,13 @@ class TestCancellationRule:
                     position=order_position,
                     successful=True
                 )
-                prefetched_order = _prefetch_order(event, order, checks)
+                prefetched_order = prefetch_order(event, order, checks)
 
                 with ensure_no_queries():
                     result = position_not_used_check.evaluate(prefetched_order, keep, order_position,
                                                               datetime.now(tz=UTC))
 
+                assert result
                 assert result.cancellation_possible is False
 
     class TestResolveDateFields:
