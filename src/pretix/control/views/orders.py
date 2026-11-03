@@ -83,9 +83,9 @@ from pretix.base.models import (
     ItemVariation, LogEntry, Order, QuestionAnswer, Quota,
     ScheduledEventExport, SeatCategoryMapping, generate_secret,
 )
+from pretix.base.models.cancellation import CancellationRequest
 from pretix.base.models.orders import (
-    CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
-    PrintLog,
+    OrderFee, OrderPayment, OrderPosition, OrderRefund, PrintLog,
 )
 from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.payment import PaymentException
@@ -459,10 +459,13 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
             ).annotate(
                 pcnt=Subquery(s, output_field=IntegerField()),
                 icnt=Subquery(i, output_field=IntegerField()),
-                has_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef('pk')))
+                has_open_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef('pk'),
+                                                                                        state__in=[
+                                                                                            CancellationRequest.STATE_CREATED,
+                                                                                            CancellationRequest.STATE_PENDING]))
             ).values(
                 'pk', 'pcnt', 'is_overpaid', 'is_underpaid', 'is_pending_with_full_payment', 'has_external_refund',
-                'has_pending_refund', 'has_cancellation_request', 'computed_payment_refund_sum', 'icnt'
+                'has_pending_refund', 'has_open_cancellation_request', 'computed_payment_refund_sum', 'icnt'
             )
         }
 
@@ -475,7 +478,7 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
             o.is_pending_with_full_payment = annotated.get(o.pk)['is_pending_with_full_payment']
             o.has_external_refund = annotated.get(o.pk)['has_external_refund']
             o.has_pending_refund = annotated.get(o.pk)['has_pending_refund']
-            o.has_cancellation_request = annotated.get(o.pk)['has_cancellation_request']
+            o.has_open_cancellation_request = annotated.get(o.pk)['has_open_cancellation_request']
             o.computed_payment_refund_sum = annotated.get(o.pk)['computed_payment_refund_sum']
             o.icnt = annotated.get(o.pk)['icnt']
 
@@ -995,7 +998,7 @@ class OrderRefundDone(OrderView):
         })
 
 
-class OrderCancellationRequestDelete(OrderView):
+class OrderCancellationRequestDeny(OrderView):
     permission = 'event.orders:write'
 
     @cached_property
@@ -1003,12 +1006,9 @@ class OrderCancellationRequestDelete(OrderView):
         return get_object_or_404(self.order.cancellation_requests, pk=self.kwargs['req'])
 
     def post(self, *args, **kwargs):
-        with transaction.atomic():
-            self.req.delete()
-            self.order.log_action('pretix.event.order.cancellationrequest.deleted', {
-            }, user=self.request.user)
+        self.req.deny(user=self.request.user)
 
-        messages.success(self.request, _('The request has been removed. If you want, you can now inform the user.'))
+        messages.success(self.request, _('The request has been denied. If you want, you can now inform the user.'))
         with language(self.order.locale, self.request.event.settings.region):
             return redirect(reverse('control:event.order.sendmail', kwargs={
                 'event': self.request.event.slug,
@@ -1024,7 +1024,7 @@ class OrderCancellationRequestDelete(OrderView):
             }))
 
     def get(self, *args, **kwargs):
-        return render(self.request, 'pretixcontrol/order/cancellation_request_delete.html', {
+        return render(self.request, 'pretixcontrol/order/cancellation_request_deny.html', {
             'order': self.order,
         })
 

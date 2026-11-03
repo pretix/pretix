@@ -18,7 +18,7 @@
            class="btn btn-primary">{% trans "Show pending refunds" %}</a>
     </div>
 {% endif %}
-{% if has_cancellation_requests %}
+{% if has_open_cancellation_requests %}
     <div class="alert alert-warning">
         {% blocktrans trimmed %}
             This event contains <strong>requested cancellations</strong> that you should take care of.

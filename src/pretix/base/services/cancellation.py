@@ -40,7 +40,7 @@ from pretix.base.cancellation import (
 )
 from pretix.base.models import Event, Membership, Order, OrderPosition
 from pretix.base.models.cancellation import (
-    Cancellation, PositionCancellationRule, ProcessCancellationRule,
+    CancellationRequest, PositionCancellationRule, ProcessCancellationRule,
 )
 from pretix.base.signals import self_service_cancellation_checks
 
@@ -406,8 +406,8 @@ def signal_listener_process_cancel_allowed(sender: Event, **kwargs) -> Cancellat
 
 
 def process_cancellation_in_progress(order: PrefetchedOrder, keep: PositionSet, check_at: datetime.datetime):
-    if any([c.state not in [Cancellation.STATE_PERFORMED, Cancellation.STATE_ABORTED] for c in
-            order.cancellations.all()]):
+    if any([c.state not in [CancellationRequest.STATE_PERFORMED, CancellationRequest.STATE_DENIED] for c in
+            order.cancellation_requests.all()]):
         return CheckResult(
             id="pretixbase_process_cancellation_in_progress",
             reason=_("Cancellation request already in progress"),

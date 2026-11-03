@@ -677,7 +677,7 @@ class TestCancellationRule:
                     r = rule_object.objects.create(event=event, all_products=True)
                 elif rule_type_variants == "process":
                     rule_object = ProcessCancellationRule
-                    r = rule_object.objects.create(event=event, all_products=True, fee_mode=FeeType.MINIMUM)
+                    r = rule_object.objects.create(event=event, fee_mode=FeeType.MINIMUM)
                 else:
                     raise ValueError("Unknown cancellation rule type: {}".format(rule_type_variants))
 

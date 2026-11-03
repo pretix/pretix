@@ -60,12 +60,12 @@ from django.views.generic import (
 )
 
 from pretix.base.models import CartPosition, LogEntry, OrderPosition
+from pretix.base.models.cancellation import CancellationRequest
 from pretix.base.models.checkin import CheckinList
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import (
     Item, ItemVariation, Quota, SubEventItem, SubEventItemVariation,
 )
-from pretix.base.models.orders import CancellationRequest
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services import tickets
 from pretix.base.services.quotas import QuotaAvailability
@@ -541,7 +541,8 @@ class SubEventDetail(EventPermissionRequiredMixin, DetailView):
                     order_id=OuterRef("id"),
                 ).values("subevent").annotate(c=Count("*")).values("c")
             ),
-            has_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef("pk"))),
+            has_open_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef("pk"), state__in=[
+                CancellationRequest.STATE_CREATED, CancellationRequest.STATE_PENDING])),
         ).select_related("invoice_address").prefetch_related("sales_channel")
         ctx = {
             "quotas": self.object.quotas.prefetch_related(

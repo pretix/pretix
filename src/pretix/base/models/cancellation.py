@@ -31,7 +31,7 @@ from typing import (
 from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Prefetch
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
@@ -46,31 +46,33 @@ if TYPE_CHECKING:
     from pretix.base.models import Order, OrderPosition
 
 
-class Cancellation(models.Model):
+class CancellationRequest(models.Model):
     STATE_CREATED: Final = "created"
-    STATE_APPROVAL_PENDING: Final = "approval_pending"
+    STATE_PENDING: Final = "pending"
     STATE_PERFORMED: Final = "performed"
-    STATE_ABORTED: Final = "aborted"
+    STATE_DENIED: Final = "denied"
 
     CANCELLATION_CHOICES = (
         (STATE_CREATED, _("Created")),
-        (STATE_APPROVAL_PENDING, _("Approval pending")),
+        (STATE_PENDING, _("Pending")),
         (STATE_PERFORMED, _("Performed")),
-        (STATE_ABORTED, _("Aborted")),
+        (STATE_DENIED, _("Denied")),
     )
 
     event = models.ForeignKey(
         "Event",
         verbose_name=_("Event"),
-        related_name="cancellations",
+        related_name="cancellation_requests",
         on_delete=models.CASCADE
     )
     order = models.ForeignKey(
         "Order",
         verbose_name=_("Order"),
-        related_name="cancellations",
+        related_name="cancellation_requests",
         on_delete=models.CASCADE
     )
+    created = models.DateTimeField(auto_now_add=True)
+
     keep = models.ManyToManyField(
         to="OrderPosition",
         verbose_name=_("Positions to keep"),
@@ -78,7 +80,8 @@ class Cancellation(models.Model):
     evaluated_at = models.DateTimeField(
         verbose_name=_("Cancellation datetime"),
     )
-
+    cancellation_fee = models.DecimalField(max_digits=13, decimal_places=2)
+    refund_as_giftcard = models.BooleanField(default=False)
     state = models.CharField(
         max_length=16,
         choices=CANCELLATION_CHOICES,
@@ -87,6 +90,13 @@ class Cancellation(models.Model):
     )
 
     _result = models.JSONField(default=dict, db_column="result", encoder=DjangoJSONEncoder)
+
+    def deny(self, user):
+        with transaction.atomic():
+            self.state = CancellationRequest.STATE_DENIED
+            self.order.log_action('pretix.event.order.cancellationrequest.denied', {
+            }, user=user)
+            self.save(update_fields=['state'])
 
     @property
     def result(self) -> CancellationResult:
@@ -118,7 +128,7 @@ class CancellationRuleManager(models.Manager.from_queryset(CancellationRuleQuery
     check_type: ClassVar[CheckTypes]
 
     def get_queryset(self):
-        return super().get_queryset().filter(type=self.check_type).order_by("pk")
+        return super().get_queryset().order_by("pk")
 
 
 CancellationVariant = Literal["earliest", "latest"]
@@ -133,52 +143,12 @@ class CancellationRule(models.Model):
         (VARIANT_LATEST, _("Latest")),
     )
 
-    event = models.ForeignKey(
-        "Event",
-        verbose_name=_("Event"),
-        related_name="cancellation_rules",
-        on_delete=models.CASCADE
-    )
-
-    type = models.CharField(
-        verbose_name=_("Type of the cancellation rule"),
-        default=CheckTypes.POSITION,
-        choices=CheckTypes,
-        max_length=15,
-    )
-
     allowed_until = ModelRelativeDateTimeField(null=True, blank=True, verbose_name=_("Allowed until"))
     except_after = ModelRelativeDateTimeField(null=True, blank=True, verbose_name=_("Except after"))
     if TYPE_CHECKING:
         allowed_until: Optional[RelativeDateWrapper]
         except_after: Optional[RelativeDateWrapper]
 
-    # position-only fields
-    fee_percentage_per_position = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        validators=[MinValueValidator(Decimal("0.00")), MaxValueValidator(Decimal("100.00"))],
-        verbose_name=_("Fee percentage per order position"),
-        default=Decimal("0.00"),
-    )
-    fee_absolute_per_position = models.DecimalField(
-        max_digits=13,
-        decimal_places=2,
-        verbose_name=_("Absolute fee per order position"),
-        default=Decimal("0.00"),
-        validators=[MinValueValidator(Decimal("0.00"))],
-    )
-
-    all_products = models.BooleanField(
-        verbose_name=_("All products and variations"),
-        default=True,
-    )
-    limit_products = models.ManyToManyField("Item", verbose_name=_("Products"), blank=True)
-    limit_variations = models.ManyToManyField(
-        "ItemVariation", blank=True, verbose_name=_("Variations")
-    )
-
-    # process-only fields
     subevent_variant = models.CharField(
         max_length=8,
         choices=SUBEVENT_VARIANT_CHOICES,
@@ -190,34 +160,8 @@ class CancellationRule(models.Model):
                                             "except after dates.")
     )
 
-    fee_cancellation_process = models.DecimalField(
-        max_digits=13,
-        decimal_places=2,
-        verbose_name=_("Absolute fee per cancellation"),
-        default=Decimal("0.00"),
-        validators=[MinValueValidator(Decimal("0.00"))],
-    )
-
-    fee_mode = models.CharField(
-        verbose_name=_("The method with which process and position fees are combined."),
-        help_text=_("Process fees can either be used to set the minimum cancellation fee that is charded or "
-                    "they can be charged in addition to all position fees."),
-        choices=[
-            (FeeType.MINIMUM, FeeType.MINIMUM.label),
-            (FeeType.ADDITIONAL, FeeType.ADDITIONAL.label),
-        ],
-        blank=True,
-        null=True,
-        max_length=15,
-    )
-
     class Meta:
-        constraints = [
-            models.CheckConstraint(
-                condition=models.Q(type__in=[CheckTypes.POSITION, CheckTypes.PROCESS]),
-                name="cancellation_rule_type_valid",
-            ),
-        ]
+        abstract = True
 
     @staticmethod
     def _resolve_date_field_common(
@@ -243,33 +187,6 @@ class CancellationRule(models.Model):
 
         return date_field.datetime(resolve_subevent(reldate_type))
 
-    def clean(self):
-        super().clean()
-        errors = {}
-
-        if self.type == CheckTypes.PROCESS:
-            if self.fee_mode not in (FeeType.MINIMUM, FeeType.ADDITIONAL):
-                errors["fee_mode"] = _(
-                    "Fee mode is not valid on a process rule."
-                )
-            if self.fee_percentage_per_position or self.fee_absolute_per_position:
-                errors["fee_percentage_per_position"] = "Position fees must be unset on a process rule."
-            if self.pk and (self.limit_products.exists() or self.limit_variations.exists()):
-                errors["limit_products"] = "Product/variation limits are not valid on a process rule."
-
-        if self.type == CheckTypes.POSITION:
-            if self.fee_cancellation_process:
-                errors["fee_cancellation_process"] = "Process fee must be unset on a position rule."
-            if self.fee_mode:
-                errors["fee_mode"] = "Fee mode is not valid on a position rule."
-
-        if errors:
-            raise ValidationError(errors)
-
-
-class PositionCancellationRuleManager(CancellationRuleManager):
-    check_type = CheckTypes.POSITION
-
 
 limit_names = {
     'allowed_until': _("allowed-until"),
@@ -283,7 +200,39 @@ class PositionCancellationRule(CancellationRule):
     - Can this position be canceled?
     - What is the price for cancelling this position?
     """
-    objects = PositionCancellationRuleManager()
+
+    objects = CancellationRuleManager()
+
+    event = models.ForeignKey(
+        "Event",
+        verbose_name=_("Event"),
+        related_name="position_cancellation_rules",
+        on_delete=models.CASCADE
+    )
+
+    fee_percentage_per_position = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal("0.00")), MaxValueValidator(Decimal("100.00"))],
+        verbose_name=_("Fee percentage per order position"),
+        default=Decimal("0.00"),
+    )
+    fee_absolute_per_position = models.DecimalField(
+        max_digits=13,
+        decimal_places=2,
+        verbose_name=_("Absolute fee per order position"),
+        default=Decimal("0.00"),
+        validators=[MinValueValidator(Decimal("0.00"))],
+    )
+
+    all_products = models.BooleanField(
+        verbose_name=_("All products and variations"),
+        default=True,
+    )
+    limit_products = models.ManyToManyField("Item", verbose_name=_("Products"), blank=True)
+    limit_variations = models.ManyToManyField(
+        "ItemVariation", blank=True, verbose_name=_("Variations")
+    )
 
     rule_prefetches: ClassVar[List[Callable[[], Prefetch]]] = [
         lambda: Prefetch('limit_products'),
@@ -296,14 +245,6 @@ class PositionCancellationRule(CancellationRule):
         lambda: Prefetch('event'),
     ]
     related_selects: ClassVar[List[str]] = []
-
-    class Meta:
-        proxy = True
-
-    def save(self, *args, **kwargs):
-        self.type = CheckTypes.POSITION
-        self.full_clean()
-        super().save(*args, **kwargs)
 
     def _position_matches_rule(self, position: "OrderPosition") -> Optional[CheckResult]:
         with ensure_no_queries():
@@ -407,17 +348,41 @@ class PositionCancellationRule(CancellationRule):
             )
 
 
-class ProcessCancellationRuleManager(CancellationRuleManager):
-    check_type = CheckTypes.PROCESS
-
-
 class ProcessCancellationRule(CancellationRule):
     """
     ProcessCancellationRules answer the question:
     - What is the processing fee for performing this cancellation?
     """
 
-    objects = ProcessCancellationRuleManager()
+    objects = CancellationRuleManager()
+
+    event = models.ForeignKey(
+        "Event",
+        verbose_name=_("Event"),
+        related_name="process_cancellation_rules",
+        on_delete=models.CASCADE
+    )
+
+    fee_cancellation_process = models.DecimalField(
+        max_digits=13,
+        decimal_places=2,
+        verbose_name=_("Absolute fee per cancellation"),
+        default=Decimal("0.00"),
+        validators=[MinValueValidator(Decimal("0.00"))],
+    )
+
+    fee_mode = models.CharField(
+        verbose_name=_("The method with which process and position fees are combined."),
+        help_text=_("Process fees can either be used to set the minimum cancellation fee that is charded or "
+                    "they can be charged in addition to all position fees."),
+        choices=[
+            (FeeType.MINIMUM, FeeType.MINIMUM.label),
+            (FeeType.ADDITIONAL, FeeType.ADDITIONAL.label),
+        ],
+        blank=True,
+        null=True,
+        max_length=15,
+    )
 
     rule_prefetches: ClassVar[List[Callable[[], Prefetch]]] = []
     rule_related_selects: ClassVar[List[str]] = []
@@ -426,14 +391,6 @@ class ProcessCancellationRule(CancellationRule):
         lambda: Prefetch('event'),
     ]
     related_selects: ClassVar[List[str]] = []
-
-    class Meta:
-        proxy = True
-
-    def save(self, *args, **kwargs):
-        self.type = CheckTypes.PROCESS
-        self.full_clean()
-        super().save(*args, **kwargs)
 
     @staticmethod
     def _resolve_date_field(date_field: RelativeDateWrapper, order: "Order",

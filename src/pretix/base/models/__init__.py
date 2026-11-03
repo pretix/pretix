@@ -22,7 +22,7 @@
 from ..settings import GlobalSettingsObject_SettingsStore
 from .auth import U2FDevice, User, WebAuthnDevice
 from .base import CachedFile, LoggedModel, cachedfile_name
-from .cancellation import Cancellation, CancellationRule
+from .cancellation import CancellationRequest, CancellationRule
 from .checkin import Checkin, CheckinList
 from .currencies import ExchangeRate
 from .customers import Customer

@@ -65,7 +65,7 @@ from pretix.control.signals import (
 )
 from pretix.helpers.daterange import daterange
 
-from ...base.models.orders import CancellationRequest
+from ...base.models.cancellation import CancellationRequest
 from ...base.models.organizer import TeamQuerySet
 from ...base.templatetags.money import money_filter
 from ..logdisplay import OVERVIEW_BANLIST
@@ -433,8 +433,8 @@ def event_index_warnings_lazy(request, organizer, event):
         status=Order.STATUS_PENDING,
         require_approval=True
     ).exists()
-    ctx['has_cancellation_requests'] = can_view_orders and CancellationRequest.objects.filter(
-        order__event=request.event
+    ctx['has_open_cancellation_requests'] = can_view_orders and CancellationRequest.objects.filter(
+        order__event=request.event, state__in=[CancellationRequest.STATE_CREATED, CancellationRequest.STATE_PENDING]
     ).exists()
     ctx['has_sync_problems'] = can_change_event_settings and request.event.queued_sync_jobs.filter(
         Q(need_manual_retry__isnull=False)

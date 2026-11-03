@@ -25,7 +25,8 @@ from django.utils.functional import cached_property
 from django.views.generic import ListView
 
 from pretix.base.models import Order, OrderPosition
-from pretix.base.models.orders import CancellationRequest, OrderPayment
+from pretix.base.models.cancellation import CancellationRequest
+from pretix.base.models.orders import OrderPayment
 from pretix.control.forms.filter import (
     OrderPaymentSearchFilterForm, OrderSearchFilterForm,
 )
@@ -60,10 +61,13 @@ class OrderSearch(PaginationMixin, ListView):
                 pk__in=[o.pk for o in ctx['orders']]
             ).annotate(
                 pcnt=Subquery(s, output_field=IntegerField()),
-                has_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef('pk')))
+                has_open_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef('pk'),
+                                                                                        state__in=[
+                                                                                            CancellationRequest.STATE_CREATED,
+                                                                                            CancellationRequest.STATE_PENDING]))
             ).values(
                 'pk', 'pcnt', 'is_overpaid', 'is_underpaid', 'is_pending_with_full_payment', 'has_external_refund',
-                'has_pending_refund', 'has_cancellation_request'
+                'has_pending_refund', 'has_open_cancellation_request'
             )
         }
 
@@ -76,7 +80,7 @@ class OrderSearch(PaginationMixin, ListView):
             o.is_pending_with_full_payment = annotated.get(o.pk)['is_pending_with_full_payment']
             o.has_external_refund = annotated.get(o.pk)['has_external_refund']
             o.has_pending_refund = annotated.get(o.pk)['has_pending_refund']
-            o.has_cancellation_request = annotated.get(o.pk)['has_cancellation_request']
+            o.has_open_cancellation_request = annotated.get(o.pk)['has_open_cancellation_request']
 
         return ctx
 

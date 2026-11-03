@@ -68,6 +68,7 @@ from pretix.base.models import (
     CachedTicket, Checkin, GiftCard, Invoice, Order, OrderPosition, Quota,
     TaxRule,
 )
+from pretix.base.models.cancellation import CancellationRequest
 from pretix.base.models.orders import (
     CachedCombinedTicket, InvoiceAddress, OrderFee, OrderPayment, OrderRefund,
     QuestionAnswer,
@@ -326,6 +327,8 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
                 'secret': self.order.secret
             }
         )
+        ctx['has_open_cancellation_request'] = self.order.cancellation_requests.filter(
+            state__in=[CancellationRequest.STATE_CREATED, CancellationRequest.STATE_PENDING]).exists()
         ctx['invoice_address_asked'] = self.request.event.settings.invoice_address_asked and (
             self.order.total != Decimal('0.00') or not self.request.event.settings.invoice_address_not_asked_free
         )

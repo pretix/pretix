@@ -713,13 +713,15 @@ class Order(LockModel, LoggedModel):
         """
         Returns whether or not this order can be canceled by the user.
         """
+        from .cancellation import CancellationRequest
         from .checkin import Checkin
         from .items import ItemAddOn
 
         if self.status not in (Order.STATUS_PENDING, Order.STATUS_PAID) or not self.count_positions:
             return False
 
-        if self.cancellation_requests.exists():
+        if self.cancellation_requests.filter(
+                state__in=[CancellationRequest.STATE_CREATED, CancellationRequest.STATE_PENDING]).exists():
             return False
 
         if self.require_approval:
@@ -755,6 +757,10 @@ class Order(LockModel, LoggedModel):
         Returns whether or not this order can be canceled by the user.
         """
         from ..services.cancellation import evaluate_cancellation
+        from .cancellation import CancellationRequest
+        if self.cancellation_requests.filter(
+                state__in=[CancellationRequest.STATE_CREATED, CancellationRequest.STATE_PENDING]).exists():
+            return False
         res = evaluate_cancellation(event=self.event, order=self, keep=set(), check_at=time_machine_now())
         return res.cancellation_possible
 
@@ -3591,13 +3597,6 @@ class CachedCombinedTicket(models.Model):
     extension = models.CharField(max_length=255)
     file = models.FileField(null=True, blank=True, upload_to=cachedcombinedticket_name, max_length=255)
     created = models.DateTimeField(auto_now_add=True)
-
-
-class CancellationRequest(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='cancellation_requests')
-    created = models.DateTimeField(auto_now_add=True)
-    cancellation_fee = models.DecimalField(max_digits=13, decimal_places=2)
-    refund_as_giftcard = models.BooleanField(default=False)
 
 
 class RevokedTicketSecret(models.Model):
