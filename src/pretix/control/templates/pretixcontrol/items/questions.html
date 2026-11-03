@@ -39,7 +39,7 @@
                 <tr>
                     <td>
                         <strong>
-                            {{ q.question }}
+                            {{ q.internal_name }}
                         </strong><br>
                         <small class="text-muted">{{ q.identifier }}</small>
                     </td>
@@ -101,7 +101,7 @@
                     <td>
                         <strong>
                             <a href="{% url "control:event.items.questions.show" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}">
-                                {{ q.question }}
+                                {{ q.internal_name }}
                             </a>
                         </strong><br>
                         <small class="text-muted">{{ q.identifier }}</small>

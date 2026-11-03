@@ -728,7 +728,7 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
         self.fields['quota'].widget.choices = self.fields['quota'].choices
         for q in self.event.questions.all():
             kwargs = {
-                "label": q.question,
+                "label": q.internal_name,
                 "required": False,
             }
             fname = 'question_{}'.format(q.pk)
@@ -887,29 +887,30 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             ).distinct()
         for q in self.event.questions.all():
             if fdata.get(f'question_{q.pk}'):
+                ref = {'orderposition__order_id': OuterRef('pk')} if q.container_type == Question.ContainerType.ORDERPOSITION else {'order_id': OuterRef('pk')}
                 if q.type in (Question.TYPE_BOOLEAN, Question.TYPE_NUMBER):
                     answers = QuestionAnswer.objects.filter(
                         question_id=q.pk,
-                        orderposition__order_id=OuterRef('pk'),
-                        answer__exact=fdata.get(f'question_{q.pk}')
+                        answer__exact=fdata.get(f'question_{q.pk}'),
+                        **ref,
                     )
                 elif q.type in (Question.TYPE_DATE, Question.TYPE_TIME, Question.TYPE_DATETIME):
                     answers = QuestionAnswer.objects.filter(
                         question_id=q.pk,
-                        orderposition__order_id=OuterRef('pk'),
-                        answer__exact=str(fdata.get(f'question_{q.pk}'))
+                        answer__exact=str(fdata.get(f'question_{q.pk}')),
+                        **ref,
                     )
                 elif q.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
                     answers = QuestionAnswer.objects.filter(
                         question_id=q.pk,
-                        orderposition__order_id=OuterRef('pk'),
-                        options=fdata.get(f'question_{q.pk}')
+                        options=fdata.get(f'question_{q.pk}'),
+                        **ref,
                     )
                 else:
                     answers = QuestionAnswer.objects.filter(
                         question_id=q.pk,
-                        orderposition__order_id=OuterRef('pk'),
-                        answer__iexact=fdata.get(f'question_{q.pk}')
+                        answer__iexact=fdata.get(f'question_{q.pk}'),
+                        **ref,
                     )
                 qs = qs.annotate(**{f'q_{q.pk}': Exists(answers)}).filter(**{f'q_{q.pk}': True})
 

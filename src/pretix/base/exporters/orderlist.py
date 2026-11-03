@@ -677,16 +677,16 @@ class OrderListExporter(MultiSheetListExporter):
                 if form_data['group_multiple_choice']:
                     for o in q.options.all():
                         options[q.pk].append(o)
-                    headers.append(str(q.question))
+                    headers.append(str(q.internal_name))
                 else:
                     for o in q.options.all():
-                        headers.append(str(q.question) + ' – ' + str(o.answer))
+                        headers.append(str(q.internal_name) + ' – ' + str(o.answer))
                         options[q.pk].append(o)
             else:
                 if q.type == Question.TYPE_CHOICE:
                     for o in q.options.all():
                         options[q.pk].append(o)
-                headers.append(str(q.question))
+                headers.append(str(q.internal_name))
         headers += [
             _('Invoice address company'),
             _('Invoice address name'),

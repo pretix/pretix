@@ -56,7 +56,7 @@ def taxrule(event):
 
 @pytest.fixture
 def question(event, item):
-    q = event.questions.create(question="T-Shirt size", type="S", identifier="ABC")
+    q = event.questions.create(internal_name="T-Shirt size", type="S", identifier="ABC")
     q.items.add(item)
     q.options.create(answer="XL", identifier="LVETRWVU")
     return q
@@ -64,7 +64,7 @@ def question(event, item):
 
 @pytest.fixture
 def question2(event2, item2):
-    q = event2.questions.create(question="T-Shirt size", type="S", identifier="ABC")
+    q = event2.questions.create(internal_name="T-Shirt size", type="S", identifier="ABC")
     q.items.add(item2)
     return q
 

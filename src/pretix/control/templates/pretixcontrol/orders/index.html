@@ -99,7 +99,7 @@
         {% if filter_form.is_valid and filter_form.cleaned_data.question %}
             <p class="text-muted">
                 <span class="fa fa-filter"></span>
-                {% blocktrans trimmed with question=filter_form.cleaned_data.question.question %}
+                {% blocktrans trimmed with question=filter_form.cleaned_data.question.internal_name %}
                     List filtered by answers to question "{{ question }}".
                 {% endblocktrans %}
                 <a href="?{% url_replace request 'question' '' 'answer' '' %}" class="text-muted">

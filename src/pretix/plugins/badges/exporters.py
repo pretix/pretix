@@ -509,7 +509,7 @@ class BadgeExporter(BaseExporter):
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
                      ] if len(name_scheme['fields']) > 1 else []) + ([
-                         ('question:{}'.format(q.identifier), _('Question: {question}').format(question=q.question))
+                         ('question:{}'.format(q.identifier), _('Data field: {question}').format(question=q.internal_name))
                          for q in self.event.questions.filter(type__in=(
                              # All except TYPE_FILE and future ones
                              Question.TYPE_TIME, Question.TYPE_TEXT, Question.TYPE_DATE, Question.TYPE_BOOLEAN,

@@ -351,7 +351,7 @@
                         <hr>
                         <dl class="dl-horizontal">
                             {% for ans in order.answers.all %}
-                                <dt>{{ ans.question.question }}</dt>
+                                <dt>{{ ans.question.internal_name }}</dt>
                                 <dd>{% include "pretixpresale/event/fragment_question_answer.html" with request=request question=ans.question answer=ans %}</dd>
                             {% endfor %}
                         </dl>

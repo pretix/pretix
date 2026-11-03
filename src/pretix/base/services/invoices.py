@@ -279,7 +279,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
             ).select_related(
                 'question'
             ).order_by(
-                'question__question',
+                'question__internal_name',
                 'question__id'
             )
             for answ in answers_qs:

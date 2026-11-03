@@ -76,7 +76,7 @@
                         {% for q in result.questions %}
                             <li>
                                 <a href="{% url "control:event.items.questions.show" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}">
-                                    {{ q.question }}
+                                    {{ q.internal_name }}
                                 </a>
                             </li>
                         {% endfor %}
@@ -115,7 +115,7 @@
                             {% if a.question.show_during_checkin %}
                                 <p>
                                     <span class="fa fa-question-circle text-muted fa-fw"></span>
-                                    <strong>{{ a.question.question }}</strong>
+                                    <strong>{{ a.question.internal_name }}</strong>
                                     {{ a }}
                                 </p>
                             {% endif %}

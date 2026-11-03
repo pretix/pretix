@@ -146,12 +146,6 @@ class CategoryForm(I18nModelForm):
 
 
 class QuestionForm(I18nModelForm):
-    question = I18nFormField(
-        label=_("Question"),
-        widget_kwargs={'attrs': {'rows': 2}},
-        widget=I18nTextarea
-    )
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance.container_type != Question.ContainerType.ORDERPOSITION:
@@ -194,7 +188,7 @@ class QuestionForm(I18nModelForm):
         model = Question
         localized_fields = '__all__'
         fields = [
-            'question',
+            'internal_name',
             'type',
             'show_during_checkin',
             'hidden',

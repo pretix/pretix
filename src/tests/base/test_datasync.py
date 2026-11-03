@@ -53,9 +53,9 @@ def event():
     with scope(organizer=o):
         ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                      default_price=Decimal('23.00'), admission=True)
-        question = ticket.questions.create(question="Whats's your favourite colour?", type=Question.TYPE_STRING,
+        question = ticket.questions.create(internal_name="Whats's your favourite colour?", type=Question.TYPE_STRING,
                                            event=event, required=False, identifier="FAV_COLOR")
-        question2 = ticket.questions.create(question="Food preference", type=Question.TYPE_CHOICE,
+        question2 = ticket.questions.create(internal_name="Food preference", type=Question.TYPE_CHOICE,
                                             event=event, required=False, identifier="FOOD_PREF")
         option1 = question2.options.create(identifier="F1", answer="vegetarian")
         option2 = question2.options.create(identifier="F2", answer="vegan")

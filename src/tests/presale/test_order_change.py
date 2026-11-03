@@ -81,7 +81,7 @@ class BaseOrdersTest(TestCase):
                                           admission=True)
         self.quota_tickets.items.add(self.ticket)
         self.event.settings.set('attendee_names_asked', True)
-        self.question = Question.objects.create(question='Foo', type=Question.TYPE_STRING, event=self.event,
+        self.question = Question.objects.create(internal_name='Foo', type=Question.TYPE_STRING, event=self.event,
                                                 required=False)
         self.ticket.questions.add(self.question)
 

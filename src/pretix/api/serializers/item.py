@@ -696,7 +696,6 @@ class QuestionFormSerializer(I18nAwareModelSerializer):
 
 
 class DatafieldSerializer(I18nAwareModelSerializer):
-    internal_name = serializers.CharField(allow_null=True, source='question', read_only=True)
     options = InlineQuestionOptionSerializer(many=True, required=False)
     identifier = serializers.CharField(allow_null=True)
 

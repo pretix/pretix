@@ -1654,8 +1654,13 @@ class Question(LoggedModel):  # TODO(questionnaires)  -  rename to Datafield ?
         verbose_name=_("Asked on"),
         default=ContainerType.ORDERPOSITION,
     )
-    question = I18nTextField(  # TODO(questionnaires) : to be renamed to 'internal_name'
+    internal_name = models.CharField(
         verbose_name=_("Internal name"),
+        max_length=255,
+    )
+    tbd_question = I18nTextField(  # TODO(questionnaires) : to be removed
+        verbose_name=_("Internal name"),
+        null=True, blank=True, db_column="question",
     )
     identifier = models.CharField(
         max_length=190,
@@ -1765,11 +1770,11 @@ class Question(LoggedModel):  # TODO(questionnaires)  -  rename to Datafield ?
     class Meta:
         verbose_name = _("Data field")
         verbose_name_plural = _("Data fields")
-        ordering = ('question', 'id')
+        ordering = ('internal_name', 'id')
         unique_together = (('event', 'identifier'),)
 
     def __str__(self):
-        return str(self.question)
+        return str(self.internal_name)
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)

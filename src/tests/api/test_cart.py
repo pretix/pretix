@@ -52,7 +52,7 @@ def taxrule(event):
 
 @pytest.fixture
 def question(event, item):
-    q = event.questions.create(question="T-Shirt size", type="S", identifier="ABC")
+    q = event.questions.create(internal_name="T-Shirt size", type="S", identifier="ABC")
     q.options.create(answer="XL", identifier="LVETRWVU")
     questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
     questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
@@ -62,7 +62,7 @@ def question(event, item):
 
 @pytest.fixture
 def question2(event2, item2):
-    q = event2.questions.create(question="T-Shirt size", type="S", identifier="ABC")
+    q = event2.questions.create(internal_name="T-Shirt size", type="S", identifier="ABC")
     questionnaire = event2.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
     questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
     questionnaire.items.add(item2)

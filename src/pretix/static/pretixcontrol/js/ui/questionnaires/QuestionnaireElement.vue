@@ -207,7 +207,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
           <template v-for="field in datafields">
 					  <a v-if="field.identifier.startsWith('@')"
                href="javascript:" @click="addExistingDatafield(field)"
-               class="list-group-item">{{ field.internal_name ?? i18n_any(field.question) }}</a>
+               class="list-group-item">{{ i18n_any(field.question) }}</a>
           </template>
 				</div>
 
@@ -216,7 +216,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
           <template v-for="field in datafields">
 					  <a v-if="!field.identifier.startsWith('@')"
                href="javascript:" @click="addExistingDatafield(field)"
-               class="list-group-item">{{ field.internal_name ?? i18n_any(field.question) }}</a>
+               class="list-group-item">{{ field.internal_name }}</a>
           </template>
         </div>
 

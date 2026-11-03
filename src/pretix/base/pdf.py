@@ -585,7 +585,7 @@ def images_from_questions(sender, *args, **kwargs):
         if q.type != Question.TYPE_FILE:
             continue
         d['question_{}'.format(q.identifier)] = {
-            'label': _('Question: {question}').format(question=q.question),
+            'label': _('Data field: {question}').format(question=q.internal_name),
             'evaluate': partial(get_answer, question_id=q.pk, etag=False),
             'etag': partial(get_answer, question_id=q.pk, etag=True),
         }
@@ -623,14 +623,14 @@ def variables_from_questions(sender, *args, **kwargs):
         if q.type == Question.TYPE_FILE:
             continue
         d['question_{}'.format(q.identifier)] = {
-            'label': _('Question: {question}').format(question=q.question),
-            'editor_sample': _('<Answer: {question}>').format(question=q.question),
+            'label': _('Data field: {question}').format(question=q.internal_name),
+            'editor_sample': _('<Answer: {question}>').format(question=q.internal_name),
             'evaluate': partial(get_answer, question_id=q.pk),
             'migrate_from': 'question_{}'.format(q.pk)
         }
         d['question_{}'.format(q.pk)] = {
-            'label': _('Question: {question}').format(question=q.question),
-            'editor_sample': _('<Answer: {question}>').format(question=q.question),
+            'label': _('Data field: {question}').format(question=q.internal_name),
+            'editor_sample': _('<Answer: {question}>').format(question=q.internal_name),
             'evaluate': partial(get_answer, question_id=q.pk),
             'hidden': True,
         }

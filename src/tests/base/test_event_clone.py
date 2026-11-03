@@ -103,8 +103,8 @@ def test_full_clone_same_organizer():
     cross_sell_category.cross_selling_match_products.add(item1)
 
     event.discounts.create(internal_name="Fake discount")
-    question1 = event.questions.create(question="Yes or no", type=Question.TYPE_BOOLEAN)
-    question2 = event.questions.create(question="Size", type=Question.TYPE_CHOICE_MULTIPLE,
+    question1 = event.questions.create(internal_name="Yes or no", type=Question.TYPE_BOOLEAN)
+    question2 = event.questions.create(internal_name="Size", type=Question.TYPE_CHOICE_MULTIPLE,
                                        dependency_question=question1)
     question2.options.create(answer="Foobar")
 

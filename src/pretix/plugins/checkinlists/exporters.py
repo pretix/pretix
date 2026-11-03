@@ -382,7 +382,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
         headrowstyle = self.get_style()
         headrowstyle.fontName = 'OpenSansBd'
         for q in questions:
-            txt = str(q.question)
+            txt = str(q.internal_name)
             p = PlainTextParagraph(txt, headrowstyle)
             while p.wrap(colwidths[len(tdata[0])], 5000)[1] > 30 * mm:
                 txt = txt[:len(txt) - 50] + "..."
@@ -519,7 +519,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             headers.append(_('End date'))
 
         for q in questions:
-            headers.append(str(q.question))
+            headers.append(str(q.internal_name))
 
         headers.append(_('Company'))
         headers.append(_('Voucher code'))

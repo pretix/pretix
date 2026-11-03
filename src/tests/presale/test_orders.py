@@ -82,7 +82,7 @@ class BaseOrdersTest(TestCase):
                                           admission=True, personalized=True)
         self.quota_tickets.items.add(self.ticket)
         self.event.settings.set('attendee_names_asked', True)
-        self.question = Question.objects.create(question='Foo', type=Question.TYPE_STRING, event=self.event,
+        self.question = Question.objects.create(internal_name='Foo', type=Question.TYPE_STRING, event=self.event,
                                                 required=False)
         self.ticket.questions.add(self.question)
 
@@ -1763,7 +1763,7 @@ class OrdersTest(BaseOrdersTest):
 
     def test_answer_download_token(self):
         with scopes_disabled():
-            q = self.event.questions.create(question="Foo", type="F")
+            q = self.event.questions.create(internal_name="Foo", type="F")
             q.items.add(self.ticket)
             a = self.ticket_pos.answers.create(question=q, answer="file")
             val = SimpleUploadedFile("testfile.txt", b"file_content")

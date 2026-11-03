@@ -175,7 +175,7 @@
                         <div class="panel-body">
                             <dl class="dl-horizontal">
                                 {% for ans in checkout_session.answers.all %}
-                                    <dt>{{ ans.question.question }}</dt>
+                                    <dt>{{ ans.question.internal_name }}</dt>   TODO(questionnaires) - nicht internal_name, sondern QuestionnaireRow.label
                                     <dd>{% include "pretixpresale/event/fragment_question_answer.html" with request=request question=ans.question answer=ans %}</dd>
                                 {% endfor %}
                             </dl>

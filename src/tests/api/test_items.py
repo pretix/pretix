@@ -2744,7 +2744,7 @@ def test_question_update_type_changes(token_client, organizer, event, question):
 @pytest.mark.django_db
 def test_question_update_circular_dependency(token_client, organizer, event, question):
     with scopes_disabled():
-        q2 = event.questions.create(question="T-Shirt size", type="B", identifier="FOO", dependency_question=question)
+        q2 = event.questions.create(internal_name="T-Shirt size", type="B", identifier="FOO", dependency_question=question)
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
         {

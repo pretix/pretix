@@ -1321,7 +1321,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.event.settings.set('invoice_name_required', True)
         assert self.order.can_modify_answers
         assert not self.op1.can_modify_answers
-        q = Question.objects.create(question='Foo', type=Question.TYPE_BOOLEAN, event=self.event)
+        q = Question.objects.create(internal_name='Foo', type=Question.TYPE_BOOLEAN, event=self.event)
         self.item1.questions.add(q)
         assert self.order.can_modify_answers
         assert self.op1.can_modify_answers
@@ -2249,7 +2249,7 @@ class EventTest(TestCase):
         q1 = event1.quotas.create(name='Quota 1', size=50)
         q1.items.add(i1)
         q1.variations.add(v1)
-        que1 = event1.questions.create(question="Age", type="N")
+        que1 = event1.questions.create(internal_name="Age", type="N")
         que1.items.add(i1)
         event1.settings.foo_setting = 23
         cl1 = event1.checkin_lists.create(

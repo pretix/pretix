@@ -688,7 +688,7 @@ class QuestionColumn(ImportColumn):
 
     @property
     def verbose_name(self):
-        return _('Question') + ': ' + str(self.q.question)
+        return _('Question') + ': ' + str(self.q.internal_name)
 
     @property
     def identifier(self):

@@ -88,7 +88,7 @@ def order(event, item):
 
 @pytest.fixture
 def question(event, item):
-    q = event.questions.create(question="T-Shirt size", type="C", identifier="ABC")
+    q = event.questions.create(internal_name="T-Shirt size", type="C", identifier="ABC")
     q.items.add(item)
     q.options.create(answer="XL", identifier="LVETRWVU")
     return q
@@ -270,7 +270,7 @@ def test_invoice_address_shredder(event, order):
 @pytest.mark.django_db
 def test_question_answer_shredder(event, order, question):
     opt = question.options.first()
-    q2 = event.questions.create(question="Photo", type="F", identifier="DEF")
+    q2 = event.questions.create(internal_name="Photo", type="F", identifier="DEF")
     l1 = order.log_action(
         'pretix.event.order.modified',
         data={

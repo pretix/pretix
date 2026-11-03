@@ -857,7 +857,7 @@ def test_import_subevent_by_date(user, event, item):
 @scopes_disabled()
 def test_import_question_validate(user, event, item):
     settings = dict(DEFAULT_SETTINGS)
-    q = event.questions.create(question='Foo', type=Question.TYPE_NUMBER)
+    q = event.questions.create(internal_name='Foo', type=Question.TYPE_NUMBER)
     settings['item'] = 'static:{}'.format(item.pk)
     settings['question_{}'.format(q.pk)] = 'csv:D'
 
@@ -872,10 +872,10 @@ def test_import_question_validate(user, event, item):
 @scopes_disabled()
 def test_import_question_valid(user, event, item):
     settings = dict(DEFAULT_SETTINGS)
-    q1 = event.questions.create(question='Foo', type=Question.TYPE_CHOICE_MULTIPLE)
+    q1 = event.questions.create(internal_name='Foo', type=Question.TYPE_CHOICE_MULTIPLE)
     o1 = q1.options.create(answer='Foo', identifier='Foo')
     o2 = q1.options.create(answer='Bar', identifier='Bar')
-    q2 = event.questions.create(question='Boolean', type=Question.TYPE_BOOLEAN)
+    q2 = event.questions.create(internal_name='Boolean', type=Question.TYPE_BOOLEAN)
     settings['item'] = 'static:{}'.format(item.pk)
     settings['attendee_email'] = 'csv:C'
     settings['question_{}'.format(q1.pk)] = 'csv:I'

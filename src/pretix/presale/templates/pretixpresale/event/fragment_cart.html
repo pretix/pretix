@@ -210,7 +210,7 @@
                             </dd>
                         {% endfor %}
                         {% for q in line.additional_answers %}
-                            <dt>{{ q.question }}</dt>
+                            <dt>{{ q.internal_name }}</dt>   TODO(questionnaires) - nicht internal_name, sondern QuestionnaireRow.label
                             <dd>{% if q.answer %}{{ q.answer|linebreaksbr }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}</dd>
                         {% endfor %}
                     </dl>

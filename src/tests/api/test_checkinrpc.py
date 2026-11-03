@@ -619,7 +619,7 @@ def test_require_paid(token_client, organizer, clist, event, order):
 
 @pytest.fixture
 def question(event, item):
-    q = event.questions.create(question='Clothes Size', type='C')
+    q = event.questions.create(internal_name='Clothes Size', type='C')
     a1 = q.options.create(answer=LazyI18nString("M"))
     a2 = q.options.create(answer=LazyI18nString("L"))
     questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Checkin questions')

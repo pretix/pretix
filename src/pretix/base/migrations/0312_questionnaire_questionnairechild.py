@@ -14,7 +14,7 @@ from pretix.base.i18n import language
 from pretix.helpers.iter import sort_groupby, sort_groupby_exp
 
 FakeQuestion = namedtuple(
-    'FakeQuestion', 'id question position required'
+    'FakeQuestion', 'id tbd_question position required'
 )
 
 
@@ -98,7 +98,7 @@ def migrate_questions_forward(apps, schema_editor):
                         position=position + 1,
                         system_datafield=question.id,
                         required=question.required,
-                        label=question.question,
+                        label=question.tbd_question,
                     )
                 else:
                     deps[question.id] = QuestionnaireRow.objects.create(
@@ -106,7 +106,7 @@ def migrate_questions_forward(apps, schema_editor):
                         position=position + 1,
                         user_datafield=question,
                         required=question.required,
-                        label=question.question,
+                        label=question.tbd_question,
                         help_text=question.help_text,
                         dependency_question=deps[question.dependency_question.id] if question.dependency_question else None,
                         dependency_values=question.dependency_values,
@@ -172,11 +172,17 @@ def migrate_questions_forward(apps, schema_editor):
                         position=position + 1,
                         user_datafield=question,
                         required=question.required,
-                        label=question.question,
+                        label=question.tbd_question,
                         help_text=question.help_text,
                         dependency_question=deps[question.dependency_question.id] if question.dependency_question else None,
                         dependency_values=question.dependency_values,
                     )
+
+            for question in event.questions:
+                question.internal_name = str(question.tbd_question)
+                if question.print_on_invoice:
+                    question.print_on_invoice_label = question.tbd_question
+                question.save()
 
 
 def migrate_questions_backward(apps, schema_editor):
@@ -219,7 +225,7 @@ class Migration(migrations.Migration):
                 ('dependency_values', pretix.base.models.fields.MultiStringField(default=[])),
                 ('dependency_question', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='dependent_questions', to='pretixbase.questionnairerow')),
                 ('questionnaire', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='rows', to='pretixbase.questionnaire')),
-                ('user_datafield', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='references', to='pretixbase.question')),
+                ('user_datafield', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='referenced_by', to='pretixbase.question')),
             ],
             options={
                 'abstract': False,
@@ -228,8 +234,24 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='question',
+            name='internal_name',
+            field=models.CharField(default='', max_length=255),
+            preserve_default=False,
+        ),
+        migrations.AddField(
+            model_name='question',
             name='print_on_invoice_label',
             field=i18nfield.fields.I18nTextField(null=True),
+        ),
+        migrations.AlterField(
+            model_name='question',
+            name='question',
+            field=i18nfield.fields.I18nTextField(null=True, db_column='question'),
+        ),
+        migrations.RenameField(
+            model_name='question',
+            old_name='question',
+            new_name='tbd_question',
         ),
         migrations.RunPython(
             migrate_questions_forward,
