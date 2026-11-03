@@ -74,8 +74,8 @@ function addTextblock () {
 	emit('update')
 }
 
-function newDatafield (container_type) {
-	dlgNewDatafield.value.open(getDatafieldCreateUrl(props.questionnaire.type[0]))
+function newDatafield () {
+	dlgNewDatafield.value.open(getDatafieldCreateUrl(props.questionnaire.type.startsWith('order_') ? 'O' : 'P'))
 }
 
 async function onNewDatafieldCreated (data) {
@@ -181,7 +181,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 					<div class="col-md-9 col-md-push-3">
 						<p class="btn-group" role="group">
 								<button class="btn btn-default" @click="dlgAddExisting.show()"><i class="fa fa-plus"></i> {{ gettext('Existing data field') }}</button>
-								<button class="btn btn-default" @click="newDatafield(questionnaire.type[0])"><i class="fa fa-plus"></i> {{ gettext('New data field') }}</button>
+								<button class="btn btn-default" @click="newDatafield()"><i class="fa fa-plus"></i> {{ gettext('New data field') }}</button>
 								<button class="btn btn-default" @click="showAddTextblockDialog()"><i class="fa fa-plus"></i> {{ gettext('Text') }}</button>
 						</p>
 					</div>
