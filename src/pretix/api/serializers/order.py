@@ -38,6 +38,7 @@ from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import get_attribute
 from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 from rest_framework.serializers import ListSerializer
@@ -45,6 +46,7 @@ from rest_framework.serializers import ListSerializer
 from pretix.api.auth.utils import get_session_key_for_api_request
 from pretix.api.serializers import CompatDecimalField, CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
+from pretix.api.serializers.fields import PrimaryKeyScopedRelatedField, SlugScopedRelatedField
 from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
@@ -235,7 +237,11 @@ class MixedAnswerListSerializer(ListSerializer):
         return dictionary
 
     def to_representation(self, instance):
-        answers = super().to_representation(instance.answers)
+        try:
+            answers_qs = get_attribute(instance, ['answers'])
+        except (KeyError, AttributeError):
+            return None
+        answers = super().to_representation(answers_qs)
         answers_dict = {answer["question"]: answer for answer in answers}
         for qc in QuestionnaireRow.objects.filter(
                 Q(system_datafield__isnull=False) | Q(user_datafield_id__isnull=False),
@@ -290,26 +296,26 @@ class MixedAnswerListSerializer(ListSerializer):
         attendee_name_parts = {}
         settings = self.context['event'].settings
         for answer in data["answers"]:
-            try:
-                qid, dfid, sys_df = QuestionnaireRow.uncook_id(answer["question"])
-            except ValueError:
-                if type(answer["question"]) is str and answer["question"] in QuestionnaireRow.SYSTEM_DATAFIELD_NUMBERS:
-                    qid, dfid, sys_df = None, None, answer["question"]
+            if "question" in answer or ("datafield" in answer and answer["datafield"] in QuestionnaireRow.SYSTEM_DATAFIELD_NUMBERS):
+                if "question" in answer:
+                    qid, dfid, sys_df = QuestionnaireRow.uncook_id(answer["question"])
                 else:
-                    raise ValidationError('Invalid question ID')
-            if dfid:
-                answer["question"] = dfid
-                answers.append(answer)
-            elif sys_df == "@country":
-                result['country'] = Country(answer["answer"])
-            elif sys_df == "@attendee_name_parts:salutation":
-                attendee_name_parts['salutation'] =  PERSON_NAME_SALUTATIONS[answer["options"][0] - 1][0]
-            elif sys_df == "@attendee_name_parts:title" and settings.name_scheme_titles:
-                attendee_name_parts['title'] =  PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1][answer["options"][0] - 1]
-            elif sys_df.startswith("@attendee_name_parts:"):
-                attendee_name_parts[sys_df[len("@attendee_name_parts:"):]] = answer["answer"]
+                    qid, dfid, sys_df = None, None, answer["question"]
+                if dfid:
+                    answer["question"] = dfid
+                    answers.append(answer)
+                elif sys_df == "@country":
+                    result['country'] = Country(answer["answer"])
+                elif sys_df == "@attendee_name_parts:salutation":
+                    attendee_name_parts['salutation'] =  PERSON_NAME_SALUTATIONS[answer["options"][0] - 1][0]
+                elif sys_df == "@attendee_name_parts:title" and settings.name_scheme_titles:
+                    attendee_name_parts['title'] =  PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1][answer["options"][0] - 1]
+                elif sys_df.startswith("@attendee_name_parts:"):
+                    attendee_name_parts[sys_df[len("@attendee_name_parts:"):]] = answer["answer"]
+                else:
+                    result[sys_df[1:]] = answer["answer"]
             else:
-                result[sys_df[1:]] = answer["answer"]
+                answers.append(answer)
         result["answers"] = super().to_internal_value(answers)
         if attendee_name_parts:
             result["attendee_name_parts"] = attendee_name_parts
@@ -317,14 +323,10 @@ class MixedAnswerListSerializer(ListSerializer):
 
 
 class AnswerSerializer(I18nAwareModelSerializer):
-    datafield = serializers.SlugRelatedField(slug_field='identifier', source='question', queryset=Question.objects.none())
+    question = PrimaryKeyScopedRelatedField(queryset=lambda event, **kw: event.positiondatafields.all(), required=False)
+    datafield = SlugScopedRelatedField(slug_field='identifier', source='question', queryset=lambda event, **kw: event.positiondatafields.all(), required=False)
     question_identifier = serializers.SlugRelatedField(slug_field='identifier', source='question', read_only=True)
     option_identifiers = AnswerQuestionOptionsIdentifierField(source='*', read_only=True)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if event := self.context.get('event'):
-            self.fields['datafield'].queryset = event.questions.filter(container_type=Question.ContainerType.ORDERPOSITION)
 
     def to_representation(self, instance):
         r = super().to_representation(instance)
@@ -340,13 +342,6 @@ class AnswerSerializer(I18nAwareModelSerializer):
     class Meta:
         model = QuestionAnswer
         fields = ('datafield', 'answer', 'options', 'option_identifiers', 'question', 'question_identifier')
-
-    def validate_question(self, q):
-        if q.event != self.context['event']:
-            raise ValidationError(
-                'The specified question does not belong to this event.'
-            )
-        return q
 
     def _handle_file_upload(self, data):
         if data['answer'] == 'file:keep':
@@ -382,22 +377,22 @@ class AnswerSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         if not data.get('question'):
-            raise ValidationError('Question not specified.')
+            raise ValidationError('Data field not specified.')
         elif data.get('question').type == Question.TYPE_FILE:
             return self._handle_file_upload(data)
         elif data.get('question').type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
             if not data.get('options'):
                 raise ValidationError(
-                    'You need to specify options if the question is of a choice type.'
+                    'You need to specify options if the data field is of a choice type.'
                 )
             if data.get('question').type == Question.TYPE_CHOICE and len(data.get('options')) > 1:
                 raise ValidationError(
-                    'You can specify at most one option for this question.'
+                    'You can specify at most one option for this data field.'
                 )
             for o in data.get('options'):
                 if o.question_id != data.get('question').pk:
                     raise ValidationError(
-                        'The specified option does not belong to this question.'
+                        'The specified option does not belong to this data field.'
                     )
 
             data['answer'] = ", ".join([str(o) for o in data.get('options')])
@@ -405,7 +400,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
         else:
             if data.get('options'):
                 raise ValidationError(
-                    'You should not specify options if the question is not of a choice type.'
+                    'You should not specify options if the data field is not of a choice type.'
                 )
 
             if data.get('question').type == Question.TYPE_BOOLEAN:
@@ -415,7 +410,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
                     data['answer'] = 'False'
                 else:
                     raise ValidationError(
-                        'Please specify "true" or "false" for boolean questions.'
+                        'Please specify "true" or "false" for boolean data fields.'
                     )
             elif data.get('question').type == Question.TYPE_NUMBER:
                 serializers.DecimalField(

@@ -28,6 +28,7 @@ import pytest
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
+from i18nfield.strings import LazyI18nString
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import Question, SeatingPlan
@@ -52,15 +53,19 @@ def taxrule(event):
 @pytest.fixture
 def question(event, item):
     q = event.questions.create(question="T-Shirt size", type="S", identifier="ABC")
-    q.items.add(item)
     q.options.create(answer="XL", identifier="LVETRWVU")
+    questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
+    questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
+    questionnaire.items.add(item)
     return q
 
 
 @pytest.fixture
 def question2(event2, item2):
     q = event2.questions.create(question="T-Shirt size", type="S", identifier="ABC")
-    q.items.add(item2)
+    questionnaire = event2.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
+    questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
+    questionnaire.items.add(item2)
     return q
 
 
@@ -408,7 +413,7 @@ def test_cartpos_expires_optional(token_client, organizer, event, item, quota, q
 
 
 @pytest.mark.django_db
-def test_cartpos_create_answer_validation(token_client, organizer, event, item, quota, question, question2):
+def test_cartpos_create_answer_legacy(token_client, organizer, event, item, quota, question, question2):
     res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
     res['answers'] = [{
         "question": 1,
@@ -424,7 +429,7 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'answers': [{'question': ['The specified question does not belong to this event.']}]}
+    assert resp.data == {'answers': [{'question': ['Invalid pk "' + str(question2.pk) + '" - object does not exist.']}]}
 
     res['answers'][0]['question'] = question.pk
     res['answers'][0]['options'] = [question.options.first().pk]
@@ -435,7 +440,7 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'answers': [{'non_field_errors': ['You should not specify options if the question is not of a choice type.']}]}
+        'answers': [{'non_field_errors': ['You should not specify options if the data field is not of a choice type.']}]}
 
     question.type = Question.TYPE_CHOICE
     question.save()
@@ -447,7 +452,7 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'answers': [{'non_field_errors': ['You need to specify options if the question is of a choice type.']}]}
+        'answers': [{'non_field_errors': ['You need to specify options if the data field is of a choice type.']}]}
 
     with scopes_disabled():
         question.options.create(answer="L")
@@ -461,7 +466,86 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'answers': [{'non_field_errors': ['You can specify at most one option for this question.']}]}
+    assert resp.data == {'answers': [{'non_field_errors': ['You can specify at most one option for this data field.']}]}
+
+    r = token_client.post(
+        '/api/v1/upload',
+        data={
+            'media_type': 'image/png',
+            'file': ContentFile(SAMPLE_PNG)
+        },
+        format='upload',
+        HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',
+    )
+    assert r.status_code == 201
+    file_id_png = r.data['id']
+    res['answers'][0]['options'] = []
+    res['answers'][0]['answer'] = file_id_png
+    question.type = Question.TYPE_FILE
+    question.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        pos = CartPosition.objects.get(pk=resp.data['id'])
+        answ = pos.answers.first()
+    assert answ.file
+    assert answ.answer.startswith("file://")
+
+
+@pytest.mark.django_db
+def test_cartpos_create_answer_validation(token_client, organizer, event, item, quota, question, question2):
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['answers'] = [{
+        "datafield": "ABC",
+        "answer": "S",
+        "options": []
+    }]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+
+    res['answers'][0]['options'] = [question.options.first().pk]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'answers': [{'non_field_errors': ['You should not specify options if the data field is not of a choice type.']}]}
+
+    question.type = Question.TYPE_CHOICE
+    question.save()
+    res['answers'][0]['options'] = []
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'answers': [{'non_field_errors': ['You need to specify options if the data field is of a choice type.']}]}
+
+    with scopes_disabled():
+        question.options.create(answer="L")
+    res['answers'][0]['options'] = [
+        question.options.first().pk,
+        question.options.last().pk,
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'answers': [{'non_field_errors': ['You can specify at most one option for this data field.']}]}
 
     r = token_client.post(
         '/api/v1/upload',
@@ -573,7 +657,7 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'answers': [{'non_field_errors': ['Please specify "true" or "false" for boolean questions.']}]}
+    assert resp.data == {'answers': [{'non_field_errors': ['Please specify "true" or "false" for boolean data fields.']}]}
 
     question.type = Question.TYPE_DATE
     question.save()

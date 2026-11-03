@@ -194,7 +194,7 @@ class BaseCartPositionCreateSerializer(I18nAwareModelSerializer):
         cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
 
         for answ_data in answers_data:
-            options = answ_data.pop('options')
+            options = answ_data.pop('options', [])
             if isinstance(answ_data['answer'], File):
                 an = answ_data.pop('answer')
                 answ = cp.answers.create(**answ_data, answer='')
