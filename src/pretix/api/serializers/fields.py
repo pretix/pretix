@@ -135,6 +135,7 @@ class PluginsField(serializers.Field):
             'plugins': data
         }
 
+
 class WritableSerializerMethodField(SerializerMethodField):
     """
     A field that get its representation from calling a method on the
@@ -179,3 +180,29 @@ class WritableSerializerMethodField(SerializerMethodField):
     def to_internal_value(self, data):
         method = getattr(self.parent, self.put_method_name)
         return method(self.parent.instance, data)
+
+
+class ContextAwareQueryMixin:
+
+    def __init__(self, *args, **kwargs):
+        assert not kwargs.get('read_only', False), (
+            'Scoped related fields are useless when read-only, '
+            'use a regular RelatedField instead.'
+        )
+        assert callable(kwargs.get('queryset', None)), (
+            'Scoped related fields must provide a callable `queryset`.'
+        )
+        super().__init__(*args, **kwargs)
+
+    def get_queryset(self):
+        return self.queryset(**self.context)
+
+
+class PrimaryKeyScopedRelatedField(ContextAwareQueryMixin, serializers.PrimaryKeyRelatedField):
+    pass
+
+
+class SlugScopedRelatedField(ContextAwareQueryMixin, serializers.SlugRelatedField):
+    pass
+
+

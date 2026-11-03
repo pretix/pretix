@@ -53,7 +53,9 @@ from pretix.api.serializers import (
     CompatDecimalField, SalesChannelMigrationMixin,
 )
 from pretix.api.serializers.event import MetaDataField
-from pretix.api.serializers.fields import UploadedFileField, WritableSerializerMethodField
+from pretix.api.serializers.fields import PrimaryKeyScopedRelatedField, \
+    UploadedFileField, \
+    WritableSerializerMethodField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.forms.questions import REQUIRED_NAME_PARTS
 from pretix.base.models import (
@@ -310,7 +312,8 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     tax_rate = ItemTaxRateField(source='*', read_only=True, max_digits=7, decimal_places=4)
     meta_data = MetaDataField(required=False, source='*')
     personalized = WritableSerializerMethodField(required=False)
-    questionnaires = serializers.PrimaryKeyRelatedField(many=True, queryset=Questionnaire.objects.none(), allow_null=True, required=False)
+    questionnaires = PrimaryKeyScopedRelatedField(many=True, allow_null=True, required=False,
+                                                  queryset=lambda event, **kw: event.questionnaires.filter(type__startswith='position_'))
     picture = UploadedFileField(required=False, allow_null=True, allowed_types=(
         'image/png', 'image/jpeg', 'image/gif'
     ), max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE)
@@ -346,7 +349,6 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         self.fields['default_price'].allow_null = False
         self.fields['default_price'].required = True
         if not self.read_only:
-            self.fields['questionnaires'].child_relation.queryset = self.context['event'].questionnaires.filter(type__startswith='position_')
             self.fields['require_membership_types'].queryset = self.context['event'].organizer.membership_types.all()
             self.fields['grant_membership_type'].queryset = self.context['event'].organizer.membership_types.all()
             self.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
