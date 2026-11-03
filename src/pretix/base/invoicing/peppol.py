@@ -131,6 +131,27 @@ class PeppolIdValidator:
     def __init__(self, validate_online=False):
         self.validate_online = validate_online
 
+    def _validate_peppol_id_online(self, value):
+        base_hostnames = ['participant.sml.prod.tech.peppol.org', 'participant.sml.test.tech.peppol.org']
+        smp_id = base64.b32encode(hashlib.sha256(value.lower().encode()).digest()).decode().rstrip("=")
+        for base_hostname in base_hostnames:
+            smp_domain = f'{smp_id}.iso6523-actorid-upis.{base_hostname}'
+            resolver = dns.resolver.Resolver()
+            try:
+                answers = resolver.resolve(smp_domain, 'NAPTR', lifetime=1.0)
+                if answers:
+                    return value
+            except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer):
+                # ID not registered, do not set found=True
+                pass
+            except Exception:  # noqa
+                # Error likely on our end or infrastructure is down, allow user to proceed
+                return value
+
+        raise ValidationError(
+            _("The Peppol participant ID is not registered on the Peppol network."),
+        )
+
     def __call__(self, value):
         if ":" not in value:
             raise ValidationError(_("A Peppol participant ID always starts with a prefix, followed by a colon (:)."))
@@ -146,25 +167,7 @@ class PeppolIdValidator:
                                   params={"number": prefix})
 
         if self.validate_online:
-            base_hostnames = ['participant.sml.prod.tech.peppol.org', 'participant.sml.test.tech.peppol.org']
-            smp_id = base64.b32encode(hashlib.sha256(value.lower().encode()).digest()).decode().rstrip("=")
-            for base_hostname in base_hostnames:
-                smp_domain = f'{smp_id}.iso6523-actorid-upis.{base_hostname}'
-                resolver = dns.resolver.Resolver()
-                try:
-                    answers = resolver.resolve(smp_domain, 'NAPTR', lifetime=1.0)
-                    if answers:
-                        return value
-                except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer):
-                    # ID not registered, do not set found=True
-                    pass
-                except Exception:  # noqa
-                    # Error likely on our end or infrastructure is down, allow user to proceed
-                    return value
-
-            raise ValidationError(
-                _("The Peppol participant ID is not registered on the Peppol network."),
-            )
+            value = self._validate_peppol_id_online(value)
 
         return value
 
