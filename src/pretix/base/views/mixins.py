@@ -345,21 +345,17 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
 
     @cached_property
     def positions(self):
-        qqs = self.request.event.questionnaires.all()
         if self.only_user_visible:
-            qqs = qqs.filter(type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE)
+            type = Questionnaire.QuestionnaireType.ORDER_POSITION_SALE
         else:
-            qqs = qqs.filter(type__startswith='position_')
-        qqs = qqs.filter(
-            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.order.sales_channel.identifier)
-        )
+            type = None
         return list(self.order.positions.select_related(
             'item', 'variation'
         ).prefetch_related(
             Prefetch('answers',
                      QuestionAnswer.objects.prefetch_related('options'),
                      to_attr='answerlist'),
-            prefetch_relevant_questionnaires(self.request, Questionnaire.QuestionnaireType.ORDER_POSITION_SALE),
+            prefetch_relevant_questionnaires(self.request.event, self.order.sales_channel.identifier, type),
         ))
 
     @cached_property

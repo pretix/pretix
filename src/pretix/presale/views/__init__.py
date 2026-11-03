@@ -395,12 +395,14 @@ def cart_exists(request):
     return bool(request._cart_cache)
 
 
-def prefetch_relevant_questionnaires(request, questionnaire_type):
-    qqs = request.event.questionnaires.all()
-    qqs = qqs.filter(
-        Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=request.sales_channel.identifier),
-        type=questionnaire_type,
+def prefetch_relevant_questionnaires(event, sales_channel, questionnaire_type):
+    qqs = event.questionnaires.filter(
+        Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=sales_channel),
     )
+    if questionnaire_type:
+        qqs = qqs.filter(type=questionnaire_type)
+    else:
+        qqs = qqs.filter(type__startswith='position_')
     dummy = Prefetch(
         # This prefetch statement is utter bullshit, but it actually prevents Django from doing
         # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
@@ -449,7 +451,7 @@ def get_cart_positions(request):
                 Prefetch('answers',
                          QuestionAnswer.objects.prefetch_related('options'),
                          to_attr='answerlist'),
-                prefetch_relevant_questionnaires(request, Questionnaire.QuestionnaireType.ORDER_POSITION_SALE),
+                prefetch_relevant_questionnaires(request.event, request.sales_channel.identifier, Questionnaire.QuestionnaireType.ORDER_POSITION_SALE),
             )
             by_id = {cp.pk: cp for cp in request._cart_cache}
             for cp in request._cart_cache:
