@@ -279,13 +279,13 @@ def build_invoice(invoice: Invoice) -> Invoice:
             ).select_related(
                 'question'
             ).order_by(
-                'question__position',
+                'question__question',
                 'question__id'
             )
             for answ in answers_qs:
                 desc += "<br />{}{} {}".format(
-                    answ.question.question,
-                    "" if str(answ.question.question).endswith("?") else ":",
+                    answ.question.print_on_invoice_label,
+                    "" if str(answ.question.print_on_invoice_label).endswith("?") else ":",
                     answ.to_string_i18n()
                 )
 

@@ -1717,6 +1717,10 @@ class Question(LoggedModel):  # TODO(questionnaires)  -  rename to Datafield ?
         verbose_name=_('Print answer on invoices'),
         default=False
     )
+    print_on_invoice_label = I18nTextField(
+        verbose_name=_('Label on invoice'),
+        null=True, blank=True,
+    )
     dependency_question = models.ForeignKey(  # TODO(questionnaires) : to be removed, -> QuestionnaireRow
         'Question', null=True, blank=True, on_delete=models.SET_NULL, related_name='dependent_questions'
     )

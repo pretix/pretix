@@ -226,6 +226,11 @@ class Migration(migrations.Migration):
             },
             bases=(models.Model, pretix.base.models.base.LoggingMixin),
         ),
+        migrations.AddField(
+            model_name='question',
+            name='print_on_invoice_label',
+            field=i18nfield.fields.I18nTextField(null=True),
+        ),
         migrations.RunPython(
             migrate_questions_forward,
             migrate_questions_backward,

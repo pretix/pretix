@@ -157,6 +157,10 @@ class QuestionForm(I18nModelForm):
         if self.instance.container_type != Question.ContainerType.ORDERPOSITION:
             del self.fields['show_during_checkin']
             del self.fields['print_on_invoice']
+            del self.fields['print_on_invoice_label']
+        else:
+            self.fields['print_on_invoice_label'].widget.attrs['data-display-dependency'] = '#id_print_on_invoice'
+            self.fields['print_on_invoice_label'].widget.attrs['rows'] = '2'
         self.fields['identifier'].required = False
 
     def clean_show_during_checkin(self):
@@ -196,6 +200,7 @@ class QuestionForm(I18nModelForm):
             'hidden',
             'identifier',
             'print_on_invoice',
+            'print_on_invoice_label',
             'valid_number_min',
             'valid_number_max',
             'valid_datetime_min',
