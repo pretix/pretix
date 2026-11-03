@@ -618,18 +618,21 @@ var editor = {
 				$('#loading-initial').remove()
 			})
 		}
-		editor._update_version_notice()
+		editor._update_notices()
 	},
 
-	_update_version_notice: function () {
+	_update_notices: function () {
 		$('#version-notice').toggle(
 			editor._other_page_objects.some((o) => o.type === 'textcontainer')
 			|| editor.fabric.getObjects().some((o) => o.type === 'textcontainer')
 		)
+		$('#nocheckin-notice').toggle(
+			!editor.fabric.getObjects().some((o) => o.type === 'barcodearea' && (!o.content || o.content === 'secret'))
+		)
 	},
 
 	_update_toolbox_values: function () {
-		editor._update_version_notice()
+		editor._update_notices()
 		let o = editor.fabric.getActiveObject()
 		if (!o) {
 			return
@@ -898,6 +901,7 @@ var editor = {
 
 		o.setCoords()
 		editor.fabric.renderAll()
+		editor._update_notices()
 	},
 
 	_update_toolbox: function () {

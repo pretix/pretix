@@ -225,6 +225,12 @@
             </div>
         </div>
         <div class="col-md-3" id="editor-toolbox-area">
+            <div class="alert alert-warning" id="nocheckin-notice">
+                {% blocktrans trimmed %}
+                    This layout does not contain a QR code that can be used to scan tickets at check-in.
+                {% endblocktrans %}
+            </div>
+
             <div class="panel panel-default" id="toolbox">
                 <div class="panel-heading">
                     <span id="toolbox-heading">
