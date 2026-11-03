@@ -148,8 +148,8 @@ class CheckoutFieldRenderer(FieldRenderer):
             label_for = self.field.id_for_label
             label_id = ""
 
-        if hasattr(self.field.field, 'question') and self.field.field.question.identifier:
-            attrs["data-identifier"] = self.field.field.question.identifier
+        if hasattr(self.field.field, 'datafield') and self.field.field.datafield.identifier:
+            attrs["data-identifier"] = self.field.field.datafield.identifier
 
         html = render_label(
             label,
