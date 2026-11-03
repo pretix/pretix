@@ -252,7 +252,6 @@ class MixedAnswerListSerializer(ListSerializer):
                     answer = dict(answer)
                     answer["question"] = qc.cooked_id
                     answer["questionnaire_id"] = qc.questionnaire_id
-                    answer["user_datafield_id"] = qc.user_datafield_id
                     answers.append(answer)
             elif (sys_answer := instance.get_system_answer(qc.system_datafield)) is not None:
                 if qc.system_datafield == QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS:

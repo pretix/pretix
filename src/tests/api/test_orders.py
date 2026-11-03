@@ -30,11 +30,12 @@ from django.core import mail as djmail
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from i18nfield.strings import LazyI18nString
 from stripe import error
 from tests.plugins.stripe.test_checkout import apple_domain_create
 from tests.plugins.stripe.test_provider import MockedCharge
 
-from pretix.base.models import InvoiceAddress, Order, OrderPosition, Team
+from pretix.base.models import InvoiceAddress, Order, OrderPosition, QuestionnaireRow, Team
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 
 
@@ -54,17 +55,26 @@ def taxrule(event):
 
 
 @pytest.fixture
-def question(event, item):
+def questionnaire(event, item):
+    questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
+    questionnaire.items.add(item)
+    return questionnaire
+
+
+@pytest.fixture
+def question(event, questionnaire):
     q = event.questions.create(question="T-Shirt size", type="S", identifier="ABC")
-    q.items.add(item)
     q.options.create(answer="XL", identifier="LVETRWVU")
+    questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
     return q
 
 
 @pytest.fixture
 def question2(event2, item2):
     q = event2.questions.create(question="T-Shirt size", type="S", identifier="ABC")
-    q.items.add(item2)
+    questionnaire = event2.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
+    questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
+    questionnaire.items.add(item2)
     return q
 
 
@@ -257,11 +267,21 @@ TEST_ORDERPOSITION_RES = {
     "blocked": None,
     "answers": [
         {
+            "datafield": "ABC",
             "question": 1,
             "answer": "S",
             "question_identifier": "ABC",
             "options": [],
             "option_identifiers": []
+        },
+        {
+            "datafield": "ABC",
+            "question": 1000000101,
+            "answer": "S",
+            "question_identifier": "ABC",
+            "options": [],
+            "option_identifiers": [],
+            "questionnaire_id": 1
         }
     ],
     "subevent": None,
@@ -372,7 +392,7 @@ TEST_ORDER_RES = {
 
 
 @pytest.mark.django_db
-def test_order_list_filter_subevent_date(token_client, device, organizer, event, order, item, taxrule, subevent, question):
+def test_order_list_filter_subevent_date(token_client, device, organizer, event, order, item, taxrule, subevent, question, questionnaire):
     res = copy.deepcopy(TEST_ORDER_RES)
     with scopes_disabled():
         res["positions"][0]["id"] = order.positions.first().pk
@@ -386,6 +406,8 @@ def test_order_list_filter_subevent_date(token_client, device, organizer, event,
     res["positions"][0]["item"] = item.pk
     res["positions"][0]["subevent"] = subevent.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
+    res["positions"][0]["answers"][1]["question"] = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
+    res["positions"][0]["answers"][1]["questionnaire_id"] = questionnaire.pk
     res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
     res["fees"][0]["tax_rule"] = taxrule.pk
     res["fees"][0]["id"] = fee.pk
@@ -433,7 +455,7 @@ def test_order_list_filter_subevent_date(token_client, device, organizer, event,
 
 
 @pytest.mark.django_db
-def test_order_list(token_client, organizer, event, order, item, taxrule, question, device):
+def test_order_list(token_client, organizer, event, order, item, taxrule, question, questionnaire, device):
     res = dict(TEST_ORDER_RES)
     with scopes_disabled():
         res["positions"][0]["id"] = order.positions.first().pk
@@ -442,6 +464,8 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
         res["positions"][0]["print_logs"][0]["device_id"] = device.device_id
     res["positions"][0]["item"] = item.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
+    res["positions"][0]["answers"][1]["question"] = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
+    res["positions"][0]["answers"][1]["questionnaire_id"] = questionnaire.pk
     res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
     res["fees"][0]["tax_rule"] = taxrule.pk
 
@@ -549,7 +573,7 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
 
 
 @pytest.mark.django_db
-def test_order_detail(token_client, organizer, event, order, item, taxrule, question):
+def test_order_detail(token_client, organizer, event, order, item, taxrule, question, questionnaire):
     res = dict(TEST_ORDER_RES)
     with scopes_disabled():
         res["positions"][0]["id"] = order.positions.first().pk
@@ -558,6 +582,8 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
     res["positions"][0]["item"] = item.pk
     res["fees"][0]["tax_rule"] = taxrule.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
+    res["positions"][0]["answers"][1]["question"] = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
+    res["positions"][0]["answers"][1]["questionnaire_id"] = questionnaire.pk
     res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(organizer.slug, event.slug,
                                                                                 order.code))
@@ -1052,7 +1078,7 @@ def test_refund_cancel(token_client, organizer, event, order):
 )
 @pytest.mark.django_db
 def test_orderposition_list_limited_read(
-        endpoint_template, response_code, limited_token_client, organizer, device, event, order, item, subevent, subevent2, question
+        endpoint_template, response_code, limited_token_client, organizer, device, event, order, item, subevent, subevent2, question, questionnaire
 ):
     endpoint = endpoint_template.format(organizer.slug, event.slug)
 
@@ -1069,6 +1095,8 @@ def test_orderposition_list_limited_read(
         res["item"] = item.pk
         res["variation"] = var.pk
         res["answers"][0]["question"] = question.pk
+        res["answers"][1]["question"] = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
+        res["answers"][1]["questionnaire_id"] = questionnaire.pk
         res["print_logs"][0]["id"] = op.print_logs.first().pk
         res["print_logs"][0]["device_id"] = device.device_id
 
@@ -1100,6 +1128,7 @@ def test_orderposition_list(
         subevent,
         subevent2,
         question,
+        questionnaire,
         django_assert_num_queries
 ):
     endpoint = endpoint_template.format(organizer.slug, event.slug)
@@ -1118,6 +1147,8 @@ def test_orderposition_list(
         res["item"] = item.pk
         res["variation"] = var.pk
         res["answers"][0]["question"] = question.pk
+        res["answers"][1]["question"] = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
+        res["answers"][1]["questionnaire_id"] = questionnaire.pk
         res["print_logs"][0]["id"] = op.print_logs.first().pk
         res["print_logs"][0]["device_id"] = device.device_id
         if endpoint_type == "organizer":
@@ -1195,10 +1226,10 @@ def test_orderposition_list(
         'type': 'entry'
     }]
     if '/events/' in endpoint:
-        with django_assert_num_queries(16):
+        with django_assert_num_queries(17):
             resp = token_client.get(endpoint + '?has_checkin=true')
     else:
-        with django_assert_num_queries(15):
+        with django_assert_num_queries(16):
             resp = token_client.get(endpoint + '?has_checkin=true')
     assert [res] == resp.data['results']
 
@@ -1220,7 +1251,7 @@ def test_orderposition_list(
 
 
 @pytest.mark.django_db
-def test_orderposition_detail(token_client, organizer, event, order, item, question):
+def test_orderposition_detail(token_client, organizer, event, order, item, question, questionnaire):
     res = dict(TEST_ORDERPOSITION_RES)
     with scopes_disabled():
         op = order.positions.first()
@@ -1228,6 +1259,8 @@ def test_orderposition_detail(token_client, organizer, event, order, item, quest
     res["id"] = op.pk
     res["item"] = item.pk
     res["answers"][0]["question"] = question.pk
+    res["answers"][1]["question"] = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
+    res["answers"][1]["questionnaire_id"] = questionnaire.pk
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
                                                                                         op.pk))
     assert resp.status_code == 200
