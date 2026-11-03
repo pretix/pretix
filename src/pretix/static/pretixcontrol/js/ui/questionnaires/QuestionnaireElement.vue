@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useId, ref, computed, onMounted, watch, Ref, inject} from 'vue'
-import QuestionElement from "./QuestionElement.vue";
+import QuestionnaireRowElement from "./QuestionnaireRowElement.vue";
 import {
 	i18n_any,
 	QUESTION_TYPE,
@@ -16,7 +16,7 @@ import { SlickList, SlickItem, DragHandle } from 'vue-slicksort';
 import {getDatafieldCreateUrl} from "./api";
 import DjangoDialog from "./DjangoDialog.vue";
 import * as api from './api';
-import QuestionnaireDetailForm from "./QuestionnaireDetailForm.vue";
+import QuestionnaireEditForm from "./QuestionnaireEditForm.vue";
 import SalesChannelIcon from "./SalesChannelIcon.vue";
 import {SalesChannel} from "./model";
 
@@ -165,7 +165,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
       <div class="form-horizontal" :id="`questionListParent${props.questionnaire.id}`">
 				<SlickList axis="y" v-model:list="props.questionnaire.rows" useDragHandle :appendTo="`#questionListParent${props.questionnaire.id}`" @update:list="emit('update')">
 					<SlickItem v-for="(child, index) in props.questionnaire.rows" :key="child._cid" :index="index">
-						<QuestionElement
+						<QuestionnaireRowElement
 										:datafields="props.datafields"
 										:question="child"
 										:editable="true"
@@ -193,7 +193,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
   <Teleport to="body">
     <NativeDialog ref="dlgEditor" class="modal-card"
                   :title="gettext('Edit questionnaire')">
-			<QuestionnaireDetailForm :questionnaire="questionnaire" :grouped_items="grouped_items"/>
+			<QuestionnaireEditForm :questionnaire="questionnaire" :grouped_items="grouped_items"/>
 
 			<button @click="dlgEditor.close(); emit('update')" class="btn btn-primary pull-right"><span class="fa fa-check"></span> {{ gettext('Save and close') }}</button>
 			<button @click="deleteQuestionnaire" class="btn btn-default">{{ gettext('Delete') }}</button>

@@ -82,27 +82,6 @@ async function saveData () {
 	}
 	await Promise.all(promises)
 }
-/*
-export default {
-	components: {
-		QuestionnaireElement, SlickList, SlickItem,
-	},
-	methods: {
-		i18n_any,
-	},
-	data() {
-		return {
-			order_questionnaires,
-			position_questionnaires,
-			order_datafields,
-			position_datafields,
-			items: items_list,
-			grouped_items,
-			categories,
-
-		}
-	}
-}*/
 
 function windowFocused() {
 	if (Date.now() - lastDataRefresh > 30000) {
