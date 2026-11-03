@@ -1609,7 +1609,7 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
         if hasattr(self.item, 'relevant_questionnaires'):
             qrows = list(copy.copy(qc) for qq in self.item.relevant_questionnaires for qc in qq.questionnairerowlist)
         else:
-            qrows = list(self.item.get_asked_questions(questionnaire__type=questionnaire_type, sales_channel=sales_channel))
+            qrows = list(self.item.get_asked_questions(questionnaire_type=questionnaire_type, sales_channel=sales_channel))
 
         row_cache = {
             q.pk: q for q in qrows
