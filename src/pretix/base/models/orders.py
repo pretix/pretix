@@ -79,7 +79,7 @@ from pretix.base.banlist import banned
 from pretix.base.decimal import round_decimal
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
-from pretix.base.models import Customer, User
+from pretix.base.models import Customer, Questionnaire, User
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.settings import PERSON_NAME_SCHEMES, ROUNDING_MODES
 from pretix.base.signals import allow_ticket_download, order_gracefully_delete
@@ -929,9 +929,8 @@ class Order(LockModel, LoggedModel):
 
         if self.event.settings.get('invoice_address_asked', as_type=bool) or self.event.settings.get('invoice_name_required', as_type=bool):
             return True
-        ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
         for cp in positions:
-            if (cp.item.ask_attendee_data and ask_names) or cp.item.questionnaires.all():  # TODO(questionnaires) : filter to only QuestionnaireType.ORDER_POSITION_SALE
+            if cp.item.get_asked_questions(questionnaire_type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE):
                 return True
 
         return False  # nothing there to modify
@@ -1610,13 +1609,7 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
         if hasattr(self.item, 'relevant_questionnaires'):
             qrows = list(copy.copy(qc) for qq in self.item.relevant_questionnaires for qc in qq.questionnairerowlist)
         else:
-            qrows = QuestionnaireRow.objects.filter(questionnaire__event_id=self.item.event_id, questionnaire__items__in=[self.item.id])
-            if questionnaire_type is not None:
-                qrows = qrows.filter(questionnaire__type=questionnaire_type)
-            if sales_channel is not None:
-                qrows = qrows.filter(Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels=sales_channel))
-
-            qrows = list(qrows)
+            qrows = list(self.item.get_asked_questions(questionnaire__type=questionnaire_type, sales_channel=sales_channel))
 
         row_cache = {
             q.pk: q for q in qrows
@@ -1633,6 +1626,8 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
 
         self.questions = []
         for qrow in qrows:
+            if not (qrow.user_datafield_id or qrow.system_datafield):
+                continue
             try:
                 qrow.answer = self.answer_cache[qrow.user_datafield_id or qrow.system_datafield]
             except KeyError:
@@ -2797,7 +2792,7 @@ class OrderPosition(AbstractPosition):
         ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
         for cp in positions:
             if cp.pk == self.pk or cp.addon_to_id == self.pk:
-                if (cp.item.ask_attendee_data and ask_names) or cp.item.questionnaires.all():  # TODO(questionnaires) : filter to only QuestionnaireType.ORDER_POSITION_SALE
+                if cp.item.questionnaires.all():  # TODO(questionnaires) : filter to only QuestionnaireType.ORDER_POSITION_SALE
                     return True
 
         return False  # nothing there to modify

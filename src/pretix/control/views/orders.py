@@ -594,7 +594,7 @@ class OrderDetail(OrderView):
     def get_items(self):
         queryset = self.object.all_positions
 
-        cartpos = queryset.order_by(
+        orderpos = queryset.order_by(
             'item', 'variation'
         ).select_related(
             'item', 'variation', 'addon_to', 'tax_rule', 'used_membership', 'used_membership__membership_type',
@@ -608,7 +608,7 @@ class OrderDetail(OrderView):
         ).order_by('positionid')
 
         positions = []
-        for p in cartpos:
+        for p in orderpos:
             responses = question_form_fields.send(sender=self.request.event, position=p)
             p.additional_fields = []
             data = p.meta_info_data
@@ -620,12 +620,7 @@ class OrderDetail(OrderView):
                             'question': value.label
                         })
 
-            p.has_questions = (
-                p.additional_fields or
-                (p.item.ask_attendee_data and self.request.event.settings.attendee_names_asked) or
-                (p.item.ask_attendee_data and self.request.event.settings.attendee_emails_asked) or
-                p.item.questionnaires.all()
-            )
+            p.has_questions = p.additional_fields or p.item.questionnaires.all()
             p.cache_answers(questionnaire_type=None, sales_channel=None)
             p.order = self.order
 
@@ -635,7 +630,7 @@ class OrderDetail(OrderView):
 
         return {
             'positions': positions,
-            'raw': cartpos,
+            'raw': orderpos,
             'total': self.object.total,
             'fees': self.object.all_fees.all(),
             'net_total': self.object.net_total,

@@ -829,11 +829,8 @@ class ItemUpdateForm(I18nModelForm):
                 )
             )
 
-        if not d.get('admission'):
-            d['personalized'] = False
-
         if d.get('grant_membership_type'):
-            if not d['grant_membership_type'].transferable and not d['personalized']:
+            if not d['grant_membership_type'].transferable and not d['personalized']:  # TODO(questionnaires)
                 self.add_error(
                     'personalized' if d.get('admission') else 'admission',
                     _("Your product grants a non-transferable membership and should therefore be a personalized "

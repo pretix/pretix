@@ -822,10 +822,16 @@ class Item(LoggedModel):
             return self.event.settings.show_quota_left
         return self.show_quota_left
 
-    @property
-    def ask_attendee_data(self):
-        # TODO(questionnaires): should this also check for the company/address-fields?
-        return QuestionnaireRow.objects.filter(questionnaire__items=self, system_datafield__in=('@attendee_name_parts', '@attendee_email')).exists()
+    def get_asked_questions(self, questionnaire_type=None, sales_channel=None):
+        qs = QuestionnaireRow.objects.filter(
+            Q(system_datafield__isnull=False) | Q(user_datafield_id__isnull=False),
+            questionnaire__items=self,
+        )  # .prefetch_related('user_datafield')
+        if questionnaire_type is not None:
+            qs = qs.filter(questionnaire__type=questionnaire_type)
+        if sales_channel is not None:
+            qs = qs.filter(Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels=sales_channel))
+        return qs
 
     def tax(self, price=None, base_price_is='auto', currency=None, invoice_address=None, override_tax_rate=None,
             include_bundled=False, force_fixed_gross_price=False):

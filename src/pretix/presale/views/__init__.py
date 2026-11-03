@@ -200,15 +200,14 @@ class CartMixin:
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
         def group_key(pos):  # only used for grouping, sorting is done before already
-            has_attendee_data = pos.item.ask_attendee_data or pos_additional_fields.get(pos.pk)
-
+            has_attendee_data = pos_additional_fields.get(pos.pk)
             grouping_allowed = (
                 # Never group when we have per-ticket download buttons
                 not downloads and
                 # Never group if the position has add-ons
                 pos.pk not in has_addons and
                 # Never group if we have answers to show
-                # TODO(questionnaires): is pos.item.questionnaires.all the correct filter?
+                # TODO(questionnaires)  --  filter questionnaires by type, and ignore ones that have only static help texts
                 (not answers or (not has_attendee_data and not bool(pos.item.questionnaires.all()))) and  # do not use .exists() to re-use prefetch cache
                 # Never group when we have a final order and a gift card code
                 (isinstance(pos, CartPosition) or not pos.item.issue_giftcard)
@@ -396,6 +395,31 @@ def cart_exists(request):
     return bool(request._cart_cache)
 
 
+def prefetch_relevant_questionnaires(request, questionnaire_type):
+    qqs = request.event.questionnaires.all()
+    qqs = qqs.filter(
+        Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=request.sales_channel.identifier),
+        type=questionnaire_type,
+    )
+    dummy = Prefetch(
+        # This prefetch statement is utter bullshit, but it actually prevents Django from doing
+        # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
+        # a prefetch lookup on this query...
+        'question',
+        Question.objects.none(),
+        to_attr='dummy'
+    )
+    return Prefetch('item__questionnaires',
+        qqs.prefetch_related(
+            Prefetch('rows', QuestionnaireRow.objects.prefetch_related(
+                Prefetch('user_datafield', Question.objects.prefetch_related(
+                    Prefetch('options', QuestionOption.objects.prefetch_related(dummy))
+                ))
+            ), to_attr='questionnairerowlist')
+        ),
+        to_attr='relevant_questionnaires')
+
+
 def get_cart_positions(request):
     from pretix.presale.views.cart import get_or_create_cart_id
 
@@ -404,11 +428,7 @@ def get_cart_positions(request):
         if not cart_id:
             request._cart_cache = CartPosition.objects.none()
         else:
-            qqs = request.event.questionnaires.all()
-            qqs = qqs.filter(
-                Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=request.sales_channel.identifier),
-                type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE,
-            )
+            from pretix.base.models import Questionnaire
             request._cart_cache = CartPosition.objects.filter(
                 cart_id=cart_id, event=request.event
             ).annotate(
@@ -429,23 +449,7 @@ def get_cart_positions(request):
                 Prefetch('answers',
                          QuestionAnswer.objects.prefetch_related('options'),
                          to_attr='answerlist'),
-                Prefetch('item__questionnaires',
-                         qqs.prefetch_related(
-                             Prefetch('rows', QuestionnaireRow.objects.prefetch_related(
-                                 Prefetch('user_datafield', Question.objects.prefetch_related(
-                                     Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
-                                         # This prefetch statement is utter bullshit, but it actually prevents Django from doing
-                                         # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
-                                         # a prefetch lookup on this query...
-                                         'question',
-                                         Question.objects.none(),
-                                         to_attr='dummy'
-                                     )))
-                                 ))
-                             ),
-                             to_attr='questionnairerowlist')
-                         ),
-                         to_attr='relevant_questionnaires')
+                prefetch_relevant_questionnaires(request, Questionnaire.QuestionnaireType.ORDER_POSITION_SALE),
             )
             by_id = {cp.pk: cp for cp in request._cart_cache}
             for cp in request._cart_cache:

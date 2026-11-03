@@ -1682,7 +1682,6 @@ class QuickSetupView(EventPermissionRequiredMixin, FormView):
                 default_price=f.cleaned_data['default_price'] or 0,
                 tax_rule=tax_rule,
                 admission=True,
-                personalized=True,
                 position=i,
                 all_sales_channels=True,
             )

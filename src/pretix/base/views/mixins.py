@@ -42,6 +42,7 @@ from pretix.base.models import (
 from pretix.base.models.customers import AttendeeProfile
 from pretix.base.models.orders import CheckoutSession, Order
 from pretix.presale.signals import contact_form_fields_overrides
+from pretix.presale.views import prefetch_relevant_questionnaires
 
 
 class BaseQuestionsViewMixin:
@@ -107,13 +108,9 @@ class BaseQuestionsViewMixin:
             )
             form.pos = cartpos or orderpos
             form.show_copy_answers_to_addon_button = form.pos.addon_to and (
-                set(form.pos.addon_to.item.questionnaires.all()) & set(form.pos.item.questionnaires.all()) or
-                (form.pos.addon_to.item.ask_attendee_data and form.pos.item.ask_attendee_data and (
-                    self.request.event.settings.attendee_names_asked or
-                    self.request.event.settings.attendee_emails_asked or
-                    self.request.event.settings.attendee_company_asked or
-                    self.request.event.settings.attendee_addresses_asked
-                ))
+                # TODO(questionnaires)  -  prefetch this
+                set(qc.form_field_name for qc in form.pos.addon_to.item.get_asked_questions(questionnaire_type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE))
+                & set(qc.form_field_name for qc in form.pos.item.get_asked_questions(questionnaire_type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE))
             )
 
             override_sets = self.get_question_override_sets(cr, idx)
@@ -362,23 +359,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
             Prefetch('answers',
                      QuestionAnswer.objects.prefetch_related('options'),
                      to_attr='answerlist'),
-            Prefetch('item__questionnaires',
-                     qqs.prefetch_related(
-                         Prefetch('rows', QuestionnaireRow.objects.prefetch_related(
-                             Prefetch('user_datafield', Question.objects.prefetch_related(
-                                 Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
-                                     # This prefetch statement is utter bullshit, but it actually prevents Django from doing
-                                     # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
-                                     # a prefetch lookup on this query...
-                                     'question',
-                                     Question.objects.none(),
-                                     to_attr='dummy'
-                                 )))
-                             ))
-                         ),
-                         to_attr='questionnairerowlist')
-                     ),
-                     to_attr='relevant_questionnaires')
+            prefetch_relevant_questionnaires(self.request, Questionnaire.QuestionnaireType.ORDER_POSITION_SALE),
         ))
 
     @cached_property

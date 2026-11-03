@@ -499,7 +499,6 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         return item
 
     def update(self, instance, validated_data):
-        validated_data.pop('compat_personalized', None)
         meta_data = validated_data.pop('meta_data', None)
         picture = validated_data.pop('picture', None)
         item = super().update(instance, validated_data)
