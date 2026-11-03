@@ -93,9 +93,6 @@
                     </summary>
                     <div>
                         <div class="panel-body questions-form" data-address-information-url="{% url "js_helpers.address_form" %}">
-                            {% if event.settings.attendee_data_explanation_text and pos.item.ask_attendee_data %}
-                                {{ event.settings.attendee_data_explanation_text|rich_text }}
-                            {% endif %}
                             {% if forloop.counter > 1 and event.settings.checkout_show_copy_answers_button %}
                                 <div class="form-group">
                                     <div class="col-md-9 col-md-offset-3">

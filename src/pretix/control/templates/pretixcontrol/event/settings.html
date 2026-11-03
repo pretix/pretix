@@ -4,6 +4,7 @@
 {% load static %}
 {% load hierarkey_form %}
 {% load formset_tags %}
+{% load icon %}
 {% block title %}{% trans "General settings" %}{% endblock %}
 {% block custom_header %}
     {{ block.super }}
@@ -115,15 +116,17 @@
                     </label>
                     <div class="col-md-9 static-form-row">
                         <p>
+                            <a href="{% url "control:event.items.questionnaires" event=request.event.slug organizer=request.organizer.slug %}"
+                               target="_blank" class="btn btn-default">
+                                {% icon "wrench" %} {% trans "Manage questionnaires" %}
+                            </a>
                             <a href="{% url "control:event.items.questions" event=request.event.slug organizer=request.organizer.slug %}"
-                               target="_blank">
-                                {% trans "Manage questionnaires" %}
+                               target="_blank" class="btn btn-default">
+                                {% icon "wrench" %} {% trans "Manage data fields" %}
                             </a>
                         </p>
                     </div>
                 </div>
-
-                {% bootstrap_field sform.attendee_data_explanation_text layout="control" %}
 
                 <h4>{% trans "Form settings" %}</h4>
                 {% bootstrap_field sform.name_scheme layout="control" %}

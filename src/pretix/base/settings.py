@@ -3351,19 +3351,6 @@ Your {organizer} team"""))  # noqa: W291
                         "how to obtain a voucher code.")
         )
     },
-    'attendee_data_explanation_text': {
-        'default': '',
-        'type': LazyI18nString,
-        'serializer_class': I18nField,
-        'form_class': I18nFormField,
-        'form_kwargs': dict(
-            label=_("Attendee data explanation"),
-            widget=I18nMarkdownTextarea,
-            widget_kwargs={'attrs': {'rows': '2'}},
-            help_text=_("This text will be shown above the questions asked for every personalized product. You can use it e.g. to explain "
-                        "why you need information from them.")
-        )
-    },
     'checkout_success_text': {
         'default': '',
         'type': LazyI18nString,

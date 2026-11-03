@@ -764,7 +764,6 @@ class EventSettingsSerializer(SettingsSerializer):
         'event_calendar_future_only',
         'frontpage_text',
         'event_info_text',
-        'attendee_data_explanation_text',
         'confirm_texts',
         'order_email_asked_twice',
         'order_phone_asked',

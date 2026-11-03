@@ -14,7 +14,7 @@ from pretix.base.i18n import language
 from pretix.helpers.iter import sort_groupby, sort_groupby_exp
 
 FakeQuestion = namedtuple(
-    'FakeQuestion', 'id tbd_question position required'
+    'FakeQuestion', 'id tbd_question position required help_text'
 )
 
 
@@ -25,21 +25,24 @@ def get_fake_questions(settings):
     sqo = json.loads(settings.get('system_question_order', '{}'))
     _ = LazyI18nString.from_gettext
 
+    if LazyI18nString(settings.get('attendee_data_explanation_text', '')):
+        fq.append(FakeQuestion(None, '', -1, False, settings.get('attendee_data_explanation_text', '')))
+
     if b(settings.get('attendee_names_asked', 'True')):
-        fq.append(FakeQuestion('@attendee_name_parts', _('Attendee name'), sqo.get('attendee_name_parts', 0), b(settings.get('attendee_names_required'))))
+        fq.append(FakeQuestion('@attendee_name_parts', _('Attendee name'), sqo.get('attendee_name_parts', 0), b(settings.get('attendee_names_required')), None))
 
     if b(settings.get('attendee_emails_asked')):
-        fq.append(FakeQuestion('@attendee_email', _('Attendee email'), sqo.get('attendee_email', 0), b(settings.get('attendee_emails_required'))))
+        fq.append(FakeQuestion('@attendee_email', _('Attendee email'), sqo.get('attendee_email', 0), b(settings.get('attendee_emails_required')), None))
 
     if b(settings.get('attendee_company_asked')):
-        fq.append(FakeQuestion('@company', _('Company'), sqo.get('company', 0), b(settings.get('attendee_company_required'))))
+        fq.append(FakeQuestion('@company', _('Company'), sqo.get('company', 0), b(settings.get('attendee_company_required')), None))
 
     if b(settings.get('attendee_addresses_asked')):
-        fq.append(FakeQuestion('@street', _('Street'), sqo.get('street', 0), b(settings.get('attendee_addresses_required'))))
-        fq.append(FakeQuestion('@zipcode', _('ZIP code'), sqo.get('zipcode', 0), b(settings.get('attendee_addresses_required'))))
-        fq.append(FakeQuestion('@city', _('City'), sqo.get('city', 0), b(settings.get('attendee_addresses_required'))))
-        fq.append(FakeQuestion('@state', _('State'), sqo.get('country', 0), b(settings.get('attendee_addresses_required'))))
-        fq.append(FakeQuestion('@country', _('Country'), sqo.get('country', 0), b(settings.get('attendee_addresses_required'))))
+        fq.append(FakeQuestion('@street', _('Street'), sqo.get('street', 0), b(settings.get('attendee_addresses_required')), None))
+        fq.append(FakeQuestion('@zipcode', _('ZIP code'), sqo.get('zipcode', 0), b(settings.get('attendee_addresses_required')), None))
+        fq.append(FakeQuestion('@city', _('City'), sqo.get('city', 0), b(settings.get('attendee_addresses_required')), None))
+        fq.append(FakeQuestion('@state', _('State'), sqo.get('country', 0), b(settings.get('attendee_addresses_required')), None))
+        fq.append(FakeQuestion('@country', _('Country'), sqo.get('country', 0), b(settings.get('attendee_addresses_required')), None))
     return fq
 
 
@@ -92,7 +95,6 @@ def migrate_questions_forward(apps, schema_editor):
             deps = {}
             deps_to_add = []
             for position, question in enumerate(questions):
-                print(position, question)
                 if isinstance(question, FakeQuestion):
                     QuestionnaireRow.objects.create(
                         questionnaire=questionnaire,
@@ -100,6 +102,7 @@ def migrate_questions_forward(apps, schema_editor):
                         system_datafield=question.id,
                         required=question.required,
                         label=question.tbd_question,
+                        help_text=question.help_text,
                     )
                 else:
                     deps[question.id] = QuestionnaireRow.objects.create(
@@ -123,6 +126,7 @@ def migrate_questions_forward(apps, schema_editor):
             setting.key: setting.value for setting in EventSettingsStore.objects.filter(object_id=event.id, key__in=(
                 'system_question_order', 'attendee_names_asked', 'attendee_names_required', 'attendee_emails_asked', 'attendee_emails_required',
                 'attendee_company_asked', 'attendee_company_required', 'attendee_addresses_asked', 'attendee_addresses_required', 'locale',
+                'attendee_data_explanation_text',
             ))
         }
         with language(get_supported_language_variant(settings.get('locale', 'en'))):

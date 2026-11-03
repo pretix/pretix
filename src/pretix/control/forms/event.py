@@ -639,7 +639,6 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
         'event_calendar_future_only',
         'frontpage_text',
         'event_info_text',
-        'attendee_data_explanation_text',
         'order_phone_asked',
         'order_phone_required',
         'checkout_phone_helptext',
