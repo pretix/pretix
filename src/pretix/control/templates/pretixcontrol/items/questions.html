@@ -47,17 +47,17 @@
                         {{ q.get_type_display }}
                     </td>
                     <td>
-                        {% if q.required %}
-                            <span class="fa fa-exclamation-circle text-muted" data-toggle="tooltip" title="{% trans "Required question" %}"></span>
+                        {% if q.show_during_checkin %}
+                            <span class="fa fa-exclamation-circle text-muted" data-toggle="tooltip" title="{% trans "Show during check-in" %}"></span>
                         {% endif %}
                     </td>
                     <td>
-                        {% if q.pk and q.ask_during_checkin %}
-                            <span class="fa fa-check-square text-muted" data-toggle="tooltip" title="{% trans "Ask during check-in" %}"></span>
+                        {% if q.print_on_invoice %}
+                            <span class="fa fa-file-o text-muted" data-toggle="tooltip" title="{% trans "Print answer on invoices" %}"></span>
                         {% endif %}
                     </td>
                     <td>
-                        {% if q.pk and q.hidden %}
+                        {% if q.hidden %}
                             <span class="fa fa-eye-slash text-muted" data-toggle="tooltip" title="{% trans "Hidden question" %}"></span>
                         {% endif %}
                     </td>
@@ -110,17 +110,17 @@
                         {{ q.get_type_display }}
                     </td>
                     <td>
-                        {% if q.required %}
-                            <span class="fa fa-exclamation-circle text-muted" data-toggle="tooltip" title="{% trans "Required question" %}"></span>
+                        {% if q.show_during_checkin %}
+                            <span class="fa fa-check-square text-muted" data-toggle="tooltip" title="{% trans "Show answer during check-in" %}"></span>
                         {% endif %}
                     </td>
                     <td>
-                        {% if q.pk and q.ask_during_checkin %}
-                            <span class="fa fa-check-square text-muted" data-toggle="tooltip" title="{% trans "Ask during check-in" %}"></span>
+                        {% if q.print_on_invoice %}
+                            <span class="fa fa-file-o text-muted" data-toggle="tooltip" title="{% trans "Print answer on invoices" %}"></span>
                         {% endif %}
                     </td>
                     <td>
-                        {% if q.pk and q.hidden %}
+                        {% if q.hidden %}
                             <span class="fa fa-eye-slash text-muted" data-toggle="tooltip" title="{% trans "Hidden question" %}"></span>
                         {% endif %}
                     </td>
