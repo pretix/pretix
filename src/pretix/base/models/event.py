@@ -1557,12 +1557,18 @@ class Event(EventMixin, LoggedModel):
     @property
     def orderdatafields(self):
         from . import Question
-        return self.questions.filter(container_type=Question.ContainerType.ORDER)
+        qs = self.questions.filter(container_type=Question.ContainerType.ORDER)
+        if 'questions' in getattr(self, '_prefetched_objects_cache', {}):
+            qs._result_cache = [df for df in self.questions.all() if df.container_type == Question.ContainerType.ORDER]
+        return qs
 
     @property
     def positiondatafields(self):
         from . import Question
-        return self.questions.filter(container_type=Question.ContainerType.ORDERPOSITION)
+        qs = self.questions.filter(container_type=Question.ContainerType.ORDERPOSITION)
+        if 'questions' in getattr(self, '_prefetched_objects_cache', {}):
+            qs._result_cache = [df for df in self.questions.all() if df.container_type == Question.ContainerType.ORDERPOSITION]
+        return qs
 
 
 class SubEvent(EventMixin, LoggedModel):

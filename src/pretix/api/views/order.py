@@ -256,7 +256,7 @@ class OrderViewSetMixin:
                 [request.event],
                 Prefetch('meta_values', queryset=EventMetaValue.objects.select_related('property'),
                          to_attr='meta_values_cached'),
-                'questionnaires',
+                'questions',
                 'item_meta_properties',
             )
             return Prefetch(

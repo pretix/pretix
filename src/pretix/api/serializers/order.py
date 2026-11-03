@@ -323,8 +323,8 @@ class MixedAnswerListSerializer(ListSerializer):
 
 
 class AnswerSerializer(I18nAwareModelSerializer):
-    question = PrimaryKeyScopedRelatedField(queryset=lambda event, **kw: event.positiondatafields.all(), required=False)
-    datafield = SlugScopedRelatedField(slug_field='identifier', source='question', queryset=lambda event, **kw: event.positiondatafields.all(), required=False)
+    question = PrimaryKeyScopedRelatedField(queryset=lambda event, **kw: event.positiondatafields, required=False)
+    datafield = SlugScopedRelatedField(slug_field='identifier', source='question', queryset=lambda event, **kw: event.positiondatafields, required=False)
     question_identifier = serializers.SlugRelatedField(slug_field='identifier', source='question', read_only=True)
     option_identifiers = AnswerQuestionOptionsIdentifierField(source='*', read_only=True)
 
