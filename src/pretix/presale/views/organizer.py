@@ -46,7 +46,7 @@ import isoweek
 from django.conf import settings
 from django.core.cache import caches
 from django.db.models import (
-    Case, Exists, F, Max, Min, OuterRef, Prefetch, Q, Value, When,
+    Case, Exists, F, Max, Min, OuterRef, Prefetch, Q, Subquery, Value, When,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.dispatch.dispatcher import NO_RECEIVERS
@@ -74,7 +74,7 @@ from pretix.helpers.formats.en.formats import (
 from pretix.helpers.http import redirect_to_url
 from pretix.helpers.i18n import parse_date_localized
 from pretix.helpers.thumb import get_thumbnail
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.presale.forms.organizer import EventListFilterForm
 from pretix.presale.ical import get_public_ical
 from pretix.presale.signals import filter_subevents
@@ -189,22 +189,27 @@ class EventListMixin:
     def _get_event_list_queryset(self):
         query = Q(is_public=True) & Q(live=True)
         qs = self.request.organizer.events.using(settings.DATABASE_REPLICA).filter(query)
-        qs = qs.filter(Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel))
+        qs = qs.filter(Q(all_sales_channels=True) | Q(id__in=self.request.sales_channel.event_set.values_list("pk")))
 
         show_old = "old" in self.request.GET
 
-        subevent_filter = Q(subevents__active=True, subevents__is_public=True)
+        subevent_filter = Q(active=True, is_public=True)
         if not show_old:
             subevent_filter &= Q(
-                Q(subevents__date_to__gte=now()) | Q(subevents__date_from__gte=now())
+                Q(date_to__gte=now()) | Q(date_from__gte=now())
             )
 
+        subevent_subquery_qs = SubEvent.objects.with_scopes_disabled().filter(
+            subevent_filter,
+            event_id=OuterRef('pk')
+        ).values('event').order_by()
         qs = qs.annotate(
-            min_from=Min('subevents__date_from', filter=subevent_filter),
-            min_to=Min('subevents__date_to', filter=subevent_filter),
-            max_from=Max('subevents__date_from', filter=subevent_filter),
-            max_to=Max('subevents__date_to', filter=subevent_filter),
-            max_fromto=Greatest(Max('subevents__date_to', filter=subevent_filter), Max('subevents__date_from', filter=subevent_filter)),
+            min_from=Subquery(subevent_subquery_qs.annotate(m=Min('date_from')).values('m')),
+            min_to=Subquery(subevent_subquery_qs.annotate(m=Min('date_to')).values('m')),
+            max_from=Subquery(subevent_subquery_qs.annotate(m=Max('date_from')).values('m')),
+            max_to=Subquery(subevent_subquery_qs.annotate(m=Max('date_to')).values('m')),
+        ).annotate(
+            max_fromto=Greatest(F("max_to"), F("max_from")),
         )
         if show_old:
             date_q = Q(date_to__lt=now()) | (Q(date_to__isnull=True) & Q(date_from__lt=now()))
@@ -601,6 +606,32 @@ def filter_subevents_with_plugins(subevents, sales_channel=None):
     return subevents
 
 
+def should_hide_subevent(settings, subevent, voucher=None):
+    hide = False
+    if settings.event_list_available_only:
+        hide = (
+            # Presale is over → the subevent is not available → hide
+            subevent.presale_has_ended or
+            # Not a single product is available on this sales channel → hide
+            # Note that means there could be products which are ignored for calendar availability (Quota.ignore_for_event_availability)
+            # or products only visible with a voucher. However, for customers with these scenarios, the event_list_available_only
+            # makes only very little sense as it would never do anything, so the flag can just be removed -- or the products should
+            # be made visible so people know why there are no products. In case a voucher is already entered on the calendar view,
+            # this is already respected and subevents are shown correctly.
+            subevent.best_availability_state is None or
+            (
+                # Sold out → hide, unless we have a voucher active that can bypass all quotas
+                (not voucher or not voucher.allow_ignore_quota) and
+                subevent.best_availability_state < Quota.AVAILABILITY_RESERVED
+            )
+        )
+
+    if settings.event_calendar_future_only:
+        if (subevent.date_to or subevent.date_from) < time_machine_now():
+            hide = True
+    return hide
+
+
 def add_subevents_for_days(qs, before, after, ebd, timezones, sales_channel, event=None, cart_namespace=None,
                            voucher=None):
     qs = qs.filter(active=True, is_public=True).filter(
@@ -640,15 +671,8 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, sales_channel, eve
             kwargs['cart_namespace'] = cart_namespace
 
         s = event.settings if event else se.event.settings
-
-        if s.event_list_available_only:
-            hide = se.presale_has_ended or (
-                (not voucher or not voucher.allow_ignore_quota) and
-                se.best_availability_state is not None and
-                se.best_availability_state < Quota.AVAILABILITY_RESERVED
-            )
-            if hide:
-                continue
+        if should_hide_subevent(s, se, voucher):
+            continue
 
         timezones.add(s.timezone)
         tz = ZoneInfo(s.timezone)
@@ -1380,7 +1404,7 @@ class OrganizerFavicon(View):
 
 class RedirectToOrganizerIndex(View):
     def get(self, *args, **kwargs):
-        return redirect_to_url(build_absolute_uri(self.request.organizer, "presale:organizer.index"))
+        return redirect_to_url(eventreverse_absolute(self.request.organizer, "presale:organizer.index"))
 
 
 class AccessibilityView(OrganizerViewMixin, EventListMixin, TemplateView):

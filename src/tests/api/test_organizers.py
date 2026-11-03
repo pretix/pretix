@@ -25,6 +25,7 @@ from datetime import datetime
 import pytest
 from django.core.files.base import ContentFile
 from django_scopes import scopes_disabled
+from i18nfield.strings import LazyI18nString
 from tests.const import SAMPLE_PNG
 
 TEST_ORGANIZER_RES = {
@@ -147,6 +148,29 @@ def test_patch_settings(token_client, organizer):
         format='json'
     )
     assert resp.status_code == 400
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/settings/'.format(organizer.slug),
+        {
+            'contact_url': 'invalid'
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/settings/'.format(organizer.slug),
+        {
+            'contact_url': 'https://example.org/contact',
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data['contact_url'] == {
+        'en': 'https://example.org/contact',
+    }
+    organizer.settings.flush()
+    assert organizer.settings.contact_url == LazyI18nString('https://example.org/contact')
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/settings/'.format(organizer.slug),

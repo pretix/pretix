@@ -20,13 +20,16 @@
 # <https://www.gnu.org/licenses/>.
 #
 import base64
+from datetime import datetime, timezone
 
 import pytest
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.serialization import load_pem_private_key
 from django_scopes import scopes_disabled
+from freezegun import freeze_time
 
 from pretix.base.models import Device
+from pretix.base.models.devices import DeviceLastSeen
 
 
 @pytest.fixture
@@ -386,3 +389,26 @@ def test_device_info_key_sets(device_client, device: Device):
         base64.b64decode(ks['diversification_key']),
         padding.PKCS1v15()
     )
+
+
+@pytest.mark.django_db
+def test_update_last_seen(device_client, device: Device):
+    assert not DeviceLastSeen.objects.exists()
+
+    with freeze_time("2020-01-10T14:30:00+00:00"):
+        resp = device_client.get('/api/v1/device/info')
+        assert resp.status_code == 200
+        assert device.last_seen.last_seen == datetime(2020, 1, 10, 14, 30, tzinfo=timezone.utc)
+
+    with freeze_time("2020-01-10T14:30:05+00:00"):
+        resp = device_client.get('/api/v1/device/info')
+        assert resp.status_code == 200
+        # No update, interal too short
+        device.last_seen.refresh_from_db()
+        assert device.last_seen.last_seen == datetime(2020, 1, 10, 14, 30, tzinfo=timezone.utc)
+
+    with freeze_time("2020-01-10T14:30:30+00:00"):
+        resp = device_client.get('/api/v1/device/info')
+        assert resp.status_code == 200
+        device.last_seen.refresh_from_db()
+        assert device.last_seen.last_seen == datetime(2020, 1, 10, 14, 30, 30, tzinfo=timezone.utc)

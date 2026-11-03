@@ -108,12 +108,16 @@ from pretix.base.services.export import (
     init_organizer_exporters, multiexport, scheduled_organizer_export,
 )
 from pretix.base.services.mail import mail, prefix_subject
+from pretix.base.services.placeholders import (
+    prepare_sample_context_for_preview,
+)
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.exports import ScheduledOrganizerExportForm
 from pretix.control.forms.filter import (
     CustomerFilterForm, DeviceFilterForm, EventFilterForm, GiftCardFilterForm,
-    OrganizerFilterForm, ReusableMediaFilterForm, TeamFilterForm,
+    LogFilterForm, OrganizerFilterForm, ReusableMediaFilterForm,
+    TeamFilterForm,
 )
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
@@ -133,14 +137,14 @@ from pretix.control.permissions import (
     organizer_permission_required,
 )
 from pretix.control.signals import nav_organizer
-from pretix.control.views import PaginationMixin
+from pretix.control.views import LargeResultSetPaginator, PaginationMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.helpers import OF_SELF, GroupConcat
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.format import SafeFormatter, format_map
-from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.helpers.urls import mainreverse_absolute
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.customer import TokenGenerator
 
 logger = logging.getLogger(__name__)
@@ -344,16 +348,11 @@ class MailSettingsPreview(OrganizerPermissionRequiredMixin, View):
 
     # get all supported placeholders with dummy values
     def placeholders(self, item):
-        ctx = {}
-        for p, s in MailSettingsForm(obj=self.request.organizer)._get_sample_context(
-                MailSettingsForm.base_context[item]).items():
-            if s.strip().startswith('*'):
-                ctx[p] = s
-            else:
-                ctx[p] = '<span class="placeholder" title="{}">{}</span>'.format(
-                    _('This value will be replaced based on dynamic parameters.'),
-                    s
-                )
+        ctx = prepare_sample_context_for_preview(
+            MailSettingsForm(obj=self.request.organizer)._get_sample_context(
+                MailSettingsForm.base_context[item]
+            )
+        )
         return self.SafeDict(ctx)
 
     def post(self, request, *args, **kwargs):
@@ -779,9 +778,9 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["events"] = self.request.user.get_events_with_permission(
-            "event.settings.general:write", request=self.request
-        ).filter(organizer=self.request.organizer)
+        # Assumption: Who has access to modify organizer settings may see all events and disable/enable plugins
+        # for them. Otherwise, inconsistent situations occur.
+        kwargs["events"] = self.request.organizer.events.all()
         kwargs["initial"] = {
             "events": self.request.organizer.events.filter(plugins__regex='(^|,)' + self.plugin.module + '(,|$)')
         }
@@ -1032,14 +1031,16 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
     def _send_invite(self, instance):
         mail(
             instance.email,
-            _('Account invitation'),
+            gettext('You\'ve been invited to join %(organizer)s') % {
+                'organizer': self.request.organizer.name,
+            },
             'pretixcontrol/email/invitation.txt',
             {
                 'instance': settings.PRETIX_INSTANCE_NAME,
                 'user': self,
                 'organizer': self.request.organizer.name,
                 'team': instance.team.name,
-                'url': build_global_uri('control:auth.invite', kwargs={
+                'url': mainreverse_absolute('control:auth.invite', kwargs={
                     'token': instance.token
                 })
             },
@@ -1207,7 +1208,7 @@ class DeviceQueryMixin:
     def get_queryset(self):
         qs = self.request.organizer.devices.prefetch_related(
             'limit_events', 'gate',
-        ).order_by('revoked', '-device_id')
+        ).select_related('last_seen').order_by('revoked', '-device_id')
 
         if 'device' in self.request_data and '__ALL' not in self.request_data:
             qs = qs.filter(
@@ -2201,7 +2202,7 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
                 owner=self.request.user,
                 timezone=str(get_current_timezone()),
             )
-        if not self.scheduled:
+        if not self.scheduled and not self.scheduled_copy_from:
             initial = {
                 "mail_subject": gettext("Export: {title}").format(title=self.exporter.verbose_name),
                 "mail_template": gettext(
@@ -2661,6 +2662,7 @@ class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     template_name = 'pretixcontrol/organizers/logs.html'
     permission = 'organizer.settings.general:write'
     model = LogEntry
+    paginator_class = LargeResultSetPaginator
     context_object_name = 'logs'
 
     def get_queryset(self):
@@ -2670,15 +2672,20 @@ class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
             'user', 'content_type', 'api_token', 'oauth_application', 'device'
         ).order_by('-datetime')
         qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
-        if self.request.GET.get('action_type'):
-            qs = qs.filter(action_type=self.request.GET['action_type'])
-        if self.request.GET.get('user'):
-            qs = qs.filter(user_id=self.request.GET.get('user'))
+
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+
         return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
+        ctx['filter_form'] = self.filter_form
         return ctx
+
+    @cached_property
+    def filter_form(self):
+        return LogFilterForm(data=self.request.GET, organizer=self.request.organizer)
 
 
 class MembershipTypeListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
@@ -2810,9 +2817,14 @@ class SSOProviderCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
         return get_object_or_404(CustomerSSOProvider, organizer=self.request.organizer, pk=self.kwargs.get('provider'))
 
     def get_success_url(self):
-        return reverse('control:organizer.ssoproviders', kwargs={
-            'organizer': self.request.organizer.slug,
+        return reverse('control:organizer.ssoprovider.edit', kwargs={
+            'organizer': self.request.organizer.slug, 'provider': self.object.pk,
         })
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['redirect_uri'] = _('(will be generated)')
+        return ctx
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -2851,10 +2863,12 @@ class SSOProviderUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['redirect_uri'] = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.login.return',
-                                                 kwargs={
-                                                     'provider': self.object.pk
-                                                 })
+        ctx['redirect_uri'] = eventreverse_absolute(
+            self.request.organizer, 'presale:organizer.customer.login.return',
+            kwargs={
+                'provider': self.object.pk
+            }
+        )
         return ctx
 
     def get_form_kwargs(self):
@@ -2941,8 +2955,11 @@ class SSOClientCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
         secret = form.instance.set_client_secret()
         messages.success(
             self.request,
-            _('The SSO client has been created. Please note down the following client secret, it will never be shown '
-              'again: {secret}').format(secret=secret)
+            _('The SSO client has been created.') + ' ' +
+            _('Please note down the following client secret, it will never be shown again.') + '\n\n' +
+            _('Base URL / issuer') + f': {form.initial["disp_base_url"]}\n\n' +
+            _('Client ID') + f': {form.instance.client_id}\n\n' +
+            _('Client secret') + f': {secret}'
         )
         form.instance.organizer = self.request.organizer
         ret = super().form_valid(form)
@@ -2991,8 +3008,9 @@ class SSOClientUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
             secret = form.instance.set_client_secret()
             messages.success(
                 self.request,
-                _('Your changes have been saved. Please note down the following client secret, it will never be shown '
-                  'again: {secret}').format(secret=secret)
+                _('Your changes have been saved.') + ' ' +
+                _('Please note down the following client secret, it will never be shown again.') + '\n\n' +
+                _('Client secret') + f': {secret}'
             )
         else:
             messages.success(
@@ -3085,7 +3103,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             self.customer.log_action('pretix.customer.password.resetrequested', {}, user=self.request.user)
             ctx = self.customer.get_email_context()
             token = TokenGenerator().make_token(self.customer)
-            ctx['url'] = build_absolute_uri(
+            ctx['url'] = eventreverse_absolute(
                 self.request.organizer,
                 'presale:organizer.customer.recoverpw'
             ) + '?id=' + self.customer.identifier + '&token=' + token
@@ -3384,8 +3402,10 @@ class ReusableMediaListView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_queryset(self):
         qs = self.request.organizer.reusable_media.select_related(
-            'customer', 'linked_orderposition', 'linked_orderposition__order', 'linked_orderposition__order__event',
-            'linked_giftcard'
+            'customer',
+            'linked_giftcard',
+        ).prefetch_related(
+            Prefetch('linked_orderpositions', queryset=OrderPosition.objects.select_related("order", "order__event"))
         )
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
@@ -3433,10 +3453,14 @@ class ReusableMediumCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
     @transaction.atomic
     def form_valid(self, form):
         r = super().form_valid(form)
-        form.instance.log_action('pretix.reusable_medium.created', user=self.request.user, data={
+
+        data = {
             k: getattr(form.instance, k)
             for k in form.changed_data
-        })
+        }
+        if "linked_orderpositions" in data:
+            data["linked_orderpositions"] = data["linked_orderpositions"].values_list("pk", flat=True)
+        form.instance.log_action('pretix.reusable_medium.created', user=self.request.user, data=data)
         messages.success(self.request, _('Your changes have been saved.'))
         return r
 
@@ -3461,13 +3485,40 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
 
     @transaction.atomic
     def form_valid(self, form):
+        prev_linked_ops_pks = list(getattr(self.object, "linked_orderpositions").values_list("pk", flat=True))
+        result = super().form_valid(form)
         if form.has_changed():
-            self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data={
+            data = {
                 k: getattr(self.object, k)
                 for k in form.changed_data
-            })
+            }
+            if "linked_orderpositions" in data:
+                # handle changes to linked_orderpositions separately
+                linked_ops_pks = data["linked_orderpositions"].values_list("pk", flat=True)
+                del data["linked_orderpositions"]
+                for op_pk in prev_linked_ops_pks:
+                    if op_pk not in linked_ops_pks:
+                        self.object.log_action(
+                            'pretix.reusable_medium.linked_orderposition.removed',
+                            user=self.request.user,
+                            data={
+                                'linked_orderposition': op_pk,
+                            }
+                        )
+                for op_pk in linked_ops_pks:
+                    if op_pk not in prev_linked_ops_pks:
+                        self.object.log_action(
+                            'pretix.reusable_medium.linked_orderposition.added',
+                            user=self.request.user,
+                            data={
+                                'linked_orderposition': op_pk,
+                            }
+                        )
+            if data:
+                # log change-action only for changes other than linked_orderpositions
+                self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data=data)
         messages.success(self.request, _('Your changes have been saved.'))
-        return super().form_valid(form)
+        return result
 
     def get_success_url(self):
         return reverse('control:organizer.reusable_medium', kwargs={

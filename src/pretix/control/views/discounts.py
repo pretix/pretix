@@ -44,7 +44,7 @@ from pretix.control.permissions import (
 from pretix.helpers.models import modelcopy
 
 from ...helpers.compat import CompatDeleteView
-from . import CreateView, PaginationMixin, UpdateView
+from . import CreateView, UpdateView
 
 
 class DiscountDelete(EventPermissionRequiredMixin, CompatDeleteView):
@@ -163,6 +163,9 @@ class DiscountCreate(EventPermissionRequiredMixin, CreateView):
             i = modelcopy(self.copy_from)
             i.pk = None
             kwargs['instance'] = i
+            kwargs["initial"]["limit_sales_channels"] = self.copy_from.limit_sales_channels.all()
+            kwargs["initial"]["condition_limit_products"] = self.copy_from.condition_limit_products.all()
+            kwargs["initial"]["benefit_limit_products"] = self.copy_from.benefit_limit_products.all()
         else:
             kwargs['instance'] = Discount(event=self.request.event)
 
@@ -183,7 +186,7 @@ class DiscountCreate(EventPermissionRequiredMixin, CreateView):
         return super().form_invalid(form)
 
 
-class DiscountList(PaginationMixin, ListView):
+class DiscountList(ListView):
     model = Discount
     context_object_name = 'discounts'
     template_name = 'pretixcontrol/items/discounts.html'

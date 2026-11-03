@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load getitem %}
+{% load icon %}
 {% block inner %}
     {% if team %}
         <h1>{% trans "Team:" %} {{ team.name }}</h1>
@@ -25,6 +26,18 @@
             <legend>{% trans "Organizer permissions" %}</legend>
             {% bootstrap_field form.all_organizer_permissions layout="control" %}
             <div class="team-permission-groups col-md-9 col-md-offset-3" data-display-dependency="#id_all_organizer_permissions" data-inverse>
+                <p class="text-muted">
+                    {% icon "info-circle" %}
+                    {% blocktrans trimmed %}
+                        Even if a team has no access to a certain category of data, they might still be able to see
+                        parts of this data when it is linked to data they can see.
+                    {% endblocktrans %}
+                    {% blocktrans trimmed %}
+                        For example, someone with access to customer accounts will be able to see some information
+                        about gift cards linked to a customer account, even if they generally can't see gift cards
+                        directly.
+                    {% endblocktrans %}
+                </p>
                 {% for f in form.organizer_field_names %}
                     {% bootstrap_field form|getitem:f layout="control" %}
                 {% endfor %}
@@ -37,6 +50,17 @@
             {% bootstrap_field form.limit_events layout="control" %}
             {% bootstrap_field form.all_event_permissions layout="control" %}
             <div class="team-permission-groups col-md-9 col-md-offset-3" data-display-dependency="#id_all_event_permissions" data-inverse>
+                <p class="text-muted">
+                    {% icon "info-circle" %}
+                    {% blocktrans trimmed %}
+                        Even if a team has no access to a certain category of data, they might still be able to see
+                        parts of this data when it is linked to data they can see.
+                    {% endblocktrans %}
+                    {% blocktrans trimmed %}
+                        For example, someone with access to orders will be able to see some information about
+                        vouchers used to create an order, even if they generally can't see vouchers directly.
+                    {% endblocktrans %}
+                </p>
                 {% for f in form.event_field_names %}
                     {% bootstrap_field form|getitem:f layout="control" %}
                 {% endfor %}

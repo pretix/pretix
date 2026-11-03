@@ -157,6 +157,12 @@
 .profile-scope:last-child .profile-save-container {
   margin-bottom: -15px;
 }
+
+/* the rule above removes blank space after any profile-save-container at the end of every fieldset, which causes an overlay if addon-questions are used. So re-add margin for non-addon-fieldsets followed by fieldsets (currently only happens it addon-questions are available) */
+fieldset:not(:has(.profile-add-on)):has( + fieldset) .profile-scope:last-child .profile-save-container {
+  margin-bottom: 0;
+}
+
 .profile-save-container .help-block {
   margin-bottom: 0;
 }

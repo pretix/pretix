@@ -74,6 +74,7 @@ Bokmål
 Boleto
 Branding-Informationen
 Browsereinstellungen
+Browserfenster
 BSD-Lizenz
 bspw
 Bundles
@@ -93,6 +94,8 @@ Checkout
 Chrome
 Client-ID
 Client-Secret
+CNAME
+CNAME-Eintrag
 CODE.txt
 Community-Übersetzungen
 CONFIRM
@@ -122,6 +125,11 @@ Debug-Modus
 dekodi
 Desktop-Apps
 Di
+DKIM
+DKIM-Eintrag
+DKIM-Schlüssel
+DMARC
+DMARC-Eintrag
 Do
 Downloadformat
 Dr
@@ -134,6 +142,7 @@ Einlasskontrolle
 Einmalpasswörter
 einzuchecken
 email
+E-Mail-App
 E-Mail-Renderer
 Enterprise-Lizenz
 Enterprise-Lizenzen
@@ -150,8 +159,10 @@ Erstattungsstatus
 Erstattungsweg
 erstmalig
 etc
+EU-USt-ID
 EU-USt-ID-Nr
 Event
+Event-Absage
 Event-Eigenschaft
 Eventeingang
 Event-Erstellung
@@ -206,6 +217,7 @@ innenname
 innennamen
 innergemeinschaftliche
 Innergemeinschaftlicher
+Instagram
 Installations-ID
 Integrationen
 invalidieren
@@ -227,6 +239,7 @@ Linktext
 lit
 Log-ID
 Logindaten
+Loginvorgangs
 Macau
 MapQuest-API-Key
 max
@@ -281,6 +294,7 @@ Pago
 parsen
 Pay
 PayPal
+PayPals
 PayPal-Account
 PayPal-Accounts
 PayPal-Konto
@@ -328,6 +342,7 @@ pretix-Kontos
 pretix-Logo
 pretix-Logos
 pretix-Plugins
+pretixPOS
 pretixPRINT
 pretixPRINT-Version
 pretixSCAN
@@ -450,6 +465,7 @@ Strong
 Swish
 systemweiten
 Tab
+Tabs
 tag
 Teammitglied
 Teamname

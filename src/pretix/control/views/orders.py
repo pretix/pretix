@@ -64,7 +64,7 @@ from django.urls import reverse
 from django.utils import formats
 from django.utils.formats import date_format, get_format
 from django.utils.functional import cached_property
-from django.utils.html import conditional_escape, escape
+from django.utils.html import conditional_escape, escape, format_html
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware, now
@@ -79,9 +79,9 @@ from pretix.base.email import get_email_context
 from pretix.base.exporter import MultiSheetListExporter
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, CachedTicket, Checkin, Invoice, InvoiceAddress, Item,
+    CachedFile, CachedTicket, Checkin, GiftCard, Invoice, InvoiceAddress, Item,
     ItemVariation, LogEntry, Order, QuestionAnswer, Quota,
-    ScheduledEventExport, generate_secret,
+    ScheduledEventExport, SeatCategoryMapping, generate_secret,
 )
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
@@ -139,6 +139,7 @@ from pretix.helpers import OF_SELF
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.hierarkey import clean_filename
+from pretix.helpers.iter import chunked_iterable
 from pretix.helpers.json import CustomJSONEncoder
 from pretix.helpers.safedownload import check_token
 from pretix.presale.signals import question_form_fields
@@ -240,7 +241,7 @@ class BaseOrderBulkActionView(OrderSearchMixin, EventPermissionRequiredMixin, As
         raise NotImplementedError()
 
     def execute_bulk(self, queryset: QuerySet, form: forms.Form):
-        qs = self.allowed_for(self.allowed_for(self.get_queryset()))
+        qs = self.allowed_for(self.get_queryset())
         total = qs.count()
         orders_with_successful_action = 0
         for i, o in enumerate(qs):
@@ -381,7 +382,7 @@ class OrderOverpaidRefundBulkActionView(BaseOrderBulkActionView):
                         'provider': refund.provider,
                     }, user=self.request.user)
                     payment.payment_provider.execute_refund(refund)
-                    return True
+                return bool(proposals)
             except (ValueError, PaymentException):
                 return False
 
@@ -394,8 +395,21 @@ class OrderDeleteBulkActionView(BaseOrderBulkActionView):
             testmode=True,
         )
 
-    def execute_single(self, instance, form: forms.Form):
-        instance.gracefully_delete(user=self.request.user)
+    def execute_bulk(self, queryset: QuerySet, form: forms.Form):
+        qs = self.allowed_for(self.get_queryset())
+        total = qs.count()
+        all_ids = list(qs.values_list("id", flat=True))
+
+        orders_with_successful_action = 0
+        for chunk in chunked_iterable(all_ids, 1000):
+            Order.gracefully_delete_bulk(
+                self.request.event,
+                qs.filter(id__in=chunk),
+                user=self.request.user,
+            )
+            orders_with_successful_action += len(chunk)
+            self.async_set_progress(orders_with_successful_action / total * 100)
+        return orders_with_successful_action, total
 
 
 class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin, ListView):
@@ -537,10 +551,10 @@ class OrderDetail(OrderView):
         ctx['refunds'] = self.order.refunds.select_related('payment').order_by('-created')
         for p in ctx['payments']:
             if p.payment_provider:
-                p.html_info = (p.payment_provider.payment_control_render(self.request, p) or "").strip()
+                p.html_info = p.payment_provider.payment_control_render(self.request, p) or ""
         for r in ctx['refunds']:
             if r.payment_provider:
-                r.html_info = (r.payment_provider.refund_control_render(self.request, r) or "").strip()
+                r.html_info = r.payment_provider.refund_control_render(self.request, r) or ""
         ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
         ctx['comment_form'] = CommentForm(initial={
             'comment': self.order.comment,
@@ -550,10 +564,14 @@ class OrderDetail(OrderView):
         })
         ctx['display_locale'] = dict(settings.LANGUAGES)[self.object.locale or self.request.event.settings.locale]
 
-        ctx['overpaid'] = self.order.pending_sum * -1
+        pending_sum = self.order.pending_sum
+        ctx['overpaid'] = pending_sum * -1
         ctx['download_buttons'] = self.download_buttons
         ctx['payment_refund_sum'] = self.order.payment_refund_sum
-        ctx['pending_sum'] = self.order.pending_sum
+        ctx['pending_sum'] = pending_sum
+        ctx['uncancelled_invoice'] = self.order.invoices.exclude(
+            Exists(self.order.invoices.filter(refers=OuterRef('pk'), is_cancellation=True))
+        ).exclude(is_cancellation=True).first()
 
         return ctx
 
@@ -584,8 +602,9 @@ class OrderDetail(OrderView):
         ).prefetch_related(
             'item__questions', 'issued_gift_cards', 'owned_gift_cards', 'linked_media',
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
-            Prefetch('all_checkins', queryset=Checkin.all.select_related('list').order_by('datetime')),
+            Prefetch('all_checkins', queryset=Checkin.all.select_related('list', 'gate').order_by('datetime')),
             Prefetch('print_logs', queryset=PrintLog.objects.select_related('device').order_by('datetime')),
+            Prefetch('subevent', queryset=self.request.event.subevents.all()),
         ).order_by('positionid')
 
         positions = []
@@ -1158,6 +1177,8 @@ class OrderRefundView(OrderView):
         manual_value = formats.sanitize_separators(manual_value)
         try:
             manual_value = Decimal(manual_value)
+            if manual_value < Decimal("0.00"):
+                raise TypeError("Please do not use negative numbers")
         except (DecimalException, TypeError):
             messages.error(self.request, _('You entered an invalid number.'))
             is_valid = False
@@ -1187,6 +1208,8 @@ class OrderRefundView(OrderView):
         giftcard_value = formats.sanitize_separators(giftcard_value)
         try:
             giftcard_value = Decimal(giftcard_value)
+            if giftcard_value < Decimal("0.00"):
+                raise TypeError("Please do not use negative numbers")
         except (DecimalException, TypeError):
             messages.error(self.request, _('You entered an invalid number.'))
             is_valid = False
@@ -1236,6 +1259,8 @@ class OrderRefundView(OrderView):
         offsetting_value = formats.sanitize_separators(offsetting_value)
         try:
             offsetting_value = Decimal(offsetting_value)
+            if offsetting_value < Decimal("0.00"):
+                raise TypeError("Please do not use negative numbers")
         except (DecimalException, TypeError):
             messages.error(self.request, _('You entered an invalid number.'))
             is_valid = False
@@ -1252,6 +1277,9 @@ class OrderRefundView(OrderView):
                     if offset_order.event.currency != self.request.event.currency:
                         messages.error(self.request, _('You entered an order in an event with a different currency.'))
                         is_valid = False
+                    if not self.request.user.has_event_permission(self.request.organizer, offset_order.event, 'event.orders:write', request=self.request):
+                        messages.error(self.request, _('You entered an order in an event that you do not have access to.'))
+                        is_valid = False
                     refunds.append(OrderRefund(
                         order=order,
                         payment=None,
@@ -1267,10 +1295,13 @@ class OrderRefundView(OrderView):
                     ))
 
         for identifier, prov in self.request.event.get_payment_providers().items():
+            # prof = process form, not a typo for prov(ider)
             prof_value = self.request.POST.get(f'newrefund-{identifier}', '0') or '0'
             prof_value = formats.sanitize_separators(prof_value)
             try:
                 prof_value = Decimal(prof_value)
+                if prof_value < Decimal("0.00"):
+                    raise TypeError("Please do not use negative numbers")
             except (DecimalException, TypeError):
                 messages.error(self.request, _('You entered an invalid number.'))
                 is_valid = False
@@ -1294,6 +1325,8 @@ class OrderRefundView(OrderView):
             value = formats.sanitize_separators(value)
             try:
                 value = Decimal(value)
+                if value < Decimal("0.00"):
+                    raise TypeError("Please do not use negative numbers")
             except (DecimalException, TypeError):
                 messages.error(self.request, _('You entered an invalid number.'))
                 is_valid = False
@@ -1323,7 +1356,12 @@ class OrderRefundView(OrderView):
                     ))
 
         any_success = False
-        if refund_selected == full_refund and is_valid:
+        if refund_selected != full_refund:
+            messages.error(self.request, _('The refunds you selected do not match the selected total refund '
+                                           'amount.'))
+            is_valid = False
+
+        if is_valid:
             for r in refunds:
                 r.save()
                 order.log_action('pretix.event.order.refund.created', {
@@ -1395,9 +1433,6 @@ class OrderRefundView(OrderView):
                             )
                         }))
             return redirect(self.get_order_url())
-        else:
-            messages.error(self.request, _('The refunds you selected do not match the selected total refund '
-                                           'amount.'))
 
     def post(self, *args, **kwargs):
         if self.start_form.is_valid():
@@ -1627,7 +1662,8 @@ class OrderCheckVATID(OrderView):
                 return redirect(self.get_order_url())
 
             try:
-                normalized_id = validate_vat_id(ia.vat_id, str(ia.country))
+                requester_id = self.request.event.settings.invoice_address_from_vat_id
+                normalized_id = validate_vat_id(ia.vat_id, str(ia.country), requester_id)
                 with transaction.atomic():
                     ia.vat_id_validated = True
                     ia.vat_id = normalized_id
@@ -1968,20 +2004,40 @@ class OrderChange(OrderView):
     def fees(self):
         fees = list(self.order.fees.all())
         for f in fees:
-            f.form = OrderFeeChangeForm(prefix='of-{}'.format(f.pk), instance=f,
-                                        data=self.request.POST if self.request.method == "POST" else None)
+            f.form = OrderFeeChangeForm(
+                prefix='of-{}'.format(f.pk),
+                instance=f,
+                data=self.request.POST if self.request.method == "POST" else None
+            )
         return fees
 
     @cached_property
     def positions(self):
         positions = list(self.order.positions.select_related(
             'item', 'item__tax_rule', 'used_membership', 'used_membership__membership_type', 'tax_rule',
-            'seat', 'subevent',
-        ).prefetch_related('granted_memberships'))
+            'seat',
+        ).prefetch_related(
+            Prefetch(
+                'subevent',
+                queryset=self.request.event.subevents.all(),
+            ),
+            'granted_memberships',
+            'issued_gift_cards',
+            'addons',
+        ).annotate(
+            _seat_allowed=Exists(SeatCategoryMapping.objects.filter(
+                subevent=OuterRef("subevent") if self.request.event.has_subevents else None,
+                product=OuterRef("item"))
+            )
+        ))
         for p in positions:
-            p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p, items=self.items,
-                                             initial={'seat': p.seat.seat_guid if p.seat else None},
-                                             data=self.request.POST if self.request.method == "POST" else None)
+            p.form = OrderPositionChangeForm(
+                prefix='op-{}'.format(p.pk),
+                instance=p,
+                items=self.items,
+                initial={'seat': p.seat.seat_guid if p.seat else None},
+                data=self.request.POST if self.request.method == "POST" else None
+            )
         return positions
 
     def get_context_data(self, **kwargs):
@@ -2190,6 +2246,10 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
     only_user_visible = False
     all_optional = True
 
+    @property
+    def order_question_container(self):
+        return self.order
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['other_form'] = self.other_form
@@ -2244,6 +2304,12 @@ class OrderContactChange(OrderView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['form'] = self.form
+        if self.order.all_positions.filter(Exists(GiftCard.objects.filter(issued_in=OuterRef('pk')))).exists():
+            self.form.fields['regenerate_secrets'].help_text = format_html(
+                '{}<br><br><strong><span class="fa fa-warning"></span> {}</strong>',
+                self.form.fields['regenerate_secrets'].help_text,
+                _("Ticket secrets of order positions that have been used to issue a gift card can not be changed. Only the link will be changed in this case."),
+            )
         return ctx
 
     @cached_property
@@ -2545,7 +2611,11 @@ class AnswerDownload(EventPermissionRequiredMixin, OrderViewMixin, ListView):
         answid = kwargs.get('answer')
         token = request.GET.get('token', '')
 
-        answer = get_object_or_404(QuestionAnswer, orderposition__order=self.order, id=answid)
+        answer = get_object_or_404(
+            QuestionAnswer,
+            Q(orderposition__order=self.order) | Q(order=self.order),
+            id=answid
+        )
         if not answer.file:
             raise Http404()
         if not check_token(request, answer, token):
@@ -2555,7 +2625,7 @@ class AnswerDownload(EventPermissionRequiredMixin, OrderViewMixin, ListView):
         resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
         resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
             self.request.event.slug.upper(), self.order.code,
-            answer.orderposition.positionid,
+            answer.orderposition.positionid if answer.orderposition else '',
             os.path.basename(answer.file.name).split('.', 1)[1]
         )
         return resp

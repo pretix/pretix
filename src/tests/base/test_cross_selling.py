@@ -732,7 +732,7 @@ def test_five_tickets_one_free(event):
 
 
 @scopes_disabled()
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 @pytest.mark.parametrize("itemcount", [3, 10, 50])
 def test_query_count_many_items(event, itemcount):
     setup_items(event, 'Tickets', 'both', 'discounts',
@@ -784,7 +784,7 @@ def test_query_count_many_items(event, itemcount):
 
 
 @scopes_disabled()
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 @pytest.mark.parametrize("catcount", [1, 10, 50])
 def test_query_count_many_categories_and_discounts(event, catcount):
     for n in range(1, catcount + 1):
@@ -838,7 +838,7 @@ def test_query_count_many_categories_and_discounts(event, catcount):
 
 
 @scopes_disabled()
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 @pytest.mark.parametrize("catcount", [2, 10, 50])
 def test_query_count_many_cartpos(event, catcount):
     for n in range(1, catcount + 1):

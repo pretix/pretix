@@ -194,7 +194,7 @@ with scopes_disabled():
                 )
             ).values('id')
 
-            matching_media = ReusableMedium.objects.filter(identifier=u).values_list('linked_orderposition__order_id', flat=True)
+            matching_media = ReusableMedium.objects.filter(identifier=u).values_list('linked_orderpositions__order_id', flat=True)
 
             mainq = (
                 code
@@ -1034,7 +1034,7 @@ with scopes_disabled():
         search = django_filters.CharFilter(method='search_qs')
 
         def search_qs(self, queryset, name, value):
-            matching_media = ReusableMedium.objects.filter(identifier=value).values_list('linked_orderposition', flat=True)
+            matching_media = ReusableMedium.objects.filter(identifier=value).values_list('linked_orderpositions', flat=True)
             return queryset.filter(
                 Q(secret__istartswith=value)
                 | Q(attendee_name_cached__icontains=value)
@@ -1658,6 +1658,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                         count_waitinglist=False,
                         force=request.data.get('force', False),
                         send_mail=send_mail,
+                        ignore_date=request.data.get('force', False),
                     )
                 except Quota.QuotaExceededException:
                     pass
@@ -1682,7 +1683,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     @action(detail=True, methods=['POST'])
     def confirm(self, request, **kwargs):
         payment = self.get_object()
-        force = request.data.get('force', False)
+        force = request.data.get('force', False) if request.data else False
         send_mail = request.data.get('send_email', True) if request.data else True
 
         if payment.state not in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
@@ -1693,7 +1694,8 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                             auth=self.request.auth,
                             count_waitinglist=False,
                             send_mail=send_mail,
-                            force=force)
+                            force=force,
+                            ignore_date=force)
         except Quota.QuotaExceededException as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except PaymentException as e:

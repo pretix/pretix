@@ -186,8 +186,88 @@ def test_sendmail_rule_send_order_vs_pos(send_to, amount_mails, recipients, orde
 
     order.event.sendmail_rules.create(date_is_absolute=True, send_date=dt_now - datetime.timedelta(hours=1),
                                       send_to=send_to,
-                                      subject='meow', template='meow meow meow')
+                                      subject='{event}: {event_location} @ {event_admission_time}', template='meow meow meow')
     order.all_positions.create(item=item, price=0, attendee_email='meow@dummy.test')
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == amount_mails
+
+    _recipients = [mail.to[0] for mail in djmail.outbox]
+    assert set(recipients) == set(_recipients)
+
+    assert djmail.outbox[0].subject == 'Dummy: Foo City @ 11:30'
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('send_to,amount_mails,recipients,ticket_mail,addon_mail, products', [
+    (Rule.ATTENDEES, 1, ['addon-attendee@dummy.test'], 'attendee@dummy.test', 'addon-attendee@dummy.test', 'addon'),
+    (Rule.ATTENDEES, 2, ['attendee@dummy.test', 'addon-attendee@dummy.test'], 'attendee@dummy.test',
+     'addon-attendee@dummy.test', 'both'),
+    (Rule.ATTENDEES, 1, ['attendee@dummy.test'], 'attendee@dummy.test', 'attendee@dummy.test', 'both'),
+    (Rule.ATTENDEES, 1, ['attendee@dummy.test'], 'attendee@dummy.test', None, 'addon'),
+    (Rule.ATTENDEES, 1, ['attendee@dummy.test'], 'attendee@dummy.test', None, 'both'),
+    (Rule.ATTENDEES, 1, ['dummy@dummy.test'], None, None, 'addon'),
+    (Rule.ATTENDEES, 1, ['dummy@dummy.test'], None, None, 'both'),
+    (Rule.ATTENDEES, 2, ['dummy@dummy.test', 'addon-attendee@dummy.test'], None, 'addon-attendee@dummy.test', 'both'),
+    (Rule.ATTENDEES, 1, ['dummy@dummy.test'], None, None, 'all'),
+    (Rule.ATTENDEES, 2, ['dummy@dummy.test', 'addon-attendee@dummy.test'], None, 'addon-attendee@dummy.test', 'all'),
+])
+@scopes_disabled()
+def test_sendmail_rule_send_addons(send_to, amount_mails, recipients, ticket_mail, addon_mail, products, order,
+                                   event, pos, item, item2):
+    djmail.outbox = []
+
+    order.status = order.STATUS_PAID
+    order.save()
+
+    p = pos
+    p.attendee_email = ticket_mail
+    p.save()
+    order.all_positions.create(item=item2, price=0, attendee_email=addon_mail, addon_to=p)
+    rule = order.event.sendmail_rules.create(date_is_absolute=True, send_date=dt_now - datetime.timedelta(hours=1),
+                                             send_to=send_to, subject='meow', template='meow meow meow',
+                                             all_products=products == 'all')
+    if products == 'addon':
+        rule.limit_products.set([item2])
+    if products == 'both':
+        rule.limit_products.set([item, item2])
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == amount_mails
+
+    _recipients = [mail.to[0] for mail in djmail.outbox]
+    assert set(recipients) == set(_recipients)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('send_to,amount_mails,recipients,ticket_mail,addon_mail, products', [
+    (Rule.ATTENDEES, 2, ['attendee@dummy.test', 'addon-attendee@dummy.test'], 'attendee@dummy.test',
+     'addon-attendee@dummy.test', 'addon'),
+    (Rule.ATTENDEES, 2, ['attendee@dummy.test', 'addon-attendee@dummy.test'], 'attendee@dummy.test',
+     'addon-attendee@dummy.test', 'both'),
+])
+@scopes_disabled()
+def test_sendmail_rule_send_addons_one_unp(send_to, amount_mails, recipients, ticket_mail, addon_mail, products, order,
+                                           event, pos, item, item2):
+    djmail.outbox = []
+
+    order.status = order.STATUS_PAID
+    order.save()
+
+    p = pos
+    p.attendee_email = ticket_mail
+    p.save()
+    order.all_positions.create(item=item2, price=0, attendee_email=addon_mail, addon_to=p)
+    order.all_positions.create(item=item2, price=0, addon_to=p)
+    rule = order.event.sendmail_rules.create(date_is_absolute=True, send_date=dt_now - datetime.timedelta(hours=1),
+                                             send_to=send_to, subject='meow', template='meow meow meow',
+                                             all_products=False)
+    if products == 'addon':
+        rule.limit_products.set([item2])
+    if products == 'both':
+        rule.limit_products.set([item, item2])
 
     sendmail_run_rules(None)
 
@@ -243,7 +323,7 @@ def test_sendmail_rule_send_correct_subevent(order, event_series, subevent1, sub
 
     event_series.sendmail_rules.create(date_is_absolute=False, offset_is_after=False, send_offset_days=2,
                                        send_offset_time=datetime.time(9, 30), send_to=Rule.ATTENDEES,
-                                       subject='meow', template='meow meow meow')
+                                       subject='{event}: {event_location} @ {event_admission_time}', template='meow meow meow')
     p1 = order.all_positions.create(item=item, price=13, attendee_email='se1@dummy.test', subevent=subevent1)
     order.all_positions.create(item=item, price=23, attendee_email='se2@dummy.test', subevent=subevent2)
 
@@ -252,6 +332,8 @@ def test_sendmail_rule_send_correct_subevent(order, event_series, subevent1, sub
     assert len(djmail.outbox) == 1
 
     assert djmail.outbox[0].to[0] == p1.attendee_email
+
+    assert djmail.outbox[0].subject == 'Meow: Meow Town @ 10:00'
 
 
 @pytest.mark.django_db
@@ -424,6 +506,97 @@ def test_sendmail_rule_checked_in_get_mail(event, order, item):
                                 subject='meow', template='meow meow meow')
     sendmail_run_rules(None)
     assert len(djmail.outbox) == 1, "email not sent"
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_checked_in_mixed_order(event, order, item):
+    order.status = Order.STATUS_PAID
+    order.save()
+    p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
+    order.all_positions.create(item=item, price=13, attendee_email='item2@dummy.test')  # p2
+    clist = event.checkin_lists.create(name="Default", all_products=True)
+
+    # receives no mail when checked in
+    djmail.outbox = []
+    perform_checkin(p1, clist, {})
+    assert clist.checkin_count == 1
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="checked_in",
+                                subject='meow', template='meow meow meow')
+    sendmail_run_rules(None)
+    assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_not_checked_in_mixed_order(event, order, item):
+    order.status = Order.STATUS_PAID
+    order.save()
+    p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
+    order.all_positions.create(item=item, price=13, attendee_email='item2@dummy.test')  # p2
+    clist = event.checkin_lists.create(name="Default", all_products=True)
+
+    # receives no mail when checked in
+    djmail.outbox = []
+    perform_checkin(p1, clist, {})
+    assert clist.checkin_count == 1
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="no_checkin",
+                                subject='meow', template='meow meow meow')
+    sendmail_run_rules(None)
+    assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_not_checked_in_mixed_order_position_without_email_not_matching_status(event, order, item, item2):
+    order.status = Order.STATUS_PAID
+    order.save()
+    p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
+    p2 = order.all_positions.create(item=item, price=13, attendee_email='item2@dummy.test')
+    clist = event.checkin_lists.create(name="Default", all_products=True)
+
+    # receives no mail when checked in
+    djmail.outbox = []
+    perform_checkin(p1, clist, {})
+
+    # we have no email and we are checked in
+    # we shouldn't trigger a fallback to order.email
+    p3 = order.all_positions.create(item=item, price=13)
+    perform_checkin(p3, clist, {})
+    assert clist.checkin_count == 2
+
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="no_checkin",
+                                subject='meow', template='meow meow meow', send_to=Rule.ATTENDEES)
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == 1
+    recipients = [m.to for m in djmail.outbox]
+    assert [p2.attendee_email] in recipients  # for p2
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_not_checked_in_mixed_order_position_without_email(event, order, item, item2):
+    order.status = Order.STATUS_PAID
+    order.save()
+    p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
+    p2 = order.all_positions.create(item=item, price=13, attendee_email='item2@dummy.test')
+    order.all_positions.create(item=item, price=13)  # p3
+    order.all_positions.create(item=item, price=13)  # p4
+    clist = event.checkin_lists.create(name="Default", all_products=True)
+
+    # receives no mail when checked in
+    djmail.outbox = []
+    perform_checkin(p1, clist, {})
+    assert clist.checkin_count == 1
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="no_checkin",
+                                subject='meow', template='meow meow meow', send_to=Rule.ATTENDEES)
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == 2
+    recipients = [m.to for m in djmail.outbox]
+    assert [order.email] in recipients  # for p3 and p4
+    assert [p2.attendee_email] in recipients  # for p2
 
 
 @pytest.mark.django_db

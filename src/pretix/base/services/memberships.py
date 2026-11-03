@@ -24,6 +24,7 @@ from typing import List, Optional
 
 from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.utils.formats import date_format
 from django.utils.translation import gettext_lazy as _
 
@@ -96,6 +97,8 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
     :param valid_from_not_chosen: Set to ``True`` to indicate that the customer is in an early step of the checkout flow
                                   where the valid_from date is not selected yet. In this case, the valid_from date is not checked.
     """
+    if lock and not transaction.get_connection().in_atomic_block:
+        raise Exception('validate_memberships_in_order(lock=True) should only be called in atomic transaction!')
     tz = event.timezone
     applicable_positions = [
         p for p in positions

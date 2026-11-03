@@ -38,7 +38,6 @@ from urllib.parse import urlparse
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db.models import Q
 from django.forms import formset_factory, inlineformset_factory
 from django.forms.utils import ErrorDict
 from django.urls import reverse
@@ -70,9 +69,9 @@ from pretix.base.forms.widgets import (
     SplitDateTimePickerWidget, format_placeholders_help_text,
 )
 from pretix.base.models import (
-    Customer, Device, Event, EventMetaProperty, Gate, GiftCard,
-    GiftCardAcceptance, Membership, MembershipType, OrderPosition, Organizer,
-    ReusableMedium, SalesChannel, Team,
+    Customer, Device, Event, EventMetaProperty, Gate, GiftCard, Membership,
+    MembershipType, OrderPosition, Organizer, ReusableMedium, SalesChannel,
+    Team,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink, TeamQuerySet
@@ -86,9 +85,9 @@ from pretix.control.forms import ExtFileField, SplitDateTimeField
 from pretix.control.forms.event import (
     SafeEventMultipleChoiceField, multimail_validate,
 )
-from pretix.control.forms.widgets import Select2
+from pretix.control.forms.widgets import Select2, Select2Multiple
 from pretix.multidomain.models import KnownDomain
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 
 class OrganizerForm(I18nModelForm):
@@ -249,6 +248,15 @@ class SafeOrderPositionChoiceField(forms.ModelChoiceField):
         return f'{op.order.code}-{op.positionid} ({str(op.item) + ((" - " + str(op.variation)) if op.variation else "")})'
 
 
+class SafeOrderPositionMultipleChoiceField(forms.ModelMultipleChoiceField):
+    def __init__(self, queryset, **kwargs):
+        queryset = queryset.model.all.none()
+        super().__init__(queryset, **kwargs)
+
+    def label_from_instance(self, op):
+        return f'{op.order.code}-{op.positionid} ({str(op.item) + ((" - " + str(op.variation)) if op.variation else "")})'
+
+
 class EventMetaPropertyForm(I18nModelForm):
     class Meta:
         model = EventMetaProperty
@@ -355,7 +363,7 @@ class TeamForm(forms.ModelForm):
                     for opt in pg.options
                 ],
                 label=pg.label,
-                help_text=pg.help_text,
+                help_text=conditional_escape(pg.help_text or ""),
                 initial=initial,
                 widget=forms.RadioSelect,
             )
@@ -380,7 +388,7 @@ class TeamForm(forms.ModelForm):
                     for opt in pg.options
                 ],
                 label=pg.label,
-                help_text=pg.help_text,
+                help_text=conditional_escape(pg.help_text or ""),
                 initial=initial,
                 widget=forms.RadioSelect,
             )
@@ -595,6 +603,7 @@ class OrganizerSettingsForm(SettingsForm):
         'customer_accounts_require_login_for_order_access',
         'invoice_regenerate_allowed',
         'contact_mail',
+        'contact_url',
         'imprint_url',
         'organizer_info_text',
         'event_list_type',
@@ -627,6 +636,7 @@ class OrganizerSettingsForm(SettingsForm):
         'cookie_consent_dialog_button_yes',
         'cookie_consent_dialog_button_no',
         'reusable_media_active',
+        'reusable_media_usage_enforced',
         'reusable_media_type_barcode',
         'reusable_media_type_barcode_identifier_length',
         'reusable_media_type_nfc_uid',
@@ -781,7 +791,7 @@ class MailSettingsForm(SettingsForm):
         }
 
         if 'url' in base_parameters:
-            placeholders['url'] = build_absolute_uri(
+            placeholders['url'] = eventreverse_absolute(
                 self.organizer,
                 'presale:organizer.customer.activate'
             ) + '?token=' + get_random_string(30)
@@ -883,15 +893,7 @@ class GiftCardCreateForm(forms.ModelForm):
 
     def clean_secret(self):
         s = self.cleaned_data['secret']
-        if GiftCard.objects.filter(
-                secret__iexact=s
-        ).filter(
-            Q(issuer=self.organizer) |
-            Q(issuer__in=GiftCardAcceptance.objects.filter(
-                acceptor=self.organizer,
-                active=True,
-            ).values_list('issuer', flat=True))
-        ).exists():
+        if self.organizer.accepted_gift_cards.filter(secret__iexact=s).exists():
             raise ValidationError(
                 _('A gift card with the same secret already exists in your or an affiliated organizer account.')
             )
@@ -963,12 +965,12 @@ class ReusableMediumUpdateForm(forms.ModelForm):
 
     class Meta:
         model = ReusableMedium
-        fields = ['active', 'expires', 'customer', 'linked_giftcard', 'linked_orderposition', 'notes']
+        fields = ['active', 'expires', 'customer', 'linked_giftcard', 'linked_orderpositions', 'notes']
         field_classes = {
             'expires': SplitDateTimeField,
             'customer': SafeModelChoiceField,
             'linked_giftcard': SafeModelChoiceField,
-            'linked_orderposition': SafeOrderPositionChoiceField,
+            'linked_orderpositions': SafeOrderPositionMultipleChoiceField,
         }
         widgets = {
             'expires': SplitDateTimePickerWidget,
@@ -978,8 +980,8 @@ class ReusableMediumUpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         organizer = self.instance.organizer
 
-        self.fields['linked_orderposition'].queryset = OrderPosition.all.filter(order__event__organizer=organizer).all()
-        self.fields['linked_orderposition'].widget = Select2(
+        self.fields['linked_orderpositions'].queryset = OrderPosition.all.filter(order__event__organizer=organizer).all()
+        self.fields['linked_orderpositions'].widget = Select2Multiple(
             attrs={
                 'data-model-select2': 'generic',
                 'data-select2-url': reverse('control:organizer.ticket_select2', kwargs={
@@ -987,8 +989,8 @@ class ReusableMediumUpdateForm(forms.ModelForm):
                 }),
             }
         )
-        self.fields['linked_orderposition'].widget.choices = self.fields['linked_orderposition'].choices
-        self.fields['linked_orderposition'].required = False
+        self.fields['linked_orderpositions'].widget.choices = self.fields['linked_orderpositions'].choices
+        self.fields['linked_orderpositions'].required = False
 
         self.fields['linked_giftcard'].queryset = organizer.issued_gift_cards.all()
         self.fields['linked_giftcard'].widget = Select2(
@@ -1042,12 +1044,12 @@ class ReusableMediumCreateForm(ReusableMediumUpdateForm):
 
     class Meta:
         model = ReusableMedium
-        fields = ['active', 'type', 'identifier', 'expires', 'linked_orderposition', 'linked_giftcard', 'customer', 'notes']
+        fields = ['active', 'type', 'identifier', 'expires', 'linked_orderpositions', 'linked_giftcard', 'customer', 'notes']
         field_classes = {
             'expires': SplitDateTimeField,
             'customer': SafeModelChoiceField,
             'linked_giftcard': SafeModelChoiceField,
-            'linked_orderposition': SafeOrderPositionChoiceField,
+            'linked_orderpositions': SafeOrderPositionMultipleChoiceField,
         }
         widgets = {
             'expires': SplitDateTimePickerWidget,
@@ -1187,7 +1189,7 @@ OrganizerFooterLinkFormset = inlineformset_factory(
 class SSOProviderForm(I18nModelForm):
 
     config_oidc_base_url = forms.URLField(
-        label=pgettext_lazy('sso_oidc', 'Base URL'),
+        label=pgettext_lazy('sso_oidc', 'Base URL / issuer'),
         required=False,
     )
     config_oidc_client_id = forms.CharField(
@@ -1284,6 +1286,14 @@ class SSOProviderForm(I18nModelForm):
 
 
 class SSOClientForm(I18nModelForm):
+    disp_base_url = forms.CharField(
+        label=_('Base URL / issuer'),
+        disabled=True,
+    )
+    disp_client_id = forms.CharField(
+        label=_('Client ID'),
+        disabled=True,
+    )
     regenerate_client_secret = forms.BooleanField(
         label=_('Invalidate old client secret and generate a new one'),
         required=False,
@@ -1291,7 +1301,8 @@ class SSOClientForm(I18nModelForm):
 
     class Meta:
         model = CustomerSSOClient
-        fields = ['is_active', 'name', 'client_id', 'client_type', 'authorization_grant_type', 'redirect_uris',
+        fields = ['is_active', 'name', 'disp_base_url', 'disp_client_id', 'regenerate_client_secret',
+                  'client_type', 'authorization_grant_type', 'redirect_uris',
                   'allowed_scopes', 'require_pkce']
         widgets = {
             'authorization_grant_type': forms.RadioSelect,
@@ -1306,13 +1317,15 @@ class SSOClientForm(I18nModelForm):
             help_text=self.fields['allowed_scopes'].help_text,
             required=self.fields['allowed_scopes'].required,
             initial=self.fields['allowed_scopes'].initial,
-            choices=CustomerSSOClient.SCOPE_CHOICES,
+            choices=[(val, format_html('<code>{}</code> &ndash; {}', val, label)) for val, label in CustomerSSOClient.SCOPE_CHOICES],
             widget=forms.CheckboxSelectMultiple
         )
+        organizer = kwargs['event']
+        self.initial['disp_base_url'] = eventreverse_absolute(organizer, 'presale:organizer.index', {}).strip('/')
         if self.instance and self.instance.pk:
-            self.fields['client_id'].disabled = True
+            self.initial['disp_client_id'] = self.instance.client_id
         else:
-            del self.fields['client_id']
+            self.initial['disp_client_id'] = _('(will be generated)')
             del self.fields['regenerate_client_secret']
 
 

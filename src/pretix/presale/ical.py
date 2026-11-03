@@ -32,7 +32,7 @@ from django.utils.translation import gettext as _
 from pretix.base.email import get_email_context
 from pretix.base.models import Event
 from pretix.helpers.format import format_map
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 
 def get_public_ical(events):
@@ -48,9 +48,9 @@ def get_public_ical(events):
         event = ev if isinstance(ev, Event) else ev.event
         tz = event.timezone
         if isinstance(ev, Event):
-            url = build_absolute_uri(event, 'presale:event.index')
+            url = eventreverse_absolute(event, 'presale:event.index')
         else:
-            url = build_absolute_uri(event, 'presale:event.index', {
+            url = eventreverse_absolute(event, 'presale:event.index', {
                 'subevent': ev.pk
             })
 
@@ -134,7 +134,7 @@ def get_private_icals(event, positions):
         program_times = p.item.program_times.all()
         if program_times:
             # if program times have been configured, they are preferred for the position's calendar entries
-            url = build_absolute_uri(event, 'presale:event.index')
+            url = eventreverse_absolute(event, 'presale:event.index')
             for index, pt in enumerate(program_times):
                 summary = _('{event} - {item}').format(event=ev, item=p.item.name)
                 if event.settings.mail_attach_ical_description:
@@ -167,11 +167,11 @@ def get_private_icals(event, positions):
         else:
             # without program times, the subevent or event times are used for calendar entries, preferring subevents
             if p.subevent:
-                url = build_absolute_uri(event, 'presale:event.index', {
+                url = eventreverse_absolute(event, 'presale:event.index', {
                     'subevent': p.subevent.pk
                 })
             else:
-                url = build_absolute_uri(event, 'presale:event.index')
+                url = eventreverse_absolute(event, 'presale:event.index')
 
             if event.settings.mail_attach_ical_description:
                 ctx = get_email_context(event=event, event_or_subevent=ev)

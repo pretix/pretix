@@ -11,7 +11,8 @@ Core
 ----
 
 .. automodule:: pretix.base.signals
-   :members: periodic_task, event_live_issues, event_copy_data, email_filter, register_notification_types, notification,
+   :members: periodic_task, event_live_issues, event_copy_data, email_filter,
+      register_notification_types, event_notification_sent, organizer_notification_sent,
       item_copy_data, register_sales_channel_types, register_global_settings, quota_availability, global_email_filter,
       register_ticket_secret_generators, gift_card_transaction_display,
       register_text_placeholders, register_mail_placeholders, device_info_updated,
@@ -64,8 +65,8 @@ Backend
 
 .. automodule:: pretix.control.signals
    :members: nav_event, html_head, html_page_start, quota_detail_html, nav_topbar, nav_global, nav_organizer, nav_event_settings,
-             order_info, event_settings_widget, oauth_application_registered, order_position_buttons, subevent_forms,
-             item_formsets, order_search_filter_q, order_search_forms
+             order_info, order_approve_info, event_settings_widget, oauth_application_registered,
+             order_position_buttons, subevent_forms, item_formsets, order_search_filter_q, order_search_forms, subevent_detail_html
 
 .. automodule:: pretix.base.signals
    :no-index:

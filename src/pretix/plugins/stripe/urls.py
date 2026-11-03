@@ -25,13 +25,12 @@ from pretix.multidomain import event_url
 
 from .views import (
     OrganizerSettingsFormView, ReturnView, ScaReturnView, ScaView,
-    oauth_disconnect, oauth_return, redirect_view, webhook,
+    oauth_disconnect, oauth_return, webhook,
 )
 
 event_patterns = [
     re_path(r'^stripe/', include([
         event_url(r'^webhook/$', webhook, name='webhook', require_live=False),
-        re_path(r'^redirect/$', redirect_view, name='redirect'),
         re_path(r'^return/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[0-9]+)/$', ReturnView.as_view(), name='return'),
         re_path(r'^sca/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[0-9]+)/$', ScaView.as_view(), name='sca'),
         re_path(r'^sca/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[0-9]+)/return/$',

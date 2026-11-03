@@ -252,13 +252,13 @@ TEST_HISTORY_RES = {
 }
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_list_list(token_client, organizer, event, clist, item, subevent, django_assert_num_queries):
     res = dict(TEST_LIST_RES)
     res["id"] = clist.pk
     res["limit_products"] = [item.pk]
 
-    with django_assert_num_queries(11):
+    with django_assert_num_queries(9):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
@@ -422,7 +422,7 @@ def test_list_update(token_client, organizer, event, clist):
     assert cl.name == "VIP"
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_list_all_items_positions(token_client, organizer, event, clist, clist_all, item, other_item, order, django_assert_num_queries):
     with scopes_disabled():
         p1 = dict(TEST_ORDERPOSITION1_RES)
@@ -437,7 +437,7 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
         p3["addon_to"] = p1["id"]
 
     # All items
-    with django_assert_num_queries(24):
+    with django_assert_num_queries(22):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=positionid'.format(
             organizer.slug, event.slug, clist_all.pk
         ))
@@ -680,7 +680,7 @@ def _redeem(token_client, org, clist, p, body=None):
     ), body or {}, format='json')
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_query_load(token_client, organizer, clist, event, order, django_assert_max_num_queries):
     with scopes_disabled():
         p = order.positions.first().pk
@@ -1099,6 +1099,27 @@ def test_question_upload(token_client, organizer, clist, event, order, question)
 
 
 @pytest.mark.django_db
+def test_question_upload_optional(token_client, organizer, clist, event, order, question):
+    with scopes_disabled():
+        p = order.positions.first()
+    question[0].type = 'F'
+    question[0].required = False
+    question[0].save()
+
+    resp = _redeem(token_client, organizer, clist, p.pk, {})
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    with scopes_disabled():
+        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: ""}})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert not order.positions.first().answers.filter(question=question[0]).exists()
+
+
+@pytest.mark.django_db
 def test_store_failed(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()
@@ -1106,6 +1127,7 @@ def test_store_failed(token_client, organizer, clist, event, order):
         organizer.slug, event.slug, clist.pk,
     ), {
         'raw_barcode': '123456',
+        'raw_source_type': 'nfc_uid',
         'nonce': '4321',
         'error_reason': 'invalid'
     }, format='json')
@@ -1346,7 +1368,7 @@ def test_redeem_addon_if_match_and_revoked_force(token_client, organizer, clist,
         assert ci.position == p
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_search(token_client, organizer, event, clist, clist_all, item, other_item, order, django_assert_max_num_queries):
     with scopes_disabled():
         p1 = dict(TEST_ORDERPOSITION1_RES)
@@ -1378,7 +1400,7 @@ def test_checkin_pdf_data_requires_permission(token_client, event, team, organiz
     assert not resp.data['results'][0].get('pdf_data')
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_expand(token_client, organizer, event, clist, clist_all, item, other_item, order, django_assert_max_num_queries):
     with scopes_disabled():
         op = order.positions.first()

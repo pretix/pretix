@@ -51,7 +51,7 @@ from pretix.base.signals import (
 )
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF, repeatable_reads_transaction
-from pretix.helpers.urls import build_absolute_uri
+from pretix.helpers.urls import mainreverse_absolute
 
 logger = logging.getLogger(__name__)
 
@@ -340,12 +340,13 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
             if schedule.owner.is_active:
                 mail(
                     email=schedule.owner.email,
-                    subject=gettext('Export failed'),
+                    subject=gettext('Scheduled export failed'),
                     template='pretixbase/email/export_failed.txt',
                     context={
                         'configuration_url': config_url,
                         'reason': msg,
                         'soft': soft,
+                        'instance': settings.PRETIX_INSTANCE_NAME,
                     },
                     event=context if isinstance(context, Event) else None,
                     organizer=context.organizer if isinstance(context, Event) else context,
@@ -455,7 +456,7 @@ def scheduled_organizer_export(self, organizer: Organizer, schedule: int) -> Non
         schedule,
         organizer,
         exporter,
-        build_absolute_uri(
+        mainreverse_absolute(
             'control:organizer.export',
             kwargs={
                 'organizer': organizer.slug,
@@ -481,7 +482,7 @@ def scheduled_event_export(self, event: Event, schedule: int) -> None:
         schedule,
         event,
         exporter,
-        build_absolute_uri(
+        mainreverse_absolute(
             'control:event.orders.export',
             kwargs={
                 'event': event.slug,

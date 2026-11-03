@@ -284,6 +284,14 @@
                             </div>
                             <div class="col-sm-4">
                                 {% bootstrap_field position.form.operation_secret layout='inline' %}
+                                {% if position.issued_gift_cards.exists %}
+                                    <div class="alert alert-info">
+                                        {% blocktrans trimmed %}
+                                        Ticket secrets of order positions that have been used to issue a gift card can not
+                                        be changed. Only the link will be changed in this case.
+                                        {% endblocktrans %}
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
 

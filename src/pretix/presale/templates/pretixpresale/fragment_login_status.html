@@ -9,15 +9,28 @@
                title="{% trans "View customer account" %}" data-toggle="tooltip">
                 <span class="fa fa-user" aria-hidden="true"></span>
                 {{ request.customer.name|default:request.customer.email }}</a>
-            <a href="{% if request.event_domain %}{% abseventurl request.event "presale:organizer.customer.logout" %}{% else %}{% abseventurl request.organizer "presale:organizer.customer.logout" %}{% endif %}?next={{ request.path|urlencode }}%3F{{ request.META.QUERY_STRING|urlencode }}">
+            <a href="{% if request.domain_mode == 'event' or request.domain_mode == 'organizer_alternative' %}{% abseventurl request.event "presale:organizer.customer.logout" %}{% else %}{% abseventurl request.organizer "presale:organizer.customer.logout" %}{% endif %}?next={{ request.path|urlencode }}%3F{{ request.META.QUERY_STRING|urlencode }}">
                 <span class="fa fa-sign-out" aria-hidden="true"></span>
                 {% trans "Log out" %}
             </a>
         {% else %}
-            <a href="{% abseventurl request.organizer "presale:organizer.customer.login" %}{% if request.resolver_match.url_name != "organizer.customer.login" %}?next={% if request.event_domain %}{{ request.scheme }}://{{ request.get_host }}{% endif %}{{ request.path|urlencode }}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}{% if request.event_domain %}&request_cross_domain_customer_auth=true{% endif %}">
-                <span class="fa fa-sign-in" aria-hidden="true"></span>
-                {% trans "Log in" %}</a>
-
+            <form
+                    {% if request.domain_mode == 'event' or request.domain_mode == 'organizer_alternative' %}
+                        action="{% abseventurl request.event "presale:event.customer.loginstart" %}" method="post"
+                    {% else %}
+                        action="{% abseventurl request.organizer "presale:organizer.customer.login" %}" method="get"
+                    {% endif %}
+                    class="helper-display-inline">
+                {% if request.domain_mode == 'event' or request.domain_mode == 'organizer_alternative' %}
+                    {% csrf_token %}
+                {% endif %}
+                {% if request.resolver_match.url_name != "organizer.customer.login" %}
+                    <input type="hidden" name="next" value="{% if request.domain_mode == 'event' or request.domain_mode == 'organizer_alternative' %}{{ request.scheme }}://{{ request.get_host }}{% endif %}{{ request.path }}?{{ request.META.QUERY_STRING }}">
+                {% endif %}
+                <button class="btn btn-link" type="submit">
+                    <span class="fa fa-sign-in" aria-hidden="true"></span>
+                    {% trans "Log in" %}</button>
+            </form>
         {% endif %}
     </nav>
 {% endif %}

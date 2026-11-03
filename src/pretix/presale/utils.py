@@ -59,7 +59,7 @@ from pretix.base.timemachine import time_machine_now_assigned_from_request
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.models import KnownDomain
 from pretix.multidomain.urlreverse import (
-    build_absolute_uri, get_event_domain, get_organizer_domain,
+    eventreverse_absolute, get_event_domain, get_organizer_domain,
 )
 from pretix.presale.signals import process_request, process_response
 
@@ -151,7 +151,9 @@ def add_customer_to_request(request):
         else:
             parent_session_key = otpstore.get(f'customer_cross_domain_auth_{request.organizer.pk}')
 
-            if parent_session_key:  # not already invalidated, expired, …
+            expected_nonce = request.session.pop('cross_domain_customer_auth_nonce', None)
+            found_nonce = request.GET.get("cross_domain_customer_auth_nonce")
+            if parent_session_key and expected_nonce and expected_nonce == found_nonce:  # not already invalidated, expired, …
                 # Make sure the OTP can't be used again
                 otpstore.delete()
 
@@ -283,7 +285,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 domain, domainmode = get_event_domain(request.event, fallback=False, return_mode=True)
                 if not domain and request_domain_mode == KnownDomain.MODE_ORG_ALT_DOMAIN:
                     path = request.get_full_path().split("/", 2)[-1]
-                    r = redirect_to_url(build_absolute_uri(request.event, "presale:event.index") + path)
+                    r = redirect_to_url(eventreverse_absolute(request.event, "presale:event.index") + path)
                     r['Access-Control-Allow-Origin'] = '*'
                     return r
                 elif domain and domain != request.host:

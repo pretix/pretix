@@ -13,9 +13,11 @@
 					{% blocktrans with url=edit_url|add:"#tab-0-1-open" %}If you want to keep the answers, <a href="{{url}}">edit the question</a> and set it to hidden.{% endblocktrans %}
 				</p>
 			</div>
-			{% for item in dependent %}
-				<li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{{ item }}</a></li>
-			{% endfor %}
+            <ul>
+                {% for item in dependent %}
+                    <li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{{ item }}</a></li>
+                {% endfor %}
+            </ul>
 		{% endif %}
 		<div class="form-group submit-group">
             <a href="{% url "control:event.items.questions" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">

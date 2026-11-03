@@ -35,6 +35,18 @@
                     </div>
                 </details>
             {% endif %}
+            {% if order_questions_form.fields %}
+                <details class="panel panel-default" open>
+                    <summary class="panel-heading">
+                        <h4 class="panel-title">
+                            <strong>{% trans "Additional order information" %}</strong>
+                        </h4>
+                    </summary>
+                    <div class="panel-body">
+                        {% bootstrap_form order_questions_form layout="horizontal" %}
+                    </div>
+                </details>
+            {% endif %}
             {% for pos, forms in formgroups %}
                 <details class="panel panel-default" open>
                     <summary class="panel-heading">

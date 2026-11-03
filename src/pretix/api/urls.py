@@ -68,6 +68,7 @@ orga_router.register(r'scheduled_exports', exporters.ScheduledOrganizerExportVie
 orga_router.register(r'exporters', exporters.OrganizerExportersViewSet, basename='exporters')
 orga_router.register(r'transactions', order.OrganizerTransactionViewSet)
 orga_router.register(r'orderpositions', order.OrganizerOrderPositionViewSet, basename='orderpositions')
+orga_router.register(r'event_meta_properties', organizer.EventMetaPropertiesViewSet)
 
 team_router = routers.DefaultRouter()
 team_router.register(r'members', organizer.TeamMemberViewSet)

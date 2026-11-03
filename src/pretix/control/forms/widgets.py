@@ -29,17 +29,30 @@ class Select2Mixin:
         super().__init__(*args, **kwargs)
 
     def options(self, name, value, attrs=None):
-        if value and value[0]:
-            for i, selected in enumerate(self.choices.queryset.filter(pk__in=value)):
-                yield self.create_option(
-                    None,
-                    self.choices.field.prepare_value(selected),
-                    self.choices.field.label_from_instance(selected),
-                    True,
-                    i,
-                    subindex=None,
-                    attrs=attrs
-                )
+        if not value or not value[0]:
+            return
+        has_none = "_none" in value
+        if has_none:
+            value = [v for v in value if v != "_none"]
+            yield self.create_option(
+                None,
+                "_none",
+                self.choices.field.none_label,
+                True,
+                0,
+                subindex=None,
+                attrs=attrs
+            )
+        for i, selected in enumerate(self.choices.queryset.filter(pk__in=value)):
+            yield self.create_option(
+                None,
+                self.choices.field.prepare_value(selected),
+                self.choices.field.label_from_instance(selected),
+                True,
+                i + (1 if has_none else 0),
+                subindex=None,
+                attrs=attrs
+            )
         return
 
     def optgroups(self, name, value, attrs=None):

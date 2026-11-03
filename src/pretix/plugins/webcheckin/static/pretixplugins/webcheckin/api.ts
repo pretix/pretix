@@ -205,8 +205,8 @@ const CSRF_TOKEN = document.querySelector<HTMLInputElement>('input[name=csrfmidd
 function handleAuthError (response: Response): void {
 	if ([401, 403].includes(response.status)) {
 		window.location.href = '/control/login?next=' + encodeURIComponent(
-			window.location.pathname + window.location.search + window.location.hash
-		)
+			window.location.pathname + window.location.search
+		) + window.location.hash
 	}
 }
 

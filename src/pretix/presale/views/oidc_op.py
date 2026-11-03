@@ -46,7 +46,7 @@ from pretix.base.models.customers import (
 )
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.middlewares import CsrfViewMiddleware
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.customer import AuthenticationForm
 from pretix.presale.utils import customer_login, get_customer_auth_time
 
@@ -234,6 +234,11 @@ class AuthorizeView(View):
 
         if response_type not in RESPONSE_TYPES_SUPPORTED:
             return self._final_error("unsupported_response_type", "response_type unsupported")
+
+        if client.authorization_grant_type == "authorization-code" and response_type != "code":
+            # with authorization_grant_type=implicit, response_type=code is still allowed, otherwise "hybrid flow" would be impossible
+            return self._final_error("unsupported_response_type", "For clients with grant type set "
+                                                                  "to authorization code, using implicit or hybrid flows is not allowed")
 
         if response_type != "code" and response_mode == "query":
             return self._final_error("invalid_request", "response_mode query must not be used with implicit or hybrid flow")
@@ -519,17 +524,17 @@ class ConfigurationView(View):
 
     def get(self, request, *args, **kwargs):
         return JsonResponse({
-            'issuer': build_absolute_uri(request.organizer, 'presale:organizer.index').rstrip('/'),
-            'authorization_endpoint': build_absolute_uri(
+            'issuer': eventreverse_absolute(request.organizer, 'presale:organizer.index').rstrip('/'),
+            'authorization_endpoint': eventreverse_absolute(
                 request.organizer, 'presale:organizer.oauth2.v1.authorize'
             ),
-            'token_endpoint': build_absolute_uri(
+            'token_endpoint': eventreverse_absolute(
                 request.organizer, 'presale:organizer.oauth2.v1.token'
             ),
-            'userinfo_endpoint': build_absolute_uri(
+            'userinfo_endpoint': eventreverse_absolute(
                 request.organizer, 'presale:organizer.oauth2.v1.userinfo'
             ),
-            'jwks_uri': build_absolute_uri(
+            'jwks_uri': eventreverse_absolute(
                 request.organizer, 'presale:organizer.oauth2.v1.jwks'
             ),
             'scopes_supported': [k for k, v in CustomerSSOClient.SCOPE_CHOICES],

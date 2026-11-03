@@ -27,7 +27,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import Q
 from django.utils.crypto import get_random_string
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
+from i18nfield.rest_framework import I18nField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -40,7 +41,7 @@ from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.auth import get_auth_backends
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
-    Customer, Device, GiftCard, GiftCardAcceptance, GiftCardTransaction,
+    Customer, Device, EventMetaProperty, GiftCard, GiftCardTransaction,
     Membership, MembershipType, OrderPosition, Organizer, ReusableMedium,
     SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
@@ -58,8 +59,8 @@ from pretix.helpers.permission_migration import (
     OLD_TO_NEW_EVENT_COMPAT, OLD_TO_NEW_EVENT_MIGRATION,
     OLD_TO_NEW_ORGANIZER_COMPAT, OLD_TO_NEW_ORGANIZER_MIGRATION,
 )
-from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.helpers.urls import mainreverse_absolute
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +72,7 @@ class OrganizerSerializer(I18nAwareModelSerializer):
     slug = serializers.CharField(read_only=True)
 
     def get_organizer_url(self, organizer):
-        return build_absolute_uri(organizer, 'presale:organizer.index')
+        return eventreverse_absolute(organizer, 'presale:organizer.index')
 
     class Meta:
         model = Organizer
@@ -268,15 +269,7 @@ class GiftCardSerializer(I18nAwareModelSerializer):
         data = super().validate(data)
         if 'secret' in data:
             s = data['secret']
-            qs = GiftCard.objects.filter(
-                secret=s
-            ).filter(
-                Q(issuer=self.context["organizer"]) |
-                Q(issuer__in=GiftCardAcceptance.objects.filter(
-                    acceptor=self.context["organizer"],
-                    active=True,
-                ).values_list('issuer', flat=True))
-            )
+            qs = self.context["organizer"].accepted_gift_cards.filter(secret=s)
             if self.instance:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():
@@ -426,6 +419,8 @@ class TeamSerializer(serializers.ModelSerializer):
                 for k, v in OLD_TO_NEW_ORGANIZER_MIGRATION.items():
                     if full_data.get(k) is True:
                         data["limit_organizer_permissions"].update({kk: True for kk in v})
+            for key in list(k for k in data if k.startswith("can_")):
+                del data[key]
 
         if full_data.get('limit_events') and full_data.get('all_events'):
             raise ValidationError('Do not set both limit_events and all_events.')
@@ -492,14 +487,16 @@ class TeamInviteSerializer(serializers.ModelSerializer):
     def _send_invite(self, instance):
         mail(
             instance.email,
-            _('Account invitation'),
+            gettext('You\'ve been invited to join %(organizer)s') % {
+                'organizer': self.context['organizer'].name,
+            },
             'pretixcontrol/email/invitation.txt',
             {
                 'instance': settings.PRETIX_INSTANCE_NAME,
                 'user': self,
                 'organizer': self.context['organizer'].name,
                 'team': instance.team.name,
-                'url': build_global_uri('control:auth.invite', kwargs={
+                'url': mainreverse_absolute('control:auth.invite', kwargs={
                     'token': instance.token
                 })
             },
@@ -574,6 +571,7 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'customer_accounts_require_login_for_order_access',
         'invoice_regenerate_allowed',
         'contact_mail',
+        'contact_url',
         'imprint_url',
         'organizer_info_text',
         'event_list_type',
@@ -605,6 +603,7 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'cookie_consent_dialog_button_yes',
         'cookie_consent_dialog_button_no',
         'reusable_media_active',
+        'reusable_media_usage_enforced',
         'reusable_media_type_barcode',
         'reusable_media_type_barcode_identifier_length',
         'reusable_media_type_nfc_uid',
@@ -634,3 +633,88 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         )
         # TODO: make sure pub is always correct
         return 'pub/' + fname
+
+
+class MetaPropertyListField(serializers.ListField):
+    def __init__(self, *args, **kwargs):
+        kwargs["validators"] = kwargs.pop("validators", [])
+
+        def validate_keys_unique(choices):
+            if not choices:
+                return
+            keys = [c.get("key") for c in choices]
+            if len(set(keys)) < len(keys):
+                raise ValidationError("The key for each meta property value option must be unique.")
+
+        kwargs["validators"].append(
+            validate_keys_unique
+        )
+        super().__init__(*args, **kwargs)
+
+
+class MetaPropertyDictField(serializers.DictField):
+
+    def __init__(self, **kwargs):
+        self.label_child = kwargs.pop("label_child", I18nField())
+        super().__init__(**kwargs)
+
+    def to_representation(self, value):
+        # django added unneccessary keys DELETE, ORDER through formsets, filter them here for backwards compat
+        d = {
+            "key": value["key"]
+        }
+        if "label" in value:
+            d["label"] = self.label_child.to_representation(value["label"])
+
+        return super().to_representation(d)
+
+    def to_internal_value(self, data):
+        if not isinstance(data, dict):
+            raise ValidationError("Meta property value options must be a dict.")
+
+        if not isinstance(data.get("key"), str):
+            raise ValidationError("Meta property value options must have a key of type string.")
+
+        if any(k not in {"key", "label"} for k in data.keys()):
+            raise ValidationError("Meta property value options may only have a key and optionally a label.")
+
+        if "label" in data:
+            try:
+                data["label"] = self.label_child.to_internal_value(data["label"])
+            except ValidationError as e:
+                raise ValidationError({"label": e.detail})
+
+        return super().to_internal_value(data)
+
+
+class EventMetaPropertiesSerializer(I18nAwareModelSerializer):
+    choices = MetaPropertyListField(
+        child=MetaPropertyDictField(
+            label_child=I18nField()
+        ),
+        allow_null=True,
+    )
+
+    class Meta:
+        model = EventMetaProperty
+        fields = (
+            'id', 'name', 'default', 'required', 'protected', 'filter_public', 'public_label', 'filter_allowed',
+            'choices'
+        )
+
+    def validate(self, data):
+        data = super().validate(data)
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+
+        choices = full_data.get("choices")
+        default = full_data.get("default")
+        if choices and default:
+            choice_keys = [c.get("key") for c in choices]
+            if default not in choice_keys:
+                raise ValidationError("You cannot set a default value that is not a valid value.")
+
+        if not choices and "choices" in data:
+            # normalize empty dict to None
+            data["choices"] = None
+        return data

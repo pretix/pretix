@@ -1,5 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "If the schema is changed, regenerate pdf-layout.validate.js with $ ajv compile -s ./pretix/static/schema/pdf-layout.schema.json --spec=draft2020 -o ./pretix/static/schema/pdf-layout.validate.js",
   "title": "Ticket Layout",
   "description": "Dynamic elements for a PDF layout",
   "type": "array",

@@ -118,6 +118,10 @@
                                 </td>
                             {% endif %}
                             <td>
+                                <span class="fa fa-fw {% if d.last_seen and d.last_seen.is_recent %}fa-check-circle text-success{% else %}fa-circle text-danger{% endif %}"
+                                      data-toggle="tooltip"
+                                      title="{% if d.last_seen %}{% blocktrans with time=d.last_seen.last_seen|date:"SHORT_DATETIME_FORMAT" %}Last seen: {{ time }}{% endblocktrans %}{% else %}{% trans "No recent contact" %}{% endif %}"
+                                ></span>
                                 {{ d.device_id }}
                             </td>
                             <td>
@@ -125,6 +129,7 @@
                                     <del>{% endif %}
                                 {{ d.name }}
                                 {% if d.revoked %}</del>{% endif %}
+
                                 {% if d.gate %}
                                     <br>
                                     <small class="text-muted">{{ d.gate.name }}</small>
@@ -137,6 +142,15 @@
                             </td>
                             <td>
                                 {{ d.software_brand|default_if_none:"" }} {{ d.software_version|default_if_none:"" }}
+                                {% if staff_session %}
+                                    <details class="admin-only">
+                                        <summary>
+                                            <i class="fa fa-angle-down collapse-indicator"></i>
+                                            {% trans "Details" %}
+                                        </summary>
+                                        <pre class="admin-only">{{ d.info|pprint }}</pre>
+                                    </details>
+                                {% endif %}
                             </td>
                             <td>
                                 {% if d.initialized %}

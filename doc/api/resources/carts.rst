@@ -192,7 +192,7 @@ Cart position endpoints
    * ``attendee_email`` (optional)
    * ``subevent`` (optional)
    * ``expires`` (optional)
-   * ``includes_tax`` (optional, **deprecated**, do not use, will be removed)
+   * ``includes_tax`` (optional, **DEPRECATED**, do not use, will be removed)
    * ``sales_channel`` (optional)
    * ``voucher`` (optional, expect a voucher code)
    * ``addons`` (optional, expect a list of nested objects of cart positions)

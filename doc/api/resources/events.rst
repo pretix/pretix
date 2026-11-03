@@ -110,7 +110,7 @@ Endpoints
             "plugins": [
               "pretix.plugins.banktransfer",
               "pretix.plugins.stripe",
-              "pretix.plugins.paypal",
+              "pretix.plugins.paypal2",
               "pretix.plugins.ticketoutputpdf"
             ],
             "all_sales_channels": false,
@@ -199,7 +199,7 @@ Endpoints
         "plugins": [
           "pretix.plugins.banktransfer",
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal",
+          "pretix.plugins.paypal2",
           "pretix.plugins.ticketoutputpdf"
         ],
         "valid_keys": {
@@ -262,7 +262,7 @@ Endpoints
         "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal"
+          "pretix.plugins.paypal2"
         ],
         "all_sales_channels": true,
         "limit_sales_channels": []
@@ -299,7 +299,7 @@ Endpoints
         "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal"
+          "pretix.plugins.paypal2"
         ],
         "all_sales_channels": true,
         "limit_sales_channels": [],
@@ -364,7 +364,7 @@ Endpoints
         "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal"
+          "pretix.plugins.paypal2"
         ],
         "all_sales_channels": true,
         "limit_sales_channels": []
@@ -401,7 +401,7 @@ Endpoints
         "item_meta_properties": {},
         "plugins": [
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal"
+          "pretix.plugins.paypal2"
         ],
         "all_sales_channels": true,
         "limit_sales_channels": [],
@@ -438,7 +438,7 @@ Endpoints
         "plugins": [
           "pretix.plugins.banktransfer",
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal",
+          "pretix.plugins.paypal2",
           "pretix.plugins.pretixdroid"
         ]
       }
@@ -475,7 +475,7 @@ Endpoints
         "plugins": [
           "pretix.plugins.banktransfer",
           "pretix.plugins.stripe",
-          "pretix.plugins.paypal",
+          "pretix.plugins.paypal2",
           "pretix.plugins.pretixdroid"
         ],
         "all_sales_channels": true,
@@ -566,7 +566,7 @@ organizer level.
       Content-Type: application/json
 
       {
-        "imprint_url": "https://pretix.eu",
+        "region": "DE",
         …
       }
 
@@ -579,12 +579,14 @@ organizer level.
       Content-Type: application/json
 
       {
-        "imprint_url":
+        "region":
           {
-            "value": "https://pretix.eu",
-            "label": "Imprint URL",
+            "value": "DE",
+            "label": "Region",
             "readonly": false,
-            "help_text": "This should point e.g. to a part of your website that has your contact details and legal information."
+            "help_text": "Will be used to determine date and time formatting as well as default country for customer
+                          addresses and phone numbers. For formatting, this takes less priority than the language and
+                          is therefore mostly relevant for languages used in different regions globally (like English)."
           }
         },
         …
@@ -620,7 +622,7 @@ organizer level.
       Content-Type: application/json
 
       {
-        "imprint_url": "https://example.org/imprint/"
+        "region": "DE"
       }
 
    **Example response**:
@@ -632,7 +634,7 @@ organizer level.
       Content-Type: application/json
 
       {
-        "imprint_url": "https://example.org/imprint/",
+        "region": "DE",
         …
       }
 

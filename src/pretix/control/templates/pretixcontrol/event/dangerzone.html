@@ -9,23 +9,24 @@
             <h3 class="panel-title">{% trans "Go offline" %}</h3>
         </div>
         <div class="row panel-body">
-            <div class="col-sm-12 col-md-9 nomargin-bottom">
+            <div class="col-sm-12 col-lg-6">
+                <p>
                 {% blocktrans trimmed %}
                     You can take your event offline. Nobody except your team will be able to see or access it any more.
                 {% endblocktrans %}
-            </div>
-            <div class="col-sm-12 col-md-3">
-                <form action="{% url "control:event.live" event=request.event.slug organizer=request.organizer.slug %}"
-                        method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="live" value="false">
+                </p>
+            </div>            
+            <form class="col-sm-12 col-lg-6 text-right"
+                    action="{% url "control:event.live" event=request.event.slug organizer=request.organizer.slug %}"
+                    method="post">
+                {% csrf_token %}
+                <input type="hidden" name="live" value="false">
 
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">
-                        <span class="fa fa-power-off"></span>
-                        {% trans "Go offline" %}
-                    </button>
-                </form>
-            </div>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <span class="fa fa-power-off"></span>
+                    {% trans "Go offline" %}
+                </button>
+            </form>
         </div>
     </div>
 
@@ -34,22 +35,24 @@
             <h3 class="panel-title">{% trans "Cancel event" %}</h3>
         </div>
         <div class="row panel-body">
-            <div class="col-sm-12 col-md-9 nomargin-bottom">
+            <div class="col-sm-12 col-lg-6">
+                <p>
                 {% blocktrans trimmed %}
                     If you need to call off your event you want to cancel and refund all tickets, you can do so through
                     this option.
                 {% endblocktrans %}
+                </p>
             </div>
-            <div class="col-sm-12 col-md-3 text-center">
-                {% if "event:cancel" in request.eventpermset %}
-                    <a href="{% url "control:event.cancel" organizer=request.organizer.slug event=request.event.slug %}"
-                            class="btn btn-danger btn-block btn-lg">
-                        <span class="fa fa-ban"></span>
+            <div class="col-sm-12 col-lg-6 text-right">
+                <a href="{% url "control:event.cancel" organizer=request.organizer.slug event=request.event.slug %}"
+                        class="btn btn-danger btn-lg pull-right {% if "event:cancel" not in request.eventpermset %}disabled{% endif %}">
+                    <span class="fa fa-ban"></span>
+                    {% if "event:cancel" in request.eventpermset %}
                         {% trans "Cancel event" %}
-                    </a>
-                {% else %}
-                    {% trans "No permission" %}
-                {% endif %}
+                    {% else %}
+                        {% trans "No permission" %}
+                    {% endif %}
+                </a>
             </div>
         </div>
     </div>
@@ -59,15 +62,16 @@
             <h3 class="panel-title">{% trans "Delete personal data" %}</h3>
         </div>
         <div class="row panel-body">
-            <div class="col-sm-12 col-md-9 nomargin-bottom">
+            <div class="col-sm-12 col-lg-6">
+                <p>
                 {% blocktrans trimmed %}
                     You can remove personal data such as names and email addresses from your event and only retain the
                     financial information such as the number and type of tickets sold.
                 {% endblocktrans %}
+                </p>
             </div>
-            <div class="col-sm-12 col-md-3">
-                <a href="
-{% url "control:event.shredder.start" event=request.event.slug organizer=request.organizer.slug %}" class="btn btn-danger btn-lg btn-block">
+            <div class="col-sm-12 col-lg-6 text-right">
+                <a href="{% url "control:event.shredder.start" event=request.event.slug organizer=request.organizer.slug %}" class="btn btn-danger btn-lg">
                     <span class="fa fa-eraser"></span>
                     {% trans "Delete personal data" %}
                 </a>
@@ -80,15 +84,17 @@
             <h3 class="panel-title">{% trans "Delete event" %}</h3>
         </div>
         <div class="row panel-body">
-            <div class="col-sm-12 col-md-9 nomargin-bottom">
+            <div class="col-sm-12 col-lg-6">
+                <p>
                 {% blocktrans trimmed %}
                     You can delete your event completely only as long as it does not contain any undeletable data, such as
                     orders not performed in test mode.
                 {% endblocktrans %}
+                </p>
             </div>
-            <div class="col-sm-12 col-md-3">
+            <div class="col-sm-12 col-lg-6 text-right">
                 <a href="{% url "control:event.delete" organizer=request.organizer.slug event=request.event.slug %}"
-                        class="btn btn-danger btn-block btn-lg {% if not request.event.allow_delete %}disabled{% endif %}">
+                        class="btn btn-danger btn-lg {% if not request.event.allow_delete %}disabled{% endif %}">
                     <span class="fa fa-trash"></span>
                     {% trans "Delete event" %}
                 </a>

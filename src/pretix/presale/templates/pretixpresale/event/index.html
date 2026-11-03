@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load l10n %}
+{% load static %}
 {% load eventurl %}
 {% load cache_large %}
 {% load money %}
@@ -22,7 +23,11 @@
             {% endblocktrans %} ::
         {% endif %}
     {% elif subevent %}
-        {{ subevent.get_date_range_display }} ::
+        {% if subevent.name|upper != event.name|upper %}
+            {# The |upper is a trick to force LazyI18nString→str conversion before comparison #}
+            {{ subevent.name }} ::
+        {% endif %}
+        {{ subevent.get_date_range_display_with_times }} ::
     {% endif %}
 {% endblock %}
 
@@ -39,6 +44,7 @@
     {% else %}
         <meta property="og:url" content="{% abseventurl request.event "presale:event.index" %}" />
     {% endif %}
+    <script type="text/javascript" src="{% static "pretixpresale/js/csrfcookieretry.js" %}"></script>
 {% endblock %}
 {% block content %}
 
@@ -72,7 +78,7 @@
         {% endif %}
 
 
-        {% if subevent_list.list_type != "list" or subevent_list.visible_events %}
+        {% if subevent_list.list_type != "list" or subevent_list.visible_events or "filtered" in request.GET %}
             {% if subevent_list_foldable %}
                 <details class="panel panel-{% if show_cart %}primary{% else %}default{% endif %}">
                 <summary class="panel-heading">
@@ -133,9 +139,6 @@
         {% if event_logo and event_logo_show_title %}
             <h2 class="content-header">
                 {{ event.name }}
-                {% if request.event.settings.show_dates_on_frontpage %}
-                    <small>{{ event.get_date_range_display_as_html }}</small>
-                {% endif %}
             </h2>
         {% endif %}
         {% if frontpage_text %}
@@ -149,8 +152,8 @@
         {% if not ev.presale_is_running %}
             <div class="alert alert-info">
                 {% if ev.presale_has_ended %}
-                    {% if event.settings.presale_has_ended_text %}
-                        {{ event.settings.presale_has_ended_text|rich_text }}
+                    {% if presale_has_ended_text %}
+                        {{ presale_has_ended_text|rich_text }}
                     {% else %}
                         {% blocktrans trimmed %}
                             The booking period for this event is over.

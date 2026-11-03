@@ -20,7 +20,6 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
-from collections import OrderedDict
 
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
@@ -52,10 +51,18 @@ class BaseSecurityProfile:
         """
         raise NotImplementedError()
 
+    @property
+    def priority(self) -> int:
+        """
+        Priority for ordering, higher will come first.
+        """
+        return 100
+
 
 class FullAccessSecurityProfile(BaseSecurityProfile):
     identifier = 'full'
     verbose_name = _('Full device access (reading and changing orders and gift cards, reading of products and settings)')
+    priority = 1000
 
     def is_allowed(self, request):
         return True
@@ -108,8 +115,11 @@ class PretixScanSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:event.settings'),
         ('POST', 'api-v1:upload'),
         ('POST', 'api-v1:checkinrpc.redeem'),
+        ('POST', 'api-v1:checkinrpc.annul'),
         ('GET', 'api-v1:checkinrpc.search'),
         ('GET', 'api-v1:reusablemedium-list'),
+        ('POST', 'api-v1:reusablemedium-lookup'),
+        ('PATCH', 'api-v1:reusablemedium-detail')
     )
 
 
@@ -144,6 +154,7 @@ class PretixScanNoSyncNoSearchSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:event.settings'),
         ('POST', 'api-v1:upload'),
         ('POST', 'api-v1:checkinrpc.redeem'),
+        ('POST', 'api-v1:checkinrpc.annul'),
         ('GET', 'api-v1:checkinrpc.search'),
     )
 
@@ -180,6 +191,7 @@ class PretixScanNoSyncSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:event.settings'),
         ('POST', 'api-v1:upload'),
         ('POST', 'api-v1:checkinrpc.redeem'),
+        ('POST', 'api-v1:checkinrpc.annul'),
         ('GET', 'api-v1:checkinrpc.search'),
     )
 
@@ -190,13 +202,15 @@ def get_all_security_profiles():
     if _ALL_PROFILES:
         return _ALL_PROFILES
 
-    types = OrderedDict()
+    types = []
     for recv, ret in register_device_security_profile.send(None):
         if isinstance(ret, (list, tuple)):
             for r in ret:
-                types[r.identifier] = r
+                types.append(r)
         else:
-            types[ret.identifier] = ret
+            types.append(ret)
+    types.sort(key=lambda el: el.priority, reverse=True)
+    types = {r.identifier: r for r in types}
     _ALL_PROFILES = types
     return types
 

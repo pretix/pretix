@@ -19,12 +19,10 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
 import json
 import logging
 import pathlib
 import re
-import secrets
 from urllib.parse import urljoin
 from urllib.request import urlopen
 
@@ -32,6 +30,10 @@ import importlib_metadata as metadata
 from django import template
 from django.conf import settings
 from django.utils.safestring import mark_safe
+
+from pretix.base.middleware import (
+    add_to_response_csp_via_request, calculate_csp_hash,
+)
 
 register = template.Library()
 LOGGER = logging.getLogger(__name__)
@@ -234,10 +236,16 @@ def vite_importmap(context):
     if not imports:
         return ""
 
-    # Generate a nonce and store it on the request so the CSP middleware can allow it
-    nonce = secrets.token_urlsafe(16)
+    json_string = json.dumps({"imports": imports})
+
+    # Calculate hash and add it to the CSP info in the request, so that will be merged into the
+    # response header later on by the middleware
     request = context.get('request')
     if request:
-        request.csp_nonce = nonce
+        csp_hash = calculate_csp_hash(json_string)
+        add_to_response_csp_via_request(request, {
+            'style-src': [csp_hash],
+            'script-src': [csp_hash],
+        })
 
-    return f'<script type="importmap" nonce="{nonce}">{json.dumps({"imports": imports})}</script>'
+    return f'<script type="importmap">{json_string}</script>'

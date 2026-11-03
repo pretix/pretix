@@ -55,9 +55,10 @@ from openpyxl.comments import Comment
 from openpyxl.styles import Font, PatternFill
 
 from pretix.base.models import (
-    Checkin, GiftCard, GiftCardTransaction, Invoice, InvoiceAddress, Order,
+    Checkin, GiftCardTransaction, Invoice, InvoiceAddress, Order,
     OrderPosition, Question,
 )
+from pretix.base.models.giftcards import GiftCard
 from pretix.base.models.orders import (
     OrderFee, OrderPayment, OrderRefund, Transaction,
 )
@@ -68,7 +69,7 @@ from ...control.forms.filter import get_all_payment_providers
 from ...helpers import GroupConcat
 from ...helpers.iter import chunked_iterable
 from ...helpers.safe_openpyxl import remove_invalid_excel_chars
-from ...multidomain.urlreverse import build_absolute_uri
+from ...multidomain.urlreverse import eventreverse_absolute
 from ..exporter import (
     ListExporter, MultiSheetListExporter, OrganizerLevelExportMixin,
 )
@@ -429,7 +430,7 @@ class OrderListExporter(MultiSheetListExporter):
             ]))
 
             row.append(
-                build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                eventreverse_absolute(order.event, 'presale:event.order', kwargs={
                     'order': order.code,
                     'secret': order.secret,
                 })
@@ -855,7 +856,7 @@ class OrderListExporter(MultiSheetListExporter):
                 ]))
 
                 row.append(
-                    build_absolute_uri(order.event, 'presale:event.order.position', kwargs={
+                    eventreverse_absolute(order.event, 'presale:event.order.position', kwargs={
                         'order': order.code,
                         'secret': op.web_secret,
                         'position': op.positionid
@@ -1326,12 +1327,12 @@ class GiftcardRedemptionListExporter(ListExporter):
             order__event__in=self.events,
             provider='giftcard',
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
-        ).order_by('created')
+        ).order_by('created').select_related("order__event__organizer")
         refunds = OrderRefund.objects.filter(
             order__event__in=self.events,
             provider='giftcard',
             state=OrderRefund.REFUND_STATE_DONE
-        ).order_by('created')
+        ).order_by('created').select_related("order__event__organizer")
 
         objs = sorted(list(payments) + list(refunds), key=lambda o: (o.order.code, o.created))
 
@@ -1348,9 +1349,9 @@ class GiftcardRedemptionListExporter(ListExporter):
                 obj.order.code,
                 obj.full_id,
                 obj.created.astimezone(tz).date().strftime('%Y-%m-%d'),
-                gc.secret,
+                gc.secret if gc.accepted_by(obj.order.event.organizer) else '?',
                 obj.amount * (-1 if isinstance(obj, OrderRefund) else 1),
-                gc.issuer
+                gc.issuer.slug
             ]
             yield row
 

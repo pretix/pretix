@@ -67,7 +67,7 @@
                                             {% icon "clock-o" %}
                                             <span class="sr-only">{% trans "Time of day" %}</span>
                                             <time datetime="{{ e.date_from|date_fast:"H:i" }}">{{ e.date_from|date:"TIME_FORMAT" }}</time>
-                                            {% if e.settings.show_date_to and e.date_to and e.date_to.date == e.date_from.date %}
+                                            {% if e.settings.show_date_to and e.date_to and e.is_same_day %}
                                                 <span aria-hidden="true">–</span><span class="sr-only">{% trans "until" context "timerange" %}</span>
                                                 <time datetime="{{ e.date_to|date_fast:"H:i" }}">{{ e.date_to|date:"TIME_FORMAT" }}</time>
                                             {% endif %}

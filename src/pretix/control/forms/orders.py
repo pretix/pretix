@@ -562,9 +562,7 @@ class OrderPositionChangeForm(forms.Form):
         if instance.addon_to_id:
             del self.fields['operation_split']
 
-        if not instance.seat and not (
-                instance.item.seat_category_mappings.filter(subevent=instance.subevent).exists()
-        ):
+        if not instance.seat and not instance._seat_allowed:
             del self.fields['seat']
 
         choices = [

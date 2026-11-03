@@ -23,6 +23,8 @@ from datetime import timedelta
 from decimal import Decimal
 
 import pytest
+from django.template.loader import render_to_string
+from django.utils.safestring import SafeData
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Organizer
@@ -75,6 +77,31 @@ TESTVERANST-12345
     assert codes[1]['label'] == 'BezahlCode'
     assert codes[1]['qr_data'] == ('bank://singlepaymentsepa?name=Verein%20f%C3%BCr%20Testzwecke%20e.V.&iban=DE37796500000069799047'
                                    '&bic=BYLADEM1MIL&amount=123%2C00&reason=TESTVERANST-12345&currency=EUR')
+
+
+@pytest.mark.django_db
+def test_payment_qr_codes_euro_keeps_allowed_apostrophe_unescaped(env):
+    o, event = env
+    codes = generate_payment_qr_codes(
+        event=event,
+        code='TESTVERANST-12345',
+        amount=Decimal('123.00'),
+        bank_details_sepa_bic='BYLADEM1MIL',
+        bank_details_sepa_iban='DE37796500000069799047',
+        bank_details_sepa_name='Bits\'n"Bugs',
+    )
+
+    qr_data = codes[0]['qr_data']
+    assert '\nBits\'nBugs\n' in qr_data
+    assert not isinstance(qr_data, SafeData)
+
+    html = render_to_string(
+        'pretixpresale/event/payment_qr_codes.html',
+        {'payment_qr_codes': codes},
+    )
+    assert 'type="application/json"' in html
+    assert "\\nBits'nBugs\\n" in html
+    assert '&#x27;' not in html
 
 
 @pytest.mark.django_db

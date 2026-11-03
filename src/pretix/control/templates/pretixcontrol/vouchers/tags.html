@@ -49,11 +49,11 @@
                         <td>
                             <strong>
                             {% if t.tag %}
-                                <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}?tag={{ '"'|add:t.tag|add:'"'|urlencode }}">
+                                <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}?filter-tag={{ '"'|add:t.tag|add:'"'|urlencode }}">
                                     {{ t.tag }}
                                 </a>
                             {% else %}
-                                <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}?tag={{ '<>'|urlencode }}">
+                                <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}?filter-tag={{ '<>'|urlencode }}">
                                     {% trans "Empty tag" %}
                                 </a>
                             {% endif %}

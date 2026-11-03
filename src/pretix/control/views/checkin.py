@@ -50,7 +50,7 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.api.views.checkin import _redeem_process
 from pretix.base.media import MEDIA_TYPES
-from pretix.base.models import Checkin, LogEntry, Order, OrderPosition
+from pretix.base.models import Checkin, Item, LogEntry, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.models.orders import PrintLog
 from pretix.base.permissions import AnyPermissionOf
@@ -401,13 +401,14 @@ class CheckinListUpdate(EventPermissionRequiredMixin, UpdateView):
                 {
                     'id': i.pk,
                     'name': str(i),
+                    'active': i.active,
                     'variations': [
                         {
                             'id': v.pk,
                             'name': str(v.value)
                         } for v in i.variations.all()
                     ]
-                } for i in self.request.event.items.filter(active=True).prefetch_related('variations')
+                } for i in self.request.event.items.prefetch_related('variations')
             ],
             **super().get_context_data(),
         }
@@ -483,10 +484,17 @@ class CheckinListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
     def get_queryset(self):
         qs = Checkin.all.filter(
-            list__event=self.request.event,
-        ).select_related(
-            'position', 'position__order', 'position__item', 'position__variation', 'position__subevent'
+            list_id__in=self.request.event.checkin_lists.values_list('id', flat=True),
         ).prefetch_related(
+            # For events with huge numbers of check-ins, prefetch_related is a lot more efficient than
+            # select_related, since it just needs to query one page size of positions instead of joining
+            # multiple huge tables during result computation
+            Prefetch(
+                'position',
+                queryset=OrderPosition.all.select_related(
+                    'order', 'item', 'variation', 'subevent',
+                )
+            ),
             'list', 'gate', 'device'
         )
         if self.filter_form.is_valid():
@@ -532,6 +540,8 @@ class CheckInListSimulator(EventPermissionRequiredMixin, FormView):
             checkinlist=self.list,
             result=self.result,
             reason_labels=dict(Checkin.REASONS),
+            media_policies=dict(Item.MEDIA_POLICIES),
+            media_types=dict(MEDIA_TYPES),
         )
 
     def form_valid(self, form):

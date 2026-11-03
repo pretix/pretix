@@ -473,7 +473,7 @@ class QuotaTestCase(BaseQuotaTestCase):
     @classscope(attr='o')
     def test_waitinglist_auto_disable(self):
         self.event.settings.waiting_list_auto_disable = RelativeDateWrapper(
-            RelativeDate(days=0, time=None, base_date_name='date_from', minutes=20, is_after=True)
+            RelativeDate(days=0, time=None, base_date_name='event__date_from', minutes=20, is_after=True)
         )
         self.quota.items.add(self.item1)
         self.quota.size = 1
@@ -484,7 +484,7 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
         self.assertEqual(self.item1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
         self.event.settings.waiting_list_auto_disable = RelativeDateWrapper(
-            RelativeDate(days=0, time=None, base_date_name='date_from', minutes=20, is_after=False)
+            RelativeDate(days=0, time=None, base_date_name='event__date_from', minutes=20, is_after=False)
         )
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
         self.assertEqual(self.item1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
@@ -1192,7 +1192,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.subevent = se2
         self.op2.save()
         self.event.settings.set('payment_term_last', RelativeDateWrapper(
-            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
+            RelativeDate(days=2, time=None, base_date_name='event__date_from', minutes=None)
         ))
 
         self.order.status = Order.STATUS_EXPIRED
@@ -1347,7 +1347,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.subevent = se2
         self.op2.save()
         self.event.settings.set('last_order_modification_date', RelativeDateWrapper(
-            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
+            RelativeDate(days=2, time=None, base_date_name='event__date_from', minutes=None)
         ))
         assert self.order.can_modify_answers
         self.op2.subevent = se3
@@ -1363,7 +1363,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=datetime.timezone.utc)
         self.event.save()
         self.event.settings.set('payment_term_last', RelativeDateWrapper(
-            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
+            RelativeDate(days=2, time=None, base_date_name='event__date_from', minutes=None)
         ))
         assert self.order.payment_term_last == datetime.datetime(2017, 5, 1, 23, 59, 59, tzinfo=datetime.timezone.utc)
 
@@ -1379,7 +1379,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.subevent = se2
         self.op2.save()
         self.event.settings.set('payment_term_last', RelativeDateWrapper(
-            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
+            RelativeDate(days=2, time=None, base_date_name='event__date_from', minutes=None)
         ))
         assert self.order.payment_term_last > now()
         self.op2.subevent = se3
@@ -1395,7 +1395,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=datetime.timezone.utc)
         self.event.save()
         self.event.settings.set('ticket_download_date', RelativeDateWrapper(
-            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
+            RelativeDate(days=2, time=None, base_date_name='event__date_from', minutes=None)
         ))
         assert self.order.ticket_download_date == datetime.datetime(2017, 5, 1, 12, 0, 0, tzinfo=datetime.timezone.utc)
 
@@ -1411,7 +1411,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.subevent = se2
         self.op2.save()
         self.event.settings.set('ticket_download_date', RelativeDateWrapper(
-            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
+            RelativeDate(days=2, time=None, base_date_name='event__date_from', minutes=None)
         ))
         assert self.order.ticket_download_date > now()
         self.op2.subevent = se3
@@ -1582,13 +1582,13 @@ class OrderTestCase(BaseQuotaTestCase):
 
         assert self.order.user_cancel_deadline is None
         self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes=None)
+            RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='event__date_from', minutes=None)
         ))
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_cancel_deadline > now()
         assert self.order.user_cancel_allowed
         self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days=4, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes=None)
+            RelativeDate(days=4, time=datetime.time(14, 0, 0), base_date_name='event__date_from', minutes=None)
         ))
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_cancel_deadline < now()
@@ -1607,7 +1607,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.save()
 
         self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes=None)
+            RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='event__date_from', minutes=None)
         ))
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_cancel_deadline < now()
@@ -2018,13 +2018,13 @@ class OrderTestCase(BaseQuotaTestCase):
 
         assert self.order.user_change_deadline is None
         self.event.settings.set('change_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes=None)
+            RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='event__date_from', minutes=None)
         ))
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_change_deadline > now()
         assert self.order.user_change_allowed
         self.event.settings.set('change_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days=4, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes=None)
+            RelativeDate(days=4, time=datetime.time(14, 0, 0), base_date_name='event__date_from', minutes=None)
         ))
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_change_deadline < now()
@@ -2046,7 +2046,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.save()
 
         self.event.settings.set('change_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes=None)
+            RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='event__date_from', minutes=None)
         ))
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_change_deadline < now()
@@ -2970,8 +2970,9 @@ class SeatingTestCase(TestCase):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("qtype,answer,expected", [
-    (Question.TYPE_STRING, "a", "a"),
-    (Question.TYPE_TEXT, "v", "v"),
+    (Question.TYPE_STRING, "aaa", "aaa"),
+    (Question.TYPE_STRING, "a", ValidationError),
+    (Question.TYPE_TEXT, "vvv", "vvv"),
     (Question.TYPE_TEXT, "waaaaay tooooo long", ValidationError),
     (Question.TYPE_NUMBER, "0.9", ValidationError),
     (Question.TYPE_NUMBER, "1", Decimal("1")),
@@ -3025,6 +3026,7 @@ def test_question_answer_validation(qtype, answer, expected):
             valid_datetime_max=datetime.datetime(2018, 1, 16, 16, 0, 0, tzinfo=tzoffset(None, 3600)),
             valid_number_min=Decimal('1'),
             valid_number_max=Decimal('100'),
+            valid_string_length_min=3,
             valid_string_length_max=8,
         )
         if isinstance(expected, type) and issubclass(expected, Exception):

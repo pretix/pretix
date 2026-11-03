@@ -65,6 +65,7 @@ valid_date_max                        date                       Maximum value f
 valid_datetime_min                    datetime                   Minimum value for date and time questions (optional)
 valid_datetime_max                    datetime                   Maximum value for date and time questions (optional)
 valid_file_portrait                   boolean                    Turn on file validation for portrait photos
+valid_string_length_min               integer                    Minimum length for string questions (optional)
 valid_string_length_max               integer                    Maximum length for string questions (optional)
 dependency_question                   integer                    Internal ID of a different question. The current
                                                                  question will only be shown if the question given in
@@ -130,6 +131,7 @@ Endpoints
             "valid_date_max": null,
             "valid_datetime_min": null,
             "valid_datetime_max": null,
+            "valid_string_length_min": null,
             "valid_string_length_max": null,
             "valid_file_portrait": false,
             "dependency_question": null,
@@ -211,6 +213,7 @@ Endpoints
         "valid_datetime_min": null,
         "valid_datetime_max": null,
         "valid_file_portrait": false,
+        "valid_string_length_min": null,
         "valid_string_length_max": null,
         "dependency_question": null,
         "dependency_value": null,
@@ -315,6 +318,7 @@ Endpoints
         "valid_datetime_min": null,
         "valid_datetime_max": null,
         "valid_file_portrait": false,
+        "valid_string_length_min": null,
         "valid_string_length_max": null,
         "options": [
           {
@@ -399,6 +403,7 @@ Endpoints
         "valid_datetime_min": null,
         "valid_datetime_max": null,
         "valid_file_portrait": false,
+        "valid_string_length_min": null,
         "valid_string_length_max": null,
         "options": [
           {

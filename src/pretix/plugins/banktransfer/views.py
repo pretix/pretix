@@ -73,7 +73,9 @@ from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.plugins.banktransfer.refund_export import (
     build_sepa_xml, get_refund_export_csv,
 )
-from pretix.plugins.banktransfer.tasks import process_banktransfers
+from pretix.plugins.banktransfer.tasks import (
+    notify_incomplete_payment, process_banktransfers,
+)
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
 
@@ -165,6 +167,11 @@ class ActionView(View):
             provider='banktransfer',
             state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING),
         ).update(state=OrderPayment.PAYMENT_STATE_CANCELED)
+
+        trans.order.refresh_from_db()
+        if trans.order.pending_sum > Decimal('0.00') and trans.order.status == Order.STATUS_PENDING:
+            notify_incomplete_payment(trans.order)
+
         return JsonResponse({
             'status': 'ok',
         })
@@ -198,6 +205,7 @@ class ActionView(View):
             'plain': comment,
         })
 
+    @transaction.atomic()
     def post(self, request, *args, **kwargs):
         for k, v in request.POST.items():
             if not k.startswith('action_'):
@@ -231,7 +239,7 @@ class ActionView(View):
             })
 
     def get(self, request, *args, **kwargs):
-        u = request.GET.get('query', '')
+        u = request.GET.get('query', '').strip()
         if len(u) < 2:
             return JsonResponse({'results': []})
 
@@ -625,6 +633,9 @@ class ImportView(ListView):
 
 class OrganizerBanktransferView:
     def dispatch(self, request, *args, **kwargs):
+        # Users can use the bank transfer views if they have sufficient permission for at least one event.
+        # Yes, this allows them to cauase changes in events they don't have access to. This is an accepted
+        # risk because every other way, the bank transfer feature becomes basically unusable.
         has_any_event_perm = request.user.get_events_with_permission(
             "event.orders:write", request=request
         ).filter(organizer=request.organizer).exists()

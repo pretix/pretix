@@ -282,10 +282,12 @@ def metric_values():
 
     # Throwaway metrics
     exact_tables = [
-        Order, OrderPosition, Invoice, Event, Organizer
+        Order, Invoice, Event, Organizer
     ]
     for m in apps.get_models():  # Count all models
-        if any(issubclass(m, p) for p in exact_tables):
+        if issubclass(m, OrderPosition):
+            metrics['pretix_model_instances']['{model="%s"}' % m._meta] = m.all.count()
+        elif any(issubclass(m, p) for p in exact_tables):
             metrics['pretix_model_instances']['{model="%s"}' % m._meta] = m.objects.count()
         else:
             metrics['pretix_model_instances']['{model="%s"}' % m._meta] = estimate_count_fast(m)

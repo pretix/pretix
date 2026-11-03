@@ -864,6 +864,9 @@ Generating new secrets
 
    Triggers generation of new ``secret`` and ``web_secret`` attributes for both the order and all order positions.
 
+   Ticket secrets of order positions that have been used to issue a gift card can not
+   be changed. Only the link (``web_secret``) will be changed in this case.
+
    **Example request**:
 
    .. sourcecode:: http
@@ -894,6 +897,9 @@ Generating new secrets
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/regenerate_secrets/
 
    Triggers generation of a new ``secret`` and ``web_secret`` attribute for a single order position.
+
+   Ticket secrets of order positions that have been used to issue a gift card can not
+   be changed. Only the link (``web_secret``) will be changed in this case.
 
    **Example request**:
 
@@ -1069,7 +1075,7 @@ Creating orders
       * ``valid_from`` (optional, if both ``valid_from`` and ``valid_until`` are **missing** (not ``null``) the availability will be computed from the given product)
       * ``valid_until`` (optional, if both ``valid_from`` and ``valid_until`` are **missing** (not ``null``) the availability will be computed from the given product)
       * ``requested_valid_from`` (optional, can be set **instead** of ``valid_from`` and ``valid_until`` to signal a user choice for the start time that may or may not be respected)
-      * ``use_reusable_medium`` (optional, causes the new ticket to take over the given reusable medium, identified by its ID)
+      * ``use_reusable_medium`` (optional, causes the new ticket to be connected to the given reusable medium, identified by its ID)
       * ``discount`` (optional, only possible if ``price`` is set; attention: if this is set to not-``null`` on any position, automatic calculation of discounts will not run)
       * ``answers``
 
@@ -2032,7 +2038,7 @@ Manipulating individual positions
 
    * ``order`` (mandatory, specified as a string mapping to a ``code``)
 
-   * ``addon_to`` (optional, specified as an integer mapping to the ``positionid`` of the parent position)
+   * ``addon_to`` (optional, specified as an integer mapping to ``positionid`` - the number of the position within the order, see :ref:`_order-position-resource` - of the parent position)
 
    * ``item`` (mandatory)
 
@@ -2342,7 +2348,7 @@ otherwise, such as splitting an order or changing fees.
             "subevent": 562,
             "seat": "seat-guid-2",
             "price": "99.99",
-            "addon_to": 12374,
+            "addon_to": 1,
             "attendee_name": "Peter",
           }
         ],

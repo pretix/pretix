@@ -65,17 +65,17 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.daterange import daterange
 from pretix.helpers.thumb import get_thumbnail
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.organizer import meta_filtersets
+from pretix.presale.productlist import (
+    item_group_by_category, prepare_item_list_for_shop,
+)
 from pretix.presale.style import get_theme_vars_css
 from pretix.presale.views.cart import get_or_create_cart_id
-from pretix.presale.views.event import (
-    get_grouped_items, item_group_by_category,
-)
 from pretix.presale.views.organizer import (
     EventListMixin, add_events_for_days, add_subevents_for_days,
     days_for_template, filter_qs_by_attr, filter_subevents_with_plugins,
-    weeks_for_template,
+    should_hide_subevent, weeks_for_template,
 )
 
 logger = logging.getLogger(__name__)
@@ -122,22 +122,9 @@ def widget_css_etag(request, version, **kwargs):
         return f'{_get_source_cache_key(version)}-{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}'
 
 
-def _use_vite(request):
-    if getattr(settings, 'PRETIX_WIDGET_VITE', False):
-        return True
-    origin = request.META.get('HTTP_ORIGIN', '')
-    gs = GlobalSettingsObject()
-    vite_origins = gs.settings.get('widget_vite_origins', as_type=str, default='')
-    if origin and vite_origins:
-        origins_list = [o.strip() for o in vite_origins.strip().splitlines() if o.strip()]
-        return origin in origins_list
-    return False
-
-
 def widget_js_etag(request, version, lang, **kwargs):
     gs = GlobalSettingsObject()
-    variant = 'vite' if _use_vite(request) else 'legacy'
-    return gs.settings.get('widget_checksum_{}_{}_{}'.format(version, lang, variant))
+    return gs.settings.get('widget_checksum_{}_{}'.format(version, lang))
 
 
 @gzip_page
@@ -161,21 +148,17 @@ def widget_css(request, version, **kwargs):
     css = f"/* v{version} */\n" + theme_css + widget_css
 
     resp = FileResponse(css, content_type='text/css')
-    resp._csp_ignore = True
     resp['Access-Control-Allow-Origin'] = '*'
     return resp
 
 
-def generate_widget_js(version, lang, use_vite=False):
+def generate_widget_js(version, lang):
     code = []
     with language(lang):
         # Provide isolation
         code.append('(function (siteglobals) {\n')
         code.append('var module = {}, exports = {};\n')
-        if use_vite:
-            code.append('const LANG = "%s";\n' % lang)
-        else:
-            code.append('var lang = "%s";\n' % lang)
+        code.append('const LANG = "%s";\n' % lang)
 
         c = JavaScriptCatalog()
         c.translation = DjangoTranslation(lang, domain='djangojs')
@@ -199,23 +182,11 @@ def generate_widget_js(version, lang, use_vite=False):
         i18n_js = template.render(context)
         code.append(i18n_js)
 
-        if use_vite:
-            vite_js = finders.find('vite/widget/widget.js')
-            if not vite_js:
-                raise FileNotFoundError('Vite widget build not found. Run: npm run build:widget')
-            with open(vite_js, 'r', encoding='utf-8') as fp:
-                code.append(fp.read())
-        else:
-            files = [
-                'vuejs/vue.js' if settings.DEBUG else 'vuejs/vue.min.js',
-                'pretixpresale/js/widget/docready.js',
-                'pretixpresale/js/widget/floatformat.js',
-                'pretixpresale/js/widget/widget.js' if version == version_max else 'pretixpresale/js/widget/widget.v{}.js'.format(version),
-            ]
-            for fname in files:
-                f = finders.find(fname)
-                with open(f, 'r', encoding='utf-8') as fp:
-                    code.append(fp.read())
+        vite_js = finders.find('vite/widget/widget.js')
+        if not vite_js:
+            raise FileNotFoundError('Vite widget build not found. Run: npm run build:widget')
+        with open(vite_js, 'r', encoding='utf-8') as fp:
+            code.append(fp.read())
 
         if settings.DEBUG:
             code.append('})(this);\n')
@@ -227,6 +198,62 @@ def generate_widget_js(version, lang, use_vite=False):
     return f"/* v{version} */\n" + code
 
 
+def get_widget_js(version, lang, force_regenerate=False):
+    if settings.DEBUG:
+        return generate_widget_js(version, lang).encode()
+
+    cache_prefix = 'widget_js_data_v{}_{}'.format(version, lang)
+    settings_key = 'widget_file_v{}_{}'.format(version, lang)
+    checksum_key = 'widget_checksum_v{}_{}'.format(version, lang)
+    gs = GlobalSettingsObject()
+
+    if not force_regenerate:
+        cached_js = cache.get(cache_prefix)
+        if cached_js:
+            return cached_js
+
+        fname = gs.settings.get(settings_key)
+        if fname:
+            if isinstance(fname, File):
+                fname = fname.name
+            try:
+                data = default_storage.open(fname).read()
+                cache.set(cache_prefix, data, 3600 * 4)
+                return data
+            except:
+                fname = None
+                logger.exception('Failed to open widget.js')
+    else:
+        fname = gs.settings.get(settings_key)
+
+    data = generate_widget_js(version, lang).encode()
+    checksum = hashlib.sha1(data).hexdigest()
+    should_save = (
+        not fname
+        or gs.settings.get(checksum_key, '') != checksum
+    )
+    if should_save:
+        newname = default_storage.save(
+            'widget/widget.{}.{}.{}.js'.format(version, lang, checksum),
+            ContentFile(data)
+        )
+        gs.settings.set(settings_key, 'file://' + newname)
+        gs.settings.set(checksum_key, checksum)
+        cache.set(cache_prefix, data, 3600 * 4)
+        if fname:
+            if isinstance(fname, File):
+                default_storage.delete(fname.name)
+            else:
+                default_storage.delete(fname)
+    return data
+
+
+def regenerate_all_widget_js():
+    for lc, ll in settings.LANGUAGES:
+        for version in range(version_min, version_max + 1):
+            get_widget_js(version, lc, force_regenerate=True)
+
+
 @gzip_page
 @condition(etag_func=widget_js_etag)
 def widget_js(request, version, lang, **kwargs):
@@ -236,46 +263,9 @@ def widget_js(request, version, lang, **kwargs):
     if version < version_min:
         version = version_min
 
-    use_vite = _use_vite(request)
-    variant = 'vite' if use_vite else 'legacy'
-    cache_prefix = 'widget_js_data_v{}_{}_{}'.format(version, lang, variant)
+    data = get_widget_js(version, lang)
 
-    cached_js = cache.get(cache_prefix)
-    if cached_js and not settings.DEBUG:
-        resp = HttpResponse(cached_js, content_type='text/javascript')
-        resp._csp_ignore = True
-        resp['Access-Control-Allow-Origin'] = '*'
-        return resp
-
-    settings_key = 'widget_file_v{}_{}_{}'.format(version, lang, variant)
-    checksum_key = 'widget_checksum_v{}_{}_{}'.format(version, lang, variant)
-
-    gs = GlobalSettingsObject()
-    fname = gs.settings.get(settings_key)
-    resp = None
-    if fname and not settings.DEBUG:
-        if isinstance(fname, File):
-            fname = fname.name
-        try:
-            data = default_storage.open(fname).read()
-            resp = HttpResponse(data, content_type='text/javascript')
-            cache.set(cache_prefix, data, 3600 * 4)
-        except:
-            logger.exception('Failed to open widget.js')
-
-    if not resp:
-        data = generate_widget_js(version, lang, use_vite=use_vite).encode()
-        checksum = hashlib.sha1(data).hexdigest()
-        if not settings.DEBUG:
-            newname = default_storage.save(
-                'widget/widget.{}.{}.{}.{}.js'.format(version, lang, variant, checksum),
-                ContentFile(data)
-            )
-            gs.settings.set(settings_key, 'file://' + newname)
-            gs.settings.set(checksum_key, checksum)
-            cache.set(cache_prefix, data, 3600 * 4)
-        resp = HttpResponse(data, content_type='text/javascript')
-    resp._csp_ignore = True
+    resp = HttpResponse(data, content_type='text/javascript')
     resp['Access-Control-Allow-Origin'] = '*'
     return resp
 
@@ -300,7 +290,7 @@ def get_picture(event, picture, size=None):
             logger.exception(f'Failed to create thumbnail of {picture.name}')
     if not thumb:
         thumb = default_storage.url(picture.name)
-    return urljoin(build_absolute_uri(event, 'presale:event.index'), thumb)
+    return urljoin(eventreverse_absolute(event, 'presale:event.index'), thumb)
 
 
 class WidgetAPIProductList(EventListMixin, View):
@@ -321,7 +311,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 ).values_list('item_id', flat=True)
             )
 
-        items, display_add_to_cart = get_grouped_items(
+        items, display_add_to_cart = prepare_item_list_for_shop(
             self.request.event,
             subevent=self.subevent,
             voucher=self.voucher,
@@ -349,7 +339,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         'picture': get_picture(self.request.event, item.picture, '60x60^') if item.picture else None,
                         'picture_fullsize': get_picture(self.request.event, item.picture) if item.picture else None,
                         'description': str(rich_text(item.description, safelinks=False)) if item.description else None,
-                        'has_variations': item.has_variations,
+                        'has_variations': bool(item.has_variations),
                         'current_unavailability_reason': item.current_unavailability_reason,
                         'order_min': item.min_per_order,
                         'order_max': item.order_max if not item.has_variations else None,
@@ -411,7 +401,6 @@ class WidgetAPIProductList(EventListMixin, View):
         self.post_process(data)
         resp = JsonResponse(data)
         resp['Access-Control-Allow-Origin'] = '*'
-        resp._csp_ignore = True
         return resp
 
     def get(self, request, *args, **kwargs):
@@ -544,7 +533,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 'location': str(ev.location),
                 'date_range': self._get_date_range(ev, event, tz=tz),
                 'availability': self._get_availability(ev, event, tz=tz),
-                'event_url': build_absolute_uri(event, 'presale:event.index'),
+                'event_url': eventreverse_absolute(event, 'presale:event.index'),
                 'subevent': ev.pk if isinstance(ev, SubEvent) else None,
             })
         return events
@@ -612,6 +601,8 @@ class WidgetAPIProductList(EventListMixin, View):
                     cart_namespace=kwargs.get('cart_namespace'),
                     sales_channel=self.request.sales_channel,
                 )
+                if not any(ebd):
+                    data['empty_text'] = str(rich_text(request.event.settings.event_list_empty_text, safelinks=False))
             else:
                 timezones = set()
                 add_events_for_days(
@@ -679,6 +670,8 @@ class WidgetAPIProductList(EventListMixin, View):
                     cart_namespace=kwargs.get('cart_namespace'),
                     sales_channel=self.request.sales_channel,
                 )
+                if not any(ebd):
+                    data['empty_text'] = str(rich_text(request.event.settings.event_list_empty_text, safelinks=False))
             else:
                 timezones = set()
                 add_events_for_days(
@@ -730,14 +723,10 @@ class WidgetAPIProductList(EventListMixin, View):
                         evs = evs[:limit]
 
                 tz = request.event.timezone
-                if self.request.event.settings.event_list_available_only:
-                    evs = [
-                        se for se in evs
-                        if not se.presale_has_ended and (
-                            se.best_availability_state is not None and
-                            se.best_availability_state >= Quota.AVAILABILITY_RESERVED
-                        )
-                    ]
+                evs = [
+                    se for se in evs
+                    if not should_hide_subevent(self.request.event.settings, se)
+                ]
 
                 data['events'] = [
                     {
@@ -745,10 +734,12 @@ class WidgetAPIProductList(EventListMixin, View):
                         'location': str(ev.location),
                         'date_range': self._get_date_range(ev, ev.event, tz),
                         'availability': self._get_availability(ev, ev.event, tz=tz),
-                        'event_url': build_absolute_uri(ev.event, 'presale:event.index'),
+                        'event_url': eventreverse_absolute(ev.event, 'presale:event.index'),
                         'subevent': ev.pk,
                     } for ev in evs
                 ]
+                if not data['events']:
+                    data['empty_text'] = str(rich_text(request.event.settings.event_list_empty_text, safelinks=False))
             else:
                 data['events'] = []
                 qs = self._get_event_list_queryset()
@@ -768,7 +759,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         'location': str(event.location),
                         'date_range': dr,
                         'availability': avail,
-                        'event_url': build_absolute_uri(event, 'presale:event.index'),
+                        'event_url': eventreverse_absolute(event, 'presale:event.index'),
                     })
 
         cache.set(cache_key, data, 30)
@@ -793,9 +784,10 @@ class WidgetAPIProductList(EventListMixin, View):
                 return self.response(cached_data)
 
         data = {
-            'target_url': build_absolute_uri(request.event, 'presale:event.index'),
+            'target_url': eventreverse_absolute(request.event, 'presale:event.index'),
             'subevent': self.subevent.pk if self.subevent else None,
             'currency': request.event.currency,
+            'currency_places': settings.CURRENCY_PLACES.get(request.event.currency, 2),
             'display_net_prices': request.event.settings.display_net_prices,
             'use_native_spinners': request.event.settings.widget_use_native_spinners,
             'show_variations_expanded': request.event.settings.show_variations_expanded,
@@ -831,7 +823,7 @@ class WidgetAPIProductList(EventListMixin, View):
             data['vouchers_exist'] = False
             if ev.presale_has_ended:
                 if request.event.settings.presale_has_ended_text:
-                    data['error'] = str(request.event.settings.presale_has_ended_text)
+                    data['error'] = templating_context.format(str(request.event.settings.presale_has_ended_text))
                 else:
                     data['error'] = gettext('The booking period for this event is over.')
             elif request.event.settings.presale_start_show_date:

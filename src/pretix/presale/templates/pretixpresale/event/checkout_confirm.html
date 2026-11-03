@@ -90,7 +90,7 @@
                                 <dt>{% trans "ZIP code and city" %}</dt>
                                 <dd>{{ addr.zipcode }} {{ addr.city }}</dd>
                                 <dt>{% trans "Country" %}</dt>
-                                <dd>{{ addr.country.name }}</dd>
+                                <dd>{{ addr.country.name|default_if_none:"" }}</dd>
                                 {% if addr.state %}
                                     <dt>{% trans "State" context "address" as state_label %}{{ COUNTRY_STATE_LABEL|getitem:addr.country.code|default:state_label }}</dt>
                                     <dd>{{ addr.state_name }}</dd>
@@ -162,6 +162,26 @@
                         {% endfor %}
                     </div>
                 </div>
+                {% if checkout_session.answers.all %}
+                    <div class="panel panel-default panel-contact">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                {% trans "Additional order information" %}
+                                <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}" aria-label="{% trans "Modify contact information" %}" class="h6">
+                                    <span class="fa fa-edit" aria-hidden="true"></span>{% trans "Modify" %}
+                                </a>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal">
+                                {% for ans in checkout_session.answers.all %}
+                                    <dt>{{ ans.question.question }}</dt>
+                                    <dd>{% include "pretixpresale/event/fragment_question_answer.html" with request=request question=ans.question answer=ans %}</dd>
+                                {% endfor %}
+                            </dl>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
         {% if confirm_messages %}
@@ -176,7 +196,7 @@
                         <div class="checkbox">
                             <label for="input_confirm_{{ key }}">
                                 <input type="checkbox" class="checkbox" value="yes" name="confirm_{{ key }}" id="input_confirm_{{ key }}" required>
-                                {{ desc|safe }}
+                                {{ desc }}
                             </label>
                         </div>
                     {% endfor %}

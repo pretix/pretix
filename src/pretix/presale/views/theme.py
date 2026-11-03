@@ -48,7 +48,6 @@ def theme_css(request, **kwargs):
     obj = getattr(request, "event", request.organizer)
     css = get_theme_vars_css(obj, widget=False)
     resp = HttpResponse(css, content_type="text/css")
-    resp._csp_ignore = True
     resp["Access-Control-Allow-Origin"] = "*"
     if "version" in request.GET:
         resp["Expires"] = http_date(time.time() + 3600 * 24 * 30)

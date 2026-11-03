@@ -81,7 +81,7 @@ is a python method that emulates a behavior similar to ``reverse``:
 
 If you need to communicate the URL externally, you can use a different method to ensure that it is always an absolute URL:
 
-.. autofunction:: pretix.multidomain.urlreverse.build_absolute_uri
+.. autofunction:: pretix.multidomain.urlreverse.eventreverse_absolute
 
 In addition, there is a template tag that works similar to ``url`` but takes an event or organizer object
 as its first argument and can be used like this::

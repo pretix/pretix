@@ -41,7 +41,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
-from pretix.api.serializers import CompatibleJSONField
+from pretix.api.auth.utils import get_session_key_for_api_request
+from pretix.api.serializers import CompatDecimalField, CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
@@ -52,6 +53,7 @@ from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.invoicing.transmission import get_transmission_types
+from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
     CachedFile, Checkin, Customer, Device, GiftCard, Invoice, InvoiceAddress,
     InvoiceLine, Item, ItemVariation, Order, OrderPosition, Question,
@@ -76,7 +78,7 @@ from pretix.base.settings import (
 )
 from pretix.base.signals import register_ticket_outputs
 from pretix.helpers.countries import CachedCountries
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 logger = logging.getLogger(__name__)
 
@@ -257,16 +259,21 @@ class AnswerSerializer(I18nAwareModelSerializer):
         if data['answer'] == 'file:keep':
             return data
         try:
-            ao = self.context["request"].user or self.context["request"].auth
             cf = CachedFile.objects.get(
-                session_key=f'api-upload-{str(type(ao))}-{ao.pk}',
                 file__isnull=False,
                 pk=data['answer'][len("file:"):],
             )
+            if cf.session_key == "api-upload-<class 'django.contrib.auth.models.AnonymousUser'>-None":
+                # OK, backwards-compatibility of a security bug fixed 2026-09, delete this at some point, but should
+                # also be harmless because all files with this key are expired one day after deployment of this fix
+                # and no new files with this key are created
+                pass
+            elif cf.session_key != get_session_key_for_api_request(self.context["request"]):
+                raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data['answer']))
         except (ValidationError, IndexError):  # invalid uuid
-            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
+            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data['answer']))
         except CachedFile.DoesNotExist:
-            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
+            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data['answer']))
 
         allowed_types = (
             'image/png', 'image/jpeg', 'image/gif', 'application/pdf'
@@ -381,6 +388,7 @@ class PrintLogSerializer(serializers.ModelSerializer):
 class FailedCheckinSerializer(I18nAwareModelSerializer):
     error_reason = serializers.ChoiceField(choices=Checkin.REASONS, required=True, allow_null=False)
     raw_barcode = serializers.CharField(required=True, allow_null=False)
+    raw_source_type = serializers.ChoiceField(choices=[(k, v) for k, v in MEDIA_TYPES.items()], default='barcode')
     position = serializers.PrimaryKeyRelatedField(queryset=OrderPosition.all.none(), required=False, allow_null=True)
     raw_item = serializers.PrimaryKeyRelatedField(queryset=Item.objects.none(), required=False, allow_null=True)
     raw_variation = serializers.PrimaryKeyRelatedField(queryset=ItemVariation.objects.none(), required=False, allow_null=True)
@@ -390,7 +398,7 @@ class FailedCheckinSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Checkin
         fields = ('error_reason', 'error_explanation', 'raw_barcode', 'raw_item', 'raw_variation',
-                  'raw_subevent', 'nonce', 'datetime', 'type', 'position')
+                  'raw_subevent', 'raw_source_type', 'nonce', 'datetime', 'type', 'position')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -591,6 +599,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     country = CompatibleCountryField(source='*')
     attendee_name = serializers.CharField(required=False)
     plugin_data = OrderPositionPluginDataField(source='*', allow_null=True, read_only=True)
+    tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
 
     class Meta:
         list_serializer_class = OrderPositionListSerializer
@@ -747,6 +756,8 @@ class OrderPaymentDateField(serializers.DateField):
 
 
 class OrderFeeSerializer(I18nAwareModelSerializer):
+    tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
+
     class Meta:
         model = OrderFee
         fields = ('id', 'fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule',
@@ -757,7 +768,7 @@ class PaymentURLField(serializers.URLField):
     def to_representation(self, instance: OrderPayment):
         if instance.state != OrderPayment.PAYMENT_STATE_CREATED:
             return None
-        return build_absolute_uri(instance.order.event, 'presale:event.order.pay', kwargs={
+        return eventreverse_absolute(instance.order.event, 'presale:event.order.pay', kwargs={
             'order': instance.order.code,
             'secret': instance.order.secret,
             'payment': instance.pk,
@@ -806,7 +817,7 @@ class OrderRefundSerializer(I18nAwareModelSerializer):
 
 class OrderURLField(serializers.URLField):
     def to_representation(self, instance: Order):
-        return build_absolute_uri(instance.event, 'presale:event.order', kwargs={
+        return eventreverse_absolute(instance.event, 'presale:event.order', kwargs={
             'order': instance.code,
             'secret': instance.secret,
         })
@@ -1149,6 +1160,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError(
                 {'discount': ['You can only specify a discount if you do the price computation, but price is not set.']}
             )
+
         return data
 
 
@@ -1228,6 +1240,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             return None
         if pp not in self.context['event'].get_payment_providers():
             raise ValidationError('The given payment provider is not known.')
+        if pp == "giftcard":
+            raise serializers.ValidationError("Cannot create giftcard payment. Use `use_gift_cards` instead")
+
         return pp
 
     def validate_payment_info(self, info):
@@ -1588,7 +1603,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 pos_data['attendee_name_parts'] = {
                     '_legacy': attendee_name
                 }
-            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k != 'answers' and k != '_quotas' and k != 'use_reusable_medium'})
+            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k not in ('answers', '_quotas', 'use_reusable_medium')})
             if simulate:
                 pos.order = order._wrapped
             else:
@@ -1703,15 +1718,25 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         answ.options.add(*options)
 
                 if use_reusable_medium:
-                    use_reusable_medium.linked_orderposition = pos
-                    use_reusable_medium.save(update_fields=['linked_orderposition'])
+                    if pos.item.media_policy not in (Item.MEDIA_POLICY_APPEND, Item.MEDIA_POLICY_APPEND_OR_NEW):
+                        for op_pk in use_reusable_medium.linked_orderpositions.values_list('pk', flat=True):
+                            use_reusable_medium.log_action(
+                                'pretix.reusable_medium.linked_orderposition.removed',
+                                data={
+                                    'linked_orderposition': op_pk,
+                                }
+                            )
+                        use_reusable_medium.linked_orderpositions.set([pos])
+                    else:
+                        use_reusable_medium.linked_orderpositions.add(pos)
                     use_reusable_medium.log_action(
-                        'pretix.reusable_medium.linked_orderposition.changed',
+                        'pretix.reusable_medium.linked_orderposition.added',
                         data={
                             'by_order': order.code,
                             'linked_orderposition': pos.pk,
                         }
                     )
+                    use_reusable_medium.touch()
 
         if not simulate:
             for cp in delete_cps:
@@ -1900,6 +1925,7 @@ class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
     position = LinePositionField(read_only=True)
     event_date_from = serializers.DateTimeField(read_only=True, source="period_start")
     event_date_to = serializers.DateTimeField(read_only=True, source="period_end")
+    tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
 
     class Meta:
         model = InvoiceLine
@@ -1937,10 +1963,15 @@ class OrderPaymentCreateSerializer(I18nAwareModelSerializer):
         model = OrderPayment
         fields = ('state', 'amount', 'payment_date', 'provider', 'info')
 
+    def validate_provider(self, value):
+        if value == "giftcard":
+            raise serializers.ValidationError("Cannot create giftcard payment")
+        return value
+
     def create(self, validated_data):
-        order = OrderPayment(order=self.context['order'], **validated_data)
-        order.save()
-        return order
+        payment = OrderPayment(order=self.context['order'], **validated_data)
+        payment.save()
+        return payment
 
 
 class OrderRefundCreateSerializer(I18nAwareModelSerializer):
@@ -1951,6 +1982,12 @@ class OrderRefundCreateSerializer(I18nAwareModelSerializer):
     class Meta:
         model = OrderRefund
         fields = ('state', 'source', 'amount', 'payment', 'execution_date', 'provider', 'info', 'comment')
+
+    def validate_provider(self, value):
+        if value == "giftcard":
+            raise serializers.ValidationError("Cannot create giftcard payment")
+
+        return value
 
     def create(self, validated_data):
         pid = validated_data.pop('payment', None)
@@ -1983,6 +2020,7 @@ class BlockedTicketSecretSerializer(I18nAwareModelSerializer):
 
 class TransactionSerializer(I18nAwareModelSerializer):
     order = serializers.SlugRelatedField(slug_field="code", read_only=True)
+    tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
 
     class Meta:
         model = Transaction

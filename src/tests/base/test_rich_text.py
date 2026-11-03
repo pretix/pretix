@@ -119,7 +119,7 @@ def test_linkify_abs(link):
     assert markdown_compile_email(input) == f"<p>{output}</p>"
 
 
-signer = signing.Signer(salt='safe-redirect')
+signer = signing.Signer(salt='safelink-url')
 
 
 @pytest.mark.parametrize(

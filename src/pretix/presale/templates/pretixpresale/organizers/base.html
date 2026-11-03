@@ -97,8 +97,10 @@
     {% endblock %}
 {% endblock %}
 {% block footernav %}
-    {% if not request.event and request.organizer.settings.contact_mail %}
-        <li><a href="{{ 'mailto:'|add:request.organizer.settings.contact_mail|anon_email }}" target="_blank" rel="noopener">{% trans "Contact" %}</a></li>
+    {% if not request.event %}
+        {% if request.organizer.settings.contact_url or request.organizer.settings.contact_mail %}
+            <li><a href="{% if request.organizer.settings.contact_url %}{% safelink request.organizer.settings.contact_url %}{% else %}{{ 'mailto:'|add:request.organizer.settings.contact_mail|anon_email }}{% endif %}" target="_blank" rel="noopener">{% trans "Contact" %}</a></li>
+        {% endif %}
     {% endif %}
     {% if not request.event and request.organizer.settings.privacy_url %}
         <li><a href="{% safelink request.organizer.settings.privacy_url %}" target="_blank" rel="noopener">{% trans "Privacy policy" %}</a></li>

@@ -101,6 +101,10 @@ class OAuthAccessToken(AbstractAccessToken):
         self.expires = now() - timedelta(hours=1)
         self.save(update_fields=['expires'])
 
+    def is_valid(self, scopes=None):
+        # Can maybe be removed after upgrading django-oauth-toolkit to 3.4.1
+        return super().is_valid(scopes) and self.application.is_usable(None)
+
 
 class OAuthRefreshToken(AbstractRefreshToken):
     application = models.ForeignKey(

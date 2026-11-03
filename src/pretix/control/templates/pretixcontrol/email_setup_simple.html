@@ -50,6 +50,46 @@
                         {% endblocktrans %}
                     </div>
                 {% endif %}
+                {% if dkim_warning %}
+                    <div class="alert alert-danger">
+                        <p>
+                            {{ dkim_warning }}
+                        </p>
+                        <p>
+                            {% trans "Your new DKIM record should be set up as a CNAME record like this:" %}
+                        </p>
+                        <pre><code>{{ dkim_hostname }}  CNAME  {{ dkim_cname }}</code></pre>
+                        <p>
+                            {% trans "Please keep in mind that updates to DNS might require multiple hours to take effect." %}
+                        </p>
+                    </div>
+                {% elif dkim_cname %}
+                    <div class="alert alert-success">
+                        {% blocktrans trimmed %}
+                            We found a DKIM record on your domain for this system. Great!
+                        {% endblocktrans %}
+                    </div>
+                {% endif %}
+                {% if dmarc_warning %}
+                    <div class="alert alert-danger">
+                        <p>
+                            {{ dmarc_warning }}
+                        </p>
+                        <p>
+                            {% trans "Your new DMARC record could look like this:" %}
+                        </p>
+                        <pre><code>_dmarc.{{ hostname }}  TXT  "v=DMARC1; p=quarantine; sp=none; adkim=r; aspf=r;"</code></pre>
+                        <p>
+                            {% trans "Please keep in mind that updates to DNS might require multiple hours to take effect." %}
+                        </p>
+                    </div>
+                {% elif dkim_cname %}
+                    <div class="alert alert-success">
+                        {% blocktrans trimmed %}
+                            We found a DMARC record on your domain for this system. Great!
+                        {% endblocktrans %}
+                    </div>
+                {% endif %}
                 {% if verification %}
                     <h3>{% trans "Verification" %}</h3>
                     <p>
@@ -70,7 +110,7 @@
             </div>
         </div>
 
-        {% if spf_warning %}
+        {% if spf_warning or dkim_warning or dmarc_warning %}
             <div class="form-group submit-group">
                 <a href="" class="btn btn-default btn-save">
                     {% trans "Cancel" %}

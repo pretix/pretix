@@ -172,7 +172,9 @@ class CachedFileInput(forms.ClearableFileInput):
         from ...base.models import CachedFile
         v = super().value_from_datadict(data, files, name)
         if v is None and data.get(name + '-cachedfile'):  # An explicit "[x] clear" would be False, not None
-            return CachedFile.objects.filter(id=data[name + '-cachedfile']).first()
+            v = CachedFile.objects.filter(id=data[name + '-cachedfile'], web_download=True).first()
+            if not v.allowed_for_session(self.request):
+                v = None
         return v
 
     def get_context(self, name, value, attrs):
@@ -244,6 +246,11 @@ class ExtFileField(ExtValidationMixin, SizeFileField):
 class CachedFileField(ExtFileField):
     widget = CachedFileInput
 
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request", None)
+        super().__init__(*args, **kwargs)
+        self.widget.request = self.request
+
     def to_python(self, data):
         from ...base.models import CachedFile
 
@@ -271,6 +278,8 @@ class CachedFileField(ExtFileField):
                 filename=data.name,
                 type=data.content_type,
             )
+            if self.request:
+                cf.bind_to_session(self.request)  # no salt because we want direct web access
             cf.file.save(data.name, data.file)
             cf.save()
             data._uploaded_to = cf
@@ -294,6 +303,8 @@ class CachedFileField(ExtFileField):
                 filename=data.name,
                 type=data.content_type,
             )
+            if self.request:
+                cf.bind_to_session(self.request)  # no salt because we want direct web access
             cf.file.save(data.name, data.file)
             cf.save()
             data._uploaded_to = cf
@@ -461,3 +472,31 @@ class SalesChannelCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
             **super().create_option(name, value, label, selected, index, subindex, attrs),
             "plugin_missing": plugin and plugin not in self.event.get_plugins(),
         }
+
+
+class ModelChoiceIteratorWithNone(forms.models.ModelChoiceIterator):
+    # see django.forms.models.ModelChoiceIterator for original implementation
+    def __iter__(self):
+        if self.field.empty_label is not None:
+            yield ("", self.field.empty_label)
+        if self.field.none_label is not None:
+            yield ("_none", self.field.none_label)
+        queryset = self.queryset
+        # Can't use iterator() when queryset uses prefetch_related()
+        if not queryset._prefetch_related_lookups:
+            queryset = queryset.iterator()
+        for obj in queryset:
+            yield self.choice(obj)
+
+
+class ModelChoiceFieldWithNone(forms.ModelChoiceField):
+    iterator = ModelChoiceIteratorWithNone
+
+    def __init__(self, *args, **kwargs):
+        self.none_label = kwargs.pop("none_label", None)
+        super().__init__(*args, **kwargs)
+
+    def to_python(self, value):
+        if value == "_none":
+            return value
+        return super().to_python(value)

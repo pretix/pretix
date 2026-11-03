@@ -35,13 +35,14 @@ import operator
 import string
 from datetime import date, datetime, time
 from functools import reduce
+from typing import TYPE_CHECKING
 
 import pytz_deprecation_shim
 from django.conf import settings
 from django.core.mail import get_connection
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -61,6 +62,9 @@ from ...helpers.permission_migration import (
 from ..settings import settings_hierarkey
 from .auth import User
 
+if TYPE_CHECKING:
+    from hierarkey.proxy import HierarkeyProxy
+
 
 @settings_hierarkey.add(cache_namespace='organizer')
 class Organizer(LoggedModel):
@@ -78,6 +82,9 @@ class Organizer(LoggedModel):
     """
 
     settings_namespace = 'organizer'
+    if TYPE_CHECKING:
+        settings: HierarkeyProxy
+
     name = models.CharField(max_length=200,
                             verbose_name=_("Name"))
     slug = models.CharField(
@@ -304,6 +311,25 @@ class Organizer(LoggedModel):
                 position=i
             )
             i += 1
+
+    def get_users_with_permission(self, permission):
+        """
+        Returns a queryset of users who have a specific permission to this organizer.
+
+        :return: Iterable of User
+        """
+        from .auth import User
+
+        if permission:
+            qs = Team.objects.with_organizer_permission(permission)
+        else:
+            qs = Team.objects.all()
+
+        team_with_perm = qs.filter(
+            members__pk=OuterRef('pk'),
+            organizer=self,
+        )
+        return User.objects.filter(Exists(team_with_perm))
 
 
 def generate_invite_token():

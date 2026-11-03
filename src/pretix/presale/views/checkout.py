@@ -21,7 +21,9 @@
 #
 from urllib.parse import quote, urlencode
 
+from django.conf import settings
 from django.contrib import messages
+from django.core.exceptions import SuspiciousOperation
 from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
@@ -29,6 +31,7 @@ from django.views.generic import View
 
 from pretix.base.services.cart import CartError
 from pretix.base.signals import validate_cart
+from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.checkoutflow import get_checkout_flow
@@ -51,7 +54,12 @@ class CheckoutView(View):
     def dispatch(self, request, *args, **kwargs):
         self.request = request
 
-        if not cart_exists(request) and "async_id" not in request.GET:
+        is_asyncaction_call = (
+            request.method == "GET" and
+            'async_id' in request.GET and
+            settings.HAS_CELERY
+        )
+        if not cart_exists(request) and not is_asyncaction_call:
             messages.error(request, _("Your cart is empty"))
             return self.redirect(self.get_index_url(self.request))
 
@@ -78,9 +86,13 @@ class CheckoutView(View):
                 utm_params = {k: v for k, v in request.GET.items() if k.startswith("utm_")}
                 return self.redirect(step.get_step_url(request) + '?' + urlencode(utm_params))
             is_selected = (step.identifier == kwargs.get('step', ''))
-            if "async_id" not in request.GET and not is_selected and not step.is_completed(request, warn=not is_selected):
+
+            if not is_asyncaction_call and not is_selected and not step.is_completed(request, warn=not is_selected):
                 return self.redirect(step.get_step_url(request))
             if is_selected:
+                if is_asyncaction_call and not isinstance(step, AsyncAction):
+                    # This could be used to circumvent validation otherwise
+                    raise SuspiciousOperation("Received ?async_id for a step that is not an AsyncAction")
                 if request.method.lower() in self.http_method_names:
                     handler = getattr(step, request.method.lower(), self.http_method_not_allowed)
                 else:

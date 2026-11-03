@@ -32,7 +32,6 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from django.conf import settings
 from django.contrib import messages
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -42,6 +41,7 @@ from django.views.generic import TemplateView
 from pretix.base.email import get_email_context
 from pretix.base.services.mail import INVALID_ADDRESS, mail
 from pretix.helpers.http import redirect_to_url
+from pretix.helpers.ratelimit import rate_limit
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.user import ResendLinkForm
 from pretix.presale.views import EventViewMixin
@@ -61,17 +61,12 @@ class ResendLinkView(EventViewMixin, TemplateView):
 
         user = self.link_form.cleaned_data.get('email')
 
-        if settings.HAS_REDIS:
-            from django_redis import get_redis_connection
-            rc = get_redis_connection("redis")
-            if rc.exists('pretix_resend_{}_{}'.format(request.event.pk, user)):
-                messages.error(request, _('If the email address you entered is valid and associated with a ticket, we have '
-                                          'already sent you an email with a link to your ticket in the past {number} hours. '
-                                          'If the email did not arrive, please check your spam folder and also double check '
-                                          'that you used the correct email address.').format(number=24))
-                return redirect_to_url(eventreverse(self.request.event, 'presale:event.resend_link'))
-            else:
-                rc.setex('pretix_resend_{}_{}'.format(request.event.pk, user), 3600 * 24, '1')
+        if rate_limit("order_resend", self.request.event.pk, user, max_num=1, expire_time=3600 * 24):
+            messages.error(request, _('If the email address you entered is valid and associated with a ticket, we have '
+                                      'already sent you an email with a link to your ticket in the past {number} hours. '
+                                      'If the email did not arrive, please check your spam folder and also double check '
+                                      'that you used the correct email address.').format(number=24))
+            return redirect_to_url(eventreverse(self.request.event, 'presale:event.resend_link'))
 
         orders = self.request.event.orders.filter(email__iexact=user)
 

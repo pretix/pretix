@@ -3,6 +3,7 @@
 {% load i18n %}
 {% load static %}
 {% load compress %}
+{% load escapejson %}
 {% block content %}
     <form class="form-signin" action="" method="post" id="webauthn-form">
         {% csrf_token %}
@@ -30,8 +31,7 @@
     </form>
     {% if jsondata %}
         <script type="text/json" id="webauthn-login">
-            {{ jsondata|safe }}
-
+            {{ jsondata|escapejson }}
         </script>
     {% endif %}
     {% compress js %}

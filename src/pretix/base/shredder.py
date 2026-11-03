@@ -50,8 +50,8 @@ from pretix.api.serializers.order import (
 from pretix.api.serializers.waitinglist import WaitingListSerializer
 from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import (
-    CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, OrderPayment,
-    OrderPosition, OrderRefund, OutgoingMail, QuestionAnswer,
+    CachedCombinedTicket, CachedTicket, Event, Invoice, InvoiceAddress,
+    OrderPayment, OrderPosition, OrderRefund, OutgoingMail, QuestionAnswer,
 )
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.signals import register_data_shredders
@@ -598,18 +598,30 @@ class InvoiceShredder(BaseDataShredder):
     def shred_data(self, progress_callback=None):
         qs_i = self.event.invoices.filter(shredded=False)
         total = qs_i.count()
+        ignore_fields = (
+            'prefix', 'invoice_no', 'full_invoice_no', 'invoice_from', 'invoice_from_name', 'invoice_from_zipcode',
+            'invoice_from_city', 'invoice_from_state', 'invoice_from_country', 'invoice_from_tax_id',
+            'invoice_from_vat_id', 'locale', 'payment_provider_stamp', 'footer_text', 'foreign_currency_display',
+            'foreign_currency_source', 'transmission_type', 'transmission_provider', 'transmission_status',
+        )
 
         for i in _progress_helper(qs_i, progress_callback, 0, total):
             if i.file:
                 i.file.delete()
-                i.shredded = True
-                i.introductory_text = "█"
-                i.additional_text = "█"
-                i.invoice_to = "█"
-                i.payment_provider_text = "█"
-                i.transmission_info = {"_shredded": True}
-                i.save()
-                i.lines.update(description="█")
+            i.shredded = True
+
+            for f in Invoice._meta.fields:
+                if f.name in ignore_fields:
+                    continue
+                val = getattr(i, f.name, None)
+                if val and isinstance(val, str):
+                    setattr(i, f.name, "█")
+                elif val and isinstance(val, list):  # jsonfield
+                    setattr(i, f.name, [])
+                elif val and isinstance(val, dict):  # jsonfield
+                    setattr(i, f.name, {"_shredded": True})
+            i.save()
+            i.lines.update(description="█", attendee_name="█")
 
 
 class CachedTicketShredder(BaseDataShredder):

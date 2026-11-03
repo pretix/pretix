@@ -1,12 +1,24 @@
 {% extends "pretixcontrol/organizers/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% block title %}
+    {% if provider %}
+        {% trans "External SSO provider:" %} {{ provider.name }}
+    {% else %}
+        {% trans "Connect to an external SSO provider" %}
+    {% endif %}
+{% endblock %}
 {% block inner %}
     {% if provider %}
-        <h1>{% trans "SSO provider:" %} {{ provider.name }}</h1>
+        <h1>{% trans "External SSO provider:" %} {{ provider.name }}</h1>
     {% else %}
-        <h1>{% trans "Create a new SSO provider" %}</h1>
+        <h1>{% trans "Connect to an external SSO provider" %}</h1>
     {% endif %}
+    <p>
+        {% blocktrans trimmed with url="https://docs.pretix.eu/guides/customer-accounts/#using-pretix-as-an-sso-client" %}
+            For more information, refer to our documentation on <a href="{{ url }}" target="_blank">Using pretix as an SSO client</a>.
+        {% endblocktrans %}
+    </p>
     <form class="form-horizontal" action="" method="post">
         {% csrf_token %}
         {% bootstrap_form form layout="control" %}

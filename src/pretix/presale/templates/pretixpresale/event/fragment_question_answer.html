@@ -1,0 +1,24 @@
+{% load safelink %}
+{% load i18n %}
+{% load rich_text %}
+{% if answer %}
+    {% if answer.file %}
+        <span class="fa fa-file" aria-hidden="true"></span>
+        <a href="{{ answer.frontend_file_url }}?token={% answer_token request answer %}">
+            {{ answer.file_name }}
+        </a>
+        {% if answer.is_image %}
+            <br>
+            <a href="{{ answer.frontend_file_url }}?token={% answer_token request answer %}" data-lightbox="order"
+                    class="answer-thumb">
+                <img src="{{ answer.frontend_file_url }}?token={% answer_token request answer %}" alt="{% trans "The image you previously uploaded" %}">
+            </a>
+        {% endif %}
+    {% elif question.type == "M" %}
+        {{ answer|rich_text_snippet }}
+    {% else %}
+        {{ answer|linebreaksbr }}
+    {% endif %}
+{% else %}
+    <em class="text-muted">{% trans "not answered" %}</em>
+{% endif %}

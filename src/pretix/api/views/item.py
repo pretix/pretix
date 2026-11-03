@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import django_filters
+from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
@@ -109,6 +110,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
             'limit_sales_channels', 'variations__limit_sales_channels', 'program_times'
         ).all()
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -123,6 +125,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
         ctx['event'] = self.request.event
         return ctx
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         original_data = self.get_serializer(instance=serializer.instance).data
 
@@ -139,6 +142,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
             data=self.request.data
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         if not instance.allow_delete():
             raise PermissionDenied('This item cannot be deleted because it has already been ordered '
@@ -183,6 +187,7 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
         ctx['event'] = self.request.event
         return ctx
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         item = self.item
         if not item.has_variations:
@@ -197,6 +202,7 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
                              {'value': serializer.instance.value})
         )
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.item.log_action(
@@ -207,6 +213,7 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
                              {'value': serializer.instance.value})
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         if not instance.allow_delete():
             raise PermissionDenied('This variation cannot be deleted because it has already been ordered '
@@ -249,6 +256,7 @@ class ItemBundleViewSet(viewsets.ModelViewSet):
         ctx['item'] = self.item
         return ctx
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
         serializer.save(base_item=item)
@@ -259,6 +267,7 @@ class ItemBundleViewSet(viewsets.ModelViewSet):
             data=merge_dicts(self.request.data, {'id': serializer.instance.pk})
         )
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.base_item.log_action(
@@ -268,6 +277,7 @@ class ItemBundleViewSet(viewsets.ModelViewSet):
             data=merge_dicts(self.request.data, {'id': serializer.instance.pk})
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
         instance.base_item.log_action(
@@ -303,6 +313,7 @@ class ItemProgramTimeViewSet(viewsets.ModelViewSet):
         ctx['item'] = self.item
         return ctx
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
         serializer.save(item=item)
@@ -313,6 +324,7 @@ class ItemProgramTimeViewSet(viewsets.ModelViewSet):
             data=merge_dicts(self.request.data, {'id': serializer.instance.pk})
         )
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.item.log_action(
@@ -322,6 +334,7 @@ class ItemProgramTimeViewSet(viewsets.ModelViewSet):
             data=merge_dicts(self.request.data, {'id': serializer.instance.pk})
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
         instance.item.log_action(
@@ -354,6 +367,7 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
         ctx['item'] = self.item
         return ctx
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         item = self.item
         category = get_object_or_404(ItemCategory, pk=self.request.data['addon_category'])
@@ -365,6 +379,7 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
             data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk})
         )
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.base_item.log_action(
@@ -374,6 +389,7 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
             data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk})
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
         instance.base_item.log_action(
@@ -403,6 +419,7 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.event.categories.all()
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -417,6 +434,7 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
         ctx['event'] = self.request.event
         return ctx
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -426,6 +444,7 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
             data=self.request.data
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         for item in instance.items.all():
             item.category = None
@@ -456,8 +475,12 @@ class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
     write_permission = 'event.items:write'
 
     def get_queryset(self):
-        return self.request.event.questions.prefetch_related('options').all()
+        return self.request.event.questions.filter(
+            # the container_type parameter is undocumented, this API is going to change in a later release
+            container_type=self.request.GET.get('container_type', Question.ContainerType.ORDERPOSITION),
+        ).prefetch_related('options').all()
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -472,6 +495,7 @@ class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
         ctx['event'] = self.request.event
         return ctx
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -481,6 +505,7 @@ class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
             data=self.request.data
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         instance.log_action(
             'pretix.event.question.deleted',
@@ -509,6 +534,7 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
         ctx['question'] = get_object_or_404(Question, pk=self.kwargs['question'], event=self.request.event)
         return ctx
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         q = get_object_or_404(Question, pk=self.kwargs['question'], event=self.request.event)
         serializer.save(question=q)
@@ -519,6 +545,7 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
             data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk})
         )
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.question.log_action(
@@ -528,6 +555,7 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
             data=merge_dicts(self.request.data, {'ORDER': serializer.instance.position}, {'id': serializer.instance.pk})
         )
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         instance.question.log_action(
             'pretix.event.question.option.deleted',
@@ -586,6 +614,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
+    @transaction.atomic()
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -608,6 +637,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
         ctx['request'] = self.request
         return ctx
 
+    @transaction.atomic()
     def perform_update(self, serializer):
         original_data = self.get_serializer(instance=serializer.instance).data
 
@@ -663,6 +693,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
                 )
         serializer.instance.rebuild_cache()
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         instance.log_action(
             'pretix.event.quota.deleted',

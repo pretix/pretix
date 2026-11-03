@@ -55,7 +55,6 @@ from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
 from pypdf import PageObject, PdfReader, PdfWriter, Transformation
-from pypdf.generic import RectangleObject
 from reportlab.lib import pagesizes
 from reportlab.lib.units import inch, mm
 from reportlab.pdfgen import canvas
@@ -205,6 +204,14 @@ OPTIONS = OrderedDict([
         'offsets': [96.52 * mm, 33.87 * mm],
         'pagesize': pagesizes.A4,
     }),
+    ('herma_90x60', {
+        'name': 'HERMA 90 x 60 mm (9012)',
+        'cols': 2,
+        'rows': 4,
+        'margins': [28.5 * mm, 10 * mm, 28.5 * mm, 10 * mm],
+        'offsets': [100 * mm, 60 * mm],
+        'pagesize': pagesizes.A4,
+    }),
     ('lyreco_70x36', {
         'name': 'Lyreco 70 x 36 mm (143.344)',
         'cols': 3,
@@ -238,15 +245,8 @@ def _render_nup_page(nup_pdf: PdfWriter, input_pages: PageObject, opt: dict) -> 
         di = i % badges_per_page
         tx = opt['margins'][3] + (di % opt['cols']) * opt['offsets'][0]
         ty = opt['margins'][2] + (opt['rows'] - 1 - (di // opt['cols'])) * opt['offsets'][1]
-        page.add_transformation(Transformation().translate(tx, ty))
-        page.mediabox = RectangleObject((
-            Decimal('%.5f' % (page.mediabox.left.as_numeric() + tx)),
-            Decimal('%.5f' % (page.mediabox.bottom.as_numeric() + ty)),
-            Decimal('%.5f' % (page.mediabox.right.as_numeric() + tx)),
-            Decimal('%.5f' % (page.mediabox.top.as_numeric() + ty))
-        ))
         page.trimbox = page.cropbox = page.mediabox
-        nup_page.merge_page(page)
+        nup_page.merge_transformed_page(page, Transformation().translate(tx, ty))
     return nup_page
 
 

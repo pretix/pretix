@@ -33,16 +33,14 @@
 # License for the specific language governing permissions and limitations under the License.
 import json
 import logging
+import re
 from decimal import Decimal
 
 from django.contrib import messages
-from django.core import signing
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Sum
-from django.http import (
-    Http404, HttpResponse, HttpResponseBadRequest, JsonResponse,
-)
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -69,10 +67,10 @@ from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal2.client.customer.partners_merchantintegrations_get_request import (
     PartnersMerchantIntegrationsGetRequest,
 )
+from pretix.plugins.paypal2.models import ReferencedPayPalObject
 from pretix.plugins.paypal2.payment import (
     PaypalMethod, PaypalMethod as Paypal, PaypalWallet,
 )
-from pretix.plugins.paypal.models import ReferencedPayPalObject
 from pretix.presale.views import get_cart
 from pretix.presale.views.cart import cart_session
 
@@ -102,21 +100,6 @@ class PaypalOrderView:
             'order': self.order.code,
             'secret': self.order.secret
         }) + ('?paid=yes' if self.order.status == Order.STATUS_PAID else ''))
-
-
-@xframe_options_exempt
-def redirect_view(request, *args, **kwargs):
-    signer = signing.Signer(salt='safe-redirect')
-    try:
-        url = signer.unsign(request.GET.get('url', ''))
-    except signing.BadSignature:
-        return HttpResponseBadRequest('Invalid parameter')
-
-    r = render(request, 'pretixplugins/paypal2/redirect.html', {
-        'url': url,
-    })
-    r._csp_ignore = True
-    return r
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -180,7 +163,6 @@ class XHRView(View):
 
         paypal_order = prov._create_paypal_order(request, None, cart_total)
         r = JsonResponse(paypal_order.dict() if paypal_order else {})
-        r._csp_ignore = True
         return r
 
 
@@ -368,22 +350,27 @@ def webhook(request, *args, **kwargs):
         return HttpResponse("Invalid body, no event_type given", status=400)
 
     if event_json['event_type'].startswith('PAYMENT.SALE.'):
-        from pretix.plugins.paypal.views import webhook
-        return webhook(request, *args, **kwargs)
+        logger.info(f"Received PPv1 webhook: {json.dumps(event_json)}")
+        return HttpResponse("PayPal V1 no longer supported", status=400)
     # V1/V2 Sorting -- End
 
     # We do not check the signature, we just use it as a trigger to look the charge up.
     if 'resource_type' not in event_json:
         return HttpResponse("Invalid body, no resource_type given", status=400)
 
-    if event_json['resource_type'] not in ["checkout-order", "refund", "capture"]:
-        return HttpResponse("Not interested in this resource type", status=200)
-
     # Retrieve the Charge ID of the refunded payment
-    if event_json['resource_type'] == 'refund':
-        payloadid = get_link(event_json['resource']['links'], 'up')['href'].split('/')[-1]
-    else:
+    if event_json['resource_type'] == 'checkout-order':
         payloadid = event_json['resource']['id']
+    elif event_json['resource_type'] == 'refund' or event_json['resource_type'] == 'capture':
+        payloadid = get_order_id(event_json.get('resource', {}).get('links', []))
+        if payloadid is None:
+            # if we get a PAYMENT.CAPTURE.DECLINED webhook because a capture wasn't created due to
+            # violated validations, then it is labeled as a `capture` ressource_type but is in fact
+            # an `order` ressource_type as there is no `capture`. So we have to fall back
+            # See test_webhook_capture_declined for a redacted payload we've received
+            payloadid = event_json['resource']['id']
+    else:
+        return HttpResponse("Not interested in this resource type", status=200)
 
     refs = [payloadid]
     if event_json['resource'].get('supplementary_data', {}).get('related_ids', {}).get('order_id'):
@@ -443,6 +430,24 @@ def webhook(request, *args, **kwargs):
         **event_json,
         '_order_state': sale.dict(),
     })
+    payment.info = json.dumps(sale.dict())
+    payment.save()
+
+    # the captures[] of the sales object only is populated if the capture request isn't rejected.
+    # the capture request might be rejected if certain validations aren't met OR if the payment is
+    # DECLINED, nevertheless we will get a webhook informing us about "PAYMENT.CAPTURE.DECLINED".
+    # With no trace of it in `sale`.
+    # So now we have to leave our current pattern of making only decisions based upon the
+    # complete payment object (and checking whenever we receive a webhook), and instead need to fail
+    # payment directly.
+    # Otherwise we are caught in a loop:
+    # 1. We get a webhook and get `sale`
+    # 2. We see no proof of a capture attempt in `sale`
+    # 3. We call execute_payment and trigger a new "PAYMENT.CAPTURE.DECLINED" webhook, GOTO 1
+    if event_json['event_type'] == "PAYMENT.CAPTURE.DECLINED":
+        payment.fail(log_data={'status': event_json['event_type']})
+        logger.exception('PayPal Webhook PAYMENT.CAPTURE.DECLINED: {}'.format(event_json))
+        return HttpResponse(status=200)
 
     if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED and sale['status'] in ('PARTIALLY_REFUNDED', 'REFUNDED', 'COMPLETED'):
         if event_json['resource_type'] == 'refund':
@@ -491,6 +496,8 @@ def webhook(request, *args, **kwargs):
         if sale['status'] == 'COMPLETED':
             any_captures = False
             all_captures_completed = True
+            any_pending_review = False
+            any_failed = None
             for purchaseunit in sale['purchase_units']:
                 for capture in purchaseunit['payments']['captures']:
                     try:
@@ -499,17 +506,29 @@ def webhook(request, *args, **kwargs):
                     except ReferencedPayPalObject.MultipleObjectsReturned:
                         pass
 
-                    if capture['status'] not in ('COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'):
+                    any_captures = True
+                    if capture['status'] in ('COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'):
+                        pass
+                    elif capture['status'] in ("DECLINED", "FAILED"):
                         all_captures_completed = False
+                        any_failed = True
+                    elif capture['status'] in ('PENDING'):
+                        all_captures_completed = False
+                        if capture.get('status_details', {}).get('reason', "") == "PENDING_REVIEW":
+                            any_pending_review = True
                     else:
-                        any_captures = True
+                        raise ValueError("Unknown paypal capture state: {}".format(capture['status']))
             if any_captures and all_captures_completed:
                 try:
-                    payment.info = json.dumps(sale.dict())
-                    payment.save(update_fields=['info'])
                     payment.confirm()
+                    prov.log_payment_duration(payment)
                 except Quota.QuotaExceededException:
                     pass
+            if any_pending_review and payment.state != OrderPayment.PAYMENT_STATE_PENDING:
+                payment.state = OrderPayment.PAYMENT_STATE_PENDING
+                payment.save(update_fields=['state'])
+            if any_failed:
+                payment.fail()
         elif sale['status'] == 'APPROVED':
             try:
                 request.session['payment_paypal_oid'] = payment.info_data['id']
@@ -543,9 +562,17 @@ def isu_disconnect(request, **kwargs):
     }))
 
 
-def get_link(links, rel):
+ORDER_ID_RE = re.compile(r"/checkout/orders/([^/?]+)")
+
+
+def get_order_id(links):
     for link in links:
-        if link['rel'] == rel:
-            return link
+        if link.get('rel', "") == "up" and link.get('href', None) is not None:
+            return link['href'].split('/')[-1]
+
+    for link in links:
+        match = ORDER_ID_RE.search(link.get("href", ""))
+        if match:
+            return match.group(1)
 
     return None

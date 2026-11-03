@@ -3,6 +3,7 @@
 {% load bootstrap3 %}
 {% load compress %}
 {% load static %}
+{% load escapejson %}
 {% block content %}
     <form class="form-signin" id="webauthn-form" action="" method="post">
         {% csrf_token %}
@@ -43,7 +44,7 @@
 
         {% if jsondata %}
             <script type="text/json" id="webauthn-login">
-            {{ jsondata|safe }}
+                {{ jsondata|escapejson }}
             </script>
         {% endif %}
         {% compress js %}

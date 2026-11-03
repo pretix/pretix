@@ -95,6 +95,83 @@ def question(event, item):
 
 
 @pytest.mark.django_db
+def test_log_action_filter(event, order):
+    sensitivekeys = [
+        'auth',
+        'key',
+        'token',
+        'password',
+        'Password',
+        '_pass',
+        'salt',
+        'secret',
+    ]
+    log_data = log_data_filtered = {
+        'foo': 'bar',
+    }
+    for d in (log_data, log_data_filtered):
+        value = '********' if d == log_data_filtered else '__sensitive_info__'
+        for k in sensitivekeys:
+            d[k] = d['prefix' + k] = d['prefix' + k + 'suffix'] = d[k + 'suffix'] = value
+
+        d['recursive_dict'] = {
+            'test': 'dummy',
+            'test_token': value,
+            'd': {
+                'baz': 'foo',
+                'mypassword': value,
+                'l': [
+                    'foo',
+                    'bar',
+                    {
+                        'baz': True,
+                        'superkey': value,
+                    },
+                ],
+            },
+            'l': [
+                'okay',
+                {
+                    'salt_to_secret': value,
+                    'name': 'okay'
+                },
+                'element',
+                [
+                    'another',
+                    {
+                        'api_password': value,
+                    },
+                    'list'
+                ]
+            ]
+        }
+        d['recursive_list'] = [
+            'foo',
+            'bar',
+            [
+                'foo',
+                'bar',
+                {
+                    'foo': 'bar',
+                    'api_token': value,
+                },
+                'baz',
+            ],
+            {
+                'foo': 'bar',
+                'MyPassword': value,
+            }
+        ]
+    l1 = order.log_action(
+        'dummy.log',
+        data=log_data,
+    )
+
+    l1.refresh_from_db()
+    assert json.loads(l1.data) == log_data_filtered
+
+
+@pytest.mark.django_db
 def test_email_shredder(event, order):
     l1 = order.log_action(
         'pretix.event.order.email.expired',
@@ -342,8 +419,11 @@ def test_invoice_shredder(event, order):
     s.shred_data()
     inv.refresh_from_db()
 
-    assert "Acme" not in inv.invoice_to
-    assert "icket" not in inv.lines.first().description
+    assert inv.invoice_to == "█"
+    assert inv.invoice_to_company == "█"
+    l = inv.lines.first()
+    assert l.description == "█"
+    assert l.attendee_name == "█"
     assert not inv.file
     assert not os.path.exists(fname)
 

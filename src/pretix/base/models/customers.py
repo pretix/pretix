@@ -33,6 +33,7 @@ from django.db.models.aggregates import Sum
 from django.db.models.expressions import OuterRef, Subquery
 from django.db.models.functions.comparison import Coalesce
 from django.utils.crypto import get_random_string, salted_hmac
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
@@ -167,7 +168,7 @@ class Customer(LoggedModel):
 
     def send_security_notice(self, message, email=None):
         from pretix.base.services.mail import SendMailException, mail
-        from pretix.multidomain.urlreverse import build_absolute_uri
+        from pretix.multidomain.urlreverse import eventreverse_absolute
 
         try:
             with language(self.locale):
@@ -178,7 +179,7 @@ class Customer(LoggedModel):
                     {
                         **self.get_email_context(),
                         'message': str(message),
-                        'url': build_absolute_uri(self.organizer, 'presale:organizer.customer.index')
+                        'url': eventreverse_absolute(self.organizer, 'presale:organizer.customer.index')
                     },
                     customer=self,
                     organizer=self.organizer,
@@ -299,12 +300,12 @@ class Customer(LoggedModel):
 
     def send_activation_mail(self):
         from pretix.base.services.mail import mail
-        from pretix.multidomain.urlreverse import build_absolute_uri
+        from pretix.multidomain.urlreverse import eventreverse_absolute
         from pretix.presale.forms.customer import TokenGenerator
 
         ctx = self.get_email_context()
         token = TokenGenerator().make_token(self)
-        ctx['url'] = build_absolute_uri(
+        ctx['url'] = eventreverse_absolute(
             self.organizer,
             'presale:organizer.customer.activate'
         ) + '?id=' + self.identifier + '&token=' + token
@@ -395,7 +396,7 @@ class AttendeeProfile(models.Model):
             self.company,
             self.street,
             (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
-            self.country.name,
+            self.country.name if self.country else None,
         ]
         for a in self.answers:
             value = a.get('value')
@@ -408,6 +409,17 @@ class AttendeeProfile(models.Model):
             parts.append(f'{a["field_label"]}: {val}')
 
         return '\n'.join([str(p).strip() for p in parts if p and str(p).strip()])
+
+    @cached_property
+    def answers_key_to_index(self):
+        return {a.get('field_name'): i for i, a in enumerate(self.answers)}
+
+    def store_answer(self, answer_dict):
+        k = answer_dict['field_name']
+        if k in self.answers_key_to_index:
+            self.answers[self.answers_key_to_index[k]] = answer_dict
+        else:
+            self.answers.append(answer_dict)
 
 
 def generate_client_id():

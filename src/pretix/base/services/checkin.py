@@ -40,7 +40,7 @@ import dateutil
 import dateutil.parser
 from dateutil.tz import datetime_exists
 from django.core.files import File
-from django.db import IntegrityError, transaction
+from django.db import IntegrityError
 from django.db.models import (
     BooleanField, Case, Count, ExpressionWrapper, F, IntegerField, Max, Min,
     OuterRef, Q, Subquery, TextField, Value, When,
@@ -59,6 +59,7 @@ from pretix.base.models import (
 )
 from pretix.base.signals import checkin_created, periodic_task
 from pretix.helpers import OF_SELF
+from pretix.helpers.database import conditional_atomic
 from pretix.helpers.jsonlogic import Logic
 from pretix.helpers.jsonlogic_boolalg import convert_to_dnf
 from pretix.helpers.jsonlogic_query import (
@@ -867,6 +868,15 @@ class RequiredQuestionsError(Exception):
         super().__init__(msg)
 
 
+class RequiredMediaExchangeError(Exception):
+    def __init__(self, msg, code, media_policy, media_type):
+        self.msg = msg
+        self.code = code
+        self.media_policy = media_policy
+        self.media_type = media_type
+        super().__init__(msg)
+
+
 def _save_answers(op, answers, given_answers):
     def _create_answer(question, answer):
         try:
@@ -882,6 +892,7 @@ def _save_answers(op, answers, given_answers):
             qa.answer = answer
             qa.save(update_fields=['answer'])
             qa.options.clear()
+            return qa
 
     written = False
     for q, a in given_answers.items():
@@ -939,7 +950,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
                     user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY,
                     raw_barcode=None, raw_source_type=None, from_revoked_secret=False, simulate=False,
-                    gate=None):
+                    gate=None, reusable_medium=None):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -955,6 +966,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     :param datetime: The datetime of the checkin, defaults to now.
     :param simulate: If true, the check-in is not saved.
     :param gate: The gate the check-in was performed at.
+    :param reusable_medium: The medium that is available for an exchange
     """
 
     # !!!!!!!!!
@@ -1033,10 +1045,10 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         if not simulate:
             _save_answers(op, answers, given_answers)
 
-    with transaction.atomic():
+    with conditional_atomic(not simulate):
         # Lock order positions, if it is an entry. We don't need it for exits, as a race condition wouldn't be problematic
-        opqs = OrderPosition.all
-        if type != Checkin.TYPE_EXIT:
+        opqs = OrderPosition.all.select_related("order", "item")
+        if type != Checkin.TYPE_EXIT and not simulate:
             opqs = opqs.select_for_update(of=OF_SELF)
         op = opqs.get(pk=op.pk)
 
@@ -1100,6 +1112,24 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'incomplete',
                 require_answers
             )
+
+        required_media_policy = op.item.media_policy
+        required_media_type = op.item.media_type
+        require_a_medium = required_media_policy and required_media_type
+        linked_media = op.linked_media
+        if require_a_medium and not reusable_medium and not force:
+            if not linked_media.exists():
+                raise RequiredMediaExchangeError(
+                    _('Ticket needs to be exchanged to a suitable medium.'),
+                    'exchange',
+                    required_media_policy,
+                    required_media_type
+                )
+            elif op.organizer.settings.reusable_media_usage_enforced:
+                raise CheckInError(
+                    _('This ticket has already been exchanged for a reusable medium that now needs to be used instead.'),
+                    'already_exchanged',
+                )
 
         device = None
         if isinstance(auth, Device):

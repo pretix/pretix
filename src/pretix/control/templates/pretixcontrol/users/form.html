@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load icon %}
 {% block title %}{% trans "User" %}{% endblock %}
 {% block content %}
     <h1>{% trans "User" %} {{ user.email }}</h1>
@@ -59,8 +60,83 @@
                         {% bootstrap_field form.is_verified layout='control' %}
                     {% endif %}
                     {% bootstrap_field form.last_login layout='control' %}
-                    {% bootstrap_field form.require_2fa layout='control' %}
                     {% bootstrap_field form.needs_password_change layout='control' %}
+                    {% bootstrap_field form.require_2fa layout='control' %}
+                    <div class="form-group">
+                        <div class="col-md-9 col-md-offset-3">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <button class="btn btn-default btn-xs pull-right" type="submit" form="resetdriftthrottle">
+                                        {% trans "Reset drift and throttle" %}
+                                    </button>
+                                    <h3 class="panel-title">
+                                        {% trans "Available two-factor authentication methods" %}
+                                    </h3>
+                                </div>
+                                <table class="panel-body table table-hover">
+                                    {% for d in devices %}
+                                    <tr>
+                                        <td>
+                                            {% if d.model_label == 'otp_totp.totpdevice' %}
+                                                TOTP
+                                            {% elif d.model_label == 'pretixbase.u2fdevice' %}
+                                                U2F
+                                            {% elif d.model_label == 'pretixbase.webauthndevice' %}
+                                                WebAuthn
+                                            {% elif d.model_label == 'otp_static.staticdevice' %}
+                                                {% trans "Emergency tokens" %}
+                                            {% endif %}
+                                            {% if d.confirmed %}
+                                                {% icon "check" %}
+                                            {% else %}
+                                                {% icon "warning" %}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{ d.name }}
+                                        </td>
+                                        <td>
+                                            {% if d.throttling_failure_timestamp %}
+                                                {% blocktrans trimmed with date=d.throttling_failure_timestamp|date:"SHORT_DATETIME_FORMAT" count cnt=d.throttling_failure_count %}
+                                                    1 failed attempt since {{ date }}
+                                                {% plural %}
+                                                    {{ cnt }} failed attempts since {{ date }}
+                                                {% endblocktrans %}
+                                                <br>
+                                            {% endif %}
+                                            {% if d.throttling_enabled and not d.verify_is_allowed.0 %}
+                                                <strong>
+                                                    {% blocktrans trimmed with date=d.verify_is_allowed.1.locked_until|date:"SHORT_DATETIME_FORMAT" %}
+                                                        Currently locked until {{ date }}
+                                                    {% endblocktrans %}
+                                                </strong>
+                                                <br>
+                                            {% endif %}
+                                            {% if d.model_label == 'otp_totp.totpdevice' %}
+                                                <small>
+                                                    <code>step = {{ d.step }},
+                                                    t0 = {{ d.t0 }},
+                                                    digits = {{ d.digits }},
+                                                    tolerance = {{ d.tolerance }},
+                                                    drift = {{ d.drift }},
+                                                    last_t = {{ d.last_t }}</code>
+                                                </small>
+                                            {% elif d.model_label == 'pretixbase.u2fdevice' %}
+                                                <small>
+                                                    <code>sign_count = {{ d.sign_count }}</code>
+                                                </small>
+                                            {% elif d.model_label == 'otp_static.staticdevice' %}
+                                                <small>
+                                                    <code>token_count = {{ d.token_set.count }}</code>
+                                                </small>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Team memberships" %}</legend>
@@ -102,4 +178,8 @@
             </div>
         </div>
     </div>
+
+    <form action="{% url "control:users.resetdriftthrottle" id=user.pk %}" id="resetdriftthrottle" method="post">
+        {% csrf_token %}
+    </form>
 {% endblock %}

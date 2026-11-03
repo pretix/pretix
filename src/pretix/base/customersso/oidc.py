@@ -36,7 +36,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from requests import RequestException
 
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 logger = logging.getLogger(__name__)
 
@@ -239,8 +239,9 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
             )
         )
 
-    if 'email_verified' in userinfo and not userinfo['email_verified']:
-        # todo: how universal is this, do we need to make this configurable?
+    if 'email_verified' in userinfo and userinfo['email_verified'] not in (True, 1, "1", "True", "true", "TRUE"):
+        # Documented criteria for using a provider with pretix:
+        # "The SSO provider only allows verified accounts to log in or the SSO provider sends the claim email_verified. "
         raise ValidationError(_('The email address on this account is not yet verified. Please first confirm the '
                                 'email address in your customer account.'))
 
@@ -313,7 +314,7 @@ def _get_or_create_server_keypair(organizer):
 
 def generate_id_token(customer, client, auth_time, nonce, scope, expires: datetime, scope_claims=False, with_code=None, with_access_token=None):
     payload = {
-        'iss': build_absolute_uri(client.organizer, 'presale:organizer.index').rstrip('/'),
+        'iss': eventreverse_absolute(client.organizer, 'presale:organizer.index').rstrip('/'),
         'aud': client.client_id,
         'exp': int(expires.timestamp()),
         'iat': int(time.time()),

@@ -206,27 +206,7 @@
                         {% for q in line.questions %}
                             <dt>{{ q.question }}</dt>
                             <dd>
-                                {% if q.answer %}
-                                    {% if q.answer.file %}
-                                        <span class="fa fa-file" aria-hidden="true"></span>
-                                        <a href="{{ q.answer.frontend_file_url }}?token={% answer_token request q.answer %}">
-                                            {{ q.answer.file_name }}
-                                        </a>
-                                        {% if q.answer.is_image %}
-                                            <br>
-                                            <a href="{{ q.answer.frontend_file_url }}?token={% answer_token request q.answer %}" data-lightbox="order"
-                                                    class="answer-thumb">
-                                                <img src="{{ q.answer.frontend_file_url }}?token={% answer_token request q.answer %}" alt="{% trans "The image you previously uploaded" %}">
-                                            </a>
-                                        {% endif %}
-                                    {% elif q.type == "M" %}
-                                        {{ q.answer|rich_text_snippet }}
-                                    {% else %}
-                                        {{ q.answer|linebreaksbr }}
-                                    {% endif %}
-                                {% else %}
-                                    <em class="text-muted">{% trans "not answered" %}</em>
-                                {% endif %}
+                                {% include "pretixpresale/event/fragment_question_answer.html" with request=request question=q answer=q.answer %}
                             </dd>
                         {% endfor %}
                         {% for q in line.additional_answers %}
@@ -357,7 +337,7 @@
                         {% if line.tax_rate and line.total %}
                             <br />
                             <small>
-                                {% blocktrans trimmed with rate=line.tax_rate|floatformat:-2 taxname=line.tax_rule.name|default:s_taxes %}
+                                {% blocktrans trimmed with rate=line.tax_rate|tax_rate_format taxname=line.tax_rule.name|default:s_taxes %}
                                     <strong>plus</strong> {{ rate }}% {{ taxname }}
                                 {% endblocktrans %}
                             </small>
@@ -367,7 +347,7 @@
                         {% if line.tax_rate and line.total %}
                             <br />
                             <small>
-                                {% blocktrans trimmed with rate=line.tax_rate|floatformat:-2 taxname=line.tax_rule.name|default:s_taxes %}
+                                {% blocktrans trimmed with rate=line.tax_rate|tax_rate_format taxname=line.tax_rule.name|default:s_taxes %}
                                     incl. {{ rate }}% {{ taxname }}
                                 {% endblocktrans %}
                             </small>
@@ -416,7 +396,7 @@
                         {% if fee.tax_rate %}
                             <br />
                             <small>
-                                {% blocktrans trimmed with rate=fee.tax_rate|floatformat:-2 taxname=fee.tax_rule.name|default:s_taxes %}
+                                {% blocktrans trimmed with rate=fee.tax_rate|tax_rate_format taxname=fee.tax_rule.name|default:s_taxes %}
                                     <strong>plus</strong> {{ rate }}% {{ taxname }}
                                 {% endblocktrans %}
                             </small>
@@ -426,7 +406,7 @@
                         {% if fee.tax_rate %}
                             <br />
                             <small>
-                                {% blocktrans trimmed with rate=fee.tax_rate|floatformat:-2 taxname=fee.tax_rule.name|default:s_taxes %}
+                                {% blocktrans trimmed with rate=fee.tax_rate|tax_rate_format taxname=fee.tax_rule.name|default:s_taxes %}
                                     incl. {{ rate }}% {{ taxname }}
                                 {% endblocktrans %}
                             </small>

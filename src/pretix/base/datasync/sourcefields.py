@@ -28,7 +28,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.models import Checkin, InvoiceAddress, Order, Question
 from pretix.base.settings import PERSON_NAME_SCHEMES
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 
 def get_answer(op, question_identifier=None):
@@ -545,7 +545,7 @@ def get_data_fields(event, for_model=None):
                 _("Order link"),
                 Question.TYPE_STRING,
                 None,
-                lambda order: build_absolute_uri(
+                lambda order: eventreverse_absolute(
                     event,
                     'presale:event.order', kwargs={
                         'order': order.code,
@@ -560,7 +560,7 @@ def get_data_fields(event, for_model=None):
                 _("Ticket link"),
                 Question.TYPE_STRING,
                 None,
-                lambda op: build_absolute_uri(
+                lambda op: eventreverse_absolute(
                     event,
                     'presale:event.order.position', kwargs={
                         'order': op.order.code,

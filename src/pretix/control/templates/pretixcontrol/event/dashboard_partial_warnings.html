@@ -1,0 +1,58 @@
+{% load i18n %}
+{% if has_overpaid_orders %}
+    <div class="alert alert-warning">
+        {% blocktrans trimmed %}
+            This event contains <strong>overpaid orders</strong>, for example due to duplicate payment attempts.
+            You should review the cases and consider refunding the overpaid amount to the user.
+        {% endblocktrans %}
+        <a href="{% url "control:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}?status=overpaid"
+                class="btn btn-primary">{% trans "Show overpaid orders" %}</a>
+    </div>
+{% endif %}
+{% if has_pending_refunds %}
+    <div class="alert alert-warning">
+        {% blocktrans trimmed %}
+            This event contains <strong>pending refunds</strong> that you should take care of.
+        {% endblocktrans %}
+        <a href="{% url "control:event.orders.refunds" event=request.event.slug organizer=request.event.organizer.slug %}"
+           class="btn btn-primary">{% trans "Show pending refunds" %}</a>
+    </div>
+{% endif %}
+{% if has_cancellation_requests %}
+    <div class="alert alert-warning">
+        {% blocktrans trimmed %}
+            This event contains <strong>requested cancellations</strong> that you should take care of.
+        {% endblocktrans %}
+        <a href="{% url "control:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}?status=rc"
+           class="btn btn-primary">{% trans "Show orders requesting cancellation" %}</a>
+    </div>
+{% endif %}
+{% if has_pending_approvals %}
+    <div class="alert alert-warning">
+        {% blocktrans trimmed %}
+            This event contains <strong>pending approvals</strong> that you should take care of.
+        {% endblocktrans %}
+        <a href="{% url "control:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}?status=pa"
+           class="btn btn-primary">{% trans "Show orders pending approval" %}</a>
+    </div>
+{% endif %}
+{% if has_pending_orders_with_full_payment %}
+    <div class="alert alert-warning">
+        {% blocktrans trimmed %}
+            This event contains <strong>fully paid orders</strong> that are not marked as paid, probably
+            because no quota was left at the time their payment arrived. You should review the cases and consider
+            either refunding the customer or creating more space.
+        {% endblocktrans %}
+        <a href="{% url "control:event.orders" event=request.event.slug organizer=request.event.organizer.slug %}?status=pendingpaid"
+           class="btn btn-primary">{% trans "Show affected orders" %}</a>
+    </div>
+{% endif %}
+{% if has_sync_problems %}
+    <div class="alert alert-warning">
+        {% blocktrans trimmed %}
+            Orders in this event could not be <strong>synced to an external system</strong> as configured.
+        {% endblocktrans %}
+        <a href="{% url "control:event.datasync.failedjobs" event=request.event.slug organizer=request.event.organizer.slug %}"
+           class="btn btn-primary">{% trans "Show sync problems" %}</a>
+    </div>
+{% endif %}

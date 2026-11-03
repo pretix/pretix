@@ -242,6 +242,24 @@ def test_cookie_domain_on_main_domain(env, client):
     assert r.client.cookies['pretix_session']['domain'] == ''
 
 
+@pytest.fixture
+def csrf_client():
+    from django.test import Client
+    return Client(enforce_csrf_checks=True)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("url", [
+    '/mrmcd/2015/',
+    '/ensure_csrf_cookie/',
+])
+def test_csrf_secure(env, url, csrf_client):
+    r = csrf_client.get(url, secure=True, HTTP_HOST='example.com')
+    assert 'pretix_csrftoken' not in r.client.cookies
+    assert '__Host-pretix_csrftoken' in r.client.cookies
+    assert r.client.cookies['__Host-pretix_csrftoken']['secure']
+
+
 @pytest.mark.django_db
 @override_settings(USE_X_FORWARDED_HOST=True)
 def test_with_forwarded_host(env, client):

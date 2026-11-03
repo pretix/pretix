@@ -42,8 +42,6 @@ from bleach import DEFAULT_CALLBACKS, html5lib_shim
 from bleach.linkifier import build_email_re
 from django import template
 from django.conf import settings
-from django.core import signing
-from django.urls import reverse
 from django.utils.functional import SimpleLazyObject
 from django.utils.html import escape
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -54,6 +52,7 @@ from markdown.postprocessors import Postprocessor
 from markdown.treeprocessors import UnescapeTreeprocessor
 from tlds import tld_set
 
+from pretix.base.views.redirect import safelink
 from pretix.helpers.format import SafeFormatter, format_map
 
 register = template.Library()
@@ -158,8 +157,7 @@ def safelink_callback(attrs, new=False):
     """
     url = html.unescape(attrs.get((None, 'href'), '/'))
     if not url_has_allowed_host_and_scheme(url, allowed_hosts=None) and not url.startswith('mailto:') and not url.startswith('tel:'):
-        signer = signing.Signer(salt='safe-redirect')
-        attrs[None, 'href'] = reverse('redirect') + '?url=' + urllib.parse.quote(signer.sign(url))
+        attrs[None, 'href'] = safelink(url)
         attrs[None, 'target'] = '_blank'
         attrs[None, 'rel'] = 'noopener'
     return attrs

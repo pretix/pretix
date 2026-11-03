@@ -1,0 +1,38 @@
+{% load i18n %}
+{% load bootstrap3 %}
+{% load icon %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            {% trans "Filter" %}
+        </h3>
+    </div>
+    <form class="panel-body filter-form" action="" method="get">
+        <div class="row">
+            <div class="col-md-3 col-xs-6">
+                {% bootstrap_field filter_form.source %}
+            </div>
+            <div class="col-md-3 col-xs-6">
+                {% bootstrap_field filter_form.device %}
+            </div>
+            <div class="col-md-3 col-xs-6">
+                {% bootstrap_field filter_form.user_email %}
+            </div>
+        </div>
+        {{ filter_form.action_type }}
+        {{ filter_form.content_type }}
+        {{ filter_form.object }}
+        {% if filter_form.is_valid and filter_form.cleaned_data.action_type %}
+            {% icon "filter" %} <code>{{ filter_form.cleaned_data.action_type }}</code>
+        {% endif %}
+        {% if filter_form.is_valid and filter_form.cleaned_data.content_type and filter_form.cleaned_data.object %}
+            {% icon "filter" %} {% trans "Specific object selected" %}
+        {% endif %}
+        <div class="text-right flip">
+            <button class="btn btn-primary btn-lg" type="submit">
+                <span class="fa fa-filter"></span>
+                {% trans "Filter" %}
+            </button>
+        </div>
+    </form>
+</div>

@@ -87,6 +87,7 @@ from pretix.base.timemachine import time_machine_now
 
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
+from ...helpers.models import NormalizedDecimalField
 from ...helpers.names import build_name
 from ...testutils.middleware import debugflags_var
 from ._transactions import (
@@ -224,8 +225,6 @@ class Order(LockModel, LoggedModel):
         "Organizer",
         related_name="orders",
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
     )
     event = models.ForeignKey(
         Event,
@@ -329,7 +328,7 @@ class Order(LockModel, LoggedModel):
         default="line",
     )
 
-    objects = ScopedManager(OrderQuerySet.as_manager().__class__, organizer='event__organizer')
+    objects = ScopedManager(OrderQuerySet.as_manager().__class__, organizer='organizer')
 
     class Meta:
         verbose_name = _("Order")
@@ -354,38 +353,60 @@ class Order(LockModel, LoggedModel):
     def _transaction_key_reset(self):
         self.__initial_status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
 
-    def gracefully_delete(self, user=None, auth=None):
-        from . import GiftCard, GiftCardTransaction, Membership, Voucher
-
-        if not self.testmode:
-            raise TypeError("Only test mode orders can be deleted.")
-        self.log_action(
-            'pretix.event.order.deleted', user=user, auth=auth,
-            data={
-                'code': self.code,
-            }
+    @classmethod
+    def gracefully_delete_bulk(cls, event, orders, user=None, auth=None):
+        # Expects to be called in a transaction
+        from . import (
+            GiftCard, GiftCardTransaction, LogEntry, Membership, Voucher,
         )
 
-        order_gracefully_delete.send(self.event, order=self)
+        if not transaction.get_connection().in_atomic_block:
+            raise Exception('gracefully_delete_bulk should only be called in atomic transaction!')
 
-        if self.status != Order.STATUS_CANCELED:
-            for position in self.positions.all():
-                if position.voucher:
-                    Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
+        logs_create = []
+        for o in orders:
+            if not o.testmode:
+                raise TypeError("Only test mode orders can be deleted.")
+            order_gracefully_delete.send(event, order=o)
+            logs_create.append(o.log_action(
+                'pretix.event.order.deleted', user=user, auth=auth,
+                data={
+                    'code': o.code,
+                },
+                save=False,
+            ))
+        LogEntry.bulk_create_and_postprocess(logs_create)
 
-        GiftCardTransaction.objects.filter(payment__in=self.payments.all()).update(payment=None)
-        GiftCardTransaction.objects.filter(refund__in=self.refunds.all()).update(refund=None)
-        GiftCardTransaction.objects.filter(order=self).update(order=None)
-        GiftCard.objects.filter(issued_in__in=self.positions.all()).update(issued_in=None)
-        Membership.objects.filter(granted_in__order=self, testmode=True).update(granted_in=None)
-        OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
-        OrderPosition.all.filter(order=self).delete()
-        OrderFee.all.filter(order=self).delete()
-        Transaction.objects.filter(order=self).delete()
-        self.refunds.all().delete()
-        self.payments.all().delete()
-        self.event.cache.delete('complain_testmode_orders')
-        self.delete()
+        voucher_ids = OrderPosition.objects.filter(
+            order__in=orders,
+            voucher__isnull=False
+        ).exclude(order__status=Order.STATUS_CANCELED).values_list("voucher_id", flat=True)
+        voucher_usages = Counter(voucher_ids)
+        for v_id, usage_count in voucher_usages.items():
+            Voucher.objects.filter(pk=v_id).update(redeemed=Greatest(0, F('redeemed') - usage_count))
+
+        GiftCardTransaction.objects.filter(payment__order__in=orders).update(payment=None)
+        GiftCardTransaction.objects.filter(refund__order__in=orders).update(refund=None)
+        GiftCardTransaction.objects.filter(order__in=orders).update(order=None)
+        GiftCard.objects.filter(issued_in__order__in=orders).update(issued_in=None)
+        Membership.objects.filter(granted_in__order__in=orders, testmode=True).update(granted_in=None)
+        OrderPosition.all.filter(order__in=orders, addon_to__isnull=False).delete()
+        OrderPosition.all.filter(order__in=orders).delete()
+        OrderFee.all.filter(order__in=orders).delete()
+        Transaction.objects.filter(order__in=orders).delete()
+        OrderRefund.objects.filter(order__in=orders).delete()
+        OrderPayment.objects.filter(order__in=orders).delete()
+        if isinstance(orders, models.QuerySet):
+            orders.delete()
+        else:
+            Order.objects.filter(pk__in=[o.pk for o in orders]).delete()
+        event.cache.delete('complain_testmode_orders')
+
+    def gracefully_delete(self, user=None, auth=None):
+        if not self.testmode:
+            raise TypeError("Only test mode orders can be deleted.")
+
+        Order.gracefully_delete_bulk(self.event, Order.objects.filter(pk=self.pk), user, auth)
 
     def email_confirm_secret(self):
         return self.tagged_secret("email_confirm", 9)
@@ -487,20 +508,20 @@ class Order(LockModel, LoggedModel):
 
     @classmethod
     def annotate_overpayments(cls, qs, results=True, refunds=True, sums=False):
-        payment_sum = OrderPayment.objects.filter(
+        payment_sum = OrderPayment.objects.with_scopes_disabled().filter(
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
             order=OuterRef('pk')
         ).order_by().values('order').annotate(s=Sum('amount')).values('s')
-        refund_sum = OrderRefund.objects.filter(
+        refund_sum = OrderRefund.objects.with_scopes_disabled().filter(
             state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
                        OrderRefund.REFUND_STATE_CREATED),
             order=OuterRef('pk')
         ).order_by().values('order').annotate(s=Sum('amount')).values('s')
-        external_refund = OrderRefund.objects.filter(
+        external_refund = OrderRefund.objects.with_scopes_disabled().filter(
             state=OrderRefund.REFUND_STATE_EXTERNAL,
             order=OuterRef('pk')
         )
-        pending_refund = OrderRefund.objects.filter(
+        pending_refund = OrderRefund.objects.with_scopes_disabled().filter(
             state__in=(OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT),
             order=OuterRef('pk')
         )
@@ -605,42 +626,14 @@ class Order(LockModel, LoggedModel):
         self.save(update_fields=['last_modified'])
 
     def set_expires(self, now_dt=None, subevents=None):
-        now_dt = now_dt or now()
-        tz = ZoneInfo(self.event.settings.timezone)
-        mode = self.event.settings.get('payment_term_mode')
-        if mode == 'days':
-            exp_by_date = now_dt.astimezone(tz) + timedelta(days=self.event.settings.get('payment_term_days', as_type=int))
-            exp_by_date = exp_by_date.astimezone(tz).replace(hour=23, minute=59, second=59, microsecond=0)
-            if self.event.settings.get('payment_term_weekdays'):
-                if exp_by_date.weekday() == 5:
-                    exp_by_date += timedelta(days=2)
-                elif exp_by_date.weekday() == 6:
-                    exp_by_date += timedelta(days=1)
-        elif mode == 'minutes':
-            exp_by_date = now_dt.astimezone(tz) + timedelta(minutes=self.event.settings.get('payment_term_minutes', as_type=int))
-        else:
-            raise ValueError("'payment_term_mode' has an invalid value '{}'.".format(mode))
+        from pretix.base.services.payment import compute_payment_deadline
 
-        self.expires = exp_by_date
-
-        term_last = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
-        if term_last:
-            if self.event.has_subevents and subevents:
-                terms = [
-                    term_last.datetime(se).date()
-                    for se in subevents
-                ]
-                if not terms:
-                    return
-                term_last = min(terms)
-            else:
-                term_last = term_last.datetime(self.event).date()
-            term_last = make_aware(datetime.combine(
-                term_last,
-                time(hour=23, minute=59, second=59)
-            ), tz)
-            if term_last < self.expires:
-                self.expires = term_last
+        self.expires = compute_payment_deadline(
+            event=self.event,
+            sales_channel=self.sales_channel,
+            now_dt=now_dt,
+            subevents=subevents,
+        )
 
     @cached_property
     def tax_total(self):
@@ -1283,10 +1276,9 @@ class Order(LockModel, LoggedModel):
 
 def answerfile_name(instance, filename: str) -> str:
     secret = get_random_string(length=32, allowed_chars=string.ascii_letters + string.digits)
-    event = (instance.cartposition if instance.cartposition else instance.orderposition.order).event
     return 'cachedfiles/answers/{org}/{ev}/{secret}.{filename}'.format(
-        org=event.organizer.slug,
-        ev=event.slug,
+        org=instance.event.organizer.slug,
+        ev=instance.event.slug,
         secret=secret,
         filename=escape_uri_path(filename),
     )
@@ -1315,6 +1307,14 @@ class QuestionAnswer(models.Model):
         'CartPosition', null=True, blank=True,
         related_name='answers', on_delete=models.CASCADE
     )
+    order = models.ForeignKey(
+        'Order', null=True, blank=True,
+        related_name='answers', on_delete=models.CASCADE
+    )
+    checkoutsession = models.ForeignKey(
+        'CheckoutSession', null=True, blank=True,
+        related_name='answers', on_delete=models.CASCADE
+    )
     question = models.ForeignKey(
         Question, related_name='answers', on_delete=models.CASCADE
     )
@@ -1330,16 +1330,21 @@ class QuestionAnswer(models.Model):
     objects = ScopedManager(organizer='question__event__organizer')
 
     class Meta:
-        unique_together = [['orderposition', 'question'], ['cartposition', 'question']]
+        unique_together = [
+            ['orderposition', 'question'],
+            ['cartposition', 'question'],
+            ['order', 'question'],
+            ['checkoutsession', 'question'],
+        ]
 
     @property
     def backend_file_url(self):
         if self.file:
-            if self.orderposition:
+            if self.associated_order:
                 return reverse('control:event.order.download.answer', kwargs={
-                    'code': self.orderposition.order.code,
-                    'event': self.orderposition.order.event.slug,
-                    'organizer': self.orderposition.order.event.organizer.slug,
+                    'code': self.associated_order.code,
+                    'event': self.associated_order.event.slug,
+                    'organizer': self.associated_order.event.organizer.slug,
                     'answer': self.pk,
                 })
         return ""
@@ -1349,14 +1354,14 @@ class QuestionAnswer(models.Model):
         from pretix.multidomain.urlreverse import eventreverse
 
         if self.file:
-            if self.orderposition:
-                url = eventreverse(self.orderposition.order.event, 'presale:event.order.download.answer', kwargs={
-                    'order': self.orderposition.order.code,
-                    'secret': self.orderposition.order.secret,
+            if self.associated_order:
+                url = eventreverse(self.associated_order.event, 'presale:event.order.download.answer', kwargs={
+                    'order': self.associated_order.code,
+                    'secret': self.associated_order.secret,
                     'answer': self.pk,
                 })
             else:
-                url = eventreverse(self.cartposition.event, 'presale:event.cart.download.answer', kwargs={
+                url = eventreverse(self.event, 'presale:event.cart.download.answer', kwargs={
                     'answer': self.pk,
                 })
 
@@ -1370,6 +1375,24 @@ class QuestionAnswer(models.Model):
     @property
     def file_name(self):
         return self.file.name.split('.', 1)[-1]
+
+    @property
+    def associated_order(self):
+        if self.orderposition:
+            return self.orderposition.order
+        elif self.order:
+            return self.order
+
+    @property
+    def event(self):
+        if self.orderposition:
+            return self.orderposition.order.event
+        elif self.cartposition:
+            return self.cartposition.event
+        elif self.order:
+            return self.order.event
+        elif self.checkoutsession:
+            return self.checkoutsession.event
 
     def __str__(self):
         return self.to_string(use_cached=True)
@@ -1675,7 +1698,7 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
             self.company,
             self.street,
             (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
-            self.country.name
+            self.country.name if self.country else ''
         ]
         lines = [r.strip() for r in lines if r]
         return '\n'.join(lines).strip()
@@ -2051,6 +2074,17 @@ class OrderPayment(models.Model):
         """
         return '{}-P-{}'.format(self.order.code, self.local_id)
 
+    @property
+    def global_id(self):
+        """
+        The global ID of this payment, constructed by the organizer slug, event slug, and the full id.
+        """
+        return "{organizer}-{event}-{full_id}".format(
+            organizer=self.order.organizer.slug.upper(),
+            event=self.order.event.slug.upper(),
+            full_id=self.full_id,
+        )
+
     def save(self, *args, **kwargs):
         if not self.local_id:
             self.local_id = (self.order.payments.aggregate(m=Max('local_id'))['m'] or 0) + 1
@@ -2251,6 +2285,17 @@ class OrderRefund(models.Model):
         """
         return '{}-R-{}'.format(self.order.code, self.local_id)
 
+    @property
+    def global_id(self):
+        """
+        The global ID of this refund, constructed by the organizer slug, event slug, and the full id.
+        """
+        return "{organizer}-{event}-{full_id}".format(
+            organizer=self.order.organizer.slug.upper(),
+            event=self.order.event.slug.upper(),
+            full_id=self.full_id,
+        )
+
     def save(self, *args, **kwargs):
         if not self.local_id:
             self.local_id = (self.order.refunds.aggregate(m=Max('local_id'))['m'] or 0) + 1
@@ -2265,9 +2310,12 @@ class OrderRefund(models.Model):
         super().save(*args, **kwargs)
 
 
-class ActivePositionManager(ScopedManager(organizer='order__event__organizer').__class__):
-    def get_queryset(self):
-        return super().get_queryset().filter(canceled=False)
+def ActivePositionManager(**scope):
+    class InnerClass(ScopedManager(**scope).__class__):
+        def get_queryset(self):
+            return super().get_queryset().filter(canceled=False)
+
+    return InnerClass()
 
 
 class OrderFee(RoundingCorrectionMixin, models.Model):
@@ -2334,8 +2382,8 @@ class OrderFee(RoundingCorrectionMixin, models.Model):
     )
     description = models.CharField(max_length=190, blank=True)
     internal_type = models.CharField(max_length=255, blank=True)
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2,
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4,
         verbose_name=_('Tax rate')
     )
     tax_rule = models.ForeignKey(
@@ -2357,7 +2405,7 @@ class OrderFee(RoundingCorrectionMixin, models.Model):
     canceled = models.BooleanField(default=False)
 
     all = ScopedManager(organizer='order__event__organizer')
-    objects = ActivePositionManager()
+    objects = ActivePositionManager(organizer='order__event__organizer')
 
     @property
     def net_value(self):
@@ -2519,8 +2567,6 @@ class OrderPosition(AbstractPosition):
         "Organizer",
         related_name="order_positions",
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
     )
     order = models.ForeignKey(
         Order,
@@ -2533,8 +2579,8 @@ class OrderPosition(AbstractPosition):
         max_digits=13, decimal_places=2, null=True, blank=True,
     )
 
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2,
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4,
         verbose_name=_('Tax rate')
     )
     tax_rule = models.ForeignKey(
@@ -2577,8 +2623,8 @@ class OrderPosition(AbstractPosition):
         blank=True,
     )
 
-    all = ScopedManager(organizer='order__event__organizer')
-    objects = ActivePositionManager()
+    all = ScopedManager(organizer='organizer')
+    objects = ActivePositionManager(organizer='organizer')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -3052,8 +3098,8 @@ class Transaction(models.Model):
     price_includes_rounding_correction = models.DecimalField(
         max_digits=13, decimal_places=2, default=Decimal("0.00")
     )
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2,
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4,
         verbose_name=_('Tax rate')
     )
     tax_rule = models.ForeignKey(
@@ -3133,6 +3179,39 @@ class Transaction(models.Model):
         return self.tax_value_includes_rounding_correction * self.count
 
 
+class CheckoutSession(models.Model):
+    """
+    A checkout session optionally bundles cart positions with additional information. This is historically
+    not required in pretix and currently only used in the Storefront API.
+    """
+    event = models.ForeignKey(
+        Event,
+        verbose_name=_("Event"),
+        related_name="checkout_sessions",
+        on_delete=models.CASCADE,
+    )
+    cart_id = models.CharField(
+        max_length=255, unique=True,
+        verbose_name=_("Cart ID (e.g. session key)"),
+    )
+    created = models.DateTimeField(
+        verbose_name=_("Date"),
+        auto_now_add=True,
+    )
+    customer = models.ForeignKey(
+        Customer,
+        related_name='checkout_sessions',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+    )
+    sales_channel = models.ForeignKey(
+        "SalesChannel",
+        on_delete=models.CASCADE,
+    )
+    testmode = models.BooleanField(default=False)
+    session_data = models.JSONField(default=dict)
+
+
 class CartPosition(AbstractPosition):
     """
     A cart position is similar to an order line, except that it is not
@@ -3168,8 +3247,8 @@ class CartPosition(AbstractPosition):
         verbose_name=_("Limit for extending expiration date"),
         null=True
     )
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2, default=Decimal('0.00'),
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4, default=Decimal('0'),
         verbose_name=_('Tax rate')
     )
     tax_code = models.CharField(
@@ -3337,6 +3416,13 @@ class CartPosition(AbstractPosition):
 
 class InvoiceAddress(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
+    checkout_session = models.OneToOneField(
+        CheckoutSession,
+        null=True,
+        blank=True,
+        related_name='invoice_address',
+        on_delete=models.CASCADE
+    )
     order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address', on_delete=models.CASCADE)
     customer = models.ForeignKey(
         Customer,
@@ -3416,7 +3502,7 @@ class InvoiceAddress(models.Model):
             self.name,
             self.street,
             (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
-            self.country.name,
+            self.country.name if self.country else '',
             self.vat_id,
             self.custom_field,
             self.internal_reference,

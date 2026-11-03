@@ -47,5 +47,5 @@ def escapejson(value):
 
 @keep_lazy(str, SafeText)
 def escapejson_attr(value):
-    """Hex encodes characters for use in a html attributw script."""
+    """Hex encodes characters for use in a html attribute."""
     return mark_safe(force_str(value).translate(_json_escapes_attr))

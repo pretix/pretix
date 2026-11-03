@@ -28,6 +28,7 @@
     </div>
     <form action="" method="post" class="form-horizontal form-plugins">
         {% csrf_token %}
+        <input type="hidden" name="go" value="{{ request.GET.go }}">
         <div id="plugin_search_results" class="panel panel-default collapse">
             <div class="panel-heading">
                 <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>

@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load escapejson %}
 {% block title %}{% trans "Add a two-factor authentication device" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Add a two-factor authentication device" %}</h1>
@@ -32,7 +33,7 @@
         </li>
         <li>
             {% trans "Add a new account to the app by scanning the following barcode:" %}
-            <div class="qrcode-canvas" data-qrdata="#qrdata"></div>
+            <script type="application/json" data-replace-with-qr>{{ qrdata|escapejson_dumps }}</script>
             <p>
                 <a data-toggle="collapse" href="#no_scan">
                     {% trans "Can't scan the barcode?" %}
@@ -81,9 +82,4 @@
         </li>
     </ol>
 
-    <script type="text/json" id="qrdata">
-        {{ qrdata|safe }}
-
-
-    </script>
 {% endblock %}

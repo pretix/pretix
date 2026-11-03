@@ -31,7 +31,7 @@ from django.utils.translation import gettext_lazy as _
 from paypalhttp import HttpResponse
 
 from pretix.base.forms import SecretKeySettingsField
-from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
+from pretix.base.middleware import add_to_response_csp
 from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
     logentry_display, register_global_settings, register_payment_providers,
@@ -201,21 +201,10 @@ def signal_process_response(sender, request: HttpRequest, response: HttpResponse
             (url.url_name == "event.checkout" and url.kwargs['step'] == "payment") or
             (url.namespace == "plugins:stripe" and url.url_name in ["sca", "sca.return"])
     ):
-        if 'Content-Security-Policy' in response:
-            h = _parse_csp(response['Content-Security-Policy'])
-        else:
-            h = {}
-
-        # https://stripe.com/docs/security/guide#content-security-policy
-        csps = {
+        add_to_response_csp(response, {
             'connect-src': ['https://api.stripe.com'],
             'frame-src': ['https://js.stripe.com', 'https://hooks.stripe.com'],
             'script-src': ['https://js.stripe.com'],
-        }
-
-        _merge_csp(h, csps)
-
-        if h:
-            response['Content-Security-Policy'] = _render_csp(h)
+        })
 
     return response

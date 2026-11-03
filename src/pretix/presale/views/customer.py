@@ -36,13 +36,14 @@ from django.db.models import (
 )
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.template.loader import render_to_string
 from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, ListView, View
 
@@ -53,10 +54,11 @@ from pretix.base.models import Customer, InvoiceAddress, Order, OrderPosition
 from pretix.base.services.mail import mail
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import customer_created, customer_signed_in
+from pretix.helpers import OF_SELF
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.models import KnownDomain
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.presale.forms.customer import (
     AuthenticationForm, ChangeInfoForm, ChangePasswordForm, RegistrationForm,
     ResetPasswordForm, SetPasswordForm, TokenGenerator,
@@ -99,7 +101,6 @@ class LoginView(RedirectBackMixin, FormView):
     redirect_authenticated_user = True
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -146,6 +147,7 @@ class LoginView(RedirectBackMixin, FormView):
             u = urlparse(url)
             qsl = parse_qs(u.query)
             qsl['cross_domain_customer_auth'] = otp
+            qsl['cross_domain_customer_auth_nonce'] = self.request.GET.get("request_cross_domain_customer_auth_nonce", "")
             url = urlunparse((u.scheme, u.netloc, u.path, u.params, urlencode(qsl, doseq=True), u.fragment))
 
         return url
@@ -167,40 +169,37 @@ class LogoutView(View):
         next_page = self.get_next_page()
         return HttpResponseRedirect(next_page)
 
+    def get_redirect_field(self):
+        return self.request.POST.get(
+            self.redirect_field_name,
+            self.request.GET.get(self.redirect_field_name)
+        )
+
     def get_next_page(self):
         if getattr(self.request, 'domain_mode', 'system') in (KnownDomain.MODE_ORG_ALT_DOMAIN, KnownDomain.MODE_EVENT_DOMAIN):
             # After we cleared the cookies on this domain, redirect to the parent domain to clear cookies as well
-            next_page = eventreverse(self.request.organizer, 'presale:organizer.customer.logout', kwargs={})
-            if self.redirect_field_name in self.request.POST or self.redirect_field_name in self.request.GET:
-                after_next_page = self.request.POST.get(
-                    self.redirect_field_name,
-                    self.request.GET.get(self.redirect_field_name)
-                )
+            next_page = eventreverse_absolute(self.request.organizer, 'presale:organizer.customer.logout', kwargs={})
+            if after_next_page := self.get_redirect_field():
                 next_page += '?' + urlencode({
                     'next': urljoin(f'{self.request.scheme}://{self.request.get_host()}', after_next_page)
                 })
         else:
             next_page = eventreverse(self.request.organizer, 'presale:organizer.index', kwargs={})
 
-            if (self.redirect_field_name in self.request.POST or
-                    self.redirect_field_name in self.request.GET):
-                next_page = self.request.POST.get(
-                    self.redirect_field_name,
-                    self.request.GET.get(self.redirect_field_name)
-                )
+            if url_from_param := self.get_redirect_field():
                 hosts = list(KnownDomain.objects.filter(organizer=self.request.organizer).values_list('domainname', flat=True))
                 siteurlsplit = urlsplit(settings.SITE_URL)
                 if siteurlsplit.port and siteurlsplit.port not in (80, 443):
                     hosts = ['%s:%d' % (h, siteurlsplit.port) for h in hosts]
                 url_is_safe = url_has_allowed_host_and_scheme(
-                    url=next_page,
+                    url=url_from_param,
                     allowed_hosts=hosts,
                     require_https=self.request.is_secure(),
                 )
                 # Security check -- Ensure the user-originating redirection URL is
                 # safe.
-                if not url_is_safe:
-                    next_page = self.request.path
+                if url_is_safe:
+                    next_page = url_from_param
 
         return next_page
 
@@ -211,7 +210,6 @@ class RegistrationView(RedirectBackMixin, FormView):
     redirect_authenticated_user = True
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -255,7 +253,6 @@ class SetPasswordView(FormView):
     template_name = 'pretixpresale/organizers/customer_setpassword.html'
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -282,6 +279,11 @@ class SetPasswordView(FormView):
 
     def form_valid(self, form):
         with transaction.atomic():
+            # Re-check token in transaction to prevent race condition
+            self.customer = Customer.objects.select_for_update(of=OF_SELF).get(pk=self.customer.pk)
+            if not TokenGenerator().check_token(self.customer, self.request.GET.get('token', '')):
+                return HttpResponseRedirect(self.get_success_url())
+
             self.customer.set_password(form.cleaned_data['password'])
             self.customer.is_verified = True
             self.customer.save()
@@ -299,7 +301,6 @@ class ResetPasswordView(FormView):
     template_name = 'pretixpresale/organizers/customer_resetpw.html'
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -316,8 +317,10 @@ class ResetPasswordView(FormView):
         customer.log_action('pretix.customer.password.resetrequested', {})
         ctx = customer.get_email_context()
         token = TokenGenerator().make_token(customer)
-        ctx['url'] = build_absolute_uri(self.request.organizer,
-                                        'presale:organizer.customer.recoverpw') + '?id=' + customer.identifier + '&token=' + token
+        ctx['url'] = eventreverse_absolute(
+            self.request.organizer,
+            'presale:organizer.customer.recoverpw'
+        ) + '?id=' + customer.identifier + '&token=' + token
         mail(
             customer.email,
             self.request.organizer.settings.mail_subject_customer_reset,
@@ -523,7 +526,6 @@ class ChangePasswordView(CustomerAccountBaseMixin, FormView):
     form_class = ChangePasswordForm
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -557,7 +559,6 @@ class ChangeInformationView(CustomerAccountBaseMixin, FormView):
     form_class = ChangeInfoForm
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -574,7 +575,7 @@ class ChangeInformationView(CustomerAccountBaseMixin, FormView):
             new_email = form.cleaned_data['email']
             form.cleaned_data['email'] = form.instance.email = self.initial_email
             ctx = form.instance.get_email_context()
-            ctx['url'] = build_absolute_uri(
+            ctx['url'] = eventreverse_absolute(
                 self.request.organizer,
                 'presale:organizer.customer.change.confirm'
             ) + '?token=' + dumps({
@@ -665,7 +666,6 @@ class SSOLoginView(RedirectBackMixin, View):
     redirect_authenticated_user = True
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -703,7 +703,8 @@ class SSOLoginView(RedirectBackMixin, View):
         request.session[f'pretix_customerauth_{self.provider.pk}_nonce'] = nonce
         request.session[f'pretix_customerauth_{self.provider.pk}_popup_origin'] = popup_origin
         request.session[f'pretix_customerauth_{self.provider.pk}_cross_domain_requested'] = self.request.GET.get("request_cross_domain_customer_auth") == "true"
-        redirect_uri = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.login.return', kwargs={
+        request.session[f'pretix_customerauth_{self.provider.pk}_cross_domain_nonce'] = self.request.GET.get("request_cross_domain_customer_auth_nonce")
+        redirect_uri = eventreverse_absolute(self.request.organizer, 'presale:organizer.customer.login.return', kwargs={
             'provider': self.provider.pk
         })
 
@@ -728,7 +729,6 @@ class SSOLoginReturnView(RedirectBackMixin, View):
     redirect_authenticated_user = True
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -772,12 +772,10 @@ class SSOLoginReturnView(RedirectBackMixin, View):
 
             if nonce != request.session.get(f'pretix_customerauth_{self.provider.pk}_nonce'):
                 return self._fail(
-                    _('Login was not successful. Error message: "{error}".').format(
-                        error='invalid one-time token',
-                    ),
+                    mark_safe(render_to_string("pretixpresale/organizers/customer_login_interrupted_message.html")),
                     popup_origin,
                 )
-            redirect_uri = build_absolute_uri(
+            redirect_uri = eventreverse_absolute(
                 self.request.organizer, 'presale:organizer.customer.login.return',
                 kwargs={
                     'provider': self.provider.pk
@@ -953,6 +951,28 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                 u = urlparse(url)
                 qsl = parse_qs(u.query)
                 qsl['cross_domain_customer_auth'] = otp
+                qsl['cross_domain_customer_auth_nonce'] = self.request.session.get(f'pretix_customerauth_{self.provider.pk}_cross_domain_nonce', '')
                 url = urlunparse((u.scheme, u.netloc, u.path, u.params, urlencode(qsl, doseq=True), u.fragment))
 
         return url
+
+
+class LoginStartView(View):
+    # When a login is initiated on a event-domain-level view, we need to carry the user to the organizer domain through
+    # this POST request to be able to set a nonce on their current session. We can't just use a link, since then we'd
+    # need to create sessions for every anonymous user of the ticketshop, which is too expensive.
+
+    def post(self, request, *args, **kwargs):
+        if getattr(self.request, 'domain_mode', 'system') not in (KnownDomain.MODE_ORG_ALT_DOMAIN, KnownDomain.MODE_EVENT_DOMAIN):
+            raise Http404("Only active on event-level domains")
+
+        nonce = get_random_string(32)
+        request.session['cross_domain_customer_auth_nonce'] = nonce
+        query = {
+            "next": request.POST.get("next", ""),
+            "request_cross_domain_customer_auth_nonce": nonce,
+            "request_cross_domain_customer_auth": "true",
+        }
+        return redirect_to_url(
+            eventreverse_absolute(self.request.organizer, "presale:organizer.customer.login") + "?" + urlencode(query)
+        )

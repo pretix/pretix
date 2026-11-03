@@ -46,6 +46,7 @@ from pretix.helpers.i18n import (
 )
 
 from ..base.i18n import get_language_without_region
+from ..base.services.placeholders import PlaceholderContext
 from ..multidomain.urlreverse import eventreverse
 from .cookies import get_cookie_providers
 from .signals import (
@@ -86,6 +87,12 @@ def _default_context(request):
                              f'{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}-'
                              f'{request.event.cache.get_or_set("css_version", default=lambda: int(time.time()))}')
         ctx['css_theme'] = eventreverse(request.event, "presale:event.theme.css") + "?version=" + theme_css_version
+
+        templating_context = PlaceholderContext(event=request.event)
+        ctx['event_texts'] = {
+            field: templating_context.format(str(request.event.settings.get(field)))
+            for field in ('banner_text', 'banner_text_bottom', 'voucher_explanation_text')
+        }
 
     elif hasattr(request, 'organizer') and request.organizer:
         pretix_settings = request.organizer.settings

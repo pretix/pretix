@@ -223,6 +223,8 @@ org_permission_sub_urls = [
     ('post', 'organizer.customers:write', 'customers/1/anonymize/', 404),
     ('put', 'organizer.customers:write', 'customers/1/', 404),
     ('delete', 'organizer.customers:write', 'customers/1/', 404),
+    ('post', 'organizer.settings.general:write', 'event_meta_properties/', 400),
+    ('patch', 'organizer.settings.general:write', 'event_meta_properties/0/', 404),
     ('get', 'organizer.customers:read', 'memberships/', 200),
     ('post', 'organizer.customers:write', 'memberships/', 400),
     ('get', 'organizer.customers:read', 'memberships/1/', 404),

@@ -22,6 +22,7 @@
 import re
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -33,15 +34,22 @@ from pretix.control.views.event import (
 
 
 class ReturnSettingsForm(SettingsForm):
-    returnurl_prefix = forms.RegexField(
+    returnurl_prefix = forms.CharField(
         label=_("Base redirection URLs"),
         help_text=_("Redirection will only be allowed to URLs that start with one of these prefixes. "
-                    "Enter one or more allowed URL prefix per line. "
+                    "Enter one allowed URL prefix per line. "
                     "URL prefixes must include a slash after the hostname."),
         required=False,
         widget=forms.Textarea,
-        regex=re.compile(r'^((https://.*/.*|http://localhost[:/].*)\n*)*$')
     )
+    line_regex = re.compile(r'^(https://.*/.*|http://localhost(:[0-9]+)?/.*)$')
+
+    def clean_returnurl_prefix(self):
+        val = self.cleaned_data['returnurl_prefix']
+        for l in val.split("\n"):
+            if not re.match(self.line_regex, l):
+                raise ValidationError(_('All values must be URLs that include at last one slash after the hostname.'))
+        return val
 
 
 class ReturnSettings(EventSettingsViewMixin, EventSettingsFormView):

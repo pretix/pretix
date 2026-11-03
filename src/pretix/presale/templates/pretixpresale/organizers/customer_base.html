@@ -22,12 +22,14 @@
                                 {% trans "Change account information" %}
                             </a>
                         </li>
-                        <li>
-                            <a href="{% eventurl request.organizer "presale:organizer.customer.password" %}">
-                                {% icon "key" %}
-                                {% trans "Change password" %}
-                            </a>
-                        </li>
+                        {% if not customer.provider %}
+                            <li>
+                                <a href="{% eventurl request.organizer "presale:organizer.customer.password" %}">
+                                    {% icon "key" %}
+                                    {% trans "Change password" %}
+                                </a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </dd>
                 <dd>

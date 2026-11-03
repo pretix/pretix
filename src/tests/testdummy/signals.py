@@ -26,11 +26,12 @@ from pretix.base.exporter import BaseExporter
 from pretix.base.invoicing.transmission import (
     TransmissionProvider, transmission_providers,
 )
-from pretix.base.models import Invoice
+from pretix.base.models import Invoice, LogEntry
+from pretix.base.notifications import Notification, NotificationType
 from pretix.base.signals import (
     register_data_exporters, register_multievent_data_exporters,
-    register_payment_providers, register_sales_channel_types,
-    register_ticket_outputs,
+    register_notification_types, register_payment_providers,
+    register_sales_channel_types, register_ticket_outputs,
 )
 from pretix.presale.signals import html_head
 
@@ -144,3 +145,30 @@ class TestPeppolTransmissionProvider(TransmissionProvider):
     def transmit(self, invoice):
         invoice.transmission_status = Invoice.TRANSMISSION_STATUS_COMPLETED
         invoice.save()
+
+
+class OrgLevelTestNotificationType(NotificationType):
+    required_permission = "organizer.settings.general:write"  # does not make much sense, just for tests
+    is_event_level = False
+    action_type = "pretix.organizer.changed"
+    verbose_name = "Organizer changed"
+
+    def __init__(self, organizer):
+        super().__init__(organizer)
+
+    def build_notification(self, logentry: LogEntry):
+        n = Notification(
+            event=None,
+            organizer=logentry.organizer,
+            title="Organizer Changed",
+            url="https://example.com"
+        )
+        n.add_attribute('Organizer', logentry.organizer.name)
+        return n
+
+
+@receiver(register_notification_types, dispatch_uid="testdummy_register_notification_types")
+def testdummy_register_notification_types(sender, **kwargs):
+    return (
+        OrgLevelTestNotificationType(sender)
+    )

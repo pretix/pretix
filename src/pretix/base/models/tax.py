@@ -40,6 +40,7 @@ from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
 from pretix.base.templatetags.money import money_filter
 from pretix.helpers.countries import FastCountryField
+from pretix.helpers.models import NormalizedDecimalField
 
 
 class TaxedPrice:
@@ -335,9 +336,9 @@ class TaxRule(LoggedModel):
         max_length=190,
         choices=TAX_CODE_LISTS,
     )
-    rate = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
+    rate = NormalizedDecimalField(
+        max_digits=7,
+        decimal_places=4,
         validators=[
             MaxValueValidator(
                 limit_value=Decimal("100.00"),

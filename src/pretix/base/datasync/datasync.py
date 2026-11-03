@@ -27,7 +27,7 @@ from datetime import timedelta
 from functools import cached_property
 from typing import List, Optional, Protocol
 
-import sentry_sdk
+from django.conf import settings
 from django.db import DatabaseError, transaction
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -236,7 +236,9 @@ class OutboundSyncProvider:
                 # model changes saved by set_sync_error / clear_in_flight calls below
                 if sq.failed_attempts >= self.max_attempts:
                     logger.exception('Failed to sync order (max attempts exceeded)')
-                    sentry_sdk.capture_exception(e)
+                    if settings.SENTRY_ENABLED:
+                        import sentry_sdk
+                        sentry_sdk.capture_exception(e)
                     sq.set_sync_error("exceeded", e.messages, e.full_message)
                 else:
                     logger.info(
@@ -247,7 +249,9 @@ class OutboundSyncProvider:
                     sq.clear_in_flight()
             except Exception as e:
                 logger.exception('Failed to sync order (unhandled exception)')
-                sentry_sdk.capture_exception(e)
+                if settings.SENTRY_ENABLED:
+                    import sentry_sdk
+                    sentry_sdk.capture_exception(e)
                 sq.set_sync_error("internal", [], str(e))
 
     @cached_property

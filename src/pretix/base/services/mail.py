@@ -54,7 +54,7 @@ from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.mail import EmailMultiAlternatives, SafeMIMEMultipart
-from django.core.mail.message import SafeMIMEText
+from django.core.mail.message import SafeMIMEText, utf8_charset_qp
 from django.db import connection, transaction
 from django.db.models import Q
 from django.dispatch import receiver
@@ -85,7 +85,7 @@ from pretix.helpers.format import (
     FormattedString, PlainHtmlAlternativeString, SafeFormatter, format_map,
 )
 from pretix.helpers.hierarkey import clean_filename
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.ical import get_private_icals
 
 logger = logging.getLogger('pretix.base.mail')
@@ -316,6 +316,7 @@ def mail(email: Union[str, Sequence[str]], subject: Union[str, FormattedString],
                 body_html = None
 
         m = OutgoingMail.objects.create(
+            guid=guid,
             organizer=organizer,
             event=event,
             order=order,
@@ -380,6 +381,8 @@ def mail(email: Union[str, Sequence[str]], subject: Union[str, FormattedString],
 
 
 class CustomEmail(EmailMultiAlternatives):
+    encoding = utf8_charset_qp
+
     def _create_mime_attachment(self, content, mimetype):
         """
         Convert the content, mimetype pair into a MIME attachment object.
@@ -449,9 +452,9 @@ def mail_send_task(self, **kwargs) -> bool:
 
     # Rewrite all <img> tags from real URLs or data URLs to inline attachments referred to by content ID
     if outgoing_mail.body_html is not None:
-        html_message = SafeMIMEMultipart(_subtype='related', encoding=settings.DEFAULT_CHARSET)
+        html_message = SafeMIMEMultipart(_subtype='related')
         html_with_cid, cid_images = replace_images_with_cid_paths(outgoing_mail.body_html)
-        html_message.attach(SafeMIMEText(html_with_cid, 'html', settings.DEFAULT_CHARSET))
+        html_message.attach(SafeMIMEText(html_with_cid, 'html', utf8_charset_qp))
         attach_cid_images(html_message, cid_images, verify_ssl=True)
         email.attach_alternative(html_message, "multipart/related")
 
@@ -997,7 +1000,7 @@ def _wrap_plain_body(content_plain, signature, event, order, position, no_order_
         body_plain += _(
             "You can view your order details at the following URL:\n{orderurl}."
         ).replace("\n", "\r\n").format(
-            orderurl=build_absolute_uri(
+            orderurl=eventreverse_absolute(
                 order.event, 'presale:event.order.position', kwargs={
                     'order': order.code,
                     'secret': position.web_secret,
@@ -1013,7 +1016,7 @@ def _wrap_plain_body(content_plain, signature, event, order, position, no_order_
         body_plain += _(
             "You can view your order details at the following URL:\n{orderurl}."
         ).replace("\n", "\r\n").format(
-            event=event.name, orderurl=build_absolute_uri(
+            event=event.name, orderurl=eventreverse_absolute(
                 order.event, 'presale:event.order.open', kwargs={
                     'order': order.code,
                     'secret': order.secret,

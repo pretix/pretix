@@ -147,7 +147,7 @@ def get_font_stylesheet(font_name, organizer: Organizer = None, event: Event = N
     stylesheet = []
     font = get_fonts(event)[font_name]
     for sty, formats in font.items():
-        if sty == 'sample':
+        if sty in ['sample', 'pdf_only']:
             continue
         stylesheet.append('@font-face { ')
         stylesheet.append('font-family: "{}";'.format(font_name))

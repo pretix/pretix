@@ -30,6 +30,7 @@
                 {% bootstrap_field form.date_admission layout="control" %}
                 {% bootstrap_field form.currency layout="control" %}
                 {% bootstrap_field sform.contact_mail layout="control" %}
+                {% bootstrap_field sform.contact_url layout="control" %}
                 {% bootstrap_field sform.imprint_url layout="control" %}
                 {% bootstrap_field form.is_public layout="control" %}
                 {% bootstrap_field form.all_sales_channels layout="control" %}
@@ -274,6 +275,9 @@
                     {% bootstrap_field sform.event_calendar_future_only layout="control" %}
                 {% endif %}
                 {% bootstrap_field sform.low_availability_percentage layout="control" addon_after="%" %}
+                {% if sform.event_list_empty_text %}
+                    {% bootstrap_field sform.event_list_empty_text layout="control" %}
+                {% endif %}
 
 
                 <h4>{% trans "Order details" %}</h4>

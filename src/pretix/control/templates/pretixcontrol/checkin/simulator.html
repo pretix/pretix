@@ -54,6 +54,8 @@
                     <span class="fa fa-check-circle"></span>
                 {% elif result.status == "incomplete" %}
                     <span class="fa fa-question-circle"></span>
+                {% elif result.status == "exchange" %}
+                    <span class="fa fa-recycle"></span>
                 {% elif result.status == "error" %}
                     {% if result.reason == "already_redeemed" %}
                         <span class="fa fa-warning"></span>
@@ -79,6 +81,14 @@
                             </li>
                         {% endfor %}
                     </ul>
+                {% elif result.status == "exchange" %}
+                    <h3 class="nomargin-top">{% trans "Media exchange required" %}</h3>
+                    <p>
+                        {% blocktrans trimmed with media_policy=media_policies|getitem:result.media_policy media_type=media_types|getitem:result.media_type %}
+                            This ticket needs to be exchanged into a <strong>{{ media_type }}</strong> reusable medium.
+                            <strong>{{ media_policy }}</strong>.
+                        {% endblocktrans %}
+                    </p>
                 {% elif result.status == "error" %}
                     <h3 class="nomargin-top">{{ reason_labels|getitem:result.reason }}</h3>
                     {% if result.reason_explanation %}

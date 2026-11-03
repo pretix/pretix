@@ -42,7 +42,9 @@ from django.utils.functional import cached_property, lazy
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from pretix.api.serializers import SalesChannelMigrationMixin
+from pretix.api.serializers import (
+    CompatDecimalField, SalesChannelMigrationMixin,
+)
 from pretix.api.serializers.event import MetaDataField
 from pretix.api.serializers.fields import UploadedFileField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
@@ -259,7 +261,9 @@ class ItemAddOnSerializer(serializers.ModelSerializer):
     def validate(self, data):
         data = super().validate(data)
 
-        ItemAddOn.clean_max_min_count(data.get('max_count'), data.get('min_count'))
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+        ItemAddOn.clean_max_min_count(full_data.get('max_count'), full_data.get('min_count'))
 
         return data
 
@@ -276,10 +280,10 @@ class ItemAddOnSerializer(serializers.ModelSerializer):
         return value
 
 
-class ItemTaxRateField(serializers.Field):
+class ItemTaxRateField(CompatDecimalField):
     def to_representation(self, i):
         if i.tax_rule:
-            return str(Decimal(i.tax_rule.rate))
+            return super().to_representation(Decimal(i.tax_rule.rate))
         else:
             return str(Decimal('0.00'))
 
@@ -289,7 +293,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     bundles = InlineItemBundleSerializer(many=True, required=False)
     variations = InlineItemVariationSerializer(many=True, required=False)
     program_times = InlineItemProgramTimeSerializer(many=True, required=False)
-    tax_rate = ItemTaxRateField(source='*', read_only=True)
+    tax_rate = ItemTaxRateField(source='*', read_only=True, max_digits=7, decimal_places=4)
     meta_data = MetaDataField(required=False, source='*')
     picture = UploadedFileField(required=False, allow_null=True, allowed_types=(
         'image/png', 'image/jpeg', 'image/gif'
@@ -374,7 +378,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     def validate_bundles(self, value):
         if not self.instance:
             for b_data in value:
-                ItemBundle.clean_itemvar(self.context['event'], b_data['bundled_item'], b_data['bundled_variation'])
+                ItemBundle.clean_itemvar(self.context['event'], b_data.get('bundled_item'), b_data.get('bundled_variation'))
         return value
 
     def validate_addons(self, value):
@@ -548,7 +552,7 @@ class QuestionSerializer(I18nAwareModelSerializer):
                   'ask_during_checkin', 'show_during_checkin', 'identifier', 'dependency_question', 'dependency_values',
                   'hidden', 'dependency_value', 'print_on_invoice', 'help_text', 'valid_number_min',
                   'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
-                  'valid_string_length_max', 'valid_file_portrait')
+                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait')
 
     def validate_identifier(self, value):
         Question._clean_identifier(self.context['event'], value, self.instance)
@@ -617,7 +621,7 @@ class QuestionSerializer(I18nAwareModelSerializer):
         options_data = validated_data.pop('options') if 'options' in validated_data else []
         items = validated_data.pop('items', [])
 
-        question = Question.objects.create(**validated_data)
+        question = Question.objects.create(**validated_data, container_type=Question.ContainerType.ORDERPOSITION)
         question.items.set(items)
         for opt_data in options_data:
             QuestionOption.objects.create(question=question, **opt_data)

@@ -1,12 +1,29 @@
 {% extends "pretixcontrol/organizers/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% block title %}
+    {% if client %}
+        {% trans "SSO client:" %} {{ client.name }}
+    {% else %}
+        {% trans "Create credentials for a new SSO client" %}
+    {% endif %}
+{% endblock %}
 {% block inner %}
     {% if client %}
         <h1>{% trans "SSO client:" %} {{ client.name }}</h1>
     {% else %}
-        <h1>{% trans "Create a new SSO client" %}</h1>
+        <h1>{% trans "Create credentials for a new SSO client" %}</h1>
+        <p>
+            {% blocktrans trimmed %}
+                After submitting this form, client credentials for your SSO client will be generated.
+            {% endblocktrans %}
+        </p>
     {% endif %}
+    <p>
+        {% blocktrans trimmed with url="https://docs.pretix.eu/guides/customer-accounts/#using-pretix-as-an-sso-provider" %}
+            For more information, refer to our documentation on <a href="{{ url }}">Using pretix as an SSO provider with external SSO clients</a>.
+        {% endblocktrans %}
+    </p>
     <form class="form-horizontal" action="" method="post">
         {% csrf_token %}
         {% bootstrap_form form layout="control" %}
