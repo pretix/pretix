@@ -267,8 +267,9 @@ class CartMixin:
             seconds_left = None
 
         itemvarsums = Counter()
+        subevent = getattr(self, 'subevent', None)
         for p in cartpos:
-            if not self.subevent or p.subevent == self.subevent:
+            if p.subevent == subevent:
                 itemvarsums[p.variation or p.item] += 1
 
         return {
