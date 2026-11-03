@@ -84,7 +84,9 @@ def migrate_questions_forward(apps, schema_editor):
                     # (same as the default questionnaire for new events)
                     internal_name = _('Attendee data')
                 else:
-                    internal_name = _('personalized products')
+                    internal_name = label_prefix + _('personalized products')
+            if len(internal_name) > 255:
+                internal_name = internal_name[:250] + ' ...'
 
             # create questionnaires and rows
             questionnaire = Questionnaire.objects.create(
@@ -156,7 +158,7 @@ def migrate_questions_forward(apps, schema_editor):
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            # Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN == "position_purchase"
+            # Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN == "position_checkin"
             create_grouped_item_questionnaires(event, rows, _('Check-in questions for '), "position_checkin", personalized_items)
 
             # [position_hidden] hidden
