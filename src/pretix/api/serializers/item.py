@@ -965,7 +965,7 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
                 raise ValidationError('System data fields are only supported on order positions.')
 
             system_fields = set(c['system_datafield'] for c in full_data['rows'])
-            if ('zipcode' in system_fields or 'state' in system_fields or 'street' in system_fields or 'city' in system_fields) and 'country' not in system_fields:
+            if ('@zipcode' in system_fields or '@state' in system_fields or '@street' in system_fields or '@city' in system_fields) and '@country' not in system_fields:
                 raise ValidationError('The system data fields "street", "zip code", "city", and "state" can only be used in combination with the "country" field.')
 
         return data
@@ -985,9 +985,9 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
     def update(self, instance, validated_data):
         rows_data = validated_data.pop('rows', None)
         questionnaire = super().update(instance, validated_data)
-        if rows_data is not None:
-            self.set_rows(questionnaire, rows_data)
         try:
+            if rows_data is not None:
+                self.set_rows(questionnaire, rows_data)
             Questionnaire.check_constraints(questionnaire.event)
         except ValidationError as e:
             raise DrfValidationError(as_serializer_error(e))
@@ -1013,6 +1013,8 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
                         update_data['dependency_question'] = result[q(update_data['dependency_question'])]
                     except KeyError:
                         raise ValidationError('A question can only depend on a previous question from the same questionnaire.')
+                    if update_data['dependency_question'].datafield_type not in (Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+                        raise ValidationError('A question can only depend on a boolean or choice question.')
                 if existing:
                     result[q(update_data)] = child_serializer.update(existing, update_data)
                 else:

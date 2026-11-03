@@ -2119,6 +2119,16 @@ class QuestionnaireRow(LoggedModel):
         '@attendee_name_parts:' + field
         for field in _name_schemes_all_fields
     ]
+    SYSTEM_DATAFIELD_TYPES = {
+       SystemDatafield.ATTENDEE_NAME_PARTS.value: Question.TYPE_STRING,
+       SystemDatafield.ATTENDEE_EMAIL.value: Question.TYPE_STRING,
+       SystemDatafield.COMPANY.value: Question.TYPE_STRING,
+       SystemDatafield.STREET.value: Question.TYPE_STRING,
+       SystemDatafield.ZIPCODE.value: Question.TYPE_STRING,
+       SystemDatafield.CITY.value: Question.TYPE_STRING,
+       SystemDatafield.STATE.value: Question.TYPE_STRING,
+       SystemDatafield.COUNTRY.value: Question.TYPE_COUNTRYCODE,
+    }
 
     questionnaire = models.ForeignKey(
         Questionnaire,
@@ -2159,6 +2169,13 @@ class QuestionnaireRow(LoggedModel):
 
     class Meta:
         ordering = ('position', 'id')
+
+    @property
+    def datafield_type(self):
+        if self.system_datafield:
+            return QuestionnaireRow.SYSTEM_DATAFIELD_TYPES[self.system_datafield]
+        elif self.user_datafield:
+            return self.user_datafield.type
 
     @property
     def form_field_name(self):
