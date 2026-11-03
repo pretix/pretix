@@ -174,6 +174,7 @@ def migrate_questions_forward(apps, schema_editor):
                     internal_name=_('Per-order questions'),
                 )
                 deps = {}
+                deps_to_add = []
                 for position, question in enumerate(questions):
                     deps[question.id] = QuestionnaireRow.objects.create(
                         questionnaire=questionnaire,
@@ -182,11 +183,16 @@ def migrate_questions_forward(apps, schema_editor):
                         required=question.required,
                         label=question.tbd_question,
                         help_text=question.help_text,
-                        dependency_question=deps[question.dependency_question.id] if question.dependency_question else None,
                         dependency_values=question.dependency_values,
                     )
+                    if question.dependency_question:
+                        deps_to_add.append((question.id, question.dependency_question.id))
+                for q, dep in deps_to_add:
+                    deps[q].dependency_question=deps[dep]
+                    deps[q].save()
 
-            for question in event.questions:
+
+            for question in event.questions.all():
                 question.internal_name = str(question.tbd_question)
                 if question.print_on_invoice:
                     question.print_on_invoice_label = question.tbd_question
