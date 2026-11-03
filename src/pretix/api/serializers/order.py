@@ -291,33 +291,34 @@ class MixedAnswerListSerializer(ListSerializer):
 
     def to_internal_value(self, data):
         result = {}
-        answers = []
-        attendee_name_parts = {}
-        settings = self.context['event'].settings
-        for answer in data["answers"]:
-            if "question" in answer or ("datafield" in answer and answer["datafield"] in QuestionnaireRow.SYSTEM_DATAFIELD_NUMBERS):
-                if "question" in answer:
-                    qid, dfid, sys_df = QuestionnaireRow.uncook_id(answer["question"])
+        if "answers" in data:
+            answers = []
+            attendee_name_parts = {}
+            settings = self.context['event'].settings
+            for answer in data["answers"]:
+                if "question" in answer or ("datafield" in answer and answer["datafield"] in QuestionnaireRow.SYSTEM_DATAFIELD_NUMBERS):
+                    if "question" in answer:
+                        qid, dfid, sys_df = QuestionnaireRow.uncook_id(answer["question"])
+                    else:
+                        qid, dfid, sys_df = None, None, answer["question"]
+                    if dfid:
+                        answer["question"] = dfid
+                        answers.append(answer)
+                    elif sys_df == "@country":
+                        result['country'] = Country(answer["answer"])
+                    elif sys_df == "@attendee_name_parts:salutation":
+                        attendee_name_parts['salutation'] =  PERSON_NAME_SALUTATIONS[answer["options"][0] - 1][0]
+                    elif sys_df == "@attendee_name_parts:title" and settings.name_scheme_titles:
+                        attendee_name_parts['title'] =  PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1][answer["options"][0] - 1]
+                    elif sys_df.startswith("@attendee_name_parts:"):
+                        attendee_name_parts[sys_df[len("@attendee_name_parts:"):]] = answer["answer"]
+                    else:
+                        result[sys_df[1:]] = answer["answer"]
                 else:
-                    qid, dfid, sys_df = None, None, answer["question"]
-                if dfid:
-                    answer["question"] = dfid
                     answers.append(answer)
-                elif sys_df == "@country":
-                    result['country'] = Country(answer["answer"])
-                elif sys_df == "@attendee_name_parts:salutation":
-                    attendee_name_parts['salutation'] =  PERSON_NAME_SALUTATIONS[answer["options"][0] - 1][0]
-                elif sys_df == "@attendee_name_parts:title" and settings.name_scheme_titles:
-                    attendee_name_parts['title'] =  PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1][answer["options"][0] - 1]
-                elif sys_df.startswith("@attendee_name_parts:"):
-                    attendee_name_parts[sys_df[len("@attendee_name_parts:"):]] = answer["answer"]
-                else:
-                    result[sys_df[1:]] = answer["answer"]
-            else:
-                answers.append(answer)
-        result["answers"] = super().to_internal_value(answers)
-        if attendee_name_parts:
-            result["attendee_name_parts"] = attendee_name_parts
+            result["answers"] = super().to_internal_value(answers)
+            if attendee_name_parts:
+                result["attendee_name_parts"] = attendee_name_parts
         return result
 
 

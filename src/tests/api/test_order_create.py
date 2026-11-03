@@ -32,6 +32,7 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from i18nfield.strings import LazyI18nString
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
@@ -78,17 +79,26 @@ def medium2(organizer2):
 
 
 @pytest.fixture
-def question(event, item):
+def questionnaire(event, item):
+    questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
+    questionnaire.items.add(item)
+    return questionnaire
+
+
+@pytest.fixture
+def question(event, questionnaire):
     q = event.questions.create(question="T-Shirt size", type="S", identifier="ABC")
-    q.items.add(item)
     q.options.create(answer="XL", identifier="LVETRWVU")
+    questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
     return q
 
 
 @pytest.fixture
 def question2(event2, item2):
     q = event2.questions.create(question="T-Shirt size", type="S", identifier="ABC")
-    q.items.add(item2)
+    questionnaire = event2.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
+    questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
+    questionnaire.items.add(item2)
     return q
 
 
@@ -467,7 +477,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
                 "valid_until": None,
                 "blocked": None,
                 'answers': [
-                    {'question': question.pk, 'answer': 'L', 'question_identifier': 'ABC',
+                    {'datafield': 'ABC', 'question': question.pk, 'answer': 'L', 'question_identifier': 'ABC',
                      'options': [opt.pk],
                      'option_identifiers': [opt.identifier]}
                 ],
@@ -1600,7 +1610,7 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'positions': [{'answers': [{'question': ['The specified question does not belong to this event.']}]}]}
+        'positions': [{'answers': [{'question': [f'Invalid pk "{question2.pk}" - object does not exist.']}]}]}
 
     res['positions'][0]['answers'][0]['question'] = question.pk
     res['positions'][0]['answers'][0]['options'] = [question.options.first().pk]
@@ -1611,7 +1621,7 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     )
     assert resp.status_code == 400
     assert resp.data == {'positions': [{'answers': [
-        {'non_field_errors': ['You should not specify options if the question is not of a choice type.']}]}]}
+        {'non_field_errors': ['You should not specify options if the data field is not of a choice type.']}]}]}
 
     question.type = Question.TYPE_CHOICE
     question.save()
@@ -1623,7 +1633,7 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     )
     assert resp.status_code == 400
     assert resp.data == {'positions': [
-        {'answers': [{'non_field_errors': ['You need to specify options if the question is of a choice type.']}]}]}
+        {'answers': [{'non_field_errors': ['You need to specify options if the data field is of a choice type.']}]}]}
 
     with scopes_disabled():
         question2.options.create(answer="L")
@@ -1638,7 +1648,7 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'positions': [{'answers': [{'non_field_errors': ['The specified option does not belong to this question.']}]}]}
+        'positions': [{'answers': [{'non_field_errors': ['The specified option does not belong to this data field.']}]}]}
 
     with scopes_disabled():
         question.options.create(answer="L")
@@ -1654,7 +1664,7 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'positions': [{'answers': [{'non_field_errors': ['You can specify at most one option for this question.']}]}]}
+        'positions': [{'answers': [{'non_field_errors': ['You can specify at most one option for this data field.']}]}]}
 
     r = token_client.post(
         '/api/v1/upload',
@@ -1773,7 +1783,7 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'positions': [{'answers': [{'non_field_errors': ['Please specify "true" or "false" for boolean questions.']}]}]}
+        'positions': [{'answers': [{'non_field_errors': ['Please specify "true" or "false" for boolean data fields.']}]}]}
 
     question.type = Question.TYPE_DATE
     question.save()
