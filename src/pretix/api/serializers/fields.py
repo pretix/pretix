@@ -36,6 +36,7 @@ from collections import OrderedDict
 
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
+from rest_framework.fields import SerializerMethodField
 
 from pretix.api.auth.utils import get_session_key_for_api_request
 
@@ -133,3 +134,48 @@ class PluginsField(serializers.Field):
         return {
             'plugins': data
         }
+
+class WritableSerializerMethodField(SerializerMethodField):
+    """
+    A field that get its representation from calling a method on the
+    parent serializer class. The method called will be of the form
+    "get_{field_name}", and should take a single argument, which is the
+    object being serialized.
+
+    When the field is written, a method of the form "put_{field_name}"
+    is called, with the instance and the incoming data as arguments. It
+    should return a dictionary of data to be update validated_data with.
+
+    For example:
+
+    class ExampleSerializer(Serializer):
+        extra_info = WritableSerializerMethodField()
+
+        def get_extra_info(self, obj):
+            return ...  # Calculate some data to return.
+
+        def put_extra_info(self, obj, new_value):
+            # Store new value
+    """
+
+    def __init__(self, method_name=None, put_method_name=None, **kwargs):
+        self.put_method_name = put_method_name
+        super().__init__(method_name, **kwargs)
+        self.read_only = False
+
+    def bind(self, field_name, parent):
+        # The method name defaults to `get_{field_name}`.
+        if self.method_name is None:
+            self.method_name = f'get_{field_name}'
+        if self.put_method_name is None:
+            self.put_method_name = f'put_{field_name}'
+
+        super().bind(field_name, parent)
+
+    def to_representation(self, value):
+        method = getattr(self.parent, self.method_name)
+        return method(value)
+
+    def to_internal_value(self, data):
+        method = getattr(self.parent, self.put_method_name)
+        return method(self.parent.instance, data)

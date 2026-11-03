@@ -1,0 +1,64 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load static %}
+{% load icon %}
+{% load compress %}
+{% load vite %}
+
+{% block title %}
+    {% trans "Questionnaires" %}
+{% endblock %}
+{% block inside %}
+    <h1>
+        {% trans "Questionnaires" %}
+        <a href="{% url "control:event.items.questions" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default pull-right">
+            {% icon "wrench" %} {% trans "Manage data fields" %}
+        </a>
+    </h1>
+    <p>
+        {% blocktrans trimmed %}
+            Questionaires allow your attendees to fill in additional data about their ticket. If you provide food, one
+            example might be to ask your users about preferences or dietary requirements.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            Each questionnaire can be assigned to one or more products for which its questions are asked. It can appear
+            either during the checkout process, in the ticket details for each attendee individually, or at the check-in
+            at the venue.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            The answer to each question is stored either in a system-provided attendee data field (such as name, email,
+            or postal address), or in a user-defined data field attached to the order or the attendee.
+        {% endblocktrans %}
+        {% blocktrans trimmed %}
+            User-defined data fields can be created from the questionnaire editor below, and managed using the button to the right.
+        {% endblocktrans %}
+    </p>
+    <br>
+
+    {{ request.event.settings.locales|json_script:"event_locales" }}
+    {{ questionnaire_type_choices|json_script:"questionnaire_type_choices" }}
+    {{ question_type_choices|json_script:"question_type_choices" }}
+    {{ system_question_choices|json_script:"system_question_choices" }}
+
+    {% url "control:event.items.questions.edit" organizer=request.event.organizer.slug event=request.event.slug question=0 as datafield_edit_url %}
+    {{ datafield_edit_url|json_script:"datafield_edit_url" }}
+
+    {% url "control:event.items.questions.show" organizer=request.event.organizer.slug event=request.event.slug question=0 as datafield_view_url %}
+    {{ datafield_view_url|json_script:"datafield_view_url" }}
+
+    {% url "control:event.items.questions.add" organizer=request.event.organizer.slug event=request.event.slug as datafield_create_url %}
+    {{ datafield_create_url|json_script:"datafield_create_url" }}
+
+    <div id="questionnaires-editor">
+        <!-- Vue app mount point -->
+        <center><div class="big-load-indicator"><i class="fa fa-cog big-rotating-icon"></i></div></center>
+    </div>
+
+    {% vite_hmr %}
+    {% vite_asset "src/pretix/static/pretixcontrol/js/ui/questionnaires/index.ts" %}
+{% endblock %}

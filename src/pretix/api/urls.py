@@ -80,7 +80,10 @@ event_router.register(r'subevents', event.SubEventViewSet)
 event_router.register(r'clone', event.CloneEventViewSet)
 event_router.register(r'items', item.ItemViewSet)
 event_router.register(r'categories', item.ItemCategoryViewSet)
-event_router.register(r'questions', item.QuestionViewSet)
+event_router.register(r'questions', item.CompatQuestionViewSet, basename='compatquestion')
+event_router.register(r'datafields/position', item.PositionDatafieldViewSet, basename='positiondatafield')
+event_router.register(r'datafields/order', item.OrderDatafieldViewSet, basename='orderdatafield')
+event_router.register(r'questionnaires', item.QuestionnaireViewSet)
 event_router.register(r'discounts', discount.DiscountViewSet)
 event_router.register(r'quotas', item.QuotaViewSet)
 event_router.register(r'vouchers', voucher.VoucherViewSet)
@@ -107,8 +110,11 @@ subevent_router.register(r'seats', event.SeatViewSet)
 checkinlist_router = routers.DefaultRouter()
 checkinlist_router.register(r'positions', checkin.CheckinListPositionViewSet, basename='checkinlistpos')
 
-question_router = routers.DefaultRouter()
-question_router.register(r'options', item.QuestionOptionViewSet)
+orderdatafield_router = routers.DefaultRouter()
+orderdatafield_router.register(r'options', item.OrderDatafieldOptionViewSet)
+
+positiondatafield_router = routers.DefaultRouter()
+positiondatafield_router.register(r'options', item.PositionDatafieldOptionViewSet)
 
 item_router = routers.DefaultRouter()
 item_router.register(r'variations', item.ItemVariationViewSet)
@@ -148,7 +154,11 @@ urlpatterns = [
     re_path(r'^organizers/(?P<organizer>[^/]+)/teams/(?P<team>[^/]+)/', include(team_router.urls)),
     re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/items/(?P<item>[^/]+)/', include(item_router.urls)),
     re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/questions/(?P<question>[^/]+)/',
-            include(question_router.urls)),
+            include(positiondatafield_router.urls)),
+    re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/datafields/order/(?P<question>[^/]+)/',
+            include(orderdatafield_router.urls)),
+    re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/datafields/position/(?P<question>[^/]+)/',
+            include(positiondatafield_router.urls)),
     re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/checkinlists/(?P<list>[^/]+)/',
             include(checkinlist_router.urls)),
     re_path(r'^organizers/(?P<organizer>[^/]+)/events/(?P<event>[^/]+)/orders/(?P<order>[^/]+)/', include(order_router.urls)),

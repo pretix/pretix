@@ -3,10 +3,10 @@
 {% load bootstrap3 %}
 {% load escapejson %}
 {% load formset_tags %}
-{% block title %}{% blocktrans with name=question.question %}Question: {{ name }}{% endblocktrans %}{% endblock %}
+{% block title %}{% blocktrans with name=question.question %}Data field: {{ name }}{% endblocktrans %}{% endblock %}
 {% block inside %}
     <h1>
-        {% blocktrans with name=question.question %}Question: {{ name }}{% endblocktrans %}
+        {% blocktrans with name=question.question %}Data field: {{ name }}{% endblocktrans %}
         {% if 'event.items:write' in request.eventpermset %}
             <a href="{% url "control:event.items.questions.edit" event=request.event.slug organizer=request.event.organizer.slug question=question.pk %}"
                     class="btn btn-default">

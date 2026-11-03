@@ -29,3 +29,20 @@ def chunked_iterable(iterable, size):
         if not chunk:
             break
         yield chunk
+
+
+def sort_groupby(data, group_key, inner_sort_key=None):
+    """
+    Groups data by group_key, returns a list of (group_key, list). The outer list is
+    sorted by group_key, all inner lists are sorted by inner_sort_key.
+    """
+    sort_key = group_key if inner_sort_key is None else lambda d: (group_key(d), inner_sort_key(d))
+    return [(group, list(items)) for group, items in itertools.groupby(sorted(data, key=sort_key), group_key)]
+
+
+def sort_groupby_exp(data, group_key, inner_sort_key=None):
+    """
+    Same as sort_groupby, but items are passed into the key functions as *item, so tuples can be destructed easily.
+    """
+    sort_key = (lambda d: group_key(*d)) if inner_sort_key is None else lambda d: (group_key(*d), inner_sort_key(*d))
+    return [(group, list(items)) for group, items in itertools.groupby(sorted(data, key=sort_key), lambda d: group_key(*d))]

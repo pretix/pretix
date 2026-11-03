@@ -31,7 +31,7 @@ from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.multidomain.urlreverse import eventreverse_absolute
 
 
-def get_answer(op, question_identifier=None):
+def get_position_answer(op, question_identifier=None):
     a = None
     if op.addon_to:
         if "answers" in getattr(op.addon_to, "_prefetched_objects_cache", {}):
@@ -59,6 +59,30 @@ def get_answer(op, question_identifier=None):
             pass
     else:
         a = op.answers.filter(question__identifier=question_identifier).first()
+
+    if not a:
+        return ""
+    else:
+        if a.question.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+            return [str(o.identifier) for o in a.options.all()]
+        if a.question.type == Question.TYPE_BOOLEAN:
+            return a.answer == "True"
+        return a.answer
+
+
+def get_order_answer(order, question_identifier=None):
+    a = None
+    if "answers" in getattr(order, "_prefetched_objects_cache", {}):
+        try:
+            a = [
+                a
+                for a in order.answers.all()
+                if a.question.identifier == question_identifier
+            ][0]
+        except IndexError:
+            pass
+    else:
+        a = order.answers.filter(question__identifier=question_identifier).first()
 
     if not a:
         return ""
@@ -127,10 +151,11 @@ DataFieldCategory = namedtuple(
 
 CAT_ORDER_POSITION = DataFieldCategory(10, _('Order position details'))
 CAT_ATTENDEE = DataFieldCategory(11, _('Attendee details'))
-CAT_QUESTIONS = DataFieldCategory(12, _('Questions'))
+CAT_ORDER_POSITION_DATAFIELDS = DataFieldCategory(12, _('Order position data fields'))
 CAT_PRODUCT = DataFieldCategory(20, _('Product details'))
 CAT_ORDER = DataFieldCategory(21, _('Order details'))
-CAT_INVOICE_ADDRESS = DataFieldCategory(22, _('Invoice address'))
+CAT_ORDER_DATAFIELDS = DataFieldCategory(22, _('Order data fields'))
+CAT_INVOICE_ADDRESS = DataFieldCategory(23, _('Invoice address'))
 CAT_EVENT = DataFieldCategory(30, _('Event information'))
 CAT_EVENT_OR_SUBEVENT = DataFieldCategory(31, pgettext_lazy('subevent', 'Event or date information'))
 
@@ -584,15 +609,27 @@ def get_data_fields(event, for_model=None):
         ]
         + [
             DataFieldInfo(
-                ORDER_POSITION,
-                CAT_QUESTIONS,
+                ORDER,
+                CAT_ORDER_POSITION_DATAFIELDS,
                 "question_" + q.identifier,
-                _("Question: {name}").format(name=str(q.question)),
+                _("Data field: {name}").format(name=str(q.question)),
                 q.type,
                 get_enum_opts(q),
-                partial(lambda qq, position: get_answer(position, qq.identifier), q),
+                partial(lambda qq, position: get_position_answer(position, qq.identifier), q),
             )
-            for q in event.questions.filter(~Q(type=Question.TYPE_FILE)).prefetch_related("options")
+            for q in event.questions.filter(~Q(type=Question.TYPE_FILE), container_type=Question.ContainerType.ORDERPOSITION).prefetch_related("options")
+        ]
+        + [
+            DataFieldInfo(
+                ORDER,
+                CAT_ORDER_DATAFIELDS,
+                "orderdatafield_" + q.identifier,
+                _("Order data field: {name}").format(name=str(q.question)),
+                q.type,
+                get_enum_opts(q),
+                partial(lambda qq, order: get_order_answer(order, qq.identifier), q),
+            )
+            for q in event.questions.filter(~Q(type=Question.TYPE_FILE), container_type=Question.ContainerType.ORDER).prefetch_related("options")
         ]
     )
     if not any(field_name == "given_name" for field_name, label, weight in name_scheme["fields"]):
