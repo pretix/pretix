@@ -2006,6 +2006,7 @@ class Questionnaire(LoggedModel):
         ORDER_POSITION_ATTENDEE_ONLY = "position_attendee", _("Per product, via attendee link")
         ORDER_POSITION_CHECKIN = "position_checkin", _("Per product, at check-in")
         ORDER_POSITION_HIDDEN = "position_hidden", _("Per product, hidden")
+
     event = models.ForeignKey(
         Event,
         related_name="questionnaires",

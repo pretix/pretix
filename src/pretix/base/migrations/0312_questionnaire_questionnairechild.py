@@ -57,7 +57,7 @@ def migrate_questions_forward(apps, schema_editor):
 
     qc_candidate = namedtuple('qc_candidate', ['item_info', 'question_id', 'question'])
 
-    def create_grouped_item_questionnaires(event, qc_candidates_iter, label_prefix, questionnaire_type, personalized_items=None):
+    def create_grouped_item_questionnaires(event, qc_candidates_iter, label_prefix, questionnaire_type, personalized_items):
         # group by item, creating a unique questionnaire per item  ->  iter[tuple[list[Question], item_info]]
         item_questionnaires = (
             ([c.question for c in group], item_info)
@@ -76,7 +76,7 @@ def migrate_questions_forward(apps, schema_editor):
 
             internal_name = label_prefix + ', '.join(str(ii.internal_name or ii.name) for ii in item_infos)
             if all(ii.personalized for ii in item_infos) and len(item_infos) == len(personalized_items):
-                if questionnaire_type == Questionnaire.QuestionnaireType.ORDER_POSITION_SALE:
+                if questionnaire_type == "order_purchase":
                     # if we have a questionnaire for exactly all personalized items, we just call it "Attendee data"
                     # (same as the default questionnaire for new events)
                     internal_name = _('Attendee data')
@@ -90,6 +90,7 @@ def migrate_questions_forward(apps, schema_editor):
             )
             questionnaire.items.set([ii.id for ii in item_infos])
             deps = {}
+            deps_to_add = []
             for position, question in enumerate(questions):
                 print(position, question)
                 if isinstance(question, FakeQuestion):
@@ -108,9 +109,13 @@ def migrate_questions_forward(apps, schema_editor):
                         required=question.required,
                         label=question.tbd_question,
                         help_text=question.help_text,
-                        dependency_question=deps[question.dependency_question.id] if question.dependency_question else None,
                         dependency_values=question.dependency_values,
                     )
+                    if question.dependency_question:
+                        deps_to_add.append((question.id, question.dependency_question.id))
+            for q, dep in deps_to_add:
+                deps[q].dependency_question=deps[dep]
+                deps[q].save()
 
     for event in Event.objects.iterator():
         # get relevant settings
@@ -137,7 +142,8 @@ def migrate_questions_forward(apps, schema_editor):
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            create_grouped_item_questionnaires(event, rows, '', Questionnaire.QuestionnaireType.ORDER_POSITION_SALE, personalized_items)
+            # Questionnaire.QuestionnaireType.ORDER_POSITION_SALE == "position_purchase"
+            create_grouped_item_questionnaires(event, rows, '', "position_purchase", personalized_items)
 
             # [position_checkin] checkin
             rows = chain((
@@ -146,7 +152,8 @@ def migrate_questions_forward(apps, schema_editor):
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            create_grouped_item_questionnaires(event, rows, _('Check-in questions for '), Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN, personalized_items)
+            # Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN == "position_purchase"
+            create_grouped_item_questionnaires(event, rows, _('Check-in questions for '), "position_checkin", personalized_items)
 
             # [position_hidden] hidden
             rows = chain((
@@ -155,14 +162,15 @@ def migrate_questions_forward(apps, schema_editor):
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            create_grouped_item_questionnaires(event, rows, _('Hidden questions for '), Questionnaire.QuestionnaireType.ORDER_POSITION_HIDDEN, personalized_items)
+            # Questionnaire.QuestionnaireType.ORDER_POSITION_HIDDEN == "position_hidden"
+            create_grouped_item_questionnaires(event, rows, _('Hidden questions for '), "position_hidden", personalized_items)
 
             # [O] get all order-level questions
             questions = list(event.questions.filter(container_type='O', hidden=False).order_by('position'))
             if questions:
                 # create questionnaires and rows
                 questionnaire = Questionnaire.objects.create(
-                    event=event, type=Questionnaire.QuestionnaireType.ORDER_SALE, position=0, all_sales_channels=True,
+                    event=event, type="order_purchase", position=0, all_sales_channels=True,
                     internal_name=_('Per-order questions'),
                 )
                 deps = {}
