@@ -200,19 +200,15 @@ class CartMixin:
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
         def group_key(pos):  # only used for grouping, sorting is done before already
-            has_attendee_data = pos.item.ask_attendee_data and (
-                self.request.event.settings.attendee_names_asked
-                or self.request.event.settings.attendee_emails_asked
-                or self.request.event.settings.attendee_company_asked
-                or self.request.event.settings.attendee_addresses_asked
-                or pos_additional_fields.get(pos.pk)
-            )
+            has_attendee_data = pos.item.ask_attendee_data or pos_additional_fields.get(pos.pk)
+
             grouping_allowed = (
                 # Never group when we have per-ticket download buttons
                 not downloads and
                 # Never group if the position has add-ons
                 pos.pk not in has_addons and
                 # Never group if we have answers to show
+                # TODO(questionnaires): is pos.item.questionnaires.all the correct filter?
                 (not answers or (not has_attendee_data and not bool(pos.item.questionnaires.all()))) and  # do not use .exists() to re-use prefetch cache
                 # Never group when we have a final order and a gift card code
                 (isinstance(pos, CartPosition) or not pos.item.issue_giftcard)

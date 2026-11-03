@@ -824,7 +824,8 @@ class Item(LoggedModel):
 
     @property
     def ask_attendee_data(self):
-        return self.admission and self.personalized
+        # TODO(questionnaires): should this also check for the company/address-fields?
+        return QuestionnaireRow.objects.filter(questionnaire__items=self, system_datafield__in=('@attendee_name_parts', '@attendee_email')).exists()
 
     def tax(self, price=None, base_price_is='auto', currency=None, invoice_address=None, override_tax_rate=None,
             include_bundled=False, force_fixed_gross_price=False):
