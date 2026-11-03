@@ -268,7 +268,7 @@ class CartMixin:
 
         itemvarsums = Counter()
         for p in cartpos:
-            if p.subevent == self.subevent:
+            if not self.subevent or p.subevent == self.subevent:
                 itemvarsums[p.variation or p.item] += 1
 
         return {
