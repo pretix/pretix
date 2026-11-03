@@ -150,8 +150,8 @@ class JSONExporter(BaseExporter):
                         'required': question.required,
                         'question': str(question.internal_name),
                         'position': question.position,
-                        'hidden': question.hidden,
-                        'ask_during_checkin': question.ask_during_checkin,
+                        'show_during_checkin': question.show_during_checkin,
+                        'print_on_invoice': question.print_on_invoice,
                         'help_text': str(question.help_text),
                         'type': question.type
                     } for question in self.event.positiondatafields
@@ -163,8 +163,8 @@ class JSONExporter(BaseExporter):
                         'required': question.required,
                         'question': str(question.internal_name),
                         'position': question.position,
-                        'hidden': question.hidden,
-                        'ask_during_checkin': question.ask_during_checkin,
+                        'show_during_checkin': question.show_during_checkin,
+                        'print_on_invoice': question.print_on_invoice,
                         'help_text': str(question.help_text),
                         'type': question.type
                     } for question in self.event.orderdatafields

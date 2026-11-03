@@ -153,7 +153,7 @@ def migrate_questions_forward(apps, schema_editor):
                 for item in personalized_items
             ), (
                 qc_candidate(item, q.id, q)
-                for q in questions.filter(hidden=False, ask_during_checkin=False)
+                for q in questions.filter(tbd_hidden=False, ask_during_checkin=False)
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
@@ -173,7 +173,7 @@ def migrate_questions_forward(apps, schema_editor):
             # [position_hidden] hidden
             rows = chain((
                 qc_candidate(item, q.id, q)
-                for q in questions.filter(hidden=True, ask_during_checkin=False)
+                for q in questions.filter(tbd_hidden=True, ask_during_checkin=False)
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
@@ -181,7 +181,7 @@ def migrate_questions_forward(apps, schema_editor):
             create_grouped_item_questionnaires(event, rows, _('Hidden questions for '), "position_hidden", personalized_items)
 
             # [O] get all order-level questions
-            questions = list(event.questions.filter(container_type='O', hidden=False).order_by('position'))
+            questions = list(event.questions.filter(container_type='O', tbd_hidden=False).order_by('position'))
             if questions:
                 # create questionnaires and rows
                 questionnaire = Questionnaire.objects.create(

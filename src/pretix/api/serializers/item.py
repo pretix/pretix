@@ -705,7 +705,7 @@ class DatafieldSerializer(I18nAwareModelSerializer):
         model = Question
         fields = ('id', 'internal_name', 'identifier', 'type',
                   'show_during_checkin',
-                  'hidden', 'print_on_invoice', 'valid_number_min',
+                  'print_on_invoice', 'print_on_invoice_label', 'valid_number_min',
                   'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
                   'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait',
                   'referenced_by_questionnaires', 'questionnaire_types',
@@ -768,6 +768,7 @@ class CompatQuestionSerializer(DatafieldSerializer):
     items = MergeField('referenced_by', serializers.PrimaryKeyRelatedField(source='questionnaire.items', many=True, queryset=Item.objects.none(), allow_null=True, required=False), mode='union')
     position = serializers.IntegerField(required=False, read_only=True, default=0)
     ask_during_checkin = MergeField('referenced_by', serializers.BooleanField(source='questionnaire.ask_during_checkin'), mode='bool_or')
+    hidden = MergeField('referenced_by', serializers.BooleanField(source='questionnaire.hidden'), mode='bool_or')
 
     dependency_question = MergeField('referenced_by', serializers.IntegerField(source='dependency_question.user_datafield_id', required=False, default=None, allow_null=True), mode='consensus')
     dependency_values = MergeField('referenced_by', serializers.JSONField(), mode='consensus')

@@ -1720,10 +1720,11 @@ class Question(LoggedModel):  # TODO(questionnaires)  -  rename to Datafield ?
         help_text=_('Not supported by all check-in apps for all question types.'),
         default=False
     )
-    hidden = models.BooleanField(  # to be removed
+    tbd_hidden = models.BooleanField(  # to be removed
         verbose_name=_('Hidden question'),
         help_text=_('This question will only show up in the backend.'),
-        default=False
+        default=False,
+        db_column="hidden",
     )
     print_on_invoice = models.BooleanField(
         verbose_name=_('Print answer on invoices'),

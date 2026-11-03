@@ -30,7 +30,6 @@
                 <th>{% trans "Type" %}</th>
                 <th class="iconcol"></th>
                 <th class="iconcol"></th>
-                <th class="iconcol"></th>
                 <th class="action-col-2"></th>
             </tr>
             </thead>
@@ -54,11 +53,6 @@
                     <td>
                         {% if q.print_on_invoice %}
                             <span class="fa fa-file-o text-muted" data-toggle="tooltip" title="{% trans "Print answer on invoices" %}"></span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if q.hidden %}
-                            <span class="fa fa-eye-slash text-muted" data-toggle="tooltip" title="{% trans "Hidden question" %}"></span>
                         {% endif %}
                     </td>
                     <td class="text-right flip">
@@ -91,7 +85,6 @@
                 <th>{% trans "Type" %}</th>
                 <th class="iconcol"></th>
                 <th class="iconcol"></th>
-                <th class="iconcol"></th>
                 <th class="action-col-2"></th>
             </tr>
             </thead>
@@ -117,11 +110,6 @@
                     <td>
                         {% if q.print_on_invoice %}
                             <span class="fa fa-file-o text-muted" data-toggle="tooltip" title="{% trans "Print answer on invoices" %}"></span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if q.hidden %}
-                            <span class="fa fa-eye-slash text-muted" data-toggle="tooltip" title="{% trans "Hidden question" %}"></span>
                         {% endif %}
                     </td>
                     <td class="text-right flip">

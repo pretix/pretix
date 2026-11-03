@@ -191,7 +191,6 @@ class QuestionForm(I18nModelForm):
             'internal_name',
             'type',
             'show_during_checkin',
-            'hidden',
             'identifier',
             'print_on_invoice',
             'print_on_invoice_label',
