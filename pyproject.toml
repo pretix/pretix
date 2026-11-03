@@ -46,7 +46,7 @@ dependencies = [
   "django-formtools==2.7",
   "django-hierarkey==2.0.*,>=2.0.2",
   "django-hijack==3.7.*",
-  "django-i18nfield==1.11.*",
+  "django-i18nfield==1.12.*",
   "django-libsass==0.9",
   "django-localflavor==5.1",
   "django-markup",
