@@ -65,6 +65,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
     )
     maxfilesize = settings.FILE_UPLOAD_MAX_SIZE_IMAGE
     minfilesize = 10
+    checkin_qr_warning = False
     title = None
 
     def get(self, request, *args, **kwargs):
@@ -292,6 +293,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         ctx['title'] = self.title
         ctx['locales'] = [p for p in settings.LANGUAGES if p[0] in self.request.event.settings.locales]
         ctx['maxfilesize'] = self.maxfilesize
+        ctx['checkin_qr_warning'] = self.checkin_qr_warning
         return ctx
 
 
