@@ -147,7 +147,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
     def _is_receiver_active(self, sender, receiver):
         return is_receiver_active(sender, receiver)
 
-    def send(self, sender: T, **named) -> List[Tuple[Callable, Any]]:
+    def send(self, sender: T, skip_exceptions=False, **named) -> List[Tuple[Callable, Any]]:
         """
         Send signal from sender to all connected receivers that belong to
         plugins enabled for the given event / organizer.
@@ -164,8 +164,19 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
 
         for receiver in self._live_receivers(sender)[0]:
             if self._is_receiver_active(sender, receiver):
-                response = receiver(signal=self, sender=sender, **named)
-                responses.append((receiver, response))
+                try:
+                    response = receiver(signal=self, sender=sender, **named)
+                except Exception as e:
+                    if skip_exceptions:
+                        logger.exception("Signal handler skipped due to exception")
+                        if settings.SENTRY_ENABLED:
+                            import sentry_sdk
+
+                            sentry_sdk.capture_exception(e)
+                    else:
+                        raise
+                else:
+                    responses.append((receiver, response))
         return responses
 
     def send_chained(self, sender: T, chain_kwarg_name, **named) -> List[Tuple[Callable, Any]]:
@@ -312,6 +323,30 @@ class OrganizerPluginSignal(PluginSignal[Organizer]):
 
 
 class GlobalSignal(django.dispatch.Signal):
+    def send(self, sender, skip_exceptions=False, **named):
+        if (
+                not self.receivers
+                or self.sender_receivers_cache.get(sender) is NO_RECEIVERS
+        ):
+            return []
+        responses = []
+        sync_receivers, _ = self._live_receivers(sender)
+        for receiver in sync_receivers:
+            try:
+                response = receiver(signal=self, sender=sender, **named)
+            except Exception as e:
+                if skip_exceptions:
+                    logger.exception("Signal handler skipped due to exception")
+                    if settings.SENTRY_ENABLED:
+                        import sentry_sdk
+
+                        sentry_sdk.capture_exception(e)
+                else:
+                    raise
+            else:
+                responses.append((receiver, response))
+        return responses
+
     def send_chained(self, sender: Event, chain_kwarg_name, **named) -> List[Tuple[Callable, Any]]:
         """
         Send signal from sender to all connected receivers. The return value of the first receiver
