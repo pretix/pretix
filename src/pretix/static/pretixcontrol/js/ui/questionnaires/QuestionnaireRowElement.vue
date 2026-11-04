@@ -137,11 +137,14 @@ const editor = ref();
 								<input type="checkbox" v-model="question.required">
 								{{ gettext('Required question') }}
 							</label>
+              <div class="help-block" v-if="(question.datafield == '@street' || question.datafield == '@zipcode' || question.datafield == '@city') && question.required">
+                {{ gettext('Always optional if a country is selected where street addresses are not guaranteed to have this field.') }}
+              </div>
 						</div>
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" v-if="question.datafield != '@state'">
           <label class="col-md-3 control-label">
             {{ gettext('Only visible if...') }}
           </label>
@@ -156,6 +159,16 @@ const editor = ref();
 						<div v-if="question.dependency_question">
 							<p><span class="debuginfo">depends on {{ question.dependency_question }} = {{ dependency_values_resolved }}</span></p>
 						</div>
+          </div>
+        </div>
+        <div class="form-group" v-else>
+          <label class="col-md-3 control-label">
+            {{ gettext('Only visible if...') }}
+          </label>
+          <div class="col-md-9">
+            <div class="help-block">
+              {{ gettext('the user selects a country where street addresses usually contain a state.') }}
+            </div>
           </div>
         </div>
 
