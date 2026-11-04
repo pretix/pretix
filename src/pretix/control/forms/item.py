@@ -1207,6 +1207,11 @@ class ItemAddOnForm(I18nModelForm):
             }
         )
         self.fields['addon_category'].widget.choices = self.fields['addon_category'].choices
+        self.fields['max_count'] = forms.IntegerField(
+            min_value=1,
+            label=self.fields['max_count'].label,
+            widget=forms.NumberInput(attrs={'placeholder': '1'}),
+        )
 
     class Meta:
         model = ItemAddOn

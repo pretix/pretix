@@ -1481,8 +1481,8 @@ class ItemAddOn(models.Model):
 
     @staticmethod
     def clean_max_count(max_count):
-        if max_count < 0:
-            raise ValidationError(_('The maximum count needs to be equal to or greater than zero.'))
+        if max_count < 1:
+            raise ValidationError(_('The maximum count needs to be greater than zero.'))
 
     @staticmethod
     def clean_max_min_count(max_count, min_count):
