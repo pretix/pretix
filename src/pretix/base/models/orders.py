@@ -123,6 +123,7 @@ class QuestionnaireRenderer:
         self.answerlist = answerlist
 
     def _row_is_visible(self, parentid, qvals):
+        # TODO(questionnaires): country-dependent address logic
         if parentid is None:
             return True
         if parentid not in self.row_cache:
@@ -134,6 +135,7 @@ class QuestionnaireRenderer:
         return answer_values and any(qval in answer_values for qval in qvals)
 
     def row_is_required(self, qrow):
+        # TODO(questionnaires): country-dependent address logic
         return qrow.required and self._row_is_visible(qrow.dependency_question_id, qrow.dependency_values)
 
     @cached_property
@@ -161,7 +163,11 @@ class QuestionnaireRenderer:
             raise ValueError('Questionnaire child without datafield has no answer')
 
     @cached_property
-    def question_data(self):
+    def question_data(self) -> List[QuestionnaireRow]:
+        """
+        Returns a list of QuestionnaireRows extended with `answer` attributes, which contains either a QuestionAnswer
+        object or a string (in case of system data fields).
+        """
         question_data = []
         for qrow in self.qrows:
             if not (qrow.user_datafield_id or qrow.system_datafield):
@@ -185,10 +191,11 @@ class QuestionnaireRenderer:
         return {qrow.user_datafield_id or qrow.system_datafield for qrow in self.question_data}
 
     @property
-    def leftovers(self):
+    def leftovers(self) -> List[FakeQuestionnaireRow]:
         """
-        Returns a list of questionnaire-row-like objects for all answers that exist, but are not asked in the questionnaire.
-        These might either exist due to questionnaire changes after orders were already created, or due to programmatically adding answers via the API.
+        Returns a list of questionnaire-row-like objects for all answers that exist, but are not asked in the
+        questionnaire. These might either exist due to questionnaire changes after orders were already created,
+        or due to programmatically adding answers via the API.
         """
         return [FakeQuestionnaireRow(answer.question, answer.question.internal_name, answer) for answer in self.answerlist if answer.question.id not in self.asked_questions]
 
