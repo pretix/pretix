@@ -22,11 +22,11 @@ The data field resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the data field
-internal_name                         string                     An internal field label
+internal_name                         string                     **Required.** An internal field label
 identifier                            string                     An arbitrary string that can be used for matching with
                                                                  other sources.
                                                                  Must be unique per event, across all types of data fields.
-type                                  string                     The expected type of data. Valid options:
+type                                  string                     **Required.** The expected type of data. Valid options:
 
                                                                  * ``N`` – number
                                                                  * ``S`` – one-line string
@@ -44,6 +44,8 @@ show_during_checkin                   boolean                    If ``true``, th
                                                                  during check-in (if the check-in client supports it).
 print_on_invoice                      boolean                    If ``true``, the data field will be shown on
                                                                  invoices.
+print_on_invoice_label                multi-lingual string       **Required if ``print_on_invoice`` is ``true``.** Label
+                                                                 to print on the invoice before the value of this field.
 options                               list of objects            In case of data field type ``C`` or ``M``, this lists the
                                                                  available objects. Only writable during creation,
                                                                  use :ref:`separate endpoint <rest-datafieldoptions>` to modify this later.
