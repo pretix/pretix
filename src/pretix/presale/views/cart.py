@@ -70,7 +70,8 @@ from pretix.helpers.http import redirect_to_url
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.productlist import (
-    get_item_option_count, item_group_by_category, prepare_item_list_for_shop,
+    get_item_option_count, get_item_var_sums, item_group_by_category,
+    prepare_item_list_for_shop,
 )
 from pretix.presale.views import (
     CartMixin, EventViewMixin, allow_cors_if_namespaced,
@@ -701,6 +702,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
         )
 
         context['cart'] = self.get_cart()
+        context['itemvarsums'] = get_item_var_sums(context['cart']['raw'], self.subevent)
         context['show_cart'] = context['cart']['positions']
 
         # Regroup those by category

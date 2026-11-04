@@ -72,7 +72,8 @@ from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_public_ical
 from pretix.presale.productlist import (
-    get_item_option_count, item_group_by_category, prepare_item_list_for_shop,
+    get_item_option_count, get_item_var_sums, item_group_by_category,
+    prepare_item_list_for_shop,
 )
 from pretix.presale.signals import seatingframe_html_head
 from pretix.presale.views.organizer import (
@@ -244,6 +245,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['display_add_to_cart'] = display_add_to_cart
 
         context['cart'] = self.get_cart()
+        context['itemvarsums'] = get_item_var_sums(context['cart']['raw'], self.subevent)
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
 
         templating_context = PlaceholderContext(event_or_subevent=self.subevent or self.request.event, event=self.request.event)
