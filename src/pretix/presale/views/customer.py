@@ -155,7 +155,7 @@ class LoginView(RedirectBackMixin, FormView):
         """Security check complete. Log the user in."""
         customer = form.get_customer()
         customer_login(self.request, customer)
-        customer_signed_in.send(customer.organizer, customer=customer)
+        customer_signed_in.send(customer.organizer, customer=customer, profile=None)
         return HttpResponseRedirect(self.get_success_url())
 
 
