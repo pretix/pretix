@@ -702,7 +702,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
         )
 
         context['cart'] = self.get_cart()
-        context['itemvarsums'] = get_item_var_sums(context['cart']['raw'], self.subevent)
+        context['itemvarsums'] = get_item_var_sums(context['cart'].get('raw', []), self.subevent)
         context['show_cart'] = context['cart']['positions']
 
         # Regroup those by category

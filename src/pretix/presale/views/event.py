@@ -245,7 +245,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['display_add_to_cart'] = display_add_to_cart
 
         context['cart'] = self.get_cart()
-        context['itemvarsums'] = get_item_var_sums(context['cart']['raw'], self.subevent)
+        context['itemvarsums'] = get_item_var_sums(context['cart'].get('raw', []), self.subevent)
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
 
         templating_context = PlaceholderContext(event_or_subevent=self.subevent or self.request.event, event=self.request.event)
