@@ -242,9 +242,10 @@ details[open] > summary.list-group-item {
                :class="`list-group-item ${askedDatafields.has(field.identifier) ? 'exists' : ''}`">{{ i18n_any(field.question) }}</a>
           </template>
 
-          <a href="javascript:" @click="addExistingDatafield(...allAddressFields)"
+          <a v-if="allAddressFields.length"
+              href="javascript:" @click="addExistingDatafield(...allAddressFields)"
              :class="`list-group-item ${anyAddressFieldAsked ? 'exists' : ''}`">{{ gettext('Attendee address') }}</a>
-          <details :open="anyAddressFieldAsked && !allAddressFieldsAsked">
+          <details v-if="allAddressFields.length" :open="anyAddressFieldAsked && !allAddressFieldsAsked">
             <summary class="list-group-item">{{ gettext('Individual address fields ...') }}</summary>
 
             <template v-for="field in datafields">
