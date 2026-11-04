@@ -297,12 +297,20 @@ def get_download_buttons(event, show_disabled):
     return buttons
 
 
-def get_wallet_buttons(event):
-    # TODO(wallet): implement this
-    from pretix.plugins.wallet.platforms import AVAILABLE_PLATFORMS
-    buttons = []
-    for p in AVAILABLE_PLATFORMS:
-        platform = p(event)
-        attr, cont = platform.render_download_button()
-        buttons.append({"identifier": platform.identifier, "attributes": attr, "content": cont})
+def get_wallet_buttons(event: Event, positions: list[OrderPosition], show_disabled: bool):
+    from pretix.plugins.wallet.platforms import get_available_platforms
+    platforms = get_available_platforms(event, show_disabled)
+
+    buttons = {"combined": []}
+    for platform in platforms:
+        if any(platform.is_available_for_position(pos) for pos in positions):
+            attr, cont = platform.render_download_button()
+            buttons["combined"].append({"identifier": platform.identifier, "attributes": attr, "content": cont})
+
+    for position in positions:
+        buttons[position] = []
+        for platform in platforms:
+            if platform.is_available_for_position(position):
+                attr, cont = platform.render_download_button()
+                buttons[position].append({"identifier": platform.identifier, "attributes": attr, "content": cont})
     return buttons

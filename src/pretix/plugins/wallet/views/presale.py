@@ -16,12 +16,25 @@ from pretix.presale.views import EventViewMixin
 from pretix.presale.views.order import (
     OrderDetailMixin, OrderPositionDetailMixin,
 )
+from pretix.plugins.wallet.platforms import get_available_platforms
+from pretix.plugins.wallet.tasks import get_pass
 
-from .control import OrderDownloadMixin
 
-
-class PresaleOrderDownloadMixin(OrderDownloadMixin):
+class OrderDownloadMixin:
+    task = get_pass
     known_errortypes = ['OrderError']
+
+    def get_success_message(self, value):
+        return ""
+
+    def get_success_url(self, value):
+        return value
+
+    @cached_property
+    def platform(self):
+        for p in get_available_platforms(self.request.event, show_disabled=False):
+            if p.identifier == self.kwargs.get("platform"):
+                return p
 
     def post(self, request, *args, **kwargs):
         # TODO: check if available if is_available is implemented (or check in super.platform?)
@@ -43,17 +56,17 @@ class PresaleOrderDownloadMixin(OrderDownloadMixin):
             return self.error(OrderError(_('Please click the link we sent you via email to download your tickets.')))
 
         if "position" in kwargs:
-            if not self.order_position.generate_ticket:
-                return self.error(_("Ticket download is not enabled for this product."))
+            if not self.platform.is_available_for_position(self.order_position):
+                return self.error(OrderError(_("Ticket download is not enabled for this product.")))
             return self.do(
-                "orderposition", self.order_position.pk, self.platform.identifier
+                "orderposition", self.order_position.pk, self.platform.identifier, False
             )
         else:
-            return self.do("order", self.order.pk, self.platform.identifier)
+            return self.do("order", self.order.pk, self.platform.identifier, False)
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
-class PresaleWalletGetPass(PresaleOrderDownloadMixin, EventViewMixin, OrderDetailMixin, AsyncAction, View):
+class PresaleWalletGetPass(OrderDownloadMixin, EventViewMixin, OrderDetailMixin, AsyncAction, View):
     def get_error_url(self):
         return self.get_order_url()
 
@@ -72,7 +85,7 @@ class PresaleWalletGetPass(PresaleOrderDownloadMixin, EventViewMixin, OrderDetai
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
-class PresaleWalletGetPassPosition(PresaleOrderDownloadMixin, EventViewMixin, OrderPositionDetailMixin, AsyncAction, View):
+class PresaleWalletGetPassPosition(OrderDownloadMixin, EventViewMixin, OrderPositionDetailMixin, AsyncAction, View):
     def get_error_url(self):
         return self.get_position_url()
 

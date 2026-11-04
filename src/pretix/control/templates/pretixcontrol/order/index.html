@@ -575,7 +575,7 @@
                                                     </button>
                                                 </form>
                                             {% endfor %}
-                                            {% for b in wallet_buttons %}
+                                            {% for b in wallet_buttons|getitem:line %}
                                                 {% comment %} TODO(wallet): move view to core {% endcomment %}
                                                 <form action="{% url "plugins:wallet:event.order.wallet.get" code=order.code event=request.event.slug organizer=request.event.organizer.slug position=line.pk platform=b.identifier %}"
                                                         method="post" data-asynctask data-asynctask-download

@@ -23,7 +23,6 @@ from django.urls import re_path
 
 from pretix.api.urls import event_router
 from pretix.plugins.wallet.views.google import CallbackView
-import pretix
 
 from .api import WalletLayoutViewSet
 from .views.apple import (
@@ -111,7 +110,7 @@ event_patterns = [
         name="google_webhook",
     ),
     re_path(
-        r"^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<position>[0-9]+)/(?P<platform>[^/]+)$",
+        r"^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/wallet/download/(?P<position>[0-9]+)/(?P<platform>[^/]+)$",
         PresaleWalletGetPass.as_view(),
         name="presale_event.order.wallet.get",
     ),
@@ -126,12 +125,12 @@ event_patterns = [
         name="apple_download_combined",
     ),
     re_path(
-        r"^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<platform>[^/]+)$",
+        r"^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/wallet/download/(?P<platform>[^/]+)$",
         PresaleWalletGetPass.as_view(),
         name="presale_event.order.wallet.get.combined",
     ),
     re_path(
-        r"^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<pid>[0-9]+)/(?P<platform>[^/]+)$",
+        r"^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/wallet/download/(?P<pid>[0-9]+)/(?P<platform>[^/]+)$",
         PresaleWalletGetPassPosition.as_view(),
         name="presale_event.order.position.wallet.get",
     ),

@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import hashlib
 import io
 import json
@@ -24,7 +25,6 @@ from ...models import CombinedAppleWalletPass
 
 from django.core.files.base import ContentFile
 from django import forms
-from django.utils.translation import gettext as _
 
 from pretix.base.forms import SecretKeySettingsField
 from pretix.control.forms import ClearableBasenameFileInput
@@ -101,24 +101,43 @@ class ApplePlatform(WalletPlatform):
 
     def generate(self, position, layout=None) -> str:
         if not layout:
-            layout = self.get_layout(position).pass_layout
-        pass_obj = layout.generate(position)
+            op_layout = self.get_layout(position)
+            if not op_layout:
+                raise ValueError(
+                    _(
+                        "WalletPlatform.generate called without layout and without position layout"
+                    )
+                )
+            layout = op_layout.pass_layout
+
+        layout.generate(position)
 
         return eventreverse_absolute(
             self.event,
             "plugins:wallet:apple_download",
-            kwargs={"order": position.order.code, "secret": position.order.secret, "position": position.pk},
+            kwargs={
+                "order": position.order.code,
+                "secret": position.order.secret,
+                "position": position.pk,
+            },
         )
 
     def generate_order(self, order: Order):
         with tempfile.TemporaryFile() as d:
             with zipfile.ZipFile(d, "w") as zipf:
                 for pos in order.positions_with_tickets:
-                    pass_obj = self.get_layout(pos).pass_layout.generate(pos)
-                    zipf.writestr(
-                        "{}-{}.pkpass".format(order.code, pos.positionid),
-                        pass_obj.content.read(),
-                    )
+                    if self.is_available_for_position(pos):
+                        layout = self.get_layout(pos)
+                        if not layout:
+                            raise ValueError(
+                                "Impossible: is_available_for_position==True but no layout"
+                            )
+
+                        pass_obj = layout.pass_layout.generate(pos)
+                        zipf.writestr(
+                            "{}-{}.pkpass".format(order.code, pos.positionid),
+                            pass_obj.content.read(),
+                        )
 
             d.seek(0)
             data = d.read()
@@ -130,13 +149,28 @@ class ApplePlatform(WalletPlatform):
             order=order,
             file=None,
         )
-        ct.file.save("{}-{}.pkpasses".format(order.code, self.identifier), ContentFile(data))
+        ct.file.save(
+            "{}-{}.pkpasses".format(order.code, self.identifier), ContentFile(data)
+        )
 
         return eventreverse_absolute(
             self.event,
             "plugins:wallet:apple_download_combined",
             kwargs={"order": order.code, "secret": order.secret},
         )
+
+    def is_available(self):
+        for field in [
+            "wallet_apple_team_id",
+            "wallet_apple_pass_type_id",
+            "wallet_apple_certificate",
+            "wallet_apple_ca_certificate",
+            "wallet_apple_key",
+        ]:
+            if not self.event.settings.get(field):
+                return (False, _("Missing field: {field}").format(field=field))
+        return super().is_available()
+
 
 class StringResource:
     entries: dict[str, MaybeTranslatedString]

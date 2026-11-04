@@ -38,7 +38,7 @@ from ..placeholders import (
     get_wallet_placeholders,
 )
 from ..platforms import (
-    AVAILABLE_PLATFORMS,
+    get_available_platforms,
     AVAILABLE_STYLES,
     AVAILABLE_STYLES_DICT,
 )
@@ -97,7 +97,9 @@ class LayoutEditorView(LayoutDetailView):
                     for style in AVAILABLE_STYLES.get(platform.identifier, [])
                 },
             }
-            for platform in AVAILABLE_PLATFORMS
+            for platform in get_available_platforms(
+                self.request.event, show_disabled=True
+            )
         ]
         context["placeholders"] = get_editor_placeholders(self.request.event)
         context["locales"] = {
@@ -196,9 +198,10 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
             base_file_settings = {}
 
         platform = None
-        for p in AVAILABLE_PLATFORMS:
+        for p in get_available_platforms(event, show_disabled=True):
             if p.identifier == platform_id:
-                platform = p(event)
+                platform = p
+
         if not platform:
             raise BadRequest("Unknown platform")
         if style_id not in AVAILABLE_STYLES_DICT[platform_id]:
@@ -280,6 +283,7 @@ class LayoutDelete(WalletLayoutMixin, DeleteView):
         messages.success(self.request, _("The selected layout been deleted."))
         return redirect(self.get_success_url())
 
+
 class OrderDownloadMixin:
     task = get_pass
 
@@ -291,9 +295,9 @@ class OrderDownloadMixin:
 
     @cached_property
     def platform(self):
-        for p in AVAILABLE_PLATFORMS:
+        for p in get_available_platforms(self.request.event, show_disabled=True):
             if p.identifier == self.kwargs.get("platform"):
-                return p(self.request.event)
+                return p
 
 
 class WalletGetView(OrderDownloadMixin, AsyncAction, OrderView):
@@ -318,10 +322,10 @@ class WalletGetView(OrderDownloadMixin, AsyncAction, OrderView):
             )
 
         if "position" in kwargs:
-            if not self.order_position.generate_ticket:
+            if not self.platform.is_available_for_position(self.order_position):
                 return self.error(_("Ticket download is not enabled for this product."))
             return self.do(
-                "orderposition", self.order_position.pk, self.platform.identifier
+                "orderposition", self.order_position.pk, self.platform.identifier, True
             )
         else:
-            return self.do("order", self.order.pk, self.platform.identifier)
+            return self.do("order", self.order.pk, self.platform.identifier, True)

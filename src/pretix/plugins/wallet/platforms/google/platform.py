@@ -1,7 +1,7 @@
 import json
 import uuid
 from functools import cached_property
-from typing import Iterable, OrderedDict
+from typing import OrderedDict
 
 from django.conf import settings
 from django.db import transaction
@@ -202,7 +202,11 @@ class GooglePlatform(WalletPlatform):
     def generate(self, position, layout: PassStyle | None = None):
         # TODO?: early-exit caching (if object for position exists and layout is None)
         if not layout:
-            layout = self.get_layout(position).pass_layout
+            op_layout = self.get_layout(position)
+            if not op_layout:
+                raise ValueError(_("WalletPlatform.generate called without layout and without position layout"))
+            layout = op_layout.pass_layout
+
         class_object, ticket_object = layout.generate(position)
         self.put_item_cached(class_object)
 
@@ -212,9 +216,11 @@ class GooglePlatform(WalletPlatform):
         class_objects = []
         ticket_objects = []
         for position in order.positions_with_tickets:
-            class_object, ticket_object = self.get_layout(
-                position
-            ).pass_layout.generate(position)
+            layout = self.get_layout(position)
+            if not layout:
+                raise ValueError("Impossible: is_available_for_position==True but no layout")
+
+            class_object, ticket_object = layout.generate(position)
             class_objects.append(class_object)
             ticket_objects.append(ticket_object)
 
@@ -222,3 +228,9 @@ class GooglePlatform(WalletPlatform):
             self.put_item_cached(co)
 
         return self._get_jwt(ticket_objects)
+
+    def is_available(self):
+        for field in ["wallet_google_issuer_id", "wallet_google_credentials"]:
+            if not self.event.settings.get(field):
+                return (False, _("Missing field: {field}").format(field=field))
+        return super().is_available()

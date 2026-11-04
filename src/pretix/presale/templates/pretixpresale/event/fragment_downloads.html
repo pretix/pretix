@@ -1,6 +1,8 @@
 {% load i18n %}
 {% load eventurl %}
 {% load rich_text %}
+{% load getitem %}
+
 {% if download_email_required %}
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -55,7 +57,7 @@
                     </form>
                 {% endif %}
             {% endfor %}
-            {% for b in wallet_buttons %}
+            {% for b in wallet_buttons.combined %}
                 {# TODO(wallet): move view to core #}
                 <form action="{% eventurl event "plugins:wallet:presale_event.order.wallet.get.combined" secret=order.secret order=order.code platform=b.identifier %}"
                         method="post" data-asynctask data-asynctask-download class="download-btn-form">
@@ -75,7 +77,7 @@
             </p>
         {% elif tickets_with_download|length == 1 %}
             <div>
-                {% for b in download_buttons %}
+                {% comment %} {% for b in download_buttons %}
                     <form action="{% if position_page and tickets_with_download.0.addon_to %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.addon_to.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=tickets_with_download.0.pk %}{% endif %}"
                             method="post" data-asynctask data-asynctask-download
                             class="download-btn-form {% if b.javascript_required or b.confirmation_text %}requirejs{% endif %}">
@@ -87,8 +89,10 @@
                         </button>
                     </form>
                 {% endfor %}
-                {% for b in wallet_buttons %}
-                    {% comment %} TODO(wallet): move view to core {% endcomment %}
+                {% for b in wallet_buttons|getitem:tickets_with_download.0 %}
+                    TODO(wallet): move view to core {% endcomment %}
+                    {% include "pretixpresale/event/fragment_item_downloads.html" with line=tickets_with_download.0 button_size="lg" download_text="long_text" %}
+{% comment %}
                     <form
                         action="{% if position_page and tickets_with_download.0.addon_to %}
                             {% eventurl event "plugins:wallet:presale_event.order.position.wallet.get" secret=tickets_with_download.0.addon_to.web_secret order=order.code platform=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.addon_to.positionid %}
@@ -105,7 +109,7 @@
                             {{ b.content }}
                         </button>
                     </form>
-                {% endfor %}
+                {% endfor %} {% endcomment %}
             </div>
             <p class="help-block">
                 {% blocktrans trimmed %}
