@@ -405,6 +405,7 @@ class OrdersTest(BaseOrdersTest):
 
     def test_modify_invoice_regenerate(self):
         self.event.settings.set('invoice_reissue_after_modify', True)
+        self.event.settings.set('invoice_transmit_after_modify', False)
         self.event.settings.set('invoice_address_asked', True)
         with scopes_disabled():
             generate_invoice(self.order)
@@ -422,39 +423,67 @@ class OrdersTest(BaseOrdersTest):
         with scopes_disabled():
             assert self.order.invoices.count() == 1
 
-        response = self.client.post(
-            '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
-                'zipcode': '12345',
-                'street': 'Main Street',
-                'city': 'Heidelberg',
-                'country': 'DE',
-                'transmission_type': 'email',
-            }, follow=True)
-        self.assertRedirects(response,
-                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
-                                                      self.order.secret),
-                             target_status_code=200)
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.post(
+                '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                    '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+                    'zipcode': '12345',
+                    'street': 'Main Street',
+                    'city': 'Heidelberg',
+                    'country': 'DE',
+                    'transmission_type': 'email',
+                }, follow=True)
+            self.assertRedirects(response,
+                                 '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret),
+                                 target_status_code=200)
         with scopes_disabled():
             assert self.order.invoices.count() == 3
+            for inv in self.order.invoices.all():
+                assert inv.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
 
         self.event.settings.set('invoice_reissue_after_modify', False)
 
-        response = self.client.post(
-            '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
-                'zipcode': '54321',
-                'street': 'Main Street',
-                'city': 'Heidelberg',
-                'country': 'DE',
-                'transmission_type': 'email',
-            }, follow=True)
-        self.assertRedirects(response,
-                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
-                                                      self.order.secret),
-                             target_status_code=200)
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.post(
+                '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                    '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+                    'zipcode': '54321',
+                    'street': 'Main Street',
+                    'city': 'Heidelberg',
+                    'country': 'DE',
+                    'transmission_type': 'email',
+                }, follow=True)
+            self.assertRedirects(response,
+                                 '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret),
+                                 target_status_code=200)
         with scopes_disabled():
             assert self.order.invoices.count() == 3
+
+        self.event.settings.set('invoice_reissue_after_modify', True)
+        self.event.settings.set('invoice_transmit_after_modify', True)
+
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.post(
+                '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                    '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+                    'zipcode': '12345',
+                    'street': 'Main Street',
+                    'city': 'Heidelberg',
+                    'country': 'DE',
+                    'transmission_type': 'email',
+                }, follow=True)
+            self.assertRedirects(response,
+                                 '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret),
+                                 target_status_code=200)
+
+        with scopes_disabled():
+            assert self.order.invoices.count() == 5
+            last_two = self.order.invoices.order_by('-pk')[:2]
+            for inv in last_two:
+                assert inv.transmission_status != Invoice.TRANSMISSION_STATUS_PENDING
 
     def test_orders_attendee_modify_invalid(self):
         self.order.status = Order.STATUS_CANCELED

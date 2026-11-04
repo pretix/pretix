@@ -1299,6 +1299,20 @@ DEFAULTS = {
                         "changes made through the backend."),
         )
     },
+    'invoice_transmit_after_modify': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
+        'form_kwargs': dict(
+            label=_("Automatically transmit cancellation and reissued invoice on address changes"),
+            help_text=_("By default, the cancellation and the reissued invoice are not transmitted after a change "
+                        "from the customer. This option only affects transmission methods which do not enforce "
+                        "automatic transmission of invoices."),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_reissue_after_modify'}),
+        )
+    },
     'invoice_regenerate_allowed': {
         'default': 'False',
         'type': bool,

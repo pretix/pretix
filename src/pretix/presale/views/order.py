@@ -76,7 +76,7 @@ from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
-    invoice_qualified,
+    invoice_qualified, transmit_invoice,
 )
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _try_auto_refund, cancel_order,
@@ -907,6 +907,10 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
                         self.order.log_action('pretix.event.order.invoice.reissued', data={
                             'invoice': inv.pk
                         })
+                        if self.request.event.settings.invoice_transmit_after_modify:
+                            transmit_invoice.apply_async(args=(c.event_id, c.pk, True))
+                            if c.pk != inv.pk:
+                                transmit_invoice.apply_async(args=(inv.event_id, inv.pk, True))
                         messages.success(self.request, _('The invoice has been reissued.'))
                 except Exception as e:
                     self.order.log_action("pretix.event.order.invoice.failed", data={
