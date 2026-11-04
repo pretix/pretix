@@ -1181,20 +1181,23 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 
 customer_created = OrganizerPluginSignal(allow_legacy_plugins=True)
 """
-Arguments: ``customer``, ``profile``
+Arguments: ``customer``
 
 This signal is sent out every time a customer account is created. The ``customer``
-object is given as the first argument. In case of SSO login, the full claims will be passed in the ``profile`` argument, e.g. as ``oidc_claims`` for OIDC.
+object is given as the first argument.
 
 The ``sender`` keyword argument will contain the organizer.
 """
 
 customer_signed_in = OrganizerPluginSignal(allow_legacy_plugins=True)
 """
-Arguments: ``customer``
+Arguments: ``customer``, ``profile``
 
 This signal is sent out every time a customer signs in. The ``customer`` object
 is given as the first argument.
+
+In case of SSO login, the full claims will be passed in the ``profile`` argument,
+e.g. as ``oidc_claims`` for OIDC. Otherwise, ``profile`` will be ``None``.
 
 The ``sender`` keyword argument will contain the organizer.
 """
