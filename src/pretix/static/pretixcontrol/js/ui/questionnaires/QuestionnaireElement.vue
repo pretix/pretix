@@ -40,16 +40,19 @@ watch(() => props.questionnaire.rows, () => {
 	}
 })
 
-function addExistingDatafield (field) {
-	props.questionnaire.rows.push({
-		_cid: useId(),
-		datafield: field.identifier,
-		required: false,
-		label: field.question ?? {en: field.internal_name},
-		help_text: {},
-		dependency_question: null,
-		dependency_values: [],
-	})
+function addExistingDatafield (...fields) {
+  for (const field of fields) {
+    if (askedDatafields.value.has(field.identifier)) continue;
+    props.questionnaire.rows.push({
+      _cid: useId(),
+      datafield: field.identifier,
+      required: false,
+      label: field.question ?? {en: field.internal_name},
+      help_text: {},
+      dependency_question: null,
+      dependency_values: [],
+    })
+  }
 	dlgAddExisting.value.close()
 	emit('update')
 }
@@ -104,11 +107,40 @@ async function deleteQuestionnaire () {
 
 const isHidden = computed(() => props.selected_product && props.questionnaire.items.indexOf(props.selected_product) === -1)
 const isEditable = computed(() => props.selected_product && props.questionnaire.items.indexOf(props.selected_product) !== -1)
+const askedDatafields = computed(() => new Set(props.questionnaire.rows.map(row => row.datafield)))
+const addressFieldIdentifiers = new Set(['@street', '@city', '@zipcode', '@state', '@country'])
+const anyAddressFieldAsked = computed(() => addressFieldIdentifiers.intersection(askedDatafields.value).size > 0)
+const allAddressFieldsAsked = computed(() => addressFieldIdentifiers.isSubsetOf(askedDatafields.value))
+const allAddressFields = computed(() => props.datafields.filter(df => addressFieldIdentifiers.has(df.identifier)))
 
 </script>
 
 <style>
 .sales-channel-icons > * { margin-left: 4px; opacity: 0.8; }
+.list-group-item.exists, .list-group-item.exists:hover { color: #666; text-decoration: line-through; background: #fcfcfc; cursor: default; }
+details > summary.list-group-item { color: #666; padding: 5px 15px 5px 28px; }
+details .list-group-item { padding-left: 28px }
+details > summary.list-group-item:hover { color: #555; text-decoration: none; background-color: #f5f5f5; }
+details > summary.list-group-item::before {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    margin-top: -.5em;
+    content: "";
+    width: 1em;
+    height: 1em;
+    font: normal normal normal 14px/1 FontAwesome;
+    display: inline-block;
+    text-align: center;
+    transform: rotate(-90deg);
+    transition: transform 150ms ease-in 0s;
+}
+details[open] > summary.list-group-item::before {
+    transform: rotate(0deg);
+}
+details[open] > summary.list-group-item {
+    color: black;
+}
 </style>
 
 <template>
@@ -205,10 +237,22 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
         <h4>{{ gettext('System fields') }}</h4>
 				<div class="list-group">
           <template v-for="field in datafields">
-					  <a v-if="field.identifier.startsWith('@')"
+					  <a v-if="field.identifier.startsWith('@') && !addressFieldIdentifiers.has(field.identifier)"
                href="javascript:" @click="addExistingDatafield(field)"
-               class="list-group-item">{{ i18n_any(field.question) }}</a>
+               :class="`list-group-item ${askedDatafields.has(field.identifier) ? 'exists' : ''}`">{{ i18n_any(field.question) }}</a>
           </template>
+
+          <a href="javascript:" @click="addExistingDatafield(...allAddressFields)"
+             :class="`list-group-item ${anyAddressFieldAsked ? 'exists' : ''}`">{{ gettext('Attendee address') }}</a>
+          <details :open="anyAddressFieldAsked && !allAddressFieldsAsked">
+            <summary class="list-group-item">{{ gettext('Individual address fields ...') }}</summary>
+
+            <template v-for="field in datafields">
+              <a v-if="addressFieldIdentifiers.has(field.identifier)"
+                 href="javascript:" @click="addExistingDatafield(field)"
+                 :class="`list-group-item ${askedDatafields.has(field.identifier) ? 'exists' : ''}`">{{ i18n_any(field.question) }}</a>
+            </template>
+          </details>
 				</div>
 
         <h4>{{ gettext('User-defined data fields') }}</h4>
@@ -216,7 +260,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
           <template v-for="field in datafields">
 					  <a v-if="!field.identifier.startsWith('@')"
                href="javascript:" @click="addExistingDatafield(field)"
-               class="list-group-item">{{ field.internal_name }}</a>
+               :class="`list-group-item ${askedDatafields.has(field.identifier) ? 'exists' : ''}`">{{ field.internal_name }}</a>
           </template>
         </div>
 
