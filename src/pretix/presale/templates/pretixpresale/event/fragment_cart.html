@@ -5,6 +5,8 @@
 {% load safelink %}
 {% load rich_text %}
 {% load money %}
+{% load getitem %}
+
 {% blocktrans asvar s_taxes %}taxes{% endblocktrans %}
 <div role="table" aria-label="{% trans "Your cart" %}" aria-describedby="{% if cart.is_ordered %}cart-description{% else%}cart-deadline{% endif %}" aria-rowcount="{{ cart.positions|length|add:2 }}">
     <div class="sr-only" role="rowgroup">
@@ -220,36 +222,7 @@
             {% if download %}
                 <div role="cell" class="download-desktop">
                 {% if line in tickets_with_download %}
-                    {% for b in download_buttons %}
-                        <form action="{% if position_page and line.addon_to %}{% eventurl event "presale:event.order.position.download" secret=line.addon_to.web_secret order=order.code output=b.identifier pid=line.pk position=line.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=line.web_secret order=order.code output=b.identifier pid=line.pk position=line.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.pk %}{% endif %}"
-                                method="post" data-asynctask data-asynctask-download class="download-btn-form{% if b.javascript_required or b.confirmation_text %} requirejs{% endif %}">
-                            {% csrf_token %}
-                            <button type="submit"
-                                    class="btn btn-sm {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}"
-                                    {% if b.confirmation_text %}data-confirmation-text="{{ b.confirmation_text|rich_text|force_escape }}"{% endif %}>
-                                <span class="fa {{ b.icon }}" aria-hidden="true"></span> {{ b.text }}
-                            </button>
-                        </form>
-                    {% endfor %}
-                    {% for b in wallet_buttons %}
-                        {% comment %} TODO(wallet): move view to core {% endcomment %}
-                        <form
-                            action="{% if position_page and line.addon_to %}
-                                {% eventurl event "plugins:wallet:presale_event.order.position.wallet.get" secret=line.addon_to.web_secret order=order.code platform=b.identifier pid=line.pk position=line.addon_to.positionid %}
-                            {% elif position_page %}
-                                {% eventurl event "plugins:wallet:presale_event.order.position.wallet.get" secret=line.web_secret order=order.code platform=b.identifier pid=line.pk position=line.positionid %}
-                            {% else %}
-                                {% eventurl event "plugins:wallet:presale_event.order.wallet.get" secret=order.secret order=order.code platform=b.identifier position=line.pk %}
-                            {% endif %}"
-                                method="post" data-asynctask data-asynctask-download class="download-btn-form">
-                            {% csrf_token %}
-                            <button type="submit"
-                                    class="btn btn-sm btn-default {{ b.attributes.class }}"
-                                    {% include "pretixbase/fragments/attributes.html" with attributes=b.attributes %}>
-                                {{ b.content }}
-                            </button>
-                        </form>
-                    {% endfor %}
+                    {% include "pretixpresale/event/fragment_item_downloads.html" with line=line %}
                 {% endif %}
                 </div>
             {% elif line.addon_to %}

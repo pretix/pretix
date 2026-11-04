@@ -5,9 +5,9 @@ import ssl
 import httpx
 import tempfile
 from django.utils.timezone import now
-from django.db.models import OuterRef, Q, Exists
+from django.db.models import OuterRef, Exists
 
-from pretix.plugins.wallet.platforms import AVAILABLE_PLATFORMS
+from pretix.plugins.wallet.platforms import get_available_platforms
 from pretix.plugins.wallet.platforms.base import WalletPlatform
 from .models import AppleWalletPass, AppleWalletDevice
 from django_scopes import scopes_disabled
@@ -73,17 +73,17 @@ def send_update_apns():
             device.save()
 
 
-def get_platform(event, platform) -> WalletPlatform | None:
-    for p in AVAILABLE_PLATFORMS:
+def get_platform(event, platform, show_disabled) -> WalletPlatform | None:
+    for p in get_available_platforms(event, show_disabled):
         if p.identifier == platform:
-            return p(event)
+            return p
 
 
 @app.task(base=ProfiledTask)
-def get_pass(model: str, pk: int, platform_identifier: str):
+def get_pass(model: str, pk: int, platform_identifier: str, show_disabled: bool):
     if model == "order":
         order = Order.objects.select_related("event").get(id=pk)
-        platform = get_platform(order.event, platform_identifier)
+        platform = get_platform(order.event, platform_identifier, show_disabled)
         if not platform:
             return
         return platform.generate_order(order)
@@ -91,7 +91,7 @@ def get_pass(model: str, pk: int, platform_identifier: str):
         position = OrderPosition.objects.select_related("order", "order__event").get(
             id=pk
         )
-        platform = get_platform(position.order.event, platform_identifier)
+        platform = get_platform(position.order.event, platform_identifier, show_disabled)
         if not platform:
             return
         return platform.generate(position)

@@ -544,7 +544,8 @@ class OrderDetail(OrderView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['items'] = self.get_items()
+        items = self.get_items()
+        ctx['items'] = items
         ctx['has_cancellation_fee'] = any(f.fee_type == OrderFee.FEE_TYPE_CANCELLATION for f in ctx['items']['fees'])
         ctx['event'] = self.request.event
         ctx['payments'] = self.order.payments.order_by('-created')
@@ -566,8 +567,8 @@ class OrderDetail(OrderView):
 
         pending_sum = self.order.pending_sum
         ctx['overpaid'] = pending_sum * -1
-        ctx['download_buttons'] = self.download_buttons
-        ctx['wallet_buttons'] = self.wallet_buttons
+        ctx['download_buttons'] = get_download_buttons(self.request.event, show_disabled=True)
+        ctx['wallet_buttons'] = get_wallet_buttons(self.request.event, items['positions'], show_disabled=True)
         ctx['payment_refund_sum'] = self.order.payment_refund_sum
         ctx['pending_sum'] = pending_sum
         ctx['uncancelled_invoice'] = self.order.invoices.exclude(
@@ -575,14 +576,6 @@ class OrderDetail(OrderView):
         ).exclude(is_cancellation=True).first()
 
         return ctx
-
-    @cached_property
-    def download_buttons(self):
-        return get_download_buttons(self.request.event, show_disabled=True)
-
-    @cached_property
-    def wallet_buttons(self):
-        return get_wallet_buttons(self.request.event)
 
     def get_items(self):
         queryset = self.object.all_positions

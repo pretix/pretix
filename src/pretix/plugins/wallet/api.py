@@ -8,19 +8,24 @@ from rest_framework import serializers, viewsets
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 
 from .models import WalletLayout, WalletPlatformLayout
-from .platforms import AVAILABLE_PLATFORMS, AVAILABLE_STYLES_DICT
+from .platforms import get_available_platforms, AVAILABLE_STYLES_DICT
 
 
 class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
-    platform = serializers.ChoiceField(
-        choices=[p.identifier for p in AVAILABLE_PLATFORMS]
-    )
+    platform = serializers.ChoiceField(choices=[])
     style = serializers.CharField(allow_null=True, required=False)
     file_settings = serializers.JSONField(default=dict, required=False)
 
     class Meta:
         model = WalletPlatformLayout
         fields = ("platform", "style", "layout", "file_settings")
+
+    def get_fields(self):
+        fields = super().get_fields()
+        fields["platform"].choices = [
+            p.identifier for p in get_available_platforms(self.context["event"], show_disabled=True)
+        ]
+        return fields
 
     def validate_layout(self, value):
         if not isinstance(value, dict):
@@ -69,9 +74,6 @@ class WalletLayoutSerializer(I18nAwareModelSerializer):
         model = WalletLayout
         fields = ("id", "name", "platform_layouts")
         read_only_fields = ("id",)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs, event=self.context["event"])

@@ -54,6 +54,9 @@ class WalletLayout(LoggedModel):
             "name",
         )
 
+    def __str__(self):
+        return self.name
+
 
 class WalletPlatformLayout(LoggedModel):
     parent = models.ForeignKey(

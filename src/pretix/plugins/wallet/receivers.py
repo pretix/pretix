@@ -34,7 +34,7 @@ from pretix.control.signals import item_forms
 from .forms import WalletLayoutItemForm
 from .models import WalletLayoutItem
 from .ticketoutput import WalletSettingsHolder
-from .platforms import AVAILABLE_PLATFORMS
+from .platforms import PLATFORMS
 from .tasks import send_update_apns
 from .models import AppleWalletPass, CombinedAppleWalletPass
 from .tasks import get_pass
@@ -42,13 +42,12 @@ from .models import GoogleWalletInstance
 from .platforms.google.google_wallet import Resource
 
 
-
 @receiver(register_ticket_outputs, dispatch_uid="output_wallet")
 def register_output(sender, **kwargs):
     return WalletSettingsHolder
 
 
-for platform in AVAILABLE_PLATFORMS:
+for platform in PLATFORMS:
     if hasattr(platform, "get_global_settings"):
         register_global_settings.connect(
             platform.get_global_settings,
@@ -74,11 +73,11 @@ def control_item_forms(sender, request, item, **kwargs):
     return forms
 
 
-
 @receiver(periodic_task, dispatch_uid="wallet_periodic")
 def periodic_tasks(sender, **kwargs):
     # TODO: move to platform?
     send_update_apns.apply_async()
+
 
 # TODO: move to platform?
 @receiver(invalidate_ticket_cache, dispatch_uid="invalidate_ticket_cache_wallet_apple")
@@ -106,12 +105,12 @@ def invalidate_apple(
                 "model": "orderposition",
                 "pk": pass_obj.order_position_id,
                 "platform_identifier": "apple",
+                "show_disabled": False
             }
         )
 
     for passes_obj in passes_qs:
         passes_obj.delete()
-
 
 
 @receiver(invalidate_ticket_cache, dispatch_uid="invalidate_ticket_cache_wallet_google")
@@ -137,5 +136,6 @@ def invalidate_google(
                     "model": "orderposition",
                     "pk": inst.order_position_id,
                     "platform_identifier": "google",
+                    "show_disabled": False
                 }
             )

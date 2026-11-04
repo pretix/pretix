@@ -6,7 +6,18 @@ from .google import (
     GoogleWalletDefaultEventTicket,
 )
 
-AVAILABLE_PLATFORMS: list[type[WalletPlatform]] = [ApplePlatform, GooglePlatform]
+# TODO(wallet): replace with registry or similar
+PLATFORMS: list[type[WalletPlatform]] = [ApplePlatform, GooglePlatform]
+
+
+def get_available_platforms(event, show_disabled: bool = False):
+    platforms = []
+    for p in PLATFORMS:
+        platform = p(event)
+        if platform.is_available()[0] and (show_disabled or platform.is_enabled()):
+            platforms.append(platform)
+    return platforms
+
 
 AVAILABLE_STYLES: dict[str, list[type[PassStyle]]] = {
     "apple": [AppleWalletEventTicket],
@@ -23,7 +34,7 @@ def get_style(platform: str, identifier: str) -> type[PassStyle] | None:
 
 
 __all__ = [
-    "AVAILABLE_PLATFORMS",
+    "get_available_platforms",
     "AVAILABLE_STYLES",
     "PassStyle",
     "WalletPlatform",

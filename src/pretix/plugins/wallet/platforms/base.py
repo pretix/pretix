@@ -1,16 +1,16 @@
 import enum
 from functools import cached_property
-from typing import Iterable, TypedDict
+from typing import TypedDict
 
 import jsonschema
 from django.core.exceptions import ValidationError
 from django.core.files import File
-from django.shortcuts import get_object_or_404
 from i18nfield.strings import LazyI18nString
 
 from pretix.api.helpers import handle_file_upload
 from pretix.base.models import OrderPosition
 from pretix.base.models.orders import Order
+from pretix.base.settings import SettingsSandbox
 from pretix.plugins.wallet.models import WalletPlatformLayout
 
 from ..i18n import MaybeTranslatedString, localizable_to_dict
@@ -24,9 +24,26 @@ from .settings import SettingsField, SettingsFile
 from django.utils.translation import gettext as _
 from django.utils.html import format_html
 
+
 class WalletPlatform:
     identifier: str
     name: str
+
+    # TODO: register urls here?
+    def __init__(self, event):
+        self.event = event
+        self.wallet_settings = SettingsSandbox('ticketoutput', 'wallet', event)
+
+    def is_enabled(self):
+        if not self.wallet_settings.get('_enabled', as_type=bool):
+            return False
+        return True
+
+    def is_available(self) -> tuple[bool, str | None]:
+        return (True, None)
+
+    def is_available_for_position(self, op: OrderPosition):
+        return op.generate_ticket and bool(self.get_layout(op))
 
     @classmethod
     def get_global_settings(cls, **kwargs):
@@ -43,19 +60,19 @@ class WalletPlatform:
             attr: the html attributes that should be added to the button element as a dict[str, str] or None
             content: the content of the button
         """
-        return None, format_html('<span class="fa fa-download"></span> {}', _('Add to {wallet}').format(wallet=self.name))
+        return None, format_html(
+            '<span class="fa fa-download"></span> {}',
+            _("Add to {wallet}").format(wallet=self.name),
+        )
 
-    def get_layout(self, op):
+    def get_layout(self, op) -> WalletPlatformLayout | None:
         if hasattr(op.item, "walletlayout"):
             wallet_layout = op.item.walletlayout.layout
         else:
             wallet_layout = op.event.wallet_layouts.get(default=True)
-        platform_layout: WalletPlatformLayout = get_object_or_404(
-            wallet_layout.platform_layouts, platform=self.identifier
-        )
-        return platform_layout
+        return wallet_layout.platform_layouts.filter(platform=self.identifier).first()
 
-    def generate(self, position, layout=None) -> str:
+    def generate(self, position, layout: "PassStyle | None"=None) -> str:
         """
         This method should generate the wallet pass and return a url the user should be sent
         to to retrieve that pass (e.g. via download or by redirecting to the wallet provider)
@@ -64,7 +81,10 @@ class WalletPlatform:
                   if the pass content has changed.
         """
         if not layout:
-            layout = self.get_layout(position).pass_layout
+            op_layout = self.get_layout(position)
+            if not op_layout:
+                raise ValueError(_("WalletPlatform.generate called without layout and without position layout"))
+            layout = op_layout.pass_layout
         return layout.generate(position)
 
     def generate_order(self, order: Order) -> str:
@@ -78,11 +98,6 @@ class WalletPlatform:
         """
         raise NotImplementedError()
 
-    # TODO: register urls here?
-    def __init__(self, event):
-        self.event = event
-
-    # TODO: is_available : check if all config for platform is set
 
 class LayoutContext(TypedDict):
     placeholders: dict[str, dict]
