@@ -1319,6 +1319,12 @@ class ItemBundleForm(I18nModelForm):
         self.fields['itemvar'].choices = choices
         change_decimal_field(self.fields['designated_price'], self.event.currency)
 
+        self.fields['count'] = forms.IntegerField(
+            min_value=1,
+            label=self.fields['count'].label,
+            widget=forms.NumberInput(attrs={'placeholder': '1'}),
+        )
+
     def clean(self):
         d = super().clean()
         if not self.cleaned_data.get('designated_price'):

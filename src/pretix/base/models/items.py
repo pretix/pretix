@@ -1563,8 +1563,8 @@ class ItemBundle(models.Model):
 
     @staticmethod
     def clean_count(count):
-        if count < 0:
-            raise ValidationError(_('The count needs to be equal to or greater than zero.'))
+        if count < 1:
+            raise ValidationError(_('The count needs to be greater than zero.'))
 
 
 class Question(LoggedModel):
