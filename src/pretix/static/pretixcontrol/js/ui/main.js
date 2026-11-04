@@ -1187,7 +1187,6 @@ function show_iframe_dialog(url, callback) {
 function setup_dialog_frame_events() {
 	var dom_ready = false, parent_responded = false
 	function notify_dialog_loaded() {
-		console.log('ready', window.innerWidth, window.innerHeight, $('#page-wrapper > .container-fluid').outerHeight() + 20)
 		window.parent.postMessage({
 			type: 'pretix:dialog-loaded',
 			contentHeight: $('#page-wrapper > .container-fluid').outerHeight() + 20,

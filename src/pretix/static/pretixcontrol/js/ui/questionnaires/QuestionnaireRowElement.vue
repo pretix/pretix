@@ -82,7 +82,7 @@ const editor = ref();
 		</div>
 		<aside class="editor-action-area">
 			<div class="btn-group" v-if="editable">
-				<DragHandle tag="button" class="btn btn-default"><i class="fa fa-arrows"></i></DragHandle>
+				<DragHandle tag="button" class="btn btn-default" :title="gettext('Click and drag this button to reorder.')"><i class="fa fa-arrows"></i></DragHandle>
 				<button class="btn btn-default" @click="editor.show()"><i class="fa fa-edit"></i></button>
 			</div>
 		</aside>
@@ -105,7 +105,7 @@ const editor = ref();
           </label>
           <div class="col-md-9">
             <I18nTextArea :value="question.help_text"/>
-            <div class="help-block">Wenn diese Frage noch weitere Erklärung braucht, können Sie sie hier eintragen.</div>
+            <div class="help-block">{{ gettext('If the question needs to be explained or clarified, do it here!') }}</div>
           </div>
         </div>
         <div class="form-group" v-if="df">
@@ -172,8 +172,8 @@ const editor = ref();
           </div>
         </div>
 
-        <button @click="editor.close(); emit('update')" class="btn btn-primary pull-right"><span class="fa fa-check"></span> Save and close</button>
-        <button @click="emit('removeSelf')" class="btn btn-default">Remove from questionnaire</button>
+        <button @click="editor.close(); emit('update')" class="btn btn-primary pull-right"><span class="fa fa-check"></span> {{ gettext('Save and close') }}</button>
+        <button @click="emit('removeSelf')" class="btn btn-default">{{ gettext('Remove from questionnaire') }}</button>
     </NativeDialog>
 
 		<DjangoDialog ref="dlgEditDatafield" @confirm="emit('invalidate:datafields')" max-width="60em"></DjangoDialog>

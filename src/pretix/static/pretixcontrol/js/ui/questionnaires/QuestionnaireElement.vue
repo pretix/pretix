@@ -19,6 +19,7 @@ import * as api from './api';
 import QuestionnaireEditForm from "./QuestionnaireEditForm.vue";
 import SalesChannelIcon from "./SalesChannelIcon.vue";
 import {SalesChannel} from "./model";
+import I18nTextArea from "./I18nTextArea.vue";
 
 const dlgEditor = ref()
 const dlgAddExisting = ref()
@@ -179,7 +180,7 @@ details[open] > summary.list-group-item {
 				</div>
 
 				<aside class="editor-action-area"><div class="btn-group">
-					<DragHandle tag="button" class="btn btn-default" v-if="!preview_mode"><i class="fa fa-arrows"></i></DragHandle>
+					<DragHandle tag="button" class="btn btn-default" v-if="!preview_mode" :title="gettext('Click and drag this button to reorder.')"><i class="fa fa-arrows"></i></DragHandle>
 					<button class="btn btn-default" @click="dlgEditor.show()" :title="`#${questionnaire.id}`"><i class="fa fa-wrench"></i></button>
 				</div></aside>
 			</div>
@@ -284,12 +285,12 @@ details[open] > summary.list-group-item {
             {{ gettext('Text') }}
           </label>
           <div class="col-md-9">
-            <I18nTextField :value="newTextblockText"/>
+            <I18nTextArea :value="newTextblockText"/>
           </div>
         </div>
 
-        <button @click="addTextblock()" class="btn btn-default pull-right">{{ gettext('OK') }}</button>
-        <button @click="dlgAddTextblock.close()" class="btn btn-default pull-right">{{ gettext('Cancel') }}</button>
+        <button @click="addTextblock()" class="btn btn-primary pull-right"><span class="fa fa-check"></span> {{ gettext('OK') }}</button>
+        <button @click="dlgAddTextblock.close()" class="btn btn-default">{{ gettext('Cancel') }}</button>
 
     </NativeDialog>
 

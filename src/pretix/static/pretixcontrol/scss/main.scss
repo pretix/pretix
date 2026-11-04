@@ -898,6 +898,7 @@ tbody th {
     height: auto;
 }
 
+/* For pages displayed inside iframe dialog. The class is set by setup_dialog_frame_events */
 html.in-iframe body { background: white }
 .in-iframe #wrapper > nav.navbar, .in-iframe #page-wrapper > div > footer { display: none; }
 .in-iframe #page-wrapper { padding: 0 15px; min-height: 568px; border-left: 0; margin: 0; }
