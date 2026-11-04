@@ -104,7 +104,19 @@ class TicketLayoutSerializer(I18nAwareModelSerializer):
 
     def create(self, validated_data):
         validated_data["event"] = self.context["event"]
-        return super().create(validated_data)
+        background = validated_data.pop("background", None)
+        instance = super().create(validated_data)
+        if background:
+            instance.background.save('background.pdf', background)
+        return instance
+
+    def update(self, instance, validated_data):
+        background = validated_data.pop("background", None)
+        if background:
+            if instance.background and TicketLayout.objects.filter(background=instance.background).count() == 1:
+                instance.background.delete()
+            instance.background.save('background.pdf', background)
+        return super().update(instance, validated_data)
 
 
 class TicketLayoutViewSet(viewsets.ModelViewSet):
