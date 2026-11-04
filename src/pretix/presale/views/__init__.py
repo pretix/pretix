@@ -287,7 +287,7 @@ class CartMixin:
             'is_ordered': bool(order),
             'itemcount': sum(c.count for c in positions if not c.addon_to),
             'show_rounding_info': (
-                self.request.event.settings.tax_rounding == "sum_by_net_only_business" and
+                self.request.event.settings.tax_rounding in ("sum_by_net_only_business", "sum_by_net_business_else_gross") and
                 not self.request.event.settings.display_net_prices and
                 sum(c.price_includes_rounding_correction for c in positions) + sum(f.price_includes_rounding_correction for f in fees)
             ),

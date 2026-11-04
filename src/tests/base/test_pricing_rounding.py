@@ -312,3 +312,9 @@ def test_only_business():
 
     apply_rounding("sum_by_net_only_business", InvoiceAddress(is_business=True), "EUR", lines)
     assert sum(l.price for l in lines) == Decimal("499.98")
+
+    apply_rounding("sum_by_net_business_else_gross", None, "EUR", lines)
+    assert sum(l.price for l in lines) == Decimal("500.00")
+
+    apply_rounding("sum_by_net_business_else_gross", InvoiceAddress(is_business=True), "EUR", lines)
+    assert sum(l.price for l in lines) == Decimal("499.98")
