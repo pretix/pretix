@@ -330,5 +330,6 @@ def register_default_organizer_permissions(sender, **kwargs):
                 PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "No access")),
                 PermissionOption(actions=("read",), label=pgettext_lazy("permission_level", "View")),
             ],
+            help_text=_("View access includes the option to e.g. abort pending emails or retry failed emails."),
         ),
     ]
