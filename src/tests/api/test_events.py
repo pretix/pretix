@@ -50,7 +50,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import OrderFee
 from pretix.testutils.queries import assert_num_queries
-
+from pretix.base.services.seating import SeatProtected, generate_seats
 
 @pytest.fixture
 def variations(item):
@@ -1463,6 +1463,68 @@ def test_remove_seating_forbidden(token_client, organizer, event, item, seatingp
     assert resp.content.decode() == '{"seating_plan":["You can not change the plan since seat \\"0-0\\" is not ' \
                                     'present in the new plan and is already sold."]}'
 
+@pytest.mark.django_db
+def test_generate_seats_protects_sold_seat(
+    token_client, organizer, event, item, seatingplan, order_position
+):
+    # Create the event's seating plan
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(
+            organizer.slug, event.slug
+        ),
+        {
+            'seating_plan': seatingplan.pk,
+            'seat_category_mapping': {
+                'Stalls': item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+    # Associate a seat with an order
+    with scopes_disabled():
+        seat = event.seats.get(seat_guid='0-0')
+        order_position.seat = seat
+        order_position.save(update_fields=['seat'])
+
+        # Removing a sold seat should raise SeatProtected
+        with pytest.raises(SeatProtected, match='already sold'):
+            generate_seats(event, None, None, {})
+
+@pytest.mark.django_db
+def test_generate_seats_protects_voucher_seat(
+    token_client, organizer, event, item, seatingplan
+):
+    # Configure the event's seating plan
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(
+            organizer.slug, event.slug
+        ),
+        {
+            'seating_plan': seatingplan.pk,
+            'seat_category_mapping': {
+                'Stalls': item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+    # Associate a seat with a voucher
+    with scopes_disabled():
+        seat = event.seats.get(seat_guid='0-0')
+
+    with scope(organizer=organizer):
+        event.vouchers.create(item=item, seat=seat)
+
+    # Removing the seat must raise SeatProtected
+    with scopes_disabled():
+        with pytest.raises(
+            SeatProtected,
+            match='already used in a voucher'
+        ):
+            generate_seats(event, None, None, {})
 
 @pytest.mark.django_db
 def test_remove_seating_canceled_seat(token_client, organizer, event, item, seatingplan, order_position):
