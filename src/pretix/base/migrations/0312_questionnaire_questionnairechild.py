@@ -19,7 +19,7 @@ from pretix.helpers.iter import sort_groupby, sort_groupby_exp
 logger = logging.getLogger(__name__)
 
 FakeQuestion = namedtuple(
-    'FakeQuestion', 'id tbd_question position required help_text'
+    'FakeQuestion', 'id question position required help_text'
 )
 
 
@@ -84,7 +84,7 @@ def migrate_questions_forward(apps, schema_editor):
 
             internal_name = label_prefix + ', '.join(str(ii.internal_name or ii.name) for ii in item_infos)
             if all(ii.personalized for ii in item_infos) and len(item_infos) == len(personalized_items):
-                if questionnaire_type == "order_purchase":
+                if questionnaire_type == "position_purchase":
                     # if we have a questionnaire for exactly all personalized items, we just call it "Attendee data"
                     # (same as the default questionnaire for new events)
                     internal_name = _('Attendee data')
@@ -109,7 +109,7 @@ def migrate_questions_forward(apps, schema_editor):
                         position=position + 1,
                         system_datafield=question.id,
                         required=question.required,
-                        label=question.tbd_question,
+                        label=question.question,
                         help_text=question.help_text,
                     )
                 else:
@@ -121,7 +121,7 @@ def migrate_questions_forward(apps, schema_editor):
                         position=position + 1,
                         user_datafield=question,
                         required=question.required,
-                        label=question.tbd_question,
+                        label=question.question,
                         help_text=question.help_text,
                         dependency_values=question.dependency_values,
                     )
@@ -153,7 +153,7 @@ def migrate_questions_forward(apps, schema_editor):
                 for item in personalized_items
             ), (
                 qc_candidate(item, q.id, q)
-                for q in questions.filter(tbd_hidden=False, ask_during_checkin=False)
+                for q in questions.filter(hidden=False, ask_during_checkin=False)
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
@@ -173,7 +173,7 @@ def migrate_questions_forward(apps, schema_editor):
             # [position_hidden] hidden
             rows = chain((
                 qc_candidate(item, q.id, q)
-                for q in questions.filter(tbd_hidden=True, ask_during_checkin=False)
+                for q in questions.filter(hidden=True, ask_during_checkin=False)
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
@@ -181,7 +181,7 @@ def migrate_questions_forward(apps, schema_editor):
             create_grouped_item_questionnaires(event, rows, _('Hidden questions for '), "position_hidden", personalized_items)
 
             # [O] get all order-level questions
-            questions = list(event.questions.filter(container_type='O', tbd_hidden=False).order_by('position'))
+            questions = list(event.questions.filter(container_type='O', hidden=False).order_by('position'))
             if questions:
                 # create questionnaires and rows
                 questionnaire = Questionnaire.objects.create(
@@ -200,7 +200,7 @@ def migrate_questions_forward(apps, schema_editor):
                         position=position + 1,
                         user_datafield=question,
                         required=question.required,
-                        label=question.tbd_question,
+                        label=question.question,
                         help_text=question.help_text,
                         dependency_values=question.dependency_values,
                     )
@@ -212,9 +212,9 @@ def migrate_questions_forward(apps, schema_editor):
 
 
             for question in event.questions.all():
-                question.internal_name = str(question.tbd_question)
+                question.internal_name = str(question.question)
                 if question.print_on_invoice:
-                    question.print_on_invoice_label = question.tbd_question
+                    question.print_on_invoice_label = question.question
                 question.save()
 
 
@@ -276,6 +276,10 @@ class Migration(migrations.Migration):
             name='print_on_invoice_label',
             field=i18nfield.fields.I18nTextField(null=True),
         ),
+        migrations.RunPython(
+            migrate_questions_forward,
+            migrate_questions_backward,
+        ),
         migrations.AlterField(
             model_name='question',
             name='question',
@@ -286,9 +290,7 @@ class Migration(migrations.Migration):
             old_name='question',
             new_name='tbd_question',
         ),
-        migrations.RunPython(
-            migrate_questions_forward,
-            migrate_questions_backward,
-        ),
+        # add tbd_hidden, tbd_ask_during_checkin, ...
+
         # TODO(questionnaires) remove old columns from Question model
     ]
