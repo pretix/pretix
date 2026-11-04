@@ -41,7 +41,7 @@ import logging
 import operator
 import string
 import warnings
-from collections import Counter
+from collections import Counter, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
 from functools import reduce
@@ -110,6 +110,107 @@ def generate_position_secret():
     raise TypeError("Function no longer exists, use secret generators")
 
 
+FakeQuestionnaireRow = namedtuple('FakeQuestionnaireRow', ('user_datafield', 'label', 'answer'))
+
+
+class QuestionnaireRenderer:
+    def __init__(self, qrows, system_answers, answerlist):
+        self.qrows = qrows
+        self.row_cache = {
+            q.pk: q for q in self.qrows
+        }
+        self.system_answers = system_answers
+        self.answerlist = answerlist
+
+    def _row_is_visible(self, parentid, qvals):
+        if parentid is None:
+            return True
+        if parentid not in self.row_cache:
+            return False
+        parentrow = self.row_cache[parentid]
+        if not self._row_is_visible(parentrow.dependency_question_id, parentrow.dependency_values):
+            return False
+        answer_values = self.get_dependency_answer_values(parentrow)
+        return answer_values and any(qval in answer_values for qval in qvals)
+
+    def row_is_required(self, qrow):
+        return qrow.required and self._row_is_visible(qrow.dependency_question_id, qrow.dependency_values)
+
+    @cached_property
+    def answer_cache(self):
+        return {
+            **self.system_answers,
+            **{aw.question_id: aw for aw in self.answerlist},
+        }
+
+    def get_system_answer(self, field_name):
+        try:
+            return self.system_answers[field_name]
+        except KeyError:
+            raise KeyError('Unknown system datafield name: ' + field_name)
+
+    def get_dependency_answer_values(self, qc):
+        if qc.user_datafield_id:
+            if qc.user_datafield_id not in self.answer_cache:
+                return None
+            answer = self.answer_cache[qc.user_datafield_id]
+            return answer.to_dependency_values()
+        elif qc.system_datafield:
+            return [self.get_system_answer(qc.system_datafield)]
+        else:
+            raise ValueError('Questionnaire child without datafield has no answer')
+
+    @cached_property
+    def question_data(self):
+        question_data = []
+        for qrow in self.qrows:
+            if not (qrow.user_datafield_id or qrow.system_datafield):
+                continue
+            try:
+                qrow.answer = self.answer_cache[qrow.user_datafield_id or qrow.system_datafield]
+            except KeyError:
+                pass
+            if self._row_is_visible(qrow.dependency_question_id, qrow.dependency_values):
+                question_data.append(qrow)
+        return question_data
+
+    def __iter__(self):
+        return iter(self.question_data)
+
+    def __bool__(self):
+        return len(self.question_data) > 0
+
+    @cached_property
+    def asked_questions(self):
+        return {qrow.user_datafield_id or qrow.system_datafield for qrow in self.question_data}
+
+    @property
+    def leftovers(self):
+        """
+        Returns a list of questionnaire-row-like objects for all answers that exist, but are not asked in the questionnaire.
+        These might either exist due to questionnaire changes after orders were already created, or due to programmatically adding answers via the API.
+        """
+        return [FakeQuestionnaireRow(answer.question, answer.question.internal_name, answer) for answer in self.answerlist if answer.question.id not in self.asked_questions]
+
+    @property
+    def full_address_asked(self):
+        Field = QuestionnaireRow.SystemDatafield
+        return {Field.STREET, Field.ZIPCODE, Field.CITY, Field.STATE, Field.COUNTRY}.issubset(self.asked_questions)
+
+
+class OrderLevelAnswerableMixin:
+
+    @cached_property
+    def rendered_questions(self):
+        qrows = QuestionnaireRow.objects.filter(
+            Q(system_datafield__isnull=False) | Q(user_datafield_id__isnull=False),
+            Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels=self.sales_channel),
+            questionnaire__event=self.event,
+            questionnaire__type=Questionnaire.QuestionnaireType.ORDER_SALE,
+        )
+        return QuestionnaireRenderer(qrows=qrows, system_answers={}, answerlist=self.answers.all())
+
+
 class OrderQuerySet(models.QuerySet):
     def get_with_secret_check(self, code, received_secret, tag, secret_length=64):
         dummy = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"[:secret_length]
@@ -138,7 +239,7 @@ class OrderQuerySet(models.QuerySet):
         return order
 
 
-class Order(LockModel, LoggedModel):
+class Order(OrderLevelAnswerableMixin, LockModel, LoggedModel):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
     several OrderPositions and is connected to a user. It has an
@@ -1395,6 +1496,13 @@ class QuestionAnswer(models.Model):
         elif self.checkoutsession:
             return self.checkoutsession.event
 
+    @property
+    def container_type(self):
+        if self.orderposition_id or self.cartposition_id:
+            return Question.ContainerType.ORDERPOSITION
+        elif self.order_id or self.checkoutsession_id:
+            return Question.ContainerType.ORDER
+
     def __str__(self):
         return self.to_string(use_cached=True)
 
@@ -1598,10 +1706,10 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
     def meta_info_data(self, d):
         self.meta_info = json.dumps(d)
 
-    def cache_answers(self, questionnaire_type, sales_channel):
+    def get_questionnaire_renderer(self, questionnaire_type, sales_channel):
         """
         Creates a new property on the object:
-        questions: a list of Question objects, extended by an 'answer' property
+        question_data: a list of QuestionnaireRow objects, extended by an 'answer' property
         """
         # We need to clone our question objects, otherwise we will override the cached
         # answers of other items in the same cart if the question objects have been
@@ -1610,34 +1718,10 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
             qrows = list(copy.copy(qc) for qq in self.item.relevant_questionnaires for qc in qq.questionnairerowlist)
         else:
             qrows = list(self.item.get_asked_questions(questionnaire_type=questionnaire_type, sales_channel=sales_channel))
-
-        row_cache = {
-            q.pk: q for q in qrows
-        }
-
-        def row_is_visible(parentid, qvals):
-            if parentid not in row_cache:
-                return False
-            parentrow = row_cache[parentid]
-            if parentrow.dependency_question_id and not row_is_visible(parentrow.dependency_question_id, parentrow.dependency_values):
-                return False
-            answer_values = self.get_dependency_answer_values(parentrow)
-            return answer_values and any(qval in answer_values for qval in qvals)
-
-        self.questions = []
-        for qrow in qrows:
-            if not (qrow.user_datafield_id or qrow.system_datafield):
-                continue
-            try:
-                qrow.answer = self.answer_cache[qrow.user_datafield_id or qrow.system_datafield]
-            except KeyError:
-                continue
-            if not qrow.dependency_question_id or row_is_visible(qrow.dependency_question_id, qrow.dependency_values):
-                self.questions.append(qrow)
-        return self.questions
+        return self._cache_question_data(qrows)
 
     @cached_property
-    def answer_cache(self):
+    def system_answers(self):
         return {
             "@attendee_name_parts": self.attendee_name,
             "@attendee_email": self.attendee_email,
@@ -1647,39 +1731,7 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
             "@city": self.city,
             "@state": self.state,
             "@country": str(self.country),
-            **{aw.question_id: aw for aw in getattr(self, 'answerlist', self.answers.all())},
         }
-
-    def get_dependency_answer_values(self, qc):
-        if qc.user_datafield_id:
-            if qc.user_datafield_id not in self.answer_cache:
-                return None
-            answer = self.answer_cache[qc.user_datafield_id]
-            return answer.to_dependency_values()
-        elif qc.system_datafield:
-            return [self.get_system_answer(qc.system_datafield)]
-        else:
-            raise ValueError('Questionnaire child without datafield has no answer')
-
-    def get_system_answer(self, system_datafield_name):
-        if system_datafield_name == QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS:
-            return self.attendee_name
-        elif system_datafield_name == QuestionnaireRow.SystemDatafield.ATTENDEE_EMAIL:
-            return self.attendee_email
-        elif system_datafield_name == QuestionnaireRow.SystemDatafield.COMPANY:
-            return self.company
-        elif system_datafield_name == QuestionnaireRow.SystemDatafield.STREET:
-            return self.street
-        elif system_datafield_name == QuestionnaireRow.SystemDatafield.ZIPCODE:
-            return self.zipcode
-        elif system_datafield_name == QuestionnaireRow.SystemDatafield.CITY:
-            return self.city
-        elif system_datafield_name == QuestionnaireRow.SystemDatafield.STATE:
-            return self.state
-        elif system_datafield_name == QuestionnaireRow.SystemDatafield.COUNTRY:
-            return str(self.country)
-        else:
-            raise ValueError('Unknown system datafield name')
 
     @property
     def net_price(self):
@@ -3220,7 +3272,7 @@ class Transaction(models.Model):
         return self.tax_value_includes_rounding_correction * self.count
 
 
-class CheckoutSession(models.Model):
+class CheckoutSession(OrderLevelAnswerableMixin, models.Model):
     """
     A checkout session optionally bundles cart positions with additional information. This is historically
     not required in pretix and currently only used in the Storefront API.

@@ -347,12 +347,12 @@
                         {% endif %}
                     </dl>
 
-                    {% if order.answers.all %}
+                    {% if order.rendered_questions %}
                         <hr>
                         <dl class="dl-horizontal">
-                            {% for ans in order.answers.all %}
-                                <dt>{{ ans.question.internal_name }}</dt>
-                                <dd>{% include "pretixpresale/event/fragment_question_answer.html" with request=request question=ans.question answer=ans %}</dd>
+                            {% for q in order.rendered_questions %}
+                                <dt>{{ q.label }}</dt>
+                                <dd>{% include "pretixpresale/event/fragment_question_answer.html" with request=request question=q answer=q.answer %}</dd>
                             {% endfor %}
                         </dl>
                     {% endif %}

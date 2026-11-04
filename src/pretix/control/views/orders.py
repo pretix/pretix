@@ -85,7 +85,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
-    PrintLog,
+    PrintLog, QuestionnaireRenderer,
 )
 from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.payment import PaymentException
@@ -143,6 +143,7 @@ from pretix.helpers.iter import chunked_iterable
 from pretix.helpers.json import CustomJSONEncoder
 from pretix.helpers.safedownload import check_token
 from pretix.presale.signals import question_form_fields
+from pretix.presale.views import prefetch_relevant_questionnaires
 
 logger = logging.getLogger(__name__)
 
@@ -600,7 +601,9 @@ class OrderDetail(OrderView):
             'item', 'variation', 'addon_to', 'tax_rule', 'used_membership', 'used_membership__membership_type',
             'discount',
         ).prefetch_related(
-            'item__questionnaires', 'issued_gift_cards', 'owned_gift_cards', 'linked_media',  # TODO(questionnaires) : item__questions gibts nicht mehr
+            prefetch_relevant_questionnaires(self.request.event, None, None),
+            #'item__questionnaires',
+            'issued_gift_cards', 'owned_gift_cards', 'linked_media',  # TODO(questionnaires) : item__questions gibts nicht mehr
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
             Prefetch('all_checkins', queryset=Checkin.all.select_related('list', 'gate').order_by('datetime')),
             Prefetch('print_logs', queryset=PrintLog.objects.select_related('device').order_by('datetime')),
@@ -621,7 +624,8 @@ class OrderDetail(OrderView):
                         })
 
             p.has_questions = p.additional_fields or p.item.questionnaires.all()
-            p.cache_answers(questionnaire_type=None, sales_channel=None)
+            qrows = list(copy.copy(qc) for qq in p.item.relevant_questionnaires for qc in qq.questionnairerowlist)
+            p.rendered_questions = QuestionnaireRenderer(qrows=qrows, system_answers=p.system_answers, answerlist=p.answers.all())
             p.order = self.order
 
             positions.append(p)

@@ -428,12 +428,23 @@
                             </dd>
                         {% endif %}
 
-                        {% if order.answers.all %}
+                        {% if order.rendered_questions or order.rendered_questions.leftovers %}
                             <hr>
                         {% endif %}
-                        {% for ans in order.answers.all %}
-                            <dt>{{ ans.question.internal_name|default:ans.question.question }}</dt>
-                            <dd>{% include "pretixcontrol/order/fragment_question_answer.html" with request=request question=ans.question answer=ans %}</dd>
+                        {% for q in order.rendered_questions %}
+                            <dt>{{ q.label }}</dt>
+                            <dd>{% include "pretixcontrol/order/fragment_question_answer.html" with request=request question=q answer=q.answer %}</dd>
+                        {% endfor %}
+                        {% for q in order.rendered_questions.leftovers %}
+                            <dt class="text-muted">
+                                {{ q.label }}
+                                <span class="fa fa-question-circle text-muted"
+                                        data-toggle="tooltip"
+                                        title="{% trans "This data field is not asked for this product, but an answer exists anyway." %}"
+                                ></span>
+                            </dt>
+                            <dd class="text-muted">{% include "pretixcontrol/order/fragment_question_answer.html" with request=request question=ans.question answer=ans %}</dd>
+                            <!-- add a edit or delete button? -->
                         {% endfor %}
                     </dl>
                 </div>
@@ -610,61 +621,69 @@
                                 {% endif %}
                                 {% if line.has_questions %}
                                     <dl>
-                                        {% for q in line.questions %}
-                                            <dt>
+                                        {% for q in line.rendered_questions %}
+                                            {% if q.system_datafield == "@street" and line.rendered_questions.full_address_asked %}
+                                                <dt>
+                                                    {% trans "Attendee address" %}
+                                                </dt>
+                                                <dd>
+                                                    {% if line.street or line.zipcode or line.city or line.country %}
+                                                        {{ line.street|default_if_none:""|linebreaksbr }}<br>
+                                                        {{ line.zipcode|default_if_none:"" }} {{ line.city|default_if_none:"" }}<br>
+                                                        {% if line.state %}{{ line.state_for_address }}<br>{% endif %}
+                                                        {{ line.country.name|default_if_none:"" }}
+                                                    {% else %}
+                                                        <em>{% trans "not answered" %}</em>
+                                                    {% endif %}
+                                                </dd>
+                                            {% elif q.system_datafield == "@zipcode" and line.rendered_questions.full_address_asked %}
+                                            {% elif q.system_datafield == "@city" and line.rendered_questions.full_address_asked %}
+                                            {% elif q.system_datafield == "@state" and line.rendered_questions.full_address_asked %}
+                                            {% elif q.system_datafield == "@country" and line.rendered_questions.full_address_asked %}
+                                            {% else %}
+                                                <dt>
+                                                    {{ q.label }}
+                                                    {% if q.questionnaire.ask_during_checkin %}
+                                                        <span class="fa fa-qrcode text-muted"
+                                                                data-toggle="tooltip"
+                                                                title="{% trans "This question will be asked during check-in." %}"
+                                                        ></span>
+                                                    {% endif %}
+                                                    {% if q.questionnaire.hidden %}
+                                                        <span class="fa fa-eye-slash text-muted"
+                                                                data-toggle="tooltip"
+                                                                title="{% trans "Hidden question" %}"
+                                                        ></span>
+                                                    {% endif %}
+                                                </dt>
+                                                <dd>
+                                                    {% include "pretixcontrol/order/fragment_question_answer.html" with request=request question=q answer=q.answer %}
+                                                    {% if q.system_datafield == "@attendee_email" and not line.addon_to %}
+                                                        <form class="form-inline helper-display-inline" method="post"
+                                                              action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}">
+                                                            {% csrf_token %}
+                                                            <a href="{% url "control:event.order.position.sendmail" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}"
+                                                               class="btn btn-default btn-xs">
+                                                                <span class="fa fa-envelope-o"></span>
+                                                            </a>
+                                                            <button class="btn btn-default btn-xs">
+                                                                {% trans "Resend link" %}
+                                                            </button>
+                                                        </form>
+                                                    {% endif %}
+                                                </dd>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% for q in line.rendered_questions.leftovers %}
+                                            <dt class="text-muted">
                                                 {{ q.label }}
-                                                {% if q.ask_during_checkin %}
-                                                    <span class="fa fa-qrcode text-muted"
-                                                            data-toggle="tooltip"
-                                                            title="{% trans "This question will be asked during check-in." %}"
-                                                    ></span>
-                                                {% endif %}
+                                                <span class="fa fa-question-circle text-muted"
+                                                        data-toggle="tooltip"
+                                                        title="{% trans "This data field is not asked for this product, but an answer exists anyway." %}"
+                                                ></span>
                                             </dt>
-                                            <dd>
-
-{#                                                {% if q.answer %}#}
-{#                                                    {% if q.answer.file %}#}
-{#                                                        <span class="fa fa-file"></span>#}
-{#                                                        <a href="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}">#}
-{#                                                            {{ q.answer.file_name }}#}
-{#                                                        </a>#}
-{#                                                        <span class="label label-danger" data-toggle="tooltip"#}
-{#                                                                title="{% trans "This file has been uploaded by a user and could contain viruses or other malicious content." %}">#}
-{#                                                            {% trans "UNSAFE" %}#}
-{#                                                        </span>#}
-{#                                                        {% if q.answer.is_image %}#}
-{#                                                            <br>#}
-{#                                                            <a href="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}" data-lightbox="order"#}
-{#                                                                class="answer-thumb">#}
-{#                                                                <img src="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}">#}
-{#                                                            </a>#}
-{#                                                        {% endif %}#}
-{#                                                    {% elif q.type == "M" %}#}
-{#                                                        {{ q.answer.to_string_i18n|rich_text_snippet }}#}
-{#                                                    {% elif q.type %}#}
-{#                                                        {{ q.answer.to_string_i18n|linebreaksbr }}#}
-{#                                                    {% else %}<!-- TODO(questionnaires): proper separation of QuestionAnswer objects and system answers......   -->#}
-{#                                                        {{ q.answer|linebreaksbr }}#}
-{#                                                    {% endif %}#}
-{#                                                {% else %}#}
-{#                                                    <em>{% trans "not answered" %}</em>#}
-{#                                                {% endif %}#}
-
-                                                {% include "pretixcontrol/order/fragment_question_answer.html" with request=request question=q answer=q.answer %}
-                                                {% if q.system_datafield == "@attendee_email" and not line.addon_to %}
-                                                    <form class="form-inline helper-display-inline" method="post"
-                                                          action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}">
-                                                        {% csrf_token %}
-                                                        <a href="{% url "control:event.order.position.sendmail" event=request.event.slug organizer=request.event.organizer.slug code=order.code position=line.pk %}"
-                                                           class="btn btn-default btn-xs">
-                                                            <span class="fa fa-envelope-o"></span>
-                                                        </a>
-                                                        <button class="btn btn-default btn-xs">
-                                                            {% trans "Resend link" %}
-                                                        </button>
-                                                    </form>
-                                                {% endif %}
-                                            </dd>
+                                            <dd class="text-muted">{% include "pretixcontrol/order/fragment_question_answer.html" with request=request question=q answer=q.answer %}</dd>
+                                            <!-- add a edit or delete button? -->
                                         {% endfor %}
                                         {% for q in line.additional_fields %}
                                             <dt>{{ q.internal_name }}</dt>

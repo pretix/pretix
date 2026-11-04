@@ -156,7 +156,7 @@
                 {% endif %}
                 {% if line.has_questions %}
                     <dl class="dl-indented">
-                        {% for q in line.questions %}
+                        {% for q in line.rendered_questions %}
                             <dt>{{ q.label }}</dt>
                             <dd>
                                 {% include "pretixpresale/event/fragment_question_answer.html" with request=request question=q answer=q.answer %}

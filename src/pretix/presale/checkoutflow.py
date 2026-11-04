@@ -63,7 +63,7 @@ from django_scopes import scopes_disabled
 from pretix.base.models import Customer, Membership, Order
 from pretix.base.models.items import Question
 from pretix.base.models.orders import (
-    InvoiceAddress, OrderPayment, QuestionAnswer,
+    InvoiceAddress, OrderPayment, QuestionAnswer, QuestionnaireRenderer,
 )
 from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.services.cart import (
@@ -1092,36 +1092,17 @@ class QuestionsStep(CartQuestionsViewMixin, CartMixin, TemplateFlowStep):
                 return False
 
         for cp in self._positions_for_questions:
-            qc_cache = {
-                qc.pk: qc for qq in cp.item.relevant_questionnaires for qc in qq.questionnairerowlist
-            }
-
-            def question_is_visible(parentid, qvals):
-                if parentid not in qc_cache:
-                    return False
-                parentqc = qc_cache[parentid]
-                if parentqc.dependency_question_id and not question_is_visible(parentqc.dependency_question_id, parentqc.dependency_values):
-                    return False
-                answer_values = cp.get_dependency_answer_values(parentqc)
-                return answer_values and any(qval in answer_values for qval in qvals)
-
-            def question_is_required(q):
-                return (
-                    q.required and
-                    (not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_values))
-                )
-
+            renderer = cp.rendered_questions
             if not self.all_optional:
-                for qq in cp.item.relevant_questionnaires:
-                    for qc in qq.questionnairerowlist:
-                        if qc.user_datafield_id and question_is_required(qc) and qc.user_datafield_id not in cp.answer_cache:
-                            if warn:
-                                messages.warning(request, _('Please fill in answers to all required questions.'))
-                            return False
-                        if qc.system_datafield and question_is_required(qc) and not cp.get_system_answer(qc.system_datafield):
-                            if warn:
-                                messages.warning(request, _('Please fill in answers to all required questions.'))
-                            return False
+                for qc in renderer.qrows:
+                    if qc.user_datafield_id and renderer.row_is_required(qc) and qc.user_datafield_id not in renderer.answer_cache:
+                        if warn:
+                            messages.warning(request, _('Please fill in answers to all required questions.'))
+                        return False
+                    if qc.system_datafield and renderer.row_is_required(qc) and not renderer.get_system_answer(qc.system_datafield):
+                        if warn:
+                            messages.warning(request, _('Please fill in answers to all required questions.'))
+                        return False
 
             responses = question_form_fields.send(sender=self.request.event, position=cp)
             form_data = cp.meta_info_data.get('question_form_data', {})

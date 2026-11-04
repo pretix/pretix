@@ -55,7 +55,7 @@ from pretix.base.models import (
     QuestionAnswer, Questionnaire, QuestionOption, TaxRule,
 )
 from pretix.base.models.items import QuestionnaireRow
-from pretix.base.models.orders import CheckoutSession
+from pretix.base.models.orders import CheckoutSession, QuestionnaireRenderer
 from pretix.base.services.cart import get_fees
 from pretix.base.services.pricing import apply_rounding
 from pretix.base.templatetags.money import money_filter
@@ -110,7 +110,7 @@ class CartMixin:
         return CheckoutSession.objects.filter(
             event=self.request.event,
             cart_id=get_or_create_cart_id(self.request, create=False),
-        ).first()
+        ).prefetch_related('answers', 'answers__question').first()
 
     @cached_property
     def cart_customer(self):
@@ -136,7 +136,7 @@ class CartMixin:
         if queryset is not None:
             prefetch = []
             if answers:
-                prefetch.append('item__questionnaires')
+                prefetch.append(prefetch_relevant_questionnaires(self.request.event, self.request.sales_channel, Questionnaire.QuestionnaireType.ORDER_POSITION_SALE))
                 prefetch.append(Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options')))
 
             cartpos = queryset.order_by(
@@ -246,7 +246,8 @@ class CartMixin:
             group.price_for_input_net = group.net_price_before_rounding + sum(a.net_price_before_rounding for a in has_addons[group.pk])
 
             if answers:
-                group.cache_answers(questionnaire_type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE, sales_channel=self.request.sales_channel)
+                qrows = list(copy.copy(qc) for qq in group.item.relevant_questionnaires for qc in qq.questionnairerowlist)
+                group.rendered_questions = QuestionnaireRenderer(qrows=qrows, system_answers=group.system_answers, answerlist=group.answers.all())
                 group.additional_answers = pos_additional_fields.get(group.pk)
             positions.append(group)
 
@@ -459,6 +460,11 @@ def get_cart_positions(request):
                 cp.event = request.event
                 if cp.addon_to_id:
                     cp.addon_to = by_id[cp.addon_to_id]
+                cp.rendered_questions = QuestionnaireRenderer(
+                    qrows=[qc for qq in cp.item.relevant_questionnaires for qc in qq.questionnairerowlist],
+                    system_answers=cp.system_answers,
+                    answerlist=cp.answerlist,
+                )
     return request._cart_cache
 
 
