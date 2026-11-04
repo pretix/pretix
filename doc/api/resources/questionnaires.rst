@@ -50,14 +50,15 @@ type                                  string                     The type of que
                                                                  * ``position_attendee`` — Per product, via attendee link
                                                                  * ``position_checkin`` — Per product, at check-in
                                                                  * ``position_hidden`` — Per product, hidden
-internal_name                         string                     Internal label for the questionnaire
+internal_name                         string                     Internal label for the questionnaire.
 items                                 list of integers           List of item IDs this questionnaire is assigned to.
+                                                                 *Only supported on per-product questionnaires.*
 position                              integer                    An integer, used for sorting
 all_sales_channels                    boolean                    If ``true`` (default), the questions from this questionnaire
                                                                  are asked on all sales channels.
 limit_sales_channels                  list of strings            List of sales channel identifiers the questions are asked on
                                                                  if ``all_sales_channels`` is ``false``.
-rows                              list of objects            List of all questionnaire rows.
+rows                                  list of objects            List of all questionnaire rows.
 ├ datafield                           string                     Reference to a data field (see above)
 ├ required                            boolean                    If ``true``, the question needs to be filled out.
 ├ label                               multi-lingual string       The field label shown to the customer

@@ -42,8 +42,10 @@ type                                  string                     **Required.** T
                                                                  * ``TEL`` – telephone number
 show_during_checkin                   boolean                    If ``true``, the value of the data field will be shown
                                                                  during check-in (if the check-in client supports it).
+                                                                 *Only supported on per-position data fields.*
 print_on_invoice                      boolean                    If ``true``, the data field will be shown on
                                                                  invoices.
+                                                                 *Only supported on per-position data fields.*
 print_on_invoice_label                multi-lingual string       **Required if ``print_on_invoice`` is ``true``.** Label
                                                                  to print on the invoice before the value of this field.
 options                               list of objects            In case of data field type ``C`` or ``M``, this lists the
