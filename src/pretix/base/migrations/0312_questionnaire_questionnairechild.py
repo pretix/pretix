@@ -7,6 +7,7 @@ from itertools import chain, groupby
 import django.db.models.deletion
 import i18nfield.fields
 from django.db import migrations, models
+from django.utils.translation import pgettext_lazy
 from i18nfield.strings import LazyI18nString
 
 import pretix.base.models.base
@@ -46,7 +47,7 @@ def get_fake_questions(settings):
         fq.append(FakeQuestion('@street', _('Street'), sqo.get('street', 0), b(settings.get('attendee_addresses_required')), None))
         fq.append(FakeQuestion('@zipcode', _('ZIP code'), sqo.get('zipcode', 0), b(settings.get('attendee_addresses_required')), None))
         fq.append(FakeQuestion('@city', _('City'), sqo.get('city', 0), b(settings.get('attendee_addresses_required')), None))
-        fq.append(FakeQuestion('@state', _('State'), sqo.get('country', 0), b(settings.get('attendee_addresses_required')), None))
+        fq.append(FakeQuestion('@state', _(pgettext_lazy("address", "State")), sqo.get('country', 0), b(settings.get('attendee_addresses_required')), None))
         fq.append(FakeQuestion('@country', _('Country'), sqo.get('country', 0), b(settings.get('attendee_addresses_required')), None))
     return fq
 

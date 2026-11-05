@@ -2115,7 +2115,7 @@ class QuestionnaireRow(LoggedModel):
         STREET = '@street', _('Street')
         ZIPCODE = '@zipcode', _('ZIP code')
         CITY = '@city', _('City')
-        STATE = '@state', _('State')
+        STATE = '@state', pgettext_lazy('address', 'State')
         COUNTRY = '@country', _('Country')
 
     # _name_schemes_all_fields = sorted(list(set(k for scheme in PERSON_NAME_SCHEMES.values() for k, v, w, *__ in scheme['fields'])))
