@@ -147,6 +147,7 @@ def test_api_create(env, token_client):
     assert resp.status_code == 201
     tl = env[0].ticket_layouts.get(pk=resp.data["id"])
     assert tl.background
+    assert "cachedfile" not in tl.background.name
 
 
 @pytest.mark.django_db
@@ -215,6 +216,7 @@ def test_api_update(env, token_client):
     assert json.loads(env[1].layout) == [
         {"type": "barcodearea", "left": "7.00", "bottom": "11.15", "size": "45.00", "content": "secret"}
     ]
+    assert "cachedfile" not in env[1].background.name
 
 
 @pytest.mark.django_db
