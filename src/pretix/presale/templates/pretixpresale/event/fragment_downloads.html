@@ -77,39 +77,7 @@
             </p>
         {% elif tickets_with_download|length == 1 %}
             <div>
-                {% comment %} {% for b in download_buttons %}
-                    <form action="{% if position_page and tickets_with_download.0.addon_to %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.addon_to.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=tickets_with_download.0.pk %}{% endif %}"
-                            method="post" data-asynctask data-asynctask-download
-                            class="download-btn-form {% if b.javascript_required or b.confirmation_text %}requirejs{% endif %}">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="btn btn-lg {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}"
-                                {% if b.confirmation_text %}data-confirmation-text="{{ b.confirmation_text|rich_text|force_escape }}"{% endif %}>
-                            <span class="fa {{ b.icon }}" aria-hidden="true"></span> {{ b.long_text }}
-                        </button>
-                    </form>
-                {% endfor %}
-                {% for b in wallet_buttons|getitem:tickets_with_download.0 %}
-                    TODO(wallet): move view to core {% endcomment %}
-                    {% include "pretixpresale/event/fragment_item_downloads.html" with line=tickets_with_download.0 button_size="lg" download_text="long_text" %}
-{% comment %}
-                    <form
-                        action="{% if position_page and tickets_with_download.0.addon_to %}
-                            {% eventurl event "plugins:wallet:presale_event.order.position.wallet.get" secret=tickets_with_download.0.addon_to.web_secret order=order.code platform=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.addon_to.positionid %}
-                        {% elif position_page %}
-                            {% eventurl event "plugins:wallet:presale_event.order.position.wallet.get" secret=tickets_with_download.0.web_secret order=order.code platform=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.positionid %}
-                        {% else %}
-                            {% eventurl event "plugins:wallet:presale_event.order.wallet.get" secret=order.secret order=order.code platform=b.identifier position=tickets_with_download.0.pk %}
-                        {% endif %}"
-                            method="post" data-asynctask data-asynctask-download class="download-btn-form">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="btn btn-lg btn-default {{ b.attributes.class }}"
-                                {% include "pretixbase/fragments/attributes.html" with attributes=b.attributes %}>
-                            {{ b.content }}
-                        </button>
-                    </form>
-                {% endfor %} {% endcomment %}
+                {% include "pretixpresale/event/fragment_item_downloads.html" with line=tickets_with_download.0 button_size="lg" download_text="long_text" %}
             </div>
             <p class="help-block">
                 {% blocktrans trimmed %}
