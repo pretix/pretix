@@ -162,6 +162,7 @@ const preview_mode = ref(false)
 
 .editor-action-row { padding-top: 10px; width: calc(100% + 190px); padding-right: 170px }
 .questionnaires-list > .editor-action-row { border-top: 1px solid rgb(175 175 175 / 0.3); padding-top: 25px; padding-bottom: 10px }
+
 </style>
 <template>
 	<div class="questionnaires-editor" v-if="!preview_mode">
@@ -169,7 +170,7 @@ const preview_mode = ref(false)
 			Order questionnaires
 		</div>
 		<div class="questionnaires-list">
-			<SlickList axis="y" v-model:list="order_questionnaires" useDragHandle appendTo="#orderQuestionnaireListParent" id="orderQuestionnaireListParent" @update:list="saveData()">
+			<SlickList axis="y" v-model:list="order_questionnaires" useDragHandle helperClass="drag-helper" appendTo="#orderQuestionnaireListParent" id="orderQuestionnaireListParent" @update:list="saveData()">
 				<SlickItem v-for="(questionnaire, index) in order_questionnaires" :key="questionnaire.id || questionnaire._new_id" :index="index">
 					<QuestionnaireElement
 						:questionnaire="questionnaire"

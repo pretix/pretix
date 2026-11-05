@@ -53,4 +53,7 @@ loadEnvironmentData()
     30% { width: 50%; }
     100% { width: 60%; }
 }
+
+.drag-handle { cursor: grab }
+body:has(.drag-helper) { cursor: grabbing }
 </style>

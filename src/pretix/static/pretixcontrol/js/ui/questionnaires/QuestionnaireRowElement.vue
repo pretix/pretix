@@ -82,7 +82,7 @@ const editor = ref();
 		</div>
 		<aside class="editor-action-area">
 			<div class="btn-group" v-if="editable">
-				<DragHandle tag="button" class="btn btn-default" :title="gettext('Click and drag this button to reorder.')"><i class="fa fa-arrows"></i></DragHandle>
+				<a v-drag-handle class="btn btn-default drag-handle" :title="gettext('Click and drag this button to reorder.')"><i class="fa fa-arrows"></i></a>
 				<button class="btn btn-default" @click="editor.show()"><i class="fa fa-edit"></i></button>
 			</div>
 		</aside>

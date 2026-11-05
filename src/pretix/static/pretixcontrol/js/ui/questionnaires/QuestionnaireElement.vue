@@ -180,7 +180,7 @@ details[open] > summary.list-group-item {
 				</div>
 
 				<aside class="editor-action-area"><div class="btn-group">
-					<DragHandle tag="button" class="btn btn-default" v-if="!preview_mode" :title="gettext('Click and drag this button to reorder.')"><i class="fa fa-arrows"></i></DragHandle>
+					<a v-drag-handle class="btn btn-default drag-handle" v-if="!preview_mode" :title="gettext('Click and drag this button to reorder.')"><i class="fa fa-arrows"></i></a>
 					<button class="btn btn-default" @click="dlgEditor.show()" :title="`#${questionnaire.id}`"><i class="fa fa-wrench"></i></button>
 				</div></aside>
 			</div>
@@ -196,7 +196,7 @@ details[open] > summary.list-group-item {
         <p v-else>{{ questionnaire._err_mes }}</p>
       </div>
       <div class="form-horizontal" :id="`questionListParent${props.questionnaire.id}`">
-				<SlickList axis="y" v-model:list="props.questionnaire.rows" useDragHandle :appendTo="`#questionListParent${props.questionnaire.id}`" @update:list="emit('update')">
+				<SlickList axis="y" v-model:list="props.questionnaire.rows" useDragHandle helperClass="drag-helper" :appendTo="`#questionListParent${props.questionnaire.id}`" @update:list="emit('update')">
 					<SlickItem v-for="(child, index) in props.questionnaire.rows" :key="child._cid" :index="index">
 						<QuestionnaireRowElement
 										:datafields="props.datafields"
