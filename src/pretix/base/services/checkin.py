@@ -1034,7 +1034,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     # Do this outside of transaction so it is saved even if the checkin fails for some other reason
     checkin_questions = list(
         QuestionnaireRow.objects.filter(
-            questionnaire__event=clist.event, questionnaire__type=Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN,
+            questionnaire__event=clist.event, questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN,
             questionnaire__items__in=[op.item_id],
         ).select_related('user_datafield', 'questionnaire')
     )

@@ -157,7 +157,7 @@ def migrate_questions_forward(apps, schema_editor):
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            # Questionnaire.QuestionnaireType.ORDER_POSITION_SALE == "position_purchase"
+            # Questionnaire.QuestionnaireType.POSITION_PURCHASE == "position_purchase"
             create_grouped_item_questionnaires(event, rows, '', "position_purchase", personalized_items)
 
             # [position_checkin] checkin
@@ -167,7 +167,7 @@ def migrate_questions_forward(apps, schema_editor):
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            # Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN == "position_checkin"
+            # Questionnaire.QuestionnaireType.POSITION_CHECKIN == "position_checkin"
             create_grouped_item_questionnaires(event, rows, _('Check-in questions for '), "position_checkin", personalized_items)
 
             # [position_hidden] hidden
@@ -177,7 +177,7 @@ def migrate_questions_forward(apps, schema_editor):
                 for item in q.items.values_list('id', 'internal_name', 'name', 'personalized', named=True)
             ))
 
-            # Questionnaire.QuestionnaireType.ORDER_POSITION_HIDDEN == "position_hidden"
+            # Questionnaire.QuestionnaireType.POSITION_HIDDEN == "position_hidden"
             create_grouped_item_questionnaires(event, rows, _('Hidden questions for '), "position_hidden", personalized_items)
 
             # [O] get all order-level questions

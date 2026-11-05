@@ -2009,11 +2009,11 @@ class QuestionOption(models.Model):
 
 class Questionnaire(LoggedModel):
     class QuestionnaireType(models.TextChoices):
-        ORDER_SALE = "order_purchase", _("Order-wide, before purchase")
-        ORDER_POSITION_SALE = "position_purchase", _("Per product, before purchase")
-        ORDER_POSITION_ATTENDEE_ONLY = "position_attendee", _("Per product, via attendee link")
-        ORDER_POSITION_CHECKIN = "position_checkin", _("Per product, at check-in")
-        ORDER_POSITION_HIDDEN = "position_hidden", _("Per product, hidden")
+        ORDER_PURCHASE = "order_purchase", _("Order-wide, before purchase")
+        POSITION_PURCHASE = "position_purchase", _("Per product, before purchase")
+        POSITION_ATTENDEE_ONLY = "position_attendee", _("Per product, via attendee link")
+        POSITION_CHECKIN = "position_checkin", _("Per product, at check-in")
+        POSITION_HIDDEN = "position_hidden", _("Per product, hidden")
 
     event = models.ForeignKey(
         Event,
@@ -2067,15 +2067,15 @@ class Questionnaire(LoggedModel):
 
     @property
     def ask_before_sale(self):
-        return self.type == Questionnaire.QuestionnaireType.ORDER_POSITION_SALE
+        return self.type == Questionnaire.QuestionnaireType.POSITION_PURCHASE
 
     @property
     def ask_during_checkin(self):
-        return self.type == Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
+        return self.type == Questionnaire.QuestionnaireType.POSITION_CHECKIN
 
     @property
     def hidden(self):
-        return self.type == Questionnaire.QuestionnaireType.ORDER_POSITION_HIDDEN
+        return self.type == Questionnaire.QuestionnaireType.POSITION_HIDDEN
 
     @staticmethod
     def check_constraints(event):

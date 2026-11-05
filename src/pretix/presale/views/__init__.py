@@ -136,7 +136,7 @@ class CartMixin:
         if queryset is not None:
             prefetch = []
             if answers:
-                prefetch.append(prefetch_relevant_questionnaires(self.request.event, self.request.sales_channel, Questionnaire.QuestionnaireType.ORDER_POSITION_SALE))
+                prefetch.append(prefetch_relevant_questionnaires(self.request.event, self.request.sales_channel, Questionnaire.QuestionnaireType.POSITION_PURCHASE))
                 prefetch.append(Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options')))
 
             cartpos = queryset.order_by(
@@ -452,7 +452,7 @@ def get_cart_positions(request):
                 Prefetch('answers',
                          QuestionAnswer.objects.prefetch_related('options'),
                          to_attr='answerlist'),
-                prefetch_relevant_questionnaires(request.event, request.sales_channel.identifier, Questionnaire.QuestionnaireType.ORDER_POSITION_SALE),
+                prefetch_relevant_questionnaires(request.event, request.sales_channel.identifier, Questionnaire.QuestionnaireType.POSITION_PURCHASE),
             )
             by_id = {cp.pk: cp for cp in request._cart_cache}
             for cp in request._cart_cache:

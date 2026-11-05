@@ -363,7 +363,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         if new_value and not item:
             try:
                 return {'questionnaires': [self.context['request'].event.questionnaires.get(
-                    type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE,
+                    type=Questionnaire.QuestionnaireType.POSITION_PURCHASE,
                     internal_name='Attendee data',  # TODO(questionnaires): how to deal with localized internal name? maybe add a Questionnaire.identifier?
                 )]}
             except Questionnaire.DoesNotExist:
@@ -648,7 +648,7 @@ class QuestionFormSerializer(I18nAwareModelSerializer):
             position = instance.cartposition if instance.cartposition_id else instance.orderposition
             print('searching ', repr(instance), repr(position), repr(instance.question), instance.pk, position.item_id, self.context)   # TODO remove print
             qcs = list(QuestionnaireRow.objects.filter(user_datafield_id=instance.question_id, questionnaire__items__in=[position.item_id]))
-            return next((qc for qc in qcs if qc.questionnaire.type == self.context.get('preferred_questionnaire_type', Questionnaire.QuestionnaireType.ORDER_POSITION_SALE)), qcs[0])
+            return next((qc for qc in qcs if qc.questionnaire.type == self.context.get('preferred_questionnaire_type', Questionnaire.QuestionnaireType.POSITION_PURCHASE)), qcs[0])
 
         return super().get_attribute(instance)
 
@@ -835,7 +835,7 @@ class POSCompatQuestionSerializer(QuestionFormSerializer):
             position = instance.cartposition if instance.cartposition_id else instance.orderposition
             print('searching ', repr(instance), repr(position), repr(instance.question), instance.pk, position.item_id, self.context)   # TODO remove print
             qcs = list(QuestionnaireRow.objects.filter(user_datafield_id=instance.question_id, questionnaire__items__in=[position.item_id]))
-            return next((qc for qc in qcs if qc.questionnaire.type == self.context.get('preferred_questionnaire_type', Questionnaire.QuestionnaireType.ORDER_POSITION_SALE)), qcs[0])
+            return next((qc for qc in qcs if qc.questionnaire.type == self.context.get('preferred_questionnaire_type', Questionnaire.QuestionnaireType.POSITION_PURCHASE)), qcs[0])
 
         return super().get_attribute(instance)
 
@@ -955,7 +955,7 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
 
             #Question.clean_items(event, full_data.get('items') or [])
 
-            if (full_data.get('type') == Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
+            if (full_data.get('type') == Questionnaire.QuestionnaireType.POSITION_CHECKIN
                     and any(c['dependency_question'] for c in full_data['rows'])):
                 raise ValidationError('Dependencies are not supported during check-in.')
 

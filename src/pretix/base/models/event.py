@@ -738,7 +738,7 @@ class Event(EventMixin, LoggedModel):
         self.settings.mail_send_order_approved_free_attendee = True
         self.settings.mail_send_download_reminder_attendee = True
         from . import Questionnaire, QuestionnaireRow
-        q = self.questionnaires.create(internal_name=str(_('Attendee data')), type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE, position=0)
+        q = self.questionnaires.create(internal_name=str(_('Attendee data')), type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, position=0)
         q.rows.create(label=str(_('Attendee name')), system_datafield=QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS, position=0)
 
     @property

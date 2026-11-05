@@ -973,7 +973,7 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
 
         questionnaires = Questionnaire.objects.filter(
             Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=container.sales_channel.identifier),
-            event=event, type=Questionnaire.QuestionnaireType.ORDER_SALE,
+            event=event, type=Questionnaire.QuestionnaireType.ORDER_PURCHASE,
         ).order_by('position').prefetch_related(
             Prefetch('rows', QuestionnaireRow.objects.prefetch_related(
                 Prefetch('user_datafield', Question.objects.prefetch_related(

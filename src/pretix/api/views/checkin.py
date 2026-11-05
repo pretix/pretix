@@ -490,7 +490,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             'pdf_data': pdf_data and (
                 user if user and user.is_authenticated else auth
             ).has_event_permission(request.organizer, event, 'event.orders:read', request),
-            'preferred_questionnaire_type': Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN,
+            'preferred_questionnaire_type': Questionnaire.QuestionnaireType.POSITION_CHECKIN,
         }
 
     common_checkin_args = dict(
@@ -800,7 +800,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     given_answers = {}
     if answers_data:
         for qc in QuestionnaireRow.objects.filter(
-                questionnaire__items__in=[op.item], questionnaire__type=Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
+                questionnaire__items__in=[op.item], questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN
         ):
             if qc.user_datafield_id and (str(qc.user_datafield_id) in answers_data or str(qc.cooked_id) in answers_data):
                 try:
@@ -980,7 +980,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         ctx['event'] = self.request.event
         ctx['expand'] = self.request.query_params.getlist('expand')
         ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
-        ctx['preferred_questionnaire_type'] = Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN
+        ctx['preferred_questionnaire_type'] = Questionnaire.QuestionnaireType.POSITION_CHECKIN
         return ctx
 
     def get_filterset_kwargs(self):

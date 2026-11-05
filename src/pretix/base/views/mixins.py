@@ -109,8 +109,8 @@ class BaseQuestionsViewMixin:
             form.pos = cartpos or orderpos
             form.show_copy_answers_to_addon_button = form.pos.addon_to and (
                 # TODO(questionnaires)  -  prefetch this
-                set(qc.form_field_name for qc in form.pos.addon_to.item.get_asked_questions(questionnaire_type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE))
-                & set(qc.form_field_name for qc in form.pos.item.get_asked_questions(questionnaire_type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE))
+                set(qc.form_field_name for qc in form.pos.addon_to.item.get_asked_questions(questionnaire_type=Questionnaire.QuestionnaireType.POSITION_PURCHASE))
+                & set(qc.form_field_name for qc in form.pos.item.get_asked_questions(questionnaire_type=Questionnaire.QuestionnaireType.POSITION_PURCHASE))
             )
 
             override_sets = self.get_question_override_sets(cr, idx)
@@ -346,7 +346,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
     @cached_property
     def positions(self):
         if self.only_user_visible:
-            type = Questionnaire.QuestionnaireType.ORDER_POSITION_SALE
+            type = Questionnaire.QuestionnaireType.POSITION_PURCHASE
         else:
             type = None
         return list(self.order.positions.select_related(

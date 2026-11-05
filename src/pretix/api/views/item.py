@@ -640,7 +640,7 @@ with scopes_disabled():
 
         def ask_during_checkin_qs(self, qs, name, value):
             return qs.filter(
-                questionnaire__type=Questionnaire.QuestionnaireType.ORDER_POSITION_CHECKIN if value else Questionnaire.QuestionnaireType.ORDER_POSITION_SALE
+                questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN if value else Questionnaire.QuestionnaireType.POSITION_PURCHASE
             )
 
 

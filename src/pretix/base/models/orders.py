@@ -213,7 +213,7 @@ class OrderLevelAnswerableMixin:
             Q(system_datafield__isnull=False) | Q(user_datafield_id__isnull=False),
             Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels=self.sales_channel),
             questionnaire__event=self.event,
-            questionnaire__type=Questionnaire.QuestionnaireType.ORDER_SALE,
+            questionnaire__type=Questionnaire.QuestionnaireType.ORDER_PURCHASE,
         )
         return QuestionnaireRenderer(qrows=qrows, system_answers={}, answerlist=self.answers.all())
 
@@ -1038,7 +1038,7 @@ class Order(OrderLevelAnswerableMixin, LockModel, LoggedModel):
         if self.event.settings.get('invoice_address_asked', as_type=bool) or self.event.settings.get('invoice_name_required', as_type=bool):
             return True
         for cp in positions:
-            if cp.item.get_asked_questions(questionnaire_type=Questionnaire.QuestionnaireType.ORDER_POSITION_SALE):
+            if cp.item.get_asked_questions(questionnaire_type=Questionnaire.QuestionnaireType.POSITION_PURCHASE):
                 return True
 
         return False  # nothing there to modify
@@ -2851,7 +2851,7 @@ class OrderPosition(AbstractPosition):
         ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
         for cp in positions:
             if cp.pk == self.pk or cp.addon_to_id == self.pk:
-                if cp.item.questionnaires.all():  # TODO(questionnaires) : filter to only QuestionnaireType.ORDER_POSITION_SALE
+                if cp.item.questionnaires.all():  # TODO(questionnaires) : filter to only QuestionnaireType.POSITION_PURCHASE
                     return True
 
         return False  # nothing there to modify
