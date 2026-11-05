@@ -29,7 +29,11 @@ const df = computed(() => question.value.datafield === null ?
 		props.datafields.find(el => el.identifier === question.value.datafield)
 );
 
-const dependency_values_options = computed(() => props.datafields.find(el => el.identifier === question.value.dependency_question)?.options);
+const dependency_values_options = computed(() => {
+  const dependency = props.datafields.find(el => el.identifier === question.value.dependency_question)
+  if (dependency?.type === 'B') return [{identifier: 'True', answer: {_: gettext('Yes')}}, {identifier: 'False', answer: {_: gettext('No')}}]
+  else return dependency?.options
+});
 const dependency_values_resolved = computed(() => question.value.dependency_values.map(ident => i18n_any(dependency_values_options.value.find(opt => opt.identifier === ident)?.answer) ?? ident));
 
 if (!question.value.label) question.value.label = {};
