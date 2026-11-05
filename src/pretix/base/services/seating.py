@@ -126,10 +126,10 @@ def generate_seats(event, subevent, plan, mapping, blocked_guids=None):
     for s in current_seats.values():
         if s.has_op:
             raise SeatProtected(_('You can not change the plan since seat "%s" is not present in the new plan and is '
-                                  'already sold.', s.name))
+                                  'already sold.'), s.name)
         if s.has_v:
             raise SeatProtected(_('You can not change the plan since seat "%s" is not present in the new plan and is '
-                                  'already used in a voucher.', s.name))
+                                  'already used in a voucher.'), s.name)
 
     Seat.objects.bulk_create(create_seats)
     CartPosition.objects.filter(addon_to__seat__in=[s.pk for s in current_seats.values()]).delete()
