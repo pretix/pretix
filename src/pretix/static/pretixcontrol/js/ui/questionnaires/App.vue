@@ -46,8 +46,6 @@ loadEnvironmentData()
 .progressBar .progressBar_progress.indeterminate {
     width: 30%; animation: slide 5s forwards;
 }
-.progressBarText { width: 100%; color: white; text-shadow: 1px 1px 1px black, -1px -1px 1px black;
-    font-weight: bold; padding-left: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;  }
 @keyframes slide {
     0% { width: 20%; }
     30% { width: 50%; }
