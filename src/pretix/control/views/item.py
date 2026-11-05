@@ -67,8 +67,8 @@ from pretix.api.serializers.item import (
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, LogEntry,
-    OrderPosition, Question, QuestionAnswer, QuestionnaireRow,
-    QuestionOption, Quota, SeatCategoryMapping, Voucher,
+    OrderPosition, Question, QuestionAnswer, QuestionnaireRow, QuestionOption,
+    Quota, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
@@ -96,7 +96,10 @@ from pretix.helpers.models import modelcopy
 from ...helpers import GroupConcat
 from ...helpers.compat import CompatDeleteView
 from ...helpers.i18n import i18n_all_from_gettext
-from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
+from . import (
+    ChartContainingView, CreateView, PaginationMixin, TellParentFormMixin,
+    UpdateView,
+)
 
 
 def has_truthy_attr(cls, attr):
@@ -253,7 +256,7 @@ class CategoryDelete(EventPermissionRequiredMixin, CompatDeleteView):
         })
 
 
-class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
+class CategoryUpdate(TellParentFormMixin, EventPermissionRequiredMixin, UpdateView):
     model = ItemCategory
     form_class = CategoryForm
     template_name = 'pretixcontrol/items/category.html'
@@ -291,7 +294,7 @@ class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class CategoryCreate(EventPermissionRequiredMixin, CreateView):
+class CategoryCreate(TellParentFormMixin, EventPermissionRequiredMixin, CreateView):
     model = ItemCategory
     form_class = CategoryForm
     template_name = 'pretixcontrol/items/category.html'
@@ -624,7 +627,7 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
         })
 
 
-class QuestionUpdate(EventPermissionRequiredMixin, QuestionMixin, UpdateView):
+class QuestionUpdate(TellParentFormMixin, EventPermissionRequiredMixin, QuestionMixin, UpdateView):
     model = Question
     form_class = QuestionForm
     template_name = 'pretixcontrol/items/question_edit.html'
@@ -665,7 +668,7 @@ class QuestionUpdate(EventPermissionRequiredMixin, QuestionMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
+class QuestionCreate(TellParentFormMixin, EventPermissionRequiredMixin, QuestionMixin, CreateView):
     model = Question
     form_class = QuestionForm
     template_name = 'pretixcontrol/items/question_edit.html'

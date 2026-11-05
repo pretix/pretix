@@ -41,27 +41,7 @@ class EventBasedFormMixin:
         return kwargs
 
 
-class TellParentFormMixin:
-
-    def dispatch(self, request, *args, **kwargs):
-        response = super().dispatch(request, *args, **kwargs)
-        if response.get("X-Frame-Options") is None:
-            response["X-Frame-Options"] = "SAMEORIGIN"
-        return response
-
-    def form_valid(self, form):
-        result = super().form_valid(form)
-        if self.request.GET.get('notify_parent') and isinstance(result, HttpResponseRedirect):
-            message_store = messages.get_messages(self.request)
-            msgs = [{'level': msg.level_tag, 'message': msg.message} for msg in message_store]
-            return render(self.request, 'pretixcontrol/notify_parent.html', {
-                'notify_info': {'object': self.object.pk, 'object_str': str(self.object), 'redirect_url': result.url, 'messages': msgs},
-            })
-        else:
-            return result
-
-
-class CreateView(EventBasedFormMixin, TellParentFormMixin, edit.CreateView):
+class CreateView(EventBasedFormMixin, edit.CreateView):
     """
     Like Django's default CreateView, but passes the optional event
     argument to the form. This is necessary for I18nModelForms to work
@@ -70,7 +50,7 @@ class CreateView(EventBasedFormMixin, TellParentFormMixin, edit.CreateView):
     pass
 
 
-class UpdateView(EventBasedFormMixin, TellParentFormMixin, edit.UpdateView):
+class UpdateView(EventBasedFormMixin, edit.UpdateView):
     """
     Like Django's default UpdateView, but passes the optional event
     argument to the form. This is necessary for I18nModelForms to work
@@ -226,3 +206,23 @@ class LargeResultSetPaginator(object):
                 UnorderedObjectListWarning,
                 stacklevel=3
             )
+
+
+class TellParentFormMixin:
+
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        if response.get("X-Frame-Options") is None:
+            response["X-Frame-Options"] = "SAMEORIGIN"
+        return response
+
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        if self.request.GET.get('notify_parent') and isinstance(result, HttpResponseRedirect):
+            message_store = messages.get_messages(self.request)
+            msgs = [{'level': msg.level_tag, 'message': msg.message} for msg in message_store]
+            return render(self.request, 'pretixcontrol/notify_parent.html', {
+                'notify_info': {'object': self.object.pk, 'object_str': str(self.object), 'redirect_url': result.url, 'messages': msgs},
+            })
+        else:
+            return result
