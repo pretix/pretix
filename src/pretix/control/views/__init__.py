@@ -43,6 +43,12 @@ class EventBasedFormMixin:
 
 class TellParentFormMixin:
 
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        if response.get("X-Frame-Options") is None:
+            response["X-Frame-Options"] = "SAMEORIGIN"
+        return response
+
     def form_valid(self, form):
         result = super().form_valid(form)
         if self.request.GET.get('notify_parent') and isinstance(result, HttpResponseRedirect):
