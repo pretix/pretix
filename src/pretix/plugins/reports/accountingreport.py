@@ -41,7 +41,7 @@ from reportlab.platypus import (
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import (
-    GiftCardTransaction, OrderFee, OrderPayment, OrderRefund, Transaction,
+    GiftCardTransaction, OrderFee, OrderPayment, OrderRefund, Transaction, Order,
 )
 from pretix.base.templatetags.money import money_filter, tax_rate_format
 from pretix.base.timeframes import (
@@ -135,6 +135,22 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                         "SHORT_DATETIME_FORMAT",
                     )
                 )
+        else:
+            filters.append(_("All time report"))
+            oldest = Order.objects.filter(
+                event__in=self.events,
+            ).order_by("datetime").first()
+            filters.append(
+                _("Date range")
+                + ": "
+                + date_format(
+                    oldest.datetime, "SHORT_DATETIME_FORMAT"
+                )
+                + " - "
+                + date_format(
+                    now().astimezone(self.timezone), "SHORT_DATETIME_FORMAT"
+                )
+            )
 
         if not form_data["no_testmode"]:
             filters.append(_("Report includes test orders which may be deleted later!"))
