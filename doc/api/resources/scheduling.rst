@@ -24,6 +24,7 @@ Field                                 Type                       Description
 id                                    integer                    Internal ID in pretix
 name                                  string                     Type name
 name_plural                           string                     Plural form of the type's name
+slug                                  string                     Slug form of the type's name, only writeable when creating a resource type.  Must be unique to the organizer
 confirmation_pending_email_subject    string                     Template for pending confirmation email subject
 confirmation_pending_email_template   string                     Template for pending confirmation mail
 confirmation_email_subject            string                     Template for confirmation email subject
@@ -197,11 +198,12 @@ Endpoints
           {
             "id": 1,
             "name": {
-              "en": "New Name"
+              "en": "My Type"
             },
             "name_plural": {
-              "en": "Old Names",
+              "en": "My Types",
             },
+            "slug": "my-type",
             "confirmation_pending_email_subject": {
               "en": "Pending subject",
             },
@@ -240,6 +242,7 @@ Endpoints
       {
         "name": "My Type",
         "name_plural": "My Types",
+        "slug": "my-type",
         "confirmation_pending_email_subject": "Pending subject",
         "confirmation_pending_email_template": "To whom it may concern…",
         "confirmation_email_subject": "Confirmation subject",
@@ -259,11 +262,12 @@ Endpoints
       {
         "id": 1,
         "name": {
-          "en": "New Name"
+          "en": "My Type"
         },
         "name_plural": {
-          "en": "Old Names",
+          "en": "My Types",
         },
+        "slug": "my-type",
         "confirmation_pending_email_subject": {
           "en": "Pending subject",
         },
@@ -307,11 +311,12 @@ Endpoints
       {
         "id": 1,
         "name": {
-          "en": "New Name"
+          "en": "My Type"
         },
         "name_plural": {
-          "en": "Old Names",
+          "en": "My Types",
         },
+        "slug": "my-type",
         "confirmation_pending_email_subject": {
           "en": "Pending subject",
         },
@@ -368,8 +373,9 @@ Endpoints
           "en": "New Name"
         },
         "name_plural": {
-          "en": "Old Names",
+          "en": "My Types",
         },
+        "slug": "my-type",
         "confirmation_pending_email_subject": {
           "en": "Pending subject",
         },
