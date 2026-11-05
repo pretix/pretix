@@ -7,13 +7,13 @@ from itertools import chain, groupby
 import django.db.models.deletion
 import i18nfield.fields
 from django.db import migrations, models
+from django.db.models import F
 from django.utils.translation import pgettext_lazy
 from i18nfield.strings import LazyI18nString
 
 import pretix.base.models.base
 import pretix.base.models.fields
 from pretix.base.i18n import language
-from pretix.base.models import Question
 from pretix.helpers.iter import sort_groupby, sort_groupby_exp
 
 
@@ -220,7 +220,12 @@ def migrate_questions_forward(apps, schema_editor):
 
 
 def migrate_questions_backward(apps, schema_editor):
-    pass  # as long as we don't delete the old columns, this is a no op. after that, it gets complicated...
+    Question = apps.get_model("pretixbase", "Question")
+    Question.objects.filter(question__isnull=True).update(question=F('internal_name'))
+
+
+def no_op(apps, schema_editor):
+    pass
 
 
 class Migration(migrations.Migration):
@@ -279,12 +284,16 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(
             migrate_questions_forward,
-            migrate_questions_backward,
+            no_op,
         ),
         migrations.AlterField(
             model_name='question',
             name='question',
             field=i18nfield.fields.I18nTextField(null=True, db_column='question'),
+        ),
+        migrations.RunPython(
+            no_op,
+            migrate_questions_backward,
         ),
         migrations.RenameField(
             model_name='question',
