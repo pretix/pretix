@@ -16,6 +16,7 @@
     		<link rel="stylesheet" type="text/x-scss" href="{% static "pretixcontrol/scss/main.scss" %}" />
             <link rel="stylesheet" type="text/x-scss" href="{% static "lightbox/css/lightbox.scss" %}" />
 		{% endcompress %}
+        {% vite_importmap %}
         {% if DEBUG %}
             <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}"></script>
         {% else %}
@@ -87,7 +88,6 @@
         <meta name="theme-color" content="#3b1c4a">
         <meta name="referrer" content="origin">
 
-        {% vite_importmap %}
         {% block custom_header %}{% endblock %}
 	</head>
 	<body data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}"
