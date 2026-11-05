@@ -27,7 +27,7 @@ classifiers = [
 ]
 
 dependencies = [
-  "arabic-reshaper==3.0.1",  # Support for Arabic in reportlab
+  "arabic-reshaper==3.1.0",  # Support for Arabic in reportlab
   "babel",
   "BeautifulSoup4==4.15.*",
   "bleach==6.4.*",
