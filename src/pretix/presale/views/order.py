@@ -274,7 +274,7 @@ class TicketPageMixin:
 
     @cached_property
     def wallet_buttons(self):
-        return get_wallet_buttons(self.request.event, self.order.positions_with_tickets, show_disabled=False)
+        return get_wallet_buttons(self.request.event, list(self.order.positions_with_tickets), show_disabled=False)
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
