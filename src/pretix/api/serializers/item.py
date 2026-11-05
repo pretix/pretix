@@ -909,7 +909,7 @@ class InlineQuestionnaireRowSerializer(I18nAwareModelSerializer):
     def validate_dependency_question(self, value):
         if value:
             if value['user_datafield']:
-                if value['user_datafield'].type not in (Question.TYPE_CHOICE, Question.TYPE_BOOLEAN, Question.TYPE_CHOICE_MULTIPLE):
+                if value['user_datafield'].type not in Question.TYPES_ALLOWED_AS_DEPENDENCIES:
                     raise ValidationError('Question dependencies can only be set to boolean or choice questions.')
         return value
 
@@ -1012,7 +1012,7 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
                         update_data['dependency_question'] = result[q(update_data['dependency_question'])]
                     except KeyError:
                         raise ValidationError('A question can only depend on a previous question from the same questionnaire.')
-                    if update_data['dependency_question'].datafield_type not in (Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+                    if update_data['dependency_question'].datafield_type not in Question.TYPES_ALLOWED_AS_DEPENDENCIES:
                         raise ValidationError('A question can only depend on a boolean or choice question.')
                 if existing:
                     result[q(update_data)] = child_serializer.update(existing, update_data)

@@ -1649,6 +1649,7 @@ class Question(LoggedModel):  # TODO(questionnaires)  -  rename to Datafield ?
     UNLOCALIZED_TYPES = [TYPE_DATE, TYPE_TIME, TYPE_DATETIME]
     ASK_DURING_CHECKIN_UNSUPPORTED = []
     SHOW_DURING_CHECKIN_UNSUPPORTED = [TYPE_FILE]
+    TYPES_ALLOWED_AS_DEPENDENCIES = {TYPE_BOOLEAN, TYPE_CHOICE, TYPE_CHOICE_MULTIPLE}
 
     event = models.ForeignKey(
         Event,

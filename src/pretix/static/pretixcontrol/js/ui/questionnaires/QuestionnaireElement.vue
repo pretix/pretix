@@ -2,12 +2,12 @@
 import {useId, ref, computed, onMounted, watch, Ref, inject} from 'vue'
 import QuestionnaireRowElement from "./QuestionnaireRowElement.vue";
 import {
-	i18n_any,
-	QUESTION_TYPE,
-	QUESTION_TYPE_LABEL,
-	QUESTIONNAIRE_TYPE,
-	QUESTIONNAIRE_TYPE_LABEL, setListState,
-	SYSTEM_DATAFIELDS
+  i18n_any,
+  QUESTION_TYPE,
+  QUESTION_TYPE_LABEL,
+  QUESTIONNAIRE_TYPE,
+  QUESTIONNAIRE_TYPE_LABEL, setListState,
+  SYSTEM_DATAFIELDS, TYPES_ALLOWED_AS_DEPENDENCIES
 } from "./helper";
 import { gettext } from './gettextstub';
 import I18nTextField from "./I18nTextField.vue";
@@ -202,7 +202,7 @@ details[open] > summary.list-group-item {
 										:datafields="props.datafields"
 										:question="child"
 										:editable="true"
-										:possible_dependencies="props.questionnaire.rows.slice(0, index)"
+										:possible_dependencies="props.questionnaire.rows.slice(0, index).filter(row => TYPES_ALLOWED_AS_DEPENDENCIES.has(props.datafields.find(el => el.identifier === row.datafield)?.type))"
 										@remove-self="questionnaire.rows.splice(index, 1); emit('update')"
 										@update="emit('update')"
 										@invalidate:datafields="emit('invalidate:datafields')"/>

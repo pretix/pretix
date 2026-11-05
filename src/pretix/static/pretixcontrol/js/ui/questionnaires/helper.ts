@@ -71,10 +71,12 @@ export function fromJsonScript (id) {
 export const QUESTION_TYPE = Object.fromEntries(fromJsonScript('question_type_choices').map(([name, value, label]) => [name, value]))
 export const QUESTION_TYPE_LABEL = Object.fromEntries(fromJsonScript('question_type_choices').map(([name, value, label]) => [name, i18n_any(label)]))
 export const QUESTION_TYPE_LABEL_FROM_VALUE = Object.fromEntries(fromJsonScript('question_type_choices').map(([name, value, label]) => [value, i18n_any(label)]))
-console.log(QUESTION_TYPE_LABEL_FROM_VALUE)
+
 export const SYSTEM_DATAFIELDS = freezeRec(Object.fromEntries(fromJsonScript('system_question_choices').map(([name, value, label]) => [
 	value, { id: value, identifier: value, question: label, type: value === 'country' ? QUESTION_TYPE.COUNTRYCODE : QUESTION_TYPE.STRING }
 ])))
 
 export const QUESTIONNAIRE_TYPE = Object.fromEntries(fromJsonScript('questionnaire_type_choices').map(([name, value, label]) => [name, value]))
 export const QUESTIONNAIRE_TYPE_LABEL = Object.fromEntries(fromJsonScript('questionnaire_type_choices').map(([name, value, label]) => [name, i18n_any(label)]))
+
+export const TYPES_ALLOWED_AS_DEPENDENCIES = new Set([QUESTION_TYPE.BOOLEAN, QUESTION_TYPE.CHOICE, QUESTION_TYPE.CHOICE_MULTIPLE]);
