@@ -46,7 +46,7 @@ from django.db.models import Prefetch, Q, prefetch_related_objects
 from django.forms import formset_factory, inlineformset_factory
 from django.urls import reverse
 from django.utils.functional import cached_property, lazy
-from django.utils.html import escape, format_html
+from django.utils.html import conditional_escape, escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
@@ -1091,7 +1091,7 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
     ]
 
     invoice_generate_sales_channels = forms.MultipleChoiceField(
-        label=_('Generate invoices for Sales channels'),
+        label=_('Sales channels to generate invoices for'),
         choices=[],
         widget=forms.CheckboxSelectMultiple,
         help_text=_("If you have enabled invoice generation in the previous setting, you can limit it here to specific "
@@ -1121,9 +1121,17 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
             self.fields['invoice_numbers_prefix_cancellations'].widget.attrs['placeholder'] = event.slug.upper() + '-'
         locale_names = dict(settings.LANGUAGES)
         self.fields['invoice_language'].choices = [('__user__', _('The user\'s language'))] + [(a, locale_names[a]) for a in event.settings.locales]
-        self.fields['invoice_generate_sales_channels'].choices = (
-            (c.identifier, c.label) for c in event.organizer.sales_channels.all()
-        )
+        self.fields['invoice_generate_sales_channels'].choices = [
+            (
+                c.identifier,
+                mark_safe(
+                    '{} {}'.format(
+                        conditional_escape(c.label),
+                        conditional_escape(c.type_instance.invoice_setting_suffix or '')
+                    ).strip()
+                )
+            ) for c in event.organizer.sales_channels.all()
+        ]
         pps = [str(pp.verbose_name) for pp in event.get_payment_providers().values() if pp.requires_invoice_immediately]
         if pps:
             generate_paid_help_text = _('An invoice will be issued before payment if the customer selects one of the following payment methods: {list}').format(
