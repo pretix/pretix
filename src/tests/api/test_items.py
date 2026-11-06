@@ -42,6 +42,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from i18nfield.strings import LazyI18nString
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
@@ -358,14 +359,16 @@ TEST_ITEM_RES = {
     "validity_dynamic_duration_months": None,
     "validity_dynamic_start_choice": False,
     "validity_dynamic_start_choice_day_limit": None,
+    "questionnaires": [],
 }
 
 
 @pytest.mark.django_db
-def test_item_list(token_client, organizer, event, team, item):
+def test_item_list(token_client, organizer, event, team, item, questionnaire):
     cat = event.categories.create(name="foo")
     res = dict(TEST_ITEM_RES)
     res["id"] = item.pk
+    res["questionnaires"] = [questionnaire.pk]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
@@ -431,9 +434,10 @@ def test_item_list_queries(token_client, organizer, event, team, item, item3):
 
 
 @pytest.mark.django_db
-def test_item_detail(token_client, organizer, event, team, item):
+def test_item_detail(token_client, organizer, event, team, item, questionnaire):
     res = dict(TEST_ITEM_RES)
     res["id"] = item.pk
+    res["questionnaires"] = [questionnaire.pk]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
                                                                                item.pk))
     assert resp.status_code == 200
@@ -441,11 +445,12 @@ def test_item_detail(token_client, organizer, event, team, item):
 
 
 @pytest.mark.django_db
-def test_item_detail_variations(token_client, organizer, event, team, item):
+def test_item_detail_variations(token_client, organizer, event, team, item, questionnaire):
     with scopes_disabled():
         var = item.variations.create(value="Children")
         res = dict(TEST_ITEM_RES)
         res["id"] = item.pk
+        res["questionnaires"] = [questionnaire.pk]
         res["variations"] = [{
             "id": var.pk,
             "value": {"en": "Children"},
@@ -480,11 +485,12 @@ def test_item_detail_variations(token_client, organizer, event, team, item):
 
 
 @pytest.mark.django_db
-def test_item_detail_addons(token_client, organizer, event, team, item, category):
+def test_item_detail_addons(token_client, organizer, event, team, item, category, questionnaire):
     item.addons.create(addon_category=category)
     res = dict(TEST_ITEM_RES)
 
     res["id"] = item.pk
+    res["questionnaires"] = [questionnaire.pk]
     res["addons"] = [{
         "addon_category": category.pk,
         "min_count": 0,
@@ -500,13 +506,14 @@ def test_item_detail_addons(token_client, organizer, event, team, item, category
 
 
 @pytest.mark.django_db
-def test_item_detail_bundles(token_client, organizer, event, team, item, category):
+def test_item_detail_bundles(token_client, organizer, event, team, item, category, questionnaire):
     with scopes_disabled():
         i = event.items.create(name="Included thing", default_price=2)
         item.bundles.create(bundled_item=i, count=1, designated_price=2)
     res = dict(TEST_ITEM_RES)
 
     res["id"] = item.pk
+    res["questionnaires"] = [questionnaire.pk]
     res["bundles"] = [{
         "bundled_item": i.pk,
         "bundled_variation": None,
@@ -520,13 +527,14 @@ def test_item_detail_bundles(token_client, organizer, event, team, item, categor
 
 
 @pytest.mark.django_db
-def test_item_detail_program_times(token_client, organizer, event, team, item, category):
+def test_item_detail_program_times(token_client, organizer, event, team, item, category, questionnaire):
     with scopes_disabled():
         item.program_times.create(item=item, start=datetime(2017, 12, 27, 0, 0, 0, tzinfo=timezone.utc),
                                   end=datetime(2017, 12, 28, 0, 0, 0, tzinfo=timezone.utc))
     res = dict(TEST_ITEM_RES)
 
     res["id"] = item.pk
+    res["questionnaires"] = [questionnaire.pk]
     res["program_times"] = [{
         "start": "2017-12-27T00:00:00Z",
         "end": "2017-12-28T00:00:00Z",
@@ -566,7 +574,6 @@ def test_item_create(token_client, organizer, event, item, category, taxrule, me
             "min_per_order": None,
             "max_per_order": None,
             "checkin_attention": False,
-
             "has_variations": True,
             "require_membership_types": [membership_type.pk],
             "meta_data": {
@@ -2449,12 +2456,17 @@ def test_quota_availability(token_client, organizer, event, quota, item):
 
 
 @pytest.fixture
-def question(event, item):
-    q = event.questions.create(
-        question="T-Shirt size", type="C", identifier="ABC", help_text="This is an example question"
-    )
-    q.items.add(item)
+def questionnaire(event, item):
+    questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
+    questionnaire.items.add(item)
+    return questionnaire
+
+
+@pytest.fixture
+def question(event, questionnaire):
+    q = event.questions.create(container_type='P', internal_name="T-Shirt size", type="S", identifier="ABC")
     q.options.create(answer="XL", identifier="LVETRWVU")
+    questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
     return q
 
 
@@ -2482,6 +2494,33 @@ TEST_QUESTION_RES = {
     "valid_string_length_min": None,
     "valid_string_length_max": None,
     "help_text": {"en": "This is an example question"},
+    "options": [
+        {
+            "id": 0,
+            "position": 0,
+            "identifier": "LVETRWVU",
+            "answer": {"en": "XL"}
+        }
+    ]
+}
+
+
+TEST_DATAFIELD_RES = {
+    "internal_name": "T-Shirt size",
+    "type": "C",
+    "show_during_checkin": False,
+    "print_on_invoice": False,
+    "print_on_invoice_label": {},
+    "identifier": "ABC",
+    "valid_number_min": None,
+    "valid_number_max": None,
+    "valid_date_min": None,
+    "valid_date_max": None,
+    "valid_datetime_min": None,
+    "valid_datetime_max": None,
+    "valid_file_portrait": False,
+    "valid_string_length_min": None,
+    "valid_string_length_max": None,
     "options": [
         {
             "id": 0,
@@ -2531,6 +2570,42 @@ def test_question_list(token_client, organizer, event, question, item):
 
 
 @pytest.mark.django_db
+def test_position_datafield_list(token_client, organizer, event, question, item):
+    res = dict(TEST_DATAFIELD_RES)
+    res["id"] = question.pk
+    res["options"][0]["id"] = question.options.first().pk
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/?required=false'.format(
+        organizer.slug, event.slug
+    ))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/?ask_during_checkin=false'.format(
+        organizer.slug, event.slug
+    ))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/?identifier=ABC'.format(
+        organizer.slug, event.slug
+    ))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/?required=true'.format(
+        organizer.slug, event.slug
+    ))
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/?ask_during_checkin=true'.format(
+        organizer.slug, event.slug
+    ))
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/?identifier=DEF'.format(
+        organizer.slug, event.slug
+    ))
+    assert [] == resp.data['results']
+
+
+@pytest.mark.django_db
 def test_question_detail(token_client, organizer, event, question, item):
     res = dict(TEST_QUESTION_RES)
 
@@ -2545,16 +2620,12 @@ def test_question_detail(token_client, organizer, event, question, item):
 
 
 @pytest.mark.django_db
-def test_question_create(token_client, organizer, event, event2, item):
+def test_position_datafield_create(token_client, organizer, event, event2, item):
     resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
+        '/api/v1/organizers/{}/events/{}/datafields/position/'.format(organizer.slug, event.slug),
         {
-            "question": "What's your name?",
+            "internal_name": "What's your name?",
             "type": "S",
-            "required": True,
-            "items": [item.pk],
-            "position": 0,
-            "ask_during_checkin": False,
             "identifier": None
         },
         format='json'
@@ -2562,36 +2633,15 @@ def test_question_create(token_client, organizer, event, event2, item):
     assert resp.status_code == 201
     with scopes_disabled():
         question = Question.objects.get(pk=resp.data['id'])
-        assert question.question == "What's your name?"
+        assert question.internal_name == "What's your name?"
         assert question.type == "S"
         assert question.identifier is not None
-        assert len(question.items.all()) == 1
 
     resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event2.slug),
+        '/api/v1/organizers/{}/events/{}/datafields/position/'.format(organizer.slug, event.slug),
         {
-            "question": "What's your name?",
+            "internal_name": "What's your name?",
             "type": "S",
-            "required": True,
-            "items": [item.pk],
-            "position": 0,
-            "ask_during_checkin": False,
-            "identifier": None
-        },
-        format='json'
-    )
-    assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["One or more items do not belong to this event."]}'
-
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
-        {
-            "question": "What's your name?",
-            "type": "S",
-            "required": True,
-            "items": [item.pk],
-            "position": 0,
-            "ask_during_checkin": False,
             "identifier": question.identifier
         },
         format='json'
@@ -2600,95 +2650,43 @@ def test_question_create(token_client, organizer, event, event2, item):
     assert resp.content.decode() == '{"identifier":["This identifier is already used for a different question."]}'
 
     resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
+        '/api/v1/organizers/{}/events/{}/datafields/position/'.format(organizer.slug, event.slug),
         {
-            "question": "What's your name?",
+            "internal_name": "What's your name?",
             "type": "S",
-            "required": True,
-            "items": [item.pk],
-            "position": 0,
-            "ask_during_checkin": False,
-            "dependency_question": question.pk,
-            "dependency_value": "1",
-            "identifier": None
-        },
-        format='json'
-    )
-    assert resp.status_code == 400
-    assert resp.content.decode() == '{"dependency_question":["Question dependencies can only be set to boolean or choice questions."]}'
-
-    question.type = Question.TYPE_BOOLEAN
-    question.save()
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
-        {
-            "question": "What's your name?",
-            "type": "S",
-            "required": True,
-            "items": [item.pk],
-            "position": 0,
-            "ask_during_checkin": True,
-            "dependency_question": question.pk,
-            "dependency_value": "1",
-            "identifier": None
-        },
-        format='json'
-    )
-    assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Dependencies are not supported during check-in."]}'
-
-    question.type = Question.TYPE_BOOLEAN
-    question.save()
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
-        {
-            "question": "What's your name?",
-            "type": "S",
-            "required": True,
-            "items": [item.pk],
-            "position": 0,
-            "ask_during_checkin": False,
-            "dependency_question": question.pk,
-            "dependency_value": "1",
-            "identifier": None
-        },
-        format='json'
-    )
-    assert resp.status_code == 201
-    with scopes_disabled():
-        q2 = Question.objects.get(pk=resp.data['id'])
-    assert q2.dependency_question == question
-
-    resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
-        {
-            "question": "What's your name?",
-            "type": "S",
-            "required": True,
-            "items": [item.pk],
-            "position": 0,
-            "ask_during_checkin": False,
             "identifier": None,
-            "dependency_question": None,
-            "dependency_values": [],
         },
         format='json'
     )
     assert resp.status_code == 201
     with scopes_disabled():
         question = Question.objects.get(pk=resp.data['id'])
-        assert question.question == "What's your name?"
+        assert question.internal_name == "What's your name?"
         assert question.type == "S"
         assert question.identifier is not None
-        assert len(question.items.all()) == 1
-        assert question.dependency_question is None
-        assert question.dependency_values == []
 
 
 @pytest.mark.django_db
-def test_question_update(token_client, organizer, event, question):
+def test_position_datafield_update_by_identifier(token_client, organizer, event, question):
     resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.identifier),
+        {
+            "question": "What's your shoe size?",
+            "type": "N",
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        question = Question.objects.get(pk=resp.data['id'])
+    assert question.question == "What's your shoe size?"
+    assert question.type == "N"
+
+
+@pytest.mark.django_db
+def test_position_datafield_update_by_id(token_client, organizer, event, question):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.id),
         {
             "question": "What's your shoe size?",
             "type": "N",
@@ -2706,7 +2704,7 @@ def test_question_update(token_client, organizer, event, question):
 def test_question_update_type_changes(token_client, organizer, event, question):
     # Allowed because no answers exist
     resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.identifier),
         {
             "type": "B",
         },
@@ -2719,7 +2717,7 @@ def test_question_update_type_changes(token_client, organizer, event, question):
 
     # Allowed change
     resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.pk),
         {
             "type": "S",
         },
@@ -2729,7 +2727,7 @@ def test_question_update_type_changes(token_client, organizer, event, question):
 
     # Forbidden change
     resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.pk),
         {
             "type": "B",
         },
@@ -2742,11 +2740,11 @@ def test_question_update_type_changes(token_client, organizer, event, question):
 
 
 @pytest.mark.django_db
-def test_question_update_circular_dependency(token_client, organizer, event, question):
+def test_questionnaire_update_circular_dependency(token_client, organizer, event, question):
     with scopes_disabled():
-        q2 = event.questions.create(internal_name="T-Shirt size", type="B", identifier="FOO", dependency_question=question)
+        q2 = event.questions.create(container_type='P', internal_name="T-Shirt size", type="B", identifier="FOO", dependency_question=question)
     resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.pk),
         {
             "dependency_question": q2.pk
         },

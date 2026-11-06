@@ -753,10 +753,8 @@ class DatafieldSerializer(I18nAwareModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         options_data = validated_data.pop('options') if 'options' in validated_data else []
-        items = validated_data.pop('items', [])
 
         question = Question.objects.create(**validated_data, container_type=self.context['container_type'])
-        question.items.set(items)
         for opt_data in options_data:
             QuestionOption.objects.create(question=question, **opt_data)
         return question
