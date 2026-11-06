@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	if (broken && !sessionStorage.getItem(RELOAD_FLAG)) {
 		sessionStorage.setItem(RELOAD_FLAG, '1')
-		location.reload()
+		location.href = location.href
 	} else if (!broken && sessionStorage.getItem(RELOAD_FLAG)) {
 		sessionStorage.removeItem(RELOAD_FLAG)
 	}
