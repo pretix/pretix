@@ -1,6 +1,6 @@
 sphinx==9.0.*
 sphinx-rtd-theme~=3.1.0
-sphinxcontrib-httpdomain~=2.1.0
+sphinxcontrib-httpdomain~=2.2.1
 sphinxcontrib-images~=1.0.1
 sphinxcontrib-jquery~=4.1
 sphinxcontrib-spelling~=8.0.2
