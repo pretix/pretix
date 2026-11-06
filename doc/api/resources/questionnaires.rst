@@ -72,7 +72,7 @@ rows                                  list of objects            List of all que
                                                                  question, this should be ``["True"]`` or ``["False"]``.
                                                                  Otherwise, it should be a list of ``identifier`` values
                                                                  of question options.
-├ rendered_help_text                  multi-lingual string       **Read-only.** Markdown contents from help_text rendered
+├ rendered_help_text                  string                     **Read-only.** Markdown contents from help_text rendered
                                                                  to HTML
 ===================================== ========================== =======================================================
 
@@ -128,10 +128,10 @@ Endpoints
                 "datafield": "@attendee_email",
                 "required": false,
                 "label": {"en": "Attendee email"},
-                "help_text": {},
+                "help_text": {"en": "*We'll send you our program guide a few days before the event.*"},
                 "dependency_question": null,
                 "dependency_values": [],
-                "rendered_help_text": ""
+                "rendered_help_text": "<em>We'll send you our program guide a few days before the event.</em>"
               }
             ]
           },
