@@ -39,10 +39,7 @@ admission                               boolean                    ``true`` for 
                                                                    (such as add-ons or merchandise).
 personalized                            boolean                    **DEPRECATED.** ``true`` for items that require personalization according
                                                                    to event settings. Only affects system-level fields, not
-                                                                   custom questions. Currently only allowed for products with
-                                                                   ``admission`` set to ``true``. For backwards compatibility,
-                                                                   when creating new items and this field is not given, it defaults
-                                                                   to the same value as ``admission``.
+                                                                   custom questions. Defaults to ``false``.
 position                                integer                    An integer, used for sorting
 picture                                 file                       A product picture to be displayed in the shop
                                                                    (can be ``null``).
@@ -240,9 +237,9 @@ meta_data                               object                     Values set fo
    For compatibility with existing applications:
 
    * When retrieving products, `personalized` is `True` if any attached questionnaire asks for `attendee_name` and/or `attendee_email`.
-   * When creating a new product, setting the `personalized` field to `True` will attach the questionnaire with `internal_name == "Attendee data"` to the new product.
-   * When updating a product, the `personalized` field cannot be changed. ([TODO]: ignore or raise error?)
-
+   * When creating a new product, setting the `personalized` field to `True` will attach the "Attendee data" questionnaire to the new product. If no such questionnaire exists, it will be created.
+     Before, the `personalized` field defaulted to the same value as `admission`. Now, it defaults to `false`.
+   * When updating a product, the `personalized` field cannot be changed, returning an HTTP 400 error if attempted.
 
 Notes
 -----
