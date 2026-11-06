@@ -164,6 +164,21 @@ def test_api_create_validate_default(env, token_client):
     assert resp.status_code == 400
     assert resp.data == {"non_field_errors": ["You cannot have two layouts with default = True"]}
 
+    env[0].ticket_layouts.filter(default=True).update(default=False)
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/ticketlayouts/'.format(env[0].slug, env[0].slug),
+        {
+            'name': 'Foo',
+            'default': True,
+            'layout': [],
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    tl = env[0].ticket_layouts.get(pk=resp.data["id"])
+    assert tl.default
+
 
 @pytest.mark.django_db
 def test_api_create_validate_layout(env, token_client):
@@ -231,6 +246,18 @@ def test_api_update_validate_default(env, token_client):
     )
     assert resp.status_code == 400
     assert resp.data == {"non_field_errors": ["You cannot have two layouts with default = True"]}
+
+    env[0].ticket_layouts.filter(default=True).update(default=False)
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/ticketlayouts/{}/'.format(env[0].slug, env[0].slug, tl2.pk),
+        {
+            "default": True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    tl2.refresh_from_db()
+    assert tl2.default
 
 
 @pytest.mark.django_db

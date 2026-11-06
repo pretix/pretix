@@ -98,7 +98,7 @@ class TicketLayoutSerializer(I18nAwareModelSerializer):
         return d
 
     def validate(self, attrs):
-        if attrs.get('default') and self.context['event'].ticket_layouts.filter(default=True).exists:
+        if attrs.get('default') and self.context['event'].ticket_layouts.filter(default=True).exists():
             raise ValidationError('You cannot have two layouts with default = True')
         return attrs
 
