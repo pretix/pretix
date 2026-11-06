@@ -370,7 +370,7 @@ def event_index(request, organizer, event):
 
     widgets = []
     if can_view_orders:
-        for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=True):
+        for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=True, skip_exceptions=True):
             widgets.extend(result)
 
     ctx = {
@@ -406,7 +406,7 @@ def event_index_widgets_lazy(request, organizer, event):
                                                         request=request)
     widgets = []
     if can_view_orders:
-        for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=False):
+        for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=False, skip_exceptions=True):
             widgets.extend(result)
 
     return build_json_response(widgets)
@@ -666,7 +666,7 @@ def user_index_widgets_lazy(request):
 
 def user_index(request):
     widgets = []
-    for r, result in user_dashboard_widgets.send(request, user=request.user):
+    for r, result in user_dashboard_widgets.send(request, skip_exceptions=True, user=request.user):
         widgets.extend(result)
 
     ctx = {

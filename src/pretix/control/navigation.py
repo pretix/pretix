@@ -135,7 +135,7 @@ def get_event_navigation(request: HttpRequest):
         # It would be better to allow plugins to handle the permission themselves, but for backwards compatibility
         # we need to have it in the "if" statement
         event_settings += sorted(
-            sum((list(a[1]) for a in nav_event_settings.send(request.event, request=request)), []),
+            sum((list(a[1]) for a in nav_event_settings.send(request.event, skip_exceptions=True, request=request)), []),
             key=lambda r: r['label']
         )
     if event_settings:
@@ -487,7 +487,7 @@ def get_global_navigation(request):
         })
 
     merge_in(nav, sorted(
-        sum((list(a[1]) for a in nav_global.send(request, request=request)), []),
+        sum((list(a[1]) for a in nav_global.send(request, skip_exceptions=True, request=request)), []),
         key=lambda r: (1 if r.get('parent') else 0, r['label'])
     ))
     return nav
@@ -718,7 +718,7 @@ def get_organizer_navigation(request):
         })
 
     merge_in(nav, sorted(
-        sum((list(a[1]) for a in nav_organizer.send(request.organizer, request=request, organizer=request.organizer)),
+        sum((list(a[1]) for a in nav_organizer.send(request.organizer, skip_exceptions=True, request=request, organizer=request.organizer)),
             []),
         key=lambda r: (1 if r.get('parent') else 0, r['label'])
     ))
