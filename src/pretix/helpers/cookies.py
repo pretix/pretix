@@ -36,8 +36,7 @@ def set_cookie_without_samesite(request, response, key, *args, **kwargs):
     if not is_secure:
         # https://www.chromestatus.com/feature/5633521622188032
         return
-    useragent = request.headers.get('User-Agent', '')
-    if should_send_same_site_none(useragent):
+    if should_send_same_site_none(request.headers.get('User-Agent', '')):
         # Chromium is rolling out SameSite=Lax as a default
         # https://www.chromestatus.com/feature/5088147346030592
         # This however breaks all pretix-in-an-iframe things, such as the pretix Widget.
@@ -48,8 +47,7 @@ def set_cookie_without_samesite(request, response, key, *args, **kwargs):
         # https://www.chromestatus.com/feature/5633521622188032
         response.cookies[key]['secure'] = is_secure
         # CHIPS
-        # iOS is having trouble with partitioned cookies
-        response.cookies[key]['Partitioned'] = not is_ios(useragent)
+        response.cookies[key]['Partitioned'] = True
 
 
 def thoroughly_delete_cookie(response, cookie_name, **kwargs):
@@ -97,10 +95,6 @@ def should_send_same_site_none(useragent):
     return not has_web_kit_same_site_bug(useragent) and not drops_unrecognized_same_site_cookies(useragent)
 
 
-def has_partitioned_cookie_bug(useragent):
-    # Don't use partitioned cookies on mobile safari
-    return is_ios(useragent)
-
 def has_web_kit_same_site_bug(useragent):
     return is_ios_version(12, useragent) or (
         is_macosx_version(10, 14, useragent) and (is_safari(useragent) or is_mac_embedded_browser(useragent))
@@ -125,10 +119,6 @@ RE_MAC_VERSION = re.compile(r"\(Macintosh;.*Mac OS X ([0-9]+)_([0-9]+)[_0-9]*.*\
 RE_SAFARI = re.compile(r"Version/.* Safari/")
 RE_MAC_EMBEDDED = re.compile(r"^Mozilla/[.0-9]+ \(Macintosh;.*Mac OS X [_0-9]+\) AppleWebKit/[.0-9]+ \(KHTML, "
                              r"like Gecko\)$")
-
-
-def is_ios(useragent):
-    return RE_IOS_VERSION.search(useragent) is not None
 
 
 def is_ios_version(major, useragent):
