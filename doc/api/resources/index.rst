@@ -21,6 +21,9 @@ at :ref:`plugin-docs`.
    item_add-ons
    item_meta_properties
    item_program_times
+   datafields
+   datafield_options
+   questionnaires
    questions
    question_options
    quotas

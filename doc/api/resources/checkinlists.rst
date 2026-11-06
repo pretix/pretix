@@ -569,6 +569,7 @@ Order position endpoints
         ],
         "answers": [
           {
+            "datafield": "A1B2C3D4",
             "question": 12,
             "answer": "Foo",
             "options": []
@@ -609,27 +610,29 @@ Order position endpoints
    :query boolean untrusted_input: If set to true, the lookup parameter is **always** interpreted as a ``secret``, never
                                    as an ``id``. This should be always set if you are passing through untrusted, scanned
                                    data to avoid guessing of ticket IDs.
-   :<json boolean questions_supported: When this parameter is set to ``true``, handling of questions is supported. If
+   :>json boolean questions_supported: When this parameter is set to ``true``, handling of questions is supported. If
                                        you do not implement question handling in your user interface, you **must**
                                        set this to ``false``. In that case, questions will just be ignored. Defaults
                                        to ``true``.
-   :<json boolean canceled_supported: When this parameter is set to ``true``, the response code ``canceled`` may be
+   :>json boolean canceled_supported: When this parameter is set to ``true``, the response code ``canceled`` may be
                                       returned. Otherwise, canceled orders will return ``unpaid``. (**Deprecated**, in
                                       the future, this will be ignored and ``canceled`` may always be returned.)
-   :<json datetime datetime: Specifies the datetime of the check-in. If not supplied, the current time will be used.
-   :<json boolean force: Specifies that the check-in should succeed regardless of revoked barcode, previous check-ins or required
+   :>json datetime datetime: Specifies the datetime of the check-in. If not supplied, the current time will be used.
+   :>json boolean force: Specifies that the check-in should succeed regardless of revoked barcode, previous check-ins or required
                          questions that have not been filled. This is usually used to upload offline scans that already happened,
                          because there's no point in validating them since they happened whether they are valid or not. Defaults to ``false``.
-   :<json string type: Send ``"exit"`` for an exit and ``"entry"`` (default) for an entry.
-   :<json boolean ignore_unpaid: Specifies that the check-in should succeed even if the order is in pending state.
+   :>json string type: Send ``"exit"`` for an exit and ``"entry"`` (default) for an entry.
+   :>json boolean ignore_unpaid: Specifies that the check-in should succeed even if the order is in pending state.
                                  Defaults to ``false`` and only works when ``include_pending`` is set on the check-in
                                  list.
-   :<json string nonce: You can set this parameter to a unique random value to identify this check-in. If you're sending
+   :>json string nonce: You can set this parameter to a unique random value to identify this check-in. If you're sending
                         this request twice with the same nonce, the second request will also succeed but will always
                         create only one check-in object even when the previous request was successful as well. This
                         allows for a certain level of idempotency and enables you to re-try after a connection failure.
-   :<json object answers: If questions are supported/required, you may/must supply a mapping of question IDs to their
-                          respective answers. The answers should always be strings. In case of (multiple-)choice-type
+   :>json object answers: If questions are supported/required, you may/must supply a mapping of ``identifier`` (`internal
+                          reference`) of data fields to their respective answers.
+                          For backwards compatibility, a mapping of data field ``id`` to answer is supported, as well.
+                          The answers should always be strings. In case of (multiple-)choice-type
                           answers, the string should contain the (comma-separated) IDs of the selected options.
 
    **Example request**:
@@ -648,7 +651,7 @@ Order position endpoints
         "questions_supported": true,
         "canceled_supported": true,
         "answers": {
-          "4": "XS"
+          "A1B2C3D4": "XS"
         }
       }
 

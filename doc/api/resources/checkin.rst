@@ -24,41 +24,43 @@ Checking a ticket in
    passed needs to be from a distinct event.
 
    :query string expand: Expand a field inside the ``position`` object into a full object. Currently ``subevent``, ``item``, ``variation``, and ``answers.question`` are supported. Can be passed multiple times.
-   :<json string secret: Scanned QR code corresponding to the ``secret`` attribute of a ticket.
-   :<json string source_type: Type of source the ``secret`` was obtained form. Defaults to ``"barcode"``.
-   :<json array lists: List of check-in list IDs to search on. No two check-in lists may be from the same event.
-   :<json string type: Send ``"exit"`` for an exit and ``"entry"`` (default) for an entry.
-   :<json datetime datetime: Specifies the datetime of the check-in. If not supplied, the current time will be used.
-   :<json boolean force: Specifies that the check-in should succeed regardless of revoked barcode, previous check-ins or required
+   :>json string secret: Scanned QR code corresponding to the ``secret`` attribute of a ticket.
+   :>json string source_type: Type of source the ``secret`` was obtained form. Defaults to ``"barcode"``.
+   :>json array lists: List of check-in list IDs to search on. No two check-in lists may be from the same event.
+   :>json string type: Send ``"exit"`` for an exit and ``"entry"`` (default) for an entry.
+   :>json datetime datetime: Specifies the datetime of the check-in. If not supplied, the current time will be used.
+   :>json boolean force: Specifies that the check-in should succeed regardless of revoked barcode, previous check-ins or required
                          questions that have not been filled. This is usually used to upload offline scans that already happened,
                          because there's no point in validating them since they happened whether they are valid or not. Defaults to ``false``.
-   :<json boolean questions_supported: When this parameter is set to ``true``, handling of questions is supported. If
+   :>json boolean questions_supported: When this parameter is set to ``true``, handling of questions is supported. If
                                        you do not implement question handling in your user interface, you **must**
                                        set this to ``false``. In that case, questions will just be ignored. Defaults
                                        to ``true``.
-   :<json boolean ignore_unpaid: Specifies that the check-in should succeed even if the order is in pending state.
+   :>json boolean ignore_unpaid: Specifies that the check-in should succeed even if the order is in pending state.
                                  Defaults to ``false`` and only works when ``include_pending`` is set on the check-in
                                  list.
-   :<json object answers: If questions are supported/required, you may/must supply a mapping of question IDs to their
-                          respective answers. The answers should always be strings. In case of (multiple-)choice-type
+   :>json object answers: If questions are supported/required, you may/must supply a mapping of ``identifier`` (`internal
+                          reference`) of data fields to their respective answers.
+                          For backwards compatibility, a mapping of data field ``id`` to answer is supported, as well.
+                          The answers should always be strings. In case of (multiple-)choice-type
                           answers, the string should contain the (comma-separated) IDs of the selected options.
-   :<json string nonce: You can set this parameter to a unique random value to identify this check-in. If you're sending
+   :>json string nonce: You can set this parameter to a unique random value to identify this check-in. If you're sending
                         this request twice with the same nonce, the second request will also succeed but will always
                         create only one check-in object even when the previous request was successful as well. This
                         allows for a certain level of idempotency and enables you to re-try after a connection failure.
-   :<json string exchange_medium_type: To perform an exchange to a reusable medium, pass the type of the new reusable medium
-   :<json string exchange_medium_identifier: To perform an exchange to a reusable media, pass the identifier of the new medium
-   :<json boolean use_order_locale: Specifies that pretix should use the customer's language (``locale`` field from the
+   :>json string exchange_medium_type: To perform an exchange to a reusable medium, pass the type of the new reusable medium
+   :>json string exchange_medium_identifier: To perform an exchange to a reusable media, pass the identifier of the new medium
+   :>json boolean use_order_locale: Specifies that pretix should use the customer's language (``locale`` field from the
                                     order) when building texts (currently only the ``reason_explanation`` response field).
                                     Defaults to ``false`` in which case the server will determine the language (currently
                                     the event default language, might change in the future with support for the
                                     ``Accept-Language`` header).
-   :<json boolean simulate: Do not actually perform the check-in, only simulate the response. The ``position`` response
+   :>json boolean simulate: Do not actually perform the check-in, only simulate the response. The ``position`` response
                             object will not reflect the simulated changes.
-   :>json string status: ``"ok"``, ``"incomplete"``, ``"exchange"``, or ``"error"``
-   :>json string reason: Reason code, only set on status ``"error"``, see below for possible values.
-   :>json string reason_explanation: Human-readable explanation, only set on status ``"error"`` and reason ``"rules"``, can be null.
-   :>json object position: Copy of the matching order position (if any was found). The contents are the same as the
+   :<json string status: ``"ok"``, ``"incomplete"``, ``"exchange"``, or ``"error"``
+   :<json string reason: Reason code, only set on status ``"error"``, see below for possible values.
+   :<json string reason_explanation: Human-readable explanation, only set on status ``"error"`` and reason ``"rules"``, can be null.
+   :<json object position: Copy of the matching order position (if any was found). The contents are the same as the
                            :ref:`order-position-resource`, with the following differences: (1) The ``checkins`` value
                            will only include check-ins for the selected list. (2) An additional boolean property
                            ``require_attention`` will inform you whether either the order or the item have the
@@ -66,13 +68,13 @@ Checking a ticket in
                            back to values from a parent product or from invoice addresses. (4) Additional properties
                            ``order__status``, ``order__valid_if_pending``, ``order__require_approval``, and
                            ``order__locale`` are included with details form the order for convenience.
-   :>json boolean require_attention: Whether or not the ``require_attention`` flag is set on the item or order.
-   :>json list checkin_texts: List of additional texts to show to the user.
-   :>json object list: Excerpt of information about the matching :ref:`check-in list <rest-checkinlists>` (if any was found),
+   :<json boolean require_attention: Whether or not the ``require_attention`` flag is set on the item or order.
+   :<json list checkin_texts: List of additional texts to show to the user.
+   :<json object list: Excerpt of information about the matching :ref:`check-in list <rest-checkinlists>` (if any was found),
                        including the attributes ``id``, ``name``, ``event``, ``subevent``, and ``include_pending``.
-   :>json object questions: List of questions to be answered for check-in, only set on status ``"incomplete"``.
-   :>json object media_policy: Reusable media policy (see documentation on items), only set on status ``"exchange"``.
-   :>json object media_type: Reusable media type (see documentation on items), only set on status ``"exchange"``.
+   :<json object questions: List of questions to be answered for check-in, only set on status ``"incomplete"``.
+   :<json object media_policy: Reusable media policy (see documentation on items), only set on status ``"exchange"``.
+   :<json object media_type: Reusable media type (see documentation on items), only set on status ``"exchange"``.
 
    **Example request**:
 
@@ -92,7 +94,7 @@ Checking a ticket in
         "datetime": null,
         "questions_supported": true,
         "answers": {
-          "4": "XS"
+          "A1B2C3D4": "XS"
         }
       }
 
@@ -318,6 +320,7 @@ Performing a ticket search
             ],
             "answers": [
               {
+                "datafield": "A1B2C3D4",
                 "question": 12,
                 "answer": "Foo",
                 "options": []
