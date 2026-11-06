@@ -1029,6 +1029,7 @@ Creating orders
      charge will be created), this is just informative in case you *handled the payment already*.
    * ``payment_date`` (optional) – Date and time of the completion of the payment.
    * ``tax_rounding_mode`` (optional)
+   * ``total`` (optional, will be computed from backend and operation will fail if the computation has a different result)
    * ``comment`` (optional)
    * ``custom_followup_at`` (optional)
    * ``checkin_attention`` (optional)
@@ -1059,6 +1060,9 @@ Creating orders
       * ``item``
       * ``variation`` (optional)
       * ``price`` (optional, if set to ``null`` or missing the price will be computed from the given product)
+      * ``tax_rule`` (optional, if set to ``null`` or missing the tax rule will be selected from the given product)
+      * ``tax_rate`` (optional, only works together with a tax rule, if set to ``null`` or missing the tax rate will be computed from the given tax rule)
+      * ``tax_code`` (optional, only works together with a tax rule, if set to ``null`` or missing the tax code will be computed from the given tax rule)
       * ``seat`` (The ``seat_guid`` attribute of a seat. Required when the specified ``item`` requires a seat, otherwise must be ``null``.)
       * ``attendee_name`` **or** ``attendee_name_parts`` (optional)
       * ``voucher`` (optional, the ``code`` attribute of a valid voucher)

@@ -607,7 +607,6 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'discount',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
-                  'print_logs', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled',
                   'print_logs', 'downloads', 'answers', 'tax_rule', 'tax_code', 'pseudonymization_id', 'pdf_data', 'seat',
                   'canceled', 'valid_from', 'valid_until', 'blocked', 'voucher_budget_use', 'plugin_data')
         read_only_fields = (
@@ -1027,17 +1026,55 @@ class OrderFeeCreateSerializer(I18nAwareModelSerializer):
     _treat_value_as_percentage = serializers.BooleanField(default=False, required=False)
     _split_taxes_like_products = serializers.BooleanField(default=False, required=False)
 
+    tax_rate = serializers.DecimalField(required=False, decimal_places=4, max_digits=7)
+    tax_value = serializers.DecimalField(required=False, decimal_places=2, max_digits=13)
+    value_includes_rounding_correction = serializers.DecimalField(required=False, decimal_places=2, max_digits=13)
+    tax_value_includes_rounding_correction = serializers.DecimalField(required=False, decimal_places=2, max_digits=13)
+
     class Meta:
         model = OrderFee
-        fields = ('fee_type', 'value', 'description', 'internal_type', 'tax_rule',
-                  '_treat_value_as_percentage', '_split_taxes_like_products')
+        fields = (
+            'fee_type', 'value', 'description', 'internal_type', 'tax_rule',
+            '_treat_value_as_percentage', '_split_taxes_like_products',
+            # The following fields should usually not be set by the client but computed by the backend. However, it makes
+            # sense to set them when the decision on the tax rate is made irrevertably on the client side, such as with
+            # pretixPOS.
+            'tax_rate', 'tax_code',
+            # The following fields are undocumented and only used by pretixPOS. They do *NOT* override the calculations
+            # by the backends but are checked against them and must match exactly, otherwise the entire operation is
+            # aborted to avoid diverging tax values between POS reports and backend reports.
+            'tax_value', 'value_includes_rounding_correction', 'tax_value_includes_rounding_correction',
+        )
 
     def validate_tax_rule(self, tr):
         if tr and tr.event != self.context['event']:
             raise ValidationError(
-                'The specified tax rate does not belong to this event.'
+                'The specified tax rule does not belong to this event.'
             )
         return tr
+
+    def validate(self, attrs):
+        if attrs.get('_treat_value_as_percentage'):
+            for k in ('tax_value', 'value_includes_rounding_correction', 'tax_value_includes_rounding_correction'):
+                if k in attrs:
+                    raise ValidationError({
+                        k: ['You cannot ask for the value to be treated as a percentage if you already computed taxes.']
+                    })
+        if attrs.get('_split_taxes_like_products'):
+            for k in ('tax_rate', 'tax_value', 'value_includes_rounding_correction', 'tax_value_includes_rounding_correction'):
+                if k in attrs:
+                    raise ValidationError({
+                        k: ['You cannot ask for the value to be distributed over tax rates if you already set the tax rate or computed taxes.']
+                    })
+        if 'tax_rate' in attrs and 'tax_rule' not in attrs:
+            raise ValidationError({
+                'tax_rate': ['Tax rate cannot be stored without tax rule.']
+            })
+
+        if 'value_includes_rounding_correction' in attrs:
+            # Make all computations like discounts on the price before rounding, later compare against rounding again
+            attrs['value'] = attrs['value'] - attrs['value_includes_rounding_correction']
+        return attrs
 
 
 class OrderPositionCreateSerializer(I18nAwareModelSerializer):
@@ -1054,13 +1091,27 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     requested_valid_from = serializers.DateTimeField(required=False, allow_null=True)
     use_reusable_medium = serializers.PrimaryKeyRelatedField(queryset=ReusableMedium.objects.none(),
                                                              required=False, allow_null=True)
+    tax_rate = serializers.DecimalField(required=False, decimal_places=4, max_digits=7)
+    tax_value = serializers.DecimalField(required=False, decimal_places=2, max_digits=13)
+    price_includes_rounding_correction = serializers.DecimalField(required=False, decimal_places=2, max_digits=13)
+    tax_value_includes_rounding_correction = serializers.DecimalField(required=False, decimal_places=2, max_digits=13)
 
     class Meta:
         model = OrderPosition
-        fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
-                  'company', 'street', 'zipcode', 'city', 'country', 'state', 'is_bundled',
-                  'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher', 'valid_from', 'valid_until',
-                  'requested_valid_from', 'use_reusable_medium', 'discount')
+        fields = (
+            'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
+            'company', 'street', 'zipcode', 'city', 'country', 'state', 'is_bundled',
+            'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher', 'valid_from', 'valid_until',
+            'requested_valid_from', 'use_reusable_medium', 'discount',
+            # The following fields should usually not be set by the client but computed by the backend. However, it makes
+            # sense to set them when the decision on the tax rate is made irrevertably on the client side, such as with
+            # pretixPOS.
+            'tax_rule', 'tax_rate', 'tax_code',
+            # The following fields are undocumented and only used by pretixPOS. They do *NOT* override the calculations
+            # by the backends but are checked against them and must match exactly, otherwise the entire operation is
+            # aborted to avoid diverging tax values between POS reports and backend reports.
+            'tax_value', 'price_includes_rounding_correction', 'tax_value_includes_rounding_correction',
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1097,6 +1148,13 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 'The specified item is not active.'
             )
         return item
+
+    def validate_tax_rule(self, tax_rule):
+        if tax_rule.event != self.context['event']:
+            raise ValidationError(
+                'The specified tax rule does not belong to this event.'
+            )
+        return tax_rule
 
     def validate_subevent(self, subevent):
         if self.context['event'].has_subevents:
@@ -1161,6 +1219,15 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 {'discount': ['You can only specify a discount if you do the price computation, but price is not set.']}
             )
 
+        if 'tax_rate' in data and 'tax_rule' not in data and not data['item'].tax_rule_id:
+            raise ValidationError({
+                'tax_rate': ['Tax rate cannot be stored without tax rule.']
+            })
+
+        if 'price_includes_rounding_correction' in data:
+            # Make all computations like discounts on the price before rounding, later compare against rounding again
+            data['price'] = data['price'] - data['price_includes_rounding_correction']
+
         return data
 
 
@@ -1218,6 +1285,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     tax_rounding_mode = serializers.ChoiceField(choices=ROUNDING_MODES, allow_null=True, required=False,)
     locale = serializers.ChoiceField(choices=[], required=False, allow_null=True)
     use_gift_cards = serializers.ListField(child=serializers.CharField(required=False), required=False)
+    total = serializers.DecimalField(required=False, decimal_places=2, max_digits=13)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1232,7 +1300,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         model = Order
         fields = ('code', 'status', 'testmode', 'email', 'phone', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'checkin_text', 'payment_info', 'payment_date',
-                  'consume_carts', 'force', 'send_email', 'simulate', 'customer', 'custom_followup_at',
+                  'consume_carts', 'force', 'send_email', 'simulate', 'customer', 'custom_followup_at', 'total',
                   'require_approval', 'valid_if_pending', 'expires', 'api_meta', 'tax_rounding_mode', 'use_gift_cards')
 
     def validate_payment_provider(self, pp):
@@ -1572,6 +1640,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         if validated_data.get('locale', None) is None:
             validated_data['locale'] = self.context['event'].settings.locale
 
+        expected_total = validated_data.pop('total', None)
         order = Order(event=self.context['event'], **validated_data)
         if not validated_data.get('expires'):
             order.set_expires(subevents=[p.get('subevent') for p in positions_data])
@@ -1603,7 +1672,14 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 pos_data['attendee_name_parts'] = {
                     '_legacy': attendee_name
                 }
-            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k not in ('answers', '_quotas', 'use_reusable_medium')})
+            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k not in (
+                'answers',
+                '_quotas',
+                'use_reusable_medium',
+                'tax_value',
+                'price_includes_rounding_correction',
+                'tax_value_includes_rounding_correction',
+            )})
             if simulate:
                 pos.order = order._wrapped
             else:
@@ -1646,7 +1722,12 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     if not pos.item.tax_rule or pos.item.tax_rule.price_includes_tax:
                         price_after_voucher = max(pos.price, pos.voucher.calculate_price(listed_price))
                     else:
-                        pos._calculate_tax(invoice_address=ia)
+                        pos._calculate_tax(
+                            invoice_address=ia,
+                            tax_rule=pos_data.get('tax_rule'),
+                            override_tax_rate=pos_data.get('tax_rate'),
+                            override_tax_code=pos_data.get('tax_code'),
+                        )
                         price_after_voucher = max(pos.price - pos.tax_value, pos.voucher.calculate_price(listed_price))
                 else:
                     price_after_voucher = listed_price
@@ -1678,7 +1759,12 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             answers_data = pos_data.pop('answers', [])
             use_reusable_medium = pos_data.pop('use_reusable_medium', None)
             pos = pos_data['__instance']
-            pos._calculate_tax(invoice_address=ia)
+            pos._calculate_tax(
+                invoice_address=ia,
+                tax_rule=pos_data.get('tax_rule', None),
+                override_tax_rate=pos_data.get('tax_rate'),
+                override_tax_code=pos_data.get('tax_code'),
+            )
 
             if simulate:
                 pos = WrappedModel(pos)
@@ -1777,7 +1863,11 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 for tr, val in fee_values:
                     fee_data['tax_rule'] = tr
                     fee_data['value'] = val
-                    f = OrderFee(**fee_data)
+                    f = OrderFee(**{k: v for k, v in fee_data.items() if k not in (
+                        'tax_value',
+                        'value_includes_rounding_correction',
+                        'tax_value_includes_rounding_correction'
+                    )})
                     f.order = order._wrapped if simulate else order
                     f._calculate_tax()
                     fees.append(f)
@@ -1786,9 +1876,17 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     else:
                         f.save()
             else:
-                f = OrderFee(**fee_data)
+                f = OrderFee(**{k: v for k, v in fee_data.items() if k not in (
+                    'tax_value',
+                    'value_includes_rounding_correction',
+                    'tax_value_includes_rounding_correction'
+                )})
                 f.order = order._wrapped if simulate else order
-                f._calculate_tax()
+                f._calculate_tax(
+                    override_tax_rate=fee_data.get('tax_rate'),
+                    override_tax_code=fee_data.get('tax_code'),
+                )
+                fee_data['__instance'] = f
                 fees.append(f)
                 if simulate:
                     f.id = 0
@@ -1820,7 +1918,47 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     "value", "value_includes_rounding_correction", "tax_value", "tax_value_includes_rounding_correction"
                 ])
 
+        for i, pos_data in enumerate(positions_data):
+            pos = pos_data['__instance']
+            if 'tax_value' in pos_data and pos_data['tax_value'] != pos.tax_value:
+                raise ValidationError(f'Tax value {pos_data["tax_value"]} in position {pos.positionid} does not match backend computation of {pos.tax_value}.')
+            if 'price_includes_rounding_correction' in pos_data and pos_data['price_includes_rounding_correction'] != pos.price_includes_rounding_correction:
+                raise ValidationError(
+                    f'Price rounding {pos_data["price_includes_rounding_correction"]} in position {pos.positionid} does not '
+                    f'match backend computation of {pos.price_includes_rounding_correction}.'
+                )
+            if ('tax_value_includes_rounding_correction' in pos_data and
+                    pos_data['tax_value_includes_rounding_correction'] != pos.tax_value_includes_rounding_correction):
+                raise ValidationError(
+                    f'Tax rounding {pos_data["tax_value_includes_rounding_correction"]} in position {pos.positionid} does not '
+                    f'match backend computation of {pos.tax_value_includes_rounding_correction}.'
+                )
+
+        for i, fee_data in enumerate(fees_data):
+            if '__instance' not in fee_data:  # split fee not supported for this, validated in OrderFeeCreateSerializer
+                continue
+            fee = fee_data['__instance']
+            if 'tax_value' in fee_data and fee_data['tax_value'] != fee.tax_value:
+                raise ValidationError(f'Tax value {fee_data["tax_value"]} in fee does not match backend computation of {fee.tax_value}.')
+            if 'value_includes_rounding_correction' in fee_data and fee_data['value_includes_rounding_correction'] != fee.value_includes_rounding_correction:
+                raise ValidationError(
+                    f'Price rounding {fee_data["value_includes_rounding_correction"]} in fee does not '
+                    f'match backend computation of {fee.value_includes_rounding_correction}.'
+                )
+            if ('tax_value_includes_rounding_correction' in fee_data and
+                    fee_data['tax_value_includes_rounding_correction'] != fee.tax_value_includes_rounding_correction):
+                raise ValidationError(
+                    f'Tax rounding {fee_data["tax_value_includes_rounding_correction"]} in fee does not '
+                    f'match backend computation of {fee.tax_value_includes_rounding_correction}.'
+                )
+
         order.total = sum([c.price for c in pos_map.values()]) + sum([f.value for f in fees])
+
+        if expected_total is not None and expected_total != order.total:
+            raise ValidationError({
+                'total': [f'Order total of {expected_total} does not match backend computation of {order.total}.']
+            })
+
         if simulate:
             order.fees = fees
             order.positions = pos_map.values()
