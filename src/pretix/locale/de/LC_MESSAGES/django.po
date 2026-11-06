@@ -14478,8 +14478,8 @@ msgstr ""
 "erreichbar sind."
 
 #: pretix/control/forms/event.py
-msgid "Generate invoices for Sales channels"
-msgstr "Rechnungen nur für bestimmte Verkaufskanäle generieren"
+msgid "Sales channels to generate invoices for"
+msgstr "Verkaufskanäle mit Rechnungsgenerierung"
 
 #: pretix/control/forms/event.py
 msgid ""

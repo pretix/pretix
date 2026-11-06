@@ -22,6 +22,7 @@
 import logging
 import warnings
 from collections import OrderedDict
+from typing import Optional
 
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
@@ -124,9 +125,17 @@ class SalesChannelType:
         return True
 
     @property
-    def required_event_plugin(self) -> str:
+    def required_event_plugin(self) -> Optional[str]:
         """
         Name of an event plugin that is required for this sales channel to be useful. Defaults to ``None``.
+        """
+        return
+
+    @property
+    def invoice_setting_suffix(self) -> Optional[str]:
+        """
+        Label for the sales channel selection in invoicing settings to add a e.g. a "recommended" or
+        "not recommended" flag.
         """
         return
 
