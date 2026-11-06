@@ -45,6 +45,7 @@
                     <th class="iconcol"></th>
                     <th class="iconcol"></th>
                     <th class="iconcol"></th>
+                    <th class="iconcol"></th>
                     <th class="text-right flip">{% trans "Default price" %}</th>
                     <th class="action-col-2"><span class="sr-only">Edit</span></th>
                 </tr>
@@ -111,6 +112,20 @@
                                     <span class="fa fa-user fa-fw text-muted" data-toggle="tooltip" title="{% trans "Admission ticket" %}"></span>
                                 {% elif i.issue_giftcard %}
                                     <span class="fa fa-gift fa-fw text-muted" data-toggle="tooltip" title="{% trans "Gift card" %}"></span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if i.attendee_data_required %}
+                                    <i class="fa-stack fa-stack-small fa-fw " data-toggle="tooltip_html" title="<div class='text-left'>{% trans "Personal data of attendees required" %}. {% if i.custom_questions_asked %}{% trans "Custom questions asked" %}. {% endif %}{% trans "Questionnaires" %}:<br>{{ i.questionnaire_names_html }}</div>">
+                                        <i class="fa text-muted fa-id-card-o fa-stack-1x"></i>
+                                        <i class="fa fa-stack-shifted fa-asterisk fa-stack-1x fa-stack-shift-up fa-stack-sm"></i>
+                                    </i>
+                                {% elif i.attendee_data_asked %}
+                                    <i class="fa-stack fa-stack-small fa-fw" data-toggle="tooltip_html" title="<div class='text-left'>{% trans "Personal data of attendees asked" %}. {% if i.custom_questions_asked %}{% trans "Custom questions asked" %}. {% endif %}{% trans "Questionnaires" %}:<br>{{ i.questionnaire_names_html }}</div>">
+                                        <span class="fa fa-id-card-o fa-fw text-muted" ></span>
+                                    </i>
+                                {% elif i.custom_questions_asked %}
+                                    <span class="fa fa-question-circle-o fa-fw text-muted" data-toggle="tooltip_html" title="<div class='text-left'>{% trans "Custom questions asked" %}. {% trans "Questionnaires" %}:<br>{{ i.questionnaire_names_html }}</div>"></span>
                                 {% endif %}
                             </td>
                             <td>

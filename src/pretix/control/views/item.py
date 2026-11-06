@@ -53,6 +53,8 @@ from django.http import (
 from django.shortcuts import redirect, render
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
+from django.utils.html import format_html_join
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.http import require_http_methods
@@ -100,6 +102,7 @@ from . import (
     ChartContainingView, CreateView, PaginationMixin, TellParentFormMixin,
     UpdateView,
 )
+from ...presale.views import prefetch_relevant_questionnaires
 
 
 def has_truthy_attr(cls, attr):
@@ -125,7 +128,10 @@ class ItemList(ListView):
         ).select_related("tax_rule").annotate(
             var_count=Count('variations'),
             requires_seat=requires_seat,
-        ).prefetch_related("category", "limit_sales_channels").order_by(
+        ).prefetch_related(
+            "category", "limit_sales_channels",
+            prefetch_relevant_questionnaires(self.request.event, None, None, questionnaire_lookup='questionnaires'),
+        ).order_by(
             F('category__position').asc(nulls_first=True),
             'category', 'position'
         )
@@ -133,6 +139,16 @@ class ItemList(ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['sales_channels'] = self.request.organizer.sales_channels.all()
+        for item in ctx['items']:
+            qrows = [qc for qq in item.relevant_questionnaires for qc in qq.questionnairerowlist]
+            item.attendee_data_asked = any(row.system_datafield for row in qrows)
+            item.attendee_data_required = item.attendee_data_asked and any(row.system_datafield and row.required for row in qrows)
+            item.custom_questions_asked = any(row.user_datafield_id for row in qrows)
+            item.questionnaire_names_html = format_html_join('<br>', '• {} {}{}', ((
+                q.internal_name,
+                mark_safe("<i class='fa fa-check-square'></i>") if q.ask_during_checkin else '',
+                mark_safe("<i class='fa fa-eye-slash'></i>") if q.hidden else '',
+            ) for q in item.relevant_questionnaires))
         items_by_category = {cat: list(items) for cat, items in groupby(ctx['items'], lambda item: item.category)}
         ctx['cat_list'] = [(cat, items_by_category.get(cat, [])) for cat in [None, *self.request.event.categories.all()]]
         return ctx

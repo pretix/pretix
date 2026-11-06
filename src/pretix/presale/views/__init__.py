@@ -396,10 +396,12 @@ def cart_exists(request):
     return bool(request._cart_cache)
 
 
-def prefetch_relevant_questionnaires(event, sales_channel, questionnaire_type):
-    qqs = event.questionnaires.filter(
-        Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=sales_channel),
-    )
+def prefetch_relevant_questionnaires(event, sales_channel, questionnaire_type, questionnaire_lookup='item__questionnaires'):
+    qqs = event.questionnaires
+    if sales_channel:
+        qqs = qqs.filter(
+            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=sales_channel),
+        )
     if questionnaire_type:
         qqs = qqs.filter(type=questionnaire_type)
     else:
@@ -412,7 +414,7 @@ def prefetch_relevant_questionnaires(event, sales_channel, questionnaire_type):
         Question.objects.none(),
         to_attr='dummy'
     )
-    return Prefetch('item__questionnaires',
+    return Prefetch(questionnaire_lookup,
         qqs.prefetch_related(
             Prefetch('rows', QuestionnaireRow.objects.prefetch_related(
                 Prefetch('user_datafield', Question.objects.prefetch_related(
