@@ -370,13 +370,6 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
                 raise ValidationError({'personalized': 'To create new products with personalized=True, a questionnaire named "Attendee data" must exist.'})
         return {}
 
-    def to_internal_value(self, data):
-        if data.get('admission') and data.get('personalized') is None and 'questionnaires' not in data and not self.instance:
-            # Backwards compatibility
-            data['personalized'] = True
-
-        return super().to_internal_value(data)
-
     def validate(self, data):
         data = super().validate(data)
         if self.instance and ('addons' in data or 'variations' in data or 'bundles' in data or 'program_times' in data):
