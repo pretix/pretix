@@ -924,7 +924,8 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Questionnaire
-        fields = ('id', 'type', 'internal_name', 'items', 'position', 'all_sales_channels', 'limit_sales_channels', 'rows')
+        fields = ('id', 'type', 'internal_name', 'items', 'position', 'all_sales_channels', 'limit_sales_channels', 'compat_personalization', 'rows')
+        read_only_fields = ('compat_personalization', )
 
     def __init__(self, *args, **kwargs):
         self.fields['rows'] = InlineQuestionnaireRowSerializer(many=True, required=True, context=kwargs['context'], partial=False)

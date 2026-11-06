@@ -81,14 +81,16 @@ def migrate_questions_forward(apps, schema_editor):
         merged_questionnaires = sort_groupby_exp(item_questionnaires, group_key=lambda questions, item_info: [str(q.id) for q in questions])
         for _unused, grouped_data in merged_questionnaires:
             questions = grouped_data[0][0]
-            item_infos = [item_info for _c, item_info in grouped_data]
+            item_infos = [item_info for _c, item_info in grouped_data if item_info is not None]
 
             internal_name = label_prefix + ', '.join(str(ii.internal_name or ii.name) for ii in item_infos)
+            compat_personalization = False
             if all(ii.personalized for ii in item_infos) and len(item_infos) == len(personalized_items):
                 if questionnaire_type == "position_purchase":
                     # if we have a questionnaire for exactly all personalized items, we just call it "Attendee data"
                     # (same as the default questionnaire for new events)
                     internal_name = _('Attendee data')
+                    compat_personalization = True
                 else:
                     internal_name = label_prefix + _('personalized products')
             if len(internal_name) > 255:
@@ -97,7 +99,7 @@ def migrate_questions_forward(apps, schema_editor):
             # create questionnaires and rows
             questionnaire = Questionnaire.objects.create(
                 event=event, type=questionnaire_type, position=0, all_sales_channels=True,
-                internal_name=internal_name
+                internal_name=internal_name, compat_personalization=compat_personalization
             )
             questionnaire.items.set([ii.id for ii in item_infos])
             valid_deps = {question.id for question in questions}
@@ -181,6 +183,13 @@ def migrate_questions_forward(apps, schema_editor):
             # Questionnaire.QuestionnaireType.POSITION_HIDDEN == "position_hidden"
             create_grouped_item_questionnaires(event, rows, _('Hidden questions for '), "position_hidden", personalized_items)
 
+            if len(personalized_items) == 0:
+                rows = chain((
+                    qc_candidate(None, 0, q)
+                    for q in get_fake_questions(settings)
+                ))
+                create_grouped_item_questionnaires(event, rows, '', "position_purchase", personalized_items)
+
             # [O] get all order-level questions
             questions = list(event.questions.filter(container_type='O', hidden=False).order_by('position'))
             if questions:
@@ -246,6 +255,7 @@ class Migration(migrations.Migration):
                 ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='questionnaires', to='pretixbase.event')),
                 ('items', models.ManyToManyField(related_name='questionnaires', to='pretixbase.item')),
                 ('limit_sales_channels', models.ManyToManyField(to='pretixbase.saleschannel')),
+                ('compat_personalization', models.BooleanField(default=False)),
             ],
             options={
                 'abstract': False,

@@ -2052,6 +2052,7 @@ class Questionnaire(LoggedModel):
                     'selected here but not on product level, the variation will not be available.'),
         blank=True,
     )
+    compat_personalization = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('position', 'id')

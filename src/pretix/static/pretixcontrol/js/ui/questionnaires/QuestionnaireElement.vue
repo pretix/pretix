@@ -153,6 +153,9 @@ details[open] > summary.list-group-item {
 				<div class="editor-preview-area">
 					<input type="checkbox" @change="e => {setListState(props.questionnaire.items, (e.target as HTMLInputElement).checked, selected_product); emit('update')}" v-if="selected_product && !preview_mode" :checked="!isHidden">
 					{{ props.questionnaire.internal_name }}
+          <span v-if="questionnaire.compat_personalization">
+            <span class="text-muted fa fa-fw fa-id-card-o" data-toggle="tooltip" :title="gettext('Default questionnaire for creating personalized items via legacy API')"></span>
+          </span>
 					<span class="fa fa-warning" v-if="questionnaire._err_mes"></span>
 					<span class="fa fa-cog fa-spin" v-if="questionnaire._loading"></span>
 

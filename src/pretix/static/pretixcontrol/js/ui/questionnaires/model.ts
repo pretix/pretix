@@ -45,6 +45,7 @@ export type Questionnaire = {
 	position: number,
 	all_sales_channels: boolean,
 	limit_sales_channels: string[],
+	compat_personalization: boolean,
 	rows: QuestionnaireRow[],
 }
 
