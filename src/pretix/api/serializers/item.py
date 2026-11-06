@@ -359,16 +359,26 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
 
     def put_personalized(self, item, new_value):
         if item and new_value != self.get_personalized(item):
-            raise ValidationError('Deprecated field "personalized" can not be updated.')
+            raise ValidationError({'personalized': 'Deprecated field "personalized" can not be updated.'})
         if new_value and not item:
             try:
-                return {'questionnaires': [self.context['request'].event.questionnaires.get(
-                    type=Questionnaire.QuestionnaireType.POSITION_PURCHASE,
-                    internal_name='Attendee data',  # TODO(questionnaires): how to deal with localized internal name? maybe add a Questionnaire.identifier?
-                )]}
+                return {'questionnaires': [self._get_or_create_compat_personalization_questionnaire()]}
             except Questionnaire.DoesNotExist:
                 raise ValidationError({'personalized': 'To create new products with personalized=True, a questionnaire named "Attendee data" must exist.'})
         return {}
+
+    def _get_or_create_compat_personalization_questionnaire(self):
+        event = self.context['request'].event
+        try:
+            return event.questionnaires.get(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, compat_personalization=True)
+        except Questionnaire.DoesNotExist:
+            q = event.questionnaires.create(internal_name=str(_('Attendee data')), type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, position=0, compat_personalization=True)
+            system_datafields_asked = {df: (label, helptext, required) for df, label, helptext, required in QuestionnaireRow.objects.filter(
+                questionnaire__event=event, system_datafield__isnull=False, questionnaire__type=Questionnaire.QuestionnaireType.POSITION_PURCHASE
+            ).values_list('system_datafield', 'label', 'help_text', 'required')}
+            for i, (df, (label, helptext, required)) in enumerate(system_datafields_asked.items()):
+                q.rows.create(label=label, help_text=helptext, required=required, system_datafield=df, position=i)
+            return q
 
     def validate(self, data):
         data = super().validate(data)
