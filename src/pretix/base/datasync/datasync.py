@@ -29,6 +29,7 @@ from typing import List, Optional, Protocol
 
 from django.conf import settings
 from django.db import DatabaseError, transaction
+from django.utils.functional import classproperty
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
@@ -101,9 +102,8 @@ class OutboundSyncProvider:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
 
-    @classmethod
-    @property
-    def display_name(cls):
+    @classproperty
+    def display_name(cls):   # noqa: N805
         return str(cls.identifier)
 
     @classmethod
