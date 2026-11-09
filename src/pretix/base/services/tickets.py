@@ -46,7 +46,7 @@ from pretix.helpers.database import rolledback_transaction
 logger = logging.getLogger(__name__)
 
 
-def generate_orderposition(order_position: int, provider: str, cf: CachedFile | None = None):
+def generate_orderposition(order_position: int, provider: str):
     order_position = OrderPosition.objects.select_related('order', 'order__event').get(id=order_position)
 
     with language(order_position.order.locale, order_position.order.event.settings.region):
@@ -57,22 +57,15 @@ def generate_orderposition(order_position: int, provider: str, cf: CachedFile | 
                 filename, ttype, data = prov.generate(order_position)
                 path, ext = os.path.splitext(filename)
 
-                if cf:
-                    cf.type = ttype
-                    cf.filename = filename
-                    cf.file.save(name=filename, content=ContentFile(data))
-                    return cf.pk
-
-                if prov.is_cacheable:
-                    for ct in CachedTicket.objects.filter(order_position=order_position, provider=provider):
-                        ct.delete()
-                    ct = CachedTicket.objects.create(order_position=order_position, provider=provider,
-                                                     extension=ext, type=ttype, file=None)
-                    ct.file.save(filename, ContentFile(data))
-                    return ct.pk
+                for ct in CachedTicket.objects.filter(order_position=order_position, provider=provider):
+                    ct.delete()
+                ct = CachedTicket.objects.create(order_position=order_position, provider=provider,
+                                                 extension=ext, type=ttype, file=None)
+                ct.file.save(filename, ContentFile(data))
+                return ct.pk
 
 
-def generate_order(order: int, provider: str, cf: CachedFile | None = None):
+def generate_order(order: int, provider: str):
     order = Order.objects.select_related('event').get(id=order)
 
     with language(order.locale, order.event.settings.region):
@@ -83,19 +76,12 @@ def generate_order(order: int, provider: str, cf: CachedFile | None = None):
                 filename, ttype, data = prov.generate_order(order)
                 path, ext = os.path.splitext(filename)
 
-                if cf:
-                    cf.type = ttype
-                    cf.filename = filename
-                    cf.file.save(name=filename, content=ContentFile(data))
-                    return cf.pk
-
-                if prov.is_cacheable:
-                    for ct in CachedCombinedTicket.objects.filter(order=order, provider=provider):
-                        ct.delete()
-                    ct = CachedCombinedTicket.objects.create(order=order, provider=provider, extension=ext,
-                                                             type=ttype, file=None)
-                    ct.file.save(filename, ContentFile(data))
-                    return ct.pk
+                for ct in CachedCombinedTicket.objects.filter(order=order, provider=provider):
+                    ct.delete()
+                ct = CachedCombinedTicket.objects.create(order=order, provider=provider, extension=ext,
+                                                         type=ttype, file=None)
+                ct.file.save(filename, ContentFile(data))
+                return ct.pk
 
 
 @app.task(base=ProfiledTask)
@@ -187,7 +173,7 @@ def get_tickets_for_order(order, base_position=None):
         ]
 
     for p in providers:
-        if not p.is_enabled or not p.is_cacheable:
+        if not p.is_enabled:
             continue
 
         if p.multi_download_enabled and not base_position:
