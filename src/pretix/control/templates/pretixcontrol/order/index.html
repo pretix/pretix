@@ -569,8 +569,7 @@
                                                         class="form-inline helper-display-inline{% if b.javascript_required %} requirejs{% endif %}">
                                                     {% csrf_token %}
                                                     <button type="submit"
-                                                            class="btn btn-xs btn-default"
-                                                            {% if b.confirmation_text %}data-confirmation-text="{{ b.confirmation_text|rich_text|force_escape }}"{% endif %}>
+                                                            class="btn btn-xs btn-default">
                                                         <span class="fa {{ b.icon }}"></span> {{ b.text }}
                                                     </button>
                                                 </form>
