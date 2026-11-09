@@ -2123,6 +2123,7 @@ class QuestionnaireRow(LoggedModel):
     _name_schemes_all_fields = ['calling_name', 'degree', 'family_name', 'full_name', 'given_name',
                                 'latin_transcription', 'middle_name', 'salutation', 'title']
     SYSTEM_DATAFIELD_NUMBERS = [
+       # The index in this list is used to create fake IDs for legacy APIs, so do not reorder anything!
        SystemDatafield.ATTENDEE_NAME_PARTS.value,
        SystemDatafield.ATTENDEE_EMAIL.value,
        SystemDatafield.COMPANY.value,

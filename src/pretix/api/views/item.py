@@ -37,7 +37,7 @@ from typing import Mapping
 
 import django_filters
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
@@ -633,12 +633,18 @@ with scopes_disabled():
     class CompatDatafieldFilter(FilterSet):
         identifier = django_filters.CharFilter(field_name='question__identifier')
         ask_during_checkin = django_filters.BooleanFilter(method='ask_during_checkin_qs')
+        required = django_filters.BooleanFilter(method='required_qs')
 
         class Meta:
-            model = QuestionnaireRow
+            model = Question
             fields = ['required']
 
         def ask_during_checkin_qs(self, qs, name, value):
+            return qs.filter(
+                questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN if value else Questionnaire.QuestionnaireType.POSITION_PURCHASE
+            )
+
+        def required_qs(self, qs, name, value):
             return qs.filter(
                 questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN if value else Questionnaire.QuestionnaireType.POSITION_PURCHASE
             )
@@ -857,7 +863,14 @@ class QuestionnaireViewSet(ConditionalListView, viewsets.ModelViewSet):
     write_permission = 'event.items:write'
 
     def get_queryset(self):
-        return self.request.event.questionnaires.prefetch_related('rows').all()
+        if 'rows.datafield' in self.request.query_params.getlist('expand'):
+            prefetch_rows = Prefetch(
+                'rows',
+                queryset=QuestionnaireRow.objects.select_related('user_datafield').prefetch_related('user_datafield__options'),
+            )
+        else:
+            prefetch_rows = 'rows'
+        return self.request.event.questionnaires.prefetch_related(prefetch_rows).all()
 
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
@@ -871,6 +884,8 @@ class QuestionnaireViewSet(ConditionalListView, viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
+        ctx['expand'] = self.request.query_params.getlist('expand')
+        ctx['expand_name_fields'] = self.request.query_params.get('expand_name_fields', '').lower() == 'true'
         return ctx
 
     def perform_update(self, serializer):

@@ -3956,6 +3956,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             '_scheme': 'salutation_title_given_family_degree',
         },
     }),
+    # If new schemes add new fields, update QuestionnaireRow._name_schemes_all_fields
 ])
 
 DEFAULTS['name_scheme']['serializer_kwargs']['choices'] = ((k, k) for k in PERSON_NAME_SCHEMES)

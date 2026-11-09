@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
+import copy
 import logging
 # This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
 # the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
@@ -39,11 +39,12 @@ from itertools import zip_longest
 import rest_framework
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db import transaction
+from django.db import transaction, models
 from django.db.models import QuerySet
 from django.utils.functional import cached_property, lazy
 from django.utils.translation import gettext_lazy as _
 from i18nfield.rest_framework import I18nField
+from i18nfield.strings import LazyI18nString
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError as DrfValidationError
 from rest_framework.serializers import as_serializer_error
@@ -65,7 +66,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.items import Questionnaire, QuestionnaireRow
 from pretix.base.settings import (
-    PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
+    PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, LazyI18nStringList,
 )
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.i18n import i18n_all_from_gettext
@@ -892,6 +893,102 @@ class RenderedMarkdownField(serializers.CharField):
         return rich_text(value)
 
 
+class InlineUserDatafieldSerializer(I18nAwareModelSerializer):
+    options = InlineQuestionOptionSerializer(many=True, required=False)
+    identifier = serializers.CharField(allow_null=True)
+
+    class Meta:
+        model = Question
+        fields = ('id', 'internal_name', 'identifier', 'type',
+                  'show_during_checkin',
+                  'print_on_invoice', 'print_on_invoice_label', 'valid_number_min',
+                  'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
+                  'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait', 'options')
+
+
+class InlineDatafieldField(serializers.Field):
+    def to_representation(self, value):
+        if value.user_datafield:
+            return DatafieldSerializer().to_representation(instance=value.user_datafield)
+        elif value.system_datafield:
+            part = {
+                'show_during_checkin': False,
+                'print_on_invoice': False,
+                'print_on_invoice_label': {},
+                'valid_number_min': None,
+                'valid_number_max': None,
+                'valid_date_min': None,
+                'valid_date_max': None,
+                'valid_datetime_min': None,
+                'valid_datetime_max': None,
+                'valid_string_length_max': None,
+                'valid_string_length_min': None,
+                'valid_file_portrait': False,
+                'options': []
+            }
+            if value.system_datafield.startswith('@attendee_name_parts:'):
+                settings = self.context['event'].settings
+                part["type"] = "S"
+                for fieldname, label, *__ in PERSON_NAME_SCHEMES.get(settings.name_scheme)['fields']:
+                    if fieldname != value.system_datafield.split(":")[1]:
+                        continue
+                    part["internal_name"] = str(QuestionnaireRow.SystemDatafield(value.system_datafield.split(":")[0]).label) + ": " + str(label)
+                    if fieldname == "title" and settings.name_scheme_titles:
+                        part["type"] = Question.FieldType.CHOICE
+                        part["options"] = [
+                            {"id": None, "identifier": k, "answer": i18n_all_from_gettext(k, settings.locales),
+                             "position": idx + 1} for idx, k in
+                            enumerate(PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1])
+                        ]
+                    elif fieldname == "salutation":
+                        part["type"] = Question.FieldType.CHOICE
+                        part["options"] = [
+                            {"id": None, "identifier": k, "answer": i18n_all_from_gettext(v, settings.locales),
+                             "position": idx + 1} for idx, (k, v) in
+                            enumerate(PERSON_NAME_SALUTATIONS)
+                        ]
+                return {
+                    'id': None,
+                    'identifier': value.system_datafield,
+                    **part,
+                }
+            else:
+                return {
+                    'id': None,
+                    'internal_name': str(QuestionnaireRow.SystemDatafield(value.system_datafield).label),
+                    'identifier': value.system_datafield,
+                    'type': QuestionnaireRow.SYSTEM_DATAFIELD_TYPES[value.system_datafield],
+                    **part,
+                }
+
+
+class InlineQuestionnaireRowListSerializer(serializers.ListSerializer):
+    def expanded_rows(self, data):
+        for r in data:
+            if r.system_datafield == '@attendee_name_parts':
+                settings = self.context['event'].settings
+                for k, v, w, *__ in PERSON_NAME_SCHEMES.get(settings.name_scheme)['fields']:
+                    copied = copy.copy(r)
+                    copied.system_datafield = r.system_datafield + ":" + k
+                    labels = LazyI18nString.from_gettext(v).data
+                    copied.label = LazyI18nString({
+                        locale: r.label.localize(locale) + ": " + labels[locale] for locale in r.label.data
+                    })
+                    copied.required = r.required and k in REQUIRED_NAME_PARTS
+                    yield copied
+            else:
+                yield r
+
+    def to_representation(self, data):
+        iterable = data.all() if isinstance(data, models.manager.BaseManager) else data
+        if self.context.get("expand_name_fields"):
+            iterable = self.expanded_rows(iterable)
+
+        return [
+            self.child.to_representation(item) for item in iterable
+        ]
+
+
 class InlineQuestionnaireRowSerializer(I18nAwareModelSerializer):
     datafield = DatafieldRelatedField(allow_null=True, source='*', queryset=Question.objects.none())
     dependency_question = DatafieldRelatedField(allow_null=True, required=False, queryset=Question.objects.none())
@@ -901,11 +998,15 @@ class InlineQuestionnaireRowSerializer(I18nAwareModelSerializer):
     class Meta:
         model = QuestionnaireRow
         fields = ('datafield', 'required', 'label', 'help_text', 'dependency_question', 'dependency_values', 'rendered_help_text', 'cooked_id')
+        list_serializer_class = InlineQuestionnaireRowListSerializer
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["datafield"].queryset = self.context["event"].questions.all()
         self.fields["dependency_question"].queryset = self.context["event"].questions.all()
+
+        if "rows.datafield" in self.context.get("expand", {}):
+            self.fields["datafield"] = InlineDatafieldField(read_only=True, source='*')
 
     def validate_dependency_question(self, value):
         if value:
@@ -931,13 +1032,18 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
         read_only_fields = ('compat_personalization', )
 
     def __init__(self, *args, **kwargs):
-        self.fields['rows'] = InlineQuestionnaireRowSerializer(many=True, required=True, context=kwargs['context'], partial=False)
         self.fields['items'].child_relation.queryset = kwargs['context']['event'].items.all()
         self.fields['limit_sales_channels'].child_relation.queryset = kwargs['context']['event'].organizer.sales_channels.all()
         super().__init__(*args, **kwargs)
+        self.fields['rows'] = InlineQuestionnaireRowSerializer(
+            many=True, required=True, context=kwargs['context'], partial=False
+        )
 
     def validate(self, data):
         data = super().validate(data)
+
+        if self.context.get('expand_name_fields'):
+           raise ValidationError("Expanding of name fields is not supported on write.")
 
         try:
             full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
