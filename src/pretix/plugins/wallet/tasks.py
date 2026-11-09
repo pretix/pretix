@@ -9,7 +9,9 @@ from django.db.models import OuterRef, Exists
 
 from pretix.plugins.wallet.platforms import get_available_platforms
 from pretix.plugins.wallet.platforms.base import WalletPlatform
-from .models import AppleWalletPass, AppleWalletDevice
+from pretix.plugins.wallet.platforms.google.google_wallet import Resource, State
+from pretix.plugins.wallet.platforms.google.platform import GooglePlatform
+from .models import AppleWalletPass, AppleWalletDevice, GoogleWalletInstance
 from django_scopes import scopes_disabled
 
 
@@ -95,3 +97,15 @@ def get_pass(model: str, pk: int, platform_identifier: str, show_disabled: bool)
         if not platform:
             return
         return platform.generate(position)
+
+
+@app.task()
+def disable_wallet_instance(pk: int):
+    try:
+        obj = GoogleWalletInstance.objects.get(pk=pk)
+    except GoogleWalletInstance.DoesNotExist:
+        return
+
+    platform = GooglePlatform(obj.order_position.event)
+    platform.comms.patch_item(Resource(obj.resource), obj.identifier, {"state": State.INACTIVE})
+    obj.delete()

@@ -23,7 +23,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q, constraints
-from django.utils.crypto import get_random_string
+from django.utils.crypto import salted_hmac, get_random_string, constant_time_compare
 from django.utils.translation import gettext_lazy as _
 from django_scopes import ScopedManager
 
@@ -115,13 +115,39 @@ class WalletLayoutFileSetting(models.Model):
 
 
 class AppleWalletDevice(models.Model):
-    device_library_id = models.CharField()
+    device_library_id = models.CharField(unique=True)
     push_token = models.CharField()
     last_push = models.DateTimeField(auto_now_add=True)
 
 
-def secret_default():
-    return get_random_string(length=64)
+class AppleWalletPassQuerySet(models.QuerySet):
+    def get_by_auth_token(self, received_message):
+        dummy = get_random_string(16)
+        pk, received_token = received_message.split(":")
+
+        try:
+            pass_obj = self.get(order_position__pk=pk)
+        except AppleWalletPass.DoesNotExist:
+            # Do a hash comparison as well to harden against timing attacks
+            dummy_hash = salted_hmac(
+                key_salt="pretix.plugins.wallet.AppleWalletPass.auth_token",
+                algorithm="sha256",
+                value=str(12345),
+                secret=dummy,
+            ).hexdigest()
+            constant_time_compare(
+                dummy_hash,
+                received_token,
+            )
+            raise AppleWalletPass.DoesNotExist
+
+        if constant_time_compare(
+            pass_obj.auth_token,
+            received_message,
+        ):
+            return pass_obj
+        else:
+            raise AppleWalletPass.DoesNotExist
 
 
 class AppleWalletPass(models.Model):
@@ -133,15 +159,29 @@ class AppleWalletPass(models.Model):
     content = models.FileField()
     updated_at = models.DateTimeField(auto_now=True)
 
-    token = models.CharField(default=secret_default, unique=True)
     registered_devices = models.ManyToManyField(
         AppleWalletDevice, related_name="passes"
     )
+
+    objects = AppleWalletPassQuerySet.as_manager()
 
     class Meta:
         unique_together = [
             ("pass_type", "serial_number"),
         ]
+
+    @property
+    def auth_token(self):
+        return (
+            str(self.order_position.pk)
+            + ":"
+            + salted_hmac(
+                key_salt="pretix.plugins.wallet.AppleWalletPass.auth_token",
+                algorithm="sha256",
+                secret=self.order_position.web_secret,
+                value=str(self.order_position.pk),
+            ).hexdigest()
+        )
 
 
 class CombinedAppleWalletPass(models.Model):
@@ -152,7 +192,9 @@ class CombinedAppleWalletPass(models.Model):
 
 class GoogleWalletInstance(models.Model):
     event = models.ForeignKey("pretixbase.Event", on_delete=models.CASCADE)
-    order_position = models.ForeignKey(OrderPosition, on_delete=models.CASCADE, null=True)
+    order_position = models.ForeignKey(
+        OrderPosition, on_delete=models.CASCADE, null=True
+    )
     resource = models.CharField()
     identifier = models.CharField()
     data = models.JSONField()

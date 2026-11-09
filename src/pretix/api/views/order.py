@@ -653,8 +653,6 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                 request.event, op, force_invalidate=True, save=True
             )
         order.save(update_fields=['secret'])
-        CachedTicket.objects.filter(order_position__order=order).delete()
-        CachedCombinedTicket.objects.filter(order=order).delete()
         tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk,
                                                      'order': order.pk})
         order.log_action(

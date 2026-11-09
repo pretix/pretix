@@ -8,6 +8,7 @@ from django.db import transaction
 from django.utils import translation
 from django.utils.translation import gettext as _
 from django import forms
+from django.utils.crypto import salted_hmac
 
 from pretix.base.models import Event, OrderPosition
 from pretix.base.models.orders import Order
@@ -52,14 +53,14 @@ def get_object_id(op: OrderPosition):
     instance_uuid = _get_instance_uuid()
     issuer_id = op.order.event.settings.wallet_google_issuer_id
 
-    return "%s.pretix-%s-%s-%s-%s-%s" % (
-        issuer_id,
-        instance_uuid,
-        op.order.event.organizer.slug,
-        op.order.event.slug,
-        op.order.code,
-        op.positionid,
-    )
+    op_secret = salted_hmac(
+        key_salt="pretix.plugins.wallet.google.object_id",
+        algorithm="sha256",
+        secret=op.web_secret,
+        value=str(op.pk),
+    ).hexdigest()
+
+    return f"{issuer_id}.pretix-{instance_uuid}-{op_secret}"
 
 
 def get_translated_dict(string, locales):
@@ -180,27 +181,16 @@ class GooglePlatform(WalletPlatform):
                 return result
 
     def _get_jwt(self, ticket_objects):
+        for to in dedup(ticket_objects):
+            self.put_item_cached(to)
         generated_jwt = self.comms.sign_jwt(
             ButtonJWT(
                 origins=[settings.SITE_URL],
                 issuer=self.comms.client_email,
                 payload={"eventTicketObjects": ticket_objects},
-                precreated=False,
+                precreated=True,
             ).serialize()
         )
-
-        # "The safe length of an encoded JWT is 1800 characters." https://developers.google.com/wallet/tickets/events/web
-        if len(generated_jwt) > 1800:
-            for to in dedup(ticket_objects):
-                self.put_item_cached(to)
-            generated_jwt = self.comms.sign_jwt(
-                ButtonJWT(
-                    origins=[settings.SITE_URL],
-                    issuer=self.comms.client_email,
-                    payload={"eventTicketObjects": ticket_objects},
-                    precreated=True,
-                ).serialize()
-            )
 
         return f"https://pay.google.com/gp/v/save/{generated_jwt}"
 
@@ -209,7 +199,11 @@ class GooglePlatform(WalletPlatform):
         if not layout:
             op_layout = self.get_layout(position)
             if not op_layout:
-                raise ValueError(_("WalletPlatform.generate called without layout and without position layout"))
+                raise ValueError(
+                    _(
+                        "WalletPlatform.generate called without layout and without position layout"
+                    )
+                )
             layout = op_layout.pass_layout
 
         class_object, ticket_object = layout.generate(position)
@@ -223,7 +217,9 @@ class GooglePlatform(WalletPlatform):
         for position in order.positions_with_tickets:
             layout = self.get_layout(position)
             if not layout:
-                raise ValueError("Impossible: is_available_for_position==True but no layout")
+                raise ValueError(
+                    "Impossible: is_available_for_position==True but no layout"
+                )
 
             class_object, ticket_object = layout.generate(position)
             class_objects.append(class_object)

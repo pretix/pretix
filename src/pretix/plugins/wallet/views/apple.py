@@ -50,9 +50,15 @@ class ApplePassAuthentication(BaseAuthentication):
             )
             raise exceptions.AuthenticationFailed(msg)
 
+        if ":" not in token:
+            msg = _(
+                "Invalid token header. Missing seperator."
+            )
+            raise exceptions.AuthenticationFailed(msg)
+
         try:
-            pass_obj = AppleWalletPass.objects.get(
-                token=token, order_position__order__event=request.event
+            pass_obj = AppleWalletPass.objects.get_by_auth_token(
+                token
             )
         except AppleWalletPass.DoesNotExist:
             raise exceptions.AuthenticationFailed(_("Invalid token."))
@@ -112,7 +118,7 @@ class DeviceRegistrationView(APIView):
                 device_library_id=device_library_identifier,
             )
         except AppleWalletDevice.DoesNotExist:
-            raise exceptions.NotFound(_("Unknown device library identifier."))
+            return Response({})
         device.passes.remove(request.auth)
         if not device.passes.exists():
             device.delete()
@@ -192,7 +198,6 @@ class DownloadPassView(EventViewMixin, OrderDetailMixin, View):
         resp = ChunkBasedFileResponse(pass_obj.content.file, content_type="application/vnd.apple.pkpass")
         resp['Content-Disposition'] = 'attachment; filename="{}"'.format(pass_obj.serial_number + ".pkpass").encode('ascii', 'ignore')
         return resp
-
 
 
 class DownloadCombinedPassView(EventViewMixin, OrderDetailMixin, View):
