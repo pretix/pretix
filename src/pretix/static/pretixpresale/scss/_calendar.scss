@@ -67,6 +67,10 @@
         border-radius: 0;
         padding: 3px 5px 3px 10px;
       }
+      a.event:hover {
+        background: var(--status-border-color);
+        color: white;
+      }
       li:last-child a.event {
         border-bottom-left-radius: $border-radius-base;
         border-bottom-right-radius: $border-radius-base;
