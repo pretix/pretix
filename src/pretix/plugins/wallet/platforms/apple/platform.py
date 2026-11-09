@@ -25,6 +25,7 @@ from ...models import CombinedAppleWalletPass
 
 from django.core.files.base import ContentFile
 from django import forms
+from django.utils.functional import classproperty
 
 from pretix.base.forms import SecretKeySettingsField
 from pretix.control.forms import ClearableBasenameFileInput
@@ -170,6 +171,10 @@ class ApplePlatform(WalletPlatform):
             if not self.event.settings.get(field):
                 return (False, _("Missing field: {field}").format(field=field))
         return super().is_available()
+
+    @classproperty
+    def default_style(cls):  # noqa: N805
+        return "event_1"
 
 
 class StringResource:

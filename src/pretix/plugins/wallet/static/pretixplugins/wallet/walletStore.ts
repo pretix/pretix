@@ -182,7 +182,7 @@ export function createWalletStore(config: {
 					const clientLayout = {
 						style: layout.style,
 						fieldgroups: {},
-						settings: layout.layout.settings,
+						settings: layout.layout.settings || {},
 						file_settings: layout.file_settings,
 					};
 					const styleDefinition = this.getPlatform(layout.platform).styles[

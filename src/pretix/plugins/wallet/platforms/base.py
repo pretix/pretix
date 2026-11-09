@@ -1,6 +1,6 @@
 import enum
 from functools import cached_property
-from typing import TypedDict
+from typing import Any, TypedDict
 
 import jsonschema
 from django.core.exceptions import ValidationError
@@ -23,6 +23,7 @@ from ..placeholders import (
 from .settings import SettingsField, SettingsFile
 from django.utils.translation import gettext as _
 from django.utils.html import format_html
+from django.utils.functional import classproperty
 
 
 class WalletPlatform:
@@ -32,10 +33,10 @@ class WalletPlatform:
     # TODO: register urls here?
     def __init__(self, event):
         self.event = event
-        self.wallet_settings = SettingsSandbox('ticketoutput', 'wallet', event)
+        self.wallet_settings = SettingsSandbox("ticketoutput", "wallet", event)
 
     def is_enabled(self):
-        if not self.wallet_settings.get('_enabled', as_type=bool):
+        if not self.wallet_settings.get("_enabled", as_type=bool):
             return False
         return True
 
@@ -51,6 +52,10 @@ class WalletPlatform:
         Return a list of fields for the global settings form, as a dict of (setting name, form field).
         """
         return {}
+
+    @classproperty
+    def default_style(cls) -> None | str:  # noqa: N805
+        return None
 
     def render_download_button(self) -> tuple[dict[str, str] | None, str]:
         """
@@ -72,7 +77,7 @@ class WalletPlatform:
             wallet_layout = op.event.wallet_layouts.get(default=True)
         return wallet_layout.platform_layouts.filter(platform=self.identifier).first()
 
-    def generate(self, position, layout: "PassStyle | None"=None) -> str:
+    def generate(self, position, layout: "PassStyle | None" = None) -> str:
         """
         This method should generate the wallet pass and return a url the user should be sent
         to to retrieve that pass (e.g. via download or by redirecting to the wallet provider)
@@ -83,7 +88,11 @@ class WalletPlatform:
         if not layout:
             op_layout = self.get_layout(position)
             if not op_layout:
-                raise ValueError(_("WalletPlatform.generate called without layout and without position layout"))
+                raise ValueError(
+                    _(
+                        "WalletPlatform.generate called without layout and without position layout"
+                    )
+                )
             layout = op_layout.pass_layout
         return layout.generate(position)
 
@@ -147,6 +156,9 @@ class FieldGroup:
             "description": self.description,
             "required": self.required,
         }
+
+    def default(self, locales: list[str]) -> dict[str, Any]:
+        raise NotImplementedError()
 
 
 class FieldContentType(enum.Enum):
@@ -238,6 +250,9 @@ class PredefinedFieldGroup(FieldGroup):
             "default_active": self.default_active,
         }
 
+    def default(self, locales):
+        return {"active": self.default_active}
+
 
 class PlaceholderFieldGroup(FieldGroup):
     type = FieldGroupType.PLACEHOLDER
@@ -303,6 +318,9 @@ class PlaceholderFieldGroup(FieldGroup):
             ),
             "default_overflow": self.default_overflow,
         }
+
+    def default(self, locales):
+        return {"entries": [x.asdict(locales) for x in self.default_entries]}
 
     def available_placeholders(self, context):
         content_type_placeholders = (
@@ -441,6 +459,15 @@ class PassStyle:
     @property
     def preview_data(self) -> dict:
         return {}
+
+    @property
+    def default_layout(self) -> dict:
+        return {
+            "fieldgroups": {
+                fieldgroup.identifier: fieldgroup.default(self.event.settings.locales)
+                for fieldgroup in self.fieldgroups
+            },
+        }
 
     def get_cleaned_setting(
         self, setting_identifier: str
