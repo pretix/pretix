@@ -5,7 +5,6 @@
 {% load safelink %}
 {% load rich_text %}
 {% load money %}
-{% load getitem %}
 
 {% blocktrans asvar s_taxes %}taxes{% endblocktrans %}
 <div role="table" aria-label="{% trans "Your cart" %}" aria-describedby="{% if cart.is_ordered %}cart-description{% else%}cart-deadline{% endif %}" aria-rowcount="{{ cart.positions|length|add:2 }}">

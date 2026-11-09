@@ -38,8 +38,7 @@
             </p>
         </div>
     </div>
-{# TODO(wallet): restructure if for less duplication #}
-{% elif can_download and download_buttons and order.count_positions and tickets_with_download or can_download and wallet_buttons and order.count_positions and tickets_with_download %}
+{% elif downloads_available %}
     <div class="info-download">
         <h3 class="sr-only">{% trans "Ticket download" %}</h3>
         {% if tickets_with_download|length > 1 and can_download_multi %} {# never True on ticket page #}
@@ -47,11 +46,10 @@
             {% for b in download_buttons %}
                 {% if b.multi %}
                     <form action="{% eventurl event "presale:event.order.download.combined" secret=order.secret order=order.code output=b.identifier %}"
-                            method="post" data-asynctask data-asynctask-download class="download-btn-form {% if b.javascript_required or b.confirmation_text %}requirejs{% endif %}">
+                            method="post" data-asynctask data-asynctask-download class="download-btn-form {% if b.javascript_required %}requirejs{% endif %}">
                         {% csrf_token %}
                         <button type="submit"
-                                class="btn btn-lg {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}"
-                                {% if b.confirmation_text %}data-confirmation-text="{{ b.confirmation_text|rich_text|force_escape }}"{% endif %}>
+                                class="btn btn-lg {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
                             <span class="fa {{ b.icon }}" aria-hidden="true"></span> {{ b.multi_text }}
                         </button>
                     </form>

@@ -34,12 +34,16 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedCombinedTicket, CachedFile, CachedTicket, Event, InvoiceAddress,
-    Order, OrderPosition,
+    CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, Order,
+    OrderPosition,
 )
-from pretix.base.services.tasks import ProfiledTask, TransactionAwareProfiledEventTask
+from pretix.base.services.tasks import (
+    ProfiledTask, TransactionAwareProfiledEventTask,
+)
 from pretix.base.settings import PERSON_NAME_SCHEMES
-from pretix.base.signals import register_ticket_outputs, invalidate_ticket_cache
+from pretix.base.signals import (
+    invalidate_ticket_cache, register_ticket_outputs,
+)
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
 
@@ -85,16 +89,12 @@ def generate_order(order: int, provider: str):
 
 
 @app.task(base=ProfiledTask)
-def generate(model: str, pk: int, provider: str, cachedfile_pk: int | None = None):
+def generate(model: str, pk: int, provider: str):
     with scopes_disabled():
-        if cachedfile_pk:
-            cf = CachedFile.objects.get(pk=cachedfile_pk)
-        else:
-            cf = None
         if model == 'order':
-            return generate_order(pk, provider, cf)
+            return generate_order(pk, provider)
         elif model == 'orderposition':
-            return generate_orderposition(pk, provider, cf)
+            return generate_orderposition(pk, provider)
 
 
 class DummyRollbackException(Exception):
@@ -278,7 +278,6 @@ def get_download_buttons(event, show_disabled):
             'identifier': provider.identifier,
             'multi': provider.multi_download_enabled,
             'javascript_required': provider.javascript_required,
-            'confirmation_text': provider.confirmation_text,
         })
     return buttons
 
