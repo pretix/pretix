@@ -60,6 +60,8 @@ dependencies = [
   "djangorestframework>=3.18.3",
   "drf_ujson2==1.7.*",
   "geoip2==5.*",
+  "google-auth=2.62.*",
+  "httpx==0.28.*",
   "isoweek",
   "jsonschema",
   "kombu==5.6.*",
