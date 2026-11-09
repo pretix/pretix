@@ -41,7 +41,8 @@ from reportlab.platypus import (
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import (
-    GiftCardTransaction, OrderFee, OrderPayment, OrderRefund, Transaction, Order,
+    GiftCardTransaction, Order, OrderFee, OrderPayment, OrderRefund,
+    Transaction,
 )
 from pretix.base.templatetags.money import money_filter, tax_rate_format
 from pretix.base.timeframes import (
