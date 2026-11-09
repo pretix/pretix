@@ -24,6 +24,7 @@ from .google_wallet import (
     Comms,
 )
 from django.utils.html import format_html
+from django.utils.functional import classproperty
 
 
 def _get_instance_uuid():
@@ -153,6 +154,10 @@ class GooglePlatform(WalletPlatform):
                 ),
             ]
         )
+
+    @classproperty
+    def default_style(self):
+        return "event"
 
     @cached_property
     def comms(self):

@@ -40,10 +40,10 @@ function onDrop(e) {
 
         .btn-group
             button.btn.btn-default(type="button" @click="inputRef.click()") Select file
-            button.btn.btn-danger(v-if="!!selectedFile || !!current_url" type="button" @click="clearFile")
+            button.btn.btn-danger(v-if="!!selectedFile" type="button" @click="clearFile")
                 i.fa.fa-trash
                 span.sr-only {{ gettext("Clear") }}
-        input.hidden(:id="id" @change="onChange" v-bind="$attrs" :required="$attrs.required && !current_url" type="file" ref="inputRef")
+        input.hidden(:id="id" @change="onChange" v-bind="$attrs" :required="!!$attrs.required" type="file" ref="inputRef")
         .help-block(v-if="!!help_text || !!props.default")
             template(v-if="!!help_text") {{ help_text }}
             br(v-if="!!help_text && !!props.default")
