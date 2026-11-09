@@ -137,13 +137,14 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                     )
                 )
         else:
-            filters.append(_("All time report"))
             oldest = Order.objects.filter(
                 event__in=self.events,
             ).order_by("datetime").first()
             filters.append(
                 _("Date range")
                 + ": "
+                + _("All time")
+                + " ("
                 + date_format(
                     oldest.datetime, "SHORT_DATETIME_FORMAT"
                 )
@@ -151,6 +152,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                 + date_format(
                     now().astimezone(self.timezone), "SHORT_DATETIME_FORMAT"
                 )
+                + ")"
             )
 
         if not form_data["no_testmode"]:
