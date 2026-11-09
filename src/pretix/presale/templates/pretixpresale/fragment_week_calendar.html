@@ -10,7 +10,9 @@
             </summary>
             <ul class="events">
                 {% for grp in day.events %}
-                    <li class="events-group"><strong>{{grp.0}}</strong></li>
+                    <li class="events-group">
+                        <strong>{{grp.0}}</strong>
+                        <ul class="list-unstyled">
                 {% for event in grp.1 %}
                     <li><a class="event {% if event.continued %}continued{% endif %} {% spaceless %}
     {% if event.event.presale_is_running and show_avail %}
@@ -87,6 +89,7 @@
                         {% endif %}
                     </a></li>
                 {% endfor %}
+                </ul></li>
                 {% endfor %}
             </ul>
         </details>

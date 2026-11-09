@@ -49,6 +49,31 @@
     li.events-group {
       font-size: 12px;
       margin: 2px 0;
+      strong {
+        border-top-left-radius: $border-radius-base;
+        border-top-right-radius: $border-radius-base;
+        display: block;
+        background-color: #e5e5e5;
+        border: 1px solid #e5e5e5;
+        padding: 3px 5px 3px 5px;
+        margin-bottom: 2px;
+        /*border-left: 5px solid #999;*/
+      }
+      a.event:before {
+        width: 5px;
+      }
+      a.event {
+        border: none;
+        border-radius: 0;
+        padding: 3px 5px 3px 10px;
+      }
+      li:last-child a.event {
+        border-bottom-left-radius: $border-radius-base;
+        border-bottom-right-radius: $border-radius-base;
+      }
+      li:last-child a.event:before {
+        border-bottom-left-radius: $border-radius-base;
+      }
     }
     li.events-group:not(:first-child) {
       margin-top: 10px;
