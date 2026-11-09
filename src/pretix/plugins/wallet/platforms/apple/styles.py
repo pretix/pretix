@@ -5,7 +5,6 @@ from typing import Any
 from django.core.files.base import ContentFile
 from django.utils.translation import gettext as _
 from django.db import transaction
-from django.urls import reverse
 
 from pretix.base.models import OrderPosition
 from pretix.helpers import OF_SELF
@@ -206,7 +205,7 @@ class AppleWalletStyle(PassStyle):
         strings = StringResource(locales=self.event.settings.locales)
 
         pass_json = self.generate_pass_json(
-            fields, op, strings, pass_type, team_id, pass_obj.serial_number, pass_obj.token
+            fields, op, strings, pass_type, team_id, pass_obj.serial_number, pass_obj.auth_token
         )
 
         if file := self.get_cleaned_setting("logo"):
@@ -235,6 +234,8 @@ class AppleWalletStyle(PassStyle):
 
         if pass_obj.content and pass_obj.manifest != manifest:
             pass_obj.content.delete()
+
+        if pass_obj.manifest != manifest:
             pass_obj.content.save(filename, ContentFile(result, name=filename))
             pass_obj.manifest = manifest
             pass_obj.save()

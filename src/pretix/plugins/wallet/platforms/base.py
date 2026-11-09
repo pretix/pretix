@@ -11,7 +11,7 @@ from pretix.api.helpers import handle_file_upload
 from pretix.base.models import OrderPosition
 from pretix.base.models.orders import Order
 from pretix.base.settings import SettingsSandbox
-from pretix.plugins.wallet.models import WalletPlatformLayout
+from pretix.plugins.wallet.models import WalletLayout, WalletPlatformLayout
 
 from ..i18n import MaybeTranslatedString, localizable_to_dict
 from ..placeholders import (
@@ -74,7 +74,10 @@ class WalletPlatform:
         if hasattr(op.item, "walletlayout"):
             wallet_layout = op.item.walletlayout.layout
         else:
-            wallet_layout = op.event.wallet_layouts.get(default=True)
+            try:
+                wallet_layout = op.event.wallet_layouts.get(default=True)
+            except WalletLayout.DoesNotExist:
+                return None
         return wallet_layout.platform_layouts.filter(platform=self.identifier).first()
 
     def generate(self, position, layout: "PassStyle | None" = None) -> str:

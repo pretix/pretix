@@ -423,7 +423,7 @@ class Comms:
             return False
 
     def put_item(self, resource: Resource, resource_id: str, payload: dict):
-        item = self.get_item(resource, payload["id"])
+        item = self.get_item(resource, resource_id)
         if item is None:
             raise Exception("API Error")
         elif not item:
@@ -433,11 +433,20 @@ class Comms:
             )
         else:
             result = self._session.put(
-                f"https://walletobjects.googleapis.com/walletobjects/v1/{resource}/{payload['id']}?strict=true",
+                f"https://walletobjects.googleapis.com/walletobjects/v1/{resource}/{resource_id}?strict=true",
                 json=payload,
             )
 
-        print(result.text)
+        result.raise_for_status()
+
+        return result.json()
+
+    def patch_item(self, resource: Resource, resource_id: str, payload: dict):
+        result = self._session.patch(
+            f"https://walletobjects.googleapis.com/walletobjects/v1/{resource}/{resource_id}?strict=true",
+            json=payload,
+        )
+
         result.raise_for_status()
 
         return result.json()

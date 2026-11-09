@@ -30,16 +30,16 @@ from pretix.base.signals import (
     periodic_task,
 )
 from pretix.control.signals import item_forms
+from pretix.plugins.wallet.platforms.google.platform import get_object_id
 
 from .forms import WalletLayoutItemForm
 from .models import WalletLayoutItem
 from .ticketoutput import WalletSettingsHolder
 from .platforms import PLATFORMS
-from .tasks import send_update_apns
+from .tasks import disable_wallet_instance, send_update_apns
 from .models import AppleWalletPass, CombinedAppleWalletPass
 from .tasks import get_pass
 from .models import GoogleWalletInstance
-from .platforms.google.google_wallet import Resource
 
 
 @receiver(register_ticket_outputs, dispatch_uid="output_wallet")
@@ -84,7 +84,6 @@ def periodic_tasks(sender, **kwargs):
 def invalidate_apple(
     sender: Event, item: int | None, provider: str | None, order: int | None, **kwargs
 ):
-
     if provider and provider != "wallet":
         return
 
@@ -117,11 +116,10 @@ def invalidate_apple(
 def invalidate_google(
     sender: Event, item: int | None, provider: str | None, order: int | None, **kwargs
 ):
-
     if provider and provider != "wallet":
         return
 
-    inst_qs = GoogleWalletInstance.objects.filter(event=sender, resource=Resource.EVENT_TICKET_OBJECT).exclude(usages=0, order_position__isnull=True)
+    inst_qs = GoogleWalletInstance.objects.filter(event=sender).exclude(order_position__isnull=True)
 
     if item:
         inst_qs = inst_qs.filter(order_position__item_id=item)
@@ -130,12 +128,14 @@ def invalidate_google(
         inst_qs = inst_qs.filter(order_position__order_id=order)
 
     for inst in inst_qs:
-        if inst.order_position_id:
-            get_pass.apply_async(
-                kwargs={
-                    "model": "orderposition",
-                    "pk": inst.order_position_id,
-                    "platform_identifier": "google",
-                    "show_disabled": False
-                }
-            )
+        if get_object_id(inst.order_position) != inst.identifier:
+            # the OPs web_secret was changed
+            disable_wallet_instance.apply_async(kwargs={"pk": inst.pk})
+        get_pass.apply_async(
+            kwargs={
+                "model": "orderposition",
+                "pk": inst.order_position_id,
+                "platform_identifier": "google",
+                "show_disabled": False
+            }
+        )
