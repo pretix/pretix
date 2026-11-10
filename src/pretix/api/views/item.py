@@ -662,7 +662,7 @@ class CompatQuestionViewSet(ConditionalListView, CompatListMixin, BaseDatafieldV
     def _check_defer(self, mode, request, *args, **kwargs):
         sales_channel_ident = request.query_params.get('sales_channel', None)
         if sales_channel_ident is None and isinstance(request.auth, Device):
-            sales_channel_ident = 'pretixpos' if request.auth.software_brand.startswith("pretixPOS") else 'web'
+            sales_channel_ident = 'pretixpos' if (request.auth.software_brand or '').startswith('pretixPOS') else 'web'
         if sales_channel_ident:
             logger.info('Returning app compatible question %s for %s (device: %r %s %s) on %s/%s',  mode, sales_channel_ident, request.auth, getattr(request.auth, 'software_brand', ''), getattr(request.auth, 'software_version', ''), request.organizer.slug, request.event.slug)
             return POSCompatQuestionViewSet.as_view(
