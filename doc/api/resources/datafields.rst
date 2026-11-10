@@ -48,6 +48,7 @@ print_on_invoice                      boolean                    If ``true``, th
                                                                  *Only supported on per-position data fields.*
 print_on_invoice_label                multi-lingual string       **Required if ``print_on_invoice`` is ``true``.** Label
                                                                  to print on the invoice before the value of this field.
+                                                                 Otherwise `null`.
 options                               list of objects            In case of data field type ``C`` or ``M``, this lists the
                                                                  available objects. Only writable during creation,
                                                                  use :ref:`separate endpoint <rest-datafieldoptions>` to modify this later.
