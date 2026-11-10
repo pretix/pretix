@@ -111,6 +111,7 @@ class TicketLayoutViewSet(viewsets.ModelViewSet):
     serializer_class = TicketLayoutSerializer
     queryset = TicketLayout.objects.none()
     lookup_field = 'id'
+    write_permission = 'event.settings.general:write'
 
     def get_queryset(self):
         return self.request.event.ticket_layouts.all()

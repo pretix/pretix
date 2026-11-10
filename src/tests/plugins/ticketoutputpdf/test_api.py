@@ -327,3 +327,22 @@ def test_renderer_batch_invalid(env, token_client, position):
     )
     assert resp.status_code == 400
     assert resp.data == {"parts": ["Please do not submit more than 1000 parts."]}
+
+
+@pytest.mark.django_db
+def test_api_permission(env, token_client):
+    t = env[0].organizer.teams.get()
+    t.limit_event_permissions = {"event.orders:read": True}
+    t.all_event_permissions = False
+    t.save()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/ticketlayouts/{}/'.format(env[0].slug, env[0].slug, env[1].pk),
+        {
+            "name": "Bar",
+            "layout": [
+                {"type": "barcodearea", "left": "7.00", "bottom": "11.15", "size": "45.00", "content": "secret"}
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 403
