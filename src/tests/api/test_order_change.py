@@ -84,13 +84,6 @@ def question(event, questionnaire):
 
 
 @pytest.fixture
-def question2(event2, item2):
-    q = event2.questions.create(internal_name="T-Shirt size", type="S", identifier="ABC")
-    q.items.add(item2)
-    return q
-
-
-@pytest.fixture
 def quota(event, item):
     q = event.quotas.create(name="Budget Quota", size=200)
     q.items.add(item)
