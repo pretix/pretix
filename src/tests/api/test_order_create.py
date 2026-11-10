@@ -311,7 +311,7 @@ def test_order_create(token_client, organizer, event, item, quota, orderquestion
 
 
 @pytest.mark.django_db
-def test_order_create_legacy(token_client, organizer, event, item, quota, orderquestion, question):
+def test_order_create_answers_with_legacy_question(token_client, organizer, event, item, quota, orderquestion, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
@@ -1652,6 +1652,8 @@ def test_order_create_positionid_validation(token_client, organizer, event, item
 def test_order_create_answer_validation(token_client, organizer, event, item, quota, orderquestion, question, question2):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question2.pk
+    del res['positions'][0]['answers'][0]['datafield']
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
@@ -1661,6 +1663,7 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     assert resp.data == {
         'positions': [{'answers': [{'question': [f'Invalid pk "{question2.pk}" - object does not exist.']}]}]}
 
+    res['positions'][0]['answers'][0]['question'] = question.pk
     res['positions'][0]['answers'][0]['options'] = [question.options.first().pk]
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
