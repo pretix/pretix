@@ -608,6 +608,11 @@ def test_order_add_orderlevel_answer(token_client, organizer, event, order, orde
     with scopes_disabled():
         assert order.answers.count() == 2
 
+
+@pytest.mark.django_db
+def test_order_replace_orderlevel_answer(token_client, organizer, event, order, orderquestion):
+    with scopes_disabled():
+        oq2 = event.questions.create(container_type=Question.ContainerType.ORDER, internal_name="Test", type="S", identifier="TEST")
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
             organizer.slug, event.slug, order.code
