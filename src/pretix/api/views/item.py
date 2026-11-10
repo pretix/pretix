@@ -38,6 +38,7 @@ from typing import Mapping
 import django_filters
 from django.db import transaction
 from django.db.models import Q, Prefetch
+from django.db.models.expressions import Exists, OuterRef
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
@@ -116,7 +117,12 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
             'variations', 'addons', 'bundles', 'meta_values', 'meta_values__property',
             'variations__meta_values', 'variations__meta_values__property',
             'require_membership_types', 'variations__require_membership_types',
-            'limit_sales_channels', 'variations__limit_sales_channels', 'program_times'
+            'limit_sales_channels', 'variations__limit_sales_channels', 'program_times',
+            Prefetch('questionnaires', Questionnaire.objects.annotate(
+                has_attendee_data=Exists(QuestionnaireRow.objects.filter(
+                    questionnaire=OuterRef('pk'), system_datafield__in=('@attendee_name_parts', '@attendee_email')
+                ))
+            )),
         ).all()
 
     @transaction.atomic()

@@ -356,6 +356,10 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
             self.fields['variations'].child.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
 
     def get_personalized(self, item):
+        if 'questionnaires' in getattr(item, '_prefetched_objects_cache', {}):
+            if all(hasattr(q, 'has_attendee_data') for q in item.questionnaires.all()):
+                return any(q.has_attendee_data for q in item.questionnaires.all())
+
         return QuestionnaireRow.objects.filter(questionnaire__items=item, system_datafield__in=('@attendee_name_parts', '@attendee_email')).exists()
 
     def put_personalized(self, item, new_value):
