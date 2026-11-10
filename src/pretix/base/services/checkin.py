@@ -57,6 +57,7 @@ from pretix.base.models import (
     Checkin, CheckinList, Device, Event, Gate, Item, ItemVariation, Order,
     OrderPosition, Questionnaire, QuestionnaireRow, QuestionOption,
 )
+from pretix.base.models.orders import QuestionnaireRenderer
 from pretix.base.signals import checkin_created, periodic_task
 from pretix.helpers import OF_SELF
 from pretix.helpers.database import conditional_atomic
@@ -1040,12 +1041,13 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     )
     require_answers = []
     if type != Checkin.TYPE_EXIT and checkin_questions:
+        qrenderer = QuestionnaireRenderer(qrows=[], system_answers=op.system_answers, answerlist=op.answers.all())
         for q in checkin_questions:
-            if q.user_datafield not in given_answers and q.user_datafield_id not in op.answer_cache:
+            if q.user_datafield not in given_answers and q.user_datafield_id not in qrenderer.answer_cache:
                 require_answers.append(q)
 
         if not simulate:
-            _save_answers(op, op.answer_cache, given_answers)
+            _save_answers(op, qrenderer.answer_cache, given_answers)
 
     with conditional_atomic(not simulate):
         # Lock order positions, if it is an entry. We don't need it for exits, as a race condition wouldn't be problematic

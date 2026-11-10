@@ -331,6 +331,8 @@ with scopes_disabled():
 
 
 def _handle_file_upload(data, user, auth):
+    if not data:
+        return None
     try:
         cf = CachedFile.objects.get(
             file__isnull=False,
@@ -809,10 +811,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     except KeyError:
                         ans = answers_data[str(qc.cooked_id)]
                     if qc.user_datafield.type == Question.TYPE_FILE:
-                        if ans:
-                            given_answers[qc.user_datafield] = _handle_file_upload(ans, user, auth)
-                        else:
-                            given_answers[qc.user_datafield] = None
+                        given_answers[qc.user_datafield] = _handle_file_upload(ans, user, auth)
                     else:
                         given_answers[qc.user_datafield] = qc.clean_answer(ans)
                 except (ValidationError, BaseValidationError):
