@@ -37,6 +37,7 @@ from collections import defaultdict
 from datetime import datetime, time, timedelta
 
 from dateutil.rrule import rruleset
+from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files import File
@@ -1506,8 +1507,8 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         all_quotas = Quota.objects.filter(
             subevent__in=self.get_queryset()
         ).annotate(
-            item_list=GroupConcat('items__id', distinct=True, ordered=True),
-            var_list=GroupConcat('variations__id', distinct=True, ordered=True),
+            item_list=GroupConcat('items__id', distinct='postgresql' in settings.DATABASES['default']['ENGINE'], ordered=True),
+            var_list=GroupConcat('variations__id', distinct='postgresql' in settings.DATABASES['default']['ENGINE'], ordered=True),
         ).values(
             'item_list', 'var_list',
             *(f.name for f in Quota._meta.fields if f.name not in (
@@ -1544,8 +1545,8 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         all_lists = CheckinList.objects.filter(
             subevent__in=self.get_queryset()
         ).annotate(
-            item_list=GroupConcat('limit_products__id', distinct=True, ordered=True),
-            gates_list=GroupConcat('gates__id', distinct=True, ordered=True),
+            item_list=GroupConcat('limit_products__id', distinct='postgresql' in settings.DATABASES['default']['ENGINE'], ordered=True),
+            gates_list=GroupConcat('gates__id', distinct='postgresql' in settings.DATABASES['default']['ENGINE'], ordered=True),
         ).values(
             'item_list', 'gates_list',
             *(f.name for f in CheckinList._meta.fields if f.name not in (
