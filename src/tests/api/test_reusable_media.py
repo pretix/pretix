@@ -170,8 +170,7 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
             sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
-        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
-                                    personalized=True)
+        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
         medium.linked_orderpositions.add(op)
         medium.linked_giftcard = giftcard
@@ -273,8 +272,7 @@ def test_medium_detail_event_permission_missing(token_client, organizer, event, 
             sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
-        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
-                                    personalized=True)
+        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
         medium.linked_orderpositions.add(op)
         medium.linked_giftcard = giftcard
@@ -364,8 +362,7 @@ def test_medium_create_linked_orderposition(token_client, organizer, event, org2
             sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
-        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
-                                         personalized=True)
+        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
         op2 = o.positions.create(item=ticket, price=Decimal("14"))
 
@@ -375,8 +372,7 @@ def test_medium_create_linked_orderposition(token_client, organizer, event, org2
             sales_channel=org2_event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
-        org2_ticket = org2_event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
-                                                   personalized=True)
+        org2_ticket = org2_event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True)
         org2_op = org2_o.positions.create(item=org2_ticket, price=Decimal("14"))
 
     payload = dict(TEST_MEDIUM_CREATE_PAYLOAD)
@@ -513,8 +509,7 @@ def test_medium_patch(token_client, organizer, event, medium, giftcard, customer
             sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
-        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
-                                         personalized=True)
+        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
         op2 = o.positions.create(item=ticket, price=Decimal("14"))
 
@@ -704,8 +699,7 @@ def test_medium_lookup_cross_organizer(token_client, organizer, organizer2, org2
             sales_channel=org2_event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
-        ticket = org2_event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
-                                         personalized=True)
+        ticket = org2_event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
         medium2.linked_orderpositions.add(op)
         medium2.linked_giftcard = giftcard2
