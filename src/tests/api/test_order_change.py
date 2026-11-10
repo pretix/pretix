@@ -30,10 +30,11 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from i18nfield.strings import LazyI18nString
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
-    InvoiceAddress, Order, OrderPosition, Question, SeatingPlan,
+    InvoiceAddress, Order, OrderPosition, Question, QuestionnaireRow, SeatingPlan,
 )
 from pretix.base.models.orders import OrderFee
 from pretix.base.services.invoices import generate_invoice
@@ -55,10 +56,30 @@ def taxrule(event):
 
 
 @pytest.fixture
-def question(event, item):
+def orderquestionnaire(event, item):
+    questionnaire = event.questionnaires.create(type='order_purchase', internal_name='Order questions')
+    return questionnaire
+
+
+@pytest.fixture
+def orderquestion(event, orderquestionnaire):
+    q = event.questions.create(container_type=Question.ContainerType.ORDER, internal_name="Order comment", type="S", identifier="COMMENT")
+    orderquestionnaire.rows.create(user_datafield=q, label=LazyI18nString('Order comment'), required=False)
+    return q
+
+
+@pytest.fixture
+def questionnaire(event, item):
+    questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
+    questionnaire.items.add(item)
+    return questionnaire
+
+
+@pytest.fixture
+def question(event, questionnaire):
     q = event.questions.create(internal_name="T-Shirt size", type="S", identifier="ABC")
-    q.items.add(item)
     q.options.create(answer="XL", identifier="LVETRWVU")
+    questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
     return q
 
 
@@ -88,7 +109,7 @@ def seat(event, organizer, item):
 
 
 @pytest.fixture
-def order(event, item, taxrule, question):
+def order(event, item, taxrule, question, orderquestion):
     testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc)
     event.plugins += ",pretix.plugins.stripe"
     event.save()
@@ -128,6 +149,7 @@ def order(event, item, taxrule, question):
                       tax_value=Decimal('0.05'), tax_rule=taxrule, canceled=True)
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'),
                                       vat_id="DE123", vat_id_validated=True)
+        o.answers.create(question=orderquestion, answer='A comment for the whole order')
         op = OrderPosition.objects.create(
             order=o,
             item=item,
@@ -532,6 +554,74 @@ def test_order_update_email_to_none(token_client, organizer, event, order):
     assert resp.status_code == 200
     order.refresh_from_db()
     assert order.email is None
+
+
+@pytest.mark.django_db
+def test_order_update_orderlevel_answer(token_client, organizer, event, order, orderquestion):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'answers': [{
+                "datafield": "COMMENT",
+                "answer": "Hello, world."
+            }],
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    with scopes_disabled():
+        assert order.answers.get().answer == "Hello, world."
+
+
+@pytest.mark.django_db
+def test_order_remove_orderlevel_answer(token_client, organizer, event, order, orderquestion):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'answers': [],
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    with scopes_disabled():
+        assert not order.answers.exists()
+
+
+@pytest.mark.django_db
+def test_order_add_orderlevel_answer(token_client, organizer, event, order, orderquestion):
+    with scopes_disabled():
+        oq2 = event.questions.create(container_type=Question.ContainerType.ORDER, internal_name="Test", type="S", identifier="TEST")
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'answers': [
+                {'datafield': 'COMMENT', 'answer': 'Hi there'},
+                {'datafield': 'TEST', 'answer': 'Test answer'},
+            ],
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    with scopes_disabled():
+        assert order.answers.count() == 2
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'answers': [
+                {'datafield': 'TEST', 'answer': 'Test answer'},
+            ],
+        }
+    )
+    assert resp.status_code == 200
+    order.refresh_from_db()
+    with scopes_disabled():
+        assert order.answers.get().answer == "Test answer"
+        assert order.answers.get().question_id == oq2.id
 
 
 @pytest.mark.django_db
@@ -1057,7 +1147,7 @@ def test_position_update_only_partial(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
-def test_position_update_info(token_client, organizer, event, order, question):
+def test_position_update_info(token_client, organizer, event, order, questionnaire, question):
     with scopes_disabled():
         op = order.positions.first()
         question.type = Question.TYPE_CHOICE_MULTIPLE
@@ -1088,13 +1178,24 @@ def test_position_update_info(token_client, organizer, event, order, question):
         ), format='json', data=payload
     )
     assert resp.status_code == 200
+    cooked_id = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
     assert resp.data['answers'] == [
         {
+            'datafield': question.identifier,
             'question': question.pk,
             'question_identifier': question.identifier,
             'answer': 'L',
             'options': [opt.pk],
             'option_identifiers': [opt.identifier],
+        },
+        {
+            'datafield': 'ABC',
+            'question': cooked_id,
+            'answer': 'L',
+            'question_identifier': 'ABC',
+            'options': [opt.pk],
+            'option_identifiers': [opt.identifier],
+            'questionnaire_id': questionnaire.pk,
         }
     ]
     op.refresh_from_db()
@@ -1129,7 +1230,8 @@ def test_position_update_info(token_client, organizer, event, order, question):
                 'country': 'US',
                 'state': 'CA',
                 'attendee_email': 'foo@example.org',
-                f'question_{question.pk}': 'L'
+                f'question_{question.pk}': 'L',
+                f'question_{cooked_id}': 'L',
             }
         ]
     }

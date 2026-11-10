@@ -1113,6 +1113,10 @@ class OrderSerializer(I18nAwareModelSerializer):
                 except InvoiceAddress.DoesNotExist:
                     InvoiceAddress.objects.create(order=instance, **iadata)
 
+        order_answers = validated_data.pop('answers', None)
+        if order_answers is not None:
+            self.fields['answers'].update(instance, order_answers)
+
         for attr, value in validated_data.items():
             if attr in update_fields:
                 setattr(instance, attr, value)
