@@ -417,6 +417,8 @@ div.scrolling-multiple-choice, div.scrolling-choice {
     }
   }
 }
+.clear-input-button { width: 2em; margin-left: -3em; margin-right: 1em; height: 2em; background: transparent; border: 0; color: #aaa; }
+.clear-input-button:hover { color: #777; }
 .team-permission-groups {
   border: 1px solid $input-border;
   border-radius: $input-border-radius;
