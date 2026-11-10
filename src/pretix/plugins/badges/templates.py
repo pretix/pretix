@@ -219,6 +219,11 @@ TEMPLATES = {
         "pagesize": (75 * mm, 52 * mm),
         "layout": _simple_template(75 * mm, 52 * mm),
     },
+    "75x40": {
+        "label": format_lazy(_("{width} x {height} mm label"), width=75, height=40),
+        "pagesize": (75 * mm, 40 * mm),
+        "layout": _simple_template(75 * mm, 40 * mm),
+    },
     "70x36": {
         "label": format_lazy(_("{width} x {height} mm label"), width=70, height=36),
         "pagesize": (70 * mm, 36 * mm),
