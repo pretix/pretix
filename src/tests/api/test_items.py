@@ -2561,8 +2561,21 @@ def test_quota_availability(token_client, organizer, event, quota, item):
 
 
 @pytest.fixture
+def orderquestionnaire(event, item):
+    questionnaire = event.questionnaires.create(type='order_purchase', internal_name='Order questions')
+    return questionnaire
+
+
+@pytest.fixture
+def orderquestion(event, orderquestionnaire):
+    q = event.questions.create(container_type=Question.ContainerType.ORDER, internal_name="Order comment", type="S", identifier="COMMENT")
+    orderquestionnaire.rows.create(user_datafield=q, label=LazyI18nString('Order comment'), required=False)
+    return q
+
+
+@pytest.fixture
 def questionnaire(event, item):
-    questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
+    questionnaire = event.questionnaires.create(type='position_purchase', internal_name='Clothes questions')
     questionnaire.items.add(item)
     return questionnaire
 
@@ -2571,7 +2584,7 @@ def questionnaire(event, item):
 def question(event, questionnaire):
     q = event.questions.create(container_type='P', internal_name="T-Shirt size", type="C", identifier="ABC")
     q.options.create(answer="XL", identifier="LVETRWVU")
-    questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
+    questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True, help_text={"en": "This is an example question"})
     return q
 
 
@@ -2706,14 +2719,6 @@ def test_position_datafield_list(token_client, organizer, event, question, item)
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/?required=false'.format(
-        organizer.slug, event.slug
-    ))
-    assert [res] == resp.data['results']
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/?ask_during_checkin=false'.format(
-        organizer.slug, event.slug
-    ))
-    assert [res] == resp.data['results']
     resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/?identifier=ABC'.format(
         organizer.slug, event.slug
     ))
@@ -2725,17 +2730,39 @@ def test_position_datafield_list(token_client, organizer, event, question, item)
 
 
 @pytest.mark.django_db
-def test_question_detail(token_client, organizer, event, question, item):
-    res = dict(TEST_QUESTION_RES)
+def test_order_datafield_list(token_client, organizer, event, orderquestion, item):
+    res = {
+        'id': orderquestion.pk,
+        'internal_name': 'Order comment',
+        'identifier': 'COMMENT',
+        'type': 'S',
+        'show_during_checkin': False,
+        'print_on_invoice': False,
+        'print_on_invoice_label': None,
+        'valid_number_min': None,
+        'valid_number_max': None,
+        'valid_date_min': None,
+        'valid_date_max': None,
+        'valid_datetime_min': None,
+        'valid_datetime_max': None,
+        'valid_string_length_max': None,
+        'valid_string_length_min': None,
+        'valid_file_portrait': False,
+        'options': [],
+    }
 
-    res["id"] = question.pk
-    res["items"] = [item.pk]
-    res["options"][0]["id"] = question.options.first().pk
-
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug,
-                                                                                   question.pk))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/order/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
-    assert res == resp.data
+    assert [res] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/order/?identifier=COMMENT'.format(
+        organizer.slug, event.slug
+    ))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/order/?identifier=DEF'.format(
+        organizer.slug, event.slug
+    ))
+    assert [] == resp.data['results']
 
 
 @pytest.mark.django_db
@@ -2790,7 +2817,7 @@ def test_position_datafield_update_by_identifier(token_client, organizer, event,
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.identifier),
         {
-            "question": "What's your shoe size?",
+            "internal_name": "What's your shoe size?",
             "type": "N",
         },
         format='json'
@@ -2798,7 +2825,7 @@ def test_position_datafield_update_by_identifier(token_client, organizer, event,
     assert resp.status_code == 200
     with scopes_disabled():
         question = Question.objects.get(pk=resp.data['id'])
-    assert question.question == "What's your shoe size?"
+    assert question.internal_name == "What's your shoe size?"
     assert question.type == "N"
 
 
@@ -2807,7 +2834,7 @@ def test_position_datafield_update_by_id(token_client, organizer, event, questio
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.id),
         {
-            "question": "What's your shoe size?",
+            "internal_name": "What's your shoe size?",
             "type": "N",
         },
         format='json'
@@ -2815,12 +2842,12 @@ def test_position_datafield_update_by_id(token_client, organizer, event, questio
     assert resp.status_code == 200
     with scopes_disabled():
         question = Question.objects.get(pk=resp.data['id'])
-    assert question.question == "What's your shoe size?"
+    assert question.internal_name == "What's your shoe size?"
     assert question.type == "N"
 
 
 @pytest.mark.django_db
-def test_datafield_update_type_changes(token_client, organizer, event, question):
+def test_position_datafield_update_type_changes(token_client, organizer, event, question):
     # Allowed because no answers exist
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.identifier),
@@ -2859,35 +2886,7 @@ def test_datafield_update_type_changes(token_client, organizer, event, question)
 
 
 @pytest.mark.django_db
-def test_questionnaire_update_circular_dependency(token_client, organizer, event, question):
-    with scopes_disabled():
-        q2 = event.questions.create(container_type='P', internal_name="T-Shirt size", type="B", identifier="FOO", dependency_question=question)
-    resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.pk),
-        {
-            "dependency_question": q2.pk
-        },
-        format='json'
-    )
-    assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Circular dependency between questions detected."]}'
-
-
-@pytest.mark.django_db
-def test_question_self_dependency(token_client, organizer, event, question):
-    resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
-        {
-            "dependency_question": question.pk
-        },
-        format='json'
-    )
-    assert resp.status_code == 400
-    assert resp.content.decode() == '{"dependency_question":["A question cannot depend on itself."]}'
-
-
-@pytest.mark.django_db
-def test_datafield_update_options(token_client, organizer, event, question, item):
+def test_position_datafield_update_options(token_client, organizer, event, question, item):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.pk),
         {
@@ -2901,7 +2900,7 @@ def test_datafield_update_options(token_client, organizer, event, question, item
 
 
 @pytest.mark.django_db
-def test_datafield_delete(token_client, organizer, event, question):
+def test_position_datafield_delete(token_client, organizer, event, question):
     resp = token_client.delete('/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.pk))
     assert resp.status_code == 204
     with scopes_disabled():
@@ -2909,17 +2908,128 @@ def test_datafield_delete(token_client, organizer, event, question):
 
 
 @pytest.mark.django_db
-def test_question_update_dependency_values(token_client, organizer, event, question):
-    resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+def test_questionnaire_create(token_client, organizer, event, question, item, item3):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questionnaires/'.format(organizer.slug, event.slug),
         {
-            "dependency_values": ["a", "b"]
+            "internal_name": "Example",
+            "type": "position_purchase",
+            "items": [item.pk],  # duplicate
+            "rows": [{
+                "datafield": question.identifier,
+                "label": {"en": "A question"},
+                "required": True,
+            }]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/questionnaires/'.format(organizer.slug, event.slug),
+        {
+            "internal_name": "Example",
+            "type": "position_purchase",
+            "items": [item3.pk],
+            "rows": [{
+                "datafield": question.identifier,
+                "label": {"en": "A question"},
+                "required": True,
+            }]
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+
+
+@pytest.mark.django_db
+def test_questionnaire_update_circular_dependency(token_client, organizer, event, question, questionnaire):
+    with scopes_disabled():
+        q2 = event.questions.create(container_type='P', internal_name="T-Shirt size", type="B", identifier="FOO")
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questionnaires/{}/'.format(organizer.slug, event.slug, questionnaire.pk),
+        {
+            "rows": [
+                {"datafield": "ABC", "dependency_datafield": "FOO"},
+                {"datafield": "FOO", "dependency_datafield": "ABC"},
+            ],
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["A question can only depend on a previous question from the same questionnaire."]}'
+
+
+@pytest.mark.django_db
+def test_questionnaire_self_dependency(token_client, organizer, event, question, questionnaire):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questionnaires/{}/'.format(organizer.slug, event.slug, questionnaire.pk),
+        {
+            "rows": [
+                {"datafield": "ABC", "dependency_datafield": "ABC"},
+            ],
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["A question can only depend on a previous question from the same questionnaire."]}'
+
+
+@pytest.mark.django_db
+def test_questionnaire_update_dependency_values(token_client, organizer, event, question, questionnaire):
+    with scopes_disabled():
+        q2 = event.questions.create(container_type='P', internal_name="T-Shirt size", type="B", identifier="FOO")
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questionnaires/{}/'.format(organizer.slug, event.slug, questionnaire.pk),
+        {
+            "rows": [
+                {"datafield": "ABC"},
+                {"datafield": "FOO", "dependency_datafield": "ABC", "dependency_values": ["a", "b"]},
+            ],
         },
         format='json'
     )
     assert resp.status_code == 200
     question.refresh_from_db()
-    assert question.dependency_values == ["a", "b"]
+    assert questionnaire.rows.get(user_datafield__identifier='FOO').dependency_values == ["a", "b"]
+
+
+@pytest.mark.django_db
+def test_questionnaire_forbid_checkin_dependency(token_client, organizer, event, question, questionnaire):
+    with scopes_disabled():
+        q2 = event.questions.create(container_type='P', internal_name="T-Shirt size", type="B", identifier="FOO")
+        questionnaire.type = 'position_checkin'
+        questionnaire.save()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questionnaires/{}/'.format(organizer.slug, event.slug, questionnaire.pk),
+        {
+            "rows": [
+                {"datafield": "ABC"},
+                {"datafield": "FOO", "dependency_datafield": "ABC", "dependency_values": ["a", "b"]},
+            ],
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"non_field_errors":["Dependencies are not supported during check-in."]}
+
+
+@pytest.mark.django_db
+def test_questionnaire_unsupported_dependency_types(token_client, organizer, event, question, questionnaire):
+    with scopes_disabled():
+        q2 = event.questions.create(container_type='P', internal_name="A string field", type="S", identifier="FOO")
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questionnaires/{}/'.format(organizer.slug, event.slug, questionnaire.pk),
+        {
+            "rows": [
+                {"datafield": "FOO"},
+                {"datafield": "ABC", "dependency_datafield": "FOO", "dependency_values": ["a", "b"]},
+            ],
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"non_field_errors":["A question can only depend on a boolean or choice question."]}
 
 
 @pytest.mark.django_db

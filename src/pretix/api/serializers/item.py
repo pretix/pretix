@@ -1069,7 +1069,7 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
             #Question.clean_items(event, full_data.get('items') or [])
 
             if (full_data.get('type') == Questionnaire.QuestionnaireType.POSITION_CHECKIN
-                    and any(c['dependency_question'] for c in full_data['rows'])):
+                    and any(c.get('dependency_question') for c in full_data['rows'])):
                 raise ValidationError('Dependencies are not supported during check-in.')
 
             if (not full_data.get('type').startswith('position_')
