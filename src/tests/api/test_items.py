@@ -2585,7 +2585,7 @@ def attendee_data_questionnaire(event):
 TEST_QUESTION_RES = {
     "question": {"en": "T-Shirt size"},
     "type": "C",
-    "required": False,
+    "required": True,
     "items": [],
     "ask_during_checkin": False,
     "show_during_checkin": False,
@@ -2655,7 +2655,7 @@ def test_question_list(token_client, organizer, event, question, item):
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/?required=false'.format(
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/?required=true'.format(
         organizer.slug, event.slug
     ))
     assert [res] == resp.data['results']
@@ -2667,7 +2667,7 @@ def test_question_list(token_client, organizer, event, question, item):
         organizer.slug, event.slug
     ))
     assert [res] == resp.data['results']
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/?required=true'.format(
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/?required=false'.format(
         organizer.slug, event.slug
     ))
     assert [] == resp.data['results']
@@ -2679,6 +2679,21 @@ def test_question_list(token_client, organizer, event, question, item):
         organizer.slug, event.slug
     ))
     assert [] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_question_detail(token_client, organizer, event, question, item):
+    res = dict(TEST_QUESTION_RES)
+
+    res["id"] = question.pk
+    res["items"] = [item.pk]
+    res["options"][0]["id"] = question.options.first().pk
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug,
+                                                                                   question.pk))
+    assert resp.status_code == 200
+    del resp.data['deprecation_warning']
+    assert res == resp.data
 
 
 @pytest.mark.django_db

@@ -637,24 +637,30 @@ class CompatListMixin(DeprecationWarningMixin):
 
 with scopes_disabled():
     class CompatDatafieldFilter(FilterSet):
-        identifier = django_filters.CharFilter(field_name='question__identifier')
         ask_during_checkin = django_filters.BooleanFilter(method='ask_during_checkin_qs')
         required = django_filters.BooleanFilter(method='required_qs')
 
         class Meta:
             model = Question
-            fields = ['required']
+            fields = ['identifier']
 
         def ask_during_checkin_qs(self, qs, name, value):
             return qs.filter(
-                questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN if value else Questionnaire.QuestionnaireType.POSITION_PURCHASE
+                Exists(QuestionnaireRow.objects.filter(
+                    questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN if value else Questionnaire.QuestionnaireType.POSITION_PURCHASE,
+                    user_datafield=OuterRef('pk'),
+                ))
             )
 
         def required_qs(self, qs, name, value):
-            return qs.filter(
-                questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN if value else Questionnaire.QuestionnaireType.POSITION_PURCHASE
-            )
-
+            cond = Exists(QuestionnaireRow.objects.filter(
+                required=True,
+                user_datafield=OuterRef('pk'),
+            ))
+            if value:
+                return qs.filter(cond)
+            else:
+                return qs.filter(~cond)
 
 class CompatQuestionViewSet(ConditionalListView, CompatListMixin, BaseDatafieldViewSet):
     container_type = Question.ContainerType.ORDERPOSITION
