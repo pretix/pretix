@@ -5,6 +5,14 @@
 Check-in
 ========
 
+.. note::
+
+   This API is affected by an upcoming larger change to our API. The API documentation already reflects the future
+   version. Features or fields not yet available are marked with **NEW**.
+   The new version is expected to be released for hosted pretix early December and for self-hosted pretix with
+   version 2027.1.
+   You can find more information `on our blog <https://pretix.eu/about/en/blog/20261110-questionnaires/>`_.
+
 This page describes special APIs built for ticket scanning apps. For managing check-in configuration or other operations,
 please also see :ref:`rest-checkinlists`. The check-in list API also contains endpoints to obtain statistics or log
 failed scans.
@@ -40,7 +48,7 @@ Checking a ticket in
                                  Defaults to ``false`` and only works when ``include_pending`` is set on the check-in
                                  list.
    :>json object answers: If questions are supported/required, you may/must supply a mapping of ``identifier`` (`internal
-                          reference`) of data fields to their respective answers.
+                          reference`) of data fields to their respective answers (**NEW**).
                           For backwards compatibility, a mapping of data field ``id`` to answer is supported, as well.
                           The answers should always be strings. In case of (multiple-)choice-type
                           answers, the string should contain the (comma-separated) IDs of the selected options.

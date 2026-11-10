@@ -4,6 +4,14 @@
 Data field options
 ================
 
+.. note::
+
+   This API is part of an upcoming larger change to our API. The API documentation already reflects the future
+   version. Until the change, this resource is still available at ``/questions/(id)/options/``.
+   The new version is expected to be released for hosted pretix early December and for self-hosted pretix with
+   version 2027.1.
+   You can find more information `on our blog <https://pretix.eu/about/en/blog/20261110-questionnaires/>`_.
+
 Resource description
 --------------------
 

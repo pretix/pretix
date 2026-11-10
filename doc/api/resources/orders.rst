@@ -9,6 +9,14 @@
 Orders
 ======
 
+.. note::
+
+   This API is affected by an upcoming larger change to our API. The API documentation already reflects the future
+   version. Features or fields not yet available are marked with **NEW**.
+   The new version is expected to be released for hosted pretix early December and for self-hosted pretix with
+   version 2027.1.
+   You can find more information `on our blog <https://pretix.eu/about/en/blog/20261110-questionnaires/>`_.
+
 Order resource
 --------------
 
@@ -119,7 +127,7 @@ cancellation_date                     datetime                   Time of order c
 plugin_data                           object                     Additional data added by plugins.
 use_gift_cards                        list of strings            List of unique gift card secrets that are used to pay
                                                                  for this order.
-answers                               list of objects            Values of data fields (answers to user-defined questions)
+answers                               list of objects            **NEW** Values of data fields (answers to user-defined questions)
 ├ datafield                           string                     The data field's ``identifier`` (internal reference)
 ├ answer                              string                     Text representation of the answer
 ├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
@@ -167,7 +175,7 @@ answers                               list of objects            Values of data 
 
    The ``use_gift_cards`` attribute has been added.
 
-.. versionchanged:: 2026.xx
+.. versionchanged:: 2027.1
 
    The ``answers`` attribute has been added.
 
@@ -241,7 +249,7 @@ downloads                             list of objects            List of ticket 
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
 └ url                                 string                     Download URL
 answers                               list of objects            Values of data fields (answers to user-defined questions)
-├ datafield                           string                     The data field's ``identifier`` (internal reference)
+├ datafield                           string                     **NEW** The data field's ``identifier`` (internal reference)
 ├ answer                              string                     Text representation of the answer
 ├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
 ├ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
@@ -1107,7 +1115,8 @@ Creating orders
       * ``discount`` (optional, only possible if ``price`` is set; attention: if this is set to not-``null`` on any position, automatic calculation of discounts will not run)
       * ``answers``
 
-        * ``datafield``
+        * ``datafield`` (**NEW**)
+        * ``question`` (**DEPRECATED**)
         * ``answer``
         * ``options``
 
@@ -1142,7 +1151,7 @@ Creating orders
      order isn't completely paid after its creation with ``use_gift_cards``, then a subsequent request to the payment
      endpoint is needed.
 
-   * ``answers`` (optional). Values for order-level data fields.
+   * **NEW** ``answers`` (optional). Values for order-level data fields.
 
      * ``datafield``
      * ``answer``

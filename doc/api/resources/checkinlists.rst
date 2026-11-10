@@ -5,6 +5,14 @@
 Check-in lists
 ==============
 
+.. note::
+
+   This API is affected by an upcoming larger change to our API. The API documentation already reflects the future
+   version. Features or fields not yet available are marked with **NEW**.
+   The new version is expected to be released for hosted pretix early December and for self-hosted pretix with
+   version 2027.1.
+   You can find more information `on our blog <https://pretix.eu/about/en/blog/20261110-questionnaires/>`_.
+
 Resource description
 --------------------
 
@@ -630,7 +638,7 @@ Order position endpoints
                         create only one check-in object even when the previous request was successful as well. This
                         allows for a certain level of idempotency and enables you to re-try after a connection failure.
    :>json object answers: If questions are supported/required, you may/must supply a mapping of ``identifier`` (`internal
-                          reference`) of data fields to their respective answers.
+                          reference`) of data fields to their respective answers (**NEW**).
                           For backwards compatibility, a mapping of data field ``id`` to answer is supported, as well.
                           The answers should always be strings. In case of (multiple-)choice-type
                           answers, the string should contain the (comma-separated) IDs of the selected options.

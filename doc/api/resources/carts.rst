@@ -3,6 +3,14 @@
 Cart positions
 ==============
 
+.. note::
+
+   This API is affected by an upcoming larger change to our API. The API documentation already reflects the future
+   version. Features or fields not yet available are marked with **NEW**.
+   The new version is expected to be released for hosted pretix early December and for self-hosted pretix with
+   version 2027.1.
+   You can find more information `on our blog <https://pretix.eu/about/en/blog/20261110-questionnaires/>`_.
+
 The API provides limited access to the cart position data model. This API currently only allows creating and deleting
 cart positions to reserve quota.
 
@@ -32,7 +40,7 @@ addon_to                              integer                    Internal ID of 
 is_bundled                            boolean                    If ``addon_to`` is set, this shows whether this is a bundled product or an addon product
 subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``)
 answers                               list of objects            Values of data fields (answers to user-defined questions)
-├ datafield                           string                     The data field's ``identifier`` (internal reference)
+├ datafield                           string                     **NEW** The data field's ``identifier`` (internal reference)
 ├ answer                              string                     Text representation of the answer
 ├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
 ├ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
@@ -200,7 +208,8 @@ Cart position endpoints
    * ``bundled`` (optional, expect a list of nested objects of cart positions)
    * ``answers``
 
-      * ``datafield``
+      * ``datafield`` **NEW**
+      * ``question`` **DEPRECATED**
       * ``answer``
       * ``options``
 

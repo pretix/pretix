@@ -230,7 +230,7 @@ meta_data                               object                     Values set fo
 
    The ``program_times`` attribute has been added.
 
-.. versionchanged:: 2026.[TODO]
+.. versionchanged:: 2027.1
 
    The ``personalized`` attribute has been deprecated.
 
