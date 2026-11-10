@@ -548,38 +548,39 @@ def test_item_detail_program_times(token_client, organizer, event, team, item, c
 
 @pytest.mark.django_db
 def test_item_create(token_client, organizer, event, item, category, taxrule, membership_type):
+    create_data = {
+        "category": category.pk,
+        "name": {
+            "en": "Ticket"
+        },
+        "active": True,
+        "sales_channels": ["web", "bar"],
+        "description": None,
+        "default_price": "23.00",
+        "free_price": False,
+        "tax_rate": "19.00",
+        "tax_rule": taxrule.pk,
+        "admission": True,
+        "issue_giftcard": False,
+        "position": 0,
+        "picture": None,
+        "available_from": None,
+        "available_until": None,
+        "require_voucher": False,
+        "hide_without_voucher": False,
+        "allow_cancel": True,
+        "min_per_order": None,
+        "max_per_order": None,
+        "checkin_attention": False,
+        "has_variations": True,
+        "require_membership_types": [membership_type.pk],
+        "meta_data": {
+            "day": "Wednesday"
+        }
+    }
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
-        {
-            "category": category.pk,
-            "name": {
-                "en": "Ticket"
-            },
-            "active": True,
-            "sales_channels": ["web", "bar"],
-            "description": None,
-            "default_price": "23.00",
-            "free_price": False,
-            "tax_rate": "19.00",
-            "tax_rule": taxrule.pk,
-            "admission": True,
-            "issue_giftcard": False,
-            "position": 0,
-            "picture": None,
-            "available_from": None,
-            "available_until": None,
-            "require_voucher": False,
-            "hide_without_voucher": False,
-            "allow_cancel": True,
-            "min_per_order": None,
-            "max_per_order": None,
-            "checkin_attention": False,
-            "has_variations": True,
-            "require_membership_types": [membership_type.pk],
-            "meta_data": {
-                "day": "Wednesday"
-            }
-        },
+        create_data,
         format='json'
     )
     assert resp.status_code == 201
@@ -589,7 +590,24 @@ def test_item_create(token_client, organizer, event, item, category, taxrule, me
         assert sorted(i.limit_sales_channels.values_list("identifier", flat=True)) == ["bar", "web"]
         assert i.meta_data == {'day': 'Wednesday'}
         assert i.require_membership_types.count() == 1
-        assert i.personalized is True  # auto-set for backwards-compatibility
+        assert i.questionnaires.count() == 0  # no auto-add to Attendee data questionnaire, we removed the `personalized` default
+        assert i.admission is True
+
+    create_data['personalized'] = True
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        create_data,
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        i = Item.objects.get(pk=resp.data['id'])
+        assert not i.all_sales_channels
+        assert sorted(i.limit_sales_channels.values_list("identifier", flat=True)) == ["bar", "web"]
+        assert i.meta_data == {'day': 'Wednesday'}
+        assert i.require_membership_types.count() == 1
+        assert i.questionnaires.count() == 1  # add to Attendee data questionnaire if `personalized` == true
+        assert i.questionnaires.get().compat_personalization
         assert i.admission is True
 
 
