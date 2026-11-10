@@ -44,7 +44,7 @@ def timeline_for_event(event, subevent=None):
     ev = subevent or event
     if subevent:
         ev_edit_url = reverse(
-            'control:event.subevent', kwargs={
+            'control:event.subevent.edit', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug,
                 'subevent': subevent.pk

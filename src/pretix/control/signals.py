@@ -133,22 +133,14 @@ This signal is sent out to include custom HTML in the top part of the the event 
 Receivers should return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
-An additional keyword argument ``subevent`` *can* contain a sub-event.
 """
 
-event_dashboard_widgets = EventPluginSignal()
+event_dashboard_statistics = EventPluginSignal()
 """
-This signal is sent out to include widgets in the event dashboard. Receivers
-should return a list of dictionaries, where each dictionary can have the keys:
-
-* content (SafeString, containing HTML)
-* display_size (str, one of "full" (whole row), "big" (half a row) or "small"
-  (quarter of a row). May be ignored on small displays, default is "small")
-* priority (int, used for ordering, higher comes first, default is 1)
-* url (str, optional, if the full widget should be a link)
+This signal is sent out to include statistical content on the event dashboard.
+Receivers should return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
-An additional keyword argument ``subevent`` *can* contain a sub-event.
 """
 
 user_dashboard_widgets = GlobalSignal()
