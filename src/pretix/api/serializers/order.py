@@ -300,7 +300,7 @@ class MixedAnswerListSerializer(ListSerializer):
                     if "question" in answer:
                         qid, dfid, sys_df = QuestionnaireRow.uncook_id(answer["question"])
                     else:
-                        qid, dfid, sys_df = None, None, answer["question"]
+                        qid, dfid, sys_df = None, None, answer["datafield"]
                     if dfid:
                         answer["question"] = dfid
                         answers.append(answer)
