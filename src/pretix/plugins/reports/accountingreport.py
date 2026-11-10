@@ -27,6 +27,7 @@ from decimal import Decimal
 
 from django import forms
 from django.db.models import F, Sum
+from django.db.models.aggregates import Min
 from django.db.models.functions import Coalesce
 from django.utils.formats import date_format
 from django.utils.html import escape
@@ -117,42 +118,33 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             dt_start, df_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(
                 now(), form_data["date_range"], self.timezone
             )
-            if dt_start:
-                filters.append(
-                    _("Begin")
-                    + ": "
-                    + date_format(
-                        dt_start.astimezone(self.timezone), "SHORT_DATETIME_FORMAT"
-                    )
-                )
-            if df_end:
-                filters.append(
-                    _("End")
-                    + ": "
-                    + date_format(
-                        (df_end - datetime.timedelta.resolution).astimezone(
-                            self.timezone
-                        ),
-                        "SHORT_DATETIME_FORMAT",
-                    )
-                )
         else:
-            oldest = Order.objects.filter(
+            dt_start = Order.objects.filter(
                 event__in=self.events,
-            ).order_by("datetime").first()
+            ).aggregate(min_datetime=Min('datetime'))['min_datetime']
+            df_end = now()
+
+        if dt_start:
             filters.append(
-                _("Date range")
+                "{label}: {value}{hint}".format(
+                    label=_("Begin"),
+                    value=date_format(
+                        dt_start.astimezone(self.timezone), "SHORT_DATETIME_FORMAT"
+                    ),
+                    hint="" if form_data["date_range"] else " ({})".format(_("first order received"))
+                )
+            )
+
+        if df_end:
+            filters.append(
+                _("End")
                 + ": "
-                + _("All time")
-                + " ("
                 + date_format(
-                    oldest.datetime, "SHORT_DATETIME_FORMAT"
+                    (df_end - datetime.timedelta.resolution).astimezone(
+                        self.timezone
+                    ),
+                    "SHORT_DATETIME_FORMAT",
                 )
-                + " - "
-                + date_format(
-                    now().astimezone(self.timezone), "SHORT_DATETIME_FORMAT"
-                )
-                + ")"
             )
 
         if not form_data["no_testmode"]:
