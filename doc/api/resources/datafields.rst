@@ -106,6 +106,7 @@ Endpoints
             "identifier": "WY3TP9SL",
             "show_during_checkin": false,
             "print_on_invoice": false,
+            "print_on_invoice_label": null,
             "valid_number_min": null,
             "valid_number_max": null,
             "valid_date_min": null,
@@ -180,6 +181,7 @@ Endpoints
         "identifier": "WY3TP9SL",
         "show_during_checkin": false,
         "print_on_invoice": false,
+        "print_on_invoice_label": null,
         "valid_number_min": null,
         "valid_number_max": null,
         "valid_date_min": null,
@@ -238,6 +240,7 @@ Endpoints
         "type": "C",
         "show_during_checkin": false,
         "print_on_invoice": false,
+        "print_on_invoice_label": null,
         "options": [
           {
             "answer": {"en": "S"}
@@ -267,6 +270,7 @@ Endpoints
         "identifier": "WY3TP9SL",
         "show_during_checkin": false,
         "print_on_invoice": false,
+        "print_on_invoice_label": null,
         "valid_number_min": null,
         "valid_number_max": null,
         "valid_date_min": null,
@@ -345,6 +349,7 @@ Endpoints
         "identifier": "WY3TP9SL",
         "show_during_checkin": false,
         "print_on_invoice": false,
+        "print_on_invoice_label": null,
         "valid_number_min": null,
         "valid_number_max": null,
         "valid_date_min": null,
