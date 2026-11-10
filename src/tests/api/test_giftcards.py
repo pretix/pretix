@@ -118,8 +118,7 @@ def test_giftcard_detail_expand(token_client, organizer, event, giftcard):
             sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
-        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
-                                    personalized=True)
+        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
         giftcard.owner_ticket = op
         giftcard.save()
@@ -180,8 +179,7 @@ def test_giftcard_detail_expand_without_permissions(team, token_client, organize
             sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
-        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
-                                    personalized=True)
+        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
         giftcard.owner_ticket = op
         giftcard.save()
@@ -244,8 +242,7 @@ def test_giftcard_patch_owner_by_id(token_client, organizer, event, giftcard):
             sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
-        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
-                                    personalized=True)
+        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
 
     resp = token_client.patch(
@@ -269,8 +266,7 @@ def test_giftcard_patch_owner_by_secret(token_client, organizer, event, giftcard
             sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
-        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
-                                    personalized=True)
+        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
 
     resp = token_client.patch(
