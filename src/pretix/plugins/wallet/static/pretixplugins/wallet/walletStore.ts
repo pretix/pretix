@@ -1,4 +1,4 @@
-import { i18nstringLocalize } from "./helpers.js";
+import { i18nstring_localize } from "/src/pretix/static/pretixbase/js/i18nstring.ts";
 import { createStore } from "./lib/store";
 import { toRaw, type InjectionKey } from "vue";
 
@@ -80,8 +80,7 @@ export function createWalletStore(config: {
 				return this.platform.styles;
 			},
 			settings() {
-				const settings: Record<string, string | { name: string; url: string }> =
-					{};
+				const settings: Record<string, SettingValue> = {};
 				for (const setting of this.style.settings) {
 					if (
 						setting.type == "text" ||
@@ -102,6 +101,28 @@ export function createWalletStore(config: {
 				}
 				return settings;
 			},
+			settingsValues(): Record<string, SettingValue> {
+				const settings: Record<string, SettingValue> = {};
+				for (const setting of this.style.settings) {
+					if (
+						setting.type == "text" ||
+						setting.type == "color" ||
+						setting.type == "float" ||
+						setting.type == "bool"
+					) {
+						settings[setting.identifier] =
+							this.layout.settings[setting.identifier] || setting.default;
+					} else if (setting.type == "image") {
+						const val = this.layout.file_settings[setting.identifier];
+						if (val && "url" in val && val.url) {
+							settings[setting.identifier] = val;
+						} else if (setting.default) {
+							settings[setting.identifier] = { url: setting.default };
+						}
+					}
+				}
+				return settings;
+			},
 			renderedFieldGroups() {
 				const content = {};
 				const placeholderFieldGroups = this.style.fieldgroups.filter(
@@ -113,7 +134,7 @@ export function createWalletStore(config: {
 						fieldgroup.identifier
 					] as any as PlaceholderFieldGroupConfig;
 					for (const entry of layout_group.entries) {
-						let label = i18nstringLocalize(entry.label);
+						let label = i18nstring_localize(entry.label);
 						let value = null;
 						if (entry.type === "placeholder") {
 							const placeholder =
@@ -122,11 +143,11 @@ export function createWalletStore(config: {
 								continue;
 							}
 							if (!label) {
-								label = i18nstringLocalize(placeholder.label);
+								label = i18nstring_localize(placeholder.label);
 							}
 							value = placeholder?.sample;
 						} else if (entry.type == "custom") {
-							value = i18nstringLocalize(entry.content);
+							value = i18nstring_localize(entry.content);
 						}
 						content[fieldgroup.identifier].push({
 							label,
@@ -226,7 +247,7 @@ export function createWalletStore(config: {
 					}
 				}
 			},
-			getSettingValue(identifier: string): Setting | { url: string } {
+			getSettingValue(identifier: string): SettingValue {
 				const setting = this.getSetting(identifier);
 				if (!setting) return;
 

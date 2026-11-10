@@ -4,7 +4,7 @@ import Select from "./input/select.vue";
 import I18nInput from "./input/i18ninput.vue";
 import TextContent from "./text-content.vue";
 import { StoreKey } from "../walletStore";
-import { i18nstringLocalize } from "../helpers.js";
+import { i18nstring_localize } from "/src/pretix/static/pretixbase/js/i18nstring.ts";
 
 const store = inject(StoreKey)!;
 
@@ -54,7 +54,7 @@ const placeholderChoices = computed(() => {
         .filter(([_, { required_context }]) =>
             new Set(required_context).isSubsetOf(availableContext),
         )
-        .map(([k, v]): [string, string] => [k, i18nstringLocalize(v.label)]);
+        .map(([k, v]): [string, string] => [k, i18nstring_localize(v.label)]);
     choices.push(["other", gettext("Other…")]);
     return choices;
 });
@@ -79,7 +79,7 @@ const placeholders = computed(() => {
                     : null;
         const placeholders = {};
         let base;
-        if (i18nstringLocalize(entry.label)) {
+        if (i18nstring_localize(entry.label)) {
             base = entry.label
         } else if (placeholder) {
             base = placeholder.label
@@ -87,7 +87,7 @@ const placeholders = computed(() => {
             return null
         }
         for (const locale of Object.keys(store.locales)) {
-            placeholders[locale] = i18nstringLocalize(base, locale)
+            placeholders[locale] = i18nstring_localize(base, locale)
         }
         return placeholders
     })
@@ -119,7 +119,7 @@ const placeholders = computed(() => {
                                             :placeholderChoices="placeholderChoices")
                                 Select(v-else-if='fieldgroup.content_type == "image"'
                                         v-model="fieldConfig.entries[n - 1].content"
-                                        :choices="Object.entries(store.placeholders.image).map(([k, v]) => [k, i18nstringLocalize(v.label)])"
+                                        :choices="Object.entries(store.placeholders.image).map(([k, v]) => [k, i18nstring_localize(v.label)])"
                                     )
                             td.text-right
                                 button.btn.btn-danger.form-control-static(type="button" @click="fieldConfig.entries.splice(n - 1, 1)" v-if="fieldConfig.entries.length > (fieldgroup.min_entries||0)")

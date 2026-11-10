@@ -44,7 +44,6 @@ const ignores = globalIgnores([
 	'src/pretix/static/pretixbase/js/asynctask.js',
 	'src/pretix/static/pretixbase/js/details.js',
 	'src/pretix/static/pretixbase/js/gettextstub.js',
-	'src/pretix/static/pretixbase/js/i18nstring.js',
 	'src/pretix/static/pretixcontrol/js/menu.js',
 	'src/pretix/static/pretixcontrol/js/ui/editor.js',
 	'src/pretix/static/pretixcontrol/js/ui/geo.js',

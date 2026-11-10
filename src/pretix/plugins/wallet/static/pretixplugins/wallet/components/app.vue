@@ -46,7 +46,10 @@ async function openPreview(e: Event) {
 const platformChoices = computed((): [string, string][] => {
 	return [
 		[null, "Do not generate pass"],
-		...Object.values(store.platform.styles).map((x): [string, string] => [x.identifier, x.name]),
+		...Object.values(store.platform.styles).map((x): [string, string] => [
+			x.identifier,
+			x.name,
+		]),
 	];
 });
 
@@ -55,6 +58,15 @@ const previewRenderers = {
 	google_eventticket_custom: GoogleEventCustom,
 	apple_eventticket: Apple,
 };
+
+const preview_data = computed(() => {
+	return {
+		data: store.style?.preview_data,
+		fieldgroups: store.fieldgroups,
+		fieldgroup_contents: store.renderedFieldGroups,
+		settings: store.settingsValues,
+	};
+});
 </script>
 
 <template lang="pug">
@@ -81,7 +93,7 @@ const previewRenderers = {
                         .panel-body
                             div(v-if="!!store.style?.preview_renderer && store.style?.preview_renderer in previewRenderers")
                                 p.text-muted {{ gettext("The preview below is only a rough representation of what the pass might look like. Please check the generated pass.") }}
-                                component(:is="previewRenderers[store.style?.preview_renderer]" :data="store.style?.preview_data")
+                                component(:is="previewRenderers[store.style?.preview_renderer]" v-bind="preview_data")
                             div(v-else) Preview not supported
         .form-group.submit-group
             button.btn.btn-lg.btn-default(type="button" @click="openPreview") Preview

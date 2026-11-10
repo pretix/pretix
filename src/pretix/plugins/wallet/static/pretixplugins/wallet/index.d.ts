@@ -80,6 +80,7 @@ type Setting = {
 	help_text: string;
 	default: string;
 };
+type SettingValue = string | number | boolean | WalletFile | { url: string };
 
 type PlaceholderFieldGroupConfig = {
 	entries: Array<FieldEntry>;
@@ -98,7 +99,6 @@ type LayoutData = {
 	fieldgroups?: Record<string, FieldGroupConfig>;
 	settings?: Record<string, any>;
 };
-
 
 type PlatformLayout = {
 	style: string;
