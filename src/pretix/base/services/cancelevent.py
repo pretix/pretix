@@ -39,7 +39,8 @@ from pretix.base.models import (
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import mail
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, _cancel_order, _try_auto_refund,
+    OrderChangeManager, OrderError, _attendee_mail_send_helper, _cancel_order,
+    _try_auto_refund,
 )
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.services.tax import split_fee_for_taxes
@@ -79,22 +80,38 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
             user,
         )
 
-        for p in positions:
-            if subevent and p.subevent_id != subevent.id:
-                continue
+        # todo before pr ready: (aka note to myself)
+        #  check if we use a checkbox in the form here
+        #  (because before, we didn't check for it and maybe we don't want to here)
+        #  also: do we really want to inform attendees about the refund_amount
+        #  or do we need to because else the template does not work?
+        _attendee_mail_send_helper(
+            event=order.event,
+            order=order,
+            positions=positions,
+            template=message,
+            subject=subject,
+            log_entry_type='pretix.event.order.email.event_canceled',
+            user=user,
+            subevent=subevent,
+        )
 
-            if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-                email_context = get_email_context(event_or_subevent=p.subevent or order.event,
-                                                  event=order.event,
-                                                  refund_amount=refund_amount,
-                                                  position_or_address=p,
-                                                  order=order, position=p)
-                order.send_mail(
-                    subject, message, email_context,
-                    'pretix.event.order.email.event_canceled',
-                    position=p,
-                    user=user
-                )
+        # for p in positions:
+        #     if subevent and p.subevent_id != subevent.id:
+        #         continue
+        #
+        #     if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
+        #         email_context = get_email_context(event_or_subevent=p.subevent or order.event,
+        #                                           event=order.event,
+        #                                           refund_amount=refund_amount,
+        #                                           position_or_address=p,
+        #                                           order=order, position=p)
+        #         order.send_mail(
+        #             subject, message, email_context,
+        #             'pretix.event.order.email.event_canceled',
+        #             position=p,
+        #             user=user
+        #         )
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
