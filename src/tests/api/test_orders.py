@@ -55,6 +55,19 @@ def taxrule(event):
 
 
 @pytest.fixture
+def orderquestionnaire(event, item):
+    questionnaire = event.questionnaires.create(type='order_purchase', internal_name='Order questions')
+    return questionnaire
+
+
+@pytest.fixture
+def orderquestion(event, orderquestionnaire):
+    q = event.questions.create(container_type=Question.ContainerType.ORDER, internal_name="Order comment", type="S", identifier="COMMENT")
+    orderquestionnaire.rows.create(user_datafield=q, label=LazyI18nString('Order comment'), required=False)
+    return q
+
+
+@pytest.fixture
 def questionnaire(event, item):
     questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
     questionnaire.items.add(item)
@@ -86,7 +99,7 @@ def quota(event, item):
 
 
 @pytest.fixture
-def order(event, item, device, taxrule, question):
+def order(event, item, device, taxrule, question, orderquestion):
     testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc)
     event.plugins += ",pretix.plugins.stripe"
     event.save()
@@ -126,6 +139,7 @@ def order(event, item, device, taxrule, question):
                       tax_value=Decimal('0.05'), tax_rule=taxrule, tax_code=taxrule.code, canceled=True)
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'),
                                       vat_id="DE123", vat_id_validated=True, custom_field="Custom info")
+        o.answers.create(question=orderquestion, answer='A comment for the whole order')
         op = OrderPosition.objects.create(
             order=o,
             item=item,
@@ -388,6 +402,12 @@ TEST_ORDER_RES = {
     "refunds": TEST_REFUNDS_RES,
     "cancellation_date": None,
     "plugin_data": {},
+    "answers": [{
+        "datafield": "COMMENT",
+        "answer": "A comment for the whole order",
+        "options": [],
+        "option_identifiers": [],
+    }],
 }
 
 

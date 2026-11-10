@@ -322,6 +322,46 @@ class MixedAnswerListSerializer(ListSerializer):
         return result
 
 
+class OrderAnswerListSerializer(ListSerializer):
+
+    def update(self, instance, validated_data):
+        qs_seen = set()
+        answercache = {
+            a.question_id: a for a in instance.answers.all()
+        }
+        for answ_data in validated_data:
+            if not answ_data.get('answer'):
+                continue
+            options = answ_data.pop('options', [])
+            if answ_data['question'].pk in qs_seen:
+                raise ValidationError(f'Question {answ_data["question"]} was sent twice.')
+            if answ_data['question'].pk in answercache:
+                a = answercache[answ_data['question'].pk]
+                if isinstance(answ_data.get('answer'), File):
+                    a.file.save(answ_data['answer'].name, answ_data['answer'], save=False)
+                    a.answer = 'file://' + a.file.name
+                elif a.answer.startswith('file://') and answ_data['answer'] == "file:keep":
+                    pass  # keep current file
+                else:
+                    for attr, value in answ_data.items():
+                        setattr(a, attr, value)
+                a.save()
+            else:
+                if isinstance(answ_data.get('answer'), File):
+                    an = answ_data.pop('answer')
+                    a = instance.answers.create(**answ_data, answer='')
+                    a.file.save(os.path.basename(an.name), an, save=False)
+                    a.answer = 'file://' + a.file.name
+                    a.save()
+                else:
+                    a = instance.answers.create(**answ_data)
+            a.options.set(options)
+            qs_seen.add(a.question_id)
+        for qid, a in answercache.items():
+            if qid not in qs_seen:
+                a.delete()
+
+
 class AnswerSerializer(I18nAwareModelSerializer):
     question = PrimaryKeyScopedRelatedField(queryset=lambda event, **kw: event.positiondatafields, required=False)
     datafield = SlugScopedRelatedField(slug_field='identifier', source='question', queryset=lambda event, **kw: event.positiondatafields, required=False)
@@ -424,6 +464,15 @@ class AnswerSerializer(I18nAwareModelSerializer):
             elif data.get('question').type == Question.TYPE_DATETIME:
                 data['answer'] = serializers.DateTimeField().to_internal_value(data.get('answer'))
         return data
+
+
+class OrderAnswerSerializer(AnswerSerializer):
+    datafield = SlugScopedRelatedField(slug_field='identifier', source='question', queryset=lambda event, **kw: event.orderdatafields, required=False)
+    question = None
+
+    class Meta:
+        model = QuestionAnswer
+        fields = ('datafield', 'answer', 'options', 'option_identifiers')
 
 
 class InlineCheckinSerializer(I18nAwareModelSerializer):
@@ -970,6 +1019,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         required=False,
     )
     plugin_data = OrderPluginDataField(source='*', allow_null=True, read_only=True)
+    answers = OrderAnswerListSerializer(child=OrderAnswerSerializer())
 
     class Meta:
         model = Order
@@ -979,7 +1029,7 @@ class OrderSerializer(I18nAwareModelSerializer):
             'payment_provider', 'fees', 'total', 'tax_rounding_mode', 'comment', 'custom_followup_at', 'invoice_address',
             'positions', 'downloads', 'checkin_attention', 'checkin_text', 'last_modified', 'payments', 'refunds',
             'require_approval', 'sales_channel', 'url', 'customer', 'valid_if_pending', 'api_meta', 'cancellation_date',
-            'plugin_data',
+            'plugin_data', 'answers',
         )
         read_only_fields = (
             'code', 'status', 'testmode', 'secret', 'datetime', 'expires', 'payment_date',
@@ -1086,6 +1136,7 @@ class SimulatedOrderPositionSerializer(OrderPositionSerializer):
 
 
 class SimulatedOrderSerializer(OrderSerializer):
+    answers = SimulatedAnswerSerializer(many=True)
     positions = SimulatedOrderPositionSerializer(many=True, read_only=True)
 
 
@@ -1307,6 +1358,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     tax_rounding_mode = serializers.ChoiceField(choices=ROUNDING_MODES, allow_null=True, required=False,)
     locale = serializers.ChoiceField(choices=[], required=False, allow_null=True)
     use_gift_cards = serializers.ListField(child=serializers.CharField(required=False), required=False)
+    answers = OrderAnswerListSerializer(child=OrderAnswerSerializer(required=False), required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1322,7 +1374,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         fields = ('code', 'status', 'testmode', 'email', 'phone', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'checkin_text', 'payment_info', 'payment_date',
                   'consume_carts', 'force', 'send_email', 'simulate', 'customer', 'custom_followup_at',
-                  'require_approval', 'valid_if_pending', 'expires', 'api_meta', 'tax_rounding_mode', 'use_gift_cards')
+                  'require_approval', 'valid_if_pending', 'expires', 'api_meta', 'tax_rounding_mode', 'use_gift_cards',
+                  'answers',)
 
     def validate_payment_provider(self, pp):
         if pp is None:
@@ -1418,6 +1471,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         force = validated_data.pop('force', False)
         simulate = validated_data.pop('simulate', False)
         gift_card_secrets = validated_data.pop('use_gift_cards') if 'use_gift_cards' in validated_data else []
+        order_answers = validated_data.pop('answers', None)
 
         if (payment_provider is not None or payment_info != '{}') and len(gift_card_secrets) > 0:
             raise ValidationError({"use_gift_cards": ['The attribute use_gift_cards is not compatible with payment_provider or payment_info']})
@@ -1679,6 +1733,19 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             else:
                 order.invoice_address = ia
                 ia.last_modified = now()
+
+        if order_answers is not None:
+            if simulate:
+                wrapped_order = WrappedModel(order)
+                answers = []
+                for answ_data in order_answers:
+                    options = answ_data.pop('options', [])
+                    answ = WrappedModel(QuestionAnswer(**answ_data))
+                    answ.options = WrappedList(options)
+                    answers.append(answ)
+                wrapped_order.answers = answers
+            else:
+                self.fields['answers'].update(order, order_answers)
 
         # Generate position objects
         pos_map = {}
