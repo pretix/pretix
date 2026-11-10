@@ -907,10 +907,9 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
                         self.order.log_action('pretix.event.order.invoice.reissued', data={
                             'invoice': inv.pk
                         })
-                        if self.request.event.settings.invoice_transmit_after_modify:
-                            transmit_invoice.apply_async(args=(c.event_id, c.pk, True))
-                            if c.pk != inv.pk:
-                                transmit_invoice.apply_async(args=(inv.event_id, inv.pk, True))
+                        transmit_invoice.apply_async(args=(c.event_id, c.pk, True))
+                        if c.pk != inv.pk:
+                            transmit_invoice.apply_async(args=(inv.event_id, inv.pk, True))
                         messages.success(self.request, _('The invoice has been reissued.'))
                 except Exception as e:
                     self.order.log_action("pretix.event.order.invoice.failed", data={

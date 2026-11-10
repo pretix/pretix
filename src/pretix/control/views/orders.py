@@ -97,7 +97,7 @@ from pretix.base.services.export import (
 )
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
-    invoice_qualified, regenerate_invoice, transmit_invoice,
+    invoice_qualified, regenerate_invoice, transmit_invoice
 )
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import prefix_subject, render_mail
