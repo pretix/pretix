@@ -26,11 +26,13 @@ Reference to system field
 
 
 Reference to user-defined data field
-    To reference a :ref:`user-defined data field <rest-datafields>`, use its internal reference (`identifier`) in the row's `datafield` attribute.
+    To reference a :ref:`user-defined data field <rest-datafields>`, use its internal reference (`identifier`)
+    in the row's `datafield` attribute.
 
 
 Static explanation text / subheading
-    To add a static text block, set the row's `datafield` attribute to `null`.
+    To add a static text block, set the row's `datafield` attribute to `null`. In this case, the text
+    from the `label` attribute is displayed as a subheading, and the `help_text` attribute as a normal paragraph.
 
 
 Resource description
@@ -61,15 +63,16 @@ limit_sales_channels                  list of strings            List of sales c
 rows                                  list of objects            List of all questionnaire rows.
 ├ datafield                           string                     Reference to a data field (see above)
 ├ required                            boolean                    If ``true``, the question needs to be filled out.
-├ label                               multi-lingual string       The field label shown to the customer
-├ help_text                           multi-lingual string       The help text shown to the customer
-├ dependency_question                 string                     ``datafield`` reference of a different row in the same
+├ label                               multi-lingual string       The field label shown to the customer. In case of a static
+                                                                 text block, the subheading.
+├ help_text                           multi-lingual string       The help text shown to the customer.
+├ dependency_datafield                string                     ``datafield`` reference of a different row in the same
                                                                  questionnaire.
                                                                  The current question will only be shown if the question
                                                                  given in this attribute is set to one of the values given
                                                                  in ``dependency_values``.
-├ dependency_values                   list of strings            If ``dependency_question`` is set to a boolean
-                                                                 question, this should be ``["True"]`` or ``["False"]``.
+├ dependency_values                   list of strings            If ``dependency_datafield`` is set to reference a boolean
+                                                                 data field, this should be ``["True"]`` or ``["False"]``.
                                                                  Otherwise, it should be a list of ``identifier`` values
                                                                  of question options.
 ├ rendered_help_text                  string                     **Read-only.** Markdown contents from help_text rendered
@@ -120,7 +123,7 @@ Endpoints
                 "required": false,
                 "label": {"en": "Attendee name"},
                 "help_text": {},
-                "dependency_question": null,
+                "dependency_datafield": null,
                 "dependency_values": [],
                 "rendered_help_text": ""
               },
@@ -129,7 +132,7 @@ Endpoints
                 "required": false,
                 "label": {"en": "Attendee email"},
                 "help_text": {"en": "*We'll send you our program guide a few days before the event.*"},
-                "dependency_question": null,
+                "dependency_datafield": null,
                 "dependency_values": [],
                 "rendered_help_text": "<em>We'll send you our program guide a few days before the event.</em>"
               }
@@ -149,7 +152,7 @@ Endpoints
                 "required": false,
                 "label": {"en": "How did you find us?"},
                 "help_text": {},
-                "dependency_question": null,
+                "dependency_datafield": null,
                 "dependency_values": [],
                 "rendered_help_text": ""
               }
@@ -204,7 +207,7 @@ Endpoints
             "required": false,
             "label": {"en": "How did you find us?"},
             "help_text": {},
-            "dependency_question": null,
+            "dependency_datafield": null,
             "dependency_values": [],
             "rendered_help_text": ""
           }
@@ -267,7 +270,7 @@ Endpoints
             "required": false,
             "label": {"en": "How did you find us?"},
             "help_text": {},
-            "dependency_question": null,
+            "dependency_datafield": null,
             "dependency_values": [],
             "rendered_help_text": ""
           }
@@ -326,7 +329,7 @@ Endpoints
             "required": false,
             "label": {"en": "How did you find us?"},
             "help_text": {},
-            "dependency_question": null,
+            "dependency_datafield": null,
             "dependency_values": [],
             "rendered_help_text": ""
           }
