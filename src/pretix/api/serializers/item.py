@@ -702,8 +702,8 @@ class DatafieldSerializer(I18nAwareModelSerializer):
     options = InlineQuestionOptionSerializer(many=True, required=False)
     identifier = serializers.CharField(allow_null=True)
 
-    referenced_by_questionnaires = MergeField('referenced_by', serializers.IntegerField(source='questionnaire.id'), mode='list')
-    questionnaire_types = MergeField('referenced_by', serializers.CharField(source='questionnaire.type'), mode='list')
+    #referenced_by_questionnaires = MergeField('referenced_by', serializers.IntegerField(source='questionnaire.id'), mode='list')
+    #questionnaire_types = MergeField('referenced_by', serializers.CharField(source='questionnaire.type'), mode='list')
 
     class Meta:
         model = Question
@@ -712,7 +712,7 @@ class DatafieldSerializer(I18nAwareModelSerializer):
                   'print_on_invoice', 'print_on_invoice_label', 'valid_number_min',
                   'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max',
                   'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait',
-                  'referenced_by_questionnaires', 'questionnaire_types',
+                  #'referenced_by_questionnaires', 'questionnaire_types',
                   'options')
 
     def validate_identifier(self, value):

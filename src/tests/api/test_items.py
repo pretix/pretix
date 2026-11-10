@@ -294,6 +294,13 @@ def item3(event):
     return event.items.create(name="Budget Ticket", default_price=23)
 
 
+@pytest.fixture
+def personalized_item(event, questionnaire, attendee_data_questionnaire):
+    item = event.items.create(name="Personalized Ticket", default_price=23, admission=True)
+    item.questionnaires.set([attendee_data_questionnaire, questionnaire])
+    return item
+
+
 TEST_ITEM_RES = {
     "name": {"en": "Budget Ticket"},
     "internal_name": None,
@@ -1273,7 +1280,6 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
     assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, program times or variations via ' \
                                     'PATCH/PUT is not supported. Please use the dedicated nested endpoint."]}'
 
-    item.personalized = True
     item.admission = True
     item.save()
 
@@ -1292,7 +1298,6 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
 
     item.refresh_from_db()
     assert item.admission
-    assert item.personalized
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
@@ -1309,13 +1314,36 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
         {
+            "admission": True,
+            "personalized": True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"personalized":{"personalized":["Deprecated field \\"personalized\\" can not be updated."]}}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
             "admission": False,
             "personalized": True,
         },
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Only admission products can currently be personalized."]}'
+    assert resp.content.decode() == '{"personalized":{"personalized":["Deprecated field \\"personalized\\" can not be updated."]}}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "admission": False,
+            "personalized": False,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    item.refresh_from_db()
+    assert not item.admission
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
@@ -1327,7 +1355,66 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
     assert resp.status_code == 200
     item.refresh_from_db()
     assert not item.admission
-    assert not item.personalized  # also set for backwards compatibility
+
+
+@pytest.mark.django_db(transaction=True)
+def test_item_update_personalized(token_client, organizer, event, personalized_item):
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
+                                                                               personalized_item.pk))
+    assert resp.status_code == 200
+    assert resp.data['admission'] == True
+    assert resp.data['personalized'] == True
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, personalized_item.pk),
+        {
+            "admission": True,
+            "personalized": False,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"personalized":{"personalized":["Deprecated field \\"personalized\\" can not be updated."]}}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, personalized_item.pk),
+        {
+            "admission": False,
+            "personalized": False,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"personalized":{"personalized":["Deprecated field \\"personalized\\" can not be updated."]}}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, personalized_item.pk),
+        {
+            "admission": False,
+            "personalized": True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    personalized_item.refresh_from_db()
+    assert not personalized_item.admission
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, personalized_item.pk),
+        {
+            "admission": False
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    personalized_item.refresh_from_db()
+    assert not personalized_item.admission
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
+                                                                               personalized_item.pk))
+    assert resp.status_code == 200
+    assert resp.data['admission'] == False
+    assert resp.data['personalized'] == True
 
 
 @pytest.mark.django_db
@@ -2482,10 +2569,17 @@ def questionnaire(event, item):
 
 @pytest.fixture
 def question(event, questionnaire):
-    q = event.questions.create(container_type='P', internal_name="T-Shirt size", type="S", identifier="ABC")
+    q = event.questions.create(container_type='P', internal_name="T-Shirt size", type="C", identifier="ABC")
     q.options.create(answer="XL", identifier="LVETRWVU")
     questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
     return q
+
+
+@pytest.fixture
+def attendee_data_questionnaire(event):
+    questionnaire = event.questionnaires.create(type='position_purchase', internal_name='Attendee data', compat_personalization=True)
+    questionnaire.rows.create(system_datafield='@attendee_name_parts', label=LazyI18nString('Attendee name'))
+    return questionnaire
 
 
 TEST_QUESTION_RES = {
@@ -2528,7 +2622,7 @@ TEST_DATAFIELD_RES = {
     "type": "C",
     "show_during_checkin": False,
     "print_on_invoice": False,
-    "print_on_invoice_label": {},
+    "print_on_invoice_label": None,
     "identifier": "ABC",
     "valid_number_min": None,
     "valid_number_max": None,
@@ -2609,14 +2703,6 @@ def test_position_datafield_list(token_client, organizer, event, question, item)
         organizer.slug, event.slug
     ))
     assert [res] == resp.data['results']
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/?required=true'.format(
-        organizer.slug, event.slug
-    ))
-    assert [] == resp.data['results']
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/?ask_during_checkin=true'.format(
-        organizer.slug, event.slug
-    ))
-    assert [] == resp.data['results']
     resp = token_client.get('/api/v1/organizers/{}/events/{}/datafields/position/?identifier=DEF'.format(
         organizer.slug, event.slug
     ))
@@ -2719,7 +2805,7 @@ def test_position_datafield_update_by_id(token_client, organizer, event, questio
 
 
 @pytest.mark.django_db
-def test_question_update_type_changes(token_client, organizer, event, question):
+def test_datafield_update_type_changes(token_client, organizer, event, question):
     # Allowed because no answers exist
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.identifier),
@@ -2786,9 +2872,9 @@ def test_question_self_dependency(token_client, organizer, event, question):
 
 
 @pytest.mark.django_db
-def test_question_update_options(token_client, organizer, event, question, item):
+def test_datafield_update_options(token_client, organizer, event, question, item):
     resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
+        '/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.pk),
         {
             "options": [
             ]
@@ -2800,8 +2886,8 @@ def test_question_update_options(token_client, organizer, event, question, item)
 
 
 @pytest.mark.django_db
-def test_question_delete(token_client, organizer, event, question):
-    resp = token_client.delete('/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk))
+def test_datafield_delete(token_client, organizer, event, question):
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/datafields/position/{}/'.format(organizer.slug, event.slug, question.pk))
     assert resp.status_code == 204
     with scopes_disabled():
         assert not event.questions.filter(pk=question.id).exists()
@@ -2819,35 +2905,6 @@ def test_question_update_dependency_values(token_client, organizer, event, quest
     assert resp.status_code == 200
     question.refresh_from_db()
     assert question.dependency_values == ["a", "b"]
-
-
-@pytest.mark.django_db
-def test_question_update_dependency_value_legacy(token_client, organizer, event, question):
-    resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
-        {
-            "dependency_value": "a"
-        },
-        format='json'
-    )
-    assert resp.status_code == 200
-    question.refresh_from_db()
-    assert question.dependency_values == ["a"]
-
-
-@pytest.mark.django_db
-def test_question_update_dependency_value_legacy_conflict(token_client, organizer, event, question):
-    resp = token_client.patch(
-        '/api/v1/organizers/{}/events/{}/questions/{}/'.format(organizer.slug, event.slug, question.pk),
-        {
-            "dependency_values": ["a", "b"],
-            "dependency_value": "a"
-        },
-        format='json'
-    )
-    assert resp.status_code == 200
-    question.refresh_from_db()
-    assert question.dependency_values == ["a"]
 
 
 TEST_OPTIONS_RES = {
@@ -2935,16 +2992,12 @@ def test_options_delete(token_client, organizer, event, question, option):
 
 
 @pytest.mark.django_db
-def test_question_create_with_option(token_client, organizer, event, item):
+def test_datafield_create_with_option(token_client, organizer, event, item):
     resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
+        '/api/v1/organizers/{}/events/{}/datafields/position/'.format(organizer.slug, event.slug),
         {
-            "question": "What's your name?",
+            "internal_name": "What's your name?",
             "type": "S",
-            "required": True,
-            "items": [item.pk],
-            "position": 0,
-            "ask_during_checkin": False,
             "identifier": None,
             "options": [
                 {
@@ -2970,14 +3023,10 @@ def test_question_create_with_option(token_client, organizer, event, item):
         assert 2 == question.options.count()
 
     resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/questions/'.format(organizer.slug, event.slug),
+        '/api/v1/organizers/{}/events/{}/datafields/position/'.format(organizer.slug, event.slug),
         {
-            "question": "What's your name?",
+            "internal_name": "What's your name?",
             "type": "S",
-            "required": True,
-            "items": [item.pk],
-            "position": 0,
-            "ask_during_checkin": False,
             "identifier": None,
             "options": [
                 {
