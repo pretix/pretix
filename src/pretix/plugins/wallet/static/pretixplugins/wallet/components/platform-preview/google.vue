@@ -1,46 +1,52 @@
 <script setup lang="ts">
-import { computed, inject } from "vue";
-import { StoreKey } from "../../walletStore";
-import { dateTimeFormat, i18nstringLocalize } from "../../helpers";
+import { computed } from "vue";
+import { dateTimeFormat } from "../../helpers";
+import { i18nstring_localize } from "/src/pretix/static/pretixbase/js/i18nstring.ts";
 
-const store = inject(StoreKey)!;
-
-const props = defineProps<{ data: any }>();
+const props = defineProps<{
+	data: any;
+	fieldgroups: Record<string, FieldGroupConfig>;
+	fieldgroup_contents: Record<
+		string,
+		{ label?: LocalizableString; content: LocalizableString }
+	>;
+	settings: Record<string, SettingValue>;
+}>();
 
 function isActive(fieldgroup: string) {
-	return store.layout.fieldgroups[fieldgroup]?.active;
+	return props.fieldgroups[fieldgroup]?.active;
 }
 
-const qrcode = computed(() => store.renderedFieldGroups["code"]?.[0]);
+const qrcode = computed(() => props.fieldgroup_contents["code"]?.[0]);
 </script>
 
 <template lang="pug">
     div.pass-preview-google(style="")
         div.f-column
             .pass-container.f-row
-                img.logo(:src="store.getSettingValue('logo')?.url")
+                img.logo(:src="props.settings['logo']?.url")
                 div
                     .bold {{ data.event }}
                     div(v-if="isActive('date')") {{ dateTimeFormat(data.date_from, {"dateStyle": "medium"}) }}
-                    div(v-else) {{  data.organizer }}
+                    div(v-else) {{ data.organizer }}
 
-            .pass-container.google-main(:data-background-color="store.getSettingValue('bg_color')")
+            .pass-container.google-main(:data-background-color="props.settings['bg_color']")
                 .pass-inner
                     .f-row
-                        img.logo(:src="store.getSettingValue('logo')?.url")
-                        div.logo-text {{  data.organizer }}
+                        img.logo(:src="props.settings['logo']?.url")
+                        div.logo-text {{ data.organizer }}
 
                     .top-row
-                        div(v-if="isActive('venue')") {{ i18nstringLocalize(data.venue?.[0]) }}
+                        div(v-if="isActive('venue')") {{ i18nstring_localize(data.venue?.[0]) }}
                         .event-name {{ data.event }}
 
                     .f-column
                         slot(name="card-rows")
 
-                    .qrcode-inner(v-for="qrcode in store.renderedFieldGroups['code']") {{ qrcode.label }}
+                    .qrcode-inner {{ qrcode.label }}
 
                     .f-column
-                        img.hero(:src="store.getSettingValue('hero')?.url")
+                        img.hero(:src="props.settings['hero']?.url")
 
         .pass-container.google-pass-details
             .pass-inner

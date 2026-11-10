@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { inject } from "vue";
 import { StoreKey } from "../../walletStore";
-import { dateTimeFormat, i18nstringLocalize } from "../../helpers";
+import { dateTimeFormat } from "../../helpers";
 import Google from "./google.vue";
+import { i18nstring_localize } from "/src/pretix/static/pretixbase/js/i18nstring.ts";
 const store = inject(StoreKey)!;
 const gettext = (window as any).gettext;
 
 const props = defineProps<{ data: any }>();
 
 function isActive(fieldgroup: string) {
-    return store.layout.fieldgroups[fieldgroup]?.active;
+	return store.layout.fieldgroups[fieldgroup]?.active;
 }
 </script>
 
@@ -36,11 +37,11 @@ function isActive(fieldgroup: string) {
                 div.pass-label {{ gettext("Ticket Holder") }}
                 div.pass-content {{ gettext("John Doe") }}
             div.pass-details-row(v-if="isActive('venue')")
-                div.pass-label  {{ i18nstringLocalize(data.venue?.[0]) }}
-                div.pass-content {{ i18nstringLocalize(data.venue?.[1]) }}
+                div.pass-label  {{ i18nstring_localize(data.venue?.[0]) }}
+                div.pass-content {{ i18nstring_localize(data.venue?.[1]) }}
             div.pass-details-row(v-if="isActive('date')")
                 div.pass-label {{ gettext("Event Start Time") }}
-                div.pass-content {{ i18nstringLocalize(data.venue?.[1]) }}
+                div.pass-content {{ i18nstring_localize(data.venue?.[1]) }}
             div.pass-details-row
                 div.pass-label {{ gettext("Ticket Type") }}
                 div.pass-content {{ gettext("Sample product") }}
