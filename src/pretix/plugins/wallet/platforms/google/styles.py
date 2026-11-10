@@ -10,7 +10,7 @@ from pretix.plugins.wallet.i18n import (
 
 from ..base import (
     FieldGroup, FieldGroupDisplay, PassStyle, PlaceholderFieldEntry,
-    PredefinedFieldGroup, TextFieldGroup,
+    PredefinedFieldGroup, TextFieldGroup, pass_style_registry
 )
 
 from .google_wallet import (
@@ -22,9 +22,12 @@ from ..settings import (
     BooleanSettingsField, ColorSettingsField, FloatSettingsField,
     ImageSettingsField,
 )
-from .platform import get_class_id, get_object_id
+from .platform import GooglePlatform, get_class_id, get_object_id
+
 
 class GoogleWalletEventTicketStyle(PassStyle):
+    platform = GooglePlatform
+
     def generate(self, op):
         self.op = op
 
@@ -222,6 +225,7 @@ class GoogleWalletEventTicketStyle(PassStyle):
         return output_object
 
 
+@pass_style_registry.register
 class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
     identifier = "event"
     name = "Default Event Ticket"
@@ -264,6 +268,7 @@ class GoogleWalletDefaultEventTicket(GoogleWalletEventTicketStyle):
         return output_object
 
 
+@pass_style_registry.register
 class GoogleWalletCustomEventTicket(GoogleWalletEventTicketStyle):
     identifier = "event_custom"
     name = "Custom Event Ticket"

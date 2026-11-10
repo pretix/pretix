@@ -1,7 +1,6 @@
 import json
 from typing import Any
 
-from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import BadRequest
@@ -19,10 +18,11 @@ from django.views.generic import (
     View,
 )
 from pretix.base.models.orders import OrderPosition
+from pretix.base.services import tickets
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.views.orders import OrderView
+from pretix.plugins.wallet.forms import WalletLayoutCreateForm
 from pretix.plugins.wallet.tasks import get_pass
-from pretix_vrpayment_wero.payment import HttpRequest
 
 from pretix.base.i18n import language
 from pretix.base.middleware import add_to_response_csp
@@ -37,11 +37,7 @@ from ..placeholders import (
     get_wallet_placeholder_renderer,
     get_wallet_placeholders,
 )
-from ..platforms import (
-    get_available_platforms,
-    AVAILABLE_STYLES,
-    AVAILABLE_STYLES_DICT,
-)
+from ..platforms import get_available_platforms, get_platform, pass_style_registry
 
 
 def get_editor_placeholders(event):
@@ -94,11 +90,14 @@ class LayoutEditorView(LayoutDetailView):
                 "name": platform.name,
                 "styles": {
                     style.identifier: style(self.request.event).asdict()
-                    for style in AVAILABLE_STYLES.get(platform.identifier, [])
+                    for style, _meta in pass_style_registry.filter(
+                        active_in=self.request.event, platform=platform.identifier
+                    )
                 },
             }
-            for platform in get_available_platforms(
-                self.request.event, show_disabled=True
+            for platform in sorted(
+                get_available_platforms(self.request.event, show_disabled=True),
+                key=lambda x: x.identifier,
             )
         ]
         context["placeholders"] = get_editor_placeholders(self.request.event)
@@ -109,7 +108,7 @@ class LayoutEditorView(LayoutDetailView):
 
         return context
 
-    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+    def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
         add_to_response_csp(
             response,
@@ -120,20 +119,6 @@ class LayoutEditorView(LayoutDetailView):
         return response
 
 
-class WalletLayoutCreateForm(forms.ModelForm):
-    class Meta:
-        model = WalletLayout
-        fields = ("name",)
-
-    def __init__(self, *args, event, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.event = event
-
-    def save(self, *args, **kwargs) -> Any:
-        self.instance.event = self.event
-        return super().save(*args, **kwargs)
-
-
 class LayoutCreateView(WalletLayoutMixin, EventPermissionRequiredMixin, CreateView):
     template_name = "pretixplugins/wallet/create.html"
     form_class = WalletLayoutCreateForm
@@ -141,6 +126,11 @@ class LayoutCreateView(WalletLayoutMixin, EventPermissionRequiredMixin, CreateVi
 
     def form_valid(self, form):
         self.object = form.save()
+        self.object.log_action(
+            action="pretix.plugins.wallet.layout.created",
+            user=self.request.user,
+            data={**form.cleaned_data, "copy_from": self.copy_from.pk},
+        )
         if self.copy_from:
             for pl in self.copy_from.platform_layouts.all():
                 modelclone(pl, parent=self.object).save()
@@ -197,16 +187,15 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
         else:
             base_file_settings = {}
 
-        platform = None
-        for p in get_available_platforms(event, show_disabled=True):
-            if p.identifier == platform_id:
-                platform = p
-
+        platform = get_platform(event, platform_id, show_disabled=True)
         if not platform:
             raise BadRequest("Unknown platform")
-        if style_id not in AVAILABLE_STYLES_DICT[platform_id]:
+
+        style, _meta = pass_style_registry.get(
+            active_in=event, identifier=(platform_id, style_id)
+        )
+        if not style:
             raise BadRequest("Unknown style")
-        style = AVAILABLE_STYLES_DICT[platform_id][style_id]
 
         layout = json.loads(layout)
         with (
@@ -222,14 +211,19 @@ class LayoutPreviewView(EventPermissionRequiredMixin, View):
             layout = style(event, layout, file_settings)
             layout.validate()
 
-            fname, mimet, data = platform.generate(p, layout)
-            if mimet == "text/uri-list":
-                return redirect(data)
-            resp = HttpResponse(data, content_type=mimet)
-            ftype = fname.split(".")[-1]
-            if not mimet.startswith("text/"):
-                resp["Content-Disposition"] = (
-                    'attachment; filename="ticket-preview.{}"'.format(ftype)
+            result = platform.generate_preview(p, layout)
+            if isinstance(result, str):
+                return redirect(result)
+            else:
+                ext, mimet, data = result
+                resp = HttpResponse(
+                    data,
+                    content_type=mimet,
+                    headers={
+                        "Content-Disposition": 'attachment; filename="ticket-preview.{}"'.format(
+                            ext.lstrip(".")
+                        )
+                    },
                 )
             return resp
 
@@ -238,9 +232,29 @@ class LayoutSetDefault(LayoutDetailView):
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         obj = self.get_object()
-        request.event.wallet_layouts.exclude(pk=obj.pk).update(default=False)
-        obj.default = True
-        obj.save(update_fields=["default"])
+        if not obj.default:
+            for layout in request.event.wallet_layouts.filter(default=True):
+                layout.log_action(
+                    "pretix.plugins.wallet.layout.changed",
+                    user=self.request.user,
+                    data={
+                        "default": False,
+                    },
+                )
+                layout.default = False
+                layout.save(update_fields=["default"])
+            obj.log_action(
+                "pretix.plugins.wallet.layout.changed",
+                user=self.request.user,
+                data={
+                    "default": True,
+                },
+            )
+            obj.default = True
+            obj.save(update_fields=["default"])
+            tickets.invalidate_cache.apply_async(
+                kwargs={"event": self.request.event.pk, "provider": "wallet"}
+            )
         messages.success(self.request, _("Your changes have been saved."))
         return redirect(self.get_success_url())
 
@@ -269,18 +283,18 @@ class LayoutDelete(WalletLayoutMixin, DeleteView):
     @transaction.atomic
     def form_valid(self, form):
         self.object = self.get_object()
-        self.object.log_action(
-            action="pretix.plugins.wallet.layout.deleted", user=self.request.user
-        )
-        self.object.delete()
+        if self.object.allow_delete():
+            self.object.log_action(
+                action="pretix.plugins.wallet.layout.deleted", user=self.request.user
+            )
+            self.object.delete()
+            tickets.invalidate_cache.apply_async(
+                kwargs={"event": self.request.event.pk, "provider": "wallet"}
+            )
+            messages.success(self.request, _("The selected layout been deleted."))
+        else:
+            messages.error(self.request, _("The selected layout cannot be deleted."))
 
-        if not self.request.event.wallet_layouts.filter(default=True).exists():
-            f = self.request.event.wallet_layouts.first()
-            if f:
-                f.default = True
-                f.save(update_fields=["default"])
-
-        messages.success(self.request, _("The selected layout been deleted."))
         return redirect(self.get_success_url())
 
 
@@ -295,9 +309,8 @@ class OrderDownloadMixin:
 
     @cached_property
     def platform(self):
-        for p in get_available_platforms(self.request.event, show_disabled=True):
-            if p.identifier == self.kwargs.get("platform"):
-                return p
+        if platform := self.kwargs.get("platform"):
+            return get_platform(self.request.event, platform, show_disabled=True)
 
 
 class WalletGetView(OrderDownloadMixin, AsyncAction, OrderView):

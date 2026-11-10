@@ -33,13 +33,16 @@ from pretix.control.signals import item_forms
 from pretix.plugins.wallet.platforms.google.platform import get_object_id
 
 from .forms import WalletLayoutItemForm
-from .models import WalletLayoutItem
+from .models import WalletLayout, WalletLayoutItem
 from .ticketoutput import WalletSettingsHolder
-from .platforms import PLATFORMS
+from .platforms import wallet_platform_registry
 from .tasks import disable_wallet_instance, send_update_apns
 from .models import AppleWalletPass, CombinedAppleWalletPass
 from .tasks import get_pass
 from .models import GoogleWalletInstance
+
+from django.utils.translation import gettext as _
+from pretix.base.logentrytypes import log_entry_types, EventLogEntryType
 
 
 @receiver(register_ticket_outputs, dispatch_uid="output_wallet")
@@ -47,7 +50,7 @@ def register_output(sender, **kwargs):
     return WalletSettingsHolder
 
 
-for platform in PLATFORMS:
+for platform in wallet_platform_registry.all():
     if hasattr(platform, "get_global_settings"):
         register_global_settings.connect(
             platform.get_global_settings,
@@ -92,7 +95,7 @@ def invalidate_apple(
 
     if item:
         pass_qs = pass_qs.filter(order_position__item_id=item)
-        passes_qs = passes_qs.filter(order__order_position__item_id=item)
+        passes_qs = passes_qs.filter(order__all_positions__item_id=item)
 
     if order:
         pass_qs = pass_qs.filter(order_position__order_id=order)
@@ -104,7 +107,7 @@ def invalidate_apple(
                 "model": "orderposition",
                 "pk": pass_obj.order_position_id,
                 "platform_identifier": "apple",
-                "show_disabled": False
+                "show_disabled": False,
             }
         )
 
@@ -119,7 +122,9 @@ def invalidate_google(
     if provider and provider != "wallet":
         return
 
-    inst_qs = GoogleWalletInstance.objects.filter(event=sender).exclude(order_position__isnull=True)
+    inst_qs = GoogleWalletInstance.objects.filter(event=sender).exclude(
+        order_position__isnull=True
+    )
 
     if item:
         inst_qs = inst_qs.filter(order_position__item_id=item)
@@ -136,6 +141,31 @@ def invalidate_google(
                 "model": "orderposition",
                 "pk": inst.order_position_id,
                 "platform_identifier": "google",
-                "show_disabled": False
+                "show_disabled": False,
             }
         )
+
+
+@log_entry_types.new_from_dict(
+    {
+        "pretix.plugins.wallet.layout.created": _(
+            "The wallet layout has been created."
+        ),
+        "pretix.plugins.wallet.layout.changed": _(
+            "The wallet layout has been changed."
+        ),
+        "pretix.plugins.wallet.layout.deleted": _(
+            "The wallet layout has been deleted."
+        ),
+    }
+)
+class WalletLogEntryType(EventLogEntryType):
+    object_link_wrapper = _("Wallet Layout {val}")
+    object_link_viewname = "plugins:wallet:edit"
+    content_type = WalletLayout
+
+    def object_link_args(self, content_object):
+        return {"layout": content_object.pk}
+
+    def object_link_display_name(self, content_object):
+        return content_object.name

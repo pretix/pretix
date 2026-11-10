@@ -76,6 +76,20 @@ class CertificateFileField(forms.FileField):
         return value
 
 
+class WalletLayoutCreateForm(forms.ModelForm):
+    class Meta:
+        model = WalletLayout
+        fields = ("name",)
+
+    def __init__(self, *args, event, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.event = event
+
+    def save(self, *args, **kwargs):
+        self.instance.event = self.event
+        return super().save(*args, **kwargs)
+
+
 class WalletLayoutItemForm(forms.ModelForm):
     is_layouts = True
     layout = forms.ModelChoiceField(
@@ -90,14 +104,16 @@ class WalletLayoutItemForm(forms.ModelForm):
         fields = ("layout",)
 
     def __init__(self, *args, **kwargs):
-        event = kwargs.pop("event")
+        self.event = kwargs.pop("event")
         super().__init__(*args, **kwargs)
-        self.fields["layout"].queryset = event.wallet_layouts.all()
+        self.fields["layout"].queryset = self.event.wallet_layouts.all()
 
     def save(self, commit=True):
-        if self.cleaned_data["layout"] is None:
-            if self.instance.pk:
-                self.instance.delete()
-        else:
-            self.instance.layout = self.cleaned_data["layout"]
-            return super().save(commit=commit)
+        if self.has_changed():
+            if self.cleaned_data["layout"] is None:
+                if self.instance.pk:
+                    self.instance.delete()
+            else:
+                self.instance.layout = self.cleaned_data["layout"]
+                super().save(commit=commit)
+        return self.instance

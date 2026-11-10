@@ -62,7 +62,11 @@
                                 <a href="{% url "plugins:wallet:edit" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                 <a href="{% url "plugins:wallet:add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ l.id }}"
                                         class="btn btn-default btn-sm" title="{% trans "Clone" %}" data-toggle="tooltip"><i class="fa fa-copy"></i></a>
-                                <a href="{% url "plugins:wallet:delete" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                {% if l.allow_delete %}
+                                    <a href="{% url "plugins:wallet:delete" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                {% else %}
+                                    <button class="btn btn-danger btn-sm" disabled><i class="fa fa-trash"></i></button>
+                                {% endif %}
                             {% endif %}
                         </td>
                     </tr>

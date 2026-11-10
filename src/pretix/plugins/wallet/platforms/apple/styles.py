@@ -15,17 +15,19 @@ from pretix.plugins.wallet.i18n import (
 from ...models import AppleWalletPass
 from ..base import (
     FieldGroup, FieldGroupDisplay, PassStyle, PlaceholderFieldEntry,
-    TextFieldGroup,
+    TextFieldGroup, pass_style_registry
 )
 from ..settings import ImageSettingsField
 
 from ..settings import ColorSettingsField, FloatSettingsField, convert_to_png
-from .platform import SignedZipFile, StringResource
+from .platform import ApplePlatform, SignedZipFile, StringResource
 
 logger = logging.getLogger("pretix.plugins.wallet.apple")
 
 
 class AppleWalletStyle(PassStyle):
+    platform = ApplePlatform
+
     @property
     def settings(self):
         return [
@@ -171,7 +173,7 @@ class AppleWalletStyle(PassStyle):
         return pass_json
 
     @transaction.atomic
-    def generate(self, op: OrderPosition):
+    def generate(self, op: OrderPosition, preview: bool = False):
         pass_type = self.event.settings.wallet_apple_pass_type_id
         team_id = self.event.settings.wallet_apple_team_id
         serial_number = "%s-%s-%s-%d" % (
@@ -181,16 +183,18 @@ class AppleWalletStyle(PassStyle):
             op.pk,
         )
 
-        pass_obj, _ = AppleWalletPass.objects.select_for_update(
-            of=OF_SELF
-        ).get_or_create(
-            order_position=op,
-            pass_type=pass_type,
-            defaults={
-                "serial_number": serial_number,
-                "pass_type": pass_type,
-            },
-        )
+        if preview:
+            pass_obj = AppleWalletPass(order_position=op, pass_type=pass_type, serial_number=serial_number)
+        else:
+            pass_obj, _ = AppleWalletPass.objects.select_for_update(
+                of=OF_SELF
+            ).get_or_create(
+                order_position=op,
+                pass_type=pass_type,
+                defaults={
+                    "serial_number": serial_number,
+                },
+            )
 
         order = op.order
         filename = "{}-{}.pkpass".format(order.event.slug, order.code)
@@ -232,17 +236,21 @@ class AppleWalletStyle(PassStyle):
         pkpass.add_file("pass.json", json.dumps(pass_json))
         result, manifest = pkpass.finish()
 
-        if pass_obj.content and pass_obj.manifest != manifest:
-            pass_obj.content.delete()
+        if preview:
+            pass_obj.content.file = ContentFile(result, name=filename)
+        else:
+            if pass_obj.content and pass_obj.manifest != manifest:
+                pass_obj.content.delete()
 
-        if pass_obj.manifest != manifest:
-            pass_obj.content.save(filename, ContentFile(result, name=filename))
-            pass_obj.manifest = manifest
-            pass_obj.save()
+            if pass_obj.manifest != manifest:
+                pass_obj.content.save(filename, ContentFile(result, name=filename))
+                pass_obj.manifest = manifest
+                pass_obj.save()
 
         return pass_obj
 
 
+@pass_style_registry.register
 class AppleWalletEventTicket(AppleWalletStyle):
     identifier = "event_1"
     name = _("Event Ticket Layout")

@@ -1,6 +1,6 @@
 import enum
 from functools import cached_property
-from typing import Any, TypedDict
+from typing import Any, Iterable, TypedDict
 
 import jsonschema
 from django.core.exceptions import ValidationError
@@ -11,6 +11,7 @@ from pretix.api.helpers import handle_file_upload
 from pretix.base.models import OrderPosition
 from pretix.base.models.orders import Order
 from pretix.base.settings import SettingsSandbox
+from pretix.base.signals import PluginAwareRegistry, is_app_active
 from pretix.plugins.wallet.models import WalletLayout, WalletPlatformLayout
 
 from ..i18n import MaybeTranslatedString, localizable_to_dict
@@ -40,8 +41,8 @@ class WalletPlatform:
             return False
         return True
 
-    def is_available(self) -> tuple[bool, str | None]:
-        return (True, None)
+    def is_available(self) -> bool:
+        return True
 
     def is_available_for_position(self, op: OrderPosition):
         return op.generate_ticket and bool(self.get_layout(op))
@@ -80,7 +81,7 @@ class WalletPlatform:
                 return None
         return wallet_layout.platform_layouts.filter(platform=self.identifier).first()
 
-    def generate(self, position, layout: "PassStyle | None" = None) -> str:
+    def generate(self, position) -> str:
         """
         This method should generate the wallet pass and return a url the user should be sent
         to to retrieve that pass (e.g. via download or by redirecting to the wallet provider)
@@ -88,15 +89,10 @@ class WalletPlatform:
         .. note:: You should cache the generated files where possible and only regenerate
                   if the pass content has changed.
         """
-        if not layout:
-            op_layout = self.get_layout(position)
-            if not op_layout:
-                raise ValueError(
-                    _(
-                        "WalletPlatform.generate called without layout and without position layout"
-                    )
-                )
-            layout = op_layout.pass_layout
+        op_layout = self.get_layout(position)
+        if not op_layout:
+            raise ValueError(_("No layout defined for order position"))
+        layout = op_layout.pass_layout
         return layout.generate(position)
 
     def generate_order(self, order: Order) -> str:
@@ -107,6 +103,16 @@ class WalletPlatform:
 
         .. note:: You should cache the generated files where possible and only regenerate
                   if the pass contents have changed.
+        """
+        raise NotImplementedError()
+
+    def generate_preview(
+        self, position: OrderPosition, layout: "PassStyle"
+    ) -> str | tuple[str, str, bytes]:
+        """
+        This method should generate the wallet pass for `position` and either return a string containing
+        a url the user should be sent to or a a tuple of an extension (str), a mimetype (str) and the data
+        (bytes) for a file that should be downloaded to the user.
         """
         raise NotImplementedError()
 
@@ -429,6 +435,7 @@ class ImageFieldGroup(PlaceholderFieldGroup):
 
 
 class PassStyle:
+    platform: type[WalletPlatform]
     identifier: str  # unique within platform
     name: str
 
@@ -671,3 +678,54 @@ class PassStyle:
 
     def generate(self, op: OrderPosition):
         raise NotImplementedError()
+
+
+class PluginAwareClassRegistry[T](PluginAwareRegistry):
+    base_class: type[T]
+
+    def register(self, *objs):
+        for obj in objs:
+            if not issubclass(obj, self.base_class):
+                raise TypeError(f"Entries must be derived from {self.base_class}")
+
+        return super().register(*objs)
+
+    def filter(
+        self, active_in=None, **kwargs
+    ) -> Iterable[tuple[type[T], dict[str, Any]]]:
+        result = super().filter(**kwargs)
+        if active_in is not None:
+            result = (
+                (entry, meta)
+                for entry, meta in result
+                if is_app_active(active_in, meta["plugin"])
+            )
+        return result
+
+    def get(
+        self, active_in=None, **kwargs
+    ) -> tuple[type[T], dict[str, Any]] | tuple[None, None]:
+        return super().get(active_in=active_in, **kwargs)
+
+
+class WalletPlatformRegistry(PluginAwareClassRegistry[WalletPlatform]):
+    base_class = WalletPlatform
+
+    def __init__(self):
+        super().__init__({"identifier": lambda o: o.identifier})
+
+
+class PassStyleRegistry(PluginAwareClassRegistry[PassStyle]):
+    base_class = PassStyle
+
+    def __init__(self):
+        super().__init__(
+            {
+                "identifier": lambda o: (o.platform.identifier, o.identifier),
+                "platform": lambda o: o.platform.identifier,
+            }
+        )
+
+
+wallet_platform_registry = WalletPlatformRegistry()
+pass_style_registry = PassStyleRegistry()

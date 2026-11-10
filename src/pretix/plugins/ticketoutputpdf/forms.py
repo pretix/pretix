@@ -22,8 +22,6 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.services import tickets
-
 from .models import TicketLayout, TicketLayoutItem
 
 
@@ -65,5 +63,3 @@ class TicketLayoutItemForm(forms.ModelForm):
                 return
         else:
             return super().save(commit=commit)
-        tickets.invalidate_cache.apply_async(kwargs={'event': self.event.pk, 'provider': 'pdf',
-                                                     'item': self.instance.item_id})

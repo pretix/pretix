@@ -57,6 +57,9 @@ class WalletLayout(LoggedModel):
     def __str__(self):
         return self.name
 
+    def allow_delete(self):
+        return not self.default
+
 
 class WalletPlatformLayout(LoggedModel):
     parent = models.ForeignKey(
@@ -74,16 +77,16 @@ class WalletPlatformLayout(LoggedModel):
 
     @property
     def pass_layout(self):
-        from .platforms import get_style
+        from .platforms import pass_style_registry
 
-        style = get_style(self.platform, self.style)
+        style, _meta = pass_style_registry.get(active_in=self.parent.event, identifier=(self.platform, self.style))
         if style:
             file_settings = {fs.key: fs.file for fs in self.file_settings.all()}
             return style(
                 event=self.parent.event, layout=self.layout, file_settings=file_settings
             )
         else:
-            raise RuntimeError(f"Style {self.platform}.{self.style} not found")
+            raise ValueError(f"Style {self.platform}.{self.style} not found")
 
 
 class WalletLayoutItem(models.Model):

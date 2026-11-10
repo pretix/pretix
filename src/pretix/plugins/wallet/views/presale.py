@@ -16,7 +16,7 @@ from pretix.presale.views import EventViewMixin
 from pretix.presale.views.order import (
     OrderDetailMixin, OrderPositionDetailMixin,
 )
-from pretix.plugins.wallet.platforms import get_available_platforms
+from pretix.plugins.wallet.platforms import get_platform
 from pretix.plugins.wallet.tasks import get_pass
 
 
@@ -32,12 +32,10 @@ class OrderDownloadMixin:
 
     @cached_property
     def platform(self):
-        for p in get_available_platforms(self.request.event, show_disabled=False):
-            if p.identifier == self.kwargs.get("platform"):
-                return p
+        if platform := self.kwargs.get('platform'):
+            return get_platform(event=self.request.event, platform=platform, show_disabled=False)
 
     def post(self, request, *args, **kwargs):
-        # TODO: check if available if is_available is implemented (or check in super.platform?)
         if not self.platform:
             return self.error(OrderError(_('You requested an invalid ticket output type.')))
         if not self.order or ('position' in kwargs and not self.order_position):

@@ -6,14 +6,20 @@
     <h1>{% trans "Wallet layout" %}</h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
-        <p>{% blocktrans with name=object.name %}Are you sure you want to delete <strong>"{{ name }}"</strong>?{% endblocktrans %}</p>
+        {% if object.allow_delete %}
+            <p>{% blocktrans with name=object.name %}Are you sure you want to delete <strong>"{{ name }}"</strong>?{% endblocktrans %}</p>
+        {% else %}
+            <p>{% blocktrans %}You cannot delete the default layout.{% endblocktrans %}</p>
+        {% endif %}
         <div class="form-group submit-group">
             <a href="{% url "plugins:wallet:index" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>
-            <button type="submit" class="btn btn-danger btn-save">
-                {% trans "Delete" %}
-            </button>
+            {% if object.allow_delete %}
+                <button type="submit" class="btn btn-danger btn-save">
+                    {% trans "Delete" %}
+                </button>
+            {% endif %}
         </div>
     </form>
 {% endblock %}

@@ -34,7 +34,7 @@
 
 import logging
 import warnings
-from typing import Any, Callable, Generic, List, Tuple, TypeVar
+from typing import Any, Callable, Generic, Iterable, List, Tuple, TypeVar
 
 import django.dispatch
 from django.apps import apps
@@ -440,7 +440,8 @@ class Registry:
             meta = {k: accessor(obj) for k, accessor in self.keys.items()}
             tup = (obj, meta)
             for key, value in meta.items():
-                self.by_key[key][value] = tup
+                self.by_key[key].setdefault(value, [])
+                self.by_key[key][value].append(tup)
             self.registered_entries[obj] = meta
 
         if len(objs) == 1:
@@ -465,16 +466,33 @@ class Registry:
             return clz
         return reg
 
-    def get(self, **kwargs):
-        (key, value), = kwargs.items()
-        return self.by_key.get(key).get(value, (None, None))
+    def get(self, **kwargs) -> tuple[Any, dict[str, Any]] | tuple[None, None]:
+        result = list(self.filter(**kwargs))
 
-    def filter(self, **kwargs):
-        return (
-            (entry, meta)
-            for entry, meta in self.registered_entries.items()
-            if all(value == meta[key] for key, value in kwargs.items())
-        )
+        if len(result) == 1:
+            return result[0]
+        elif len(result) >= 1:
+            raise RuntimeError(f"get() returned more than one -- it returned {len(result)}!")
+        return (None, None)
+
+    def filter(self, **kwargs) -> Iterable[tuple[Any, dict[str, Any]]]:
+        for key in kwargs.keys():
+            if key not in self.keys:
+                raise ValueError(f"Unknown key: {key!r}")
+
+        if len(kwargs) == 1:
+            # fast route: lookup using `self.by_key`
+            (key, value), = kwargs.items()
+            return self.by_key.get(key, {}).get(value, [])
+        else:
+            return (
+                (entry, meta)
+                for entry, meta in self.registered_entries.items()
+                if all(value == meta[key] for key, value in kwargs.items())
+            )
+
+    def all(self):
+        return self.registered_entries.keys()
 
 
 class PluginAwareRegistry(Registry):
@@ -522,11 +540,7 @@ class PluginAwareRegistry(Registry):
         return result
 
     def get(self, active_in=None, **kwargs):
-        item, meta = super().get(**kwargs)
-        if meta and active_in is not None:
-            if not is_app_active(active_in, meta['plugin']):
-                return None, None
-        return item, meta
+        return super().get(active_in=active_in, **kwargs)
 
 
 EventPluginRegistry = PluginAwareRegistry  # for backwards compatibility

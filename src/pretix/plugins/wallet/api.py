@@ -6,9 +6,10 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, viewsets
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from pretix.base.services import tickets
 
 from .models import WalletLayout, WalletPlatformLayout
-from .platforms import get_available_platforms, AVAILABLE_STYLES_DICT
+from .platforms import wallet_platform_registry, pass_style_registry
 
 
 class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
@@ -23,7 +24,7 @@ class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
     def get_fields(self):
         fields = super().get_fields()
         fields["platform"].choices = [
-            p.identifier for p in get_available_platforms(self.context["event"], show_disabled=True)
+            p.identifier for p, _ in wallet_platform_registry.filter(active_in=self.context['event'])
         ]
         return fields
 
@@ -37,11 +38,9 @@ class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
         style = data.get("style")
         layout = data.get("layout")
         if platform and style and layout:
-            platform_styles = AVAILABLE_STYLES_DICT[platform]
-
-            if data["style"] not in platform_styles:
-                raise ValidationError(_("Invalid style"))
-            style = platform_styles[data["style"]]
+            style, _meta = pass_style_registry.get(active_in=self.context['event'], identifier=(platform, style))
+            if not style:
+                raise ValidationError({"style": _("Invalid style")})
 
             obj = style(event=self.context["event"], layout=data["layout"])
             obj.validate()
@@ -125,5 +124,8 @@ class WalletLayoutViewSet(viewsets.ModelViewSet):
             action="pretix.plugins.wallet.layout.changed",
             user=self.request.user,
             auth=self.request.auth,
-            data=self.request.data,
+            data=serializer.to_representation(serializer.instance),
+        )
+        tickets.invalidate_cache.apply_async(
+            kwargs={"event": self.request.event.pk, "provider": "wallet"}
         )

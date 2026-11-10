@@ -19,7 +19,7 @@ from pretix.plugins.wallet.i18n import (
     MaybeTranslatedString,
 )
 from ..base import (
-    WalletPlatform,
+    WalletPlatform, wallet_platform_registry
 )
 from ...models import CombinedAppleWalletPass
 
@@ -35,6 +35,7 @@ from ...forms import CertificateFileField, validate_rsa_privkey
 logger = logging.getLogger("pretix.plugins.wallet.apple")
 
 
+@wallet_platform_registry.register
 class ApplePlatform(WalletPlatform):
     identifier = "apple"
     name = _("Apple Wallet")
@@ -123,6 +124,12 @@ class ApplePlatform(WalletPlatform):
             },
         )
 
+    def generate_preview(self, position, layout):
+        pass_obj = layout.generate(position)
+        data = pass_obj.content.file.read()
+        pass_obj.content.delete()
+        return "pkpass", "application/vnd.apple.pkpass", data
+
     def generate_order(self, order: Order):
         with tempfile.TemporaryFile() as d:
             with zipfile.ZipFile(d, "w") as zipf:
@@ -134,7 +141,7 @@ class ApplePlatform(WalletPlatform):
                                 "Impossible: is_available_for_position==True but no layout"
                             )
 
-                        pass_obj = layout.pass_layout.generate(pos)
+                        pass_obj = layout.pass_layout.generate(pos, False)
                         zipf.writestr(
                             "{}-{}.pkpass".format(order.code, pos.positionid),
                             pass_obj.content.read(),
@@ -169,7 +176,7 @@ class ApplePlatform(WalletPlatform):
             "wallet_apple_key",
         ]:
             if not self.event.settings.get(field):
-                return (False, _("Missing field: {field}").format(field=field))
+                return False
         return super().is_available()
 
     @classproperty

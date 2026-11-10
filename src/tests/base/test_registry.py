@@ -87,6 +87,10 @@ def test_registry_classes():
     # check normal object instantiation still works with our decorator
     assert Cat().make_sound() == "meow"
 
+    # check that an error is raised when trying to retrieve by non-unique key
+    with pytest.raises(Exception):
+        _, _ = animal_type_registry.get(classis="mammalia")
+
 
 def test_registry_instances():
     animal_sound_registry = Registry({"animal": lambda s: s.animal})
