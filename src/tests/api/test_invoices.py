@@ -27,6 +27,7 @@ import freezegun
 import pytest
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from i18nfield.strings import LazyI18nString
 
 from pretix.base.models import Invoice, InvoiceAddress, Order, OrderPosition
 from pretix.base.models.orders import OrderFee
@@ -51,17 +52,17 @@ def taxrule(event):
 
 
 @pytest.fixture
-def question(event, item):
-    q = event.questions.create(internal_name="T-Shirt size", type="S", identifier="ABC")
-    q.items.add(item)
-    q.options.create(answer="XL", identifier="LVETRWVU")
-    return q
+def questionnaire(event, item):
+    questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Clothes questions')
+    questionnaire.items.add(item)
+    return questionnaire
 
 
 @pytest.fixture
-def question2(event2, item2):
-    q = event2.questions.create(internal_name="T-Shirt size", type="S", identifier="ABC")
-    q.items.add(item2)
+def question(event, questionnaire):
+    q = event.questions.create(internal_name="T-Shirt size", type="S", identifier="ABC")
+    q.options.create(answer="XL", identifier="LVETRWVU")
+    questionnaire.rows.create(user_datafield=q, label=LazyI18nString('T-Shirt size'), required=True)
     return q
 
 
