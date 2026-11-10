@@ -25,7 +25,7 @@ from django.utils.translation import gettext_lazy as _
 from django_countries.fields import Country
 
 from pretix.base.models import Invoice
-from pretix.base.signals import EventPluginRegistry, Registry
+from pretix.base.signals import PluginAwareRegistry, Registry
 
 
 class TransmissionType:
@@ -220,7 +220,7 @@ class TransmissionProvider:
         return None
 
 
-class TransmissionProviderRegistry(EventPluginRegistry):
+class TransmissionProviderRegistry(PluginAwareRegistry):
     def __init__(self):
         super().__init__({
             'identifier': lambda o: getattr(o, 'identifier'),

@@ -40,9 +40,11 @@ class WalletApp(AppConfig):
 
     def ready(self):
         from . import receivers  # NOQA
+        from .platforms import apple  # NOQA
+        from .platforms import google  # NOQA
 
     def installed(self, event):
-        from pretix.plugins.wallet.platforms import PLATFORMS, get_style
+        from pretix.plugins.wallet.platforms import wallet_platform_registry, pass_style_registry
 
         wallet_layout, created = event.wallet_layouts.get_or_create(
             default=True,
@@ -51,10 +53,10 @@ class WalletApp(AppConfig):
             }
         )
         if created:
-            for platform in PLATFORMS:
+            for platform, _meta in wallet_platform_registry.filter(active_in=event):
                 if not platform.default_style:
                     continue
-                style = get_style(platform.identifier, platform.default_style)
+                style, _meta = pass_style_registry.get(active_in=event, platform=platform.identifier, identifier=platform.default_style)
                 if not style:
                     continue
                 layout = style(event).default_layout

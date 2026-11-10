@@ -40,7 +40,7 @@ we generally use a custom ``form_valid`` method on our ``FormView`` that looks l
     def form_valid(self, form):
         if form.has_changed():
             self.request.event.log_action('pretix.event.changed', user=self.request.user, data={
-                k: getattr(self.request.event, k) for k in form.changed_data
+                k: form.cleaned_data.get(k) for k in form.changed_data
             })
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)

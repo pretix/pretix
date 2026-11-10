@@ -17,6 +17,7 @@ from pretix.plugins.wallet.models import GoogleWalletInstance
 from ..base import (
     PassStyle,
     WalletPlatform,
+    wallet_platform_registry
 )
 
 from .google_wallet import (
@@ -90,6 +91,7 @@ def dedup(list):
     return new
 
 
+@wallet_platform_registry.register
 class GooglePlatform(WalletPlatform):
     identifier = "google"
     name = _("Google Wallet")
@@ -194,18 +196,23 @@ class GooglePlatform(WalletPlatform):
 
         return f"https://pay.google.com/gp/v/save/{generated_jwt}"
 
-    def generate(self, position, layout: PassStyle | None = None):
+    def generate(self, position):
         # TODO?: early-exit caching (if object for position exists and layout is None)
-        if not layout:
-            op_layout = self.get_layout(position)
-            if not op_layout:
-                raise ValueError(
-                    _(
-                        "WalletPlatform.generate called without layout and without position layout"
-                    )
+        op_layout = self.get_layout(position)
+        if not op_layout:
+            raise ValueError(
+                _(
+                    "WalletPlatform.generate called without layout and without position layout"
                 )
-            layout = op_layout.pass_layout
+            )
+        layout = op_layout.pass_layout
 
+        class_object, ticket_object = layout.generate(position)
+        self.put_item_cached(class_object)
+
+        return self._get_jwt([ticket_object])
+
+    def generate_preview(self, position: OrderPosition, layout: PassStyle) -> str:
         class_object, ticket_object = layout.generate(position)
         self.put_item_cached(class_object)
 
@@ -215,15 +222,16 @@ class GooglePlatform(WalletPlatform):
         class_objects = []
         ticket_objects = []
         for position in order.positions_with_tickets:
-            layout = self.get_layout(position)
-            if not layout:
-                raise ValueError(
-                    "Impossible: is_available_for_position==True but no layout"
-                )
+            if self.is_available_for_position(position):
+                layout = self.get_layout(position)
+                if not layout:
+                    raise ValueError(
+                        "Impossible: is_available_for_position==True but no layout"
+                    )
 
-            class_object, ticket_object = layout.generate(position)
-            class_objects.append(class_object)
-            ticket_objects.append(ticket_object)
+                class_object, ticket_object = layout.pass_layout.generate(position, False)
+                class_objects.append(class_object)
+                ticket_objects.append(ticket_object)
 
         for co in dedup(class_objects):
             self.put_item_cached(co)
@@ -233,5 +241,5 @@ class GooglePlatform(WalletPlatform):
     def is_available(self):
         for field in ["wallet_google_issuer_id", "wallet_google_credentials"]:
             if not self.event.settings.get(field):
-                return (False, _("Missing field: {field}").format(field=field))
+                return False
         return super().is_available()

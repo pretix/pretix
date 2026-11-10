@@ -1540,10 +1540,11 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
         }
         for f in self.plugin_forms:
             change_data.update({
-                k: (f.cleaned_data.get(k).name
+                f"{f.prefix}-{k}": (
+                    f.cleaned_data.get(k).name
                     if isinstance(f.cleaned_data.get(k), File)
-                    else f.cleaned_data.get(k))
-                for k in f.changed_data
+                    else f.cleaned_data.get(k)
+                ) for k in f.changed_data
             })
 
         meta_changed = {}

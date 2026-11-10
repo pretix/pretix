@@ -7,8 +7,7 @@ import tempfile
 from django.utils.timezone import now
 from django.db.models import OuterRef, Exists
 
-from pretix.plugins.wallet.platforms import get_available_platforms
-from pretix.plugins.wallet.platforms.base import WalletPlatform
+from pretix.plugins.wallet.platforms import get_platform
 from pretix.plugins.wallet.platforms.google.google_wallet import Resource, State
 from pretix.plugins.wallet.platforms.google.platform import GooglePlatform
 from .models import AppleWalletPass, AppleWalletDevice, GoogleWalletInstance
@@ -73,12 +72,6 @@ def send_update_apns():
                 f"https://api.push.apple.com/3/device/{device.push_token}", json={}
             )
             device.save()
-
-
-def get_platform(event, platform, show_disabled) -> WalletPlatform | None:
-    for p in get_available_platforms(event, show_disabled):
-        if p.identifier == platform:
-            return p
 
 
 @app.task(base=ProfiledTask)
