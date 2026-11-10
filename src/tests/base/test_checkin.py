@@ -277,97 +277,66 @@ def test_unpaid_force(position, clist):
     perform_checkin(position, clist, {}, force=True)
 
 
-@pytest.mark.django_db
-def test_required_question_missing(event, position, clist):
-    q = event.questions.create(
-        question="Quo vadis?",
+@pytest.fixture
+def required_checkin_question(event, position):
+    df = event.questions.create(
+        internal_name="Quo vadis?",
         type="S",
-        required=True,
-        ask_during_checkin=True,
     )
-    q.items.add(position.item)
+    qaire = event.questionnaires.create(
+        type='position_checkin',
+    )
+    qaire.items.add(position.item)
+    return qaire.rows.create(user_datafield=df, label="Quo vadis?", required=True)
+
+
+@pytest.mark.django_db
+def test_required_question_missing(event, position, clist, required_checkin_question):
     with pytest.raises(RequiredQuestionsError) as excinfo:
         perform_checkin(position, clist, {}, questions_supported=True)
     assert excinfo.value.code == 'incomplete'
-    assert excinfo.value.questions == [q]
+    assert excinfo.value.questionnaire_rows == [required_checkin_question]
 
 
 @pytest.mark.django_db
-def test_required_question_missing_but_not_supported(event, position, clist):
-    q = event.questions.create(
-        question="Quo vadis?",
-        type="S",
-        required=True,
-        ask_during_checkin=True,
-    )
-    q.items.add(position.item)
+def test_required_question_missing_but_not_supported(event, position, clist, required_checkin_question):
     perform_checkin(position, clist, {}, questions_supported=False)
 
 
 @pytest.mark.django_db
-def test_required_question_missing_but_forced(event, position, clist):
-    q = event.questions.create(
-        question="Quo vadis?",
-        type="S",
-        required=True,
-        ask_during_checkin=True,
-    )
-    q.items.add(position.item)
+def test_required_question_missing_but_forced(event, position, clist, required_checkin_question):
     perform_checkin(position, clist, {}, questions_supported=True, force=True)
 
 
 @pytest.mark.django_db
-def test_optional_question_missing(event, position, clist):
-    q = event.questions.create(
-        question="Quo vadis?",
-        type="S",
-        required=False,
-        ask_during_checkin=True,
-    )
-    q.items.add(position.item)
+def test_optional_question_missing(event, position, clist, required_checkin_question):
+    required_checkin_question.required = False
+    required_checkin_question.save()
     with pytest.raises(RequiredQuestionsError) as excinfo:
         perform_checkin(position, clist, {}, questions_supported=True)
     assert excinfo.value.code == 'incomplete'
-    assert excinfo.value.questions == [q]
+    assert excinfo.value.questionnaire_rows == [required_checkin_question]
 
 
 @pytest.mark.django_db
-def test_required_online_question_missing(event, position, clist):
-    q = event.questions.create(
-        question="Quo vadis?",
-        type="S",
-        required=True,
-        ask_during_checkin=False,
-    )
-    q.items.add(position.item)
+def test_required_online_question_missing(event, position, clist, required_checkin_question):
+    qaire = required_checkin_question.questionnaire
+    qaire.type = 'position_purchase'
+    qaire.save()
     perform_checkin(position, clist, {}, questions_supported=True)
 
 
 @pytest.mark.django_db
-def test_question_filled_previously(event, position, clist):
-    q = event.questions.create(
-        question="Quo vadis?",
-        type="S",
-        required=True,
-        ask_during_checkin=True,
-    )
-    q.items.add(position.item)
-    position.answers.create(question=q, answer='Foo')
+def test_question_filled_previously(event, position, clist, required_checkin_question):
+    position.answers.create(question=required_checkin_question.user_datafield, answer='Foo')
     perform_checkin(position, clist, {}, questions_supported=True)
 
 
 @pytest.mark.django_db
-def test_question_filled(event, position, clist):
-    q = event.questions.create(
-        question="Quo vadis?",
-        type="S",
-        required=True,
-        ask_during_checkin=True,
-    )
-    q.items.add(position.item)
-    perform_checkin(position, clist, {q: 'Foo'}, questions_supported=True)
+def test_question_filled(event, position, clist, required_checkin_question):
+    perform_checkin(position, clist, {required_checkin_question.user_datafield: 'Foo'}, questions_supported=True)
     a = position.answers.get()
-    assert a.question == q
+    assert a.question == required_checkin_question.user_datafield
     assert a.answer == 'Foo'
 
 

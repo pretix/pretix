@@ -35,6 +35,7 @@ import logging
 import os
 from datetime import datetime, timedelta, timezone
 from functools import partial, reduce
+from typing import List
 
 import dateutil
 import dateutil.parser
@@ -862,10 +863,10 @@ class CheckInError(Exception):
 
 
 class RequiredQuestionsError(Exception):
-    def __init__(self, msg, code, questions):
+    def __init__(self, msg, code, questionnaire_rows: List[QuestionnaireRow]):
         self.msg = msg
         self.code = code
-        self.questions = questions
+        self.questionnaire_rows = questionnaire_rows
         super().__init__(msg)
 
 
@@ -1114,7 +1115,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             raise RequiredQuestionsError(
                 _('You need to answer questions to complete this check-in.'),
                 'incomplete',
-                require_answers
+                questionnaire_rows=require_answers,
             )
 
         required_media_policy = op.item.media_policy
