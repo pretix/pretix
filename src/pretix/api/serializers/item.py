@@ -583,6 +583,9 @@ class DatafieldRelatedField(serializers.SlugRelatedField):
     def __init__(self, *args, **kwargs):
         super().__init__(slug_field='identifier', **kwargs)
 
+    def get_queryset(self):
+        return self.context['event'].questions.all()
+
     def to_representation(self, qc):
         if not qc:
             return None
@@ -616,7 +619,7 @@ class LegacyDependencyValueField(serializers.CharField):
 
 
 class QuestionFormSerializer(I18nAwareModelSerializer):
-    datafield = DatafieldRelatedField(allow_null=True, source='*', queryset=Question.objects.none())
+    datafield = DatafieldRelatedField(allow_null=True, source='*')
     question = I18nField(source='label', allow_null=True)
     type = serializers.CharField(source='user_datafield.type', allow_null=True, default=Question.FieldType.STRING)
     identifier = serializers.SerializerMethodField(read_only=True)
@@ -633,7 +636,7 @@ class QuestionFormSerializer(I18nAwareModelSerializer):
     valid_string_length_min = serializers.IntegerField(source='user_datafield.valid_string_length_min', allow_null=True)
     valid_file_portrait = serializers.BooleanField(source='user_datafield.valid_file_portrait', allow_null=True)
 
-    dependency_question = DatafieldRelatedField(allow_null=True, required=False, queryset=Question.objects.none())
+    dependency_question = DatafieldRelatedField(allow_null=True, required=False)
     items = serializers.PrimaryKeyRelatedField(source='questionnaire.items', many=True, queryset=Item.objects.none(), allow_null=True, required=False)
     questionnaire_id = serializers.IntegerField(source='questionnaire.id', read_only=True)
 
@@ -994,20 +997,18 @@ class InlineQuestionnaireRowListSerializer(serializers.ListSerializer):
 
 
 class InlineQuestionnaireRowSerializer(I18nAwareModelSerializer):
-    datafield = DatafieldRelatedField(allow_null=True, source='*', queryset=Question.objects.none())
-    dependency_question = DatafieldRelatedField(allow_null=True, required=False, queryset=Question.objects.none())
+    datafield = DatafieldRelatedField(allow_null=True, source='*')
+    dependency_datafield = DatafieldRelatedField(allow_null=True, required=False, source='dependency_question')
     rendered_help_text = RenderedMarkdownField(read_only=True, source='help_text')
     cooked_id = serializers.IntegerField(read_only=True, allow_null=True)
 
     class Meta:
         model = QuestionnaireRow
-        fields = ('datafield', 'required', 'label', 'help_text', 'dependency_question', 'dependency_values', 'rendered_help_text', 'cooked_id')
+        fields = ('datafield', 'required', 'label', 'help_text', 'dependency_datafield', 'dependency_values', 'rendered_help_text', 'cooked_id')
         list_serializer_class = InlineQuestionnaireRowListSerializer
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["datafield"].queryset = self.context["event"].questions.all()
-        self.fields["dependency_question"].queryset = self.context["event"].questions.all()
 
         if "rows.datafield" in self.context.get("expand", {}):
             self.fields["datafield"] = InlineDatafieldField(read_only=True, source='*')
