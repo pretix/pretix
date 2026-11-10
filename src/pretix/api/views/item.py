@@ -895,6 +895,9 @@ class QuestionnaireViewSet(ConditionalListView, viewsets.ModelViewSet):
         return ctx
 
     def perform_update(self, serializer):
+        if new_type := serializer.validated_data.get('type'):
+            if new_type.split('_', 1)[0] != serializer.instance.type.split('_', 1)[0]:
+                raise ValidationError({'type': 'Cannot change container part of type field'})
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
             'pretix.event.questionnaire.changed',

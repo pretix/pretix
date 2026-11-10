@@ -2907,6 +2907,38 @@ def test_question_update_dependency_values(token_client, organizer, event, quest
     assert question.dependency_values == ["a", "b"]
 
 
+@pytest.mark.django_db
+def test_questionnaire_forbid_container_type_change(token_client, organizer, event, question, questionnaire, orderquestionnaire):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questionnaires/{}/'.format(organizer.slug, event.slug, orderquestionnaire.pk),
+        {
+            "type": "position_purchase",
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"type":"Cannot change container part of type field"}
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questionnaires/{}/'.format(organizer.slug, event.slug, questionnaire.pk),
+        {
+            "type": "order_purchase",
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"type":"Cannot change container part of type field"}
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/questionnaires/{}/'.format(organizer.slug, event.slug, questionnaire.pk),
+        {
+            "type": "position_hidden",
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+
 TEST_OPTIONS_RES = {
     "identifier": "LVETRWVU",
     "answer": {"en": "XL"},
