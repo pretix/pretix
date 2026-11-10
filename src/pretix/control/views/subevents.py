@@ -1506,8 +1506,8 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         all_quotas = Quota.objects.filter(
             subevent__in=self.get_queryset()
         ).annotate(
-            item_list=GroupConcat('items__id'),
-            var_list=GroupConcat('variations__id'),
+            item_list=GroupConcat('items__id', distinct=True, ordered=True),
+            var_list=GroupConcat('variations__id', distinct=True, ordered=True),
         ).values(
             'item_list', 'var_list',
             *(f.name for f in Quota._meta.fields if f.name not in (
@@ -1544,8 +1544,8 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         all_lists = CheckinList.objects.filter(
             subevent__in=self.get_queryset()
         ).annotate(
-            item_list=GroupConcat('limit_products__id'),
-            gates_list=GroupConcat('gates__id'),
+            item_list=GroupConcat('limit_products__id', distinct=True, ordered=True),
+            gates_list=GroupConcat('gates__id', distinct=True, ordered=True),
         ).values(
             'item_list', 'gates_list',
             *(f.name for f in CheckinList._meta.fields if f.name not in (
