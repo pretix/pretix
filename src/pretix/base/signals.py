@@ -167,7 +167,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
                 try:
                     response = receiver(signal=self, sender=sender, **named)
                 except Exception as e:
-                    if skip_exceptions:
+                    if skip_exceptions and not settings.DEBUG:
                         logger.exception("Signal handler skipped due to exception")
                         if settings.SENTRY_ENABLED:
                             import sentry_sdk
@@ -335,7 +335,7 @@ class GlobalSignal(django.dispatch.Signal):
             try:
                 response = receiver(signal=self, sender=sender, **named)
             except Exception as e:
-                if skip_exceptions:
+                if skip_exceptions and not settings.DEBUG:
                     logger.exception("Signal handler skipped due to exception")
                     if settings.SENTRY_ENABLED:
                         import sentry_sdk
