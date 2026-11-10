@@ -56,7 +56,7 @@ calculated automatically.
           },
           "answers": [
             {
-              "question": 1,
+              "datafield": "A1B2C3D4",
               "answer": "23",
               "options": []
             }
