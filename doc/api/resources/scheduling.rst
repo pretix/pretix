@@ -48,10 +48,8 @@ property_values                       list of strings            Properties assi
 name                                  string                     Resource name
 locale                                string                     The locale used for communication with this resource
 active                                boolean                    Deleted resources will have this set to false
-notification_email                    string                     The email address to send confirmation emails to when a
-                                                                 planning is created.
-confirmation_required                 boolean                    Does this resource require confirmation when a planning
-                                                                 is created for it.
+notification_email                    string                     The email address to send confirmation emails to when a planning is created.  Ignored when type.is_human is True
+confirmation_required                 boolean                    Does this resource require confirmation when a planning is created for it.
 ===================================== ========================== =======================================================
 
 Manager invite resource
