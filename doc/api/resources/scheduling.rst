@@ -1640,7 +1640,7 @@ Endpoints
             "available": true,
             "start": "2026-03-01T09:00:00Z",
             "end": "2026-03-01T17:00:00Z",
-            "timezone": "Europe/Berlin",
+            "timezone": "Europe/Berlin"
           }
         ]
       }
@@ -1668,7 +1668,7 @@ Endpoints
             "available": true,
             "start": "2026-03-01T09:00:00Z",
             "end": "2026-03-01T17:00:00Z",
-            "timezone": "Europe/Berlin",
+            "timezone": "Europe/Berlin"
       }
 
 
@@ -1685,7 +1685,7 @@ Endpoints
         "available": true,
         "start": "2026-03-01T09:00:00Z",
         "end": "2026-03-01T17:00:00Z",
-        "timezone": "Europe/Berlin",
+        "timezone": "Europe/Berlin"
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -1720,7 +1720,7 @@ Endpoints
         "available": true,
         "start": "2026-03-01T09:00:00Z",
         "end": "2026-03-01T17:00:00Z",
-        "timezone": "Europe/Berlin",
+        "timezone": "Europe/Berlin"
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -1764,7 +1764,7 @@ Endpoints
         "available": false,
         "start": "2026-03-01T09:00:00Z",
         "end": "2026-03-01T17:00:00Z",
-        "timezone": "Europe/Berlin",
+        "timezone": "Europe/Berlin"
       }
 
    :param organizer: The ``slug`` field of a valid organizer
