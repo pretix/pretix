@@ -208,32 +208,32 @@ Endpoints
               "en": "My Type"
             },
             "name_plural": {
-              "en": "My Types",
+              "en": "My Types"
             },
             "slug": "my-type",
             "canceled_pending_email_subject": {
-              "en": "Canceled subject",
+              "en": "Canceled subject"
             },
             "canceled_pending_email_template": {
-              "en": "To whom it may concern…",
+              "en": "To whom it may concern…"
             },
             "confirmation_pending_email_subject": {
-              "en": "Pending subject",
+              "en": "Pending subject"
             },
             "confirmation_pending_email_template": {
-              "en": "To whom it may concern…",
+              "en": "To whom it may concern…"
             },
             "confirmation_email_subject": {
-              "en": "Confirmation subject",
+              "en": "Confirmation subject"
             },
             "confirmation_email_template": {
-              "en": "To whom it may concern…",
+              "en": "To whom it may concern…"
             },
             "subevent_moved_email_subject": {
-              "en": "Subevent moved subject",
+              "en": "Subevent moved subject"
             },
             "subevent_moved_email_template": {
-              "en": "To whom it may concern…",
+              "en": "To whom it may concern…"
             },
             "is_human": false
           }
@@ -288,32 +288,32 @@ Endpoints
           "en": "My Type"
         },
         "name_plural": {
-          "en": "My Types",
+          "en": "My Types"
         },
         "slug": "my-type",
         "canceled_pending_email_subject": {
-          "en": "Canceled subject",
+          "en": "Canceled subject"
         },
         "canceled_pending_email_template": {
-          "en": "To whom it may concern…",
+          "en": "To whom it may concern…"
         },
         "confirmation_pending_email_subject": {
-          "en": "Pending subject",
+          "en": "Pending subject"
         },
         "confirmation_pending_email_template": {
-          "en": "To whom it may concern…",
+          "en": "To whom it may concern…"
         },
         "confirmation_email_subject": {
-          "en": "Confirmation subject",
+          "en": "Confirmation subject"
         },
         "confirmation_email_template": {
-          "en": "To whom it may concern…",
+          "en": "To whom it may concern…"
         },
         "subevent_moved_email_subject": {
-          "en": "Subevent moved subject",
+          "en": "Subevent moved subject"
         },
         "subevent_moved_email_template": {
-          "en": "To whom it may concern…",
+          "en": "To whom it may concern…"
         },
         "is_human": false
       }
@@ -350,32 +350,32 @@ Endpoints
           "en": "My Type"
         },
         "name_plural": {
-          "en": "My Types",
+          "en": "My Types"
         },
         "slug": "my-type",
         "canceled_pending_email_subject": {
-          "en": "Canceled subject",
+          "en": "Canceled subject"
         },
         "canceled_pending_email_template": {
-          "en": "To whom it may concern…",
+          "en": "To whom it may concern…"
         },
         "confirmation_pending_email_subject": {
-          "en": "Pending subject",
+          "en": "Pending subject"
         },
         "confirmation_pending_email_template": {
-          "en": "To whom it may concern…",
+          "en": "To whom it may concern…"
         },
         "confirmation_email_subject": {
-          "en": "Confirmation subject",
+          "en": "Confirmation subject"
         },
         "confirmation_email_template": {
-          "en": "To whom it may concern…",
+          "en": "To whom it may concern…"
         },
         "subevent_moved_email_subject": {
-          "en": "Subevent moved subject",
+          "en": "Subevent moved subject"
         },
         "subevent_moved_email_template": {
-          "en": "To whom it may concern…",
+          "en": "To whom it may concern…"
         },
         "is_human": false
       }
@@ -421,32 +421,32 @@ Endpoints
           "en": "New Name"
         },
         "name_plural": {
-          "en": "My Types",
+          "en": "My Types"
         },
         "slug": "my-type",
         "canceled_pending_email_subject": {
-          "en": "Canceled subject",
+          "en": "Canceled subject"
         },
         "canceled_pending_email_template": {
-          "en": "To whom it may concern…",
+          "en": "To whom it may concern…"
         },
         "confirmation_pending_email_subject": {
-          "en": "Pending subject",
+          "en": "Pending subject"
         },
         "confirmation_pending_email_template": {
-          "en": "To whom it may concern…",
+          "en": "To whom it may concern…"
         },
         "confirmation_email_subject": {
-          "en": "Confirmation subject",
+          "en": "Confirmation subject"
         },
         "confirmation_email_template": {
-          "en": "To whom it may concern…",
+          "en": "To whom it may concern…"
         },
         "subevent_moved_email_subject": {
-          "en": "Subevent moved subject",
+          "en": "Subevent moved subject"
         },
         "subevent_moved_email_template": {
-          "en": "To whom it may concern…",
+          "en": "To whom it may concern…"
         },
         "is_human": false
       }
@@ -517,7 +517,7 @@ Endpoints
             "property_values": [
               {"id": 2, "property": 1, "value": "Value 1"},
               {"id": 3, "property": 1, "value": "Value 2"},
-              {"id": 4, "property": 1, "value": "Value 3"},
+              {"id": 4, "property": 1, "value": "Value 3"}
             ],
             "name": "My Resource",
             "locale": "en",
@@ -558,7 +558,7 @@ Endpoints
         "property_values": [
           {"id": 2, "property": 1, "value": "Value 1"},
           {"id": 3, "property": 1, "value": "Value 2"},
-          {"id": 4, "property": 1, "value": "Value 3"},
+          {"id": 4, "property": 1, "value": "Value 3"}
         ],
         "name": "My Resource",
         "locale": "en",
@@ -586,7 +586,7 @@ Endpoints
         "property_values": [
           {"id": 2, "property": 1, "value": "Value 1"},
           {"id": 3, "property": 1, "value": "Value 2"},
-          {"id": 4, "property": 1, "value": "Value 3"},
+          {"id": 4, "property": 1, "value": "Value 3"}
         ],
         "name": "My Resource",
         "locale": "en",
@@ -631,7 +631,7 @@ Endpoints
         "property_values": [
           {"id": 2, "property": 1, "value": "Value 1"},
           {"id": 3, "property": 1, "value": "Value 2"},
-          {"id": 4, "property": 1, "value": "Value 3"},
+          {"id": 4, "property": 1, "value": "Value 3"}
         ],
         "name": "My Resource",
         "locale": "en",
@@ -685,7 +685,7 @@ Endpoints
         "property_values": [
           {"id": 2, "property": 1, "value": "Value 1"},
           {"id": 3, "property": 1, "value": "Value 2"},
-          {"id": 4, "property": 1, "value": "Value 3"},
+          {"id": 4, "property": 1, "value": "Value 3"}
         ],
         "name": "New Resource",
         "locale": "en",
@@ -1837,7 +1837,7 @@ Endpoints
             "resource": 4,
             "subevent": 5,
             "status": "requested",
-            "invoiced": false
+            "invoiced": false,
             "created_at": "2026-01-01T09:00:00Z",
             "cost": "42.00",
             "paid": false
@@ -1881,7 +1881,7 @@ Endpoints
         "resource": 4,
         "subevent": 5,
         "status": "requested",
-        "invoiced": false
+        "invoiced": false,
         "created_at": "2026-01-01T09:00:00Z",
         "cost": "42.00",
         "paid": false
@@ -1927,7 +1927,7 @@ Endpoints
         "resource": 4,
         "subevent": 5,
         "status": "confirmed",
-        "invoiced": false
+        "invoiced": false,
         "created_at": "2026-01-01T09:00:00Z",
         "cost": "42.00",
         "paid": false
