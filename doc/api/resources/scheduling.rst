@@ -1852,50 +1852,6 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
 
-.. http:post:: /api/v1/organizers/(organizer)/plannings/
-
-   Create a planning for an organizer.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      POST /api/v1/organizers/bigevents/plannings/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-      {
-        "resource": 4,
-        "subevent": 5,
-        "requirement": 6,
-        "status": "requested",
-        "invoiced": false
-      }
-
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 201 Created
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "id": 1,
-        "resource": 4,
-        "subevent": 5,
-        "requirement": 6,
-        "status": "requested",
-        "invoiced": false
-      }
-
-   :param organizer: The ``slug`` field of a valid organizer
-   :statuscode 201: no error
-   :statuscode 400: The planning could not be created due to invalid submitted data.
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
-
 .. http:get:: /api/v1/organizers/(organizer)/plannings/(id)/
 
    Returns information on one planning, identified by its ID.
