@@ -485,6 +485,7 @@ Endpoints
    :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or type does not exist **or** you have no permission to view it **or** the type still has resources attached to it.
+   :statuscode 404: The requested resource type does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/
 
