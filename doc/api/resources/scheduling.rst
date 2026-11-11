@@ -114,7 +114,7 @@ The value resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
-value                                 string                     Value's human-readable name
+value                                 string                     Value's human-readable name.  Must be unique within the property.
 ===================================== ========================== =======================================================
 
 Rule resource
