@@ -25,6 +25,10 @@ function clearFile() {
 function onDrop(e) {
     selectedFile.value = e.dataTransfer.files[0] || null
 }
+
+const hasFile = computed(() => {
+    return !!selectedFile.value?.name
+})
 </script>
 
 <template lang="pug">
@@ -34,13 +38,13 @@ function onDrop(e) {
         span.optional(v-if="!$attrs.required")  {{ gettext("Optional") }}
 
     div.col-md-9(@drop.stop.prevent="onDrop" @dragover.stop.prevent @dragenter.stop.prevent)
-        div(v-if="!!selectedFile")
+        div(v-if="hasFile")
             | {{  gettext("Currently") + ': ' }}
             a(:href="selectedFile.url" data-lightbox="input") {{ selectedFile.name }}
 
         .btn-group
             button.btn.btn-default(type="button" @click="inputRef.click()") Select file
-            button.btn.btn-danger(v-if="!!selectedFile" type="button" @click="clearFile")
+            button.btn.btn-danger(v-if="hasFile" type="button" @click="clearFile")
                 i.fa.fa-trash
                 span.sr-only {{ gettext("Clear") }}
         input.hidden(:id="id" @change="onChange" v-bind="$attrs" :required="!!$attrs.required" type="file" ref="inputRef")

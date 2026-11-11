@@ -607,8 +607,6 @@ class PassStyle:
                         getattr(request, "auth", None),
                         {"image/png", "image/jpeg"},
                     )
-                elif setting.identifier in file_settings:
-                    res[setting.identifier] = None
 
         return res
 

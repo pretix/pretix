@@ -10,12 +10,17 @@ from pretix.base.models import OrderPosition
 from pretix.helpers import OF_SELF
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.wallet.i18n import (
-    FormattingLocalizableString, GettextLocalizableString,
+    FormattingLocalizableString,
+    GettextLocalizableString,
 )
 from ...models import AppleWalletPass
 from ..base import (
-    FieldGroup, FieldGroupDisplay, PassStyle, PlaceholderFieldEntry,
-    TextFieldGroup, pass_style_registry
+    FieldGroup,
+    FieldGroupDisplay,
+    PassStyle,
+    PlaceholderFieldEntry,
+    TextFieldGroup,
+    pass_style_registry,
 )
 from ..settings import ImageSettingsField
 
@@ -35,7 +40,8 @@ class AppleWalletStyle(PassStyle):
                 identifier="logo",
                 label=_("Logo"),
                 help_text=_("Will be displayed on the top left corner of the pass"),
-                default="pretixplugins/wallet/logo.png",
+                default=self.event.settings.logo_image
+                or "pretixplugins/wallet/logo.png",
             ),
             ImageSettingsField(
                 identifier="icon",
@@ -184,7 +190,9 @@ class AppleWalletStyle(PassStyle):
         )
 
         if preview:
-            pass_obj = AppleWalletPass(order_position=op, pass_type=pass_type, serial_number=serial_number)
+            pass_obj = AppleWalletPass(
+                order_position=op, pass_type=pass_type, serial_number=serial_number
+            )
         else:
             pass_obj, _ = AppleWalletPass.objects.select_for_update(
                 of=OF_SELF
@@ -209,7 +217,13 @@ class AppleWalletStyle(PassStyle):
         strings = StringResource(locales=self.event.settings.locales)
 
         pass_json = self.generate_pass_json(
-            fields, op, strings, pass_type, team_id, pass_obj.serial_number, pass_obj.auth_token
+            fields,
+            op,
+            strings,
+            pass_type,
+            team_id,
+            pass_obj.serial_number,
+            pass_obj.auth_token,
         )
 
         if file := self.get_cleaned_setting("logo"):

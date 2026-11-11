@@ -85,7 +85,6 @@ const preview_data = computed(() => {
             .tab-pane.active.row
                 .col-md-6.col-lg-8
                     Select.form-group(label="Style" :modelValue="store.style?.identifier || null" @update:modelValue="store.setStyle" :choices="platformChoices")
-                    button(type="button" @click="store.setStyle(store.style.identifier)") Reset style
                     StyleSettings(v-if="!!store.style")
                 .col-md-6.col-lg-4(style="position: sticky; top: 10px;")
                     .panel.panel-default

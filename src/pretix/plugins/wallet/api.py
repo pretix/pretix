@@ -85,11 +85,9 @@ class WalletLayoutSerializer(I18nAwareModelSerializer):
                 obj, _ = instance.platform_layouts.update_or_create(
                     platform=layout["platform"], defaults=layout
                 )
+                obj.file_settings.exclude(key__in=file_settings.keys()).delete()
                 for key, file in file_settings.items():
-                    if not file:
-                        obj.file_settings.filter(key=key).delete()
-
-                    elif file != "keep":
+                    if file != "keep":
                         file_setting, _ = obj.file_settings.get_or_create(key=key)
                         file_setting.file.save(os.path.basename(file.name), file)
 

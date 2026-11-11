@@ -81,7 +81,7 @@ export function createWalletStore(config: {
 			},
 			settings() {
 				const settings: Record<string, SettingValue> = {};
-				for (const setting of this.style.settings) {
+				for (const setting of this.style?.settings) {
 					if (
 						setting.type == "text" ||
 						setting.type == "color" ||
@@ -103,7 +103,7 @@ export function createWalletStore(config: {
 			},
 			settingsValues(): Record<string, SettingValue> {
 				const settings: Record<string, SettingValue> = {};
-				for (const setting of this.style.settings) {
+				for (const setting of this.style?.settings) {
 					if (
 						setting.type == "text" ||
 						setting.type == "color" ||
@@ -125,7 +125,7 @@ export function createWalletStore(config: {
 			},
 			renderedFieldGroups() {
 				const content = {};
-				const placeholderFieldGroups = this.style.fieldgroups.filter(
+				const placeholderFieldGroups = this.style?.fieldgroups.filter(
 					(x) => x.type === "placeholder",
 				);
 				for (const fieldgroup of placeholderFieldGroups) {
@@ -175,7 +175,7 @@ export function createWalletStore(config: {
 			},
 			fieldgroups(): Record<string, FieldGroupDefinition> {
 				return Object.fromEntries(
-					this.style.fieldgroups.map((x) => [x.identifier, x]),
+					this.style?.fieldgroups.map((x) => [x.identifier, x]),
 				);
 			},
 		},
@@ -241,7 +241,7 @@ export function createWalletStore(config: {
 				}
 			},
 			getSetting(identifier: string): Setting {
-				for (const setting of this.style.settings) {
+				for (const setting of this.style?.settings) {
 					if (setting.identifier === identifier) {
 						return setting;
 					}
@@ -355,6 +355,8 @@ export function createWalletStore(config: {
 									return [k, await this.uploadFile(v)];
 								} else if ("file" in v && v.file == null) {
 									return [k, null];
+								} else if ("url" in v) {
+									return [k, "file:keep"]
 								}
 							}),
 						)
