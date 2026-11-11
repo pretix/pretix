@@ -21,6 +21,7 @@
 #
 import datetime
 import time
+from collections import namedtuple
 from decimal import Decimal
 from unittest import mock
 from urllib.parse import quote as urlquote
@@ -926,6 +927,9 @@ def test_require_paid(token_client, organizer, clist, event, order):
     assert resp.data['status'] == 'ok'
 
 
+questiondata = namedtuple('questiondata', ['datafield', 'answers', 'qrow'])
+
+
 @pytest.fixture
 def question(event, item):
     q = event.questions.create(internal_name='Clothes Size', type='C')
@@ -934,7 +938,7 @@ def question(event, item):
     questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Checkin questions')
     row = questionnaire.rows.create(user_datafield=q, label=LazyI18nString('Size'), required=True)
     questionnaire.items.add(item)
-    return q, a1, a2, row
+    return questiondata(q, [a1, a2], row)
 
 
 def assert_questions_response(questions, df, qrow):
@@ -953,21 +957,21 @@ def assert_questions_response(questions, df, qrow):
 def test_question_number(token_client, organizer, clist, event, order, question):
     with scopes_disabled():
         p = order.positions.first()
-        question[0].options.all().delete()
-    question[0].type = 'N'
-    question[0].save()
+        question.datafield.options.all().delete()
+    question.datafield.type = 'N'
+    question.datafield.save()
 
     resp = _redeem(token_client, organizer, clist, p.pk, {})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question[0], question[3])
+        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
 
-    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: "3.24"}})
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: "3.24"}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
     with scopes_disabled():
-        assert order.positions.first().answers.get(question=question[0]).answer == '3.24'
+        assert order.positions.first().answers.get(question=question.datafield).answer == '3.24'
 
 
 @pytest.mark.django_db
@@ -978,14 +982,14 @@ def test_question_choice(token_client, organizer, clist, event, order, question)
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question[0], question[3])
+        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
 
-    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: str(question[1].pk)}})
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: str(question.answers[0].pk)}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
     with scopes_disabled():
-        assert order.positions.first().answers.get(question=question[0]).answer == 'M'
-        assert list(order.positions.first().answers.get(question=question[0]).options.all()) == [question[1]]
+        assert order.positions.first().answers.get(question=question.datafield).answer == 'M'
+        assert list(order.positions.first().answers.get(question=question.datafield).options.all()) == [question.answers[0]]
 
 
 @pytest.mark.django_db
@@ -996,61 +1000,61 @@ def test_question_choice_identifier(token_client, organizer, clist, event, order
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question[0], question[3])
+        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
 
-    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: str(question[1].identifier)}})
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: str(question.answers[0].identifier)}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
     with scopes_disabled():
-        assert order.positions.first().answers.get(question=question[0]).answer == 'M'
-        assert list(order.positions.first().answers.get(question=question[0]).options.all()) == [question[1]]
+        assert order.positions.first().answers.get(question=question.datafield).answer == 'M'
+        assert list(order.positions.first().answers.get(question=question.datafield).options.all()) == [question.answers[0]]
 
 
 @pytest.mark.django_db
 def test_question_invalid(token_client, organizer, clist, event, order, question):
     with scopes_disabled():
         p = order.positions.first()
-    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: "A"}})
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: "A"}})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question[0], question[3])
+        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
 
 
 @pytest.mark.django_db
 def test_question_required(token_client, organizer, clist, event, order, question):
     with scopes_disabled():
         p = order.positions.first()
-    question[3].required = True
-    question[3].save()
+    question.qrow.required = True
+    question.qrow.save()
 
     resp = _redeem(token_client, organizer, clist, p.pk, {})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question[0], question[3])
+        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
 
-    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: ""}})
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: ""}})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question[0], question[3])
+        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
 
 
 @pytest.mark.django_db
 def test_question_optional(token_client, organizer, clist, event, order, question):
     with scopes_disabled():
         p = order.positions.first()
-    question[3].required = False
-    question[3].save()
+    question.qrow.required = False
+    question.qrow.save()
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {}})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question[0], question[3])
+        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
 
-    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: ""}})
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: ""}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
 
@@ -1059,21 +1063,21 @@ def test_question_optional(token_client, organizer, clist, event, order, questio
 def test_question_multiple_choice(token_client, organizer, clist, event, order, question):
     with scopes_disabled():
         p = order.positions.first()
-    question[0].type = 'M'
-    question[0].save()
+    question.datafield.type = 'M'
+    question.datafield.save()
 
     resp = _redeem(token_client, organizer, clist, p.pk, {})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question[0], question[3])
+        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
 
-    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: "{},{}".format(question[1].pk, question[2].pk)}})
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: "{},{}".format(question.answers[0].pk, question.answers[1].pk)}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
     with scopes_disabled():
-        assert order.positions.first().answers.get(question=question[0]).answer == 'M, L'
-        assert set(order.positions.first().answers.get(question=question[0]).options.all()) == {question[1], question[2]}
+        assert order.positions.first().answers.get(question=question.datafield).answer == 'M, L'
+        assert set(order.positions.first().answers.get(question=question.datafield).options.all()) == {question.answers[0], question.answers[1]}
 
 
 @pytest.mark.django_db
@@ -1092,47 +1096,69 @@ def test_question_upload(token_client, organizer, clist, event, order, question)
 
     with scopes_disabled():
         p = order.positions.first()
-    question[0].type = 'F'
-    question[0].save()
+    question.datafield.type = 'F'
+    question.datafield.save()
 
     resp = _redeem(token_client, organizer, clist, p.pk, {})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question[0], question[3])
+        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
 
-    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: "invalid"}})
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: "invalid"}})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
 
-    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: file_id_png}})
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: file_id_png}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
     with scopes_disabled():
-        assert order.positions.first().answers.get(question=question[0]).answer.startswith('file://')
-        assert order.positions.first().answers.get(question=question[0]).file
+        assert order.positions.first().answers.get(question=question.datafield).answer.startswith('file://')
+        assert order.positions.first().answers.get(question=question.datafield).file
 
 
 @pytest.mark.django_db
 def test_question_upload_optional(token_client, organizer, clist, event, order, question):
     with scopes_disabled():
         p = order.positions.first()
-    question[0].type = 'F'
-    question[0].save()
-    question[3].required = False
-    question[3].save()
+    question.datafield.type = 'F'
+    question.datafield.save()
+    question.qrow.required = False
+    question.qrow.save()
 
     resp = _redeem(token_client, organizer, clist, p.pk, {})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question[0], question[3])
+        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
 
-    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: ""}})
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: ""}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
     with scopes_disabled():
-        assert not order.positions.first().answers.filter(question=question[0]).exists()
+        assert not order.positions.first().answers.filter(question=question.datafield).exists()
+
+
+@pytest.mark.django_db
+def test_question_upload_optional(token_client, organizer, clist, event, order, question):
+    with scopes_disabled():
+        p = order.positions.first()
+    question.datafield.type = 'F'
+    question.datafield.save()
+    question.qrow.required = False
+    question.qrow.save()
+
+    resp = _redeem(token_client, organizer, clist, p.pk, {})
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    with scopes_disabled():
+        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
+
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: ""}})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert not order.positions.first().answers.filter(question=question.datafield).exists()
 
 
 @pytest.mark.django_db
