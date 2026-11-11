@@ -165,7 +165,6 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
 resource                              integer                    Internal ID in pretix for the planning's resource
-requirement                           integer                    Internal ID in pretix for the planning's requirement
 subevent                              integer                    Internal ID in pretix for the planning's subevent
 status                                string                     Status for the planning, can be one of ``requested``,
                                                                  ``confirmed``, ``completed``, or ``cancelled``.
@@ -1834,7 +1833,6 @@ Endpoints
             "id": 1,
             "resource": 4,
             "subevent": 5,
-            "requirement": 6,
             "status": "requested",
             "invoiced": false
           }
@@ -1876,7 +1874,6 @@ Endpoints
         "id": 1,
         "resource": 4,
         "subevent": 5,
-        "requirement": 6,
         "status": "requested",
         "invoiced": false
       }
@@ -1920,7 +1917,6 @@ Endpoints
         "id": 1,
         "resource": 4,
         "subevent": 5,
-        "requirement": 6,
         "status": "confirmed",
         "invoiced": false
       }
