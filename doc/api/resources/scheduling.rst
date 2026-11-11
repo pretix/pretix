@@ -253,7 +253,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 201 OK
+      HTTP/1.1 201 Created
       Vary: Accept
       Content-Type: application/json
 
@@ -497,7 +497,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 201 OK
+      HTTP/1.1 201 Created
       Vary: Accept
       Content-Type: application/json
 
@@ -664,7 +664,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 201 OK
+      HTTP/1.1 201 Created
       Vary: Accept
       Content-Type: application/json
 
@@ -800,7 +800,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 201 OK
+      HTTP/1.1 201 Created
       Vary: Accept
       Content-Type: application/json
 
@@ -938,7 +938,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 201 OK
+      HTTP/1.1 201 Created
       Vary: Accept
       Content-Type: application/json
 
@@ -1096,7 +1096,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 201 OK
+      HTTP/1.1 201 Created
       Vary: Accept
       Content-Type: application/json
 
@@ -1263,7 +1263,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 201 OK
+      HTTP/1.1 201 Created
       Vary: Accept
       Content-Type: application/json
 
@@ -1387,7 +1387,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 204 OK
+      HTTP/1.1 204 No Content
       Vary: Accept
       Content-Type: text/javascript
 
@@ -1465,7 +1465,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 201 OK
+      HTTP/1.1 201 Created
       Vary: Accept
       Content-Type: application/json
 
@@ -1580,7 +1580,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 204 OK
+      HTTP/1.1 204 No Content
       Vary: Accept
       Content-Type: text/javascript
 
@@ -1664,7 +1664,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 201 OK
+      HTTP/1.1 201 Created
       Vary: Accept
       Content-Type: application/json
 
@@ -1779,7 +1779,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/1.1 204 OK
+      HTTP/1.1 204 No Content
       Vary: Accept
       Content-Type: text/javascript
 
