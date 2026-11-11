@@ -941,7 +941,7 @@ def question(event, item):
     return questiondata(q, [a1, a2], row)
 
 
-def assert_questions_response(questions, df, qrow):
+def assert_questions_response_one(questions, df, qrow):
     assert len(questions) == 1
     serialized = DatafieldSerializer(df).data
     for k in ('type', 'options', 'show_during_checkin', 'identifier', 'print_on_invoice', 'valid_number_min', 'valid_number_max', 'valid_date_min', 'valid_date_max', 'valid_datetime_min', 'valid_datetime_max', 'valid_string_length_max', 'valid_string_length_min', 'valid_file_portrait'):
@@ -951,6 +951,15 @@ def assert_questions_response(questions, df, qrow):
     assert questions[0]['required'] == qrow.required
     assert questions[0]['question'] == I18nField().to_representation(qrow.label)
     assert questions[0]['help_text'] == I18nField().to_representation(qrow.help_text)
+
+
+@pytest.fixture
+def attendee_questionnaire(event, item):
+    attendee_questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Attendee data')
+    attendee_questionnaire.rows.create(system_datafield='@attendee_name_parts', required=True)
+    attendee_questionnaire.rows.create(system_datafield='@company', required=False)
+    attendee_questionnaire.items.set([item])
+    return attendee_questionnaire
 
 
 @pytest.mark.django_db
@@ -965,7 +974,7 @@ def test_question_number(token_client, organizer, clist, event, order, question)
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
+        assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: "3.24"}})
     assert resp.status_code == 201
@@ -982,7 +991,7 @@ def test_question_choice(token_client, organizer, clist, event, order, question)
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
+        assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: str(question.answers[0].pk)}})
     assert resp.status_code == 201
@@ -1000,7 +1009,7 @@ def test_question_choice_identifier(token_client, organizer, clist, event, order
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
+        assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: str(question.answers[0].identifier)}})
     assert resp.status_code == 201
@@ -1018,7 +1027,7 @@ def test_question_invalid(token_client, organizer, clist, event, order, question
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
+        assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
 
 @pytest.mark.django_db
@@ -1032,13 +1041,13 @@ def test_question_required(token_client, organizer, clist, event, order, questio
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
+        assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: ""}})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
+        assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
 
 @pytest.mark.django_db
@@ -1052,9 +1061,42 @@ def test_question_optional(token_client, organizer, clist, event, order, questio
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
+        assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: ""}})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_question_system(token_client, organizer, clist, event, order, question, attendee_questionnaire):
+    with scopes_disabled():
+        p = order.positions.first()
+
+    SYS_QUESTIONS_RES = [
+        {'id': 2000000011, 'question': {'en': 'Name'}, 'type': 'S', 'required': True, 'items': [1], 'options': [], 'position': 0, 'ask_during_checkin': True, 'show_during_checkin': False, 'identifier': '@attendee_name_parts:full_name', 'dependency_question': None, 'dependency_values': [], 'hidden': False, 'dependency_value': None, 'print_on_invoice': False, 'help_text': None, 'valid_number_min': None, 'valid_number_max': None, 'valid_date_min': None, 'valid_date_max': None, 'valid_datetime_min': None, 'valid_datetime_max': None, 'valid_string_length_max': None, 'valid_string_length_min': None, 'valid_file_portrait': None, 'questionnaire_id': attendee_questionnaire.id},
+        {'id': 2000000002, 'question': {'en': ''}, 'type': 'S', 'required': False, 'items': [1], 'options': [], 'position': 1, 'ask_during_checkin': True, 'show_during_checkin': False, 'identifier': '@company', 'dependency_question': None, 'dependency_values': [], 'hidden': False, 'dependency_value': None, 'print_on_invoice': False, 'help_text': None, 'valid_number_min': None, 'valid_number_max': None, 'valid_date_min': None, 'valid_date_max': None, 'valid_datetime_min': None, 'valid_datetime_max': None, 'valid_string_length_max': None, 'valid_string_length_min': None, 'valid_file_portrait': None, 'questionnaire_id': attendee_questionnaire.id}
+    ]
+
+    resp = _redeem(token_client, organizer, clist, p.pk, {})
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    with scopes_disabled():
+        assert len(resp.data['questions']) == 3
+        assert resp.data['questions'] == [
+            {'id': 1000000101, 'question': {'en': 'Size'}, 'type': 'C', 'required': True, 'items': [1], 'options': [{'id': 1, 'identifier': question.answers[0].identifier, 'answer': {'en': 'M'}, 'position': 0}, {'id': 2, 'identifier': question.answers[1].identifier, 'answer': {'en': 'L'}, 'position': 0}], 'position': 0, 'ask_during_checkin': True, 'show_during_checkin': False, 'identifier': question.datafield.identifier, 'dependency_question': None, 'dependency_values': [], 'hidden': False, 'dependency_value': None, 'print_on_invoice': False, 'help_text': None, 'valid_number_min': None, 'valid_number_max': None, 'valid_date_min': None, 'valid_date_max': None, 'valid_datetime_min': None, 'valid_datetime_max': None, 'valid_string_length_max': None, 'valid_string_length_min': None, 'valid_file_portrait': False, 'questionnaire_id': question.qrow.questionnaire_id},
+            *SYS_QUESTIONS_RES,
+        ]
+
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {'2000000011': "Jane Doe", '2000000002': "VEB Eintrittskartenverkauf"}})
+    print(resp.data)
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    with scopes_disabled():
+        assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
+
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {'1000000101': question.answers[0].pk, '2000000011': "Jane Doe", '2000000002': "VEB Eintrittskartenverkauf"}})
+    print(resp.data)
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
 
@@ -1070,7 +1112,7 @@ def test_question_multiple_choice(token_client, organizer, clist, event, order, 
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
+        assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: "{},{}".format(question.answers[0].pk, question.answers[1].pk)}})
     assert resp.status_code == 201
@@ -1103,7 +1145,7 @@ def test_question_upload(token_client, organizer, clist, event, order, question)
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
+        assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: "invalid"}})
     assert resp.status_code == 400
@@ -1130,7 +1172,7 @@ def test_question_upload_optional(token_client, organizer, clist, event, order, 
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
+        assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: ""}})
     assert resp.status_code == 201
@@ -1152,7 +1194,7 @@ def test_question_upload_optional(token_client, organizer, clist, event, order, 
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert_questions_response(resp.data['questions'], question.datafield, question.qrow)
+        assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: ""}})
     assert resp.status_code == 201
