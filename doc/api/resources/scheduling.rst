@@ -1769,7 +1769,7 @@ Endpoints
 
    :param organizer: The ``slug`` field of a valid organizer
    :param resource: The ``id`` field of a valid resource
-   :param id: The ``id`` field of the planning to update
+   :param id: The ``id`` field of the shift to update
    :statuscode 200: no error
    :statuscode 400: The shift could not be modified due to invalid submitted data.
    :statuscode 401: Authentication failure
