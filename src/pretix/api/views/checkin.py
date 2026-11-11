@@ -77,6 +77,7 @@ from pretix.base.services.checkin import (
 from pretix.base.services.media import perform_media_exchange
 from pretix.base.signals import checkin_annulled
 from pretix.helpers import OF_SELF
+from pretix.presale.views import prefetch_relevant_questionnaires
 
 with scopes_disabled():
     class CheckinListFilter(FilterSet):
@@ -407,6 +408,7 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
         ),
         Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
         'answers', 'answers__options', 'answers__question',
+        prefetch_relevant_questionnaires(sales_channel=None, questionnaire_type=Questionnaire.QuestionnaireType.POSITION_CHECKIN),
     ]
     select_related = [
         'item', 'variation', 'order', 'addon_to', 'order__invoice_address', 'order', 'seat'
@@ -801,24 +803,24 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     # 5. Pre-validate all incoming answers, handle file upload
     given_answers = {}
     if answers_data:
-        for qc in QuestionnaireRow.objects.filter(
-                questionnaire__items__in=[op.item], questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN
-        ):
-            if (qc.user_datafield_id and str(qc.user_datafield_id) in answers_data) or (qc.cooked_id and str(qc.cooked_id) in answers_data):
-                try:
+        # op.item.relevant_questionnaires prefetched in _checkin_list_position_queryset via prefetch_relevant_questionnaires
+        for questionnaire in op.item.relevant_questionnaires:
+            for qc in questionnaire.rows.all():
+                if (qc.user_datafield_id and str(qc.user_datafield_id) in answers_data) or (qc.cooked_id and str(qc.cooked_id) in answers_data):
                     try:
-                        ans = answers_data[str(qc.user_datafield_id)]
-                    except KeyError:
-                        ans = answers_data[str(qc.cooked_id)]
-                    if qc.system_datafield:
-                        # TODO
-                        continue
-                    if qc.user_datafield.type == Question.TYPE_FILE:
-                        given_answers[qc.user_datafield or qc.system_datafield] = _handle_file_upload(ans, user, auth)
-                    else:
-                        given_answers[qc.user_datafield or qc.system_datafield] = qc.clean_answer(ans)
-                except (ValidationError, BaseValidationError):
-                    pass
+                        try:
+                            ans = answers_data[str(qc.user_datafield_id)]
+                        except KeyError:
+                            ans = answers_data[str(qc.cooked_id)]
+                        if qc.system_datafield:
+                            # TODO
+                            continue
+                        if qc.user_datafield.type == Question.TYPE_FILE:
+                            given_answers[qc.user_datafield or qc.system_datafield] = _handle_file_upload(ans, user, auth)
+                        else:
+                            given_answers[qc.user_datafield or qc.system_datafield] = qc.clean_answer(ans)
+                    except (ValidationError, BaseValidationError):
+                        pass
 
     # 6. Pass to our actual check-in logic
     if use_order_locale:
