@@ -28,37 +28,15 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.models import Checkin, InvoiceAddress, Order, Question
 from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.helpers.models import find_first_with_cache
 from pretix.multidomain.urlreverse import eventreverse_absolute
 
 
 def get_position_answer(op, question_identifier=None):
-    a = None
-    if op.addon_to:
-        if "answers" in getattr(op.addon_to, "_prefetched_objects_cache", {}):
-            try:
-                a = [
-                    a
-                    for a in op.addon_to.answers.all()
-                    if a.question.identifier == question_identifier
-                ][0]
-            except IndexError:
-                pass
-        else:
-            a = op.addon_to.answers.filter(
-                question__identifier=question_identifier
-            ).first()
+    a = find_first_with_cache(op.answers, question__identifier=question_identifier)
 
-    if "answers" in getattr(op, "_prefetched_objects_cache", {}):
-        try:
-            a = [
-                a
-                for a in op.answers.all()
-                if a.question.identifier == question_identifier
-            ][0]
-        except IndexError:
-            pass
-    else:
-        a = op.answers.filter(question__identifier=question_identifier).first()
+    if a is None and op.addon_to:
+        a = find_first_with_cache(op.addon_to.answers, question__identifier=question_identifier)
 
     if not a:
         return ""
@@ -71,19 +49,7 @@ def get_position_answer(op, question_identifier=None):
 
 
 def get_order_answer(order, question_identifier=None):
-    a = None
-    if "answers" in getattr(order, "_prefetched_objects_cache", {}):
-        try:
-            a = [
-                a
-                for a in order.answers.all()
-                if a.question.identifier == question_identifier
-            ][0]
-        except IndexError:
-            pass
-    else:
-        a = order.answers.filter(question__identifier=question_identifier).first()
-
+    a = find_first_with_cache(order.answers, question__identifier=question_identifier)
     if not a:
         return ""
     else:

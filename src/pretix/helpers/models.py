@@ -26,6 +26,8 @@ from django.core.files import File
 from django.db import models
 from django.db.models.fields import DecimalField
 
+from pretix.settings import DEBUG
+
 
 class Thumbnail(models.Model):
     source = models.CharField(max_length=255)
@@ -86,3 +88,49 @@ class NormalizedDecimalField(DecimalField):
         if value is not None:
             value = _normalize_decimal(value)
         return value
+
+
+def get_prefetch_cache(related_manager):
+    if hasattr(related_manager, 'get_prefetch_cache'):
+        return related_manager.get_prefetch_cache()
+    else:
+        try:
+            return related_manager.instance._prefetched_objects_cache[
+                related_manager.field.remote_field.cache_name
+            ]
+        except (AttributeError, KeyError):
+            return None
+
+
+def is_prefetched(related_manager):
+    return get_prefetch_cache(related_manager) is not None
+
+
+def find_first_with_cache(related_manager, **filter_kwargs):
+    if is_prefetched(related_manager):
+        for candidate in related_manager.all():
+            if _evaluate_simple_filter(candidate, **filter_kwargs):
+                return candidate
+    else:
+        result = related_manager.filter(**filter_kwargs).first()
+        if result and DEBUG:
+            assert _evaluate_simple_filter(result, **filter_kwargs)  # ensure we only build filters that are compatible with _evaluate_simple_filter
+        return result
+
+
+def filter_with_cache(related_manager, **filter_kwargs):
+    qs = related_manager.filter(**filter_kwargs)
+    if is_prefetched(related_manager):
+        qs._result_cache = [obj for obj in related_manager.all() if _evaluate_simple_filter(obj, **filter_kwargs)]
+    return qs
+
+
+def _evaluate_simple_filter(obj, **filter_kwargs):
+    for key, expected_value in filter_kwargs.items():
+        path = key.split('__')
+        o = obj
+        for p in path:
+            o = getattr(o, p)
+        if o != expected_value:
+            return False
+    return True

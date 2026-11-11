@@ -83,6 +83,7 @@ from pretix.base.signals import layout_image_variables, layout_text_variables
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.helpers.daterange import datetimerange
+from pretix.helpers.models import find_first_with_cache, is_prefetched
 from pretix.helpers.reportlab import (
     ThumbnailingImageReader, register_ttf_font_if_new, reshaper,
 )
@@ -555,23 +556,9 @@ DEFAULT_IMAGES = OrderedDict([])
 @receiver(layout_image_variables, dispatch_uid="pretix_base_layout_image_variables_questions")
 def images_from_questions(sender, *args, **kwargs):
     def get_answer(op, order, event, question_id, etag):
-        a = None
-        if op.addon_to:
-            if 'answers' in getattr(op.addon_to, '_prefetched_objects_cache', {}):
-                try:
-                    a = [a for a in op.addon_to.answers.all() if a.question_id == question_id][0]
-                except IndexError:
-                    pass
-            else:
-                a = op.addon_to.answers.filter(question_id=question_id).first()
-
-        if 'answers' in getattr(op, '_prefetched_objects_cache', {}):
-            try:
-                a = [a for a in op.answers.all() if a.question_id == question_id][0]
-            except IndexError:
-                pass
-        else:
-            a = op.answers.filter(question_id=question_id).first() or a
+        a = find_first_with_cache(op.answers, question_id=question_id)
+        if a is None and op.addon_to:
+            a = find_first_with_cache(op.addon_to.answers, question_id=question_id)
 
         if not a or not a.file or not any(a.file.name.lower().endswith(e) for e in settings.FILE_UPLOAD_EXTENSIONS_QUESTION_IMAGE):
             return None
@@ -595,23 +582,9 @@ def images_from_questions(sender, *args, **kwargs):
 @receiver(layout_text_variables, dispatch_uid="pretix_base_layout_text_variables_questions")
 def variables_from_questions(sender, *args, **kwargs):
     def get_answer(op, order, event, question_id):
-        a = None
-        if op.addon_to:
-            if 'answers' in getattr(op.addon_to, '_prefetched_objects_cache', {}):
-                try:
-                    a = [a for a in op.addon_to.answers.all() if a.question_id == question_id][0]
-                except IndexError:
-                    pass
-            else:
-                a = op.addon_to.answers.filter(question_id=question_id).first()
-
-        if 'answers' in getattr(op, '_prefetched_objects_cache', {}):
-            try:
-                a = [a for a in op.answers.all() if a.question_id == question_id][0]
-            except IndexError:
-                pass
-        else:
-            a = op.answers.filter(question_id=question_id).first() or a
+        a = find_first_with_cache(op.answers, question_id=question_id)
+        if a is None and op.addon_to:
+            a = find_first_with_cache(op.addon_to.answers, question_id=question_id)
 
         if not a:
             return ""
@@ -776,7 +749,7 @@ def get_program_times(op: OrderPosition, ev: Event):
 def generate_compressed_addon_list(op, order, event, only_checked_in=False):
     itemcount = defaultdict(int)
     addon_qs = (
-        op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
+        op.addons.all() if is_prefetched(op.addons)
         else op.addons.select_related('item', 'variation')
     )
     if only_checked_in:

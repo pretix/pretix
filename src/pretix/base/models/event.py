@@ -79,6 +79,7 @@ from pretix.helpers.thumb import get_thumbnail
 
 from ..settings import settings_hierarkey
 from .organizer import Organizer, Team
+from ...helpers.models import filter_with_cache
 
 if TYPE_CHECKING:
     from hierarkey.proxy import HierarkeyProxy
@@ -1557,18 +1558,12 @@ class Event(EventMixin, LoggedModel):
     @property
     def orderdatafields(self):
         from . import Question
-        qs = self.questions.filter(container_type=Question.ContainerType.ORDER)
-        if 'questions' in getattr(self, '_prefetched_objects_cache', {}):
-            qs._result_cache = [df for df in self.questions.all() if df.container_type == Question.ContainerType.ORDER]
-        return qs
+        return filter_with_cache(self.questions, container_type=Question.ContainerType.ORDER)
 
     @property
     def positiondatafields(self):
         from . import Question
-        qs = self.questions.filter(container_type=Question.ContainerType.ORDERPOSITION)
-        if 'questions' in getattr(self, '_prefetched_objects_cache', {}):
-            qs._result_cache = [df for df in self.questions.all() if df.container_type == Question.ContainerType.ORDERPOSITION]
-        return qs
+        return filter_with_cache(self.questions, container_type=Question.ContainerType.ORDERPOSITION)
 
 
 class SubEvent(EventMixin, LoggedModel):

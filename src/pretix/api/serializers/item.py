@@ -70,6 +70,7 @@ from pretix.base.settings import (
 )
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.i18n import i18n_all_from_gettext
+from pretix.helpers.models import is_prefetched
 
 logger = logging.getLogger(__name__)
 
@@ -356,7 +357,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
             self.fields['variations'].child.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
 
     def get_personalized(self, item):
-        if 'questionnaires' in getattr(item, '_prefetched_objects_cache', {}):
+        if is_prefetched(item.questionnaires):
             if all(hasattr(q, 'has_attendee_data') for q in item.questionnaires.all()):
                 return any(q.has_attendee_data for q in item.questionnaires.all())
 
