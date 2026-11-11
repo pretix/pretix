@@ -601,7 +601,7 @@ class OrderDetail(OrderView):
             'item', 'variation', 'addon_to', 'tax_rule', 'used_membership', 'used_membership__membership_type',
             'discount',
         ).prefetch_related(
-            prefetch_relevant_questionnaires(self.request.event, None, None),
+            prefetch_relevant_questionnaires(None, None),
             #'item__questionnaires',
             'issued_gift_cards', 'owned_gift_cards', 'linked_media',  # TODO(questionnaires) : item__questions gibts nicht mehr
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
@@ -624,7 +624,7 @@ class OrderDetail(OrderView):
                         })
 
             p.has_questions = p.additional_fields or p.item.questionnaires.all()
-            qrows = list(copy.copy(qc) for qq in p.item.relevant_questionnaires for qc in qq.questionnairerowlist)
+            qrows = list(copy.copy(qc) for qq in p.item.relevant_questionnaires for qc in qq.rows.all())
             p.rendered_questions = QuestionnaireRenderer(qrows=qrows, system_answers=p.system_answers, answerlist=p.answers.all())
             p.order = self.order
 

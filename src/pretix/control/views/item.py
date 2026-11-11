@@ -130,7 +130,7 @@ class ItemList(ListView):
             requires_seat=requires_seat,
         ).prefetch_related(
             "category", "limit_sales_channels",
-            prefetch_relevant_questionnaires(self.request.event, None, None, questionnaire_lookup='questionnaires'),
+            prefetch_relevant_questionnaires(None, None, questionnaire_lookup='questionnaires'),
         ).order_by(
             F('category__position').asc(nulls_first=True),
             'category', 'position'
@@ -140,7 +140,7 @@ class ItemList(ListView):
         ctx = super().get_context_data(**kwargs)
         ctx['sales_channels'] = self.request.organizer.sales_channels.all()
         for item in ctx['items']:
-            qrows = [qc for qq in item.relevant_questionnaires for qc in qq.questionnairerowlist]
+            qrows = [qc for qq in item.relevant_questionnaires for qc in qq.rows.all()]
             item.attendee_data_asked = any(row.system_datafield for row in qrows)
             item.attendee_data_required = item.attendee_data_asked and any(row.system_datafield and row.required for row in qrows)
             item.custom_questions_asked = any(row.user_datafield_id for row in qrows)

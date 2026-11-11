@@ -1783,7 +1783,7 @@ class AbstractPosition(AnswerableMixin, RoundingCorrectionMixin, models.Model):
         # answers of other items in the same cart if the question objects have been
         # selected via prefetch_related
         if hasattr(self.item, 'relevant_questionnaires'):
-            qrows = list(copy.copy(qc) for qq in self.item.relevant_questionnaires for qc in qq.questionnairerowlist)
+            qrows = list(copy.copy(qc) for qq in self.item.relevant_questionnaires for qc in qq.rows.all())
         else:
             qrows = list(self.item.get_asked_questions(questionnaire_type=questionnaire_type, sales_channel=sales_channel))
         return self._cache_question_data(qrows)

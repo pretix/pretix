@@ -986,14 +986,13 @@ class OrderLevelQuestionsForm(BaseQuestionsForm):
                         to_attr='dummy'
                     )))
                 ))
-            ),
-            to_attr='questionnairerowlist')
+            ))
         )
         answerlist = container.answers.prefetch_related('options')
 
         idx = 0
         for questionnaire in questionnaires:
-            for qrow in getattr(questionnaire, 'questionnairerowlist', questionnaire.rows.all()):
+            for qrow in questionnaire.rows.all():
                 if qrow.user_datafield:
                     df = qrow.user_datafield
                     self.fields[qrow.form_field_name] = self.build_user_question_field(request, event, answerlist, qrow, df)
@@ -1037,7 +1036,7 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
             self.fields['requested_valid_from'] = self.build_requested_valid_from_field(event, pos, item)
 
         for questionnaire in questionnaires:
-            for qrow in getattr(questionnaire, 'questionnairerowlist', questionnaire.rows.all()):
+            for qrow in questionnaire.rows.all():
                 if qrow.user_datafield:
                     df = qrow.user_datafield
                     self.fields[qrow.form_field_name] = self.build_user_question_field(request, event, pos.answerlist, qrow, df)

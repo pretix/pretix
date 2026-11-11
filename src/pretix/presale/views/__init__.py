@@ -136,7 +136,7 @@ class CartMixin:
         if queryset is not None:
             prefetch = []
             if answers:
-                prefetch.append(prefetch_relevant_questionnaires(self.request.event, self.request.sales_channel, Questionnaire.QuestionnaireType.POSITION_PURCHASE))
+                prefetch.append(prefetch_relevant_questionnaires(self.request.sales_channel, Questionnaire.QuestionnaireType.POSITION_PURCHASE))
                 prefetch.append(Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options')))
 
             cartpos = queryset.order_by(
@@ -246,7 +246,7 @@ class CartMixin:
             group.price_for_input_net = group.net_price_before_rounding + sum(a.net_price_before_rounding for a in has_addons[group.pk])
 
             if answers:
-                qrows = list(copy.copy(qc) for qq in group.item.relevant_questionnaires for qc in qq.questionnairerowlist)
+                qrows = list(copy.copy(qc) for qq in group.item.relevant_questionnaires for qc in qq.rows.all())
                 group.rendered_questions = QuestionnaireRenderer(qrows=qrows, system_answers=group.system_answers, answerlist=group.answers.all())
                 group.additional_answers = pos_additional_fields.get(group.pk)
             positions.append(group)
@@ -396,8 +396,8 @@ def cart_exists(request):
     return bool(request._cart_cache)
 
 
-def prefetch_relevant_questionnaires(event, sales_channel, questionnaire_type, questionnaire_lookup='item__questionnaires'):
-    qqs = event.questionnaires
+def prefetch_relevant_questionnaires(sales_channel, questionnaire_type, questionnaire_lookup='item__questionnaires'):
+    qqs = Questionnaire.objects
     if sales_channel:
         qqs = qqs.filter(
             Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=sales_channel),
@@ -420,7 +420,7 @@ def prefetch_relevant_questionnaires(event, sales_channel, questionnaire_type, q
                 Prefetch('user_datafield', Question.objects.prefetch_related(
                     Prefetch('options', QuestionOption.objects.prefetch_related(dummy))
                 ))
-            ), to_attr='questionnairerowlist')
+            ))
         ),
         to_attr='relevant_questionnaires')
 
@@ -454,7 +454,7 @@ def get_cart_positions(request):
                 Prefetch('answers',
                          QuestionAnswer.objects.prefetch_related('options'),
                          to_attr='answerlist'),
-                prefetch_relevant_questionnaires(request.event, request.sales_channel.identifier, Questionnaire.QuestionnaireType.POSITION_PURCHASE),
+                prefetch_relevant_questionnaires(request.sales_channel.identifier, Questionnaire.QuestionnaireType.POSITION_PURCHASE),
             )
             by_id = {cp.pk: cp for cp in request._cart_cache}
             for cp in request._cart_cache:
@@ -463,7 +463,7 @@ def get_cart_positions(request):
                 if cp.addon_to_id:
                     cp.addon_to = by_id[cp.addon_to_id]
                 cp.rendered_questions = QuestionnaireRenderer(
-                    qrows=[qc for qq in cp.item.relevant_questionnaires for qc in qq.questionnairerowlist],
+                    qrows=[qc for qq in cp.item.relevant_questionnaires for qc in qq.rows.all()],
                     system_answers=cp.system_answers,
                     answerlist=cp.answerlist,
                 )
