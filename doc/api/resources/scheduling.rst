@@ -1136,11 +1136,7 @@ Endpoints
 
       {
         "id": 1,
-        "resource": 4,
-        "subevent": 5,
-        "requirement": 6,
-        "status": "requested",
-        "invoiced": false
+        "name": "My Property"
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
