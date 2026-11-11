@@ -22,13 +22,13 @@ The type resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
-name                                  string                     Type name
-name_plural                           string                     Plural form of the type's name
+name                                  multi-lingual string       Type name
+name_plural                           multi-lingual string       Plural form of the type's name
 slug                                  string                     Slug form of the type's name, only writeable when creating a resource type.  Must be unique to the organizer
-confirmation_pending_email_subject    string                     Template for pending confirmation email subject
-confirmation_pending_email_template   string                     Template for pending confirmation mail
-confirmation_email_subject            string                     Template for confirmation email subject
-confirmation_email_template           string                     Template for confirmation email
+confirmation_pending_email_subject    multi-lingual string       Template for pending confirmation email subject
+confirmation_pending_email_template   multi-lingual string       Template for pending confirmation mail
+confirmation_email_subject            multi-lingual string       Template for confirmation email subject
+confirmation_email_template           multi-lingual string       Template for confirmation email
 is_human                              boolean                    Does the resource represent a human (read-only after creation)
 ===================================== ========================== =======================================================
 
