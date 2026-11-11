@@ -313,10 +313,24 @@ class MixedAnswerListSerializer(ListSerializer):
                         answers.append(answer)
                     elif sys_df == "@country":
                         result['country'] = Country(answer["answer"])
+                        if not result['country'].name:
+                            raise ValidationError("Data field @country needs a valid country code.")
                     elif sys_df == "@attendee_name_parts:salutation":
-                        attendee_name_parts['salutation'] = PERSON_NAME_SALUTATIONS[answer["options"][0] - 1][0]
+                        valid_salutations = dict(PERSON_NAME_SALUTATIONS)
+                        if "options" in answer and len(answer["options"]) == 1 and answer["options"][0] <= len(PERSON_NAME_SALUTATIONS):
+                            attendee_name_parts['salutation'] = PERSON_NAME_SALUTATIONS[answer["options"][0] - 1][0]
+                        elif "option_identifiers" in answer and len(answer["option_identifiers"]) == 1 and answer["option_identifiers"][0] in valid_salutations:
+                            attendee_name_parts['salutation'] = answer["option_identifiers"][0]
+                        else:
+                            raise ValidationError("Data field @attendee_name_parts:salutation requires valid options")
                     elif sys_df == "@attendee_name_parts:title" and settings.name_scheme_titles:
-                        attendee_name_parts['title'] = PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1][answer["options"][0] - 1]
+                        valid_titles = PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1]
+                        if "options" in answer and len(answer["options"]) == 1 and answer["options"][0] <= len(valid_titles):
+                            attendee_name_parts['title'] = valid_titles[answer["options"][0] - 1]
+                        elif "option_identifiers" in answer and len(answer["option_identifiers"]) == 1 and answer["option_identifiers"][0] in valid_titles:
+                            attendee_name_parts['title'] = answer["option_identifiers"][0]
+                        else:
+                            raise ValidationError("Data field @attendee_name_parts:title requires valid options")
                     elif sys_df.startswith("@attendee_name_parts:"):
                         attendee_name_parts[sys_df[len("@attendee_name_parts:"):]] = answer["answer"]
                     else:
