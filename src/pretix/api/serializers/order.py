@@ -291,7 +291,7 @@ class MixedAnswerListSerializer(ListSerializer):
                     "question": qc.cooked_id,
                     "answer": sys_answer,
                     "question_identifier": f'{qc.system_datafield}',
-                    "detafield": f'{qc.system_datafield}',
+                    "datafield": f'{qc.system_datafield}',
                     "options": [],
                     "option_identifiers": [],
                     "questionnaire_id": qc.questionnaire_id,
