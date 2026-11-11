@@ -1751,7 +1751,7 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'positions': [{'answers': [{'non_field_errors': [f'The specified option {wrong_pk} does not belong to this data field.']}]}]}
+        'positions': [{'answers': [{'options': [f'The specified option {wrong_pk} does not belong to this data field.']}]}]}
 
     with scopes_disabled():
         question.options.create(answer="L")
