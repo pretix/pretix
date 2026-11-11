@@ -260,7 +260,7 @@ class MixedAnswerListSerializer(ListSerializer):
                     answer["question"] = qc.cooked_id
                     answer["questionnaire_id"] = qc.questionnaire_id
                     answers.append(answer)
-            elif (sys_answer := instance.get_system_answer(qc.system_datafield)) is not None:
+            elif (sys_answer := instance.system_answers[qc.system_datafield]) is not None:
                 if qc.system_datafield == QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS:
                     name_parts = instance.attendee_name_parts
                     settings = self.context['event'].settings
