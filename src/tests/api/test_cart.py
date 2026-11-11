@@ -452,7 +452,7 @@ def test_cartpos_create_answer_legacy(token_client, organizer, event, item, quot
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'answers': [{'non_field_errors': ['You need to specify options if the data field is of a choice type.']}]}
+        'answers': [{'non_field_errors': ['You need to specify either options or option_identifiers if the data field is of a choice type.']}]}
 
     with scopes_disabled():
         question.options.create(answer="L")
@@ -531,7 +531,7 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'answers': [{'non_field_errors': ['You need to specify options if the data field is of a choice type.']}]}
+        'answers': [{'non_field_errors': ['You need to specify either options or option_identifiers if the data field is of a choice type.']}]}
 
     with scopes_disabled():
         question.options.create(answer="L")

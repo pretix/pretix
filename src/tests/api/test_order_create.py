@@ -1737,14 +1737,13 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     )
     assert resp.status_code == 400
     assert resp.data == {'positions': [
-        {'answers': [{'non_field_errors': ['You need to specify options if the data field is of a choice type.']}]}]}
+        {'answers': [{'non_field_errors': ['You need to specify either options or option_identifiers if the data field is of a choice type.']}]}]}
 
     with scopes_disabled():
         question2.options.create(answer="L")
     with scopes_disabled():
-        res['positions'][0]['answers'][0]['options'] = [
-            question2.options.first().pk,
-        ]
+        wrong_pk = question2.options.first().pk
+        res['positions'][0]['answers'][0]['options'] = [wrong_pk,]
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
@@ -1752,7 +1751,7 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'positions': [{'answers': [{'non_field_errors': ['The specified option does not belong to this data field.']}]}]}
+        'positions': [{'answers': [{'non_field_errors': [f'The specified option {wrong_pk} does not belong to this data field.']}]}]}
 
     with scopes_disabled():
         question.options.create(answer="L")
