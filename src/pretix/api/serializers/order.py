@@ -348,39 +348,7 @@ class MixedAnswerListSerializer(ListSerializer):
 class OrderAnswerListSerializer(ListSerializer):
 
     def update(self, instance, validated_data):
-        qs_seen = set()
-        answercache = {
-            a.question_id: a for a in instance.answers.all()
-        }
-        for answ_data in validated_data:
-            if not answ_data.get('answer'):
-                continue
-            options = answ_data.pop('options', [])
-            if answ_data['question'].pk in qs_seen:
-                raise ValidationError(f'Question {answ_data["question"]} was sent twice.')
-            if answ_data['question'].pk in answercache:
-                a = answercache[answ_data['question'].pk]
-                if isinstance(answ_data.get('answer'), File):
-                    a.set_file(answ_data['answer'])
-                elif a.answer.startswith('file://') and answ_data['answer'] == "file:keep":
-                    pass  # keep current file
-                else:
-                    for attr, value in answ_data.items():
-                        setattr(a, attr, value)
-                a.save()
-            else:
-                if isinstance(answ_data.get('answer'), File):
-                    an = answ_data.pop('answer')
-                    a = instance.answers.create(**answ_data, answer='')
-                    a.set_file(an)
-                    a.save()
-                else:
-                    a = instance.answers.create(**answ_data)
-            a.options.set(options)
-            qs_seen.add(a.question_id)
-        for qid, a in answercache.items():
-            if qid not in qs_seen:
-                a.delete()
+        instance.set_answers(validated_data)
 
 
 class AnswerSerializer(I18nAwareModelSerializer):
@@ -1898,14 +1866,11 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     Voucher.objects.filter(pk=pos.voucher.pk).update(redeemed=F('redeemed') + 1)
                 pos.save()
 
-                # Workaround for a pretixPOS bug :-(
-                deduped_answers = dict()
-                for answ_data in answers_data:
-                    if answ_data.get('question') in deduped_answers:
-                        continue
-                    deduped_answers[answ_data.get('question')] = answ_data
-
-                pos._create_answers(deduped_answers.values(), close_files=False)
+                pos.set_answers(
+                    answers_data,
+                    ignore_duplicates=True,  # Workaround for a pretixPOS bug :-(
+                    answercache=dict()
+                )
 
                 if use_reusable_medium:
                     if pos.item.media_policy not in (Item.MEDIA_POLICY_APPEND, Item.MEDIA_POLICY_APPEND_OR_NEW):

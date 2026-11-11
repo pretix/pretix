@@ -207,7 +207,52 @@ class QuestionnaireRenderer:
         return {Field.STREET, Field.ZIPCODE, Field.CITY, Field.STATE, Field.COUNTRY}.issubset(self.asked_questions)
 
 
-class OrderLevelAnswerableMixin:
+class AnswerableMixin:
+
+    def set_answers(self, answers_data, ignore_duplicates=False, close_files=False, answercache=None):
+        questions_seen = set()
+        if answercache is None:
+            answercache = {
+                a_obj.question_id: a_obj for a_obj in self.answers.all()
+            }
+        for data in answers_data:
+            if not data.get('answer'):
+                continue
+            options = data.pop('options', [])
+            if data['question'].pk in questions_seen:
+                if ignore_duplicates:
+                    continue
+                else:
+                    raise ValidationError(f'Question {data["question"]} was sent twice.')
+            new_value = data['answer']
+            if data['question'].pk in answercache:
+                a_obj = answercache[data['question'].pk]
+                if isinstance(new_value, File):
+                    a_obj.set_file(new_value)
+                    if close_files: new_value.close()
+                elif a_obj.answer.startswith('file://') and new_value == "file:keep":
+                    pass  # keep current file
+                else:
+                    for attr, value in data.items():
+                        setattr(a_obj, attr, value)
+                a_obj.save()
+            else:
+                if isinstance(new_value, File):
+                    data.pop('answer')
+                    a_obj = self.answers.create(**data, answer='')
+                    a_obj.set_file(new_value)
+                    a_obj.save()
+                    if close_files: new_value.close()
+                else:
+                    a_obj = self.answers.create(**data)
+            a_obj.options.set(options)
+            questions_seen.add(a_obj.question_id)
+        for qid, a_obj in answercache.items():
+            if qid not in questions_seen:
+                a_obj.delete()
+
+
+class OrderLevelAnswerableMixin(AnswerableMixin):
 
     @cached_property
     def rendered_questions(self):
@@ -1605,7 +1650,7 @@ class RoundingCorrectionMixin:
         return self.gross_price_before_rounding - self.tax_value_before_rounding
 
 
-class AbstractPosition(RoundingCorrectionMixin, models.Model):
+class AbstractPosition(AnswerableMixin, RoundingCorrectionMixin, models.Model):
     """
     A position can either be one line of an order or an item placed in a cart.
 
@@ -1745,19 +1790,6 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
             "@state": self.state,
             "@country": str(self.country),
         }
-
-    def _create_answers(self, answers_data, close_files=False):
-        for answ_data in answers_data:
-            options = answ_data.pop('options', [])
-            if isinstance(answ_data['answer'], File):
-                an = answ_data.pop('answer')
-                a = self.answers.create(**answ_data, answer='')
-                a.set_file(an)
-                a.save()
-                if close_files: an.close()
-            else:
-                a = self.answers.create(**answ_data)
-                a.options.add(*options)
 
     @property
     def net_price(self):

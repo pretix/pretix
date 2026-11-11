@@ -20,10 +20,9 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
-import os
 
 import pycountry
-from django.core.files import File
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import RegexValidator
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -208,39 +207,10 @@ class OrderPositionInfoPatchSerializer(serializers.ModelSerializer):
         instance.save(update_fields=list(validated_data.keys()))
 
         if answers_data is not None:
-            qs_seen = set()
-            answercache = {
-                a.question_id: a for a in instance.answers.all()
-            }
-            for answ_data in answers_data:
-                if not answ_data.get('answer'):
-                    continue
-                options = answ_data.pop('options', [])
-                if answ_data['question'].pk in qs_seen:
-                    raise ValidationError(f'Question {answ_data["question"]} was sent twice.')
-                if answ_data['question'].pk in answercache:
-                    a = answercache[answ_data['question'].pk]
-                    if isinstance(answ_data.get('answer'), File):
-                        a.set_file(answ_data['answer'])
-                    elif a.answer.startswith('file://') and answ_data['answer'] == "file:keep":
-                        pass  # keep current file
-                    else:
-                        for attr, value in answ_data.items():
-                            setattr(a, attr, value)
-                    a.save()
-                else:
-                    if isinstance(answ_data.get('answer'), File):
-                        an = answ_data.pop('answer')
-                        a = instance.answers.create(**answ_data, answer='')
-                        a.set_file(an)
-                        a.save()
-                    else:
-                        a = instance.answers.create(**answ_data)
-                a.options.set(options)
-                qs_seen.add(a.question_id)
-            for qid, a in answercache.items():
-                if qid not in qs_seen:
-                    a.delete()
+            try:
+                instance.set_answers(answers_data)
+            except DjangoValidationError as e:
+                raise ValidationError(str(e))
 
         return instance
 
