@@ -424,7 +424,7 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'answers': [{'question': ['The specified question does not belong to this event.']}]}
+    assert resp.data == {'answers': {0: {'question': ['The specified question does not belong to this event.']}}}
 
     res['answers'][0]['question'] = question.pk
     res['answers'][0]['options'] = [question.options.first().pk]
@@ -434,8 +434,9 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        'answers': [{'non_field_errors': ['You should not specify options if the question is not of a choice type.']}]}
+    assert resp.data == {'answers': {
+        0: {'non_field_errors': ['You should not specify options if the question is not of a choice type.']}
+    }}
 
     question.type = Question.TYPE_CHOICE
     question.save()
@@ -447,7 +448,7 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'answers': [{'non_field_errors': ['You need to specify options if the question is of a choice type.']}]}
+        'answers': {0: {'non_field_errors': ['You need to specify options if the question is of a choice type.']}}}
 
     with scopes_disabled():
         question.options.create(answer="L")
@@ -461,7 +462,8 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'answers': [{'non_field_errors': ['You can specify at most one option for this question.']}]}
+    assert resp.data == {
+        'answers': {0: {'non_field_errors': ['You can specify at most one option for this question.']}}}
 
     r = token_client.post(
         '/api/v1/upload',
@@ -533,7 +535,7 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'answers': [{'non_field_errors': ['A valid number is required.']}]}
+    assert resp.data == {'answers': {0: {'non_field_errors': ['A valid number is required.']}}}
 
     question.type = Question.TYPE_BOOLEAN
     question.save()
@@ -573,7 +575,8 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'answers': [{'non_field_errors': ['Please specify "true" or "false" for boolean questions.']}]}
+    assert resp.data == {
+        'answers': {0: {'non_field_errors': ['Please specify "true" or "false" for boolean questions.']}}}
 
     question.type = Question.TYPE_DATE
     question.save()
@@ -599,7 +602,7 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
     )
     assert resp.status_code == 400
     assert resp.data == {
-        'answers': [{'non_field_errors': ['Date has wrong format. Use one of these formats instead: YYYY-MM-DD.']}]}
+        'answers': {0: {'non_field_errors': ['Date has wrong format. Use one of these formats instead: YYYY-MM-DD.']}}}
 
     question.type = Question.TYPE_DATETIME
     question.save()
@@ -624,9 +627,9 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'answers': [{'non_field_errors': [
+    assert resp.data == {'answers': {0: {'non_field_errors': [
         'Datetime has wrong format. Use one of these formats instead: '
-        'YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].']}]}
+        'YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z].']}}}
 
     question.type = Question.TYPE_TIME
     question.save()
@@ -651,8 +654,8 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'answers': [
-        {'non_field_errors': ['Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]].']}]}
+    assert resp.data == {'answers': {0: {'non_field_errors': [
+        'Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]].']}}}
 
 
 @pytest.mark.django_db
@@ -1387,7 +1390,7 @@ def test_cartpos_create_bulk_validation_error_in_addon(token_client, organizer, 
                 'data': None,
                 'success': False,
                 'errors': {
-                    'addons': [{'item': ['Invalid pk "-1" - object does not exist.']}]
+                    'addons': {0: {'item': ['Invalid pk "-1" - object does not exist.']}}
                 }
             }
         ]
