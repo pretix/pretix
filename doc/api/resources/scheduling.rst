@@ -167,6 +167,9 @@ id                                    integer                    Internal ID in 
 resource                              integer                    Internal ID in pretix for the planning's resource (read-only)
 subevent                              integer                    Internal ID in pretix for the planning's subevent (read-only)
 status                                string                     Status for the planning, can be one of ``requested``,
+created_at                            datetime                   When the Planning was created
+cost                                  decimal (string)           How much the resource for this planning cost
+is_paid                               boolean                    Whether the resource has been paid for this planning
                                                                  ``confirmed``, ``completed``, ``canceled``, or ``denied``.  Only ``confirmed``, ``canceled``, or ``denied`` can be set.
 invoiced                              boolean                    Should this planning be invoiced?
 ===================================== ========================== =======================================================
@@ -1835,6 +1838,9 @@ Endpoints
             "subevent": 5,
             "status": "requested",
             "invoiced": false
+            "created_at": "2026-01-01T09:00:00Z",
+            "cost": "42.00",
+            "paid": false
           }
         ]
       }
@@ -1876,6 +1882,9 @@ Endpoints
         "subevent": 5,
         "status": "requested",
         "invoiced": false
+        "created_at": "2026-01-01T09:00:00Z",
+        "cost": "42.00",
+        "paid": false
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -1919,6 +1928,9 @@ Endpoints
         "subevent": 5,
         "status": "confirmed",
         "invoiced": false
+        "created_at": "2026-01-01T09:00:00Z",
+        "cost": "42.00",
+        "paid": false
       }
 
    :param organizer: The ``slug`` field of a valid organizer
