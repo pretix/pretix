@@ -434,6 +434,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
 
         data['options'] = []
         data['answer'] = cf.file
+        data.pop('option_identifiers', None)
         return data
 
     def validate(self, data):
