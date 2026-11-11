@@ -94,7 +94,7 @@ class AuthenticationForm(forms.Form):
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
 
-        if rate_limit("customer_login", include_ip_from_request=self.request, max_num=10, expire_time=600):
+        if rate_limit("customer_login", include_ip_from_request=self.request, max_num=10, expire_time=300):
             raise forms.ValidationError(
                 self.error_messages['rate_limit'],
                 code='rate_limit',
