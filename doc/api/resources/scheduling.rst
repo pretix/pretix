@@ -843,6 +843,34 @@ Endpoints
    :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
    :statuscode 404: The requested invite does not exist
 
+.. http:delete:: /api/v1/organizers/(organizer)/resources/(resource)/invites/(id)/
+
+   Delete an invite.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/resources/7/invites/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+      Content-Type: application/json
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource: The ``id`` field of a valid resource
+   :param id: The ``id`` field of the invite to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or type does not exist **or** you have no permission to view it.
+
 .. http:post:: /api/v1/organizers/(organizer)/resources/(resource)/invites/(id)/resend/
 
    Resend the invitation email for an invite.
