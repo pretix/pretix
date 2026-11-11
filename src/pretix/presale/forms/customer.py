@@ -75,6 +75,7 @@ class AuthenticationForm(forms.Form):
         'unverified': _("You have not yet activated your account and set a password. Please click the link in the "
                         "email we sent you. In case you cannot find it, click \"Forgot your password?\" to receive "
                         "a new email."),
+        'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
     }
 
     def __init__(self, request=None, *args, **kwargs):
@@ -92,6 +93,12 @@ class AuthenticationForm(forms.Form):
     def clean(self):
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
+
+        if rate_limit("customer_login", include_ip_from_request=self.request, max_num=10, expire_time=300):
+            raise forms.ValidationError(
+                self.error_messages['rate_limit'],
+                code='rate_limit',
+            )
 
         if email is not None and password:
             try:
