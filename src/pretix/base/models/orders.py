@@ -115,6 +115,14 @@ def generate_position_secret():
 FakeQuestionnaireRow = namedtuple('FakeQuestionnaireRow', ('user_datafield', 'label', 'answer'))
 
 
+class SystemDatafieldAnswer:
+    def __init__(self, answer):
+        self.answer = answer
+
+    def to_dependency_values(self):
+        return [self.answer]
+
+
 class QuestionnaireRenderer:
     def __init__(self, qrows, system_answers, answerlist):
         self.qrows = qrows
@@ -154,13 +162,14 @@ class QuestionnaireRenderer:
             raise KeyError('Unknown system datafield name: ' + field_name)
 
     def get_dependency_answer_values(self, qc):
-        if qc.user_datafield_id:
-            if qc.user_datafield_id not in self.answer_cache:
-                return None
-            answer = self.answer_cache[qc.user_datafield_id]
+        if answer := self.get_answer_object(qc):
             return answer.to_dependency_values()
+
+    def get_answer_object(self, qc):
+        if qc.user_datafield_id:
+            return self.answer_cache.get(qc.user_datafield_id)
         elif qc.system_datafield:
-            return [self.get_system_answer(qc.system_datafield)]
+            return SystemDatafieldAnswer(self.get_system_answer(qc.system_datafield))
         else:
             raise ValueError('Questionnaire child without datafield has no answer')
 
@@ -176,6 +185,7 @@ class QuestionnaireRenderer:
                 continue
             try:
                 qrow.answer = self.answer_cache[qrow.user_datafield_id or qrow.system_datafield]
+                # TODO(questionnaires) - replace with `qrow.answer = self.get_answer_object(qrow)` ?
             except KeyError:
                 pass
             if self._row_is_visible(qrow.dependency_question_id, qrow.dependency_values):
