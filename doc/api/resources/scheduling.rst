@@ -1371,6 +1371,35 @@ Endpoints
    :statuscode 403: The requested organizer, property, or value does not exist **or** you have no permission to view it.
    :statuscode 404: The requested value does not exist
 
+.. http:delete:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
+
+   Delete a value.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+      Content-Type: application/json
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
+   :param property: The ``id`` field of a valid property
+   :param id: The ``id`` field of the value to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or type does not exist **or** you have no permission to view it.
+
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/rules/
 
    Returns a list of all rules for a resource.
