@@ -114,7 +114,6 @@ The value resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
-prop                                  integer                    Internal ID in pretix for the value's property
 value                                 string                     Value's human-readable name
 ===================================== ========================== =======================================================
 
@@ -1244,7 +1243,6 @@ Endpoints
         "results": [
           {
             "id": 1,
-            "prop": 4,
             "value": "My Value"
           }
         ]
@@ -1271,7 +1269,6 @@ Endpoints
       Accept: application/json, text/javascript
 
       {
-        "prop": 4,
         "value": "My Value"
       }
 
@@ -1286,7 +1283,6 @@ Endpoints
 
       {
         "id": 1,
-        "prop": 4,
         "value": "My Value"
       }
 
@@ -1320,7 +1316,6 @@ Endpoints
 
       {
         "id": 1,
-        "prop": 4,
         "value": "My Value"
       }
 
@@ -1363,7 +1358,6 @@ Endpoints
 
       {
         "id": 1,
-        "prop": 4,
         "value": "New Value"
       }
 
