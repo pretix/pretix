@@ -408,7 +408,7 @@ Endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "id": 1,
@@ -473,7 +473,7 @@ Endpoints
 
       HTTP/1.1 204 No Content
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
    :param organizer: The ``slug`` field of a valid organizer
    :param id: The ``id`` field of the type to delete
@@ -642,7 +642,7 @@ Endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "id": 1,
@@ -928,7 +928,7 @@ Endpoints
 
       HTTP/1.1 204 No Content
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
    :param organizer: The ``slug`` field of a valid organizer
    :param resource: The ``id`` field of a valid resource
@@ -1079,7 +1079,7 @@ Endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "id": 1,
@@ -1238,7 +1238,7 @@ Endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "id": 1,
@@ -1415,7 +1415,7 @@ Endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "id": 1,
@@ -1456,7 +1456,7 @@ Endpoints
 
       HTTP/1.1 204 No Content
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
    :param organizer: The ``slug`` field of a valid organizer
    :param resource: The ``id`` field of a valid resource
@@ -1613,7 +1613,7 @@ Endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "id": 1,
@@ -1651,7 +1651,7 @@ Endpoints
 
       HTTP/1.1 204 No Content
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
    :param organizer: The ``slug`` field of a valid organizer
    :param resource: The ``id`` field of a valid resource
@@ -1814,7 +1814,7 @@ Endpoints
 
       HTTP/1.1 200 OK
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
       {
         "id": 1,
@@ -1852,7 +1852,7 @@ Endpoints
 
       HTTP/1.1 204 No Content
       Vary: Accept
-      Content-Type: text/javascript
+      Content-Type: application/json
 
    :param organizer: The ``slug`` field of a valid organizer
    :param id: The ``id`` field of the planning to cancel
