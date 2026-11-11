@@ -165,17 +165,17 @@ class BaseQuestionsViewMixin:
                 for k, v in self.order_questions_form.cleaned_data.items():
                     if k.startswith('question_'):
                         field = self.order_questions_form.fields[k]
-                        if hasattr(field, 'answer'):
+                        if hasattr(field, 'answer_object'):
                             # We already have a cached answer object, so we don't
                             # have to create a new one
                             if v == '' or v is None or (isinstance(field, forms.FileField) and v is False) \
                                     or (isinstance(v, QuerySet) and not v.exists()):
-                                if field.answer.file:
-                                    field.answer.file.delete()
-                                field.answer.delete()
+                                if field.answer_object.file:
+                                    field.answer_object.file.delete()
+                                field.answer_object.delete()
                             else:
-                                self._save_to_answer(field, field.answer, v)
-                                field.answer.save()
+                                self._save_to_answer(field, field.answer_object, v)
+                                field.answer_object.save()
                         elif v != '' and v is not None:
                             self._upsert_answer(
                                 field, v,
@@ -224,19 +224,19 @@ class BaseQuestionsViewMixin:
                             form.pos.requested_valid_from = None
                     elif k.startswith('question_'):
                         field = form.fields[k]
-                        if hasattr(field, 'answer'):
+                        if hasattr(field, 'answer_object'):
                             # We already have a cached answer object, so we don't
                             # have to create a new one
                             if v == '' or v is None or (isinstance(field, forms.FileField) and v is False) \
                                     or (isinstance(v, QuerySet) and not v.exists()):
-                                if field.answer.file:
-                                    field.answer.file.delete()
-                                field.answer.delete()
+                                if field.answer_object.file:
+                                    field.answer_object.file.delete()
+                                field.answer_object.delete()
                             else:
-                                self._save_to_answer(field, field.answer, v)
-                                field.answer.save()
+                                self._save_to_answer(field, field.answer_object, v)
+                                field.answer_object.save()
 
-                                answer_dict = self._build_answer_dict(field, field.answer, k)
+                                answer_dict = self._build_answer_dict(field, field.answer_object, k)
                                 prof.store_answer(answer_dict)
                         elif v != '' and v is not None:
                             answer = self._upsert_answer(
@@ -283,7 +283,7 @@ class BaseQuestionsViewMixin:
             self._save_to_answer(field, answer, v)
             answer.save()
         except IntegrityError:
-            # Since we prefill ``field.answer`` at form creation time, there's a possible race condition
+            # Since we prefill ``field.answer_object`` at form creation time, there's a possible race condition
             # here if the users submits their save request a second time while the first one is still running,
             # thus leading to duplicate QuestionAnswer objects. Since Django doesn't support UPSERT, the "proper"
             # fix would be a transaction with select_for_update(), or at least fetching using get_or_create here

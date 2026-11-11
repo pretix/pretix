@@ -879,7 +879,7 @@ class BaseQuestionsForm(forms.Form):
         field.questionnaire_row = qc
         if answers:
             # Cache the answer object for later use
-            field.answer = answers[0]
+            field.answer_object = answers[0]
 
         if qc.dependency_question_id:
             field.widget.attrs['data-question-dependency'] = qc.dependency_question.form_field_name
