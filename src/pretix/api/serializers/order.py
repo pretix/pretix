@@ -1282,7 +1282,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError(
                 'Orders cannot have more than %(max)s positions.' % {'max': settings.PRETIX_MAX_ORDER_SIZE}
             )
-        errs = [{} for p in data]
+        errs = defaultdict(dict)
         if any([p.get('positionid') for p in data]):
             if not all([p.get('positionid') for p in data]):
                 for i, p in enumerate(data):
@@ -1311,16 +1311,16 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 last_posid = p['positionid']
 
         elif any([p.get('addon_to') for p in data]):
-            errs = [
-                {'positionid': ["If you set addon_to on any position, you need to specify position IDs manually."]}
-                for p in data
-            ]
+            errs = {
+                i: {'positionid': ["If you set addon_to on any position, you need to specify position IDs manually."]}
+                for i, p in enumerate(data)
+            }
         else:
             for i, p in enumerate(data):
                 p['positionid'] = i + 1
 
-        if any(errs):
-            raise ValidationError(errs)
+        if errs:
+            raise ValidationError(dict(errs))
         return data
 
     def create(self, validated_data):
@@ -1437,7 +1437,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         # use further down
         del quota_diff_for_locking, voucher_diff_for_locking, seat_diff_for_locking
 
-        errs = [{} for p in positions_data]
+        errs = defaultdict(dict)
 
         for i, pos_data in enumerate(positions_data):
             if pos_data.get('voucher'):
@@ -1566,7 +1566,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                                     )
                                 ]
 
-        if any(errs):
+        if errs:
             raise ValidationError({'positions': errs})
 
         if validated_data.get('locale', None) is None:

@@ -28,7 +28,7 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import Seat, Voucher
 from pretix.base.models.vouchers import generate_codes
 
-
+from collections import defaultdict
 class VoucherListSerializer(serializers.ListSerializer):
     def create(self, validated_data):
         vouchers_without_codes = [v for v in validated_data if not v.get('code')]
@@ -38,23 +38,21 @@ class VoucherListSerializer(serializers.ListSerializer):
 
         codes = set()
         seats = set()
-        errs = []
-        err = False
-        for voucher_data in validated_data:
+        errs = defaultdict(dict)
+        for i, voucher_data in enumerate(validated_data):
             if voucher_data.get('seat') and (voucher_data.get('seat'), voucher_data.get('subevent')) in seats:
-                err = True
-                errs.append({'code': ['Duplicate seat ID in request.']})
+                errs[i] = {'code': ['Duplicate seat ID in request.']}
                 continue
             else:
                 seats.add((voucher_data.get('seat'), voucher_data.get('subevent')))
 
             if voucher_data['code'] in codes:
                 err = True
-                errs.append({'code': ['Duplicate voucher code in request.']})
+                errs[i] = {'code': ['Duplicate voucher code in request.']}
             else:
                 codes.add(voucher_data['code'])
-                errs.append({})
-        if err:
+
+        if errs:
             raise ValidationError(errs)
         return super().create(validated_data)
 
