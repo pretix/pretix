@@ -879,12 +879,13 @@ class RequiredMediaExchangeError(Exception):
         super().__init__(msg)
 
 
-def _save_answers(op, answers, given_answers):
+def _save_answers(op, existing_answer_objects, given_answers):
+    # used by perform_checkin to store `answers`, as well as by CartManager to store widget_data
     def _create_answer(question, answer):
         try:
             return op.answers.create(question=question, answer=answer)
         except IntegrityError:
-            # Since we prefill ``field.answer`` at form creation time, there's a possible race condition
+            # Since we prefetch answers in _checkin_list_position_queryset, there's a possible race condition
             # here if the user submits their scan a second time while the first one is still running,
             # thus leading to duplicate QuestionAnswer objects. Since Django doesn't support UPSERT, the "proper"
             # fix would be a transaction with select_for_update(), or at least fetching using get_or_create here
@@ -899,14 +900,14 @@ def _save_answers(op, answers, given_answers):
     written = False
     for q, a in given_answers.items():
         if not a:
-            if q.id in answers:
+            if q.id in existing_answer_objects:
                 written = True
-                answers[q.id].delete()
+                existing_answer_objects[q.id].delete()
             else:
                 continue
         if isinstance(a, QuestionOption):
-            if q.id in answers:
-                qa = answers[q.id]
+            if q.id in existing_answer_objects:
+                qa = existing_answer_objects[q.id]
                 qa.answer = str(a.answer)
                 qa.save()
                 written = True
@@ -915,8 +916,8 @@ def _save_answers(op, answers, given_answers):
                 qa = _create_answer(question=q, answer=str(a.answer))
             qa.options.add(a)
         elif isinstance(a, list):
-            if q.id in answers:
-                qa = answers[q.id]
+            if q.id in existing_answer_objects:
+                qa = existing_answer_objects[q.id]
                 qa.answer = ", ".join([str(o) for o in a])
                 qa.save()
                 written = True
@@ -925,16 +926,16 @@ def _save_answers(op, answers, given_answers):
                 qa = _create_answer(question=q, answer=", ".join([str(o) for o in a]))
             qa.options.add(*a)
         elif isinstance(a, File):
-            if q.id in answers:
-                qa = answers[q.id]
+            if q.id in existing_answer_objects:
+                qa = existing_answer_objects[q.id]
             else:
                 qa = _create_answer(question=q, answer=str(a))
             qa.set_file(a)
             qa.save()
             written = True
         else:
-            if q.id in answers:
-                qa = answers[q.id]
+            if q.id in existing_answer_objects:
+                qa = existing_answer_objects[q.id]
                 qa.answer = str(a)
                 qa.save()
             else:
@@ -942,9 +943,7 @@ def _save_answers(op, answers, given_answers):
             written = True
 
     if written:
-        prefetched_objects_cache = getattr(op, '_prefetched_objects_cache', {})
-        if 'answers' in prefetched_objects_cache:
-            del prefetched_objects_cache['answers']
+        op.answers._remove_prefetched_objects()
 
 
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
