@@ -50,7 +50,7 @@ function addExistingDatafield (...fields) {
       required: false,
       label: field.question ?? {en: field.internal_name},
       help_text: {},
-      dependency_question: null,
+      dependency_datafield: null,
       dependency_values: [],
     })
   }
@@ -71,7 +71,7 @@ function addTextblock () {
 		required: false,
 		label: newTextblockTitle.value,
 		help_text: newTextblockText.value,
-		dependency_question: null,
+		dependency_datafield: null,
 		dependency_values: [],
 	})
 	dlgAddTextblock.value.close()

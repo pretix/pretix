@@ -30,7 +30,7 @@ const df = computed(() => question.value.datafield === null ?
 );
 
 const dependency_values_options = computed(() => {
-  const dependency = props.datafields.find(el => el.identifier === question.value.dependency_question)
+  const dependency = props.datafields.find(el => el.identifier === question.value.dependency_datafield)
   if (dependency?.type === 'B') return [{identifier: 'True', answer: {_: gettext('Yes')}}, {identifier: 'False', answer: {_: gettext('No')}}]
   else return dependency?.options
 });
@@ -48,8 +48,8 @@ const editor = ref();
 			<div class="form-group">
 
 				<template v-if="df">
-					<div v-if="question.dependency_question" class="dependency-info debuginfo">
-						<span><span class="fa fa-link"></span> {{ question.dependency_question }} = {{ dependency_values_resolved }}</span>
+					<div v-if="question.dependency_datafield" class="dependency-info debuginfo">
+						<span><span class="fa fa-link"></span> {{ question.dependency_datafield }} = {{ dependency_values_resolved }}</span>
 					</div>
 					<div class="col-md-3 control-label label-empty" v-if="df.type === QUESTION_TYPE.BOOLEAN"></div>
 					<label class="col-md-3 control-label" :for="id" v-else>
@@ -153,15 +153,15 @@ const editor = ref();
             {{ gettext('Only visible if...') }}
           </label>
           <div class="col-md-9">
-            <select v-model="question.dependency_question" class="form-control">
+            <select v-model="question.dependency_datafield" class="form-control">
               <option :value="null">{{ gettext('(none)') }}</option>
               <option v-for="(qc, index) in possible_dependencies" :value="qc.datafield">{{ i18n_any(qc.label) }}</option>
             </select>
             <select v-model="question.dependency_values" class="form-control" multiple>
               <option v-for="(qc, index) in dependency_values_options" :value="qc.identifier">{{ i18n_any(qc.answer) }}</option>
             </select>
-						<div v-if="question.dependency_question">
-							<p><span class="debuginfo">depends on {{ question.dependency_question }} = {{ dependency_values_resolved }}</span></p>
+						<div v-if="question.dependency_datafield">
+							<p><span class="debuginfo">depends on {{ question.dependency_datafield }} = {{ dependency_values_resolved }}</span></p>
 						</div>
           </div>
         </div>
