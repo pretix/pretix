@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from collections import defaultdict
 from decimal import Decimal
 
 from rest_framework import serializers
@@ -28,7 +29,7 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import Seat, Voucher
 from pretix.base.models.vouchers import generate_codes
 
-from collections import defaultdict
+
 class VoucherListSerializer(serializers.ListSerializer):
     def create(self, validated_data):
         vouchers_without_codes = [v for v in validated_data if not v.get('code')]
@@ -47,7 +48,6 @@ class VoucherListSerializer(serializers.ListSerializer):
                 seats.add((voucher_data.get('seat'), voucher_data.get('subevent')))
 
             if voucher_data['code'] in codes:
-                err = True
                 errs[i] = {'code': ['Duplicate voucher code in request.']}
             else:
                 codes.add(voucher_data['code'])

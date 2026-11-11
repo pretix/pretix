@@ -1626,10 +1626,8 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': {0: {'answers': {0:
-        {'non_field_errors': [
-            'You should not specify options if the question is not of a choice type.']}
-    }}}}
+    assert resp.data == {'positions': {0: {'answers': {
+        0: {'non_field_errors': ['You should not specify options if the question is not of a choice type.']}}}}}
 
     question.type = Question.TYPE_CHOICE
     question.save()
@@ -1640,9 +1638,8 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': {0:
-        {'answers': {0: {'non_field_errors': [
-            'You need to specify options if the question is of a choice type.']}}}}}
+    assert resp.data == {'positions': {0: {
+        'answers': {0: {'non_field_errors': ['You need to specify options if the question is of a choice type.']}}}}}
 
     with scopes_disabled():
         question2.options.create(answer="L")
@@ -1793,11 +1790,8 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        'positions': {0: {'answers': {0:
-            {'non_field_errors': [
-                'Please specify "true" or "false" for boolean questions.']}
-        }}}}
+    assert resp.data == {'positions': {
+        0: {'answers': {0: {'non_field_errors': ['Please specify "true" or "false" for boolean questions.']}}}}}
 
     question.type = Question.TYPE_DATE
     question.save()
@@ -1823,10 +1817,8 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': {0: {'answers': {0:
-        {'non_field_errors': [
-            'Date has wrong format. Use one of these formats instead: YYYY-MM-DD.']}
-    }}}}
+    assert resp.data == {'positions': {0: {'answers': {
+        0: {'non_field_errors': ['Date has wrong format. Use one of these formats instead: YYYY-MM-DD.']}}}}}
 
     question.type = Question.TYPE_DATETIME
     question.save()
@@ -1880,10 +1872,8 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'positions': {0: {'answers': {0:
-        {'non_field_errors': [
-            'Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]].']}
-    }}}}
+    assert resp.data == {'positions': {0: {'answers': {
+        0: {'non_field_errors': ['Time has wrong format. Use one of these formats instead: hh:mm[:ss[.uuuuuu]].']}}}}}
 
 
 @pytest.mark.django_db
@@ -1937,12 +1927,8 @@ def test_order_create_quota_validation(token_client, organizer, event, item, quo
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        'positions': {1:
-            {'item': [
-                'There is not enough quota available on quota "Budget Quota" to perform the operation.']},
-        }
-    }
+    assert resp.data == {'positions': {
+        1: {'item': ['There is not enough quota available on quota "Budget Quota" to perform the operation.']}}}
 
     res['force'] = True
     resp = token_client.post(
@@ -1974,12 +1960,8 @@ def test_order_create_quota_consume_cart(token_client, organizer, event, item, q
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        'positions': {0:
-            {'item': [
-                'There is not enough quota available on quota "Budget Quota" to perform the operation.']},
-        }
-    }
+    assert resp.data == {'positions': {
+        0: {'item': ['There is not enough quota available on quota "Budget Quota" to perform the operation.']}}}
 
     res['consume_carts'] = [cr.cart_id]
     resp = token_client.post(
@@ -2014,11 +1996,8 @@ def test_order_create_quota_consume_cart_expired(token_client, organizer, event,
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        'positions': {0:
-            {'item': ['There is not enough quota available on quota "Budget Quota" to perform the operation.']},
-                      }
-    }
+    assert resp.data == {'positions': {
+        0: {'item': ['There is not enough quota available on quota "Budget Quota" to perform the operation.']}}}
 
 
 @pytest.mark.django_db
@@ -2190,11 +2169,7 @@ def test_order_create_with_blocked_seat(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        'positions': {0:
-            {'seat': ['The selected seat "Seat A1" is not available.']},
-                      }
-    }
+    assert resp.data == {'positions': {0: {'seat': ['The selected seat "Seat A1" is not available.']}}}
 
 
 @pytest.mark.django_db
@@ -2213,11 +2188,7 @@ def test_order_create_with_used_seat(token_client, organizer, event, item, quota
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        'positions': {0:
-            {'seat': ['The selected seat "Seat A1" is not available.']},
-                      }
-    }
+    assert resp.data == {'positions': {0: {'seat': ['The selected seat "Seat A1" is not available.']}}}
 
 
 @pytest.mark.django_db
@@ -2232,11 +2203,7 @@ def test_order_create_with_unknown_seat(token_client, organizer, event, item, qu
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        'positions': {0:
-            {'seat': ['The specified seat does not exist.']},
-                      }
-    }
+    assert resp.data == {'positions': {0: {'seat': ['The specified seat does not exist.']}}}
 
 
 @pytest.mark.django_db
@@ -2250,11 +2217,7 @@ def test_order_create_require_seat(token_client, organizer, event, item, quota, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        'positions': {0:
-            {'seat': ['The specified product requires to choose a seat.']},
-                      }
-    }
+    assert resp.data == {'positions': {0: {'seat': ['The specified product requires to choose a seat.']}}}
 
 
 @pytest.mark.django_db
@@ -2272,11 +2235,7 @@ def test_order_create_unseated(token_client, organizer, event, item, quota, seat
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        'positions': {0:
-            {'seat': ['The specified product does not allow to choose a seat.']},
-                      }
-    }
+    assert resp.data == {'positions': {0: {'seat': ['The specified product does not allow to choose a seat.']}}}
 
 
 @pytest.mark.django_db
@@ -2314,12 +2273,7 @@ def test_order_create_with_duplicate_seat(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        'positions': {1:
-
-            {'seat': ['The selected seat "Seat A1" is not available.']},
-                      }
-    }
+    assert resp.data == {'positions': {1: {'seat': ['The selected seat "Seat A1" is not available.']}}}
 
 
 @pytest.mark.django_db
@@ -2890,11 +2844,7 @@ def test_order_create_voucher_unknown_code(token_client, organizer, event, item,
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        'positions': {0:
-            {'voucher': ['Object with code=FOOBAR does not exist.']},
-                      }
-    }
+    assert resp.data == {'positions': {0: {'voucher': ['Object with code=FOOBAR does not exist.']}}}
 
 
 @pytest.mark.django_db
@@ -3217,12 +3167,7 @@ def test_order_create_use_medium_other_organizer(token_client, organizer, event,
         ), format='json', data=res
     )
     assert resp.data == {
-        "positions": {0:
-            {
-                "use_reusable_medium": ["The specified medium does not belong to this organizer."]
-            }
-        }
-    }
+        "positions": {0: {"use_reusable_medium": ["The specified medium does not belong to this organizer."]}}}
     assert resp.status_code == 400
 
 
@@ -3364,13 +3309,8 @@ def test_order_create_auto_pricing_explicit_discount_not_allowed(token_client, o
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {
-        "positions": {1:
-            {
-                "discount": ["You can only specify a discount if you do the price computation, but price is not set."]
-            }
-        }
-    }
+    assert resp.data == {"positions": {
+        1: {"discount": ["You can only specify a discount if you do the price computation, but price is not set."]}}}
 
 
 @pytest.mark.django_db
