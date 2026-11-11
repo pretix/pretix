@@ -1430,7 +1430,7 @@ Endpoints
             "available": true,
             "start": "2026-03-01T09:00:00Z",
             "end": null,
-            "weekdays": [0, 1, 2]
+            "weekdays": [0, 1, 2],
             "timezone": "Europe/Berlin",
             "starttime": "09:00:00",
             "endtime": "17:00:00"
@@ -1461,7 +1461,7 @@ Endpoints
           "available": true,
           "start": "2026-03-01T09:00:00Z",
           "end": null,
-          "weekdays": [0, 1, 2]
+          "weekdays": [0, 1, 2],
           "timezone": "Europe/Berlin",
           "starttime": "09:00:00",
           "endtime": "17:00:00"
@@ -1481,7 +1481,7 @@ Endpoints
         "available": true,
         "start": "2026-03-01T09:00:00Z",
         "end": null,
-        "weekdays": [0, 1, 2]
+        "weekdays": [0, 1, 2],
         "timezone": "Europe/Berlin",
         "starttime": "09:00:00",
         "endtime": "17:00:00"
@@ -1519,7 +1519,7 @@ Endpoints
         "available": true,
         "start": "2026-03-01T09:00:00Z",
         "end": null,
-        "weekdays": [0, 1, 2]
+        "weekdays": [0, 1, 2],
         "timezone": "Europe/Berlin",
         "starttime": "09:00:00",
         "endtime": "17:00:00"
@@ -1566,7 +1566,7 @@ Endpoints
         "available": false,
         "start": "2026-03-01T09:00:00Z",
         "end": null,
-        "weekdays": [0, 1, 2]
+        "weekdays": [0, 1, 2],
         "timezone": "Europe/Berlin",
         "starttime": "09:00:00",
         "endtime": "17:00:00"
