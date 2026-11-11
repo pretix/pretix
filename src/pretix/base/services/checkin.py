@@ -929,8 +929,7 @@ def _save_answers(op, answers, given_answers):
                 qa = answers[q.id]
             else:
                 qa = _create_answer(question=q, answer=str(a))
-            qa.file.save(os.path.basename(a.name), a, save=False)
-            qa.answer = 'file://' + qa.file.name
+            qa.set_file(a)
             qa.save()
             written = True
         else:

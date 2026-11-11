@@ -361,8 +361,7 @@ class OrderAnswerListSerializer(ListSerializer):
             if answ_data['question'].pk in answercache:
                 a = answercache[answ_data['question'].pk]
                 if isinstance(answ_data.get('answer'), File):
-                    a.file.save(answ_data['answer'].name, answ_data['answer'], save=False)
-                    a.answer = 'file://' + a.file.name
+                    a.set_file(answ_data['answer'])
                 elif a.answer.startswith('file://') and answ_data['answer'] == "file:keep":
                     pass  # keep current file
                 else:
@@ -373,8 +372,7 @@ class OrderAnswerListSerializer(ListSerializer):
                 if isinstance(answ_data.get('answer'), File):
                     an = answ_data.pop('answer')
                     a = instance.answers.create(**answ_data, answer='')
-                    a.file.save(os.path.basename(an.name), an, save=False)
-                    a.answer = 'file://' + a.file.name
+                    a.set_file(an)
                     a.save()
                 else:
                     a = instance.answers.create(**answ_data)
@@ -1899,24 +1897,15 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 if pos.voucher:
                     Voucher.objects.filter(pk=pos.voucher.pk).update(redeemed=F('redeemed') + 1)
                 pos.save()
-                seen_answers = set()
+
+                # Workaround for a pretixPOS bug :-(
+                deduped_answers = dict()
                 for answ_data in answers_data:
-                    # Workaround for a pretixPOS bug :-(
-                    if answ_data.get('question') in seen_answers:
+                    if answ_data.get('question') in deduped_answers:
                         continue
-                    seen_answers.add(answ_data.get('question'))
+                    deduped_answers[answ_data.get('question')] = answ_data
 
-                    options = answ_data.pop('options', [])
-
-                    if isinstance(answ_data['answer'], File):
-                        an = answ_data.pop('answer')
-                        answ = pos.answers.create(**answ_data, answer='')
-                        answ.file.save(os.path.basename(an.name), an, save=False)
-                        answ.answer = 'file://' + answ.file.name
-                        answ.save()
-                    else:
-                        answ = pos.answers.create(**answ_data)
-                        answ.options.add(*options)
+                pos._create_answers(deduped_answers.values(), close_files=False)
 
                 if use_reusable_medium:
                     if pos.item.media_policy not in (Item.MEDIA_POLICY_APPEND, Item.MEDIA_POLICY_APPEND_OR_NEW):

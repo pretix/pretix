@@ -192,19 +192,8 @@ class BaseCartPositionCreateSerializer(I18nAwareModelSerializer):
         # prices, cart positions are just quota/voucher placeholders
         validated_data['custom_price_input_is_net'] = not validated_data.pop('includes_tax', True)
         cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
+        cp._create_answers(answers_data, close_files=True)
 
-        for answ_data in answers_data:
-            options = answ_data.pop('options', [])
-            if isinstance(answ_data['answer'], File):
-                an = answ_data.pop('answer')
-                answ = cp.answers.create(**answ_data, answer='')
-                answ.file.save(os.path.basename(an.name), an, save=False)
-                answ.answer = 'file://' + answ.file.name
-                answ.save()
-                an.close()
-            else:
-                answ = cp.answers.create(**answ_data)
-                answ.options.add(*options)
         return cp
 
 

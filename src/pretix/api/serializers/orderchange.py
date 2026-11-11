@@ -221,8 +221,7 @@ class OrderPositionInfoPatchSerializer(serializers.ModelSerializer):
                 if answ_data['question'].pk in answercache:
                     a = answercache[answ_data['question'].pk]
                     if isinstance(answ_data.get('answer'), File):
-                        a.file.save(answ_data['answer'].name, answ_data['answer'], save=False)
-                        a.answer = 'file://' + a.file.name
+                        a.set_file(answ_data['answer'])
                     elif a.answer.startswith('file://') and answ_data['answer'] == "file:keep":
                         pass  # keep current file
                     else:
@@ -233,8 +232,7 @@ class OrderPositionInfoPatchSerializer(serializers.ModelSerializer):
                     if isinstance(answ_data.get('answer'), File):
                         an = answ_data.pop('answer')
                         a = instance.answers.create(**answ_data, answer='')
-                        a.file.save(os.path.basename(an.name), an, save=False)
-                        a.answer = 'file://' + a.file.name
+                        a.set_file(an)
                         a.save()
                     else:
                         a = instance.answers.create(**answ_data)

@@ -39,6 +39,7 @@ import hmac
 import json
 import logging
 import operator
+import os
 import string
 import warnings
 from collections import Counter, namedtuple
@@ -53,6 +54,7 @@ import dateutil
 import pycountry
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.files import File
 from django.db import models, transaction
 from django.db.models import (
     Case, Exists, F, Max, OuterRef, Q, Subquery, Sum, Value, When,
@@ -1583,6 +1585,10 @@ class QuestionAnswer(models.Model):
             self.orderposition.order.touch()
         super().delete(**kwargs)
 
+    def set_file(self, new_file):
+        self.file.save(os.path.basename(new_file.name), new_file, save=False)
+        self.answer = 'file://' + self.file.name
+
 
 class RoundingCorrectionMixin:
 
@@ -1739,6 +1745,19 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
             "@state": self.state,
             "@country": str(self.country),
         }
+
+    def _create_answers(self, answers_data, close_files=False):
+        for answ_data in answers_data:
+            options = answ_data.pop('options', [])
+            if isinstance(answ_data['answer'], File):
+                an = answ_data.pop('answer')
+                a = self.answers.create(**answ_data, answer='')
+                a.set_file(an)
+                a.save()
+                if close_files: an.close()
+            else:
+                a = self.answers.create(**answ_data)
+                a.options.add(*options)
 
     @property
     def net_price(self):

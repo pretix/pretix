@@ -312,8 +312,7 @@ class BaseQuestionsViewMixin:
             answer.answer = value.answer
         elif isinstance(field, forms.FileField):
             if isinstance(value, UploadedFile):
-                answer.file.save(value.name, value)
-                answer.answer = 'file://' + value.name
+                answer.set_file(value)
         else:
             answer.answer = value
 
