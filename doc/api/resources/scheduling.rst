@@ -25,10 +25,14 @@ id                                    integer                    Internal ID in 
 name                                  multi-lingual string       Type name
 name_plural                           multi-lingual string       Plural form of the type's name
 slug                                  string                     Slug form of the type's name, only writeable when creating a resource type.  Must be unique to the organizer
+canceled_email_subject                multi-lingual string       Template for canceled planning email subject
+canceled_email_template               multi-lingual string       Template for canceled planning email
 confirmation_pending_email_subject    multi-lingual string       Template for pending confirmation email subject
 confirmation_pending_email_template   multi-lingual string       Template for pending confirmation mail
 confirmation_email_subject            multi-lingual string       Template for confirmation email subject
 confirmation_email_template           multi-lingual string       Template for confirmation email
+subevent_moved_email_subject          multi-lingual string       Template for moved subevent email subject
+subevent_moved_email_template         multi-lingual string       Template for moved subevent email
 is_human                              boolean                    Does the resource represent a human (read-only after creation)
 ===================================== ========================== =======================================================
 
@@ -202,6 +206,12 @@ Endpoints
               "en": "My Types",
             },
             "slug": "my-type",
+            "canceled_pending_email_subject": {
+              "en": "Canceled subject",
+            },
+            "canceled_pending_email_template": {
+              "en": "To whom it may concern…",
+            },
             "confirmation_pending_email_subject": {
               "en": "Pending subject",
             },
@@ -212,6 +222,12 @@ Endpoints
               "en": "Confirmation subject",
             },
             "confirmation_email_template": {
+              "en": "To whom it may concern…",
+            },
+            "subevent_moved_email_subject": {
+              "en": "Subevent moved subject",
+            },
+            "subevent_moved_email_template": {
               "en": "To whom it may concern…",
             },
             "is_human": false
@@ -241,10 +257,14 @@ Endpoints
         "name": "My Type",
         "name_plural": "My Types",
         "slug": "my-type",
+        "canceled_email_subject": "Canceled subject",
+        "canceled_email_template": "To whom it may concern…",
         "confirmation_pending_email_subject": "Pending subject",
         "confirmation_pending_email_template": "To whom it may concern…",
         "confirmation_email_subject": "Confirmation subject",
         "confirmation_email_template": "To whom it may concern…",
+        "subevent_moved_email_subject": "Subevent moved subject",
+        "subevent_moved_email_template": "To whom it may concern…",
         "is_human": false
       }
 
@@ -266,6 +286,12 @@ Endpoints
           "en": "My Types",
         },
         "slug": "my-type",
+        "canceled_pending_email_subject": {
+          "en": "Canceled subject",
+        },
+        "canceled_pending_email_template": {
+          "en": "To whom it may concern…",
+        },
         "confirmation_pending_email_subject": {
           "en": "Pending subject",
         },
@@ -276,6 +302,12 @@ Endpoints
           "en": "Confirmation subject",
         },
         "confirmation_email_template": {
+          "en": "To whom it may concern…",
+        },
+        "subevent_moved_email_subject": {
+          "en": "Subevent moved subject",
+        },
+        "subevent_moved_email_template": {
           "en": "To whom it may concern…",
         },
         "is_human": false
@@ -316,6 +348,12 @@ Endpoints
           "en": "My Types",
         },
         "slug": "my-type",
+        "canceled_pending_email_subject": {
+          "en": "Canceled subject",
+        },
+        "canceled_pending_email_template": {
+          "en": "To whom it may concern…",
+        },
         "confirmation_pending_email_subject": {
           "en": "Pending subject",
         },
@@ -326,6 +364,12 @@ Endpoints
           "en": "Confirmation subject",
         },
         "confirmation_email_template": {
+          "en": "To whom it may concern…",
+        },
+        "subevent_moved_email_subject": {
+          "en": "Subevent moved subject",
+        },
+        "subevent_moved_email_template": {
           "en": "To whom it may concern…",
         },
         "is_human": false
@@ -375,6 +419,12 @@ Endpoints
           "en": "My Types",
         },
         "slug": "my-type",
+        "canceled_pending_email_subject": {
+          "en": "Canceled subject",
+        },
+        "canceled_pending_email_template": {
+          "en": "To whom it may concern…",
+        },
         "confirmation_pending_email_subject": {
           "en": "Pending subject",
         },
@@ -385,6 +435,12 @@ Endpoints
           "en": "Confirmation subject",
         },
         "confirmation_email_template": {
+          "en": "To whom it may concern…",
+        },
+        "subevent_moved_email_subject": {
+          "en": "Subevent moved subject",
+        },
+        "subevent_moved_email_template": {
           "en": "To whom it may concern…",
         },
         "is_human": false
