@@ -220,6 +220,13 @@ class AnswerQuestionOptionsIdentifierField(serializers.Field):
             return [o.identifier for o in instance.options.all()]
         return []
 
+    def to_internal_value(self, data):
+        if not isinstance(data, list):
+            self.fail('invalid')
+        if not all(isinstance(i, str) for i in data):
+            self.fail('invalid')
+        return {self.field_name: data}
+
 
 class InlineSeatSerializer(I18nAwareModelSerializer):
 
@@ -267,7 +274,7 @@ class MixedAnswerListSerializer(ListSerializer):
                                     options = [salutation_keys.index(name_parts[k]) + 1]
                                     options_ident = [name_parts[k]]
                                 elif k == "title" and settings.name_scheme_titles:
-                                    options =  [PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1].index(name_parts[k]) + 1]
+                                    options = [PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1].index(name_parts[k]) + 1]
                                     options_ident = [name_parts[k]]
                             except ValueError:
                                 pass
@@ -307,9 +314,9 @@ class MixedAnswerListSerializer(ListSerializer):
                     elif sys_df == "@country":
                         result['country'] = Country(answer["answer"])
                     elif sys_df == "@attendee_name_parts:salutation":
-                        attendee_name_parts['salutation'] =  PERSON_NAME_SALUTATIONS[answer["options"][0] - 1][0]
+                        attendee_name_parts['salutation'] = PERSON_NAME_SALUTATIONS[answer["options"][0] - 1][0]
                     elif sys_df == "@attendee_name_parts:title" and settings.name_scheme_titles:
-                        attendee_name_parts['title'] =  PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1][answer["options"][0] - 1]
+                        attendee_name_parts['title'] = PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1][answer["options"][0] - 1]
                     elif sys_df.startswith("@attendee_name_parts:"):
                         attendee_name_parts[sys_df[len("@attendee_name_parts:"):]] = answer["answer"]
                     else:
@@ -366,7 +373,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
     question = PrimaryKeyScopedRelatedField(queryset=lambda event, **kw: event.positiondatafields, required=False)
     datafield = SlugScopedRelatedField(slug_field='identifier', source='question', queryset=lambda event, **kw: event.positiondatafields, required=False)
     question_identifier = serializers.SlugRelatedField(slug_field='identifier', source='question', read_only=True)
-    option_identifiers = AnswerQuestionOptionsIdentifierField(source='*', read_only=True)
+    option_identifiers = AnswerQuestionOptionsIdentifierField(source='*', required=False)
 
     def to_representation(self, instance):
         r = super().to_representation(instance)
@@ -421,24 +428,37 @@ class AnswerSerializer(I18nAwareModelSerializer):
         elif data.get('question').type == Question.TYPE_FILE:
             return self._handle_file_upload(data)
         elif data.get('question').type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
-            if not data.get('options'):
+            if not data.get('options') and not data.get("option_identifiers"):
                 raise ValidationError(
-                    'You need to specify options if the data field is of a choice type.'
+                    'You need to specify either options or option_identifiers if the data field is of a choice type.'
                 )
-            if data.get('question').type == Question.TYPE_CHOICE and len(data.get('options')) > 1:
+            if 'options' in data and "option_identifiers" in data:
+                raise ValidationError(
+                    'You need to specify either options or option_identifiers, not both.'
+                )
+            if data.get('question').type == Question.TYPE_CHOICE and len(data.get('options') or data.get('option_identifiers')) > 1:
                 raise ValidationError(
                     'You can specify at most one option for this data field.'
                 )
-            for o in data.get('options'):
-                if o.question_id != data.get('question').pk:
-                    raise ValidationError(
-                        'The specified option does not belong to this data field.'
-                    )
-
-            data['answer'] = ", ".join([str(o) for o in data.get('options')])
-
+            if 'options' in data:
+                for o in data.get('options'):
+                    if o.question_id != data.get('question').pk:
+                        raise ValidationError({
+                            'options': 'The specified option {opt} does not belong to this data field.'.format(opt=o.pk)
+                        })
+                data['answer'] = ", ".join([str(o) for o in data['options']])
+            elif 'option_identifiers' in data:
+                opt_cache = {o.identifier: o for o in data['question'].options.filter(identifier__in=data.get('option_identifiers'))}
+                for o in data.get('option_identifiers'):
+                    if o not in opt_cache:
+                        raise ValidationError({
+                            'option_identifiers': 'The specified option "{opt}" does not belong to this data field.'.format(opt=o)
+                        })
+                data['options'] = list(opt_cache.values())
+                del data['option_identifiers']
+                data['answer'] = ", ".join([str(o) for o in data['options']])
         else:
-            if data.get('options'):
+            if data.get('options') or data.get('option_identifiers'):
                 raise ValidationError(
                     'You should not specify options if the data field is not of a choice type.'
                 )
@@ -463,6 +483,8 @@ class AnswerSerializer(I18nAwareModelSerializer):
                 data['answer'] = serializers.TimeField().to_internal_value(data.get('answer'))
             elif data.get('question').type == Question.TYPE_DATETIME:
                 data['answer'] = serializers.DateTimeField().to_internal_value(data.get('answer'))
+
+        data.pop('option_identifiers', None)
         return data
 
 
@@ -1738,18 +1760,16 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 order.invoice_address = ia
                 ia.last_modified = now()
 
-        if order_answers is not None:
-            if simulate:
-                wrapped_order = WrappedModel(order)
-                answers = []
-                for answ_data in order_answers:
-                    options = answ_data.pop('options', [])
-                    answ = WrappedModel(QuestionAnswer(**answ_data))
-                    answ.options = WrappedList(options)
-                    answers.append(answ)
-                wrapped_order.answers = answers
-            else:
-                self.fields['answers'].update(order, order_answers)
+        if simulate:
+            answers = []
+            for answ_data in (order_answers or []):
+                options = answ_data.pop('options', [])
+                answ = WrappedModel(QuestionAnswer(**answ_data))
+                answ.options = WrappedList(options)
+                answers.append(answ)
+            order.answers = answers
+        elif order_answers is not None:
+            self.fields['answers'].update(order, order_answers)
 
         # Generate position objects
         pos_map = {}

@@ -451,16 +451,59 @@ def test_order_create_expires(token_client, organizer, event, item, quota, order
 
 
 @pytest.mark.django_db
-def test_order_create_simulate(token_client, organizer, event, item, quota, orderquestion, question):
+@pytest.mark.parametrize("option_by", ["id", "identifier"])
+def test_order_create_answer_options(token_client, organizer, event, item, quota, orderquestion, question, option_by):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     question.type = Question.TYPE_CHOICE_MULTIPLE
     question.save()
+    orderquestion.type = Question.TYPE_CHOICE_MULTIPLE
+    orderquestion.save()
+    with scopes_disabled():
+        opt = question.options.create(answer="L")
+        orderopt = orderquestion.options.create(answer="L")
+    res['positions'][0]['item'] = item.pk
+    if "option_by" == "id":
+        res['positions'][0]['answers'][0]['options'] = [opt.pk]
+        res['answers'][0]['options'] = [orderopt.pk]
+    else:
+        res['positions'][0]['answers'][0]['option_identifiers'] = [opt.identifier]
+        res['answers'][0]['option_identifiers'] = [orderopt.identifier]
+        del res['positions'][0]['answers'][0]['options']
+        del res['answers'][0]['options']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert list(o.answers.get(question=orderquestion).options.all()) == [orderopt]
+        assert list(o.positions.get().answers.get(question=question).options.all()) == [opt]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("option_by", ["id", "identifier"])
+def test_order_create_simulate(token_client, organizer, event, item, quota, orderquestion, question, option_by):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    question.type = Question.TYPE_CHOICE_MULTIPLE
+    question.save()
+    orderquestion.type = Question.TYPE_CHOICE_MULTIPLE
+    orderquestion.save()
     with scopes_disabled():
         voucher = event.vouchers.create(price_mode="set", value=21.50, item=item, budget=Decimal('2.50'),
                                         max_usages=999)
         opt = question.options.create(answer="L")
+        orderopt = orderquestion.options.create(answer="L")
     res['positions'][0]['item'] = item.pk
-    res['positions'][0]['answers'][0]['options'] = [opt.pk]
+    if "option_by" == "id":
+        res['positions'][0]['answers'][0]['options'] = [opt.pk]
+        res['answers'][0]['options'] = [orderopt.pk]
+    else:
+        res['positions'][0]['answers'][0]['option_identifiers'] = [opt.identifier]
+        res['answers'][0]['option_identifiers'] = [orderopt.identifier]
+        del res['positions'][0]['answers'][0]['options']
+        del res['answers'][0]['options']
     res['positions'][0]['voucher'] = voucher.code
     del res['positions'][0]['price']
     res['simulate'] = True
@@ -584,6 +627,16 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, orde
         'sales_channel': 'web',
         'cancellation_date': None,
         'plugin_data': {},
+        'answers': [
+            {
+                'datafield': 'COMMENT',
+                'question': orderquestion.pk,
+                'question_identifier': 'COMMENT',
+                'answer': 'L',
+                'options': [orderopt.pk],
+                'option_identifiers': [orderopt.identifier]
+            }
+        ]
     }
 
 
