@@ -805,6 +805,7 @@ Endpoints
    :param organizer: The ``slug`` field of a valid organizer
    :param resource: The ``id`` field of a valid resource
    :statuscode 201: no error
+   :statuscode 303: The email belongs to an existing user, the Location header will contain managers endpoint to use instead of this one.
    :statuscode 400: The invite could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
