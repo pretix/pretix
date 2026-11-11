@@ -804,16 +804,19 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         for qc in QuestionnaireRow.objects.filter(
                 questionnaire__items__in=[op.item], questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN
         ):
-            if qc.user_datafield_id and (str(qc.user_datafield_id) in answers_data or str(qc.cooked_id) in answers_data):
+            if (qc.user_datafield_id and str(qc.user_datafield_id) in answers_data) or (qc.cooked_id and str(qc.cooked_id) in answers_data):
                 try:
                     try:
                         ans = answers_data[str(qc.user_datafield_id)]
                     except KeyError:
                         ans = answers_data[str(qc.cooked_id)]
+                    if qc.system_datafield:
+                        # TODO
+                        continue
                     if qc.user_datafield.type == Question.TYPE_FILE:
-                        given_answers[qc.user_datafield] = _handle_file_upload(ans, user, auth)
+                        given_answers[qc.user_datafield or qc.system_datafield] = _handle_file_upload(ans, user, auth)
                     else:
-                        given_answers[qc.user_datafield] = qc.clean_answer(ans)
+                        given_answers[qc.user_datafield or qc.system_datafield] = qc.clean_answer(ans)
                 except (ValidationError, BaseValidationError):
                     pass
 
