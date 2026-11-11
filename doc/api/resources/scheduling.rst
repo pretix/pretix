@@ -164,8 +164,8 @@ The planning resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
-resource                              integer                    Internal ID in pretix for the planning's resource
-subevent                              integer                    Internal ID in pretix for the planning's subevent
+resource                              integer                    Internal ID in pretix for the planning's resource (read-only)
+subevent                              integer                    Internal ID in pretix for the planning's subevent (read-only)
 status                                string                     Status for the planning, can be one of ``requested``,
                                                                  ``confirmed``, ``completed``, or ``cancelled``.
 invoiced                              boolean                    Should this planning be invoiced?
