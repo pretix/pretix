@@ -96,7 +96,7 @@ const preview_data = computed(() => {
                                 component(:is="previewRenderers[store.style?.preview_renderer]" v-bind="preview_data")
                             div(v-else) Preview not supported
         .form-group.submit-group
-            button.btn.btn-lg.btn-default(type="button" @click="openPreview") Preview
+            button.btn.btn-lg.btn-default(v-if="!!store.style" type="button" @click="openPreview") Preview
             button.btn.btn-primary.btn-save(type="submit") Submit
 
 </template>
