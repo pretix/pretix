@@ -16,7 +16,7 @@
     position: relative;
     display: block;
 
-    > a {
+    > a, > details > summary > a, > form > button {
       position: relative;
       display: block;
       padding: $nav-link-padding;
