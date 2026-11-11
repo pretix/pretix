@@ -39,8 +39,14 @@ class Command(BaseCommand):
         parser.add_argument(
             '--print-sql',
             action='store_true',
-            help='Print all SQL queries.',
+            help='Print all SQL queries (needs package `django-extensions`).',
         )
+        parser.description = "django-scopes aware shell"
+        parser.epilog = """
+        To wrap shell in scopes_disabled (completely ignore django-scopes), add --override.
+        
+        For more specific scopes, add --model__lookup=value flags, e.g. --organizer__slug=demo
+        """
 
     def handle(self, *args, **options):
         try:
