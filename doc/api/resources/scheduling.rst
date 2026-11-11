@@ -1574,7 +1574,7 @@ Endpoints
 
    :param organizer: The ``slug`` field of a valid organizer
    :param resource: The ``id`` field of a valid resource
-   :param id: The ``id`` field of the planning to update
+   :param id: The ``id`` field of the rule to update
    :statuscode 200: no error
    :statuscode 400: The rule could not be modified due to invalid submitted data.
    :statuscode 401: Authentication failure
