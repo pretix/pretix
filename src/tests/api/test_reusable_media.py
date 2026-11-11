@@ -696,7 +696,7 @@ def test_medium_autocreate_giftcard(token_client, organizer, team):
 
 
 @pytest.mark.django_db
-def test_medium_lookup_cross_organizer(token_client, organizer, organizer2, org2_event, medium2, giftcard2):
+def test_medium_lookup_cross_organizer(token_client, organizer, customer, organizer2, org2_event, medium2, giftcard2):
     with scopes_disabled():
         o = Order.objects.create(
             code='FOO', event=org2_event, email='dummy@dummy.test',
@@ -708,7 +708,12 @@ def test_medium_lookup_cross_organizer(token_client, organizer, organizer2, org2
                                          personalized=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
         medium2.linked_orderpositions.add(op)
+        medium2.customer = customer
         medium2.linked_giftcard = giftcard2
+        medium2.claim_token = "1234"
+        medium2.info = {"foo": "bar"}
+        medium2.notes = "Internal notes"
+        medium2.label = "Max Muster"
         medium2.save()
 
     resp = token_client.post(
@@ -755,3 +760,9 @@ def test_medium_lookup_cross_organizer(token_client, organizer, organizer2, org2
     assert resp.data["result"]["organizer"] == "partner"
     assert resp.data["result"]["linked_giftcard"] is not None
     assert resp.data["result"]["linked_orderposition"] is None
+    assert resp.data["result"]["linked_orderpositions"] == []
+    assert resp.data["result"]["customer"] is None
+    assert resp.data["result"]["info"] == {}
+    assert resp.data["result"]["notes"] is None
+    assert resp.data["result"]["claim_token"] is None
+    assert resp.data["result"]["label"] is None
