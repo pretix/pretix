@@ -100,7 +100,6 @@ The property resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
-resource_type                         integer                    Internal ID in pretix for the property's resource type
 name                                  string                     Property name
 ===================================== ========================== =======================================================
 
@@ -1066,7 +1065,6 @@ Endpoints
         "results": [
           {
             "id": 1,
-            "resource_type": 4,
             "name": "My Property"
           }
         ]
@@ -1092,7 +1090,6 @@ Endpoints
       Accept: application/json, text/javascript
 
       {
-        "resource_type": 4,
         "name": "My Property"
       }
 
@@ -1107,7 +1104,6 @@ Endpoints
 
       {
         "id": 1,
-        "resource_type": 4,
         "name": "My Property"
       }
 
@@ -1185,7 +1181,6 @@ Endpoints
 
       {
         "id": 1,
-        "resource_type": 4,
         "name": "New Property"
       }
 
