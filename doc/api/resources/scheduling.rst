@@ -387,9 +387,9 @@ Endpoints
 
 .. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(id)/
 
-   Update a resource type. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
-   want to change.
+   Update a resource type. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all
+   fields of the type, other fields will be reset to default. With ``PATCH``, you only need to provide the fields
+   that you want to change.
 
    **Example request**:
 
@@ -1149,7 +1149,7 @@ Endpoints
 .. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
 
    Update a property. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
+   the property, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
    **Example request**:
@@ -1331,7 +1331,7 @@ Endpoints
 .. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
 
    Update a value. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
+   the value, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
    **Example request**:
@@ -1536,7 +1536,7 @@ Endpoints
 .. http:patch:: /api/v1/organizers/(organizer)/resources/(resource)/rules/(id)/
 
    Update a rule. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
+   the rule, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
    **Example request**:
@@ -1734,7 +1734,7 @@ Endpoints
 .. http:patch:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/(id)/
 
    Update a shift. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
+   the shift, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
    **Example request**:
@@ -1935,7 +1935,7 @@ Endpoints
 .. http:patch:: /api/v1/organizers/(organizer)/plannings/(id)/
 
    Update a planning. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
+   the planning, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
    **Example request**:
