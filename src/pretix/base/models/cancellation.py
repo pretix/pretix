@@ -33,6 +33,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models, transaction
 from django.db.models import Prefetch
+from django.utils.functional import Promise
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
@@ -40,7 +41,10 @@ from pretix.base.cancellation import (
     CancellationResult, CheckResult, CheckTypes, FeeType, RuleResult,
 )
 from pretix.base.reldate import ModelRelativeDateTimeField, RelativeDateWrapper
+from pretix.base.templatetags.money import money_filter
 from pretix.helpers import ensure_no_queries
+
+from pretix.base.models import LoggedModel
 
 if TYPE_CHECKING:
     from pretix.base.models import Order, OrderPosition
@@ -134,13 +138,18 @@ class CancellationRuleManager(models.Manager.from_queryset(CancellationRuleQuery
 CancellationVariant = Literal["earliest", "latest"]
 
 
-class CancellationRule(models.Model):
+class CancellationRule(LoggedModel):
     VARIANT_EARLIEST: Final = "earliest"
     VARIANT_LATEST: Final = "latest"
 
     SUBEVENT_VARIANT_CHOICES = (
         (VARIANT_EARLIEST, _("Earliest")),
         (VARIANT_LATEST, _("Latest")),
+    )
+
+    internal_name = models.CharField(
+        verbose_name=_('Internal name'),
+        max_length=190,
     )
 
     allowed_until = ModelRelativeDateTimeField(null=True, blank=True, verbose_name=_("Allowed until"))
@@ -200,6 +209,7 @@ class PositionCancellationRule(CancellationRule):
     - Can this position be canceled?
     - What is the price for cancelling this position?
     """
+    ruletype = "position"
 
     objects = CancellationRuleManager()
 
@@ -245,6 +255,15 @@ class PositionCancellationRule(CancellationRule):
         lambda: Prefetch('event'),
     ]
     related_selects: ClassVar[List[str]] = []
+
+    @property
+    def display_fee(self) -> str | Promise:
+        if self.fee_absolute_per_position == Decimal("0.00") and self.fee_absolute_per_position == Decimal("0.00"):
+            return _("No fee")
+        if self.fee_absolute_per_position != Decimal("0.00"):
+            return money_filter(self.fee_absolute_per_position, self.event.currency)
+        else:
+            return _("{percentage} %").format(percentage=self.fee_absolute_per_position)
 
     def _position_matches_rule(self, position: "OrderPosition") -> Optional[CheckResult]:
         with ensure_no_queries():
@@ -353,6 +372,7 @@ class ProcessCancellationRule(CancellationRule):
     ProcessCancellationRules answer the question:
     - What is the processing fee for performing this cancellation?
     """
+    ruletype = "process"
 
     objects = CancellationRuleManager()
 
@@ -373,14 +393,15 @@ class ProcessCancellationRule(CancellationRule):
 
     fee_mode = models.CharField(
         verbose_name=_("The method with which process and position fees are combined."),
-        help_text=_("Process fees can either be used to set the minimum cancellation fee that is charded or "
+        help_text=_("Process fees can either be used to set the minimum cancellation fee that is charged or "
                     "they can be charged in addition to all position fees."),
         choices=[
             (FeeType.MINIMUM, FeeType.MINIMUM.label),
             (FeeType.ADDITIONAL, FeeType.ADDITIONAL.label),
         ],
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
+        default=FeeType.MINIMUM,
         max_length=15,
     )
 
@@ -391,6 +412,14 @@ class ProcessCancellationRule(CancellationRule):
         lambda: Prefetch('event'),
     ]
     related_selects: ClassVar[List[str]] = []
+
+    @property
+    def display_fee(self) -> str | Promise:
+        fee_amount = money_filter(self.fee_cancellation_process, self.event.currency)
+        if self.fee_mode == FeeType.MINIMUM:
+            return _("Position fees or minimum of {fee}").format(fee=fee_amount)
+        else:
+            return _("Position fees plus {fee}").format(fee=fee_amount)
 
     @staticmethod
     def _resolve_date_field(date_field: RelativeDateWrapper, order: "Order",

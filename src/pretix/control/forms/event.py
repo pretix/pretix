@@ -60,7 +60,8 @@ from pytz import common_timezones
 from pretix.base.forms import (
     I18nMarkdownTextarea, I18nModelForm, PlaceholderValidator, SettingsForm,
 )
-from pretix.base.models import Event, Organizer, TaxRule, Team
+from pretix.base.models import Event, Organizer, TaxRule, Team, ItemVariation, Item
+from pretix.base.models.cancellation import PositionCancellationRule, ProcessCancellationRule
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
 from pretix.base.models.organizer import TeamQuerySet
 from pretix.base.models.tax import TAX_CODE_LISTS, VAT_ID_COUNTRIES
@@ -73,7 +74,7 @@ from pretix.base.settings import (
 )
 from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
-    FontSelect, MultipleLanguagesWidget, SalesChannelCheckboxSelectMultiple,
+    FontSelect, ItemMultipleChoiceField, MultipleLanguagesWidget, SalesChannelCheckboxSelectMultiple,
     SlugWidget, SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
@@ -804,6 +805,194 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
             if field.has_changed(initial_value, data_value):
                 data.append(name)
         return data
+
+
+class ProcessCancellationRuleForm(forms.ModelForm):
+    fee_minimum = forms.DecimalField(
+        label=_("Minimum fee charged"),
+        required=False,
+        help_text=_("")
+    )
+    fee_additional = forms.DecimalField(
+        label=_("Additional fee charged"),
+        required=False,
+        help_text=_("")
+    )
+
+    class Meta:
+        model = ProcessCancellationRule
+        fields = [
+            'internal_name',
+            'allowed_until',
+            'except_after',
+            'fee_mode'
+        ]
+        widgets = {
+            'fee_mode': forms.RadioSelect,
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+
+        self.fields["fee_minimum"].widget = forms.NumberInput(attrs={
+            "data-display-dependency": "#id_fee_mode_0"
+        })
+        self.fields["fee_additional"].widget = forms.NumberInput(attrs={
+            "data-display-dependency": "#id_fee_mode_1"
+        })
+
+
+class PositionCancellationRuleForm(forms.ModelForm):
+    itemvars = forms.MultipleChoiceField(
+        label=_("Products"),
+        required=False,
+    )
+
+    fee_mode = forms.ChoiceField(
+        choices=[
+            ('absolute', _('Fixed Fee')),
+            ('percentage', _('Percentage Fee')),
+        ],
+        widget=forms.RadioSelect(
+
+        )
+    )
+
+    class Meta:
+        model = PositionCancellationRule
+        fields = [
+            'internal_name',
+            'allowed_until',
+            'except_after',
+            'fee_percentage_per_position',
+            'fee_absolute_per_position',
+            'all_products',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        self.instance = kwargs.get("instance", None)
+
+        initial = kwargs.get("initial", {})
+        if self.instance and self.instance.pk and "itemvars" not in initial:
+            initial["itemvars"] = [
+                                      str(i.pk) for i in self.instance.limit_products.all()
+                                  ] + [
+                                      "{}-{}".format(v.item_id, v.pk)
+                                      for v in self.instance.limit_variations.all()
+                                  ]
+
+        kwargs["initial"] = initial
+        super().__init__(*args, **kwargs)
+
+        self.fields["fee_percentage_per_position"].widget = forms.NumberInput(attrs={
+            "data-display-dependency": "#id_fee_mode_1"
+        })
+        self.fields["fee_absolute_per_position"].widget = forms.NumberInput(attrs={
+            "data-display-dependency": "#id_fee_mode_0"
+        })
+
+        choices = []
+        for item in self.event.items.all():
+            if len(item.variations.all()) > 0:
+                allvars = _("All variations")
+                choices.append(
+                    (
+                        "{}".format(item.pk),
+                        (
+                            f"{item} – {allvars}"
+                            if item.active
+                            else mark_safe(
+                                f'<strike class="text-muted">{escape(item)} – {allvars}</strike>'
+                            )
+                        ),
+                    )
+                )
+            else:
+                choices.append(
+                    (
+                        "{}".format(item.pk),
+                        (
+                            str(item)
+                            if item.active
+                            else mark_safe(
+                                f'<strike class="text-muted">{escape(item)}</strike>'
+                            )
+                        ),
+                    )
+                )
+            for v in item.variations.all():
+                choices.append(
+                    (
+                        "{}-{}".format(item.pk, v.pk),
+                        (
+                            "{} – {}".format(item, v.value)
+                            if item.active
+                            else mark_safe(
+                                f'<strike class="text-muted">{escape(item)} – {escape(v.value)}</strike>'
+                            )
+                        ),
+                    )
+                )
+
+        self.fields["itemvars"].widget = forms.CheckboxSelectMultiple(
+            attrs={
+                "data-inverse-dependency": "<[name$=all_products]",
+                "class": "scrolling-multiple-choice",
+            },
+        )
+        self.fields["itemvars"].choices = choices
+
+    def clean(self):
+        d = super().clean() | {}
+
+        if d.get("fee_mode") == 'absolute':
+            d['fee_percentage_per_position'] = Decimal('0.00')
+
+        if d.get("fee_mode") == 'percentage':
+            d['fee_relative_per_position'] = Decimal('0.00')
+
+        return d
+
+    def save(self, *args, **kwargs):
+        creating = not self.instance.pk
+
+        inst = super().save(*args, **kwargs)
+
+        selected_items = set(
+            list(
+                self.event.items.filter(
+                    id__in=[i for i in self.cleaned_data["itemvars"] if "-" not in i]
+                )
+            )
+        )
+        selected_variations = list(
+            ItemVariation.objects.filter(
+                item__event=self.event,
+                id__in=[
+                    i.split("-")[1] for i in self.cleaned_data["itemvars"] if "-" in i
+                ],
+            )
+        )
+
+        current_items = [] if creating else self.instance.limit_products.all()
+        current_variations = [] if creating else self.instance.limit_variations.all()
+
+        self.instance.limit_products.remove(
+            *[i for i in current_items if i not in selected_items]
+        )
+        self.instance.limit_products.add(
+            *[i for i in selected_items if i not in current_items]
+        )
+        self.instance.limit_variations.remove(
+            *[i for i in current_variations if i not in selected_variations]
+        )
+        self.instance.limit_variations.add(
+            *[i for i in selected_variations if i not in current_variations]
+        )
+        return inst
+
 
 
 class CancelSettingsForm(SettingsForm):

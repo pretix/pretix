@@ -35,10 +35,10 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.forms.widgets import Widget
-from django.utils.formats import get_format
+from django.utils.formats import date_format, get_format, time_format
 from django.utils.functional import Promise, lazy
-from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import get_current_timezone, is_aware, now
+from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from rest_framework import serializers
 
 from pretix.base.forms.widgets import OptionAttrsSelect
@@ -324,6 +324,68 @@ class RelativeDateWrapper:
         else:
             data = parser.parse(input)
         return RelativeDateWrapper(data)
+
+    def __str__(self):
+        if isinstance(self.data, datetime.datetime):
+            return date_format(
+                self.data.astimezone(get_current_timezone()),
+                "SHORT_DATETIME_FORMAT",
+            )
+        elif isinstance(self.data, datetime.date):
+            return date_format(self.data, "SHORT_DATE_FORMAT")
+
+        rd = self.data
+        base = rd.choice.text
+
+        if rd.minutes is not None:
+            if rd.is_after:
+                msg = ngettext(
+                    "{count} minute after {base}",
+                    "{count} minutes after {base}",
+                    rd.minutes,
+                )
+            else:
+                msg = ngettext(
+                    "{count} minute before {base}",
+                    "{count} minutes before {base}",
+                    rd.minutes,
+                )
+            return msg.format(count=rd.minutes, base=base)
+
+        time = time_format(rd.time, "TIME_FORMAT") if rd.time else None
+
+        if rd.days == 0:
+            if time:
+                return gettext("On the day of {base} at {time}").format(base=base, time=time)
+            return gettext("On the day of {base}").format(base=base)
+
+        if rd.is_after:
+            if time:
+                msg = ngettext(
+                    "{count} day after {base} at {time}",
+                    "{count} days after {base} at {time}",
+                    rd.days,
+                )
+            else:
+                msg = ngettext(
+                    "{count} day after {base}",
+                    "{count} days after {base}",
+                    rd.days,
+                )
+        else:
+            if time:
+                msg = ngettext(
+                    "{count} day before {base} at {time}",
+                    "{count} days before {base} at {time}",
+                    rd.days,
+                )
+            else:
+                msg = ngettext(
+                    "{count} day before {base}",
+                    "{count} days before {base}",
+                    rd.days,
+                )
+        return msg.format(count=rd.days, base=base, time=time)
 
     def __len__(self):
         return len(self.to_string())

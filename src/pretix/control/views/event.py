@@ -88,7 +88,8 @@ from pretix.control.forms.event import (
     CancelSettingsForm, CommentForm, ConfirmTextFormset, EventDeleteForm,
     EventFooterLinkFormset, EventMetaValueForm, EventSettingsForm,
     EventUpdateForm, InvoiceSettingsForm, ItemMetaPropertyForm,
-    MailSettingsForm, PaymentSettingsForm, ProviderForm, QuickSetupForm,
+    MailSettingsForm, PaymentSettingsForm, PositionCancellationRuleForm, ProcessCancellationRuleForm, ProviderForm,
+    QuickSetupForm,
     QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet, TaxSettingsForm,
     TicketSettingsForm, WidgetCodeForm,
 )
@@ -104,6 +105,7 @@ from pretix.presale.views.widget import (
 )
 
 from ...base.i18n import language
+from ...base.models.cancellation import PositionCancellationRule, ProcessCancellationRule
 from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
 )
@@ -754,6 +756,10 @@ class CancelSettings(EventSettingsViewMixin, EventSettingsFormView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
+
+        ctx['position_cancellation_rules'] = self.request.event.position_cancellation_rules.all()
+        ctx['process_cancellation_rules'] = self.request.event.process_cancellation_rules.all()
+
         ctx['gets_notification'] = self.request.user.notifications_send and (
             (
                 self.request.user.notification_settings.filter(
@@ -776,6 +782,218 @@ class CancelSettings(EventSettingsViewMixin, EventSettingsFormView):
         )
         return ctx
 
+
+CANCELLATION_RULE_TYPES = {
+    "position":
+        {
+            "model": PositionCancellationRule,
+            "form_class": PositionCancellationRuleForm
+        },
+    "process":
+        {
+            "model": ProcessCancellationRule,
+            "form_class": ProcessCancellationRuleForm
+        }
+}
+
+
+class CancelRuleCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView):
+    template_name = 'pretixcontrol/event/cancellation_rule_edit.html'
+    permission = 'event.settings.general:write'
+    context_object_name = 'cancelrule'
+    type: str
+
+    def dispatch(self, request, *args, **kwargs):
+        self.ruletype = kwargs["ruletype"]
+        if self.ruletype not in CANCELLATION_RULE_TYPES:
+            raise Http404("Unknown type")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_class(self):
+        return CANCELLATION_RULE_TYPES[self.ruletype]["form_class"]
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.event
+        return kwargs
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.cancel', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_initial(self):
+        return {}
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["ruletype"] = self.ruletype
+        ctx["types"] = CANCELLATION_RULE_TYPES.keys()
+        return ctx
+
+    @transaction.atomic
+    def form_valid(self, form):
+        messages.success(self.request, _('The new cancellation rule has been created.'))
+        form.instance.event = self.request.event
+        ret = super().form_valid(form)
+
+        form.instance.log_action('pretix.event.cancellationrule.added', user=self.request.user,
+                                 data=dict(form.cleaned_data))
+        return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
+
+class CancelRuleUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView):
+    template_name = 'pretixcontrol/event/cancellation_rule_edit.html'
+    permission = 'event.settings.general:write'
+    context_object_name = 'rule'
+
+    ruletype: str
+
+    @cached_property
+    def form(self):
+        return self.get_form()
+
+    def dispatch(self, request, *args, **kwargs):
+        self.ruletype = kwargs["ruletype"]
+        if self.ruletype not in CANCELLATION_RULE_TYPES:
+            raise Http404("Unknown type")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_class(self):
+        return CANCELLATION_RULE_TYPES[self.ruletype]["form_class"]
+
+    def get_object(self, queryset=None) -> ProcessCancellationRule | PositionCancellationRule:
+        model = CANCELLATION_RULE_TYPES[self.ruletype]["model"]
+        try:
+            return model.objects.get(event=self.request.event, id=self.kwargs['rule'])
+        except (ProcessCancellationRule.DoesNotExist, PositionCancellationRule.DoesNotExist):
+            raise Http404(_("The requested cancellation rule does not exist."))
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.form
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["ruletype"] = self.ruletype
+        ctx["types"] = CANCELLATION_RULE_TYPES.keys()
+        return ctx
+
+    @transaction.atomic
+    def form_valid(self, form):
+        messages.success(self.request, _('Your changes have been saved.'))
+        form.instance.event = self.request.event
+
+        if form.has_changed():
+            change_data = {
+                k: form.cleaned_data.get(k) for k in form.changed_data
+            }
+            self.object.log_action(
+                'pretix.event.cancellationrule.changed', user=self.request.user, data=change_data
+            )
+
+        return super().form_valid(form)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.cancel', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
+
+class TaxDefault(EventSettingsViewMixin, EventPermissionRequiredMixin, DetailView):
+    model = TaxRule
+    permission = 'event.settings.tax:write'
+
+    def get_object(self, queryset=None) -> TaxRule:
+        try:
+            return self.request.event.tax_rules.get(
+                id=self.kwargs['rule']
+            )
+        except TaxRule.DoesNotExist:
+            raise Http404(_("The requested tax rule does not exist."))
+
+    def get(self, request, *args, **kwargs):
+        return self.http_method_not_allowed(request, *args, **kwargs)
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        messages.success(self.request, _('Your changes have been saved.'))
+        obj = self.get_object()
+        if not obj.default:
+            for tr in self.request.event.tax_rules.filter(default=True):
+                tr.log_action(
+                    'pretix.event.taxrule.changed', user=self.request.user, data={
+                        'default': False,
+                    }
+                )
+                tr.default = False
+                tr.save(update_fields=['default'])
+            obj.log_action(
+                'pretix.event.taxrule.changed', user=self.request.user, data={
+                    'default': True,
+                }
+            )
+            obj.default = True
+            obj.save(update_fields=['default'])
+        return redirect(self.get_success_url())
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.tax', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+
+class TaxDelete(EventSettingsViewMixin, EventPermissionRequiredMixin, CompatDeleteView):
+    model = TaxRule
+    template_name = 'pretixcontrol/event/tax_delete.html'
+    permission = 'event.settings.tax:write'
+    context_object_name = 'taxrule'
+
+    def get_object(self, queryset=None) -> TaxRule:
+        try:
+            return self.request.event.tax_rules.get(
+                id=self.kwargs['rule']
+            )
+        except TaxRule.DoesNotExist:
+            raise Http404(_("The requested tax rule does not exist."))
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        if self.object.allow_delete():
+            self.object.log_action(action='pretix.event.taxrule.deleted', user=request.user)
+            self.object.delete()
+            messages.success(self.request, _('The selected tax rule has been deleted.'))
+        else:
+            messages.error(self.request, _('The selected tax rule can not be deleted.'))
+        return redirect(success_url)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.tax', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['possible'] = self.object.allow_delete()
+        return context
 
 class InvoicePreview(EventPermissionRequiredMixin, View):
     permission = 'event.settings.invoicing:write'

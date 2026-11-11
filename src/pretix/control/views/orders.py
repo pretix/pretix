@@ -1451,6 +1451,8 @@ class OrderRefundView(OrderView):
 class OrderTransition(OrderView):
     permission = 'event.orders:write'
 
+    # TODO: rebuild
+
     @cached_property
     def req(self):
         if 'req' not in self.request.GET:

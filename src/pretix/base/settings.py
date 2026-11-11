@@ -2128,7 +2128,7 @@ DEFAULTS = {
                         "Note that it will be your responsibility to claim the cancellation fee from the user."),
         )
     },
-    'cancel_allow_user_until': {
+    'cancel_allow_user_until': {  # TODO: Turn into rule
         'default': None,
         'type': RelativeDateWrapper,
         'form_class': RelativeDateTimeField,
@@ -2137,7 +2137,7 @@ DEFAULTS = {
             label=_("Do not allow cancellations after"),
         )
     },
-    'cancel_allow_user_paid': {
+    'cancel_allow_user_paid': {  # TODO: Turn into rule
         'default': 'False',
         'type': bool,
         'form_class': forms.BooleanField,
@@ -2148,7 +2148,16 @@ DEFAULTS = {
                         "Otherwise, a manual refund will be created for you to process manually."),
         )
     },
-    'cancel_allow_user_paid_keep': {
+    'cancel_allow_user_paid_until': {  # TODO: Turn into rule
+        'default': None,
+        'type': RelativeDateWrapper,
+        'form_class': RelativeDateTimeField,
+        'serializer_class': SerializerRelativeDateTimeField,
+        'form_kwargs': dict(
+            label=_("Do not allow cancellations after"),
+        )
+    },
+    'cancel_allow_user_paid_keep': {  # TODO: Turn into rule
         'default': '0.00',
         'type': Decimal,
         'form_class': forms.DecimalField,
@@ -2160,7 +2169,7 @@ DEFAULTS = {
             label=_("Keep a fixed cancellation fee"),
         )
     },
-    'cancel_allow_user_paid_keep_fees': {
+    'cancel_allow_user_paid_keep_fees': {  # TODO: Turn into rule
         'default': 'False',
         'type': bool,
         'form_class': forms.BooleanField,
@@ -2169,7 +2178,7 @@ DEFAULTS = {
             label=_("Keep payment, shipping and service fees"),
         )
     },
-    'cancel_allow_user_paid_keep_percentage': {
+    'cancel_allow_user_paid_keep_percentage': {  # TODO: Turn into rule
         'default': '0.00',
         'type': Decimal,
         'form_class': forms.DecimalField,
@@ -2181,7 +2190,7 @@ DEFAULTS = {
             label=_("Keep a percentual cancellation fee"),
         )
     },
-    'cancel_allow_user_paid_adjust_fees': {
+    'cancel_allow_user_paid_adjust_fees': {  # TODO: Include in cancellation logic
         'default': 'False',
         'type': bool,
         'form_class': forms.BooleanField,
@@ -2265,15 +2274,6 @@ DEFAULTS = {
             ],
             widget=forms.RadioSelect,
             # When adding a new ordering, remember to also define it in the event model
-        )
-    },
-    'cancel_allow_user_paid_until': {
-        'default': None,
-        'type': RelativeDateWrapper,
-        'form_class': RelativeDateTimeField,
-        'serializer_class': SerializerRelativeDateTimeField,
-        'form_kwargs': dict(
-            label=_("Do not allow cancellations after"),
         )
     },
     'cancel_terms_paid': {

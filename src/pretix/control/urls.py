@@ -296,6 +296,13 @@ urlpatterns = [
         re_path(r'^settings/email/preview$', event.MailSettingsPreview.as_view(), name='event.settings.mail.preview'),
         re_path(r'^settings/email/layoutpreview$', event.MailSettingsRendererPreview.as_view(),
                 name='event.settings.mail.preview.layout'),
+
+        re_path(r'^settings/cancel/(?P<ruletype>[^/]+)/(?P<rule>\d+)/$', event.CancelRuleUpdate.as_view(),
+                name='event.settings.cancellation_rule.edit'),
+        re_path(r'^settings/cancel/add/(?P<ruletype>[^/]+)$', event.CancelRuleCreate.as_view(),
+                name='event.settings.cancellation_rule.add'),
+        re_path(r'^settings/cancel/(?P<rule>\d+)/delete$', event.CancelRuleCreate.as_view(),
+                name='event.settings.cancellation_rule.delete'),
         re_path(r'^settings/cancel', event.CancelSettings.as_view(), name='event.settings.cancel'),
         re_path(r'^settings/invoice$', event.InvoiceSettings.as_view(), name='event.settings.invoice'),
         re_path(r'^settings/invoice/preview$', event.InvoicePreview.as_view(), name='event.settings.invoice.preview'),

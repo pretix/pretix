@@ -548,6 +548,7 @@ class OrdersTest(BaseOrdersTest):
         assert self.order.status == Order.STATUS_CANCELED
 
     def test_orders_cancel_paid_request(self):
+        # TODO: fix
         self.order.status = Order.STATUS_PAID
         self.order.save()
         with scopes_disabled():
@@ -589,6 +590,7 @@ class OrdersTest(BaseOrdersTest):
         assert response.status_code == 302
 
     def test_orders_cancel_free_no_request(self):
+        # TODO: fix
         self.order.status = Order.STATUS_PAID
         self.order.total = Decimal('0.00')
         self.order.save()
@@ -615,6 +617,7 @@ class OrdersTest(BaseOrdersTest):
             assert not self.order.cancellation_requests.exists()
 
     def test_orders_cancel_free_ignore_fixed_fee(self):
+        # TODO: Fix
         self.order.status = Order.STATUS_PAID
         self.order.total = Decimal('0.00')
         self.order.save()

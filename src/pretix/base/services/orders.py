@@ -521,6 +521,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
     :param order: The order to change
     :param user: The user that performed the change
     """
+    # TODO: Extend for partion cancellation
     # If new actions are added to this function, make sure to add the reverse operation to reactivate_order()
     with transaction.atomic():
         if isinstance(order, int):
@@ -657,6 +658,10 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
 
         order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application or device,
                          data={'cancellation_fee': cancellation_fee, 'comment': comment})
+        # TODO: Handle elsewhere
+        # Both cases:
+        #   - Cancellation Request is being processed
+        #   - Order is regularly canceled
         order.cancellation_requests.all().delete()
 
         order.create_transactions()

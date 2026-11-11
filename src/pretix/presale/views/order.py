@@ -1134,6 +1134,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
                 self.request.POST.get('giftcard') == 'true'
             )
         )
+        # TODO: rebuild
         if require_approval:
             self.order.cancellation_requests.create(
                 cancellation_fee=fee or Decimal('0.00'),
