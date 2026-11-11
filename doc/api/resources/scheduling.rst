@@ -52,8 +52,12 @@ property_values                       list of strings            Properties assi
 name                                  string                     Resource name
 locale                                string                     The locale used for communication with this resource
 active                                boolean                    Deleted resources will have this set to false
+phone                                 string                     The resource's phone number (or ``null``)
+address                               string                     The resource's address
 notification_email                    string                     The email address to send confirmation emails to when a planning is created.  Ignored when type.is_human is True
 confirmation_required                 boolean                    Does this resource require confirmation when a planning is created for it.
+can_invoice                           boolean                    Can this resource invoice the organizer?
+external_identifier                   string                     External ID of the resource (or ``null``)
 ===================================== ========================== =======================================================
 
 Manager invite resource
@@ -514,8 +518,12 @@ Endpoints
             "name": "My Resource",
             "locale": "en",
             "active": true,
+            "phone": null,
+            "address": "",
             "notification_email": "",
-            "confirmation_required": false
+            "confirmation_required": false,
+            "can_invoice": false,
+            "external_identifier": null
           }
         ]
       }
@@ -546,8 +554,12 @@ Endpoints
         "name": "My Resource",
         "locale": "en",
         "active": true,
+        "phone": null,
+        "address": "",
         "notification_email": "",
-        "confirmation_required": false
+        "confirmation_required": false,
+        "can_invoice": false,
+        "external_identifier": null
       }
 
 
@@ -567,8 +579,12 @@ Endpoints
         "name": "My Resource",
         "locale": "en",
         "active": true,
+        "phone": null,
+        "address": "",
         "notification_email": "",
-        "confirmation_required": false
+        "confirmation_required": false,
+        "can_invoice": false,
+        "external_identifier": null
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -605,8 +621,12 @@ Endpoints
         "name": "My Resource",
         "locale": "en",
         "active": true,
+        "phone": null,
+        "address": "",
         "notification_email": "",
-        "confirmation_required": false
+        "confirmation_required": false,
+        "can_invoice": false,
+        "external_identifier": null
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -652,8 +672,12 @@ Endpoints
         "name": New Resource,
         "locale": "en",
         "active": true,
+        "phone": null,
+        "address": "",
         "notification_email": "",
-        "confirmation_required": false
+        "confirmation_required": false,
+        "can_invoice": false,
+        "external_identifier": null
       }
 
    :param organizer: The ``slug`` field of a valid organizer
