@@ -1840,7 +1840,7 @@ Endpoints
       }
 
    :query page: The page number in case of a multi-page result set, default is 1
-   :query event: Only return plannings for subevents with the given event ID
+   :query event: Only return plannings for events with the given slug
    :query resource: Only return plannings with the given resource ID
    :query resource_type: Only return plannings for resources with the given resource type ID
    :query status: Only return plannings with the given status
