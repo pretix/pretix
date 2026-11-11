@@ -1432,8 +1432,8 @@ Endpoints
             "end": null,
             "weekdays": [0, 1, 2]
             "timezone": "Europe/Berlin",
-            "starttime": "09:00",
-            "endtime": "17:00"
+            "starttime": "09:00:00",
+            "endtime": "17:00:00"
           }
         ]
       }
@@ -1463,8 +1463,8 @@ Endpoints
           "end": null,
           "weekdays": [0, 1, 2]
           "timezone": "Europe/Berlin",
-          "starttime": "09:00",
-          "endtime": "17:00"
+          "starttime": "09:00:00",
+          "endtime": "17:00:00"
       }
 
 
@@ -1483,8 +1483,8 @@ Endpoints
         "end": null,
         "weekdays": [0, 1, 2]
         "timezone": "Europe/Berlin",
-        "starttime": "09:00",
-        "endtime": "17:00"
+        "starttime": "09:00:00",
+        "endtime": "17:00:00"
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -1521,8 +1521,8 @@ Endpoints
         "end": null,
         "weekdays": [0, 1, 2]
         "timezone": "Europe/Berlin",
-        "starttime": "09:00",
-        "endtime": "17:00"
+        "starttime": "09:00:00",
+        "endtime": "17:00:00"
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -1568,8 +1568,8 @@ Endpoints
         "end": null,
         "weekdays": [0, 1, 2]
         "timezone": "Europe/Berlin",
-        "starttime": "09:00",
-        "endtime": "17:00"
+        "starttime": "09:00:00",
+        "endtime": "17:00:00"
       }
 
    :param organizer: The ``slug`` field of a valid organizer
