@@ -167,7 +167,7 @@ id                                    integer                    Internal ID in 
 resource                              integer                    Internal ID in pretix for the planning's resource (read-only)
 subevent                              integer                    Internal ID in pretix for the planning's subevent (read-only)
 status                                string                     Status for the planning, can be one of ``requested``,
-                                                                 ``confirmed``, ``completed``, or ``cancelled``.
+                                                                 ``confirmed``, ``completed``, ``canceled``, or ``denied``.  Only ``confirmed``, ``canceled``, or ``denied`` can be set.
 invoiced                              boolean                    Should this planning be invoiced?
 ===================================== ========================== =======================================================
 
