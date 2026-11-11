@@ -528,7 +528,9 @@ Endpoints
       }
 
    :query page: The page number in case of a multi-page result set, default is 1
-   :query resource_type: Only return plannings for resources with the given resource type ID
+   :query type: Only return resources for types with the given ID
+   :query active: Only return resources which are active
+   :query external_identifier: Only return resources with the given external_identifier
    :param organizer: The ``slug`` field of a valid organizer
    :statuscode 200: no error
    :statuscode 401: Authentication failure
