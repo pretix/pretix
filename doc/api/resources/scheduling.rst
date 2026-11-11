@@ -1408,7 +1408,7 @@ Endpoints
    :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or resource or rule does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested planning does not exist
+   :statuscode 404: The requested rule does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/
 
