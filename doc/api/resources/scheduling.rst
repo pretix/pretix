@@ -398,6 +398,33 @@ Endpoints
    :statuscode 403: The requested organizer or resource type does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource type does not exist
 
+.. http:delete:: /api/v1/organizers/(organizer)/resourcetypes/(id)/
+
+   Delete a type.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/resourcetypes/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+      Content-Type: text/javascript
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param id: The ``id`` field of the type to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or type does not exist **or** you have no permission to view it **or** the type still has resources attached to it.
+
 .. http:get:: /api/v1/organizers/(organizer)/resources/
 
    Returns a list of all resources for an organizer.
