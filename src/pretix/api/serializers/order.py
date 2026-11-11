@@ -400,6 +400,13 @@ class AnswerSerializer(I18nAwareModelSerializer):
                 'pk': instance.orderposition.pk,
                 'question': instance.question_id,
             }, request=self.context['request'])
+        elif r['answer'].startswith('file://') and instance.order:
+            r['answer'] = reverse('api-v1:order-answer', kwargs={
+                'organizer': instance.order.event.organizer.slug,
+                'event': instance.order.event.slug,
+                'code': instance.order.code,
+                'question': instance.question_id,
+            }, request=self.context['request'])
         return r
 
     class Meta:

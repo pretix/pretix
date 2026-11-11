@@ -708,6 +708,29 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+    @action(detail=True, url_name='answer', url_path=r'answer/(?P<question>\d+)')
+    def answer(self, request, **kwargs):
+        order = self.get_object()
+        answer = get_object_or_404(
+            QuestionAnswer,
+            order=order,
+            question_id=kwargs.get('question')
+        )
+        if not answer.file:
+            raise NotFound()
+
+        ftype, ignored = mimetypes.guess_type(answer.file.name)
+        return FileResponse(
+            answer.file,
+            filename='{}-{}-{}'.format(
+                self.request.event.slug.upper(),
+                order.code,
+                os.path.basename(answer.file.name).split('.', 1)[1]
+            ),
+            as_attachment=True,
+            content_type=ftype or 'application/binary'
+        )
+
     def create(self, request, *args, **kwargs):
         if 'send_mail' in request.data and 'send_email' not in request.data and isinstance(request.data, dict):
             request.data['send_email'] = request.data['send_mail']
@@ -1301,7 +1324,7 @@ class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet
         pos = self.get_object()
         answer = get_object_or_404(
             QuestionAnswer,
-            orderposition=self.get_object(),
+            orderposition=pos,
             question_id=kwargs.get('question')
         )
         if not answer.file:
