@@ -1040,7 +1040,7 @@ Endpoints
 
 .. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/
 
-   Returns a list of all properties for an organizer.
+   Returns a list of all properties for a resource type.
 
    **Example request**:
 
@@ -1079,7 +1079,7 @@ Endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/
 
-   Create a property for an organizer.
+   Create a property for a resource type.
 
    **Example request**:
 
