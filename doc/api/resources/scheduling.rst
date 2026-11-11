@@ -666,7 +666,7 @@ Endpoints
         "id": 1,
         "type": 5,
         "property_values": [2, 3, 4],
-        "name": New Resource,
+        "name": "New Resource",
         "locale": "en",
         "active": true,
         "phone": null,
@@ -684,6 +684,33 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource does not exist
+
+.. http:delete:: /api/v1/organizers/(organizer)/resources/(id)/
+
+   Delete a resource.  A resource with plannings will be inactive instead.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/resources/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+      Content-Type: application/json
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param id: The ``id`` field of the resource to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or type does not exist **or** you have no permission to view it.
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/invites/
 
