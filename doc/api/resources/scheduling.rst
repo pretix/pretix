@@ -100,7 +100,7 @@ The property resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
-name                                  string                     Property name
+name                                  string                     Property name.  Must be unique within the resource type.
 ===================================== ========================== =======================================================
 
 Value resource
