@@ -863,10 +863,14 @@ Endpoints
       Vary: Accept
       Content-Type: application/json
 
+      {
+        "status": "Invite resent"
+      }
+
    :param organizer: The ``slug`` field of a valid organizer
    :param resource: The ``id`` field of a valid resource
    :param id: The ``id`` field of the invite to resend the invitation email to
-   :statuscode 201: no error
+   :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
    :statuscode 404: The requested invite does not exist
