@@ -130,7 +130,10 @@ $(document).on('pretix:bind-forms', function () {
 		if (tiles) {
 			let $map = $('<div>')
 			$grp.append($('<div>').addClass('col-md-9 col-md-offset-3').append($map))
-			let map = L.map($map.get(0))
+			let map = L.map($map.get(0), {
+				scrollWheelZoom: false
+			})
+			map.once('focus', function() { map.scrollWheelZoom.enable(); });
 			L.tileLayer(tiles, {
 				attribution: attrib,
 				maxZoom: 18,
