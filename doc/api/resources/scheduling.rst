@@ -384,7 +384,7 @@ Endpoints
    :param id: The ``id`` field of the resource type to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource type does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource type does not exist
 
 .. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(id)/
@@ -456,7 +456,7 @@ Endpoints
    :statuscode 200: no error
    :statuscode 400: The type could not be modified due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource type does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource type does not exist
 
 .. http:delete:: /api/v1/organizers/(organizer)/resourcetypes/(id)/
@@ -484,7 +484,7 @@ Endpoints
    :param id: The ``id`` field of the type to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or type does not exist **or** you have no permission to view it **or** the type still has resources attached to it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it **or** the type still has resources attached to it.
    :statuscode 404: The requested resource type does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/
@@ -649,7 +649,7 @@ Endpoints
    :param id: The ``id`` field of the resource to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource does not exist
 
 .. http:patch:: /api/v1/organizers/(organizer)/resources/(id)/
@@ -704,7 +704,7 @@ Endpoints
    :statuscode 200: no error
    :statuscode 400: The resource could not be modified due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource does not exist
 
 .. http:delete:: /api/v1/organizers/(organizer)/resources/(id)/
@@ -732,7 +732,8 @@ Endpoints
    :param id: The ``id`` field of the resource to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or type does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/invites/
 
@@ -771,7 +772,8 @@ Endpoints
    :param resource: The ``id`` field of a valid resource
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource does not exist
 
 .. http:post:: /api/v1/organizers/(organizer)/resources/(resource)/invites/
 
@@ -809,7 +811,8 @@ Endpoints
    :statuscode 303: The email belongs to an existing user, the Location header will contain managers endpoint to use instead of this one.
    :statuscode 400: The invite could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/invites/(id)/
 
@@ -841,8 +844,8 @@ Endpoints
    :param id: The ``id`` field of the invite to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested invite does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource or invite does not exist
 
 .. http:delete:: /api/v1/organizers/(organizer)/resources/(resource)/invites/(id)/
 
@@ -870,7 +873,8 @@ Endpoints
    :param id: The ``id`` field of the invite to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or type does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource or invite does not exist
 
 .. http:post:: /api/v1/organizers/(organizer)/resources/(resource)/invites/(id)/resend/
 
@@ -901,8 +905,8 @@ Endpoints
    :param id: The ``id`` field of the invite to resend the invitation email to
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested invite does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource or invite does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/managers/
 
@@ -941,7 +945,8 @@ Endpoints
    :param resource: The ``id`` field of a valid resource
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource does not exist
 
 .. http:post:: /api/v1/organizers/(organizer)/resources/(resource)/managers/
 
@@ -977,7 +982,8 @@ Endpoints
    :param resource: The ``id`` field of a valid resource
    :statuscode 201: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/managers/(id)/
 
@@ -1009,8 +1015,8 @@ Endpoints
    :param id: The ``id`` field of the manager to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested manager does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource or manager does not exist
 
 .. http:delete:: /api/v1/organizers/(organizer)/resources/(resource)/managers/(id)/
 
@@ -1038,7 +1044,8 @@ Endpoints
    :param id: The ``id`` field of the type to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource or manager does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/
 
@@ -1078,6 +1085,7 @@ Endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type does not exist
 
 .. http:post:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/
 
@@ -1115,6 +1123,7 @@ Endpoints
    :statuscode 400: The property could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
 
@@ -1146,8 +1155,8 @@ Endpoints
    :param id: The ``id`` field of the property to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or property does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested property does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type or property does not exist
 
 .. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
 
@@ -1188,8 +1197,8 @@ Endpoints
    :statuscode 200: no error
    :statuscode 400: The property could not be modified due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or property does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested property does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type or property does not exist
 
 .. http:delete:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
 
@@ -1217,7 +1226,8 @@ Endpoints
    :param id: The ``id`` field of the property to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or type does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it **or** the property has values linked to a requirement.
+   :statuscode 404: The requested type or property does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/
 
@@ -1257,7 +1267,8 @@ Endpoints
    :param property: The ``id`` field of a valid property
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or property does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type or property does not exist
 
 .. http:post:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/
 
@@ -1295,7 +1306,8 @@ Endpoints
    :statuscode 201: no error
    :statuscode 400: The value could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or property does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type or property does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
 
@@ -1328,8 +1340,8 @@ Endpoints
    :param id: The ``id`` field of the value to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer, property, or value does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested value does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type, property, or value does not exist
 
 .. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
 
@@ -1371,8 +1383,8 @@ Endpoints
    :statuscode 200: no error
    :statuscode 400: The value could not be modified due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer, property, or value does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested value does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type, property, or value does not exist
 
 .. http:delete:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
 
@@ -1401,7 +1413,8 @@ Endpoints
    :param id: The ``id`` field of the value to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or type does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it **or** the value is linked to a requirement.
+   :statuscode 404: The requested type, property, or value does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/rules/
 
@@ -1446,7 +1459,8 @@ Endpoints
    :param resource: The ``id`` field of a valid resource
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource does not exist
 
 .. http:post:: /api/v1/organizers/(organizer)/resources/(resource)/rules/
 
@@ -1495,7 +1509,8 @@ Endpoints
    :statuscode 201: no error
    :statuscode 400: The rule could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/rules/(id)/
 
@@ -1533,8 +1548,8 @@ Endpoints
    :param id: The ``id`` field of the rule to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource or rule does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested rule does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource or rule does not exist
 
 .. http:patch:: /api/v1/organizers/(organizer)/resources/(resource)/rules/(id)/
 
@@ -1581,8 +1596,8 @@ Endpoints
    :statuscode 200: no error
    :statuscode 400: The rule could not be modified due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource or rule does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested rule does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource or rule does not exist
 
 .. http:delete:: /api/v1/organizers/(organizer)/resources/(resource)/rules/(id)/
 
@@ -1610,8 +1625,8 @@ Endpoints
    :param id: The ``id`` field of the rule to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource or rule does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested rule does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource or rule does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/
 
@@ -1653,7 +1668,8 @@ Endpoints
    :param resource: The ``id`` field of a valid resource
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource does not exist
 
 .. http:post:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/
 
@@ -1696,7 +1712,8 @@ Endpoints
    :statuscode 201: no error
    :statuscode 400: The shift could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/(id)/
 
@@ -1731,8 +1748,8 @@ Endpoints
    :param id: The ``id`` field of the shift to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested shift does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource or shift does not exist
 
 .. http:patch:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/(id)/
 
@@ -1776,8 +1793,8 @@ Endpoints
    :statuscode 200: no error
    :statuscode 400: The shift could not be modified due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource or shift does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested shift does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource or shift does not exist
 
 .. http:delete:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/(id)/
 
@@ -1805,8 +1822,8 @@ Endpoints
    :param id: The ``id`` field of the shift to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or resource or shift does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested shift does not exist
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested resource or shift does not exist
 
 .. http:get:: /api/v1/organizers/(organizer)/plannings/
 
@@ -1892,7 +1909,7 @@ Endpoints
    :param id: The ``id`` field of the planning to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/planning does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizerdoes not exist **or** you have no permission to view it.
    :statuscode 404: The requested planning does not exist
 
 .. http:patch:: /api/v1/organizers/(organizer)/plannings/(id)/
@@ -1939,7 +1956,7 @@ Endpoints
    :statuscode 200: no error
    :statuscode 400: The planning could not be modified due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or planning does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizerdoes not exist **or** you have no permission to view it.
    :statuscode 404: The requested planning does not exist
 
 .. http:delete:: /api/v1/organizers/(organizer)/plannings/(id)/
@@ -1967,5 +1984,5 @@ Endpoints
    :param id: The ``id`` field of the planning to cancel
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer or planning does not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizerdoes not exist **or** you have no permission to view it.
    :statuscode 404: The requested planning does not exist
