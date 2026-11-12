@@ -168,7 +168,7 @@ subevent                              integer                    Internal ID in 
 status                                string                     Status for the planning, can be one of ``requested``, ``confirmed``, ``completed``, ``canceled``, or ``denied``.  Only ``confirmed``, ``canceled``, or ``denied`` can be set.
 created_at                            datetime                   When the Planning was created
 cost                                  decimal (string)           How much the resource for this planning cost
-is_paid                               boolean                    Whether the resource has been paid for this planning
+paid                                  boolean                    Whether the resource has been paid for this planning
 invoiced                              boolean                    Should this planning be invoiced?
 ===================================== ========================== =======================================================
 
