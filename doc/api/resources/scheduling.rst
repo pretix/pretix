@@ -980,6 +980,7 @@ Endpoints
    :param organizer: The ``slug`` field of a valid organizer
    :param resource: The ``id`` field of a valid resource
    :statuscode 201: no error
+   :statuscode 400: User with this email address does not exist
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource does not exist
