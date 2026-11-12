@@ -1792,7 +1792,7 @@ class AbstractPosition(AnswerableMixin, RoundingCorrectionMixin, models.Model):
             qrows = list(copy.copy(qc) for qq in questionnaires for qc in qq.rows.all())
         else:
             qrows = list(self.item.get_asked_questions(questionnaire_type=questionnaire_type, sales_channel=sales_channel))
-        return self._cache_question_data(qrows)
+        return QuestionnaireRenderer(qrows, self.system_answers, self.answers.all())
 
     @cached_property
     def system_answers(self):
