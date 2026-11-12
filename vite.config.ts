@@ -26,7 +26,7 @@ export default defineConfig({
 		// across plugins whose node_modules live in sibling directories
 		dedupe: [...SHARED_DEPS, '@vue/runtime-core', '@vue/reactivity', '@vue/shared'],
 	    alias: {
-			'@': path.resolve(__dirname, 'src'),
+			'@': path.resolve(import.meta.dirname, 'src'),
 		}
 	},
 	server: {
@@ -40,12 +40,12 @@ export default defineConfig({
 	},
 	build: {
 		manifest: true,
-		outDir: path.resolve(__dirname, 'src/pretix/static.dist/vite/control'),
+		outDir: path.resolve(import.meta.dirname, 'src/pretix/static.dist/vite/control'),
 		rollupOptions: {
 			preserveEntrySignatures: 'exports-only',
 			input: {
-				'webcheckin/main': path.resolve(__dirname, 'src/pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.ts'),
-				'checkinrules/main': path.resolve(__dirname, 'src/pretix/static/pretixcontrol/js/ui/checkinrules/index.ts'),
+				'webcheckin/main': path.resolve(import.meta.dirname, 'src/pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.ts'),
+				'checkinrules/main': path.resolve(import.meta.dirname, 'src/pretix/static/pretixcontrol/js/ui/checkinrules/index.ts'),
 				...Object.fromEntries(SHARED_DEPS.map(dep => [`_vendor/${dep}`, `virtual:vendor/${dep}`])),
 				...pretixPluginEntries,
 			},
