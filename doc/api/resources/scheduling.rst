@@ -70,8 +70,8 @@ The manager invite resource contains the following public fields:
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
-id                                    integer                    Internal ID of the user in pretix
-email                                 string                     The invitee's email address, must be an existing user's email address
+id                                    integer                    Internal ID in pretix
+email                                 string                     The invitee's email address, must not be an existing user's email address
 ===================================== ========================== =======================================================
 
 Manager resource
@@ -84,8 +84,8 @@ The manager resource contains the following public fields:
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
-id                                    integer                    Internal ID in pretix
-email                                 string                     The managers's email address
+id                                    integer                    Internal ID of the user in pretix
+email                                 string                     The manager's email address, must be an existing user's email address
 ===================================== ========================== =======================================================
 
 Property resource
