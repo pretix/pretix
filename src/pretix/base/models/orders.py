@@ -226,6 +226,7 @@ class AnswerableMixin:
                 a_obj.question_id: a_obj for a_obj in self.answers.all()
             }
         for data in answers_data:
+            data = dict(data)
             question_id = data['question'].pk
             if not data.get('answer'):
                 if (not delete_missing) and question_id in answercache:
@@ -1804,7 +1805,7 @@ class AbstractPosition(AnswerableMixin, RoundingCorrectionMixin, models.Model):
             "@zipcode": self.zipcode,
             "@city": self.city,
             "@state": self.state,
-            "@country": str(self.country),
+            "@country": str(self.country) if self.country else None,
         }
 
     @property

@@ -1064,6 +1064,7 @@ def test_question_optional(token_client, organizer, clist, event, order, questio
         assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: ""}})
+    print(resp.data)
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
 
@@ -1162,6 +1163,7 @@ def test_question_multiple_choice(token_client, organizer, clist, event, order, 
         assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
     resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question.datafield.pk: "{},{}".format(question.answers[0].pk, question.answers[1].pk)}})
+    print(resp.data)
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
     with scopes_disabled():

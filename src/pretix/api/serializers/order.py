@@ -25,9 +25,11 @@ import os
 from collections import Counter, defaultdict
 from datetime import timedelta
 from decimal import Decimal
+from typing import Any
 
 import pycountry
 from django.conf import settings
+from django.core.exceptions import ValidationError as BaseValidationError
 from django.core.files import File
 from django.db import models
 from django.db.models import F, Q
@@ -215,6 +217,10 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
 
 
 class AnswerQuestionOptionsIdentifierField(serializers.Field):
+    default_error_messages = {
+        'invalid_choice': gettext_lazy('"{input}" is not a valid choice.')
+    }
+
     def to_representation(self, instance: QuestionAnswer):
         if isinstance(instance, WrappedModel) or instance.pk:
             return [o.identifier for o in instance.options.all()]
@@ -222,9 +228,9 @@ class AnswerQuestionOptionsIdentifierField(serializers.Field):
 
     def to_internal_value(self, data):
         if not isinstance(data, list):
-            self.fail('invalid')
+            self.fail('invalid_choice', input=data)
         if not all(isinstance(i, str) for i in data):
-            self.fail('invalid')
+            self.fail('invalid_choice', input=data)
         return {self.field_name: data}
 
 
@@ -237,22 +243,21 @@ class InlineSeatSerializer(I18nAwareModelSerializer):
 
 class MixedAnswerListSerializer(ListSerializer):
     def __init__(self, instance=None, *args, **kwargs):
-        self.parent_instance = instance
         super().__init__(instance.answers if instance else None, *args, **kwargs)
 
     def get_value(self, dictionary):
         return dictionary
 
-    def to_representation(self, instance):
+    def to_representation(self, data):
         try:
-            answers_qs = get_attribute(instance, ['answers'])
+            answers_qs = get_attribute(data, ['answers'])
         except (KeyError, AttributeError):
             return None
         answers = super().to_representation(answers_qs)
         answers_dict = {answer["question"]: answer for answer in answers}
         for qc in QuestionnaireRow.objects.filter(
                 Q(system_datafield__isnull=False) | Q(user_datafield_id__isnull=False),
-                questionnaire__items__id=instance.item_id
+                questionnaire__items__id=data.item_id
         ):
             if qc.user_datafield_id:
                 if answer := answers_dict.get(qc.user_datafield_id):
@@ -260,9 +265,9 @@ class MixedAnswerListSerializer(ListSerializer):
                     answer["question"] = qc.cooked_id
                     answer["questionnaire_id"] = qc.questionnaire_id
                     answers.append(answer)
-            elif (sys_answer := instance.system_answers[qc.system_datafield]) is not None:
+            elif (sys_answer := data.system_answers[qc.system_datafield]) is not None:
                 if qc.system_datafield == QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS:
-                    name_parts = instance.attendee_name_parts
+                    name_parts = data.attendee_name_parts
                     settings = self.context['event'].settings
                     for k, v, w, *__ in PERSON_NAME_SCHEMES.get(settings.name_scheme)['fields']:
                         if k in name_parts:
@@ -298,57 +303,62 @@ class MixedAnswerListSerializer(ListSerializer):
                 })
         return answers
 
-    @staticmethod
-    def unexpand_system_answers(input_answers, settings):
-        result = {}
-        user_answers = []
-        attendee_name_parts = {}
-        for answer in input_answers:
-            if "question" in answer or ("datafield" in answer and answer["datafield"] in QuestionnaireRow.SYSTEM_DATAFIELD_NUMBERS):
-                if "question" in answer:
-                    qid, dfid, sys_df = QuestionnaireRow.uncook_id(answer["question"])
-                else:
-                    qid, dfid, sys_df = None, None, answer["datafield"]
-                if dfid:
-                    answer["question"] = dfid
-                    user_answers.append(answer)
-                elif sys_df == "@country":
-                    result['country'] = Country(answer["answer"])
-                    if not result['country'].name:
-                        raise ValidationError("Data field @country needs a valid country code.")
-                elif sys_df == "@attendee_name_parts:salutation":
-                    valid_salutations = dict(PERSON_NAME_SALUTATIONS)
-                    if "options" in answer and len(answer["options"]) == 1 and answer["options"][0] <= len(PERSON_NAME_SALUTATIONS):
-                        attendee_name_parts['salutation'] = PERSON_NAME_SALUTATIONS[answer["options"][0] - 1][0]
-                    elif "option_identifiers" in answer and len(answer["option_identifiers"]) == 1 and answer["option_identifiers"][0] in valid_salutations:
-                        attendee_name_parts['salutation'] = answer["option_identifiers"][0]
-                    else:
-                        raise ValidationError("Data field @attendee_name_parts:salutation requires valid options")
-                elif sys_df == "@attendee_name_parts:title" and settings.name_scheme_titles:
-                    valid_titles = PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1]
-                    if "options" in answer and len(answer["options"]) == 1 and answer["options"][0] <= len(valid_titles):
-                        attendee_name_parts['title'] = valid_titles[answer["options"][0] - 1]
-                    elif "option_identifiers" in answer and len(answer["option_identifiers"]) == 1 and answer["option_identifiers"][0] in valid_titles:
-                        attendee_name_parts['title'] = answer["option_identifiers"][0]
-                    else:
-                        raise ValidationError("Data field @attendee_name_parts:title requires valid options")
-                elif sys_df.startswith("@attendee_name_parts:"):
-                    attendee_name_parts[sys_df[len("@attendee_name_parts:"):]] = answer["answer"]
-                else:
-                    result[sys_df[1:]] = answer["answer"]
+    def run_child_validation(self, data):
+        answer = data
+        settings = self.context['event'].settings
+        if "question" in answer or ("datafield" in answer and answer["datafield"] in QuestionnaireRow.SYSTEM_DATAFIELD_NUMBERS):
+            if "question" in answer:
+                qid, dfid, sys_df = QuestionnaireRow.uncook_id(answer["question"])
             else:
-                user_answers.append(answer)
-
-        if attendee_name_parts:
-            result["attendee_name_parts"] = attendee_name_parts
-        return result, user_answers
+                qid, dfid, sys_df = None, None, answer["datafield"]
+            if self.context.get('allowed_datafields') and (dfid or sys_df.split(':')[0]) not in self.context.get('allowed_datafields'):   # TODO maybe move this into the to_internal_value loop
+                raise ValidationError(f"Unexpected data field {dfid or sys_df}")
+            if dfid is not None:
+                answer["question"] = dfid
+                return super().run_child_validation(answer)
+            elif sys_df == "@country":
+                country = Country(answer["answer"])
+                if not country.name:
+                    raise ValidationError("Data field @country needs a valid country code.")
+                return ('country', country)
+            elif sys_df == "@attendee_name_parts:salutation":
+                valid_salutations = dict(PERSON_NAME_SALUTATIONS)
+                if "options" in answer and len(answer["options"]) == 1 and answer["options"][0] <= len(PERSON_NAME_SALUTATIONS):
+                    salutation = PERSON_NAME_SALUTATIONS[answer["options"][0] - 1][0]
+                elif "option_identifiers" in answer and len(answer["option_identifiers"]) == 1 and answer["option_identifiers"][0] in valid_salutations:
+                    salutation = answer["option_identifiers"][0]
+                else:
+                    raise ValidationError("Data field @attendee_name_parts:salutation requires valid options")
+                return ('attendee_name_parts', {'salutation': salutation})
+            elif sys_df == "@attendee_name_parts:title" and settings.name_scheme_titles:
+                valid_titles = PERSON_NAME_TITLE_GROUPS.get(settings.name_scheme_titles)[1]
+                if "options" in answer and len(answer["options"]) == 1 and answer["options"][0] <= len(valid_titles):
+                    title = valid_titles[answer["options"][0] - 1]
+                elif "option_identifiers" in answer and len(answer["option_identifiers"]) == 1 and answer["option_identifiers"][0] in valid_titles:
+                    title = answer["option_identifiers"][0]
+                else:
+                    raise ValidationError("Data field @attendee_name_parts:title requires valid options")
+                return ('attendee_name_parts', {'title': title})
+            elif sys_df.startswith("@attendee_name_parts:"):
+                return ('attendee_name_parts', {sys_df[len("@attendee_name_parts:"):]: answer["answer"]})
+            else:
+                return (sys_df[1:], answer["answer"])
+        else:
+            return super().run_child_validation(answer)
 
     def to_internal_value(self, data):
         result = {}
-        if "answers" in data:
-            settings = self.context['event'].settings
-            result, user_answers = self.unexpand_system_answers(data['answers'], settings)
-            result["answers"] = super().to_internal_value(user_answers)
+        if 'answers' in data:
+            answers = super().to_internal_value(data['answers'])
+            for answer in answers:
+                if type(answer) is tuple:
+                    k, v = answer
+                    if k == 'attendee_name_parts':
+                        result.setdefault(k, {}).update(v)  # merge dicts
+                    else:
+                        result[k] = v
+                else:
+                    result.setdefault('answers', []).append(answer)
         return result
 
 
@@ -363,6 +373,9 @@ class AnswerSerializer(I18nAwareModelSerializer):
     datafield = SlugScopedRelatedField(slug_field='identifier', source='question', queryset=lambda event, **kw: event.positiondatafields, required=False)
     question_identifier = serializers.SlugRelatedField(slug_field='identifier', source='question', read_only=True)
     option_identifiers = AnswerQuestionOptionsIdentifierField(source='*', required=False)
+
+    ignore_extraneous_options_field = False
+    allow_empty = False
 
     def to_representation(self, instance):
         r = super().to_representation(instance)
@@ -387,6 +400,10 @@ class AnswerSerializer(I18nAwareModelSerializer):
         fields = ('datafield', 'answer', 'options', 'option_identifiers', 'question', 'question_identifier')
 
     def _handle_file_upload(self, data):
+        data['options'] = []
+        data.pop('option_identifiers', None)
+        if self.allow_empty and not data['answer']:
+            return data
         if data['answer'] == 'file:keep':
             return data
         try:
@@ -401,7 +418,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
                 pass
             elif cf.session_key != get_session_key_for_api_request(self.context["request"]):
                 raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data['answer']))
-        except (ValidationError, IndexError):  # invalid uuid
+        except (ValidationError, BaseValidationError, IndexError):  # invalid uuid
             raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data['answer']))
         except CachedFile.DoesNotExist:
             raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data['answer']))
@@ -414,9 +431,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
         if cf.file.size > settings.FILE_UPLOAD_MAX_SIZE_OTHER:
             raise ValidationError('The submitted file "{fid}" is too large to be used in this field.'.format(fid=data))
 
-        data['options'] = []
         data['answer'] = cf.file
-        data.pop('option_identifiers', None)
         return data
 
     def validate(self, data):
@@ -425,7 +440,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
         elif data.get('question').type == Question.TYPE_FILE:
             return self._handle_file_upload(data)
         elif data.get('question').type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
-            if not data.get('options') and not data.get("option_identifiers"):
+            if not data.get('options') and not data.get("option_identifiers") and not self.allow_empty:
                 raise ValidationError(
                     'You need to specify either options or option_identifiers if the data field is of a choice type.'
                 )
@@ -455,7 +470,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
                 del data['option_identifiers']
                 data['answer'] = ", ".join([str(o) for o in data['options']])
         else:
-            if data.get('options') or data.get('option_identifiers'):
+            if (data.get('options') or data.get('option_identifiers')) and not self.ignore_extraneous_options_field:
                 raise ValidationError(
                     'You should not specify options if the data field is not of a choice type.'
                 )
@@ -485,13 +500,27 @@ class AnswerSerializer(I18nAwareModelSerializer):
         return data
 
 
-class OrderAnswerSerializer(AnswerSerializer):
-    datafield = SlugScopedRelatedField(slug_field='identifier', source='question', queryset=lambda event, **kw: event.orderdatafields, required=False)
+class OptionalAnswerSerializer(AnswerSerializer):
+    answer = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    allow_empty = True
+
+
+class NewAnswerSerializer(AnswerSerializer):
     question = None
+    question_identifier = None
 
     class Meta:
         model = QuestionAnswer
         fields = ('datafield', 'answer', 'options', 'option_identifiers')
+
+
+class NewOptionalAnswerSerializer(AnswerSerializer):
+    answer = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    allow_empty = True
+
+
+class OrderAnswerSerializer(NewAnswerSerializer):
+    datafield = SlugScopedRelatedField(slug_field='identifier', source='question', queryset=lambda event, **kw: event.orderdatafields, required=False)
 
 
 class InlineCheckinSerializer(I18nAwareModelSerializer):
@@ -1032,9 +1061,9 @@ class OrderSerializer(I18nAwareModelSerializer):
     payment_provider = OrderPaymentTypeField(source='*', read_only=True)
     url = OrderURLField(source='*', read_only=True)
     customer = serializers.SlugRelatedField(slug_field='identifier', read_only=True)
-    sales_channel = serializers.SlugRelatedField(
+    sales_channel = SlugScopedRelatedField(
         slug_field='identifier',
-        queryset=SalesChannel.objects.none(),
+        queryset=lambda **context: context["organizer"].sales_channels.all() if "organizer" in context else context["event"].organizer.sales_channels.all(),
         required=False,
     )
     plugin_data = OrderPluginDataField(source='*', allow_null=True, read_only=True)
@@ -1058,10 +1087,6 @@ class OrderSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if "organizer" in self.context:
-            self.fields["sales_channel"].queryset = self.context["organizer"].sales_channels.all()
-        else:
-            self.fields["sales_channel"].queryset = self.context["event"].organizer.sales_channels.all()
         if not self.context['pdf_data']:
             self.fields['positions'].child.fields.pop('pdf_data', None)
 

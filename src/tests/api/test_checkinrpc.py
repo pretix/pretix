@@ -880,6 +880,11 @@ def test_addons_expand(token_client, organizer, clist, event, order, question, o
         p.answers.create(question=question.datafield, answer="3")
 
     resp = _redeem(token_client, organizer, clist, p.secret, {"answers": {question.datafield.pk: ""}}, query="?expand=addons&expand=item")
+
+    # TODO(questionnaires) ---  this test expects that if a question is required, a non-empty answer exists, and i explicitly send an empty answer,
+    # that the empty answer gets ignored and the non-empty one is kept and the checkin succeeds....
+    # however, we can't outright skip empty answers completely, as we need them in case of non-required questions
+
     assert resp.status_code == 201
     assert resp.data["status"] == "ok"
     assert resp.data["position"]["addons"][0]["item"]["id"] == other_item.pk

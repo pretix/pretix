@@ -32,13 +32,17 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
+from rest_framework.exceptions import ValidationError
+from rest_framework.settings import api_settings
+from rest_framework.utils import html
 
 from pretix.api.auth.utils import get_session_key_for_api_request
+
 
 
 def remove_duplicates_from_list(data):
@@ -204,5 +208,3 @@ class PrimaryKeyScopedRelatedField(ContextAwareQueryMixin, serializers.PrimaryKe
 
 class SlugScopedRelatedField(ContextAwareQueryMixin, serializers.SlugRelatedField):
     pass
-
-

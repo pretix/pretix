@@ -271,6 +271,7 @@ class OrderViewSetMixin:
                         Prefetch('meta_values', ItemVariationMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
                     )),
                     'answers', 'answers__options', 'answers__question',
+                    # TODO(questionnaires) - add prefetch_relevant_questionnaires (if needed - POS only?)
                     'item__category',
                     'addon_to__answers', 'addon_to__answers__options', 'addon_to__answers__question',
                     Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(

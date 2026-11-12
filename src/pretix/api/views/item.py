@@ -662,6 +662,7 @@ with scopes_disabled():
             else:
                 return qs.filter(~cond)
 
+
 class CompatQuestionViewSet(ConditionalListView, CompatListMixin, BaseDatafieldViewSet):
     container_type = Question.ContainerType.ORDERPOSITION
     serializer_class = CompatQuestionSerializer

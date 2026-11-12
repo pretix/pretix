@@ -24,8 +24,6 @@ from datetime import timedelta
 from functools import reduce
 
 import django_filters
-from django.conf import settings
-from django.core.exceptions import ValidationError as BaseValidationError
 from django.db import connection, transaction
 from django.db.models import (
     Count, Exists, F, Max, OrderBy, OuterRef, Prefetch, Q, Subquery,
@@ -50,15 +48,15 @@ from rest_framework.generics import ListAPIView
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
-from pretix.api.auth.utils import get_session_key_for_api_auth
+from pretix.api.compat import get_partial_validation_result
 from pretix.api.serializers.checkin import (
     CheckinListSerializer, CheckinRPCAnnulInputSerializer,
     CheckinRPCRedeemInputSerializer, MiniCheckinListSerializer,
 )
 from pretix.api.serializers.item import POSCompatQuestionSerializer
 from pretix.api.serializers.order import (
-    CheckinListOrderPositionSerializer, CheckinSerializer,
-    FailedCheckinSerializer, MixedAnswerListSerializer,
+    OptionalAnswerSerializer, CheckinListOrderPositionSerializer, CheckinSerializer,
+    FailedCheckinSerializer, MixedAnswerListSerializer, NewOptionalAnswerSerializer,
 )
 from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
@@ -77,7 +75,6 @@ from pretix.base.services.checkin import (
 from pretix.base.services.media import perform_media_exchange
 from pretix.base.signals import checkin_annulled
 from pretix.helpers import OF_SELF
-from pretix.presale.views import prefetch_relevant_questionnaires
 
 with scopes_disabled():
     class CheckinListFilter(FilterSet):
@@ -329,37 +326,6 @@ with scopes_disabled():
                 Q(valid_until__isnull=True) | Q(valid_until__gte=now()),
                 blocked__isnull=True,
             )
-
-
-def _handle_file_upload(data, user, auth):
-    if not data:
-        return None
-    try:
-        cf = CachedFile.objects.get(
-            file__isnull=False,
-            pk=data[len("file:"):],
-        )
-        if cf.session_key == "api-upload-<class 'django.contrib.auth.models.AnonymousUser'>-None":
-            # OK, backwards-compatibility of a security bug fixed 2026-09, delete this at some point, but should
-            # also be harmless because all files with this key are expired one day after deployment of this fix
-            # and no new files with this key are created
-            pass
-        elif cf.session_key != get_session_key_for_api_auth(user, auth):
-            raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
-    except (ValidationError, BaseValidationError, IndexError):  # invalid uuid
-        raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
-    except CachedFile.DoesNotExist:
-        raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
-
-    allowed_types = (
-        'image/png', 'image/jpeg', 'image/gif', 'application/pdf'
-    )
-    if cf.type not in allowed_types:
-        raise ValidationError('The submitted file "{fid}" has a file type that is not allowed in this field.'.format(fid=data))
-    if cf.file.size > settings.FILE_UPLOAD_MAX_SIZE_OTHER:
-        raise ValidationError('The submitted file "{fid}" is too large to be used in this field.'.format(fid=data))
-
-    return cf.file
 
 
 def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_products=False, pdf_data=False, expand=None):
@@ -801,43 +767,49 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
 
     # 5. Pre-validate all incoming answers, handle file upload, handle system answers
     given_answers = {}
+    given_system_answers = {}
     if answers_data:
-        allowed_system_datafields = set()
-        op.item._checkin_questions = _get_checkin_questions(op)
-        for qc in op.item._checkin_questions:
-            if qc.system_datafield:
-                allowed_system_datafields.add(qc.system_datafield)
-            if not qc.user_datafield_id:
-                continue
-            if str(qc.user_datafield_id) in answers_data:
-                ans = answers_data[str(qc.user_datafield_id)]
-            elif str(qc.cooked_id) in answers_data:
-                ans = answers_data[str(qc.cooked_id)]
-            else:
-                continue
-            try:
-                if qc.user_datafield.type == Question.TYPE_FILE:
-                    given_answers[qc.user_datafield] = _handle_file_upload(ans, user, auth)
+        checkin_questions = op.item._checkin_questions = _get_checkin_questions(op)
+        if type(answers_data) is dict:
+            # convert old dict format to new 'list of dicts' format
+
+            fields_with_options = {"@attendee_name_parts:salutation", "@attendee_name_parts:title"} | {qc.user_datafield_id for qc in checkin_questions if qc.datafield_type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE)}
+            new_answers_data = []
+            for k, v in answers_data.items():
+                v = str(v)
+                try:
+                    qid, dfid, sysdf = QuestionnaireRow.uncook_id(k)
+                except ValueError:
+                    continue
+                ident = {'datafield': sysdf} if sysdf else {'question': k}
+                if (dfid or sysdf) in fields_with_options:
+                    new_answers_data.append({**ident, 'answer': v, 'option_identifiers': v.split(',') if v else []})
+                    try:
+                        new_answers_data.append({**ident, 'answer': v, 'options': [int(id) for id in v.split(',')]})
+                    except ValueError:
+                        pass
                 else:
-                    given_answers[qc.user_datafield] = qc.clean_answer(ans)
-            except (ValidationError, BaseValidationError):
-                pass
-        def get_sys_df(cookedid):
-            try:
-                qid, dfid, sysdf = QuestionnaireRow.uncook_id(cookedid)
-                return sysdf if sysdf and sysdf.split(':')[0] in allowed_system_datafields else None
-            except (IndexError, ValueError):
-                return None
-        system_df_answers = [
-            {'datafield': get_sys_df(k), 'answer': v, 'option_identifiers': [v]}
-            for k, v in answers_data.items() if get_sys_df(k)
-        ]
-        if system_df_answers:
-            result, _user_answers = MixedAnswerListSerializer.unexpand_system_answers(system_df_answers, op.order.event.settings)
-            for k, v in result.items():
-                setattr(op, k, v)
-            if not simulate:
-                op.save(update_fields=result.keys())
+                    new_answers_data.append({**ident, 'answer': v})
+            answers_data = new_answers_data
+            child_serializer = OptionalAnswerSerializer()
+            child_serializer.ignore_extraneous_options_field = False
+        else:
+            child_serializer = NewOptionalAnswerSerializer()
+
+        allowed_datafields = {qc.system_datafield or qc.user_datafield_id for qc in checkin_questions if qc.system_datafield or qc.user_datafield_id}
+        answers_data, errors = get_partial_validation_result(
+            answers_data,
+            MixedAnswerListSerializer,
+            prepare_data=lambda d: {'answers': d},
+            context={'event': op.order.event, 'request': request, 'allowed_datafields': allowed_datafields},
+            child=child_serializer
+        )
+
+        given_answers = answers_data.pop('answers', [])
+        given_system_answers = answers_data
+        print("errors: ", errors)
+        print("answers_data: ", answers_data)
+        print("given_answers: ", given_answers)
 
     # 6. Pass to our actual check-in logic
     if use_order_locale:
@@ -857,6 +829,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 op=op,
                 clist=list_by_event[op.order.event_id],
                 given_answers=given_answers,
+                given_system_answers=given_system_answers,
                 force=force,
                 ignore_unpaid=ignore_unpaid,
                 nonce=nonce,

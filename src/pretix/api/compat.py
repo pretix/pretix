@@ -78,3 +78,22 @@ class MergeField(serializers.Field):
 
     def to_representation(self, value):
         return value
+
+
+def get_partial_validation_result(data, serializer_class, prepare_data=None, **serializer_kwargs):
+    errors = []
+    serializer = serializer_class(data=prepare_data(data) if prepare_data else data, **serializer_kwargs)
+    if not serializer.is_valid():
+        if isinstance(serializer.errors, list):
+            valid_inputs = []
+            for input, error in zip(data, serializer.errors):
+                if error:
+                    errors.append((input, error))
+                else:
+                    valid_inputs.append(input)
+            print(valid_inputs)
+            print('errors', errors)
+            serializer.initial_data = prepare_data(valid_inputs) if prepare_data else valid_inputs
+            del serializer._validated_data
+        serializer.is_valid(raise_exception=True)
+    return serializer.validated_data, errors

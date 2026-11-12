@@ -955,11 +955,11 @@ def _get_checkin_questions(op):
     )
 
 
-def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
+def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: list, force=False,
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
                     user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY,
                     raw_barcode=None, raw_source_type=None, from_revoked_secret=False, simulate=False,
-                    gate=None, reusable_medium=None):
+                    gate=None, reusable_medium=None, given_system_answers=None):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -977,6 +977,8 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     :param gate: The gate the check-in was performed at.
     :param reusable_medium: The medium that is available for an exchange
     """
+
+    assert isinstance(given_answers, list) or (isinstance(given_answers, dict) and not given_answers)  # given_answers must be list (or empty dict, for plugin compatibility)
 
     # !!!!!!!!!
     # Update doc/images/checkin_online.puml if you make substantial changes here!
@@ -1045,13 +1047,26 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         op.item._checkin_questions = _get_checkin_questions(op)
     require_answers = []
     if type != Checkin.TYPE_EXIT and op.item._checkin_questions:
+        answered_now = set()
+        if given_system_answers:
+            for k, v in given_system_answers.items():
+                answered_now.add(f'@{k}')
+                setattr(op, k, v)
+            if not simulate:
+                op.save(update_fields=given_system_answers.keys())
         qrenderer = QuestionnaireRenderer(qrows=[], system_answers=op.system_answers, answerlist=op.answers.all())
+        answered = dict(qrenderer.answer_cache)
+        for answ in given_answers:
+            answered[answ['question'].id] = answ.get('options') or answ['answer']
+            answered_now.add(answ['question'].id)
         for q in op.item._checkin_questions:
-            if q.user_datafield not in given_answers and q.user_datafield_id not in qrenderer.answer_cache and not qrenderer.answer_cache.get(q.system_datafield):
+            k = q.system_datafield or q.user_datafield_id
+            # require answers if: answer (stored or new) is empty, and the question is either required or wasn't answered right now
+            # this means: a required question needs a non-empty answer; a non-required questions needs either an non-empty answer, or needs to be answered (even empty) right now
+            if answered.get(k) in (None, [], False, '') and (q.required or k not in answered_now):
                 require_answers.append(q)
-
         if not simulate:
-            _save_answers(op, qrenderer.answer_cache, given_answers)
+            op.set_answers(given_answers, delete_missing=False)
 
     with conditional_atomic(not simulate):
         # Lock order positions, if it is an entry. We don't need it for exits, as a race condition wouldn't be problematic
@@ -1181,7 +1196,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     'forced': force or op.order.status != Order.STATUS_PAID,
                     'datetime': dt,
                     'type': type,
-                    'answers': {k.pk: str(v) for k, v in given_answers.items()},
+                    'answers': {str(answ['question'].id): answ.get('option_identifiers') or answ['answer'] for answ in given_answers},
                     'list': clist.pk
                 }, user=user, auth=auth)
                 checkin_created.send(op.order.event, checkin=ci)
