@@ -534,7 +534,7 @@ Endpoints
 
    :query page: The page number in case of a multi-page result set, default is 1
    :query type: Only return resources for types with the given ID
-   :query active: Only return resources which are active
+   :query active: Filter to active **or** inactive resources
    :query external_identifier: Only return resources with the given external_identifier
    :param organizer: The ``slug`` field of a valid organizer
    :statuscode 200: no error
