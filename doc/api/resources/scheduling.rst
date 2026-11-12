@@ -49,7 +49,6 @@ Field                                 Type                                   Des
 id                                    integer                                Internal ID in pretix
 type                                  integer                                Internal ID for resource type in pretix (read-only after creation)
 property_values                       list of {id, property, value} objects  Property values assigned to the resource.  When writing there are 3 shorthands which can be used: ``{"property": 2, "value": "My value"}``, ``{"id": 2, "property": 2}``, and ``{"id": 2}``.
-
 name                                  string                                 Resource name
 locale                                string                                 The locale used for communication with this resource
 active                                boolean                                Deleted resources will have this set to false
