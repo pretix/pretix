@@ -33,12 +33,12 @@ from pretix.control.signals import item_forms
 from pretix.plugins.wallet.platforms.google.platform import get_object_id
 
 from .forms import WalletLayoutItemForm
-from .models import WalletLayout, WalletLayoutItem
+from pretix.base.models.wallet import WalletLayout, WalletLayoutItem
 from .ticketoutput import WalletSettingsHolder
-from .platforms import wallet_platform_registry
+from ...base.wallet.platforms import wallet_platform_registry
 from .tasks import disable_wallet_instance, send_update_apns
 from .models import AppleWalletPass, CombinedAppleWalletPass
-from .tasks import get_pass
+from pretix.base.wallet.tasks import get_pass
 from .models import GoogleWalletInstance
 
 from django.utils.translation import gettext as _

@@ -2,30 +2,30 @@ import json
 import logging
 from typing import Any
 
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, File
 from django.utils.translation import gettext as _
 from django.db import transaction
 
 from pretix.base.models import OrderPosition
 from pretix.helpers import OF_SELF
 from pretix.multidomain.urlreverse import eventreverse_absolute
-from pretix.plugins.wallet.i18n import (
+from pretix.helpers.i18n import (
     FormattingLocalizableString,
     GettextLocalizableString,
 )
-from ...models import AppleWalletPass
-from ..base import (
+from pretix.plugins.wallet.models import AppleWalletPass
+from pretix.base.wallet.platforms.base import (
     FieldGroup,
     FieldGroupDisplay,
     PassStyle,
     PlaceholderFieldEntry,
     TextFieldGroup,
-    pass_style_registry,
 )
-from ..settings import ImageSettingsField
+from pretix.base.wallet.platforms import pass_style_registry
+from pretix.base.wallet.platforms.settings import ImageSettingsField
 
-from ..settings import ColorSettingsField, FloatSettingsField, convert_to_png
-from .platform import ApplePlatform, SignedZipFile, StringResource
+from pretix.base.wallet.platforms.settings import ColorSettingsField, FloatSettingsField, convert_to_png
+from pretix.plugins.wallet.platforms.apple.platform import ApplePlatform, SignedZipFile, StringResource
 
 logger = logging.getLogger("pretix.plugins.wallet.apple")
 
@@ -40,14 +40,14 @@ class AppleWalletStyle(PassStyle):
                 identifier="logo",
                 label=_("Logo"),
                 help_text=_("Will be displayed on the top left corner of the pass"),
-                default=self.event.settings.logo_image
-                or "pretixplugins/wallet/logo.png",
+                default=self.event.settings.get('logo_image', as_type=File, binary_file=True)
+                or "pretixbase/img/pretix-logo.png",
             ),
             ImageSettingsField(
                 identifier="icon",
                 label=_("Icon"),
                 help_text=_("Will be displayed as the file icon"),
-                default="pretixplugins/wallet/icon.png",
+                default="pretixbase/img/pretix-icon.png",
             ),
             ImageSettingsField(identifier="background", label=_("Background Image")),
             ColorSettingsField(

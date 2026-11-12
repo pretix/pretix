@@ -25,6 +25,7 @@ from django.utils.translation import gettext as _
 
 from pretix.base.ticketoutput import BaseTicketOutput
 
+
 class WalletSettingsHolder(BaseTicketOutput):
     """
     Mock ticket output provider for control settings
@@ -39,5 +40,5 @@ class WalletSettingsHolder(BaseTicketOutput):
 
     def settings_content_render(self, request) -> str:
         return render_to_string(
-            "pretixplugins/wallet/settings_content.html", {"request": request}
+            "pretixcontrol/wallet/settings_content.html", {"request": request}
         )

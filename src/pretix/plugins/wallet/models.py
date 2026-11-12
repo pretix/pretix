@@ -20,101 +20,11 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Q, constraints
 from django.utils.crypto import salted_hmac, get_random_string, constant_time_compare
-from django.utils.translation import gettext_lazy as _
-from django_scopes import ScopedManager
 
-from pretix.base.models import LoggedModel, OrderPosition
+from pretix.base.models import OrderPosition
 from pretix.base.models.orders import Order
-
-
-class WalletLayout(LoggedModel):
-    event = models.ForeignKey(
-        "pretixbase.Event", on_delete=models.CASCADE, related_name="wallet_layouts"
-    )
-    name = models.CharField(max_length=190, verbose_name=_("Name"))
-    default = models.BooleanField(
-        verbose_name=_("Default"),
-        default=False,
-    )
-
-    objects = ScopedManager(organizer="event__organizer")
-
-    class Meta:
-        constraints = [
-            constraints.UniqueConstraint(
-                "event", condition=Q(default=True), name="one_default_wallet_per_event"
-            )
-        ]
-        ordering = (
-            "-default",
-            "name",
-        )
-
-    def __str__(self):
-        return self.name
-
-    def allow_delete(self):
-        return not self.default
-
-
-class WalletPlatformLayout(LoggedModel):
-    parent = models.ForeignKey(
-        WalletLayout, on_delete=models.CASCADE, related_name="platform_layouts"
-    )
-
-    platform = models.CharField(max_length=10)
-    style = models.CharField(max_length=255)
-    layout = models.JSONField(default=dict)
-
-    objects = ScopedManager(organizer="parent__event__organizer")
-
-    class Meta:
-        unique_together = (("parent", "platform"),)
-
-    @property
-    def pass_layout(self):
-        from .platforms import pass_style_registry
-
-        style, _meta = pass_style_registry.get(active_in=self.parent.event, identifier=(self.platform, self.style))
-        if style:
-            file_settings = {fs.key: fs.file for fs in self.file_settings.all()}
-            return style(
-                event=self.parent.event, layout=self.layout, file_settings=file_settings
-            )
-        else:
-            raise ValueError(f"Style {self.platform}.{self.style} not found")
-
-
-class WalletLayoutItem(models.Model):
-    item = models.OneToOneField(
-        "pretixbase.Item",
-        null=True,
-        blank=True,
-        related_name="walletlayout",
-        on_delete=models.CASCADE,
-    )
-    layout = models.ForeignKey(
-        WalletLayout,
-        null=True,
-        on_delete=models.CASCADE,
-        related_name="item_assignments",
-    )
-
-    def clean(self):
-        if self.layout and self.item.event != self.layout.event:
-            raise ValidationError("cannot bind layout to item of different event")
-
-
-class WalletLayoutFileSetting(models.Model):
-    layout = models.ForeignKey(
-        WalletPlatformLayout, on_delete=models.CASCADE, related_name="file_settings"
-    )
-    key = models.CharField()
-    file = models.FileField()
 
 
 class AppleWalletDevice(models.Model):

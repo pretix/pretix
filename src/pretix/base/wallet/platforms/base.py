@@ -12,10 +12,10 @@ from pretix.base.models import OrderPosition
 from pretix.base.models.orders import Order
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import PluginAwareRegistry, is_app_active
-from pretix.plugins.wallet.models import WalletLayout, WalletPlatformLayout
+from pretix.base.models.wallet import WalletLayout, WalletPlatformLayout
 
-from ..i18n import MaybeTranslatedString, localizable_to_dict
-from ..placeholders import (
+from pretix.helpers.i18n import MaybeTranslatedString, localizable_to_dict
+from pretix.base.wallet.placeholders import (
     WalletPlaceholderRenderer,
     get_available_context,
     get_wallet_placeholder_renderer,
@@ -723,7 +723,3 @@ class PassStyleRegistry(PluginAwareClassRegistry[PassStyle]):
                 "platform": lambda o: o.platform.identifier,
             }
         )
-
-
-wallet_platform_registry = WalletPlatformRegistry()
-pass_style_registry = PassStyleRegistry()

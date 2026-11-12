@@ -43,21 +43,21 @@ class WalletApp(AppConfig):
         from .platforms import apple  # NOQA
         from .platforms import google  # NOQA
 
-    def installed(self, event):
-        from pretix.plugins.wallet.platforms import wallet_platform_registry, pass_style_registry
+    # def installed(self, event):
+    #     from pretix.base.wallet.platforms import wallet_platform_registry, pass_style_registry
 
-        wallet_layout, created = event.wallet_layouts.get_or_create(
-            default=True,
-            defaults={
-                'name': _('Default layout'),
-            }
-        )
-        if created:
-            for platform, _meta in wallet_platform_registry.filter(active_in=event):
-                if not platform.default_style:
-                    continue
-                style, _meta = pass_style_registry.get(active_in=event, platform=platform.identifier, identifier=platform.default_style)
-                if not style:
-                    continue
-                layout = style(event).default_layout
-                wallet_layout.platform_layouts.get_or_create(platform=platform.identifier, defaults={"style": style.identifier, "layout": layout})
+    #     wallet_layout, created = event.wallet_layouts.get_or_create(
+    #         default=True,
+    #         defaults={
+    #             'name': _('Default layout'),
+    #         }
+    #     )
+    #     if created:
+    #         for platform, _meta in wallet_platform_registry.filter(active_in=event):
+    #             if not platform.default_style:
+    #                 continue
+    #             style, _meta = pass_style_registry.get(active_in=event, identifier=(platform.identifier, platform.default_style))
+    #             if not style:
+    #                 continue
+    #             layout = style(event).default_layout
+    #             wallet_layout.platform_layouts.get_or_create(platform=platform.identifier, defaults={"style": style.identifier, "layout": layout})

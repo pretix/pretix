@@ -24,7 +24,7 @@ from django.urls import re_path
 from pretix.api.urls import event_router
 from pretix.plugins.wallet.views.google import CallbackView
 
-from .api import WalletLayoutViewSet
+from pretix.control.views.wallet import WalletLayoutViewSet
 from .views.apple import (
     DeviceGetUpdatablePassesView,
     DeviceRegistrationView,
@@ -33,7 +33,7 @@ from .views.apple import (
     DownloadPassView,
     DownloadCombinedPassView
 )
-from .views.control import (
+from pretix.control.views.wallet import (
     LayoutCreateView,
     LayoutDelete,
     LayoutEditorView,
@@ -42,7 +42,7 @@ from .views.control import (
     LayoutSetDefault,
     WalletGetView
 )
-from .views.presale import PresaleWalletGetPass, PresaleWalletGetPassPosition
+from ...presale.views.wallet import PresaleWalletGetPass, PresaleWalletGetPassPosition
 
 urlpatterns = [
     re_path(

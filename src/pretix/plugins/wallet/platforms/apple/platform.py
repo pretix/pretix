@@ -15,13 +15,13 @@ from django.utils.translation import gettext as _
 
 from pretix.base.models.orders import Order
 from pretix.multidomain.urlreverse import eventreverse_absolute
-from pretix.plugins.wallet.i18n import (
+from pretix.helpers.i18n import (
     MaybeTranslatedString,
 )
-from ..base import (
+from pretix.base.wallet.platforms import (
     WalletPlatform, wallet_platform_registry
 )
-from ...models import CombinedAppleWalletPass
+from pretix.plugins.wallet.models import CombinedAppleWalletPass
 
 from django.core.files.base import ContentFile
 from django import forms
@@ -30,7 +30,7 @@ from django.utils.functional import classproperty
 from pretix.base.forms import SecretKeySettingsField
 from pretix.control.forms import ClearableBasenameFileInput
 
-from ...forms import CertificateFileField, validate_rsa_privkey
+from pretix.plugins.wallet.forms import CertificateFileField, validate_rsa_privkey
 
 logger = logging.getLogger("pretix.plugins.wallet.apple")
 

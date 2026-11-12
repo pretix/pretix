@@ -1,19 +1,21 @@
 from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.dispatch import receiver
-from django.templatetags.static import static
 
 from pretix.base.models.event import Event
 from pretix.base.templatetags.money import money_filter
 from pretix.multidomain.urlreverse import eventreverse_absolute
-from pretix.plugins.wallet.i18n import (
-    FormattingLocalizableString, GettextLocalizableString, LocalizableDatetime,
+from pretix.helpers.i18n import (
+    FormattingLocalizableString,
+    GettextLocalizableString,
+    LocalizableDatetime,
 )
 
-from ..signals import register_wallet_placeholders
+from pretix.base.signals import register_wallet_placeholders
 from .base import (
-    BaseWalletPlaceholder, FunctionalContextTransformation,
-    FunctionalWalletImagePlaceholder, FunctionalWalletTextPlaceholder,
+    BaseWalletPlaceholder,
+    FunctionalContextTransformation,
+    FunctionalWalletTextPlaceholder,
     WalletPlaceholderRenderer,
 )
 
@@ -295,20 +297,4 @@ def base_text_placeholders(sender: Event, **kwargs):
             {"order_position", "order"},
             website,
         ),
-        # IMAGES
-        FunctionalWalletImagePlaceholder(
-            "poweredby_logo",
-            GettextLocalizableString.gettext("Logo"),
-            set(),
-            lambda: get_static_file("pretixplugins/wallet/logo.png"),
-            static("pretixplugins/wallet/logo.png"),
-        ),
-        FunctionalWalletImagePlaceholder(
-            "poweredby_icon",
-            GettextLocalizableString.gettext("Icon"),
-            set(),
-            lambda: get_static_file("pretixplugins/wallet/icon.png"),
-            static("pretixplugins/wallet/icon.png"),
-        ),
-        # TODO: Image upload
     ]

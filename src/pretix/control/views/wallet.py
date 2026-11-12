@@ -1,9 +1,10 @@
 import json
+import os
 from typing import Any
 
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import BadRequest
+from django.core.exceptions import BadRequest, ValidationError
 from django.db import transaction
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -17,27 +18,153 @@ from django.views.generic import (
     ListView,
     View,
 )
-from pretix.base.models.orders import OrderPosition
-from pretix.base.services import tickets
-from pretix.base.views.tasks import AsyncAction
-from pretix.control.views.orders import OrderView
-from pretix.plugins.wallet.forms import WalletLayoutCreateForm
-from pretix.plugins.wallet.tasks import get_pass
+from rest_framework import serializers, viewsets
 
+from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.i18n import language
 from pretix.base.middleware import add_to_response_csp
+from pretix.base.models.orders import OrderPosition
+from pretix.base.models.wallet import WalletLayout, WalletPlatformLayout
+from pretix.base.services import tickets
 from pretix.base.services.tickets import get_preview_position
-from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.helpers.database import rolledback_transaction
-from pretix.helpers.models import modelclone
-from pretix.plugins.wallet.i18n import localizable_to_dict
-
-from ..models import WalletLayout
-from ..placeholders import (
+from pretix.base.views.tasks import AsyncAction
+from pretix.base.wallet.placeholders import (
     get_wallet_placeholder_renderer,
     get_wallet_placeholders,
 )
-from ..platforms import get_available_platforms, get_platform, pass_style_registry
+from pretix.base.wallet.platforms import (
+    get_available_platforms,
+    get_platform,
+    pass_style_registry,
+    wallet_platform_registry,
+)
+from pretix.base.wallet.tasks import get_pass
+from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views.orders import OrderView
+from pretix.helpers.database import rolledback_transaction
+from pretix.helpers.i18n import localizable_to_dict
+from pretix.helpers.models import modelclone
+from pretix.plugins.wallet.forms import WalletLayoutCreateForm
+
+
+class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
+    platform = serializers.ChoiceField(choices=[])
+    style = serializers.CharField(allow_null=True, required=False)
+    file_settings = serializers.JSONField(default=dict, required=False)
+
+    class Meta:
+        model = WalletPlatformLayout
+        fields = ("platform", "style", "layout", "file_settings")
+
+    def get_fields(self):
+        fields = super().get_fields()
+        fields["platform"].choices = [
+            p.identifier
+            for p, _ in wallet_platform_registry.filter(active_in=self.context["event"])
+        ]
+        return fields
+
+    def validate_layout(self, value):
+        if not isinstance(value, dict):
+            raise ValidationError(_("Layout must be a dict"))
+        return value
+
+    def validate(self, data):
+        platform = data.get("platform")
+        style = data.get("style")
+        layout = data.get("layout")
+        if platform and style and layout:
+            style, _meta = pass_style_registry.get(
+                active_in=self.context["event"], identifier=(platform, style)
+            )
+            if not style:
+                raise ValidationError({"style": _("Invalid style")})
+
+            obj = style(event=self.context["event"], layout=data["layout"])
+            obj.validate()
+            data["file_settings"] = obj.extract_file_settings(
+                self.context["request"], data.get("file_settings", {})
+            )
+
+        return data
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret["file_settings"] = {}
+        for file_setting in instance.file_settings.all():
+            try:
+                url = file_setting.file.url
+            except AttributeError:
+                continue
+            request = self.context["request"]
+            ret["file_settings"][file_setting.key] = {
+                "url": request.build_absolute_uri(url),
+                "name": os.path.basename(file_setting.file.name).split(".", 1)[-1],
+            }
+        return ret
+
+
+class WalletLayoutSerializer(I18nAwareModelSerializer):
+    platform_layouts = WalletPlatformLayoutSerializer(many=True)
+
+    class Meta:
+        model = WalletLayout
+        fields = ("id", "name", "platform_layouts")
+        read_only_fields = ("id",)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs, event=self.context["event"])
+
+    def update(self, instance, validated_data):
+        platform_layouts = validated_data.pop("platform_layouts")
+        for layout in platform_layouts:
+            if layout["style"]:
+                file_settings = layout.pop("file_settings", {})
+                obj, _ = instance.platform_layouts.update_or_create(
+                    platform=layout["platform"], defaults=layout
+                )
+                obj.file_settings.exclude(key__in=file_settings.keys()).delete()
+                for key, file in file_settings.items():
+                    if file != "keep":
+                        file_setting, _ = obj.file_settings.get_or_create(key=key)
+                        file_setting.file.save(os.path.basename(file.name), file)
+
+        instance.platform_layouts.exclude(
+            platform__in={
+                layout["platform"]
+                for layout in platform_layouts
+                if layout["style"] is not None
+            }
+        ).delete()
+        return super().update(instance, validated_data)
+
+
+class WalletLayoutViewSet(viewsets.ModelViewSet):
+    model = WalletLayout
+    queryset = WalletLayout.objects.none()
+    serializer_class = WalletLayoutSerializer
+    permission = "event.settings.general:write"
+
+    def get_queryset(self):
+        return self.request.event.wallet_layouts.all()
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx["event"] = self.request.event
+        return ctx
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        serializer.instance.log_action(
+            action="pretix.plugins.wallet.layout.changed",
+            user=self.request.user,
+            auth=self.request.auth,
+            data=serializer.to_representation(serializer.instance),
+        )
+        tickets.invalidate_cache.apply_async(
+            kwargs={"event": self.request.event.pk, "provider": "wallet"}
+        )
 
 
 def get_editor_placeholders(event):
@@ -72,7 +199,7 @@ class WalletLayoutMixin:
 
 
 class LayoutListView(WalletLayoutMixin, EventPermissionRequiredMixin, ListView):
-    template_name = "pretixplugins/wallet/layout_list.html"
+    template_name = "pretixcontrol/wallet/layout_list.html"
 
 
 class LayoutDetailView(WalletLayoutMixin, EventPermissionRequiredMixin, DetailView):
@@ -80,7 +207,7 @@ class LayoutDetailView(WalletLayoutMixin, EventPermissionRequiredMixin, DetailVi
 
 
 class LayoutEditorView(LayoutDetailView):
-    template_name = "pretixplugins/wallet/edit.html"
+    template_name = "pretixcontrol/wallet/edit.html"
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -120,7 +247,7 @@ class LayoutEditorView(LayoutDetailView):
 
 
 class LayoutCreateView(WalletLayoutMixin, EventPermissionRequiredMixin, CreateView):
-    template_name = "pretixplugins/wallet/create.html"
+    template_name = "pretixcontrol/wallet/create.html"
     form_class = WalletLayoutCreateForm
     permission = "event.settings.general:write"
 
@@ -129,11 +256,24 @@ class LayoutCreateView(WalletLayoutMixin, EventPermissionRequiredMixin, CreateVi
         self.object.log_action(
             action="pretix.plugins.wallet.layout.created",
             user=self.request.user,
-            data={**form.cleaned_data, "copy_from": self.copy_from.pk},
+            data={
+                **form.cleaned_data,
+                "copy_from": self.copy_from.pk if self.copy_from else None,
+            },
         )
         if self.copy_from:
             for pl in self.copy_from.platform_layouts.all():
                 modelclone(pl, parent=self.object).save()
+        else:
+            for platform, _meta in wallet_platform_registry.filter(active_in=self.request.event):
+                if not platform.default_style:
+                    continue
+                style, _meta = pass_style_registry.get(active_in=self.request.event, identifier=(platform.identifier, platform.default_style))
+                if not style:
+                    continue
+                layout = style(self.request.event).default_layout
+                self.object.platform_layouts.get_or_create(platform=platform.identifier, defaults={"style": style.identifier, "layout": layout})
+
         return HttpResponseRedirect(self.get_success_url())
 
     def get_form_kwargs(self) -> dict[str, Any]:
@@ -269,7 +409,7 @@ class LayoutSetDefault(LayoutDetailView):
 
 
 class LayoutDelete(WalletLayoutMixin, DeleteView):
-    template_name = "pretixplugins/wallet/delete.html"
+    template_name = "pretixcontrol/wallet/delete.html"
 
     def get_success_url(self) -> str:
         return reverse(

@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { dateTimeFormat } from "../../helpers";
+import { dateTimeFormat } from "/src/pretix/static/pretixcontrol/wallet/helpers";
 import { i18nstring_localize } from "/src/pretix/static/pretixbase/js/i18nstring.ts";
+import type { PreviewProps } from "src/pretix/static/pretixcontrol/wallet/index.d.ts";
 
-const props = defineProps<{
-	data: any;
-	fieldgroups: Record<string, FieldGroupConfig>;
-	fieldgroup_contents: Record<
-		string,
-		{ label?: LocalizableString; content: LocalizableString }
-	>;
-	settings: Record<string, SettingValue>;
-}>();
+const props = defineProps<PreviewProps>();
 
 function isActive(fieldgroup: string) {
 	return props.fieldgroups[fieldgroup]?.active;

@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import { computed, inject } from "vue";
-import { StoreKey } from "../../walletStore";
+import { computed } from "vue";
+import type { PreviewProps } from "src/pretix/static/pretixcontrol/wallet/index.d.ts";
+
 import FieldGroupEntries from "./FieldGroupEntries.vue";
-const store = inject(StoreKey)!;
-const props = defineProps<{ data: any }>();
+
+const props = defineProps<PreviewProps>();
 
 const theme = computed(() => {
 	const theme = {
-		bg_color: store.getSettingValue("bg_color"),
-		fg_color: store.getSettingValue("fg_color"),
-		label_color: store.getSettingValue("label_color"),
+		bg_color: props.settings["bg_color"],
+		fg_color: props.settings["fg_color"],
+		label_color: props.settings["label_color"],
 		bg_image: null,
 	};
-	const bg_image = store.getSettingValue("background");
+	const bg_image = props.settings["background"];
 	if (bg_image?.url) {
-		theme.bg_image = `url(${encodeURI(store.getSettingValue("background").url)})`;
+		theme.bg_image = `url(${encodeURI(props.settings["background"].url)})`;
 		theme.bg_color = "#000";
 		theme.fg_color = '#fff'
 	}
@@ -27,19 +28,19 @@ const theme = computed(() => {
         .pass-container.blur-bg.apple-pass-front
             .pass-inner.f-column
                 .f-row.head-row
-                    img.logo(:src="store.getSettingValue('logo')?.url")
-                    div.logo-text {{ store.renderedFieldGroups['logo_text']?.[0]?.content }}
-                    FieldGroupEntries.header.f-row(fieldgroup="header")
+                    img.logo(:src="settings['logo']?.url")
+                    div.logo-text {{ fieldgroup_contents['logo_text']?.[0]?.content }}
+                    FieldGroupEntries.header.f-row(fieldgroup="header" :fieldgroup_contents="fieldgroup_contents")
 
                 .f-column
-                    FieldGroupEntries.primary(fieldgroup="primary")
-                    FieldGroupEntries.f-row(fieldgroup="secondary")
-                    FieldGroupEntries.f-row(fieldgroup="auxiliary")
+                    FieldGroupEntries.primary(fieldgroup="primary" :fieldgroup_contents="fieldgroup_contents")
+                    FieldGroupEntries.f-row(fieldgroup="secondary" :fieldgroup_contents="fieldgroup_contents")
+                    FieldGroupEntries.f-row(fieldgroup="auxiliary" :fieldgroup_contents="fieldgroup_contents")
 
-                .qrcode-inner(v-for="qrcode in store.renderedFieldGroups['code']") {{ qrcode.label }}
+                .qrcode-inner(v-for="qrcode in fieldgroup_contents['code']") {{ qrcode.label }}
 
         .pass-container.apple-pass-back
-            FieldGroupEntries.pass-inner.f-column(fieldgroup="back")
+            FieldGroupEntries.pass-inner.f-column(fieldgroup="back" :fieldgroup_contents="fieldgroup_contents")
 
 </template>
 

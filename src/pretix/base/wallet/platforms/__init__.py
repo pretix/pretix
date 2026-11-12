@@ -4,9 +4,12 @@ from pretix.base.models import Event
 from .base import (
     PassStyle,
     WalletPlatform,
-    wallet_platform_registry,
-    pass_style_registry,
+    WalletPlatformRegistry,
+    PassStyleRegistry,
 )
+
+wallet_platform_registry = WalletPlatformRegistry()
+pass_style_registry = PassStyleRegistry()
 
 
 def get_available_platforms(
@@ -18,7 +21,9 @@ def get_available_platforms(
             yield platform
 
 
-def get_platform(event: Event, platform: str, show_disabled: bool) -> WalletPlatform | None:
+def get_platform(
+    event: Event, platform: str, show_disabled: bool
+) -> WalletPlatform | None:
     for p in get_available_platforms(event, show_disabled):
         if p.identifier == platform:
             return p

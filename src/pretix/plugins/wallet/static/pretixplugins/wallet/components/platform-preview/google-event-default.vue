@@ -1,21 +1,20 @@
 <script setup lang="ts">
-import { inject } from "vue";
-import { StoreKey } from "../../walletStore";
-import { dateTimeFormat } from "../../helpers";
+import { dateTimeFormat } from "/src/pretix/static/pretixcontrol/wallet/helpers";
 import Google from "./google.vue";
 import { i18nstring_localize } from "/src/pretix/static/pretixbase/js/i18nstring.ts";
-const store = inject(StoreKey)!;
+import type { PreviewProps } from "src/pretix/static/pretixcontrol/wallet/index.d.ts";
+
 const gettext = (window as any).gettext;
 
-const props = defineProps<{ data: any }>();
+const props = defineProps<PreviewProps>();
 
 function isActive(fieldgroup: string) {
-	return store.layout.fieldgroups[fieldgroup]?.active;
+	return props.fieldgroups[fieldgroup]?.active;
 }
 </script>
 
 <template lang="pug">
-    Google(:data="data")
+    Google(v-bind="props")
         template(#card-rows)
             div.card-row(v-if="isActive('date')")
                 div

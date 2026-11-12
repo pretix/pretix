@@ -4,22 +4,37 @@ from django.utils.translation import gettext as _
 
 from pretix.base.models import OrderPosition
 from pretix.multidomain.urlreverse import eventreverse_absolute
-from pretix.plugins.wallet.i18n import (
-    FormattingLocalizableString, GettextLocalizableString, LazyLocalizable,
+from pretix.helpers.i18n import (
+    FormattingLocalizableString,
+    GettextLocalizableString,
+    LazyLocalizable,
 )
 
-from ..base import (
-    FieldGroup, FieldGroupDisplay, PassStyle, PlaceholderFieldEntry,
-    PredefinedFieldGroup, TextFieldGroup, pass_style_registry
+
+from pretix.base.wallet.platforms.base import (
+    FieldGroup,
+    FieldGroupDisplay,
+    PassStyle,
+    PlaceholderFieldEntry,
+    PredefinedFieldGroup,
+    TextFieldGroup,
 )
+
+from pretix.base.wallet.platforms import pass_style_registry
 
 from .google_wallet import (
-    AnimationType, ConfirmationCodeLabel, DoorsOpenLabel, EventTicketClass, EventTicketObject,
+    AnimationType,
+    ConfirmationCodeLabel,
+    DoorsOpenLabel,
+    EventTicketClass,
+    EventTicketObject,
     State,
 )
 
-from ..settings import (
-    BooleanSettingsField, ColorSettingsField, FloatSettingsField,
+from pretix.base.wallet.platforms.settings import (
+    BooleanSettingsField,
+    ColorSettingsField,
+    FloatSettingsField,
     ImageSettingsField,
 )
 from .platform import GooglePlatform, get_class_id, get_object_id
@@ -43,7 +58,7 @@ class GoogleWalletEventTicketStyle(PassStyle):
                 identifier="logo",
                 label=_("Logo"),
                 default=self.event.settings.logo_image
-                or "pretixplugins/wallet/logo.png",
+                or "pretixbase/img/pretix-logo.png",
             ),
             # TODO: wide logo
             ImageSettingsField(
@@ -203,7 +218,7 @@ class GoogleWalletEventTicketStyle(PassStyle):
             State.ACTIVE,
             self.event.settings.locales,
             self.event.settings.locale,
-            order_position=op
+            order_position=op,
         )
         fields = self.get_pass_fields(op)
 

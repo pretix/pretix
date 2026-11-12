@@ -1233,6 +1233,14 @@ Both the original and updated versions of the Device are included to allow
 receivers to see what has been updated.
 """
 
+register_wallet_placeholders = EventPluginSignal()
+"""
+This signal is sent out to get all known wallet placeholders. Receivers should return
+an list of subclasses of pretix.base.wallet.placeholders.BaseWalletPlaceholder.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 invalidate_ticket_cache = EventPluginSignal()
 """
 Arguments: ``item: int | None``, ``provider: str | None``, ``order: int | None``

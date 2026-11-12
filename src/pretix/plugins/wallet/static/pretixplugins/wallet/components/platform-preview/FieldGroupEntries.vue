@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { computed, inject, reactive, watchEffect } from "vue";
-import { StoreKey } from "../../walletStore";
-
-const store = inject(StoreKey)!;
 
 const props = defineProps<{
 	fieldgroup: string;
+    fieldgroup_contents: Record<string, any>;
 }>();
 
 
@@ -19,7 +17,7 @@ function focusGroup() {
 
 <template lang="pug">
     div(@click="focusGroup")
-        div(v-for="entry in store.renderedFieldGroups[fieldgroup]")
+        div(v-for="entry in fieldgroup_contents[fieldgroup]")
             div.pass-label {{ entry.label }}
             div.pass-content {{ entry.content }}
 </template>

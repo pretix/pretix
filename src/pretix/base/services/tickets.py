@@ -44,6 +44,7 @@ from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import (
     invalidate_ticket_cache, register_ticket_outputs,
 )
+from pretix.base.wallet.platforms import get_available_platforms
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
 
@@ -283,7 +284,6 @@ def get_download_buttons(event, show_disabled):
 
 
 def get_wallet_buttons(event: Event, positions: list[OrderPosition], show_disabled: bool):
-    from pretix.plugins.wallet.platforms import get_available_platforms
     platforms = list(get_available_platforms(event, show_disabled))
 
     buttons: dict[str | OrderPosition, list] = {"combined": []}

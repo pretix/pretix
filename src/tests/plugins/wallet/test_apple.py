@@ -384,6 +384,7 @@ def test_generate_pass_background_image_hack(apple_env, order):
     op = order.positions.first()
 
     c = CachedFile.objects.create(type="image/png", filename="test.png")
+    # TODO(wallet): update static path
     c.file.save("test.png", ContentFile(open(finders.find("pretixplugins/wallet/icon.png"), "rb").read()))
     pass_strings, pass_data = generate_and_get_pass(event, op, BASIC_SAMPLE_LAYOUT, file_settings={"background": c.file}, expected_files=["background.png"])
 

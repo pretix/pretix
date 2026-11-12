@@ -1,5 +1,4 @@
-from pretix.base.models import Event, Order, OrderPosition
-from pretix.base.services.tasks import ProfiledTask
+from pretix.base.models import Event
 from pretix.celery_app import app
 import ssl
 import httpx
@@ -7,7 +6,6 @@ import tempfile
 from django.utils.timezone import now
 from django.db.models import OuterRef, Exists
 
-from pretix.plugins.wallet.platforms import get_platform
 from pretix.plugins.wallet.platforms.google.google_wallet import Resource, State
 from pretix.plugins.wallet.platforms.google.platform import GooglePlatform
 from .models import AppleWalletPass, AppleWalletDevice, GoogleWalletInstance
@@ -72,24 +70,6 @@ def send_update_apns():
                 f"https://api.push.apple.com/3/device/{device.push_token}", json={}
             )
             device.save()
-
-
-@app.task(base=ProfiledTask)
-def get_pass(model: str, pk: int, platform_identifier: str, show_disabled: bool):
-    if model == "order":
-        order = Order.objects.select_related("event").get(id=pk)
-        platform = get_platform(order.event, platform_identifier, show_disabled)
-        if not platform:
-            return
-        return platform.generate_order(order)
-    elif model == "orderposition":
-        position = OrderPosition.objects.select_related("order", "order__event").get(
-            id=pk
-        )
-        platform = get_platform(position.order.event, platform_identifier, show_disabled)
-        if not platform:
-            return
-        return platform.generate(position)
 
 
 @app.task()

@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 
 from pretix.control.forms import ClearableBasenameFileInput
 
-from .models import WalletLayout, WalletLayoutItem
+from pretix.base.models.wallet import WalletLayout, WalletLayoutItem
 
 logger = logging.getLogger(__name__)
 

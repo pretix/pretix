@@ -16,8 +16,8 @@ from pretix.presale.views import EventViewMixin
 from pretix.presale.views.order import (
     OrderDetailMixin, OrderPositionDetailMixin,
 )
-from pretix.plugins.wallet.platforms import get_platform
-from pretix.plugins.wallet.tasks import get_pass
+from pretix.base.wallet.platforms import get_platform
+from pretix.base.wallet.tasks import get_pass
 
 
 class OrderDownloadMixin:

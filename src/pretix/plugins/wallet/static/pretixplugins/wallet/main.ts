@@ -1,30 +1,7 @@
-import { createApp } from "vue";
-import App from "./components/app.vue";
-import { createWalletStore, StoreKey } from "./walletStore";
-const mountEl = document.querySelector<HTMLElement>("#editor")!;
-const store = createWalletStore({
-	platforms: JSON.parse(
-		document.querySelector("#platforms")?.textContent ?? "{}",
-	),
-	placeholders: JSON.parse(
-		document.querySelector("#placeholders")?.textContent ?? "{}",
-	),
-	locales: JSON.parse(document.querySelector("#locales")?.textContent ?? "{}"),
-	csrfToken: document.querySelector<HTMLInputElement>(
-		"input[name=csrfmiddlewaretoken]",
-	)?.value!!,
-	layoutId: mountEl.dataset.layoutId!,
-	baseUrl: mountEl.dataset.baseUrl!,
-	previewUrl: mountEl.dataset.previewUrl!,
-});
-store.load();
-const app = createApp(App);
-app.provide(StoreKey, store);
-app.mount(mountEl);
+import Apple from "./components/platform-preview/apple.vue";
+import GoogleEventDefault from "./components/platform-preview/google-event-default.vue";
+import GoogleEventCustom from "./components/platform-preview/google-event-custom.vue";
 
-app.config.errorHandler = (error, _vm, info) => {
-	// vue fatals on errors by default, which is a weird choice
-	// https://github.com/vuejs/core/issues/3525
-	// https://github.com/vuejs/router/discussions/2435
-	console.error("[VUE]", info, error);
-};
+window.pretix_wallet_preview_renderers['apple_eventticket'] = Apple;
+window.pretix_wallet_preview_renderers['google_eventticket_default'] = GoogleEventDefault;
+window.pretix_wallet_preview_renderers['google_eventticket_custom'] = GoogleEventCustom;

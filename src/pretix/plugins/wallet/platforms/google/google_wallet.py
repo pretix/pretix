@@ -15,7 +15,7 @@ from google.auth.transport.requests import AuthorizedSession
 from google.oauth2 import service_account
 
 from pretix.base.models.orders import OrderPosition
-from pretix.plugins.wallet.i18n import (
+from pretix.helpers.i18n import (
     MaybeTranslatedString, localizable_to_dict,
 )
 

@@ -14,7 +14,7 @@ from pretix.base.models import Event, OrderPosition
 from pretix.base.models.orders import Order
 from pretix.base.settings import GlobalSettingsObject
 from pretix.plugins.wallet.models import GoogleWalletInstance
-from ..base import (
+from pretix.base.wallet.platforms import (
     PassStyle,
     WalletPlatform,
     wallet_platform_registry
