@@ -957,7 +957,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
 
     :param op: The order position to check in
     :param clist: The order position to check in
-    :param given_answers: A dictionary of questions mapped to validated, given answers
+    :param given_answers: A dictionary of data field objects mapped to validated, given answers
     :param force: When set to True, this will succeed even when the position is already checked in or when required
         questions are not filled out.
     :param ignore_unpaid: When set to True, this will succeed even when the order is unpaid.
@@ -1032,17 +1032,20 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             )
 
     # Do this outside of transaction so it is saved even if the checkin fails for some other reason
-    checkin_questions = list(
-        QuestionnaireRow.objects.filter(
-            questionnaire__event=clist.event, questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN,
-            questionnaire__items__in=[op.item_id],
-        ).select_related('user_datafield', 'questionnaire')
-    )
+    if hasattr(op.item, 'relevant_questionnaires_position_checkin'):
+        checkin_questions = [qc for q in op.item.relevant_questionnaires_position_checkin for qc in q.rows.all()]
+    else:
+        checkin_questions = list(
+            QuestionnaireRow.objects.filter(
+                questionnaire__event=clist.event, questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN,
+                questionnaire__items__in=[op.item_id],
+            ).select_related('user_datafield', 'questionnaire')
+        )
     require_answers = []
     if type != Checkin.TYPE_EXIT and checkin_questions:
         qrenderer = QuestionnaireRenderer(qrows=[], system_answers=op.system_answers, answerlist=op.answers.all())
         for q in checkin_questions:
-            if q.user_datafield not in given_answers and q.user_datafield_id not in qrenderer.answer_cache:
+            if q.user_datafield not in given_answers and q.user_datafield_id not in qrenderer.answer_cache and not qrenderer.answer_cache.get(q.system_datafield):
                 require_answers.append(q)
 
         if not simulate:
