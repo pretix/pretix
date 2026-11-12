@@ -1041,7 +1041,7 @@ Endpoints
 
    :param organizer: The ``slug`` field of a valid organizer
    :param resource: The ``id`` field of a valid resource
-   :param id: The ``id`` field of the type to delete
+   :param id: The ``id`` field of the manager to remove
    :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
