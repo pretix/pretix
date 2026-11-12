@@ -1782,8 +1782,9 @@ class AbstractPosition(AnswerableMixin, RoundingCorrectionMixin, models.Model):
         # We need to clone our question objects, otherwise we will override the cached
         # answers of other items in the same cart if the question objects have been
         # selected via prefetch_related
-        if hasattr(self.item, 'relevant_questionnaires'):
-            qrows = list(copy.copy(qc) for qq in self.item.relevant_questionnaires for qc in qq.rows.all())
+        cache_key = 'relevant_questionnaires' + (f'_{questionnaire_type}' if questionnaire_type else '')
+        if (questionnaires := getattr(self.item, cache_key, None)) is not None:
+            qrows = list(copy.copy(qc) for qq in questionnaires for qc in qq.rows.all())
         else:
             qrows = list(self.item.get_asked_questions(questionnaire_type=questionnaire_type, sales_channel=sales_channel))
         return self._cache_question_data(qrows)

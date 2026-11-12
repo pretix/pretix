@@ -246,7 +246,7 @@ class CartMixin:
             group.price_for_input_net = group.net_price_before_rounding + sum(a.net_price_before_rounding for a in has_addons[group.pk])
 
             if answers:
-                qrows = list(copy.copy(qc) for qq in group.item.relevant_questionnaires for qc in qq.rows.all())
+                qrows = list(copy.copy(qc) for qq in group.item.relevant_questionnaires_position_purchase for qc in qq.rows.all())
                 group.rendered_questions = QuestionnaireRenderer(qrows=qrows, system_answers=group.system_answers, answerlist=group.answers.all())
                 group.additional_answers = pos_additional_fields.get(group.pk)
             positions.append(group)
@@ -422,7 +422,7 @@ def prefetch_relevant_questionnaires(sales_channel, questionnaire_type, question
                 ))
             ))
         ),
-        to_attr='relevant_questionnaires')
+        to_attr='relevant_questionnaires' + (f'_{questionnaire_type}' if questionnaire_type else ''))
 
 
 def get_cart_positions(request):
@@ -463,7 +463,7 @@ def get_cart_positions(request):
                 if cp.addon_to_id:
                     cp.addon_to = by_id[cp.addon_to_id]
                 cp.rendered_questions = QuestionnaireRenderer(
-                    qrows=[qc for qq in cp.item.relevant_questionnaires for qc in qq.rows.all()],
+                    qrows=[qc for qq in cp.item.relevant_questionnaires_position_purchase for qc in qq.rows.all()],
                     system_answers=cp.system_answers,
                     answerlist=cp.answerlist,
                 )

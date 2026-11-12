@@ -1023,9 +1023,10 @@ class TicketLevelQuestionsForm(BaseQuestionsForm):
         request = kwargs.pop('request', None)
         cartpos = self.cartpos = kwargs.pop('cartpos', None)
         orderpos = self.orderpos = kwargs.pop('orderpos', None)
+        only_user_visible = kwargs.pop('only_user_visible')
         pos = cartpos or orderpos
         item = pos.item
-        questionnaires = pos.item.relevant_questionnaires
+        questionnaires = pos.item.relevant_questionnaires_position_purchase if only_user_visible else pos.item.relevant_questionnaires
         event = kwargs.pop('event')
         self.all_optional = kwargs.pop('all_optional', False)
         self.attendee_addresses_required = event.settings.attendee_addresses_required and not self.all_optional

@@ -49,6 +49,7 @@ class BaseQuestionsViewMixin:
     order_form_class = OrderLevelQuestionsForm
     orderposition_form_class = TicketLevelQuestionsForm
     all_optional = False
+    only_user_visible = False
 
     @cached_property
     def _positions_for_questions(self):
@@ -102,6 +103,7 @@ class BaseQuestionsViewMixin:
                 cartpos=cartpos,
                 orderpos=orderpos,
                 all_optional=self.all_optional,
+                only_user_visible=self.only_user_visible,
                 data=(self.request.POST if self.request.method == 'POST' else None),
                 files=(self.request.FILES if self.request.method == 'POST' else None),
                 **kwargs
