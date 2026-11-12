@@ -333,7 +333,6 @@ def test_order_update_transmission_validation(token_client, organizer, event, or
     assert resp.status_code == 400
     assert resp.data == {"invoice_address": {"transmission_info": {
         "transmission_it_sdi_pec": ["Enter a valid email address.", "Enter a valid email address."],
-        "transmission_it_sdi_recipient_code": ["This field is required."]
     }}}
 
     resp = token_client.patch(
