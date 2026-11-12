@@ -211,10 +211,10 @@ Endpoints
               "en": "My Types"
             },
             "slug": "my-type",
-            "canceled_pending_email_subject": {
+            "canceled_email_subject": {
               "en": "Canceled subject"
             },
-            "canceled_pending_email_template": {
+            "canceled_email_template": {
               "en": "To whom it may concern…"
             },
             "confirmation_pending_email_subject": {
@@ -291,10 +291,10 @@ Endpoints
           "en": "My Types"
         },
         "slug": "my-type",
-        "canceled_pending_email_subject": {
+        "canceled_email_subject": {
           "en": "Canceled subject"
         },
-        "canceled_pending_email_template": {
+        "canceled_email_template": {
           "en": "To whom it may concern…"
         },
         "confirmation_pending_email_subject": {
@@ -353,10 +353,10 @@ Endpoints
           "en": "My Types"
         },
         "slug": "my-type",
-        "canceled_pending_email_subject": {
+        "canceled_email_subject": {
           "en": "Canceled subject"
         },
-        "canceled_pending_email_template": {
+        "canceled_email_template": {
           "en": "To whom it may concern…"
         },
         "confirmation_pending_email_subject": {
@@ -424,10 +424,10 @@ Endpoints
           "en": "My Types"
         },
         "slug": "my-type",
-        "canceled_pending_email_subject": {
+        "canceled_email_subject": {
           "en": "Canceled subject"
         },
-        "canceled_pending_email_template": {
+        "canceled_email_template": {
           "en": "To whom it may concern…"
         },
         "confirmation_pending_email_subject": {
