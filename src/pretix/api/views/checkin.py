@@ -72,7 +72,7 @@ from pretix.base.models.orders import PrintLog
 from pretix.base.permissions import AnyPermissionOf
 from pretix.base.services.checkin import (
     CheckInError, RequiredMediaExchangeError, RequiredQuestionsError, SQLLogic,
-    perform_checkin,
+    _get_checkin_questions, perform_checkin,
 )
 from pretix.base.services.media import perform_media_exchange
 from pretix.base.signals import checkin_annulled
@@ -408,7 +408,6 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
         ),
         Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
         'answers', 'answers__options', 'answers__question',
-        prefetch_relevant_questionnaires(sales_channel=None, questionnaire_type=Questionnaire.QuestionnaireType.POSITION_CHECKIN),
     ]
     select_related = [
         'item', 'variation', 'order', 'addon_to', 'order__invoice_address', 'order', 'seat'
@@ -804,26 +803,25 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     given_answers = {}
     if answers_data:
         allowed_system_datafields = set()
-        # `op.item.relevant_questionnaires_position_checkin` is prefetched in _checkin_list_position_queryset using prefetch_relevant_questionnaires
-        for questionnaire in op.item.relevant_questionnaires_position_checkin:
-            for qc in questionnaire.rows.all():
-                if qc.system_datafield:
-                    allowed_system_datafields.add(qc.system_datafield)
-                if not qc.user_datafield_id:
-                    continue
-                if str(qc.user_datafield_id) in answers_data:
-                    ans = answers_data[str(qc.user_datafield_id)]
-                elif str(qc.cooked_id) in answers_data:
-                    ans = answers_data[str(qc.cooked_id)]
+        op.item._checkin_questions = _get_checkin_questions(op)
+        for qc in op.item._checkin_questions:
+            if qc.system_datafield:
+                allowed_system_datafields.add(qc.system_datafield)
+            if not qc.user_datafield_id:
+                continue
+            if str(qc.user_datafield_id) in answers_data:
+                ans = answers_data[str(qc.user_datafield_id)]
+            elif str(qc.cooked_id) in answers_data:
+                ans = answers_data[str(qc.cooked_id)]
+            else:
+                continue
+            try:
+                if qc.user_datafield.type == Question.TYPE_FILE:
+                    given_answers[qc.user_datafield] = _handle_file_upload(ans, user, auth)
                 else:
-                    continue
-                try:
-                    if qc.user_datafield.type == Question.TYPE_FILE:
-                        given_answers[qc.user_datafield] = _handle_file_upload(ans, user, auth)
-                    else:
-                        given_answers[qc.user_datafield] = qc.clean_answer(ans)
-                except (ValidationError, BaseValidationError):
-                    pass
+                    given_answers[qc.user_datafield] = qc.clean_answer(ans)
+            except (ValidationError, BaseValidationError):
+                pass
         def get_sys_df(cookedid):
             try:
                 qid, dfid, sysdf = QuestionnaireRow.uncook_id(cookedid)

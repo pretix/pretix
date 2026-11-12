@@ -658,7 +658,6 @@ class QuestionFormSerializer(I18nAwareModelSerializer):
     def get_attribute(self, instance):
         if isinstance(instance, QuestionAnswer):
             position = instance.cartposition if instance.cartposition_id else instance.orderposition
-            print('searching ', repr(instance), repr(position), repr(instance.question), instance.pk, position.item_id, self.context)   # TODO remove print
             qcs = list(QuestionnaireRow.objects.filter(user_datafield_id=instance.question_id, questionnaire__items__in=[position.item_id]))
             return next((qc for qc in qcs if qc.questionnaire.type == self.context.get('preferred_questionnaire_type', Questionnaire.QuestionnaireType.POSITION_PURCHASE)), qcs[0])
 

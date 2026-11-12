@@ -946,6 +946,15 @@ def _save_answers(op, existing_answer_objects, given_answers):
         op.answers._remove_prefetched_objects()
 
 
+def _get_checkin_questions(op):
+    return list(
+        QuestionnaireRow.objects.filter(
+            questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN,
+            questionnaire__items__in=[op.item_id],
+        ).select_related('user_datafield', 'questionnaire')
+    )
+
+
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
                     user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY,
@@ -1032,19 +1041,12 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             )
 
     # Do this outside of transaction so it is saved even if the checkin fails for some other reason
-    if hasattr(op.item, 'relevant_questionnaires_position_checkin'):
-        checkin_questions = [qc for q in op.item.relevant_questionnaires_position_checkin for qc in q.rows.all()]
-    else:
-        checkin_questions = list(
-            QuestionnaireRow.objects.filter(
-                questionnaire__event=clist.event, questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN,
-                questionnaire__items__in=[op.item_id],
-            ).select_related('user_datafield', 'questionnaire')
-        )
+    if not hasattr(op.item, '_checkin_questions'):
+        op.item._checkin_questions = _get_checkin_questions(op)
     require_answers = []
-    if type != Checkin.TYPE_EXIT and checkin_questions:
+    if type != Checkin.TYPE_EXIT and op.item._checkin_questions:
         qrenderer = QuestionnaireRenderer(qrows=[], system_answers=op.system_answers, answerlist=op.answers.all())
-        for q in checkin_questions:
+        for q in op.item._checkin_questions:
             if q.user_datafield not in given_answers and q.user_datafield_id not in qrenderer.answer_cache and not qrenderer.answer_cache.get(q.system_datafield):
                 require_answers.append(q)
 

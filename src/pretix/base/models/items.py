@@ -822,6 +822,25 @@ class Item(LoggedModel):
             return self.event.settings.show_quota_left
         return self.show_quota_left
 
+    def get_relevant_questionnaires(self, questionnaire_type, sales_channel):
+        """
+        Creates a new property on the object:
+        question_data: a list of QuestionnaireRow objects, extended by an 'answer' property
+        """
+        # We need to clone our question objects, otherwise we will override the cached
+        # answers of other items in the same cart if the question objects have been
+        # selected via prefetch_related
+        cache_key = 'relevant_questionnaires' + (f'_{questionnaire_type}' if questionnaire_type else '')
+        if (questionnaires := getattr(self, cache_key, None)) is not None:
+            return questionnaires
+        else:
+            qs = self.questionnaires.all()
+            if questionnaire_type is not None:
+                qs = qs.filter(questionnaire__type=questionnaire_type)
+            if sales_channel is not None:
+                qs = qs.filter(Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels=sales_channel))
+            return qs
+
     def get_asked_questions(self, questionnaire_type=None, sales_channel=None):
         qs = QuestionnaireRow.objects.filter(
             Q(system_datafield__isnull=False) | Q(user_datafield_id__isnull=False),
