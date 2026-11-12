@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, watchEffect } from "vue";
 import Select from "./input/select.vue";
-import I18nInput from "./input/i18ninput.vue";
+import I18nInput from "/src/pretix/static/pretixbase/components/i18n-input.vue";
 import TextContent from "./text-content.vue";
 import { StoreKey } from "../walletStore";
 import { i18nstring_localize } from "/src/pretix/static/pretixbase/js/i18nstring.ts";
@@ -112,7 +112,7 @@ const placeholders = computed(() => {
                         tr(v-for="n, i in fieldConfig.entries.length" :key="i")
                             td(v-if="fieldgroup.display == 'with_label'")
                                 .i18n-form-group
-                                    I18nInput(v-model="fieldConfig.entries[n - 1].label" :placeholders="placeholders[n - 1]")
+                                    I18nInput(v-model="fieldConfig.entries[n - 1].label" :placeholders="placeholders[n - 1]" :locales="store.locales")
                             td
                                 TextContent(v-if='fieldgroup.content_type == "text"'
                                             v-model="fieldConfig.entries[n - 1]"

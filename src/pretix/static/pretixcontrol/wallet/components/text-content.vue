@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, inject, reactive } from 'vue'
+import { computed, inject } from 'vue'
 import Select from './input/select.vue'
-import I18nInput from './input/i18ninput.vue'
+import I18nInput from "/src/pretix/static/pretixbase/components/i18n-input.vue";
 import { StoreKey } from "../walletStore";
 
 const store = inject(StoreKey)!
