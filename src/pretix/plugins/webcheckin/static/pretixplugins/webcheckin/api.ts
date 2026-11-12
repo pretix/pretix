@@ -1,4 +1,5 @@
-import type { I18nString, SubEvent } from './i18n'
+import type { SubEvent } from './i18n'
+import type { LocalizableString } from '@/pretix/static/pretixbase/js/i18n'
 
 const settingsEl = document.getElementById('api-settings')
 const { urls } = JSON.parse(settingsEl.textContent || '{}') as { urls: {
@@ -59,8 +60,8 @@ export interface Position {
 	order: string
 	positionid: number
 	canceled?: boolean
-	item: { id?: number; name: I18nString; internal_name?: string; admission?: boolean }
-	variation: { id?: number; value: I18nString } | null
+	item: { id?: number; name: LocalizableString; internal_name?: string; admission?: boolean }
+	variation: { id?: number; value: LocalizableString } | null
 	price: string
 	attendee_name: string
 	attendee_name_parts: Record<string, string>
@@ -110,8 +111,8 @@ export interface Answer {
 
 export interface AnswerQuestion {
 	id: number
-	question: I18nString
-	help_text?: I18nString
+	question: LocalizableString
+	help_text?: LocalizableString
 	type: string
 	required: boolean
 	position: number
@@ -138,12 +139,12 @@ export interface QuestionOption {
 	id: number
 	identifier: string
 	position: number
-	answer: I18nString
+	answer: LocalizableString
 }
 
 export interface Addon {
-	item: { name: I18nString; internal_name?: string }
-	variation: { value: I18nString } | null
+	item: { name: LocalizableString; internal_name?: string }
+	variation: { value: LocalizableString } | null
 }
 
 export interface CheckinStatusVariation {
