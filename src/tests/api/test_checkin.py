@@ -37,7 +37,7 @@ from tests.const import SAMPLE_PNG
 
 from pretix.api.serializers.item import DatafieldSerializer
 from pretix.base.models import (
-    Checkin, CheckinList, InvoiceAddress, Order, OrderPosition,
+    Checkin, CheckinList, InvoiceAddress, Order, OrderPosition, Question, QuestionnaireRow,
 )
 
 
@@ -956,8 +956,8 @@ def assert_questions_response_one(questions, df, qrow):
 @pytest.fixture
 def attendee_questionnaire(event, item):
     attendee_questionnaire = event.questionnaires.create(type='position_checkin', internal_name='Attendee data')
-    attendee_questionnaire.rows.create(system_datafield='@attendee_name_parts', required=True)
-    attendee_questionnaire.rows.create(system_datafield='@company', required=False)
+    attendee_questionnaire.rows.create(system_datafield='@attendee_name_parts', required=True, label='Attendee name')
+    attendee_questionnaire.rows.create(system_datafield='@company', required=False, label='Attendee company name')
     attendee_questionnaire.items.set([item])
     return attendee_questionnaire
 
@@ -1073,32 +1073,79 @@ def test_question_system(token_client, organizer, clist, event, order, question,
     with scopes_disabled():
         p = order.positions.first()
 
+    cid_company = QuestionnaireRow.cook_id_from_parts(attendee_questionnaire.id, None, '@company')
     SYS_QUESTIONS_RES = [
-        {'id': 2000000011, 'question': {'en': 'Name'}, 'type': 'S', 'required': True, 'items': [1], 'options': [], 'position': 0, 'ask_during_checkin': True, 'show_during_checkin': False, 'identifier': '@attendee_name_parts:full_name', 'dependency_question': None, 'dependency_values': [], 'hidden': False, 'dependency_value': None, 'print_on_invoice': False, 'help_text': None, 'valid_number_min': None, 'valid_number_max': None, 'valid_date_min': None, 'valid_date_max': None, 'valid_datetime_min': None, 'valid_datetime_max': None, 'valid_string_length_max': None, 'valid_string_length_min': None, 'valid_file_portrait': None, 'questionnaire_id': attendee_questionnaire.id},
-        {'id': 2000000002, 'question': {'en': ''}, 'type': 'S', 'required': False, 'items': [1], 'options': [], 'position': 1, 'ask_during_checkin': True, 'show_during_checkin': False, 'identifier': '@company', 'dependency_question': None, 'dependency_values': [], 'hidden': False, 'dependency_value': None, 'print_on_invoice': False, 'help_text': None, 'valid_number_min': None, 'valid_number_max': None, 'valid_date_min': None, 'valid_date_max': None, 'valid_datetime_min': None, 'valid_datetime_max': None, 'valid_string_length_max': None, 'valid_string_length_min': None, 'valid_file_portrait': None, 'questionnaire_id': attendee_questionnaire.id}
+        {'id': cid_company, 'question': {'en': 'Attendee company name'}, 'type': 'S', 'required': False, 'items': [1], 'options': [], 'position': 0, 'ask_during_checkin': True, 'show_during_checkin': False, 'identifier': '@company', 'dependency_question': None, 'dependency_values': [], 'hidden': False, 'dependency_value': None, 'print_on_invoice': False, 'help_text': None, 'valid_number_min': None, 'valid_number_max': None, 'valid_date_min': None, 'valid_date_max': None, 'valid_datetime_min': None, 'valid_datetime_max': None, 'valid_string_length_max': None, 'valid_string_length_min': None, 'valid_file_portrait': None, 'questionnaire_id': attendee_questionnaire.id}
     ]
 
     resp = _redeem(token_client, organizer, clist, p.pk, {})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
-        assert len(resp.data['questions']) == 3
+        assert len(resp.data['questions']) == 2
         assert resp.data['questions'] == [
             {'id': 1000000101, 'question': {'en': 'Size'}, 'type': 'C', 'required': True, 'items': [1], 'options': [{'id': 1, 'identifier': question.answers[0].identifier, 'answer': {'en': 'M'}, 'position': 0}, {'id': 2, 'identifier': question.answers[1].identifier, 'answer': {'en': 'L'}, 'position': 0}], 'position': 0, 'ask_during_checkin': True, 'show_during_checkin': False, 'identifier': question.datafield.identifier, 'dependency_question': None, 'dependency_values': [], 'hidden': False, 'dependency_value': None, 'print_on_invoice': False, 'help_text': None, 'valid_number_min': None, 'valid_number_max': None, 'valid_date_min': None, 'valid_date_max': None, 'valid_datetime_min': None, 'valid_datetime_max': None, 'valid_string_length_max': None, 'valid_string_length_min': None, 'valid_file_portrait': False, 'questionnaire_id': question.qrow.questionnaire_id},
             *SYS_QUESTIONS_RES,
         ]
 
-    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {'2000000011': "Jane Doe", '2000000002': "VEB Eintrittskartenverkauf"}})
-    print(resp.data)
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {'1000000101': question.answers[0].pk, str(cid_company): "VEB Eintrittskartenverkauf"}})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+    p.refresh_from_db()
+    assert p.attendee_name_parts == {'full_name': "Peter"}
+    assert p.company == 'VEB Eintrittskartenverkauf'
+    with scopes_disabled():
+        assert p.answers.get().answer == 'M'
+
+
+@pytest.mark.django_db
+def test_question_system_name_fields(token_client, organizer, clist, event, order, question, attendee_questionnaire):
+    with scopes_disabled():
+        p = order.positions.first()
+        p.attendee_name_parts = None
+        p.save()
+        event.settings.name_scheme = 'salutation_given_family'
+
+    cid_question = QuestionnaireRow.cook_id_from_parts(question.qrow.questionnaire.id, question.datafield.id, None)
+    cid_name_salutation = QuestionnaireRow.cook_id_from_parts(attendee_questionnaire.id, None, '@attendee_name_parts:salutation')
+    cid_name_given_name = QuestionnaireRow.cook_id_from_parts(attendee_questionnaire.id, None, '@attendee_name_parts:given_name')
+    cid_name_family_name = QuestionnaireRow.cook_id_from_parts(attendee_questionnaire.id, None, '@attendee_name_parts:family_name')
+    cid_company = QuestionnaireRow.cook_id_from_parts(attendee_questionnaire.id, None, '@company')
+    SYS_QUESTIONS_RES = [
+     {'id': cid_name_salutation, 'question': {'en': 'Salutation'}, 'type': Question.FieldType.CHOICE, 'required': True, 'items': [1], 'options': [{'id': 1, 'identifier': 'Ms', 'answer': {'en': 'Ms'}, 'position': 1},
+                                                                                                                                         {'id': 2, 'identifier': 'Mr', 'answer': {'en': 'Mr'}, 'position': 2},
+                                                                                                                                         {'id': 3, 'identifier': 'Mx', 'answer': {'en': 'Mx'}, 'position': 3}], 'position': 0, 'ask_during_checkin': True, 'show_during_checkin': False, 'identifier': '@attendee_name_parts:salutation', 'dependency_question': None, 'dependency_values': [], 'hidden': False, 'dependency_value': None, 'print_on_invoice': False, 'help_text': None, 'valid_number_min': None, 'valid_number_max': None, 'valid_date_min': None, 'valid_date_max': None, 'valid_datetime_min': None, 'valid_datetime_max': None, 'valid_string_length_max': None, 'valid_string_length_min': None, 'valid_file_portrait': None, 'questionnaire_id': attendee_questionnaire.id},
+     {'id': cid_name_given_name, 'question': {'en': 'Given name'}, 'type': 'S', 'required': True, 'items': [1], 'options': [], 'position': 1, 'ask_during_checkin': True, 'show_during_checkin': False, 'identifier': '@attendee_name_parts:given_name', 'dependency_question': None, 'dependency_values': [], 'hidden': False, 'dependency_value': None, 'print_on_invoice': False, 'help_text': None, 'valid_number_min': None, 'valid_number_max': None, 'valid_date_min': None, 'valid_date_max': None, 'valid_datetime_min': None, 'valid_datetime_max': None, 'valid_string_length_max': None, 'valid_string_length_min': None, 'valid_file_portrait': None, 'questionnaire_id': attendee_questionnaire.id},
+     {'id': cid_name_family_name, 'question': {'en': 'Family name'}, 'type': 'S', 'required': True, 'items': [1], 'options': [], 'position': 2, 'ask_during_checkin': True, 'show_during_checkin': False, 'identifier': '@attendee_name_parts:family_name', 'dependency_question': None, 'dependency_values': [], 'hidden': False, 'dependency_value': None, 'print_on_invoice': False, 'help_text': None, 'valid_number_min': None, 'valid_number_max': None, 'valid_date_min': None, 'valid_date_max': None, 'valid_datetime_min': None, 'valid_datetime_max': None, 'valid_string_length_max': None, 'valid_string_length_min': None, 'valid_file_portrait': None, 'questionnaire_id': attendee_questionnaire.id},
+     {'id': cid_company, 'question': {'en': 'Attendee company name'}, 'type': 'S', 'required': False, 'items': [1], 'options': [], 'position': 3, 'ask_during_checkin': True, 'show_during_checkin': False, 'identifier': '@company', 'dependency_question': None, 'dependency_values': [], 'hidden': False, 'dependency_value': None, 'print_on_invoice': False, 'help_text': None, 'valid_number_min': None, 'valid_number_max': None, 'valid_date_min': None, 'valid_date_max': None, 'valid_datetime_min': None, 'valid_datetime_max': None, 'valid_string_length_max': None, 'valid_string_length_min': None, 'valid_file_portrait': None, 'questionnaire_id': attendee_questionnaire.id}
+    ]
+
+    resp = _redeem(token_client, organizer, clist, p.pk, {})
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    with scopes_disabled():
+        assert len(resp.data['questions']) == 5
+        assert resp.data['questions'] == [
+            {'id': cid_question, 'question': {'en': 'Size'}, 'type': 'C', 'required': True, 'items': [1], 'options': [{'id': 1, 'identifier': question.answers[0].identifier, 'answer': {'en': 'M'}, 'position': 0}, {'id': 2, 'identifier': question.answers[1].identifier, 'answer': {'en': 'L'}, 'position': 0}], 'position': 0, 'ask_during_checkin': True, 'show_during_checkin': False, 'identifier': question.datafield.identifier, 'dependency_question': None, 'dependency_values': [], 'hidden': False, 'dependency_value': None, 'print_on_invoice': False, 'help_text': None, 'valid_number_min': None, 'valid_number_max': None, 'valid_date_min': None, 'valid_date_max': None, 'valid_datetime_min': None, 'valid_datetime_max': None, 'valid_string_length_max': None, 'valid_string_length_min': None, 'valid_file_portrait': False, 'questionnaire_id': question.qrow.questionnaire_id},
+            *SYS_QUESTIONS_RES,
+        ]
+
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {str(cid_name_salutation): 'Mx', str(cid_name_given_name): 'Jane', str(cid_name_family_name): 'Doe', str(cid_company): "VEB Eintrittskartenverkauf"}})
     assert resp.status_code == 400
     assert resp.data['status'] == 'incomplete'
     with scopes_disabled():
         assert_questions_response_one(resp.data['questions'], question.datafield, question.qrow)
 
-    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {'1000000101': question.answers[0].pk, '2000000011': "Jane Doe", '2000000002': "VEB Eintrittskartenverkauf"}})
-    print(resp.data)
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {str(cid_question): question.answers[0].pk}})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
+
+    p.refresh_from_db()
+    assert p.attendee_name_parts == {'salutation': 'Mx', 'given_name': 'Jane', 'family_name': 'Doe'}
+    assert p.company == 'VEB Eintrittskartenverkauf'
+    with scopes_disabled():
+        assert p.answers.get().answer == 'M'
 
 
 @pytest.mark.django_db

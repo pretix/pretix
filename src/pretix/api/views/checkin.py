@@ -58,7 +58,7 @@ from pretix.api.serializers.checkin import (
 from pretix.api.serializers.item import POSCompatQuestionSerializer
 from pretix.api.serializers.order import (
     CheckinListOrderPositionSerializer, CheckinSerializer,
-    FailedCheckinSerializer,
+    FailedCheckinSerializer, MixedAnswerListSerializer,
 )
 from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
@@ -800,27 +800,46 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     op = op_candidates[0]
     common_checkin_args['list'] = list_by_event[op.order.event_id]
 
-    # 5. Pre-validate all incoming answers, handle file upload
+    # 5. Pre-validate all incoming answers, handle file upload, handle system answers
     given_answers = {}
     if answers_data:
-        # op.item.relevant_questionnaires prefetched in _checkin_list_position_queryset via prefetch_relevant_questionnaires
-        for questionnaire in op.item.relevant_questionnaires:
+        allowed_system_datafields = set()
+        # `op.item.relevant_questionnaires_position_checkin` is prefetched in _checkin_list_position_queryset using prefetch_relevant_questionnaires
+        for questionnaire in op.item.relevant_questionnaires_position_checkin:
             for qc in questionnaire.rows.all():
-                if (qc.user_datafield_id and str(qc.user_datafield_id) in answers_data) or (qc.cooked_id and str(qc.cooked_id) in answers_data):
-                    try:
-                        try:
-                            ans = answers_data[str(qc.user_datafield_id)]
-                        except KeyError:
-                            ans = answers_data[str(qc.cooked_id)]
-                        if qc.system_datafield:
-                            # TODO
-                            continue
-                        if qc.user_datafield.type == Question.TYPE_FILE:
-                            given_answers[qc.user_datafield or qc.system_datafield] = _handle_file_upload(ans, user, auth)
-                        else:
-                            given_answers[qc.user_datafield or qc.system_datafield] = qc.clean_answer(ans)
-                    except (ValidationError, BaseValidationError):
-                        pass
+                if qc.system_datafield:
+                    allowed_system_datafields.add(qc.system_datafield)
+                if not qc.user_datafield_id:
+                    continue
+                if str(qc.user_datafield_id) in answers_data:
+                    ans = answers_data[str(qc.user_datafield_id)]
+                elif str(qc.cooked_id) in answers_data:
+                    ans = answers_data[str(qc.cooked_id)]
+                else:
+                    continue
+                try:
+                    if qc.user_datafield.type == Question.TYPE_FILE:
+                        given_answers[qc.user_datafield] = _handle_file_upload(ans, user, auth)
+                    else:
+                        given_answers[qc.user_datafield] = qc.clean_answer(ans)
+                except (ValidationError, BaseValidationError):
+                    pass
+        def get_sys_df(cookedid):
+            try:
+                qid, dfid, sysdf = QuestionnaireRow.uncook_id(cookedid)
+                return sysdf if sysdf and sysdf.split(':')[0] in allowed_system_datafields else None
+            except (IndexError, ValueError):
+                return None
+        system_df_answers = [
+            {'datafield': get_sys_df(k), 'answer': v, 'option_identifiers': [v]}
+            for k, v in answers_data.items() if get_sys_df(k)
+        ]
+        if system_df_answers:
+            result, _user_answers = MixedAnswerListSerializer.unexpand_system_answers(system_df_answers, op.order.event.settings)
+            for k, v in result.items():
+                setattr(op, k, v)
+            if not simulate:
+                op.save(update_fields=result.keys())
 
     # 6. Pass to our actual check-in logic
     if use_order_locale:
