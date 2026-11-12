@@ -219,24 +219,28 @@ class QuestionnaireRenderer:
 
 class AnswerableMixin:
 
-    def set_answers(self, answers_data, ignore_duplicates=False, close_files=False, answercache=None):
+    def set_answers(self, answers_data, ignore_duplicates=False, close_files=False, delete_missing=True, answercache=None):
         questions_seen = set()
         if answercache is None:
             answercache = {
                 a_obj.question_id: a_obj for a_obj in self.answers.all()
             }
         for data in answers_data:
+            question_id = data['question'].pk
             if not data.get('answer'):
+                if (not delete_missing) and question_id in answercache:
+                    answercache[question_id].delete()
+                    questions_seen.add(question_id)
                 continue
-            options = data.pop('options', [])
-            if data['question'].pk in questions_seen:
+            if question_id in questions_seen:
                 if ignore_duplicates:
                     continue
                 else:
                     raise ValidationError(f'Question {data["question"]} was sent twice.')
             new_value = data['answer']
-            if data['question'].pk in answercache:
-                a_obj = answercache[data['question'].pk]
+            options = data.pop('options', [])
+            if question_id in answercache:
+                a_obj = answercache[question_id]
                 if isinstance(new_value, File):
                     a_obj.set_file(new_value)
                     if close_files: new_value.close()
@@ -257,9 +261,10 @@ class AnswerableMixin:
                     a_obj = self.answers.create(**data)
             a_obj.options.set(options)
             questions_seen.add(a_obj.question_id)
-        for qid, a_obj in answercache.items():
-            if qid not in questions_seen:
-                a_obj.delete()
+        if delete_missing:
+            for qid, a_obj in answercache.items():
+                if qid not in questions_seen:
+                    a_obj.delete()
 
 
 class OrderLevelAnswerableMixin(AnswerableMixin):
