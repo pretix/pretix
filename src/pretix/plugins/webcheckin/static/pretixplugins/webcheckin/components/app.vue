@@ -2,7 +2,8 @@
 import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { api } from '../api'
 import type { CheckinList, Position, RedeemResponse, CheckinStatus, AnswerQuestion } from '../api'
-import { STRINGS, i18nstringLocalize, formatSubevent, formatAnswer } from '../i18n'
+import { STRINGS, formatSubevent, formatAnswer } from '../i18n'
+import { localize_string } from '@/pretix/static/pretixbase/js/i18n'
 
 import CheckinlistSelect from './checkinlist-select.vue'
 import SearchresultItem from './searchresult-item.vue'
@@ -114,9 +115,9 @@ const checkResultAddons = computed(() => {
 	if (!checkResult.value?.position?.addons) return ''
 	return checkResult.value.position.addons.map((addon) => {
 		if (addon.variation) {
-			return `+ ${addon.item.internal_name || i18nstringLocalize(addon.item.name)} – ${i18nstringLocalize(addon.variation.value)}`
+			return `+ ${addon.item.internal_name || localize_string(addon.item.name)} – ${localize_string(addon.variation.value)}`
 		}
-		return '+ ' + (addon.item.internal_name || i18nstringLocalize(addon.item.name))
+		return '+ ' + (addon.item.internal_name || localize_string(addon.item.name))
 	}).join('\n')
 })
 
@@ -125,9 +126,9 @@ const checkResultSubevent = computed(() => formatSubevent(checkResult.value?.pos
 const checkResultItemvar = computed(() => {
 	if (!checkResult.value?.position) return ''
 	if (checkResult.value.position.variation) {
-		return `${i18nstringLocalize(checkResult.value.position.item.name)} – ${i18nstringLocalize(checkResult.value.position.variation.value)}`
+		return `${localize_string(checkResult.value.position.item.name)} – ${localize_string(checkResult.value.position.variation.value)}`
 	}
-	return i18nstringLocalize(checkResult.value.position.item.name)
+	return localize_string(checkResult.value.position.item.name)
 })
 
 const checkResultText = computed(() => {
@@ -316,9 +317,9 @@ async function check (
 				if (!answers.value[q.id.toString()]) {
 					answers.value[q.id.toString()] = ''
 				}
-				;(q as AnswerQuestion).question = i18nstringLocalize(q.question)
+				;(q as AnswerQuestion).question = localize_string(q.question)
 				for (const o of q.options) {
-					;(o as { answer: string }).answer = i18nstringLocalize(o.answer)
+					;(o as { answer: string }).answer = localize_string(o.answer)
 				}
 			}
 			nextTick(() => {
@@ -410,7 +411,7 @@ onUnmounted(() => {
 				span(v-for="a in checkResult.position.answers")
 					span(v-if="a.question.show_during_checkin")
 						br
-						strong {{ i18nstringLocalize(a.question.question) }}:
+						strong {{ localize_string(a.question.question) }}:
 						|  {{ formatAnswer(a.answer, a.question) }}
 				strong(v-for="t in checkResult.checkin_texts")
 					br
