@@ -165,11 +165,10 @@ Field                                 Type                       Description
 id                                    integer                    Internal ID in pretix
 resource                              integer                    Internal ID in pretix for the planning's resource (read-only)
 subevent                              integer                    Internal ID in pretix for the planning's subevent (read-only)
-status                                string                     Status for the planning, can be one of ``requested``,
+status                                string                     Status for the planning, can be one of ``requested``, ``confirmed``, ``completed``, ``canceled``, or ``denied``.  Only ``confirmed``, ``canceled``, or ``denied`` can be set.
 created_at                            datetime                   When the Planning was created
 cost                                  decimal (string)           How much the resource for this planning cost
 is_paid                               boolean                    Whether the resource has been paid for this planning
-                                                                 ``confirmed``, ``completed``, ``canceled``, or ``denied``.  Only ``confirmed``, ``canceled``, or ``denied`` can be set.
 invoiced                              boolean                    Should this planning be invoiced?
 ===================================== ========================== =======================================================
 
