@@ -1,5 +1,3 @@
-/* global gettext, pgettext */
-
 export const TEXTS = {
 	and: gettext('All of the conditions below (AND)'),
 	or: gettext('At least one of the conditions below (OR)'),
