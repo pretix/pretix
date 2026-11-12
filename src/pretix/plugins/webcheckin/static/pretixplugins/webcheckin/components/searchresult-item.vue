@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import type { Position } from '../api'
-import { STRINGS, i18nstringLocalize, formatSubevent } from '../i18n'
+import { STRINGS, formatSubevent } from '../i18n'
+import { localize_string } from '@/pretix/static/pretixbase/js/i18n'
 
 const props = defineProps<{
 	position: Position
@@ -22,9 +23,9 @@ const status = computed(() => {
 
 const itemvar = computed(() => {
 	if (props.position.variation) {
-		return `${i18nstringLocalize(props.position.item.name)} – ${i18nstringLocalize(props.position.variation.value)}`
+		return `${localize_string(props.position.item.name)} – ${localize_string(props.position.variation.value)}`
 	}
-	return i18nstringLocalize(props.position.item.name)
+	return localize_string(props.position.item.name)
 })
 
 const subevent = computed(() => formatSubevent(props.position.subevent))
