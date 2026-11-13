@@ -409,7 +409,7 @@ def test_subevent_create(team, token_client, organizer, event, subevent, meta_pr
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"item_price_overrides":[{"item":["Invalid pk \\"555\\" - object does not exist."]}]}'
+    assert resp.data == {"item_price_overrides": {0: {"item": ["Invalid pk \"555\" - object does not exist."]}}}
 
 
 @pytest.mark.django_db
@@ -580,7 +580,7 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"item_price_overrides":[{"item":["Invalid pk \\"123\\" - object does not exist."]}]}'
+    assert resp.data == {"item_price_overrides": {0: {"item": ["Invalid pk \"123\" - object does not exist."]}}}
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
@@ -686,7 +686,8 @@ def test_subevent_update(token_client, organizer, event, subevent, item, item2, 
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"variation_price_overrides":[{"variation":["Invalid pk \\"123\\" - object does not exist."]}]}'
+    assert resp.data == {
+        "variation_price_overrides": {0: {"variation": ["Invalid pk \"123\" - object does not exist."]}}}
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/subevents/{}/'.format(organizer.slug, event.slug, subevent.pk),
