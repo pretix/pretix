@@ -40,10 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const field = document.querySelector('input[name="csrfmiddlewaretoken"]')
 	const pageSecret = field ? unmask(field.value) : null
+	
+	// bail if there is no pageSecret
+	if (!pageSecret) return
 
 	const check = (secrets) => {
-		// skip if there is no pageSecret
-		if (secrets.length === 0) return pageSecret !== null ? 'no_cookie' : null
+		if (secrets.length === 0) return 'no_cookie'
 		if (secrets.length > 1) return 'duplicate_cookie'
 		if (!secrets[0]) return 'invalid_cookie'
 		if (pageSecret !== null && pageSecret !== secrets[0]) return 'mismatch'
