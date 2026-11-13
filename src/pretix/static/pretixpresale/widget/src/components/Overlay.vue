@@ -1,177 +1,206 @@
 <script setup lang="ts">
-import { computed, ref, watch, onMounted, onUnmounted, inject, nextTick } from 'vue'
-import { StoreKey } from '~/sharedStore'
-import { STRINGS } from '~/i18n'
+import {
+	computed,
+	ref,
+	watch,
+	onMounted,
+	onUnmounted,
+	inject,
+	nextTick,
+} from "vue";
+import { StoreKey } from "~/sharedStore";
+import { STRINGS } from "~/i18n";
 
-const store = inject(StoreKey)!
+const store = inject(StoreKey)!;
 
-const cancelBlocked = ref(false)
-const lightboxImage = ref<HTMLImageElement>()
-const frameDialog = ref<HTMLDialogElement>()
-const alertDialog = ref<HTMLDialogElement>()
-const lightboxDialog = ref<HTMLDialogElement>()
-const iframe = ref<HTMLIFrameElement>()
-const closeButton = ref<HTMLButtonElement>()
+const cancelBlocked = ref(false);
+const lightboxImage = ref<HTMLImageElement>();
+const frameDialog = ref<HTMLDialogElement>();
+const alertDialog = ref<HTMLDialogElement>();
+const lightboxDialog = ref<HTMLDialogElement>();
+const iframe = ref<HTMLIFrameElement>();
+const closeButton = ref<HTMLButtonElement>();
 
 const frameClasses = computed(() => ({
-	'pretix-widget-frame-holder': true,
-	'pretix-widget-frame-shown': store.overlay.frameShown || store.overlay.frameLoading,
-	'pretix-widget-frame-isloading': store.overlay.frameLoading,
-}))
+	"pretix-widget-frame-holder": true,
+	"pretix-widget-frame-shown":
+		store.overlay.frameShown || store.overlay.frameLoading,
+	"pretix-widget-frame-isloading": store.overlay.frameLoading,
+}));
 
 const alertClasses = computed(() => ({
-	'pretix-widget-alert-holder': true,
-	'pretix-widget-alert-shown': store.overlay.errorMessage,
-}))
+	"pretix-widget-alert-holder": true,
+	"pretix-widget-alert-shown": store.overlay.errorMessage,
+}));
 
 const lightboxClasses = computed(() => ({
-	'pretix-widget-lightbox-holder': true,
-	'pretix-widget-lightbox-shown': store.overlay.lightbox,
-	'pretix-widget-lightbox-isloading': store.overlay.lightbox?.loading,
-}))
+	"pretix-widget-lightbox-holder": true,
+	"pretix-widget-lightbox-shown": store.overlay.lightbox,
+	"pretix-widget-lightbox-isloading": store.overlay.lightbox?.loading,
+}));
 
 const cancelBlockedClasses = computed(() => ({
-	'pretix-widget-visibility-hidden': !cancelBlocked.value,
-}))
+	"pretix-widget-visibility-hidden": !cancelBlocked.value,
+}));
 
-const errorMessageId = computed(() => `${store.htmlId}-error-message`)
+const errorMessageId = computed(() => `${store.htmlId}-error-message`);
 
-function onMessage (e: MessageEvent) {
-	if (e.data.type && e.data.type === 'pretix:widget:title') {
+function onMessage(e: MessageEvent) {
+	if (e.data.type && e.data.type === "pretix:widget:title") {
 		if (iframe.value) {
-			iframe.value.title = e.data.title
+			iframe.value.title = e.data.title;
 		}
 	}
 }
 
-function lightboxClose () {
-	store.overlay.lightbox = null
+function lightboxClose() {
+	store.overlay.lightbox = null;
 }
 
-function lightboxLoaded () {
+function lightboxLoaded() {
 	if (store.overlay.lightbox) {
-		store.overlay.lightbox.loading = false
+		store.overlay.lightbox.loading = false;
 	}
 }
 
-function errorContinue () {
+function errorContinue() {
 	if (store.overlay.errorUrlAfterNewTab) {
-		window.open(store.overlay.errorUrlAfter)
+		window.open(store.overlay.errorUrlAfter);
 	} else {
-		store.overlay.frameSrc = store.overlay.errorUrlAfter
-		store.overlay.frameLoading = true
+		store.overlay.frameSrc = store.overlay.errorUrlAfter;
+		store.overlay.frameLoading = true;
 	}
 }
 
-function errorClose () {
-	store.overlay.errorMessage = null
-	store.overlay.errorUrlAfter = null
-	store.overlay.errorUrlAfterNewTab = false
+function errorClose() {
+	store.overlay.errorMessage = null;
+	store.overlay.errorUrlAfter = null;
+	store.overlay.errorUrlAfterNewTab = false;
 }
 
-function close (e) {
+function close(e) {
 	if (store.overlay.frameLoading) {
 		// Chrome does not allow blocking dialog.cancel event more than once
 		// => wiggle the loading-element and re-open the modal
-		cancel(e)
-		frameDialog.value?.showModal()
-		return
+		cancel(e);
+		frameDialog.value?.showModal();
+		return;
 	}
-	store.overlay.frameShown = false
-	store.frameDismissed = true
-	store.overlay.frameSrc = ''
-	store.reload()
-	triggerCloseCallback()
+	store.overlay.frameShown = false;
+	store.frameDismissed = true;
+	store.overlay.frameSrc = "";
+	store.reload();
+	triggerCloseCallback();
 }
 
-function cancel (e: Event) {
+function cancel(e: Event) {
 	// do not allow to cancel while frame is loading as we cannot abort the operation
 	if (store.overlay.frameLoading) {
-		e.preventDefault()
-		const target = e.target as HTMLElement
-		target.addEventListener('animationend', function () {
-			target.classList.remove('pretix-widget-shake-once')
-		}, { once: true })
-		target.classList.add('pretix-widget-shake-once')
-		cancelBlocked.value = true
+		e.preventDefault();
+		const target = e.target as HTMLElement;
+		target.addEventListener(
+			"animationend",
+			function () {
+				target.classList.remove("pretix-widget-shake-once");
+			},
+			{ once: true },
+		);
+		target.classList.add("pretix-widget-shake-once");
+		cancelBlocked.value = true;
 	}
 }
 
-function iframeLoaded () {
+function iframeLoaded() {
 	if (store.overlay.frameLoading) {
-		store.overlay.frameLoading = false
-		cancelBlocked.value = false
+		store.overlay.frameLoading = false;
+		cancelBlocked.value = false;
 		if (store.overlay.frameSrc) {
-			store.overlay.frameShown = true
+			store.overlay.frameShown = true;
 		}
 	}
 }
 
-function triggerCloseCallback () {
+function triggerCloseCallback() {
 	nextTick(() => {
 		for (const callback of (window as any).PretixWidget._closed || []) {
-			callback()
+			callback();
 		}
-	})
+	});
 }
 
 // TODO check if watchEffect is better for the following watchers
-watch(() => store.overlay.lightbox, (newValue, oldValue) => {
-	if (!newValue) return
-	if (newValue.image !== oldValue?.image) {
-		newValue.loading = true
-	}
-	if (!oldValue) {
-		lightboxDialog.value?.showModal()
-	}
-})
-
-watch(() => store.overlay.errorMessage, (newValue, oldValue) => {
-	if (newValue && !oldValue) {
-		alertDialog.value?.showModal()
-	}
-})
-
-watch(() => store.overlay.frameShown, async (newValue) => {
-	if (!newValue) return
-	await nextTick()
-	closeButton.value?.focus()
-})
-
-watch(() => store.overlay.frameSrc, (newValue, oldValue) => {
-	// show loading spinner only when previously no frame_src was set
-	if (newValue && !oldValue) {
-		store.overlay.frameLoading = true
-	}
-	if (iframe.value) {
-		// to close and unload the iframe, frame_src can be empty -> make it valid HTML with about:blank
-		iframe.value.src = newValue || 'about:blank'
-	}
-})
-
-watch(() => store.overlay.frameLoading, (newValue) => {
-	if (newValue) {
-		if (frameDialog.value && !frameDialog.value.open) {
-			frameDialog.value.showModal()
+watch(
+	() => store.overlay.lightbox,
+	(newValue, oldValue) => {
+		if (!newValue) return;
+		if (newValue.image !== oldValue?.image) {
+			newValue.loading = true;
 		}
-	} else {
-		if (!store.overlay.frameSrc && frameDialog.value?.open) { // finished loading, but no iframe to display => close
-			frameDialog.value.close()
+		if (!oldValue) {
+			lightboxDialog.value?.showModal();
 		}
-	}
-})
+	},
+);
+
+watch(
+	() => store.overlay.errorMessage,
+	(newValue, oldValue) => {
+		if (newValue && !oldValue) {
+			alertDialog.value?.showModal();
+		}
+	},
+);
+
+watch(
+	() => store.overlay.frameShown,
+	async (newValue) => {
+		if (!newValue) return;
+		await nextTick();
+		closeButton.value?.focus();
+	},
+);
+
+watch(
+	() => store.overlay.frameSrc,
+	(newValue, oldValue) => {
+		// show loading spinner only when previously no frame_src was set
+		if (newValue && !oldValue) {
+			store.overlay.frameLoading = true;
+		}
+		if (iframe.value) {
+			// to close and unload the iframe, frame_src can be empty -> make it valid HTML with about:blank
+			iframe.value.src = newValue || "about:blank";
+		}
+	},
+);
+
+watch(
+	() => store.overlay.frameLoading,
+	(newValue) => {
+		if (newValue) {
+			if (frameDialog.value && !frameDialog.value.open) {
+				frameDialog.value.showModal();
+			}
+		} else {
+			if (!store.overlay.frameSrc && frameDialog.value?.open) {
+				// finished loading, but no iframe to display => close
+				frameDialog.value.close();
+			}
+		}
+	},
+);
 
 onMounted(() => {
-	window.addEventListener('message', onMessage, false)
-})
+	window.addEventListener("message", onMessage, false);
+});
 
 onUnmounted(() => {
-	window.removeEventListener('message', onMessage, false)
-})
+	window.removeEventListener("message", onMessage, false);
+});
 
 const vAutofocus = {
-	mounted: (el) => el.focus()
-}
+	mounted: (el) => el.focus(),
+};
 </script>
 
 <template lang="pug">
@@ -231,5 +260,4 @@ Teleport(to="body")
 					)
 					figcaption(v-if="store.overlay.lightbox.description") {{ store.overlay.lightbox.description }}
 </template>
-<style lang="sass">
-</style>
+<style lang="sass"></style>

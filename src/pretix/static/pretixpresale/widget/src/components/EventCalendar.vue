@@ -1,66 +1,72 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
-import { StoreKey } from '~/sharedStore'
-import { STRINGS } from '~/i18n'
-import { padNumber } from '~/utils'
-import EventCalendarRow from './EventCalendarRow.vue'
-import EventListFilterForm from './EventListFilterForm.vue'
+import { computed, inject, ref } from "vue";
+import { StoreKey } from "~/sharedStore";
+import { STRINGS } from "~/i18n";
+import { padNumber } from "~/utils";
+import EventCalendarRow from "./EventCalendarRow.vue";
+import EventListFilterForm from "./EventListFilterForm.vue";
 
 defineProps<{
-	mobile: boolean
-}>()
+	mobile: boolean;
+}>();
 
-const store = inject(StoreKey)!
-const calendar = ref<HTMLDivElement>()
+const store = inject(StoreKey)!;
+const calendar = ref<HTMLDivElement>();
 
-const displayEventInfo = computed(() => store.displayEventInfo || (store.displayEventInfo === null && store.parentStack.length > 0))
+const displayEventInfo = computed(
+	() =>
+		store.displayEventInfo ||
+		(store.displayEventInfo === null && store.parentStack.length > 0),
+);
 
 const monthname = computed(() => {
 	// TODO proper date formatting?
-	if (!store.date) return ''
-	const monthNum = store.date.substr(5, 2)
-	const year = store.date.substr(0, 4)
-	return `${STRINGS.months[monthNum]} ${year}`
-})
+	if (!store.date) return "";
+	const monthNum = store.date.substr(5, 2);
+	const year = store.date.substr(0, 4);
+	return `${STRINGS.months[monthNum]} ${year}`;
+});
 
-const id = computed(() => `${store.htmlId}-event-calendar-table`)
+const id = computed(() => `${store.htmlId}-event-calendar-table`);
 
-const ariaLabelledby = computed(() => `${store.htmlId}-event-calendar-table-label`)
+const ariaLabelledby = computed(
+	() => `${store.htmlId}-event-calendar-table-label`,
+);
 
-function backToList () {
+function backToList() {
 	// TODO should be in store
-	store.weeks = null
-	store.view = 'events'
-	store.name = null
-	store.frontpageText = null
+	store.weeks = null;
+	store.view = "events";
+	store.name = null;
+	store.frontpageText = null;
 }
 
-function prevmonth () {
-	if (!store.date) return
-	let curMonth = parseInt(store.date.substr(5, 2))
-	let curYear = parseInt(store.date.substr(0, 4))
-	curMonth--
+function prevmonth() {
+	if (!store.date) return;
+	let curMonth = parseInt(store.date.substr(5, 2));
+	let curYear = parseInt(store.date.substr(0, 4));
+	curMonth--;
 	if (curMonth < 1) {
-		curMonth = 12
-		curYear--
+		curMonth = 12;
+		curYear--;
 	}
-	store.date = `${curYear}-${padNumber(curMonth, 2)}-01`
-	store.loading++
-	store.reload({ focus: `#${id.value}` })
+	store.date = `${curYear}-${padNumber(curMonth, 2)}-01`;
+	store.loading++;
+	store.reload({ focus: `#${id.value}` });
 }
 
-function nextmonth () {
-	if (!store.date) return
-	let curMonth = parseInt(store.date.substr(5, 2))
-	let curYear = parseInt(store.date.substr(0, 4))
-	curMonth++
+function nextmonth() {
+	if (!store.date) return;
+	let curMonth = parseInt(store.date.substr(5, 2));
+	let curYear = parseInt(store.date.substr(0, 4));
+	curMonth++;
 	if (curMonth > 12) {
-		curMonth = 1
-		curYear++
+		curMonth = 1;
+		curYear++;
 	}
-	store.date = `${curYear}-${padNumber(curMonth, 2)}-01`
-	store.loading++
-	store.reload({ focus: `#${id.value}` })
+	store.date = `${curYear}-${padNumber(curMonth, 2)}-01`;
+	store.loading++;
+	store.reload({ focus: `#${id.value}` });
 }
 </script>
 <template lang="pug">
@@ -116,5 +122,4 @@ function nextmonth () {
 				:mobile="mobile"
 			)
 </template>
-<style lang="sass">
-</style>
+<style lang="sass"></style>

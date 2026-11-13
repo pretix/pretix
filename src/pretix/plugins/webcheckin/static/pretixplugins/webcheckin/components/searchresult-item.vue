@@ -1,35 +1,43 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import type { Position } from '../api'
-import { STRINGS, i18nstringLocalize, formatSubevent } from '../i18n'
+import { computed, ref } from "vue";
+import type { Position } from "../api";
+import { STRINGS, i18nstringLocalize, formatSubevent } from "../i18n";
 
 const props = defineProps<{
-	position: Position
-}>()
+	position: Position;
+}>();
 
 defineEmits<{
-	selected: [position: Position]
-}>()
+	selected: [position: Position];
+}>();
 
-const rootEl = ref<HTMLAnchorElement>()
+const rootEl = ref<HTMLAnchorElement>();
 
 const status = computed(() => {
-	if (props.position.checkins.length) return 'redeemed'
-	if (props.position.order__status === 'n' && props.position.order__valid_if_pending) return 'pending_valid'
-	if (props.position.order__status === 'n' && props.position.order__require_approval) return 'require_approval'
-	return props.position.order__status
-})
+	if (props.position.checkins.length) return "redeemed";
+	if (
+		props.position.order__status === "n" &&
+		props.position.order__valid_if_pending
+	)
+		return "pending_valid";
+	if (
+		props.position.order__status === "n" &&
+		props.position.order__require_approval
+	)
+		return "require_approval";
+	return props.position.order__status;
+});
 
 const itemvar = computed(() => {
 	if (props.position.variation) {
-		return `${i18nstringLocalize(props.position.item.name)} – ${i18nstringLocalize(props.position.variation.value)}`
+		return `${i18nstringLocalize(props.position.item.name)} – ${i18nstringLocalize(props.position.variation.value)}`;
 	}
-	return i18nstringLocalize(props.position.item.name)
-})
+	return i18nstringLocalize(props.position.item.name);
+});
 
-const subevent = computed(() => formatSubevent(props.position.subevent))
+const subevent = computed(() => formatSubevent(props.position.subevent));
 
-defineExpose({ el: rootEl })
+defineExpose({ el: rootEl });
 </script>
 <template lang="pug">
 a.list-group-item.searchresult(ref="rootEl", href="#", @click.prevent="$emit('selected', position)")

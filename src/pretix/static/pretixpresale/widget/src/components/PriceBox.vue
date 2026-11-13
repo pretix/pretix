@@ -1,93 +1,114 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
-import type { Price } from '~/types'
-import { StoreKey } from '~/sharedStore'
-import { STRINGS, interpolate } from '~/i18n'
-import { floatformat, autofloatformat, stripHTML } from '~/utils'
+import { computed, inject } from "vue";
+import type { Price } from "~/types";
+import { StoreKey } from "~/sharedStore";
+import { STRINGS, interpolate } from "~/i18n";
+import { floatformat, autofloatformat, stripHTML } from "~/utils";
 
 const props = defineProps<{
-	price: Price
-	freePrice: boolean
-	fieldName: string
-	suggestedPrice?: Price | null
-	originalPrice?: string | null
-	mandatoryPricedAddons?: boolean
-	itemId: number
-}>()
+	price: Price;
+	freePrice: boolean;
+	fieldName: string;
+	suggestedPrice?: Price | null;
+	originalPrice?: string | null;
+	mandatoryPricedAddons?: boolean;
+	itemId: number;
+}>();
 
-const store = inject(StoreKey)!
+const store = inject(StoreKey)!;
 
-const priceBoxId = computed(() => `${store.htmlId}-item-pricebox-${props.itemId}`)
+const priceBoxId = computed(
+	() => `${store.htmlId}-item-pricebox-${props.itemId}`,
+);
 
-const priceDescId = computed(() => `${store.htmlId}-item-pricedesc-${props.itemId}`)
+const priceDescId = computed(
+	() => `${store.htmlId}-item-pricedesc-${props.itemId}`,
+);
 
-const ariaLabelledby = computed(() => `${store.htmlId}-item-label-${props.itemId} ${priceBoxId.value}`)
+const ariaLabelledby = computed(
+	() => `${store.htmlId}-item-label-${props.itemId} ${priceBoxId.value}`,
+);
 
 const displayPrice = computed(() => {
 	if (store.displayNetPrices) {
-		return floatformat(props.price.net, store.currency_places)
+		return floatformat(props.price.net, store.currency_places);
 	}
-	return floatformat(props.price.gross, store.currency_places)
-})
+	return floatformat(props.price.gross, store.currency_places);
+});
 
 const displayPriceNonlocalized = computed(() => {
 	if (store.displayNetPrices) {
-		return parseFloat(props.price.net).toFixed(2)
+		return parseFloat(props.price.net).toFixed(2);
 	}
-	return parseFloat(props.price.gross).toFixed(2)
-})
+	return parseFloat(props.price.gross).toFixed(2);
+});
 
 const suggestedPriceNonlocalized = computed(() => {
-	const price = props.suggestedPrice ?? props.price
+	const price = props.suggestedPrice ?? props.price;
 	if (store.displayNetPrices) {
-		return parseFloat(price.net).toFixed(store.currency_places)
+		return parseFloat(price.net).toFixed(store.currency_places);
 	}
-	return parseFloat(price.gross).toFixed(store.currency_places)
-})
+	return parseFloat(price.gross).toFixed(store.currency_places);
+});
 
 // TODO BAD
 const originalLine = computed(() => {
-	if (!props.originalPrice) return ''
-	return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${floatformat(props.originalPrice, store.currency_places)}`
-})
+	if (!props.originalPrice) return "";
+	return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${floatformat(props.originalPrice, store.currency_places)}`;
+});
 
 // TODO BAD
 const priceline = computed(() => {
-	if (props.price.gross === '0.00') {
+	if (props.price.gross === "0.00") {
 		if (props.mandatoryPricedAddons && !props.originalPrice) {
-			return '\u00A0' // nbsp
+			return "\u00A0"; // nbsp
 		}
-		return STRINGS.free
+		return STRINGS.free;
 	}
-	return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${displayPrice.value}`
-})
+	return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${displayPrice.value}`;
+});
 
-const originalPriceAriaLabel = computed(() => interpolate(STRINGS.original_price, [stripHTML(originalLine.value)]))
+const originalPriceAriaLabel = computed(() =>
+	interpolate(STRINGS.original_price, [stripHTML(originalLine.value)]),
+);
 
-const newPriceAriaLabel = computed(() => interpolate(STRINGS.new_price, [stripHTML(priceline.value)]))
+const newPriceAriaLabel = computed(() =>
+	interpolate(STRINGS.new_price, [stripHTML(priceline.value)]),
+);
 
 const taxline = computed(() => {
 	if (store.displayNetPrices) {
 		if (props.price.includes_mixed_tax_rate) {
-			return STRINGS.tax_plus_mixed
+			return STRINGS.tax_plus_mixed;
 		}
-		return interpolate(STRINGS.tax_plus, {
-			rate: autofloatformat(props.price.rate, 2),
-			taxname: props.price.name,
-		}, true)
+		return interpolate(
+			STRINGS.tax_plus,
+			{
+				rate: autofloatformat(props.price.rate, 2),
+				taxname: props.price.name,
+			},
+			true,
+		);
 	} else {
 		if (props.price.includes_mixed_tax_rate) {
-			return STRINGS.tax_incl_mixed
+			return STRINGS.tax_incl_mixed;
 		}
-		return interpolate(STRINGS.tax_incl, {
-			rate: autofloatformat(props.price.rate, 2),
-			taxname: props.price.name,
-		}, true)
+		return interpolate(
+			STRINGS.tax_incl,
+			{
+				rate: autofloatformat(props.price.rate, 2),
+				taxname: props.price.name,
+			},
+			true,
+		);
 	}
-})
+});
 
 // rate can either be "0.00" or "0" => parseFloat to check
-const showTaxline = computed(() => Number.parseFloat(props.price.rate) && Number.parseFloat(props.price.gross))
+const showTaxline = computed(
+	() =>
+		Number.parseFloat(props.price.rate) && Number.parseFloat(props.price.gross),
+);
 </script>
 <template lang="pug">
 .pretix-widget-pricebox
@@ -111,5 +132,4 @@ const showTaxline = computed(() => Number.parseFloat(props.price.rate) && Number
 		)
 	small.pretix-widget-pricebox-tax(v-if="showTaxline", :id="priceDescId") {{ taxline }}
 </template>
-<style lang="sass">
-</style>
+<style lang="sass"></style>

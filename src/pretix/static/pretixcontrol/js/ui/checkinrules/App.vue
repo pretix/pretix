@@ -1,72 +1,81 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { rules as rawRules, allItems, activeItems, allProducts, limitProducts } from './django-interop'
-import { convertToDNF } from './jsonlogic-boolalg'
+import { computed } from "vue";
+import {
+	rules as rawRules,
+	allItems,
+	activeItems,
+	allProducts,
+	limitProducts,
+} from "./django-interop";
+import { convertToDNF } from "./jsonlogic-boolalg";
 
-import RulesEditor from './checkin-rules-editor.vue'
-import RulesVisualization from './checkin-rules-visualization.vue'
+import RulesEditor from "./checkin-rules-editor.vue";
+import RulesVisualization from "./checkin-rules-visualization.vue";
 
-const gettext = (window as any).gettext
+const gettext = (window as any).gettext;
 
 const missingItems = computed(() => {
 	// This computed variable contains list of item or variation names that
 	// a) Are allowed on the checkin list according to all_products or include_products
 	// b) Are not matched by ANY logical branch of the rule.
 	// The list will be empty if there is a "catch-all" rule.
-	let productsSeen = {}
-	let variationsSeen = {}
-	let rules = convertToDNF(rawRules.value)
-	let branchWithoutProductFilter = false
+	let productsSeen = {};
+	let variationsSeen = {};
+	let rules = convertToDNF(rawRules.value);
+	let branchWithoutProductFilter = false;
 
 	if (!rules.or) {
-		rules = { or: [rules] }
+		rules = { or: [rules] };
 	}
 
 	for (let part of rules.or) {
 		if (!part.and) {
-			part = { and: [part] }
+			part = { and: [part] };
 		}
-		let thisBranchWithoutProductFilter = true
+		let thisBranchWithoutProductFilter = true;
 		for (let subpart of part.and) {
 			if (subpart.inList) {
-				if (subpart.inList[0].var === 'product' && subpart.inList[1]) {
-					thisBranchWithoutProductFilter = false
+				if (subpart.inList[0].var === "product" && subpart.inList[1]) {
+					thisBranchWithoutProductFilter = false;
 					for (let listentry of subpart.inList[1].objectList) {
-						productsSeen[parseInt(listentry.lookup[1])] = true
+						productsSeen[parseInt(listentry.lookup[1])] = true;
 					}
-				} else if (subpart.inList[0].var === 'variation' && subpart.inList[1]) {
-					thisBranchWithoutProductFilter = false
+				} else if (subpart.inList[0].var === "variation" && subpart.inList[1]) {
+					thisBranchWithoutProductFilter = false;
 					for (let listentry_ of subpart.inList[1].objectList) {
-						variationsSeen[parseInt(listentry_.lookup[1])] = true
+						variationsSeen[parseInt(listentry_.lookup[1])] = true;
 					}
 				}
 			}
 		}
 		if (thisBranchWithoutProductFilter) {
-			branchWithoutProductFilter = true
-			break
+			branchWithoutProductFilter = true;
+			break;
 		}
 	}
-	if (branchWithoutProductFilter || (!Object.keys(productsSeen).length && !Object.keys(variationsSeen).length)) {
+	if (
+		branchWithoutProductFilter ||
+		(!Object.keys(productsSeen).length && !Object.keys(variationsSeen).length)
+	) {
 		// At least one branch with no product filters at all – that's fine.
-		return []
+		return [];
 	}
 
-	let missing = []
+	let missing = [];
 	for (const item of activeItems.value) {
-		if (productsSeen[item.id]) continue
-		if (!allProducts.value && !limitProducts.value.includes(item.id)) continue
+		if (productsSeen[item.id]) continue;
+		if (!allProducts.value && !limitProducts.value.includes(item.id)) continue;
 		if (item.variations.length > 0) {
 			for (let variation of item.variations) {
-				if (variationsSeen[variation.id]) continue
-				missing.push(item.name + ' – ' + variation.name)
+				if (variationsSeen[variation.id]) continue;
+				missing.push(item.name + " – " + variation.name);
 			}
 		} else {
-			missing.push(item.name)
+			missing.push(item.name);
 		}
 	}
-	return missing
-})
+	return missing;
+});
 </script>
 <template lang="pug">
 #rules-editor.form-inline
@@ -98,5 +107,4 @@ const missingItems = computed(() => {
 			li(v-for="h in missingItems", :key="h") {{ h }}
 		p {{ gettext("Please double-check if this was intentional.") }}
 </template>
-<style lang="stylus">
-</style>
+<style lang="stylus"></style>

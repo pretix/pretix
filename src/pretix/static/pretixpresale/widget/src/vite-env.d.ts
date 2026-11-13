@@ -1,1 +1,1 @@
-declare const LANG: string
+declare const LANG: string;

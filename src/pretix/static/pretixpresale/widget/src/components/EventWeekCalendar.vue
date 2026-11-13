@@ -1,62 +1,66 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
-import { StoreKey } from '~/sharedStore'
-import { STRINGS } from '~/i18n'
-import { getISOWeeks } from '~/utils'
-import EventWeekCell from './EventWeekCell.vue'
-import EventListFilterForm from './EventListFilterForm.vue'
+import { computed, inject, ref } from "vue";
+import { StoreKey } from "~/sharedStore";
+import { STRINGS } from "~/i18n";
+import { getISOWeeks } from "~/utils";
+import EventWeekCell from "./EventWeekCell.vue";
+import EventListFilterForm from "./EventListFilterForm.vue";
 
 defineProps<{
-	mobile: boolean
-}>()
+	mobile: boolean;
+}>();
 
-const store = inject(StoreKey)!
-const weekcalendar = ref<HTMLDivElement>()
+const store = inject(StoreKey)!;
+const weekcalendar = ref<HTMLDivElement>();
 
-const displayEventInfo = computed(() => store.displayEventInfo || (store.displayEventInfo === null && store.parentStack.length > 0))
+const displayEventInfo = computed(
+	() =>
+		store.displayEventInfo ||
+		(store.displayEventInfo === null && store.parentStack.length > 0),
+);
 
 const weekname = computed(() => {
-	if (!store.week) return ''
-	const curWeek = store.week[1]
-	const curYear = store.week[0]
-	return `${curWeek} / ${curYear}`
-})
+	if (!store.week) return "";
+	const curWeek = store.week[1];
+	const curYear = store.week[0];
+	return `${curWeek} / ${curYear}`;
+});
 
-const id = computed(() => `${store.htmlId}-event-week-table`)
+const id = computed(() => `${store.htmlId}-event-week-table`);
 
-function backToList () {
-	store.weeks = null
-	store.name = null
-	store.frontpageText = null
-	store.view = 'events'
+function backToList() {
+	store.weeks = null;
+	store.name = null;
+	store.frontpageText = null;
+	store.view = "events";
 }
 
-function prevweek () {
-	if (!store.week) return
-	let curWeek = store.week[1]
-	let curYear = store.week[0]
-	curWeek--
+function prevweek() {
+	if (!store.week) return;
+	let curWeek = store.week[1];
+	let curYear = store.week[0];
+	curWeek--;
 	if (curWeek < 1) {
-		curYear--
-		curWeek = getISOWeeks(curYear)
+		curYear--;
+		curWeek = getISOWeeks(curYear);
 	}
-	store.week = [curYear, curWeek]
-	store.loading++
-	store.reload({ focus: `#${id.value}` })
+	store.week = [curYear, curWeek];
+	store.loading++;
+	store.reload({ focus: `#${id.value}` });
 }
 
-function nextweek () {
-	if (!store.week) return
-	let curWeek = store.week[1]
-	let curYear = store.week[0]
-	curWeek++
+function nextweek() {
+	if (!store.week) return;
+	let curWeek = store.week[1];
+	let curYear = store.week[0];
+	curWeek++;
 	if (curWeek > getISOWeeks(curYear)) {
-		curWeek = 1
-		curYear++
+		curWeek = 1;
+		curYear++;
 	}
-	store.week = [curYear, curWeek]
-	store.loading++
-	store.reload({ focus: `#${id.value}` })
+	store.week = [curYear, curWeek];
+	store.loading++;
+	store.reload({ focus: `#${id.value}` });
 }
 </script>
 <template lang="pug">
@@ -93,5 +97,4 @@ function nextweek () {
 		.pretix-widget-event-week-col(v-for="d in store.days", :key="d?.date || ''")
 			EventWeekCell(:day="d", :mobile="mobile")
 </template>
-<style lang="sass">
-</style>
+<style lang="sass"></style>

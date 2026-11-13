@@ -1,43 +1,54 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { TEXTS, VARS, TYPEOPS } from './constants'
+import { computed } from "vue";
+import { TEXTS, VARS, TYPEOPS } from "./constants";
 
-declare const $: any
-declare const moment: any
+declare const $: any;
+declare const moment: any;
 
 interface GraphNode {
-	rule: any
-	column: number
-	children: string[]
-	y: number
-	parent?: GraphNode
+	rule: any;
+	column: number;
+	children: string[];
+	y: number;
+	parent?: GraphNode;
 }
 
 const props = defineProps<{
-	node: GraphNode
-	nodeid: string
-	children: GraphNode[]
-	boxWidth: number
-	boxHeight: number
-	marginX: number
-	marginY: number
-	paddingX: number
-}>()
+	node: GraphNode;
+	nodeid: string;
+	children: GraphNode[];
+	boxWidth: number;
+	boxHeight: number;
+	marginX: number;
+	marginY: number;
+	paddingX: number;
+}>();
 
 const x = computed(() => {
-	return props.node.column * (props.boxWidth + props.marginX) + props.marginX / 2 + props.paddingX
-})
+	return (
+		props.node.column * (props.boxWidth + props.marginX) +
+		props.marginX / 2 +
+		props.paddingX
+	);
+});
 
 const y = computed(() => {
-	return props.node.y * (props.boxHeight + props.marginY) + props.marginY / 2
-})
+	return props.node.y * (props.boxHeight + props.marginY) + props.marginY / 2;
+});
 
 const edges = computed(() => {
-	const startX = x.value + props.boxWidth + 1
-	const startY = y.value + props.boxHeight / 2
+	const startX = x.value + props.boxWidth + 1;
+	const startY = y.value + props.boxHeight / 2;
 	return props.children.map((c) => {
-		const endX = (c.column * (props.boxWidth + props.marginX) + props.marginX / 2 + props.paddingX) - 1
-		const endY = (c.y * (props.boxHeight + props.marginY) + props.marginY / 2) + props.boxHeight / 2
+		const endX =
+			c.column * (props.boxWidth + props.marginX) +
+			props.marginX / 2 +
+			props.paddingX -
+			1;
+		const endY =
+			c.y * (props.boxHeight + props.marginY) +
+			props.marginY / 2 +
+			props.boxHeight / 2;
 
 		return `
             M ${startX} ${startY}
@@ -45,25 +56,25 @@ const edges = computed(() => {
             C ${endX - 25} ${startY} ${endX - 25} ${startY} ${endX - 25} ${startY + 25 * Math.sign(endY - startY)}
             L ${endX - 25} ${endY - 25 * Math.sign(endY - startY)}
             C ${endX - 25} ${endY} ${endX - 25} ${endY} ${endX} ${endY}
-          `
-	})
-})
+          `;
+	});
+});
 
 const checkEdge = computed(() => {
-	const startX = x.value + props.boxWidth + 1
-	const startY = y.value + props.boxHeight / 2
+	const startX = x.value + props.boxWidth + 1;
+	const startY = y.value + props.boxHeight / 2;
 
-	return `M ${startX} ${startY} L ${startX + 25} ${startY}`
-})
+	return `M ${startX} ${startY} L ${startX + 25} ${startY}`;
+});
 
 const rootEdge = computed(() => {
 	if (props.node.column > 0) {
-		return
+		return;
 	}
-	const startX = 0
-	const startY = props.boxHeight / 2 + props.marginY / 2
-	const endX = x.value - 1
-	const endY = y.value + props.boxHeight / 2
+	const startX = 0;
+	const startY = props.boxHeight / 2 + props.marginY / 2;
+	const endX = x.value - 1;
+	const endY = y.value + props.boxHeight / 2;
 
 	return `
             M ${startX} ${startY}
@@ -71,98 +82,101 @@ const rootEdge = computed(() => {
             C ${endX - 25} ${startY} ${endX - 25} ${startY} ${endX - 25} ${startY + 25 * Math.sign(endY - startY)}
             L ${endX - 25} ${endY - 25 * Math.sign(endY - startY)}
             C ${endX - 25} ${endY} ${endX - 25} ${endY} ${endX} ${endY}
-        `
-})
+        `;
+});
 
 const operator = computed(() => {
-	return Object.keys(props.node.rule).filter((k) => !k.startsWith('__'))[0]
-})
+	return Object.keys(props.node.rule).filter((k) => !k.startsWith("__"))[0];
+});
 
 const variable = computed(() => {
-	const op = operator.value
+	const op = operator.value;
 	if (props.node.rule[op] && props.node.rule[op][0]) {
-		if (props.node.rule[op][0]['entries_since']) {
-			return 'entries_since'
+		if (props.node.rule[op][0]["entries_since"]) {
+			return "entries_since";
 		}
-		if (props.node.rule[op][0]['entries_before']) {
-			return 'entries_before'
+		if (props.node.rule[op][0]["entries_before"]) {
+			return "entries_before";
 		}
-		if (props.node.rule[op][0]['entries_days_since']) {
-			return 'entries_days_since'
+		if (props.node.rule[op][0]["entries_days_since"]) {
+			return "entries_days_since";
 		}
-		if (props.node.rule[op][0]['entries_days_before']) {
-			return 'entries_days_before'
+		if (props.node.rule[op][0]["entries_days_before"]) {
+			return "entries_days_before";
 		}
-		return props.node.rule[op][0]['var']
+		return props.node.rule[op][0]["var"];
 	} else {
-		return ''
+		return "";
 	}
-})
+});
 
 const vardata = computed(() => {
-	return VARS[variable.value as keyof typeof VARS]
-})
+	return VARS[variable.value as keyof typeof VARS];
+});
 
 const varresult = computed(() => {
-	const op = operator.value
+	const op = operator.value;
 	if (props.node.rule[op] && props.node.rule[op][0]) {
-		if (typeof props.node.rule[op][0]['__result'] === 'undefined')
-			return null
-		return props.node.rule[op][0]['__result']
+		if (typeof props.node.rule[op][0]["__result"] === "undefined") return null;
+		return props.node.rule[op][0]["__result"];
 	} else {
-		return ''
+		return "";
 	}
-})
+});
 
 const rightoperand = computed(() => {
-	const op = operator.value
-	if (props.node.rule[op] && typeof props.node.rule[op][1] !== 'undefined') {
-		return props.node.rule[op][1]
+	const op = operator.value;
+	if (props.node.rule[op] && typeof props.node.rule[op][1] !== "undefined") {
+		return props.node.rule[op][1];
 	} else {
-		return null
+		return null;
 	}
-})
+});
 
 const op = computed(() => {
-	return TYPEOPS[vardata.value.type as keyof typeof TYPEOPS]?.[operator.value as any]
-})
+	return TYPEOPS[vardata.value.type as keyof typeof TYPEOPS]?.[
+		operator.value as any
+	];
+});
 
 const operands = computed(() => {
-	return props.node.rule[operator.value]
-})
+	return props.node.rule[operator.value];
+});
 
 const result = computed(() => {
-	return typeof props.node.rule.__result === 'undefined' ? null : !!props.node.rule.__result
-})
+	return typeof props.node.rule.__result === "undefined"
+		? null
+		: !!props.node.rule.__result;
+});
 
 const resultInclParents = computed(() => {
-	if (typeof props.node.rule.__result === 'undefined') return null
+	if (typeof props.node.rule.__result === "undefined") return null;
 
-	function _p (node: GraphNode): boolean {
+	function _p(node: GraphNode): boolean {
 		if (node.parent) {
-			return node.rule.__result && _p(node.parent)
+			return node.rule.__result && _p(node.parent);
 		}
-		return node.rule.__result
+		return node.rule.__result;
 	}
-	return _p(props.node)
-})
+	return _p(props.node);
+});
 
 const nodeClass = computed(() => {
 	return {
 		node: true,
-		'node-true': result.value === true,
-		'node-false': result.value === false,
-	}
-})
+		"node-true": result.value === true,
+		"node-false": result.value === false,
+	};
+});
 
-function df (val: string) {
-	const format = $('body').attr('data-datetimeformat')
-	return moment(val).format(format)
+function df(val: string) {
+	const format = $("body").attr("data-datetimeformat");
+	return moment(val).format(format);
 }
 
-function tf (val: string) {
-	const format = $('body').attr('data-timeformat')
-	return moment(val, 'HH:mm:ss').format(format)
+function tf(val: string) {
+	const format = $("body").attr("data-timeformat");
+	return moment(val, "HH:mm:ss").format(format);
 }
 </script>
 <template lang="pug">

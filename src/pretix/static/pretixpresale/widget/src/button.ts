@@ -1,31 +1,33 @@
-import { createApp, type App } from 'vue'
-import ButtonComponent from '~/components/Button.vue'
-import { createWidgetStore, StoreKey } from '~/sharedStore'
-import { makeid } from '~/utils'
-import type { WidgetData } from '~/types'
+import { createApp, type App } from "vue";
+import ButtonComponent from "~/components/Button.vue";
+import { createWidgetStore, StoreKey } from "~/sharedStore";
+import { makeid } from "~/utils";
+import type { WidgetData } from "~/types";
 
-export function createButtonInstance (element: Element, htmlId?: string): App {
-	let targetUrl = element.attributes.event.value
+export function createButtonInstance(element: Element, htmlId?: string): App {
+	let targetUrl = element.attributes.event.value;
 	if (!targetUrl.match(/\/$/)) {
-		targetUrl += '/'
+		targetUrl += "/";
 	}
 
-	const widgetData: WidgetData = JSON.parse(JSON.stringify(window.PretixWidget.widget_data))
+	const widgetData: WidgetData = JSON.parse(
+		JSON.stringify(window.PretixWidget.widget_data),
+	);
 
 	for (const attr of Array.from(element.attributes)) {
 		if (attr.name.match(/^data-.*$/)) {
-			widgetData[attr.name.replace(/^data-/, '')] = attr.value
+			widgetData[attr.name.replace(/^data-/, "")] = attr.value;
 		}
 	}
 
-	const rawItems = element.attributes.items?.value || ''
+	const rawItems = element.attributes.items?.value || "";
 
 	// Parse items string (format: "item_1=2,item_3=1")
-	const buttonItems: { item: string; count: string }[] = []
-	for (const itemStr of rawItems.split(',')) {
-		if (itemStr.includes('=')) {
-			const [item, count] = itemStr.split('=')
-			buttonItems.push({ item, count })
+	const buttonItems: { item: string; count: string }[] = [];
+	for (const itemStr of rawItems.split(",")) {
+		if (itemStr.includes("=")) {
+			const [item, count] = itemStr.split("=");
+			buttonItems.push({ item, count });
 		}
 	}
 
@@ -33,45 +35,50 @@ export function createButtonInstance (element: Element, htmlId?: string): App {
 		targetUrl,
 		voucher: element.attributes.voucher?.value || null,
 		subevent: element.attributes.subevent?.value || null,
-		skipSsl: 'skip-ssl-check' in element.attributes,
-		disableIframe: 'disable-iframe' in element.attributes,
+		skipSsl: "skip-ssl-check" in element.attributes,
+		disableIframe: "disable-iframe" in element.attributes,
 		widgetData,
 		htmlId: htmlId || element.id || makeid(16),
 		isButton: true,
 		buttonItems,
 		buttonText: element.innerHTML,
-		keepCart: 'keep-cart' in element.attributes || buttonItems.length > 0,
-	})
+		keepCart: "keep-cart" in element.attributes || buttonItems.length > 0,
+	});
 
 	const observer = new MutationObserver((mutationList) => {
 		for (const mutation of mutationList) {
-			if (mutation.type === 'attributes' && mutation.attributeName?.startsWith('data-')) {
-				const attrName = mutation.attributeName.substring(5)
-				const attrValue = (mutation.target as Element).getAttribute(mutation.attributeName)
+			if (
+				mutation.type === "attributes" &&
+				mutation.attributeName?.startsWith("data-")
+			) {
+				const attrName = mutation.attributeName.substring(5);
+				const attrValue = (mutation.target as Element).getAttribute(
+					mutation.attributeName,
+				);
 				if (attrValue !== null) {
-					store.widgetData[attrName] = attrValue
+					store.widgetData[attrName] = attrValue;
 				}
 			}
 		}
-	})
+	});
 
-	const app = createApp(ButtonComponent)
-	app.provide(StoreKey, store)
+	const app = createApp(ButtonComponent);
+	app.provide(StoreKey, store);
 	app.config.errorHandler = (error, _vm, info) => {
-		console.error('[pretix-button]', info, error)
-	}
+		console.error("[pretix-button]", info, error);
+	};
 	// Instead of mounting to the element directly, replicate vue2.7 behaviour, where
 	// the HTML-element gets replaced instead of vue3’s behaviour to replace innerHTML.
 	// The latter can cause issues with custom CSS as HTML structure would change.
 	// app.mount(element)
 	// observer.observe(element, { attributes: true })
-	const fragment = document.createDocumentFragment()
-	app.mount(fragment)
+	const fragment = document.createDocumentFragment();
+	app.mount(fragment);
 	for (const attr of element.attributes) {
-		fragment.firstChild.setAttribute(attr.name, attr.value)
+		fragment.firstChild.setAttribute(attr.name, attr.value);
 	}
-	observer.observe(fragment.firstChild, { attributes: true })
-	element.parentNode.replaceChild(fragment, element)
+	observer.observe(fragment.firstChild, { attributes: true });
+	element.parentNode.replaceChild(fragment, element);
 
-	return app
+	return app;
 }

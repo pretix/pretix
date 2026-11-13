@@ -1,119 +1,148 @@
 <script setup lang="ts">
-import { computed, inject, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { StoreKey } from '~/sharedStore'
-import { STRINGS } from '~/i18n'
-import Category from './Category.vue'
+import {
+	computed,
+	inject,
+	ref,
+	watch,
+	onMounted,
+	onBeforeUnmount,
+	nextTick,
+} from "vue";
+import { StoreKey } from "~/sharedStore";
+import { STRINGS } from "~/i18n";
+import Category from "./Category.vue";
 
-const store = inject(StoreKey)!
+const store = inject(StoreKey)!;
 
-const form = ref<HTMLFormElement>()
-const voucherinput = ref<HTMLInputElement>()
-const isItemsSelected = ref(false)
-const localVoucher = ref('')
+const form = ref<HTMLFormElement>();
+const voucherinput = ref<HTMLInputElement>();
+const isItemsSelected = ref(false);
+const localVoucher = ref("");
 
-const idVoucherInput = computed(() => `${store.htmlId}-voucher-input`)
-const ariaLabelledby = computed(() => `${store.htmlId}-voucher-headline`)
-const displayEventInfo = computed(() => store.displayEventInfo || (store.displayEventInfo === null && (store.events || store.weeks || store.days)))
-const idCartExistsMsg = computed(() => `${store.htmlId}-cart-exists`)
+const idVoucherInput = computed(() => `${store.htmlId}-voucher-input`);
+const ariaLabelledby = computed(() => `${store.htmlId}-voucher-headline`);
+const displayEventInfo = computed(
+	() =>
+		store.displayEventInfo ||
+		(store.displayEventInfo === null &&
+			(store.events || store.weeks || store.days)),
+);
+const idCartExistsMsg = computed(() => `${store.htmlId}-cart-exists`);
 
 const buyLabel = computed(() => {
-	let allFree = true
+	let allFree = true;
 	for (const cat of store.categories) {
 		for (const item of cat.items) {
 			for (const v of item.variations) {
-				if (v.price.gross !== '0.00') {
-					allFree = false
-					break
+				if (v.price.gross !== "0.00") {
+					allFree = false;
+					break;
 				}
 			}
-			if ((item.variations.length === 0 && item.price.gross !== '0.00') || item.mandatory_priced_addons) {
-				allFree = false
-				break
+			if (
+				(item.variations.length === 0 && item.price.gross !== "0.00") ||
+				item.mandatory_priced_addons
+			) {
+				allFree = false;
+				break;
 			}
 		}
-		if (!allFree) break
+		if (!allFree) break;
 	}
-	return allFree ? STRINGS.register : STRINGS.buy
-})
+	return allFree ? STRINGS.register : STRINGS.buy;
+});
 
 const hiddenParams = computed(() => {
-	const params = new URL(store.getVoucherFormTarget()).searchParams
-	params.delete('iframe')
-	params.delete('take_cart_id')
-	return [...params.entries()]
-})
+	const params = new URL(store.getVoucherFormTarget()).searchParams;
+	params.delete("iframe");
+	params.delete("take_cart_id");
+	return [...params.entries()];
+});
 
-const showVoucherForm = computed(() => store.vouchersExist && !store.disableVouchers && !store.voucherCode)
+const showVoucherForm = computed(
+	() => store.vouchersExist && !store.disableVouchers && !store.voucherCode,
+);
 
-async function backToList () {
-	store.targetUrl = store.parentStack.pop() || store.targetUrl
-	store.error = null
+async function backToList() {
+	store.targetUrl = store.parentStack.pop() || store.targetUrl;
+	store.error = null;
 	if (!store.subevent) {
 		// reset if we are not in a series
-		store.name = null
-		store.frontpageText = null
+		store.name = null;
+		store.frontpageText = null;
 	}
-	store.subevent = null
-	store.offset = 0
-	store.appendEvents = false
-	store.triggerLoadCallback()
+	store.subevent = null;
+	store.offset = 0;
+	store.appendEvents = false;
+	store.triggerLoadCallback();
 
 	if (store.events !== undefined && store.events !== null) {
-		store.view = 'events'
+		store.view = "events";
 	} else if (store.days !== undefined && store.days !== null) {
-		store.view = 'days'
+		store.view = "days";
 	} else {
-		store.view = 'weeks'
+		store.view = "weeks";
 	}
 
 	// wait for redraw, then focus content element for better a11y
-	const rootEl = form.value?.closest('.pretix-widget-wrapper') as HTMLElement | null
-	await nextTick()
-	rootEl?.focus()
+	const rootEl = form.value?.closest(
+		".pretix-widget-wrapper",
+	) as HTMLElement | null;
+	await nextTick();
+	rootEl?.focus();
 }
 
-function calcItemsSelected () {
-	if (!form.value) return
-	const checkboxes = form.value.querySelectorAll<HTMLInputElement>('input[type=checkbox], input[type=radio]')
-	const hasChecked = Array.from(checkboxes).some((el) => el.checked)
-	const numberInputs = form.value.querySelectorAll<HTMLInputElement>('.pretix-widget-item-count-group input')
-	const hasQuantity = Array.from(numberInputs).some((el) => parseInt(el.value || '0') > 0)
-	isItemsSelected.value = hasChecked || hasQuantity
+function calcItemsSelected() {
+	if (!form.value) return;
+	const checkboxes = form.value.querySelectorAll<HTMLInputElement>(
+		"input[type=checkbox], input[type=radio]",
+	);
+	const hasChecked = Array.from(checkboxes).some((el) => el.checked);
+	const numberInputs = form.value.querySelectorAll<HTMLInputElement>(
+		".pretix-widget-item-count-group input",
+	);
+	const hasQuantity = Array.from(numberInputs).some(
+		(el) => parseInt(el.value || "0") > 0,
+	);
+	isItemsSelected.value = hasChecked || hasQuantity;
 }
 
-function _focusVoucherField () {
-	voucherinput.value?.focus()
+function _focusVoucherField() {
+	voucherinput.value?.focus();
 }
 
-function handleBuy (event: Event) {
+function handleBuy(event: Event) {
 	if (form.value) {
-		const formData = new FormData(form.value)
-		store.buy(formData, event)
+		const formData = new FormData(form.value);
+		store.buy(formData, event);
 	}
 }
 
-function handleRedeem (event: Event) {
-	store.redeem(localVoucher.value, event)
+function handleRedeem(event: Event) {
+	store.redeem(localVoucher.value, event);
 }
 
 onMounted(() => {
 	if (form.value) {
-		form.value.addEventListener('change', calcItemsSelected)
+		form.value.addEventListener("change", calcItemsSelected);
 	}
-})
+});
 
 onBeforeUnmount(() => {
 	if (form.value) {
-		form.value.removeEventListener('change', calcItemsSelected)
+		form.value.removeEventListener("change", calcItemsSelected);
 	}
-})
+});
 
-watch(() => store.overlay?.frameShown, (newValue) => {
-	if (!newValue && form.value) {
-		form.value.reset()
-		calcItemsSelected()
-	}
-})
+watch(
+	() => store.overlay?.frameShown,
+	(newValue) => {
+		if (!newValue && form.value) {
+			form.value.reset();
+			calcItemsSelected();
+		}
+	},
+);
 </script>
 
 <template lang="pug">
@@ -233,5 +262,4 @@ watch(() => store.overlay?.frameShown, (newValue) => {
 				button(@click="handleRedeem") {{ STRINGS.redeem }}
 			.pretix-widget-clear
 </template>
-<style lang="sass">
-</style>
+<style lang="sass"></style>

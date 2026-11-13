@@ -1,55 +1,58 @@
 <script setup lang="ts">
-import { computed, inject, ref, onMounted, watch } from 'vue'
-import { StoreKey } from '~/sharedStore'
-import { STRINGS } from '~/i18n'
-import EventForm from './EventForm.vue'
-import EventList from './EventList.vue'
-import EventCalendar from './EventCalendar.vue'
-import EventWeekCalendar from './EventWeekCalendar.vue'
-import Overlay from './Overlay.vue'
+import { computed, inject, ref, onMounted, watch } from "vue";
+import { StoreKey } from "~/sharedStore";
+import { STRINGS } from "~/i18n";
+import EventForm from "./EventForm.vue";
+import EventList from "./EventList.vue";
+import EventCalendar from "./EventCalendar.vue";
+import EventWeekCalendar from "./EventWeekCalendar.vue";
+import Overlay from "./Overlay.vue";
 
 const emit = defineEmits<{
-	mounted: []
-}>()
+	mounted: [];
+}>();
 
-const store = inject(StoreKey)!
+const store = inject(StoreKey)!;
 
-const wrapper = ref<HTMLDivElement>()
-const formcomp = ref<InstanceType<typeof EventForm>>()
-const mobile = ref(false)
+const wrapper = ref<HTMLDivElement>();
+const formcomp = ref<InstanceType<typeof EventForm>>();
+const mobile = ref(false);
 
 const classObject = computed(() => ({
-	'pretix-widget': true,
-	'pretix-widget-mobile': mobile.value,
-	'pretix-widget-use-custom-spinners': true,
-}))
+	"pretix-widget": true,
+	"pretix-widget-mobile": mobile.value,
+	"pretix-widget-use-custom-spinners": true,
+}));
 
 watch(mobile, (newValue) => {
-	store.mobile = newValue
-})
+	store.mobile = newValue;
+});
 
 onMounted(() => {
 	if (wrapper.value) {
 		const resizeObserver = new ResizeObserver((entries) => {
-			mobile.value = entries[0].contentRect.width <= 800
-		})
-		resizeObserver.observe(wrapper.value)
+			mobile.value = entries[0].contentRect.width <= 800;
+		});
+		resizeObserver.observe(wrapper.value);
 	}
 
-	store.reload() // TODO call earlier?
-	emit('mounted') // TODO where does this go?
-})
+	store.reload(); // TODO call earlier?
+	emit("mounted"); // TODO where does this go?
+});
 
-watch(() => store.view, (_newValue, oldValue) => {
-	if (oldValue && wrapper.value) {
-		// always make sure the widget is scrolled to the top
-		// as we only check top, we do not need to wait for a redraw
-		const rect = wrapper.value.getBoundingClientRect()
-		if (rect.top < 0) {
-			wrapper.value.scrollIntoView()
+watch(
+	() => store.view,
+	(_newValue, oldValue) => {
+		if (oldValue && wrapper.value) {
+			// always make sure the widget is scrolled to the top
+			// as we only check top, we do not need to wait for a redraw
+			const rect = wrapper.value.getBoundingClientRect();
+			if (rect.top < 0) {
+				wrapper.value.scrollIntoView();
+			}
 		}
-	}
-})
+	},
+);
 </script>
 <template lang="pug">
 .pretix-widget-wrapper(ref="wrapper", tabindex="0", role="article", :aria-label="store.name")
@@ -72,5 +75,4 @@ watch(() => store.view, (_newValue, oldValue) => {
 
 	Overlay
 </template>
-<style lang="sass">
-</style>
+<style lang="sass"></style>
