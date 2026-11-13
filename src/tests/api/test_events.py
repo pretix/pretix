@@ -372,6 +372,32 @@ def test_event_create(team, token_client, organizer, event, meta_prop):
                 "de": "Demo Konference 2020 Test",
                 "en": "Demo Conference 2020 Test"
             },
+            "live": False,
+            "currency": "EUR",
+            "date_from": "1817-12-27T10:00:00Z",
+            "date_to": "1817-12-28T10:00:00Z",
+            "date_admission": None,
+            "is_public": False,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "slug": "newslug",
+            "meta_data": {
+                "type": "Conference"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"date_from":["Do not pass dates before 1900-01-01"],"date_to":["Do not pass dates before 1900-01-01"]}'
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/'.format(organizer.slug),
+        {
+            "name": {
+                "de": "Demo Konference 2020 Test",
+                "en": "Demo Conference 2020 Test"
+            },
             "live": True,
             "currency": "EUR",
             "date_from": "2017-12-27T10:00:00Z",
