@@ -4,25 +4,23 @@
 		"src/pretix/static/**/*.vue",
 		"src/pretix/plugins/webcheckin/**/*",
 		"src/pretix/plugins/webcheckin/**/*.vue",
-		"src/pretix/plugins/wallet/**/*",
-		"src/pretix/plugins/wallet/**/*.vue"
 	],
+	"exclude": ["**/*.js"],
 	"compilerOptions": {
-		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
 		},
 		"strict": false,
 		"allowJs": true,
 		"checkJs": true,
-		"target": "es2025",
+		"target": "esnext",
 		"module": "esnext",
 		"moduleResolution": "bundler",
 		"resolveJsonModule": true,
 		"noErrorTruncation": true,
 		"noImplicitThis": true,
 		"isolatedModules": true,
-		"types": ["node", "events"]
+		"noEmit": true,
 	},
 	"vueCompilerOptions": {
 		"plugins": ["@vue/language-plugin-pug"]

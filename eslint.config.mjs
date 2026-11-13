@@ -5,6 +5,7 @@ import ts from 'typescript-eslint'
 import stylistic from '@stylistic/eslint-plugin'
 import vue from 'eslint-plugin-vue'
 import vuePug from 'eslint-plugin-vue-pug'
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 const ignores = globalIgnores([
 	'**/node_modules',
@@ -43,6 +44,8 @@ const ignores = globalIgnores([
 	'src/pretix/static/pretixbase/js/addressform.js',
 	'src/pretix/static/pretixbase/js/asynctask.js',
 	'src/pretix/static/pretixbase/js/details.js',
+	'src/pretix/static/pretixbase/js/gettextstub.js',
+	'src/pretix/static/pretixbase/js/i18nstring.js',
 	'src/pretix/static/pretixcontrol/js/menu.js',
 	'src/pretix/static/pretixcontrol/js/ui/editor.js',
 	'src/pretix/static/pretixcontrol/js/ui/geo.js',
@@ -159,4 +162,5 @@ export default defineConfig([
 			},
 		},
 	},
+	eslintPluginPrettierRecommended,
 ])
