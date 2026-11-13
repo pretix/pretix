@@ -1,11 +1,27 @@
 {% extends "pretixcontrol/organizers/base.html" %}
 {% load i18n %}
+{% load eventurl %}
 {% load bootstrap3 %}
 {% load static %}
 {% block inner %}
     <h1>
         {% blocktrans with name=request.organizer.name %}Organizer: {{ name }}{% endblocktrans %}
     </h1>
+    <div class="helper-space-below">
+        {% trans "Public profile" %}:
+        <span id="organizer_url" class="text-muted">{% abseventurl request.organizer "presale:organizer.index" %}</span>
+        <button type="button" class="btn btn-default btn-xs btn-clipboard js-only" data-clipboard-target="#organizer_url">
+            <i class="fa fa-clipboard" aria-hidden="true"></i>
+            <span class="sr-only">{% trans "Copy to clipboard" %}</span>
+        </button>
+        <div class="btn-group helper-display-inline-block">
+            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" title="{% trans "Create QR code" %}" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-qrcode" aria-hidden="true"></i>
+            </button>
+            {% include "pretixcontrol/organizers/fragment_qr_dropdown.html" with url=0 %}
+        </div>
+        <div class="clearfix"></div>
+    </div>
     {% if events|length == 0 and not filter_form.filtered %}
         {% if "organizer.events:create" in request.orgapermset %}
             <p>
