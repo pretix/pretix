@@ -1307,7 +1307,20 @@ class SubEventsTest(SoupTest):
             for se in [self.subevent1, self.subevent2]:
                 assert se.checkinlist_set.count() == 1
 
-    def test_edit_bulk_lists_keep_mixed(self):
+    def test_edit_bulk_lists_keep_mixed_if_checked_in(self):
+        with scopes_disabled():
+            self.subevent1.checkinlist_set.create(event=self.event1, name="C1")
+            cl = self.subevent2.checkinlist_set.create(event=self.event1, name="C2")
+            cl.checkins.create(
+                successful=False,
+            )
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_edit', {
+            '__ALL': 'on',
+        }, follow=True)
+        fields = extract_form_fields(doc)
+        assert 'checkinlist_set-TOTAL_FORMS' not in fields
+
+    def test_edit_bulk_lists_replace_mixed_if_unused(self):
         with scopes_disabled():
             self.subevent1.checkinlist_set.create(event=self.event1, name="C1")
             self.subevent2.checkinlist_set.create(event=self.event1, name="C2")
@@ -1315,4 +1328,18 @@ class SubEventsTest(SoupTest):
             '__ALL': 'on',
         }, follow=True)
         fields = extract_form_fields(doc)
-        assert 'checkinlist_set-TOTAL_FORMS' not in fields
+
+        fields.update({
+            '_bulk': ['__checkinlists'],
+            'checkinlist_set-TOTAL_FORMS': '1',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+            'checkinlist_set-0-name': 'Default',
+            'checkinlist_set-0-all_products': 'on',
+        })
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_edit', fields, follow=True)
+        assert doc.select(".alert-success")
+        with scopes_disabled():
+            assert self.subevent1.checkinlist_set.get().name == "Default"
+            assert self.subevent2.checkinlist_set.get().name == "Default"
