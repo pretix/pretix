@@ -1,4 +1,4 @@
-import { i18nstring_localize } from "/src/pretix/static/pretixbase/js/i18nstring.ts";
+import { localize_string } from "/src/pretix/static/pretixbase/js/i18n.ts";
 import { createStore } from "/src/pretix/static/pretixpresale/widget/src/lib/store.ts";
 import { toRaw, type InjectionKey } from "vue";
 
@@ -134,7 +134,7 @@ export function createWalletStore(config: {
 						fieldgroup.identifier
 					] as any as PlaceholderFieldGroupConfig;
 					for (const entry of layout_group.entries) {
-						let label = i18nstring_localize(entry.label);
+						let label = localize_string(entry.label);
 						let value = null;
 						if (entry.type === "placeholder") {
 							const placeholder =
@@ -143,11 +143,11 @@ export function createWalletStore(config: {
 								continue;
 							}
 							if (!label) {
-								label = i18nstring_localize(placeholder.label);
+								label = localize_string(placeholder.label);
 							}
 							value = placeholder?.sample;
 						} else if (entry.type == "custom") {
-							value = i18nstring_localize(entry.content);
+							value = localize_string(entry.content);
 						}
 						content[fieldgroup.identifier].push({
 							label,

@@ -4,12 +4,10 @@ import Select from "./input/select.vue";
 import I18nInput from "/src/pretix/static/pretixbase/components/i18n-input.vue";
 import TextContent from "./text-content.vue";
 import { StoreKey } from "../walletStore";
-import { i18nstring_localize } from "/src/pretix/static/pretixbase/js/i18nstring.ts";
+import { localize_string } from "/src/pretix/static/pretixbase/js/i18n.ts";
 
 const store = inject(StoreKey)!;
 
-const gettext = (window as any).gettext;
-const ngettext = (window as any).ngettext;
 const interpolate = (window as any).interpolate;
 
 const props = defineProps<{
@@ -54,7 +52,7 @@ const placeholderChoices = computed(() => {
         .filter(([_, { required_context }]) =>
             new Set(required_context).isSubsetOf(availableContext),
         )
-        .map(([k, v]): [string, string] => [k, i18nstring_localize(v.label)]);
+        .map(([k, v]): [string, string] => [k, localize_string(v.label)]);
     choices.push(["other", gettext("Other…")]);
     return choices;
 });
@@ -79,7 +77,7 @@ const placeholders = computed(() => {
                     : null;
         const placeholders = {};
         let base;
-        if (i18nstring_localize(entry.label)) {
+        if (localize_string(entry.label)) {
             base = entry.label
         } else if (placeholder) {
             base = placeholder.label
@@ -87,7 +85,7 @@ const placeholders = computed(() => {
             return null
         }
         for (const locale of Object.keys(store.locales)) {
-            placeholders[locale] = i18nstring_localize(base, locale)
+            placeholders[locale] = localize_string(base, locale)
         }
         return placeholders
     })
@@ -119,7 +117,7 @@ const placeholders = computed(() => {
                                             :placeholderChoices="placeholderChoices")
                                 Select(v-else-if='fieldgroup.content_type == "image"'
                                         v-model="fieldConfig.entries[n - 1].content"
-                                        :choices="Object.entries(store.placeholders.image).map(([k, v]) => [k, i18nstring_localize(v.label)])"
+                                        :choices="Object.entries(store.placeholders.image).map(([k, v]) => [k, localize_string(v.label)])"
                                     )
                             td.text-right
                                 button.btn.btn-danger.form-control-static(type="button" @click="fieldConfig.entries.splice(n - 1, 1)" v-if="fieldConfig.entries.length > (fieldgroup.min_entries||0)")
