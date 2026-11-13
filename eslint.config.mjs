@@ -5,6 +5,7 @@ import ts from 'typescript-eslint'
 import stylistic from '@stylistic/eslint-plugin'
 import vue from 'eslint-plugin-vue'
 import vuePug from 'eslint-plugin-vue-pug'
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 const ignores = globalIgnores([
 	'**/node_modules',
@@ -161,4 +162,5 @@ export default defineConfig([
 			},
 		},
 	},
+	eslintPluginPrettierRecommended,
 ])
