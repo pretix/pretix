@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { computed, inject, watchEffect } from "vue";
 import Select from "./input/select.vue";
-import I18nInput from "/src/pretix/static/pretixbase/components/i18n-input.vue";
+import I18nInput from "@/pretix/static/pretixbase/components/i18n-input.vue";
 import TextContent from "./text-content.vue";
 import { StoreKey } from "../walletStore";
-import { localize_string } from "/src/pretix/static/pretixbase/js/i18n.ts";
+import { localize_string } from "@/pretix/static/pretixbase/js/i18n";
 
 const store = inject(StoreKey)!;
+
+const gettext = (window as any).gettext;
+const ngettext = (window as any).ngettext;
 
 const interpolate = (window as any).interpolate;
 

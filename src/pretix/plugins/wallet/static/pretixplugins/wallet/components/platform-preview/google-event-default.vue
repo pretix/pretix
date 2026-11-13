@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { dateTimeFormat } from "/src/pretix/static/pretixcontrol/wallet/helpers";
+import { dateTimeFormat } from "@/pretix/static/pretixcontrol/wallet/helpers";
 import Google from "./google.vue";
-import { i18nstring_localize } from "/src/pretix/static/pretixbase/js/i18nstring.ts";
+import { i18nstring_localize } from "@/pretix/static/pretixbase/js/i18nstring.ts";
 import type { PreviewProps } from "src/pretix/static/pretixcontrol/wallet/index.d.ts";
 
 const gettext = (window as any).gettext;

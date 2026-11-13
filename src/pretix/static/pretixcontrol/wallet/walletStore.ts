@@ -1,5 +1,5 @@
-import { localize_string } from "/src/pretix/static/pretixbase/js/i18n.ts";
-import { createStore } from "/src/pretix/static/pretixpresale/widget/src/lib/store.ts";
+import { localize_string } from "@/pretix/static/pretixbase/js/i18n.ts";
+import { createStore } from "@/pretix/static/pretixpresale/widget/src/lib/store.ts";
 import { toRaw, type InjectionKey } from "vue";
 
 export type WidgetStore = ReturnType<typeof createWalletStore>;
