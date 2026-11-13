@@ -244,6 +244,59 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or event or exhibitor does not exist **or** you have no permission to view it.
 
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/(exhibitor_id)/leads/(id)/
+
+   Returns information on one lead, identified by its exhibitor and lead ID.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/exhibitors/1/leads/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "attendee_order": "T0E7E",
+        "attendee_positionid": 1,
+        "rating": 1,
+        "notes": "",
+        "tags": [],
+        "first_upload": "2021-07-06T11:03:31.414491+01:00",
+        "device_name": "DEV1",
+        "device_uuid": "d8c2ec53-d602-4a08-882d-db4cf54344a2"
+        "data": [
+          {
+            "id": "attendee_name",
+            "label": "Attendee name",
+            "value": "Peter Miller",
+            "details": [
+              {"label": "Given name", "value": "Peter"},
+              {"label": "Family name", "value": "Miller"},
+            ]
+          }
+        ]
+      }
+
+
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param event: The ``slug`` field of the event to fetch
+   :param exhibitor_id: The ``id`` field of the exhibitor to fetch
+   :param exhibitor_id: The ``id`` field of the lead to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or event or exhibitor or lead does not exist **or** you have no permission to view it.
+
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/(id)/vouchers/
 
    Returns a list of all vouchers connected to an exhibitor. The response contains the same data as described in
