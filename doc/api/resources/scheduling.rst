@@ -149,7 +149,7 @@ id                                    integer                    Internal ID in 
 available                             boolean                    Will the resource be available during this shift?
 start                                 datetime                   The shift's start time
 end                                   datetime                   The shift's end time
-timezone                              string                     Shift timezone name
+timezone                              string                     Timezone the shift is defined in
 ===================================== ========================== =======================================================
 
 Planning resource
