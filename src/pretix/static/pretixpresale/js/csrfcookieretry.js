@@ -42,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const pageSecret = field ? unmask(field.value) : null
 
 	const check = (secrets) => {
-		if (secrets.length === 0) return 'no_cookie'
+		// skip if there is no pageSecret
+		if (secrets.length === 0) return pageSecret !== null ? 'no_cookie' : null
 		if (secrets.length > 1) return 'duplicate_cookie'
 		if (!secrets[0]) return 'invalid_cookie'
 		if (pageSecret !== null && pageSecret !== secrets[0]) return 'mismatch'
