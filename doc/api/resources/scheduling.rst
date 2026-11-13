@@ -147,8 +147,8 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID in pretix
 available                             boolean                    Will the resource be available during this shift?
-start                                 datetime                   The shift's start date
-end                                   datetime                   The shift's end date
+start                                 datetime                   The shift's start time
+end                                   datetime                   The shift's end time
 timezone                              string                     Shift timezone name
 ===================================== ========================== =======================================================
 
