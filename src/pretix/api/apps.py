@@ -27,4 +27,4 @@ class PretixApiConfig(AppConfig):
     label = 'pretixapi'
 
     def ready(self):
-        from . import signals, webhooks  # noqa
+        from . import monkeypatches, signals, webhooks  # noqa
