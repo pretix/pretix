@@ -10562,8 +10562,8 @@ msgstr ""
 "angegebenen „letzten Zahlungsdatum“ akzeptiert."
 
 #: pretix/base/settings.py
-msgid "Allow postponed payment choice for sales channels"
-msgstr "Erlaube aufgeschobene Entscheidung der Zahlungsart für Verkaufskanäle"
+msgid "Sales channels to generate invoices for"
+msgstr "Verkaufskanäle mit Rechnungsgenerierung"
 
 #: pretix/base/settings.py
 msgid ""
