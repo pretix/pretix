@@ -257,17 +257,37 @@ Resource type endpoints
       Accept: application/json, text/javascript
 
       {
-        "name": "My Type",
-        "name_plural": "My Types",
+        "name": {
+          "en": "My Type"
+        },
+        "name_plural": {
+          "en": "My Types"
+        },
         "slug": "my-type",
-        "canceled_email_subject": "Canceled subject",
-        "canceled_email_template": "To whom it may concern…",
-        "confirmation_pending_email_subject": "Pending subject",
-        "confirmation_pending_email_template": "To whom it may concern…",
-        "confirmation_email_subject": "Confirmation subject",
-        "confirmation_email_template": "To whom it may concern…",
-        "subevent_moved_email_subject": "Subevent moved subject",
-        "subevent_moved_email_template": "To whom it may concern…",
+        "canceled_email_subject": {
+          "en": "Canceled subject"
+        },
+        "canceled_email_template": {
+          "en": "To whom it may concern…"
+        },
+        "confirmation_pending_email_subject": {
+          "en": "Pending subject"
+        },
+        "confirmation_pending_email_template": {
+          "en": "To whom it may concern…"
+        },
+        "confirmation_email_subject": {
+          "en": "Confirmation subject"
+        },
+        "confirmation_email_template": {
+          "en": "To whom it may concern…"
+        },
+        "subevent_moved_email_subject": {
+          "en": "Subevent moved subject"
+        },
+        "subevent_moved_email_template": {
+          "en": "To whom it may concern…"
+        },
         "is_human": false
       }
 
@@ -402,7 +422,9 @@ Resource type endpoints
       Content-Length: 34
 
       {
-        "name": "New Name"
+        "name": {
+          "en": "New Name"
+        }
       }
 
    **Example response**:
