@@ -165,10 +165,7 @@ export function createWidgetStore (config: {
 			},
 			newTabTarget (): string {
 				let url = this.subevent ? `${this.targetUrl}${this.subevent}/` : this.targetUrl
-				let parameters = this.consentParameter
-				if (this.additionalURLParams) {
-					parameters += `&${this.additionalURLParams}`
-				}
+				let parameters = this.additionalURLParams + this.consentParameter
 				if (parameters) {
 					url += '?' + parameters.replace(/^&/, '')
 				}
