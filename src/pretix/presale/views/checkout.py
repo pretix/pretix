@@ -83,7 +83,7 @@ class CheckoutView(View):
                 return self.redirect(previous_step.get_step_url(request) if previous_step else self.get_index_url(request))
 
             if 'step' not in kwargs:
-                utm_params = {k: v for k, v in request.GET.items() if k.startswith("utm_")}
+                utm_params = {k: v for k, v in request.GET.items() if k.startswith("utm_") or k == "gclid" or k == "_gl"}
                 return self.redirect(step.get_step_url(request) + '?' + urlencode(utm_params))
             is_selected = (step.identifier == kwargs.get('step', ''))
 
