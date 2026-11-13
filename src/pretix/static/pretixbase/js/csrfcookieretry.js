@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const field = document.querySelector('input[name="csrfmiddlewaretoken"]')
 	const pageSecret = field ? unmask(field.value) : null
-	
 	// bail if there is no pageSecret
 	if (!pageSecret) return
 
