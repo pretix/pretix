@@ -130,9 +130,9 @@ available                             boolean                    Will the resour
 start                                 datetime                   The rule's start date
 end                                   datetime                   The rule's end date (or ``null``)
 weekdays                              list of integers           The list of weekdays this rule should work for.  0-indexed, starting with Monday.
-timezone                              string                     Rule timezone name
-starttime                             time                       The start time for generated availabilities
-endtime                               time                       The end time for generated availabilities
+timezone                              string                     Timezone to execute the rule in
+starttime                             time                       The start time of day for generated availabilities
+endtime                               time                       The end time of day for generated availabilities
 ===================================== ========================== =======================================================
 
 
