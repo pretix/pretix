@@ -1932,7 +1932,7 @@ Planning endpoints
    :param id: The ``id`` field of the planning to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizerdoes not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested planning does not exist
 
 .. http:patch:: /api/v1/organizers/(organizer)/plannings/(id)/
@@ -1979,7 +1979,7 @@ Planning endpoints
    :statuscode 200: no error
    :statuscode 400: The planning could not be modified due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizerdoes not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested planning does not exist
 
 .. http:delete:: /api/v1/organizers/(organizer)/plannings/(id)/
@@ -2007,5 +2007,5 @@ Planning endpoints
    :param id: The ``id`` field of the planning to cancel
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizerdoes not exist **or** you have no permission to view it.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested planning does not exist
