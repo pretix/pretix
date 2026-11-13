@@ -172,8 +172,8 @@ paid                                  boolean                    Whether the res
 invoiced                              boolean                    Should this planning be invoiced?
 ===================================== ========================== =======================================================
 
-Endpoints
----------
+Resource type endpoints
+-----------------------
 
 .. http:get:: /api/v1/organizers/(organizer)/resourcetypes/
 
@@ -485,6 +485,9 @@ Endpoints
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it **or** the type still has resources attached to it.
    :statuscode 404: The requested resource type does not exist
 
+Resource endpoints
+------------------
+
 .. http:get:: /api/v1/organizers/(organizer)/resources/
 
    Returns a list of all resources for an organizer.
@@ -733,6 +736,9 @@ Endpoints
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource does not exist
 
+Invite endpoints
+----------------
+
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/invites/
 
    Returns a list of all invites for a resource.
@@ -906,6 +912,9 @@ Endpoints
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource or invite does not exist
 
+Manager endpoints
+-----------------
+
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/managers/
 
    Returns a list of all managers for a resource.
@@ -1045,6 +1054,9 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource or manager does not exist
+
+Property endpoints
+------------------
 
 .. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/
 
@@ -1227,6 +1239,9 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it **or** the property has values linked to a requirement.
    :statuscode 404: The requested type or property does not exist
+
+Value endpoints
+---------------
 
 .. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/
 
@@ -1414,6 +1429,9 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it **or** the value is linked to a requirement.
    :statuscode 404: The requested type, property, or value does not exist
+
+Availability rule endpoints
+---------------------------
 
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/rules/
 
@@ -1627,6 +1645,9 @@ Endpoints
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource or rule does not exist
 
+Availability shift endpoints
+----------------------------
+
 .. http:get:: /api/v1/organizers/(organizer)/resources/(resource)/shifts/
 
    Returns a list of all shifts for a resource.
@@ -1823,6 +1844,9 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource or shift does not exist
+
+Planning endpoints
+------------------
 
 .. http:get:: /api/v1/organizers/(organizer)/plannings/
 
