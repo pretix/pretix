@@ -1520,6 +1520,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
         quotas_by_subevent = defaultdict(set)
         for q in all_quotas:
+            # Normalize lists returned from PostgreSQL
             if q['item_list']:
                 q['item_list'] = ",".join(sorted(q['item_list'].split(',')))
             if q['var_list']:
@@ -1558,6 +1559,11 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
         lists_by_subevent = defaultdict(list)
         for cl in all_lists:
+            # Normalize lists returned from PostgreSQL
+            if cl['item_list']:
+                cl['item_list'] = ",".join(sorted(cl['item_list'].split(',')))
+            if cl['gates_list']:
+                cl['gates_list'] = ",".join(sorted(cl['gates_list'].split(',')))
             lists_by_subevent[cl.pop('subevent')].append(cl)
 
         prev = None
