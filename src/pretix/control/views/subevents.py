@@ -60,7 +60,7 @@ from django.views.generic import (
 )
 
 from pretix.base.models import CartPosition, LogEntry, OrderPosition
-from pretix.base.models.checkin import CheckinList
+from pretix.base.models.checkin import CheckinList, Checkin
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import (
     Item, ItemVariation, Quota, SubEventItem, SubEventItemVariation,
@@ -1320,9 +1320,13 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         extra = 0
         kwargs = {}
 
-        if self.sampled_lists is None:
+        if self.block_list_change:
             return None
-        kwargs['instance'] = self.get_queryset()[0]
+        if self.sampled_lists is not None:
+            try:
+                kwargs['instance'] = self.get_queryset()[0]
+            except IndexError:
+                raise Http404("No matching dates")
 
         formsetclass = inlineformset_factory(
             SubEvent, CheckinList,
@@ -1335,13 +1339,28 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         )
 
     def save_list_formset(self, log_entries):
-        if self.sampled_lists is None or not self.list_formset.has_changed():
+        if self.block_list_change or not self.list_formset.has_changed():
             return
         qidx = 0
         subevents = list(self.get_queryset().prefetch_related('checkinlist_set'))
         to_save_products = []
         to_save_gates = []
         to_delete_list_ids = []
+
+        if self.sampled_lists is None:
+            if len(self.list_formset.forms) == 0:
+                return
+            else:
+                for se in subevents:
+                    for q in se.checkinlist_set.all():
+                        to_delete_list_ids.append(q.pk)
+                        log_entries += [
+                            q.log_action(action='pretix.event.checkinlist.deleted', user=self.request.user, save=False),
+                        ]
+
+                if to_delete_list_ids:
+                    CheckinList.objects.filter(id__in=to_delete_list_ids).delete()
+                    to_delete_list_ids = []
 
         for f in self.list_formset.forms:
             if self.list_formset._should_delete_form(f) and f in self.list_formset.extra_forms:
@@ -1494,6 +1513,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         ctx['filter_form'] = self.filter_form
         ctx['sampled_quotas'] = self.sampled_quotas
         ctx['sampled_lists'] = self.sampled_lists
+        ctx['block_list_change'] = self.block_list_change
         ctx['formset'] = self.quota_formset
         ctx['cl_formset'] = self.list_formset
         ctx['itemvar_forms'] = self.itemvar_forms
@@ -1539,6 +1559,14 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             if quotas_by_subevent[se.pk] != prev:
                 return None
         return se.quotas.all()
+
+    @cached_property
+    def block_list_change(self):
+        if self.sampled_lists:
+            return False  # all the same, safe to change
+        return Checkin.all.filter(
+            list__subevent__in=self.get_queryset()
+        ).exists()
 
     @cached_property
     def sampled_lists(self):
