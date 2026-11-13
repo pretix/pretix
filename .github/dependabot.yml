@@ -11,8 +11,20 @@ updates:
       interval: "daily"
     versioning-strategy: increase
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
+
   - package-ecosystem: "npm"
     directory: "/src/pretix/static/npm_dir"
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    cooldown:
+      default-days: 7
