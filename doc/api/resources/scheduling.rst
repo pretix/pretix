@@ -129,7 +129,7 @@ id                                    integer                    Internal ID in 
 available                             boolean                    Will the resource be available in the generated availabilities?
 start                                 datetime                   The rule's start date
 end                                   datetime                   The rule's end date (or ``null``)
-weekdays                              list of integers           The list of weekdays this rule should work for.  0-indexed, starting with Monday.
+weekdays                              list of integers           The list of weekdays this rule should work for.  0-indexed, starting with Monday.  Requires at least one item.
 timezone                              string                     Timezone to execute the rule in
 starttime                             time                       The start time of day for generated availabilities
 endtime                               time                       The end time of day for generated availabilities
