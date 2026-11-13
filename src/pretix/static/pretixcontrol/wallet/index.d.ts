@@ -2,7 +2,7 @@ type Platform = {
 	identifier: string;
 	name: string;
 	styles: Styles;
-};
+}
 
 type Style = {
 	identifier: string;
@@ -11,18 +11,18 @@ type Style = {
 	settings: Setting[];
 	preview_renderer: string;
 	preview_data: Record<string, string>;
-};
+}
 
 type Placeholder = {
 	label: string;
 	sample: string;
 	required_context: string[];
-};
+}
 
-type Styles = Record<string, Style>;
-type Placeholders = Record<string, Placeholder>;
-type PlaceholderConfig = Record<string, Placeholders>;
-type Platforms = Platform[];
+type Styles = Record<string, Style>
+type Placeholders = Record<string, Placeholder>
+type PlaceholderConfig = Record<string, Placeholders>
+type Platforms = Platform[]
 
 type BaseFieldGroupDefinition = {
 	type: FieldGroupType;
@@ -30,18 +30,18 @@ type BaseFieldGroupDefinition = {
 	name: string;
 	description: string;
 	required: boolean;
-};
+}
 
-type FieldGroupDefinition =
-	| PlaceholderFieldGroupDefinition
-	| PredefinedFieldGroupDefinition;
+type FieldGroupDefinition
+	= | PlaceholderFieldGroupDefinition
+		| PredefinedFieldGroupDefinition
 
-type FieldGroupDisplay = "plain" | "with_label";
-type FieldGroupType = "placeholder" | "predefined";
-type FieldContentType = "text" | "image";
+type FieldGroupDisplay = 'plain' | 'with_label'
+type FieldGroupType = 'placeholder' | 'predefined'
+type FieldContentType = 'text' | 'image'
 
 type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
-	type: "placeholder";
+	type: 'placeholder';
 	content_type: FieldContentType;
 	default_entries: FieldEntry[];
 	min_entries: number | null;
@@ -49,67 +49,66 @@ type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
 	context_args: string[];
 	overflows: string[];
 	default_overflow: string | null;
-};
+}
 
 type PredefinedFieldGroupDefinition = BaseFieldGroupDefinition & {
-	type: "predefined";
+	type: 'predefined';
 	default_active: boolean;
-};
+}
 
-type LocalizableString = null | string | Record<string, string>;
+type LocalizableString = null | string | Record<string, string>
 
 type PlaceholderFieldEntry = {
-	type: "placeholder";
+	type: 'placeholder';
 	label: LocalizableString;
 	content?: string;
-};
+}
 
 type CustomFieldEntry = {
-	type: "custom";
+	type: 'custom';
 	label?: LocalizableString;
 	content?: LocalizableString;
-};
+}
 
-type FieldEntry = PlaceholderFieldEntry | CustomFieldEntry;
+type FieldEntry = PlaceholderFieldEntry | CustomFieldEntry
 
 type Setting = {
 	identifier: string;
 	label: string;
-	type: "text" | "image" | "color" | "float" | "bool";
+	type: 'text' | 'image' | 'color' | 'float' | 'bool';
 	required: boolean;
 	help_text: string;
 	default: string;
-};
-type SettingValue = string | number | boolean | WalletFile | { url: string };
+}
+type SettingValue = string | number | boolean | WalletFile | { url: string }
 
 type PlaceholderFieldGroupConfig = {
 	entries: Array<FieldEntry>;
 	overflow: string | null;
-};
+}
 
 type PredefinedFieldGroupConfig = {
 	active: boolean;
-};
+}
 
-type FieldGroupConfig =
-	| PlaceholderFieldGroupConfig
-	| PredefinedFieldGroupConfig;
+type FieldGroupConfig
+	= | PlaceholderFieldGroupConfig
+		| PredefinedFieldGroupConfig
 
 type LayoutData = {
 	fieldgroups?: Record<string, FieldGroupConfig>;
 	settings?: Record<string, any>;
-};
+}
 
 type PlatformLayout = {
 	style: string;
 	fieldgroups: Record<string, FieldGroupConfig>;
 	settings: {};
 	file_settings: Record<string, WalletFile>;
-};
-type ServerSideFile = { url: string; name: string };
-type ClientSideFile = { file: File | null; identifier?: string; url: string };
-type WalletFile = ServerSideFile | ClientSideFile;
-
+}
+type ServerSideFile = { url: string; name: string }
+type ClientSideFile = { file: File | null; identifier?: string; url: string }
+type WalletFile = ServerSideFile | ClientSideFile
 
 export type PreviewProps = {
 	data: any;
@@ -119,4 +118,4 @@ export type PreviewProps = {
 		{ label?: LocalizableString; content: LocalizableString }
 	>;
 	settings: Record<string, SettingValue>;
-};
+}

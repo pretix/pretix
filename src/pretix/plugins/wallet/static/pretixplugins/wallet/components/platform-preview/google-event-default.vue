@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { dateTimeFormat } from "@/pretix/static/pretixcontrol/wallet/helpers";
-import Google from "./google.vue";
-import { i18nstring_localize } from "@/pretix/static/pretixbase/js/i18nstring.ts";
-import type { PreviewProps } from "src/pretix/static/pretixcontrol/wallet/index.d.ts";
+import { dateTimeFormat } from '@/pretix/static/pretixcontrol/wallet/helpers'
+import Google from './google.vue'
+import { i18nstring_localize } from '@/pretix/static/pretixbase/js/i18nstring.ts'
+import type { PreviewProps } from 'src/pretix/static/pretixcontrol/wallet/index.d.ts'
 
-const gettext = (window as any).gettext;
+const gettext = (window as any).gettext
 
-const props = defineProps<PreviewProps>();
+const props = defineProps<PreviewProps>()
 
-function isActive(fieldgroup: string) {
-	return props.fieldgroups[fieldgroup]?.active;
+function isActive (fieldgroup: string) {
+	return props.fieldgroups[fieldgroup]?.active
 }
 </script>
 

@@ -1,48 +1,48 @@
-import { localize_string } from "@/pretix/static/pretixbase/js/i18n.ts";
-import { createStore } from "@/pretix/static/pretixpresale/widget/src/lib/store.ts";
-import { toRaw, type InjectionKey } from "vue";
+import { localize_string } from '@/pretix/static/pretixbase/js/i18n.ts'
+import { createStore } from '@/pretix/static/pretixpresale/widget/src/lib/store.ts'
+import { toRaw, type InjectionKey } from 'vue'
 
-export type WidgetStore = ReturnType<typeof createWalletStore>;
-export const StoreKey: InjectionKey<WidgetStore> = Symbol("WidgetStore");
+export type WidgetStore = ReturnType<typeof createWalletStore>
+export const StoreKey: InjectionKey<WidgetStore> = Symbol('WidgetStore')
 
-function getDefaultFieldgroupState(
+function getDefaultFieldgroupState (
 	fieldgroup: FieldGroupDefinition,
 ): FieldGroupConfig {
-	if (fieldgroup.type == "predefined") {
-		return { active: fieldgroup.required || fieldgroup.default_active };
-	} else if (fieldgroup.type == "placeholder") {
+	if (fieldgroup.type == 'predefined') {
+		return { active: fieldgroup.required || fieldgroup.default_active }
+	} else if (fieldgroup.type == 'placeholder') {
 		return {
 			overflow: fieldgroup.default_overflow,
 			entries: JSON.parse(JSON.stringify(fieldgroup.default_entries)),
-		};
+		}
 	}
 }
 
-function parseExistingFieldgroupState(
+function parseExistingFieldgroupState (
 	fieldgroup: FieldGroupDefinition,
 	existing?: FieldGroupConfig,
 ): FieldGroupConfig {
 	if (!existing) {
-		return getDefaultFieldgroupState(fieldgroup);
+		return getDefaultFieldgroupState(fieldgroup)
 	}
-	if (fieldgroup.type == "predefined") {
+	if (fieldgroup.type == 'predefined') {
 		return {
-			active: "active" in existing ? existing.active : fieldgroup.required,
-		};
-	} else if (fieldgroup.type == "placeholder") {
+			active: 'active' in existing ? existing.active : fieldgroup.required,
+		}
+	} else if (fieldgroup.type == 'placeholder') {
 		return {
-			overflow: "overflow" in existing ? existing.overflow : null,
+			overflow: 'overflow' in existing ? existing.overflow : null,
 			// TODO: check that placeholders are possible
 			entries: structuredClone(
 				toRaw(
-					"entries" in existing ? existing.entries : fieldgroup.default_entries,
+					'entries' in existing ? existing.entries : fieldgroup.default_entries,
 				),
 			),
-		};
+		}
 	}
 }
 
-export function createWalletStore(config: {
+export function createWalletStore (config: {
 	platforms: Platforms;
 	placeholders: PlaceholderConfig;
 	locales: Record<string, string>;
@@ -60,308 +60,308 @@ export function createWalletStore(config: {
 			platformLayouts: {} as Record<string, PlatformLayout>,
 		}),
 		getters: {
-			platform(): Platform {
-				return this.getPlatform(this.activePlatform);
+			platform (): Platform {
+				return this.getPlatform(this.activePlatform)
 			},
-			layout() {
+			layout () {
 				if (!this.loaded) {
-					return;
+					return
 				}
-				return this.platformLayouts[this.activePlatform] || null;
+				return this.platformLayouts[this.activePlatform] || null
 			},
-			style(): Style {
+			style (): Style {
 				if (this.layout) {
-					return this.platform.styles[this.layout.style];
+					return this.platform.styles[this.layout.style]
 				} else {
-					return null;
+					return null
 				}
 			},
-			styles() {
-				return this.platform.styles;
+			styles () {
+				return this.platform.styles
 			},
-			settings() {
-				const settings: Record<string, SettingValue> = {};
+			settings () {
+				const settings: Record<string, SettingValue> = {}
 				for (const setting of this.style?.settings) {
 					if (
-						setting.type == "text" ||
-						setting.type == "color" ||
-						setting.type == "float" ||
-						setting.type == "bool"
+						setting.type == 'text'
+						|| setting.type == 'color'
+						|| setting.type == 'float'
+						|| setting.type == 'bool'
 					) {
-						settings[setting.identifier] =
-							this.layout.settings[setting.identifier];
-					} else if (setting.type == "image") {
-						const val = this.layout.file_settings[setting.identifier];
+						settings[setting.identifier]
+							= this.layout.settings[setting.identifier]
+					} else if (setting.type == 'image') {
+						const val = this.layout.file_settings[setting.identifier]
 						if (val) {
-							settings[setting.identifier] = val;
+							settings[setting.identifier] = val
 						} else {
-							settings[setting.identifier] = null;
+							settings[setting.identifier] = null
 						}
 					}
 				}
-				return settings;
+				return settings
 			},
-			settingsValues(): Record<string, SettingValue> {
-				const settings: Record<string, SettingValue> = {};
+			settingsValues (): Record<string, SettingValue> {
+				const settings: Record<string, SettingValue> = {}
 				for (const setting of this.style?.settings) {
 					if (
-						setting.type == "text" ||
-						setting.type == "color" ||
-						setting.type == "float" ||
-						setting.type == "bool"
+						setting.type == 'text'
+						|| setting.type == 'color'
+						|| setting.type == 'float'
+						|| setting.type == 'bool'
 					) {
-						settings[setting.identifier] =
-							this.layout.settings[setting.identifier] || setting.default;
-					} else if (setting.type == "image") {
-						const val = this.layout.file_settings[setting.identifier];
-						if (val && "url" in val && val.url) {
-							settings[setting.identifier] = val;
+						settings[setting.identifier]
+							= this.layout.settings[setting.identifier] || setting.default
+					} else if (setting.type == 'image') {
+						const val = this.layout.file_settings[setting.identifier]
+						if (val && 'url' in val && val.url) {
+							settings[setting.identifier] = val
 						} else if (setting.default) {
-							settings[setting.identifier] = { url: setting.default };
+							settings[setting.identifier] = { url: setting.default }
 						}
 					}
 				}
-				return settings;
+				return settings
 			},
-			renderedFieldGroups() {
-				const content = {};
+			renderedFieldGroups () {
+				const content = {}
 				const placeholderFieldGroups = this.style?.fieldgroups.filter(
-					(x) => x.type === "placeholder",
-				);
+					(x) => x.type === 'placeholder',
+				)
 				for (const fieldgroup of placeholderFieldGroups) {
-					content[fieldgroup.identifier] = [];
+					content[fieldgroup.identifier] = []
 					const layout_group = this.layout.fieldgroups[
 						fieldgroup.identifier
-					] as any as PlaceholderFieldGroupConfig;
+					] as any as PlaceholderFieldGroupConfig
 					for (const entry of layout_group.entries) {
-						let label = localize_string(entry.label);
-						let value = null;
-						if (entry.type === "placeholder") {
-							const placeholder =
-								this.placeholders[fieldgroup.content_type][entry.content];
+						let label = localize_string(entry.label)
+						let value = null
+						if (entry.type === 'placeholder') {
+							const placeholder
+								= this.placeholders[fieldgroup.content_type][entry.content]
 							if (!placeholder) {
-								continue;
+								continue
 							}
 							if (!label) {
-								label = localize_string(placeholder.label);
+								label = localize_string(placeholder.label)
 							}
-							value = placeholder?.sample;
-						} else if (entry.type == "custom") {
-							value = localize_string(entry.content);
+							value = placeholder?.sample
+						} else if (entry.type == 'custom') {
+							value = localize_string(entry.content)
 						}
 						content[fieldgroup.identifier].push({
 							label,
 							content: value,
-						});
+						})
 					}
 				}
 				for (const fieldgroup of placeholderFieldGroups) {
-					const layout_group: PlaceholderFieldGroupConfig =
-						this.layout.fieldgroups[fieldgroup.identifier];
+					const layout_group: PlaceholderFieldGroupConfig
+						= this.layout.fieldgroups[fieldgroup.identifier]
 					if (
-						fieldgroup.max_entries &&
-						content[fieldgroup.identifier].length > fieldgroup.max_entries
+						fieldgroup.max_entries
+						&& content[fieldgroup.identifier].length > fieldgroup.max_entries
 					) {
 						const overflow = content[fieldgroup.identifier].splice(
 							fieldgroup.max_entries,
-						);
+						)
 						if (layout_group.overflow) {
-							content[layout_group.overflow].unshift(...overflow);
+							content[layout_group.overflow].unshift(...overflow)
 						}
 					}
 				}
 
-				return content;
+				return content
 			},
-			fieldgroups(): Record<string, FieldGroupDefinition> {
+			fieldgroups (): Record<string, FieldGroupDefinition> {
 				return Object.fromEntries(
 					this.style?.fieldgroups.map((x) => [x.identifier, x]),
-				);
+				)
 			},
 		},
 		actions: {
-			getPlatform(identifier: string): Platform {
+			getPlatform (identifier: string): Platform {
 				for (const platform of this.platforms) {
 					if (platform.identifier === identifier) {
-						return platform;
+						return platform
 					}
 				}
 			},
-			load() {
+			load () {
 				// TODO: error handling / proper api client
 				fetch(`${this.baseUrl}${this.layoutId}/`)
 					.then((x) => x.json())
 					.then((x) => {
-						this.parseServerLayout(x);
-						this.loaded = true;
+						this.parseServerLayout(x)
+						this.loaded = true
 					})
-					.catch(alert);
+					.catch(alert)
 			},
-			parseServerLayout(serverLayout) {
-				this.name = serverLayout.name;
+			parseServerLayout (serverLayout) {
+				this.name = serverLayout.name
 				for (const layout of serverLayout.platform_layouts) {
 					const clientLayout = {
 						style: layout.style,
 						fieldgroups: {},
 						settings: layout.layout.settings || {},
 						file_settings: layout.file_settings,
-					};
+					}
 					const styleDefinition = this.getPlatform(layout.platform).styles[
 						layout.style
-					];
+					]
 					for (const fieldgroup of styleDefinition.fieldgroups) {
-						clientLayout.fieldgroups[fieldgroup.identifier] =
-							parseExistingFieldgroupState(
+						clientLayout.fieldgroups[fieldgroup.identifier]
+							= parseExistingFieldgroupState(
 								fieldgroup,
 								layout.layout.fieldgroups[fieldgroup.identifier],
-							);
+							)
 					}
-					this.platformLayouts[layout.platform] = clientLayout;
+					this.platformLayouts[layout.platform] = clientLayout
 				}
 			},
-			setPlatform(platform: string) {
-				this.activePlatform = platform;
+			setPlatform (platform: string) {
+				this.activePlatform = platform
 			},
-			setStyle(style: string | null) {
+			setStyle (style: string | null) {
 				if (style === null) {
-					delete this.platformLayouts[this.activePlatform];
+					delete this.platformLayouts[this.activePlatform]
 				} else if (Object.keys(this.platform.styles).includes(style)) {
 					const newLayout = {
 						style,
 						fieldgroups: {},
 						settings: {},
 						file_settings: {},
-					};
-					for (const fieldgroup of this.platform.styles[style].fieldgroups) {
-						newLayout.fieldgroups[fieldgroup.identifier] =
-							getDefaultFieldgroupState(fieldgroup);
 					}
-					this.platformLayouts[this.activePlatform] = newLayout;
+					for (const fieldgroup of this.platform.styles[style].fieldgroups) {
+						newLayout.fieldgroups[fieldgroup.identifier]
+							= getDefaultFieldgroupState(fieldgroup)
+					}
+					this.platformLayouts[this.activePlatform] = newLayout
 					// TODO: keep old fieldgroups & settings if matching
 				}
 			},
-			getSetting(identifier: string): Setting {
+			getSetting (identifier: string): Setting {
 				for (const setting of this.style?.settings) {
 					if (setting.identifier === identifier) {
-						return setting;
+						return setting
 					}
 				}
 			},
-			getSettingValue(identifier: string): SettingValue {
-				const setting = this.getSetting(identifier);
-				if (!setting) return;
+			getSettingValue (identifier: string): SettingValue {
+				const setting = this.getSetting(identifier)
+				if (!setting) return
 
 				if (
-					setting.type == "text" ||
-					setting.type == "color" ||
-					setting.type == "float" ||
-					setting.type == "bool"
+					setting.type == 'text'
+					|| setting.type == 'color'
+					|| setting.type == 'float'
+					|| setting.type == 'bool'
 				) {
-					return this.layout.settings[setting.identifier] || setting.default;
-				} else if (setting.type == "image") {
-					const val = this.layout.file_settings[setting.identifier];
-					if (val && "url" in val && val.url) {
-						return val;
+					return this.layout.settings[setting.identifier] || setting.default
+				} else if (setting.type == 'image') {
+					const val = this.layout.file_settings[setting.identifier]
+					if (val && 'url' in val && val.url) {
+						return val
 					} else if (setting.default) {
-						return { url: setting.default };
+						return { url: setting.default }
 					}
 				}
 			},
-			setSetting(identifier: string, value: string | File) {
-				const setting = this.getSetting(identifier);
-				if (!setting) return;
+			setSetting (identifier: string, value: string | File) {
+				const setting = this.getSetting(identifier)
+				if (!setting) return
 
-				if (setting.type === "image") {
+				if (setting.type === 'image') {
 					if (this.layout.file_settings[setting.identifier]?.url) {
 						URL.revokeObjectURL(
 							this.layout.file_settings[setting.identifier].url,
-						);
+						)
 					}
 					if (value instanceof File) {
 						this.layout.file_settings[setting.identifier] = {
 							file: value,
 							url: value === null ? null : URL.createObjectURL(value),
 							name: value.name,
-						};
+						}
 					} else if (value === null) {
 						this.layout.file_settings[setting.identifier] = {
 							file: null,
-						};
+						}
 					}
 				} else if (
-					(setting.type == "text" || setting.type == "color") &&
-					typeof value == "string"
+					(setting.type == 'text' || setting.type == 'color')
+					&& typeof value == 'string'
 				) {
-					this.layout.settings[setting.identifier] = value;
-				} else if (setting.type == "float" && typeof value == "string") {
-					this.layout.settings[setting.identifier] = parseFloat(value);
-				} else if (setting.type == "float" && typeof value == "number") {
-					this.layout.settings[setting.identifier] = value;
-				} else if (setting.type == "bool" && typeof value == "boolean") {
-					this.layout.settings[setting.identifier] = value;
+					this.layout.settings[setting.identifier] = value
+				} else if (setting.type == 'float' && typeof value == 'string') {
+					this.layout.settings[setting.identifier] = parseFloat(value)
+				} else if (setting.type == 'float' && typeof value == 'number') {
+					this.layout.settings[setting.identifier] = value
+				} else if (setting.type == 'bool' && typeof value == 'boolean') {
+					this.layout.settings[setting.identifier] = value
 				}
 			},
-			async uploadFile(file: ClientSideFile) {
-				return await fetch("/api/v1/upload", {
-					method: "POST",
+			async uploadFile (file: ClientSideFile) {
+				return await fetch('/api/v1/upload', {
+					method: 'POST',
 					body: file.file,
 					headers: {
-						"content-disposition": `attachment; filename="${encodeURI(file.file.name)}"`,
-						"content-type": file.file.type || "application/octet-stream",
-						"X-CSRFToken": this.csrfToken,
+						'content-disposition': `attachment; filename="${encodeURI(file.file.name)}"`,
+						'content-type': file.file.type || 'application/octet-stream',
+						'X-CSRFToken': this.csrfToken,
 					},
 				})
 					.then((x) => x.json())
 					.then((x) => {
-						file.identifier = x.id;
-						return x.id;
+						file.identifier = x.id
+						return x.id
 					})
-					.catch(alert);
+					.catch(alert)
 			},
-			serializeFieldgroups(platform, layout: PlatformLayout) {
-				const styleDefinition = this.getPlatform(platform).styles[layout.style];
+			serializeFieldgroups (platform, layout: PlatformLayout) {
+				const styleDefinition = this.getPlatform(platform).styles[layout.style]
 
 				return Object.fromEntries(
 					Object.entries(layout.fieldgroups)
 						.map(([k, v]) => {
 							const fieldgroupDefinition = styleDefinition.fieldgroups.find(
 								(x) => x.identifier == k,
-							);
+							)
 							if (!fieldgroupDefinition) {
-								return;
+								return
 							}
-							if (fieldgroupDefinition.type == "placeholder") {
-								v = v as PlaceholderFieldGroupConfig;
+							if (fieldgroupDefinition.type == 'placeholder') {
+								v = v as PlaceholderFieldGroupConfig
 								v = {
 									...v,
 									entries: v.entries.filter(
-										(x) => x.type != "placeholder" || !!x.content,
+										(x) => x.type != 'placeholder' || !!x.content,
 									),
-								};
+								}
 							}
-							return [k, v];
+							return [k, v]
 						})
 						.filter((x) => !!x),
-				);
+				)
 			},
-			async serializePlatformLayout(platform, layout: PlatformLayout) {
+			async serializePlatformLayout (platform, layout: PlatformLayout) {
 				const uploadedFiles = Object.fromEntries(
 					(
 						await Promise.all(
 							Object.entries(layout.file_settings).map(async ([k, v]) => {
-								if ("identifier" in v) {
-									return [k, v.identifier];
-								} else if ("file" in v && v.file instanceof File) {
-									return [k, await this.uploadFile(v)];
-								} else if ("file" in v && v.file == null) {
-									return [k, null];
-								} else if ("url" in v) {
-									return [k, "file:keep"]
+								if ('identifier' in v) {
+									return [k, v.identifier]
+								} else if ('file' in v && v.file instanceof File) {
+									return [k, await this.uploadFile(v)]
+								} else if ('file' in v && v.file == null) {
+									return [k, null]
+								} else if ('url' in v) {
+									return [k, 'file:keep']
 								}
 							}),
 						)
 					).filter((x) => !!x),
-				);
+				)
 				return {
 					platform,
 					style: layout.style,
@@ -370,46 +370,46 @@ export function createWalletStore(config: {
 						fieldgroups: this.serializeFieldgroups(platform, layout),
 						settings: layout.settings,
 					},
-				};
+				}
 			},
-			async serializeCurrentPlatformLayout() {
-				return this.serializePlatformLayout(this.activePlatform, this.layout);
+			async serializeCurrentPlatformLayout () {
+				return this.serializePlatformLayout(this.activePlatform, this.layout)
 			},
-			async serializeLayout() {
+			async serializeLayout () {
 				const layoutPromises = Object.entries(this.platformLayouts).map(
 					([platform, layout]) =>
 						this.serializePlatformLayout(platform, layout),
-				);
+				)
 				return {
 					name: this.name,
 					platform_layouts: await Promise.all(layoutPromises),
-				};
+				}
 			},
-			async save() {
-				const serializedLayout = await this.serializeLayout();
+			async save () {
+				const serializedLayout = await this.serializeLayout()
 				// TODO: error handling / proper api client
 				fetch(
 					`/api/v1/organizers/demo/events/wallet/walletlayouts/${this.layoutId}/`,
 					{
-						method: "PUT",
+						method: 'PUT',
 						headers: {
-							"content-type": "application/json",
-							"X-CSRFToken": this.csrfToken,
+							'content-type': 'application/json',
+							'X-CSRFToken': this.csrfToken,
 						},
 						body: JSON.stringify(serializedLayout),
 					},
 				)
 					.then((x) => {
 						if (!x.ok) {
-							throw new Error(`Response status: ${x.status}`);
+							throw new Error(`Response status: ${x.status}`)
 						}
-						return x.json();
+						return x.json()
 					})
 					.then((x) => {
-						this.parseServerLayout(x);
+						this.parseServerLayout(x)
 					})
-					.catch((x) => alert(x));
+					.catch((x) => alert(x))
 			},
 		},
-	});
+	})
 }

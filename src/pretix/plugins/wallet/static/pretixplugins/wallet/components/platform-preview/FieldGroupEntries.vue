@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { computed, inject, reactive, watchEffect } from "vue";
+import { computed, inject, reactive, watchEffect } from 'vue'
 
 const props = defineProps<{
 	fieldgroup: string;
-    fieldgroup_contents: Record<string, any>;
-}>();
+	fieldgroup_contents: Record<string, any>;
+}>()
 
-
-function focusGroup() {
-    // TODO: highlight group? or change ui concept completely
-    const elem = document.getElementById('fieldgroup-' + props.fieldgroup)
-    elem && elem.scrollIntoView()
+function focusGroup () {
+	// TODO: highlight group? or change ui concept completely
+	const elem = document.getElementById('fieldgroup-' + props.fieldgroup)
+	elem && elem.scrollIntoView()
 }
 
 </script>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { PreviewProps } from "src/pretix/static/pretixcontrol/wallet/index.d.ts";
+import type { PreviewProps } from 'src/pretix/static/pretixcontrol/wallet/index.d.ts'
 
-import Google from "./google.vue";
-import FieldGroupEntries from "./FieldGroupEntries.vue";
+import Google from './google.vue'
+import FieldGroupEntries from './FieldGroupEntries.vue'
 
-const props = defineProps<PreviewProps>();
+const props = defineProps<PreviewProps>()
 
 </script>
 

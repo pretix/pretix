@@ -1,5 +1,3 @@
-import { i18nstring_localize } from '/src/pretix/static/pretixbase/js/i18nstring.ts'
-
 const body = document.body
 
 export const timezone = body.dataset.timezone ?? 'UTC'

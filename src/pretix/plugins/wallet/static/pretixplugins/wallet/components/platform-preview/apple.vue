@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import type { PreviewProps } from "src/pretix/static/pretixcontrol/wallet/index.d.ts";
+import { computed } from 'vue'
+import type { PreviewProps } from 'src/pretix/static/pretixcontrol/wallet/index.d.ts'
 
-import FieldGroupEntries from "./FieldGroupEntries.vue";
+import FieldGroupEntries from './FieldGroupEntries.vue'
 
-const props = defineProps<PreviewProps>();
+const props = defineProps<PreviewProps>()
 
 const theme = computed(() => {
 	const theme = {
-		bg_color: props.settings["bg_color"],
-		fg_color: props.settings["fg_color"],
-		label_color: props.settings["label_color"],
+		bg_color: props.settings['bg_color'],
+		fg_color: props.settings['fg_color'],
+		label_color: props.settings['label_color'],
 		bg_image: null,
-	};
-	const bg_image = props.settings["background"];
+	}
+	const bg_image = props.settings['background']
 	if (bg_image?.url) {
-		theme.bg_image = `url(${encodeURI(props.settings["background"].url)})`;
-		theme.bg_color = "#000";
+		theme.bg_image = `url(${encodeURI(props.settings['background'].url)})`
+		theme.bg_color = '#000'
 		theme.fg_color = '#fff'
 	}
-	return theme;
-});
+	return theme
+})
 </script>
 
 <template lang="pug">
