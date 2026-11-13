@@ -1,69 +1,83 @@
 <script setup lang="ts">
-import { computed, inject, ref, watch, onMounted } from 'vue'
-import type { Item, Category } from '~/types'
-import { StoreKey } from '~/sharedStore'
-import { STRINGS, interpolate } from '~/i18n'
-import { floatformat } from '~/utils'
-import AvailBox from './AvailBox.vue'
-import PriceBox from './PriceBox.vue'
-import Variation from './Variation.vue'
+import { computed, inject, ref, watch, onMounted } from "vue";
+import type { Item, Category } from "~/types";
+import { StoreKey } from "~/sharedStore";
+import { STRINGS, interpolate } from "~/i18n";
+import { floatformat } from "~/utils";
+import AvailBox from "./AvailBox.vue";
+import PriceBox from "./PriceBox.vue";
+import Variation from "./Variation.vue";
 
 const props = defineProps<{
-	item: Item
-	category: Category
-}>()
+	item: Item;
+	category: Category;
+}>();
 
-const store = inject(StoreKey)!
+const store = inject(StoreKey)!;
 
-const expanded = ref(store.showVariationsExpanded)
-const variations = ref<HTMLDivElement>()
+const expanded = ref(store.showVariationsExpanded);
+const variations = ref<HTMLDivElement>();
 
 const classObject = computed(() => ({
-	'pretix-widget-item': true,
-	'pretix-widget-item-with-picture': !!props.item.picture,
-	'pretix-widget-item-with-variations': props.item.has_variations,
-}))
+	"pretix-widget-item": true,
+	"pretix-widget-item-with-picture": !!props.item.picture,
+	"pretix-widget-item-with-variations": props.item.has_variations,
+}));
 
 const varClasses = computed(() => ({
-	'pretix-widget-item-variations': true,
-	'pretix-widget-item-variations-expanded': expanded.value,
-}))
+	"pretix-widget-item-variations": true,
+	"pretix-widget-item-variations-expanded": expanded.value,
+}));
 
-const pictureAltText = computed(() => interpolate(STRINGS.image_of, [props.item.name]))
+const pictureAltText = computed(() =>
+	interpolate(STRINGS.image_of, [props.item.name]),
+);
 
-const headingLevel = computed(() => props.category.name ? '4' : '3')
+const headingLevel = computed(() => (props.category.name ? "4" : "3"));
 
-const itemLabelId = computed(() => `${store.htmlId}-item-label-${props.item.id}`)
+const itemLabelId = computed(
+	() => `${store.htmlId}-item-label-${props.item.id}`,
+);
 
-const itemDescId = computed(() => `${store.htmlId}-item-desc-${props.item.id}`)
+const itemDescId = computed(() => `${store.htmlId}-item-desc-${props.item.id}`);
 
-const itemPriceId = computed(() => `${store.htmlId}-item-price-${props.item.id}`)
+const itemPriceId = computed(
+	() => `${store.htmlId}-item-price-${props.item.id}`,
+);
 
-const ariaLabelledby = computed(() => `${itemLabelId.value} ${itemPriceId.value}`)
+const ariaLabelledby = computed(
+	() => `${itemLabelId.value} ${itemPriceId.value}`,
+);
 
-const minOrderStr = computed(() => interpolate(STRINGS.order_min, [props.item.order_min]))
+const minOrderStr = computed(() =>
+	interpolate(STRINGS.order_min, [props.item.order_min]),
+);
 
-const quotaLeftStr = computed(() => interpolate(STRINGS.quota_left, [props.item.avail[1]]))
+const quotaLeftStr = computed(() =>
+	interpolate(STRINGS.quota_left, [props.item.avail[1]]),
+);
 
-const showToggle = computed(() => props.item.has_variations && !store.showVariationsExpanded)
+const showToggle = computed(
+	() => props.item.has_variations && !store.showVariationsExpanded,
+);
 
 // TODO dedupe?
 const showPrices = computed(() => {
-	let hasPriced = false
-	let cntItems = 0
+	let hasPriced = false;
+	let cntItems = 0;
 	for (const cat of store.categories) {
 		for (const item of cat.items) {
 			if (item.has_variations) {
-				cntItems += item.variations.length
-				hasPriced = true
+				cntItems += item.variations.length;
+				hasPriced = true;
 			} else {
-				cntItems++
-				hasPriced = hasPriced || item.price.gross !== '0.00' || item.free_price
+				cntItems++;
+				hasPriced = hasPriced || item.price.gross !== "0.00" || item.free_price;
 			}
 		}
 	}
-	return hasPriced || cntItems > 1
-})
+	return hasPriced || cntItems > 1;
+});
 
 // TODO XSS
 const pricerange = computed(() => {
@@ -72,68 +86,73 @@ const pricerange = computed(() => {
 			STRINGS.price_from,
 			{
 				currency: store.currency,
-				price: floatformat(props.item.min_price || '0', store.currency_places),
+				price: floatformat(props.item.min_price || "0", store.currency_places),
 			},
-			true
+			true,
 		).replace(
 			store.currency,
-			`<span class="pretix-widget-pricebox-currency">${store.currency}</span>`
-		)
+			`<span class="pretix-widget-pricebox-currency">${store.currency}</span>`,
+		);
 	} else if (props.item.min_price !== props.item.max_price) {
-		return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${floatformat(props.item.min_price || '0', store.currency_places)} – ${floatformat(props.item.max_price || '0', store.currency_places)}`
-	} else if (props.item.min_price === '0.00' && props.item.max_price === '0.00') {
+		return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${floatformat(props.item.min_price || "0", store.currency_places)} – ${floatformat(props.item.max_price || "0", store.currency_places)}`;
+	} else if (
+		props.item.min_price === "0.00" &&
+		props.item.max_price === "0.00"
+	) {
 		if (props.item.mandatory_priced_addons) {
-			return '\xA0' // nbsp, because an empty string would cause the HTML element to collapse
+			return "\xA0"; // nbsp, because an empty string would cause the HTML element to collapse
 		}
-		return STRINGS.free
+		return STRINGS.free;
 	} else {
-		return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${floatformat(props.item.min_price || '0', store.currency_places)}`
+		return `<span class="pretix-widget-pricebox-currency">${store.currency}</span> ${floatformat(props.item.min_price || "0", store.currency_places)}`;
 	}
-})
+});
 
-const variationsToggleLabel = computed(() => expanded.value ? STRINGS.hide_variations : STRINGS.variations)
+const variationsToggleLabel = computed(() =>
+	expanded.value ? STRINGS.hide_variations : STRINGS.variations,
+);
 
-function expand () {
-	expanded.value = !expanded.value
+function expand() {
+	expanded.value = !expanded.value;
 }
 
-function lightbox () {
+function lightbox() {
 	if (store.overlay) {
 		store.overlay.lightbox = {
-			image: props.item.picture_fullsize || '',
+			image: props.item.picture_fullsize || "",
 			description: props.item.name,
 			loading: true, // TODO why?
-		}
+		};
 	}
 }
 
 onMounted(() => {
 	if (variations.value && !expanded.value) {
-		variations.value.hidden = true
+		variations.value.hidden = true;
 
-		variations.value.addEventListener('transitionend', function (event) {
+		variations.value.addEventListener("transitionend", function (event) {
 			if (event.target === variations.value) {
 				if (variations.value) {
-					variations.value.hidden = !expanded.value
-					variations.value.style.maxHeight = 'none'
+					variations.value.hidden = !expanded.value;
+					variations.value.style.maxHeight = "none";
 				}
 			}
-		})
+		});
 	}
-})
+});
 
 watch(expanded, (newValue) => {
-	const v = variations.value
-	if (!v) return
+	const v = variations.value;
+	if (!v) return;
 
-	v.hidden = false
-	v.style.maxHeight = `${newValue ? 0 : v.scrollHeight}px`
+	v.hidden = false;
+	v.style.maxHeight = `${newValue ? 0 : v.scrollHeight}px`;
 
 	// Vue.nextTick does not work here
 	setTimeout(() => {
-		v.style.maxHeight = `${!newValue ? 0 : v.scrollHeight}px`
-	}, 50)
-})
+		v.style.maxHeight = `${!newValue ? 0 : v.scrollHeight}px`;
+	}, 50);
+});
 </script>
 <template lang="pug">
 div(
@@ -214,5 +233,4 @@ div(
 			:category="category"
 		)
 </template>
-<style lang="sass">
-</style>
+<style lang="sass"></style>

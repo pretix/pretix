@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { Category } from '~/types'
-import Item from './Item.vue'
+import type { Category } from "~/types";
+import Item from "./Item.vue";
 
 defineProps<{
-	category: Category
-}>()
+	category: Category;
+}>();
 </script>
 
 <template lang="pug">
@@ -19,5 +19,4 @@ defineProps<{
 			:category="category"
 		)
 </template>
-<style lang="sass">
-</style>
+<style lang="sass"></style>

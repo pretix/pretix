@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { TEXTS } from './constants'
-import { rules } from './django-interop'
-import CheckinRule from './checkin-rule.vue'
+import { computed } from "vue";
+import { TEXTS } from "./constants";
+import { rules } from "./django-interop";
+import CheckinRule from "./checkin-rule.vue";
 
-const hasRules = computed(() => !!Object.keys(rules.value).length)
+const hasRules = computed(() => !!Object.keys(rules.value).length);
 
-function addRule () {
-	rules.value.and = []
+function addRule() {
+	rules.value.and = [];
 }
 </script>
 <template lang="pug">

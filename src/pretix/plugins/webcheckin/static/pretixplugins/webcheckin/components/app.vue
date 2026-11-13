@@ -1,292 +1,316 @@
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
-import { api } from '../api'
-import type { CheckinList, Position, RedeemResponse, CheckinStatus, AnswerQuestion } from '../api'
-import { STRINGS, i18nstringLocalize, formatSubevent, formatAnswer } from '../i18n'
+import { ref, computed, nextTick, onMounted, onUnmounted } from "vue";
+import { api } from "../api";
+import type {
+	CheckinList,
+	Position,
+	RedeemResponse,
+	CheckinStatus,
+	AnswerQuestion,
+} from "../api";
+import {
+	STRINGS,
+	i18nstringLocalize,
+	formatSubevent,
+	formatAnswer,
+} from "../i18n";
 
-import CheckinlistSelect from './checkinlist-select.vue'
-import SearchresultItem from './searchresult-item.vue'
-import Datefield from './datefield.vue'
-import Timefield from './timefield.vue'
-import Datetimefield from './datetimefield.vue'
+import CheckinlistSelect from "./checkinlist-select.vue";
+import SearchresultItem from "./searchresult-item.vue";
+import Datefield from "./datefield.vue";
+import Timefield from "./timefield.vue";
+import Datetimefield from "./datetimefield.vue";
 
 const props = defineProps<{
-	eventName?: string
-}>()
+	eventName?: string;
+}>();
 
-const COUNTRIES = JSON.parse(document.querySelector('#countries')?.textContent ?? '[]')
+const COUNTRIES = JSON.parse(
+	document.querySelector("#countries")?.textContent ?? "[]",
+);
 
-let clearTimeoutId: ReturnType<typeof setTimeout> | null = null
-const answers = ref<Record<string, string>>({})
+let clearTimeoutId: ReturnType<typeof setTimeout> | null = null;
+const answers = ref<Record<string, string>>({});
 
 // Checkin list selection
-const checkinlist = ref<CheckinList | null>(null)
-const subevent = computed(() => formatSubevent(checkinlist.value?.subevent))
+const checkinlist = ref<CheckinList | null>(null);
+const subevent = computed(() => formatSubevent(checkinlist.value?.subevent));
 
-function selectList (list: CheckinList) {
-	checkinlist.value = list
-	location.hash = '#' + list.id
-	refocus()
-	fetchStatus()
+function selectList(list: CheckinList) {
+	checkinlist.value = list;
+	location.hash = "#" + list.id;
+	refocus();
+	fetchStatus();
 }
 
-function switchList () {
-	location.hash = ''
-	checkinlist.value = null
+function switchList() {
+	location.hash = "";
+	checkinlist.value = null;
 }
 
 // Entry/Exit type
-const type = ref<'entry' | 'exit'>('entry')
+const type = ref<"entry" | "exit">("entry");
 
-function switchType () {
-	type.value = type.value === 'exit' ? 'entry' : 'exit'
-	refocus()
+function switchType() {
+	type.value = type.value === "exit" ? "entry" : "exit";
+	refocus();
 }
 
 // Input/query
-const inputEl = ref<HTMLInputElement>()
-const query = ref('')
+const inputEl = ref<HTMLInputElement>();
+const query = ref("");
 
-function refocus () {
+function refocus() {
 	nextTick(() => {
-		inputEl.value?.focus()
-	})
+		inputEl.value?.focus();
+	});
 }
 
-function inputKeyup (e: KeyboardEvent) {
-	if (e.key === 'Enter') {
-		startSearch(true)
-	} else if (query.value === '') {
-		clear()
+function inputKeyup(e: KeyboardEvent) {
+	if (e.key === "Enter") {
+		startSearch(true);
+	} else if (query.value === "") {
+		clear();
 	}
 }
 
-function globalKeydown (e: KeyboardEvent | Event) {
+function globalKeydown(e: KeyboardEvent | Event) {
 	if (!(e instanceof KeyboardEvent)) {
-		refocus()
-		return
+		refocus();
+		return;
 	}
 
-	if (document.activeElement?.classList.contains('searchresult')) {
-		if (e.key === 'ArrowDown') {
-			(document.activeElement.nextElementSibling as HTMLElement)?.focus()
-			e.preventDefault()
-			return
+	if (document.activeElement?.classList.contains("searchresult")) {
+		if (e.key === "ArrowDown") {
+			(document.activeElement.nextElementSibling as HTMLElement)?.focus();
+			e.preventDefault();
+			return;
 		}
-		if (e.key === 'ArrowUp') {
-			(document.activeElement.previousElementSibling as HTMLElement)?.focus()
-			e.preventDefault()
-			return
+		if (e.key === "ArrowUp") {
+			(document.activeElement.previousElementSibling as HTMLElement)?.focus();
+			e.preventDefault();
+			return;
 		}
 	}
 
-	const nodeName = document.activeElement?.nodeName?.toLowerCase()
-	if (nodeName !== 'input' && nodeName !== 'textarea') {
+	const nodeName = document.activeElement?.nodeName?.toLowerCase();
+	if (nodeName !== "input" && nodeName !== "textarea") {
 		if (e.key?.match(/^[a-z0-9A-Z+/=<>#]$/)) {
-			query.value = ''
-			refocus()
+			query.value = "";
+			refocus();
 		}
 	}
 }
 
 // Status
-const status = ref<CheckinStatus | null>(null)
-const statusLoading = ref(0)
-let statusInterval: ReturnType<typeof setInterval> | null = null
+const status = ref<CheckinStatus | null>(null);
+const statusLoading = ref(0);
+let statusInterval: ReturnType<typeof setInterval> | null = null;
 
-async function fetchStatus () {
-	if (!checkinlist.value) return
+async function fetchStatus() {
+	if (!checkinlist.value) return;
 
-	statusLoading.value++
+	statusLoading.value++;
 	try {
-		status.value = await api.fetchStatus(checkinlist.value.id)
+		status.value = await api.fetchStatus(checkinlist.value.id);
 	} finally {
-		statusLoading.value--
+		statusLoading.value--;
 	}
 }
 
 // Check/redeem
-const checkLoading = ref(false)
-const checkError = ref<string | null>(null)
-const checkResult = ref<RedeemResponse | null>(null)
+const checkLoading = ref(false);
+const checkError = ref<string | null>(null);
+const checkResult = ref<RedeemResponse | null>(null);
 
 const checkResultAddons = computed(() => {
-	if (!checkResult.value?.position?.addons) return ''
-	return checkResult.value.position.addons.map((addon) => {
-		if (addon.variation) {
-			return `+ ${addon.item.internal_name || i18nstringLocalize(addon.item.name)} – ${i18nstringLocalize(addon.variation.value)}`
-		}
-		return '+ ' + (addon.item.internal_name || i18nstringLocalize(addon.item.name))
-	}).join('\n')
-})
+	if (!checkResult.value?.position?.addons) return "";
+	return checkResult.value.position.addons
+		.map((addon) => {
+			if (addon.variation) {
+				return `+ ${addon.item.internal_name || i18nstringLocalize(addon.item.name)} – ${i18nstringLocalize(addon.variation.value)}`;
+			}
+			return (
+				"+ " + (addon.item.internal_name || i18nstringLocalize(addon.item.name))
+			);
+		})
+		.join("\n");
+});
 
-const checkResultSubevent = computed(() => formatSubevent(checkResult.value?.position?.subevent))
+const checkResultSubevent = computed(() =>
+	formatSubevent(checkResult.value?.position?.subevent),
+);
 
 const checkResultItemvar = computed(() => {
-	if (!checkResult.value?.position) return ''
+	if (!checkResult.value?.position) return "";
 	if (checkResult.value.position.variation) {
-		return `${i18nstringLocalize(checkResult.value.position.item.name)} – ${i18nstringLocalize(checkResult.value.position.variation.value)}`
+		return `${i18nstringLocalize(checkResult.value.position.item.name)} – ${i18nstringLocalize(checkResult.value.position.variation.value)}`;
 	}
-	return i18nstringLocalize(checkResult.value.position.item.name)
-})
+	return i18nstringLocalize(checkResult.value.position.item.name);
+});
 
 const checkResultText = computed(() => {
-	if (!checkResult.value) return ''
-	if (checkResult.value.status === 'ok') {
-		return type.value === 'exit' ? STRINGS['result.exit'] : STRINGS['result.ok']
-	} else if (checkResult.value.status === 'incomplete') {
-		return STRINGS['result.questions']
-	} else if (checkResult.value.reason && STRINGS['result.' + checkResult.value.reason]) {
-		return STRINGS['result.' + checkResult.value.reason]
+	if (!checkResult.value) return "";
+	if (checkResult.value.status === "ok") {
+		return type.value === "exit"
+			? STRINGS["result.exit"]
+			: STRINGS["result.ok"];
+	} else if (checkResult.value.status === "incomplete") {
+		return STRINGS["result.questions"];
+	} else if (
+		checkResult.value.reason &&
+		STRINGS["result." + checkResult.value.reason]
+	) {
+		return STRINGS["result." + checkResult.value.reason];
 	}
-	return checkResult.value.reason ?? ''
-})
+	return checkResult.value.reason ?? "";
+});
 
 const checkResultColor = computed(() => {
-	if (!checkResult.value) return ''
-	if (checkResult.value.status === 'ok') return 'green'
-	if (checkResult.value.status === 'incomplete') return 'purple'
-	if (checkResult.value.reason === 'already_redeemed') return 'orange'
-	return 'red'
-})
+	if (!checkResult.value) return "";
+	if (checkResult.value.status === "ok") return "green";
+	if (checkResult.value.status === "incomplete") return "purple";
+	if (checkResult.value.reason === "already_redeemed") return "orange";
+	return "red";
+});
 
 // Modals
-const showUnpaidModal = ref(false)
-const showQuestionsModal = ref(false)
-const questionsModalEl = ref<HTMLFormElement>()
+const showUnpaidModal = ref(false);
+const showQuestionsModal = ref(false);
+const questionsModalEl = ref<HTMLFormElement>();
 
-function answerSetM (qid: string, opid: string, checked: boolean) {
-	let arr = answers.value[qid] ? answers.value[qid].split(',') : []
+function answerSetM(qid: string, opid: string, checked: boolean) {
+	let arr = answers.value[qid] ? answers.value[qid].split(",") : [];
 	if (checked && !arr.includes(opid)) {
-		arr.push(opid)
+		arr.push(opid);
 	} else if (!checked) {
-		arr = arr.filter(o => opid !== o)
+		arr = arr.filter((o) => opid !== o);
 	}
-	answers.value[qid] = arr.join(',')
+	answers.value[qid] = arr.join(",");
 }
 
 // Search
-const searchLoading = ref(false)
-const searchResults = ref<Position[] | null>(null)
-const searchNextUrl = ref<string | null>(null)
-const searchError = ref<unknown>(null)
-const resultEls = ref<InstanceType<typeof SearchresultItem>[]>([])
+const searchLoading = ref(false);
+const searchResults = ref<Position[] | null>(null);
+const searchNextUrl = ref<string | null>(null);
+const searchError = ref<unknown>(null);
+const resultEls = ref<InstanceType<typeof SearchresultItem>[]>([]);
 
-function selectResult (position: Position) {
-	check(position.secret, false, false, false, false)
+function selectResult(position: Position) {
+	check(position.secret, false, false, false, false);
 }
 
-async function startSearch (fallbackToScan: boolean) {
+async function startSearch(fallbackToScan: boolean) {
 	if (query.value.length >= 32 && fallbackToScan) {
-		check(query.value, false, false, true, true)
-		return
+		check(query.value, false, false, true, true);
+		return;
 	}
 
-	checkResult.value = null
-	searchLoading.value = true
-	searchError.value = null
-	searchResults.value = []
-	answers.value = {}
+	checkResult.value = null;
+	searchLoading.value = true;
+	searchError.value = null;
+	searchResults.value = [];
+	answers.value = {};
 
 	if (clearTimeoutId) {
-		clearTimeout(clearTimeoutId)
-		clearTimeoutId = null
+		clearTimeout(clearTimeoutId);
+		clearTimeoutId = null;
 	}
 
 	try {
-		const data = await api.searchPositions(checkinlist.value!.id, query.value)
-		searchLoading.value = false
+		const data = await api.searchPositions(checkinlist.value!.id, query.value);
+		searchLoading.value = false;
 
 		if (data.results) {
-			searchResults.value = data.results
-			searchNextUrl.value = data.next
+			searchResults.value = data.results;
+			searchNextUrl.value = data.next;
 
 			if (data.results.length) {
 				if (data.results[0].secret === query.value) {
 					nextTick(() => {
-						inputEl.value?.blur()
-						resultEls.value[0]?.el?.click()
-					})
+						inputEl.value?.blur();
+						resultEls.value[0]?.el?.click();
+					});
 				} else {
 					nextTick(() => {
-						resultEls.value[0]?.el?.focus()
-					})
+						resultEls.value[0]?.el?.focus();
+					});
 				}
 			} else {
 				nextTick(() => {
-					inputEl.value?.blur()
-				})
+					inputEl.value?.blur();
+				});
 			}
 		} else {
-			searchError.value = data
+			searchError.value = data;
 		}
 
-		clearTimeoutId = setTimeout(clear, 30 * 1000)
+		clearTimeoutId = setTimeout(clear, 30 * 1000);
 	} catch (e) {
-		searchLoading.value = false
-		searchResults.value = []
-		searchError.value = e
-		clearTimeoutId = setTimeout(clear, 30 * 1000)
+		searchLoading.value = false;
+		searchResults.value = [];
+		searchError.value = e;
+		clearTimeoutId = setTimeout(clear, 30 * 1000);
 	}
 }
 
-async function searchNext () {
-	if (!searchNextUrl.value) return
+async function searchNext() {
+	if (!searchNextUrl.value) return;
 
-	searchLoading.value = true
-	searchError.value = null
+	searchLoading.value = true;
+	searchError.value = null;
 
 	if (clearTimeoutId) {
-		clearTimeout(clearTimeoutId)
-		clearTimeoutId = null
+		clearTimeout(clearTimeoutId);
+		clearTimeoutId = null;
 	}
 
 	try {
-		const data = await api.fetchNextPage<Position>(searchNextUrl.value)
-		searchLoading.value = false
+		const data = await api.fetchNextPage<Position>(searchNextUrl.value);
+		searchLoading.value = false;
 
 		if (data.results) {
-			searchResults.value = [...(searchResults.value ?? []), ...data.results]
-			searchNextUrl.value = data.next
+			searchResults.value = [...(searchResults.value ?? []), ...data.results];
+			searchNextUrl.value = data.next;
 		} else {
-			searchError.value = data
+			searchError.value = data;
 		}
 
-		clearTimeoutId = setTimeout(clear, 30 * 1000)
+		clearTimeoutId = setTimeout(clear, 30 * 1000);
 	} catch (e) {
-		searchLoading.value = false
-		searchError.value = e
-		clearTimeoutId = setTimeout(clear, 30 * 1000)
+		searchLoading.value = false;
+		searchError.value = e;
+		clearTimeoutId = setTimeout(clear, 30 * 1000);
 	}
 }
 
-async function check (
+async function check(
 	id: string,
 	ignoreUnpaid: boolean,
 	keepAnswers: boolean,
 	fallbackToSearch: boolean,
-	untrusted: boolean
+	untrusted: boolean,
 ) {
 	if (!keepAnswers) {
-		answers.value = {}
+		answers.value = {};
 	} else if (showQuestionsModal.value) {
-		if (!questionsModalEl.value?.reportValidity()) return
+		if (!questionsModalEl.value?.reportValidity()) return;
 	}
 
-	showUnpaidModal.value = false
-	showQuestionsModal.value = false
-	checkLoading.value = true
-	checkError.value = null
-	checkResult.value = {} as RedeemResponse
+	showUnpaidModal.value = false;
+	showQuestionsModal.value = false;
+	checkLoading.value = true;
+	checkError.value = null;
+	checkResult.value = {} as RedeemResponse;
 
 	if (clearTimeoutId) {
-		clearTimeout(clearTimeoutId)
-		clearTimeoutId = null
+		clearTimeout(clearTimeoutId);
+		clearTimeoutId = null;
 	}
 
 	nextTick(() => {
-		inputEl.value?.blur()
-	})
+		inputEl.value?.blur();
+	});
 
 	try {
 		const data = await api.redeemPosition(
@@ -299,73 +323,87 @@ async function check (
 				type: type.value,
 				answers: answers.value,
 			},
-			untrusted
-		)
+			untrusted,
+		);
 
-		checkLoading.value = false
-		checkResult.value = data
+		checkLoading.value = false;
+		checkResult.value = data;
 
-		if (checkinlist.value?.include_pending && data.status === 'error' && data.reason === 'unpaid') {
-			showUnpaidModal.value = true
+		if (
+			checkinlist.value?.include_pending &&
+			data.status === "error" &&
+			data.reason === "unpaid"
+		) {
+			showUnpaidModal.value = true;
 			nextTick(() => {
-				document.querySelector<HTMLButtonElement>('.modal-unpaid .btn-primary')?.focus()
-			})
-		} else if (data.status === 'incomplete' && data.questions) {
-			showQuestionsModal.value = true
+				document
+					.querySelector<HTMLButtonElement>(".modal-unpaid .btn-primary")
+					?.focus();
+			});
+		} else if (data.status === "incomplete" && data.questions) {
+			showQuestionsModal.value = true;
 			for (const q of data.questions) {
 				if (!answers.value[q.id.toString()]) {
-					answers.value[q.id.toString()] = ''
+					answers.value[q.id.toString()] = "";
 				}
-				;(q as AnswerQuestion).question = i18nstringLocalize(q.question)
+				(q as AnswerQuestion).question = i18nstringLocalize(q.question);
 				for (const o of q.options) {
-					;(o as { answer: string }).answer = i18nstringLocalize(o.answer)
+					(o as { answer: string }).answer = i18nstringLocalize(o.answer);
 				}
 			}
 			nextTick(() => {
-				document.querySelector<HTMLElement>('.modal-questions input, .modal-questions select, .modal-questions textarea')?.focus()
-			})
-		} else if (data.status === 'error' && data.reason === 'invalid' && fallbackToSearch) {
-			startSearch(false)
+				document
+					.querySelector<HTMLElement>(
+						".modal-questions input, .modal-questions select, .modal-questions textarea",
+					)
+					?.focus();
+			});
+		} else if (
+			data.status === "error" &&
+			data.reason === "invalid" &&
+			fallbackToSearch
+		) {
+			startSearch(false);
 		} else {
-			clearTimeoutId = setTimeout(clear, 30 * 1000)
-			fetchStatus()
+			clearTimeoutId = setTimeout(clear, 30 * 1000);
+			fetchStatus();
 		}
 	} catch (e) {
-		checkLoading.value = false
-		checkResult.value = {} as RedeemResponse
-		checkError.value = String(e)
-		clearTimeoutId = setTimeout(clear, 30 * 1000)
+		checkLoading.value = false;
+		checkResult.value = {} as RedeemResponse;
+		checkError.value = String(e);
+		clearTimeoutId = setTimeout(clear, 30 * 1000);
 	}
 }
 
-function clear () {
-	query.value = ''
-	searchLoading.value = false
-	searchResults.value = null
-	searchNextUrl.value = null
-	searchError.value = null
-	checkLoading.value = false
-	checkError.value = null
-	checkResult.value = null
-	showUnpaidModal.value = false
-	showQuestionsModal.value = false
-	answers.value = {}
+function clear() {
+	query.value = "";
+	searchLoading.value = false;
+	searchResults.value = null;
+	searchNextUrl.value = null;
+	searchError.value = null;
+	checkLoading.value = false;
+	checkError.value = null;
+	checkResult.value = null;
+	showUnpaidModal.value = false;
+	showQuestionsModal.value = false;
+	answers.value = {};
 }
 
 onMounted(() => {
-	window.addEventListener('focus', globalKeydown)
-	document.addEventListener('visibilitychange', globalKeydown)
-	document.addEventListener('keydown', globalKeydown)
-	statusInterval = setInterval(fetchStatus, 120 * 1000)
-})
+	window.addEventListener("focus", globalKeydown);
+	document.addEventListener("visibilitychange", globalKeydown);
+	document.addEventListener("keydown", globalKeydown);
+	statusInterval = setInterval(fetchStatus, 120 * 1000);
+});
 
 onUnmounted(() => {
-	window.removeEventListener('focus', globalKeydown)
-	document.removeEventListener('visibilitychange', globalKeydown)
-	document.removeEventListener('keydown', globalKeydown)
-	if (statusInterval) clearInterval(statusInterval)
-	if (clearTimeoutId) clearTimeout(clearTimeoutId)
-})
+	window.removeEventListener("focus", globalKeydown);
+	document.removeEventListener("visibilitychange", globalKeydown);
+	document.removeEventListener("keydown", globalKeydown);
+	if (statusInterval) clearInterval(statusInterval);
+	if (clearTimeoutId) clearTimeout(clearTimeoutId);
+});
 </script>
 <template lang="pug">
 .container

@@ -1,100 +1,120 @@
 <script setup lang="ts">
-import { computed, ref, inject, onMounted } from 'vue'
-import type { Item, Variation } from '~/types'
-import { StoreKey, globalWidgetId } from '~/sharedStore'
-import { STRINGS } from '~/i18n'
+import { computed, ref, inject, onMounted } from "vue";
+import type { Item, Variation } from "~/types";
+import { StoreKey, globalWidgetId } from "~/sharedStore";
+import { STRINGS } from "~/i18n";
 
 const props = defineProps<{
-	item: Item
-	variation?: Variation
-}>()
+	item: Item;
+	variation?: Variation;
+}>();
 
-const store = inject(StoreKey)!
-const quantity = ref<HTMLInputElement>()
+const store = inject(StoreKey)!;
+const quantity = ref<HTMLInputElement>();
 
-const avail = computed(() => props.item.has_variations ? props.variation.avail : props.item.avail)
+const avail = computed(() =>
+	props.item.has_variations ? props.variation.avail : props.item.avail,
+);
 
-const orderMax = computed(() => props.item.has_variations ? props.variation.order_max : props.item.order_max)
+const orderMax = computed(() =>
+	props.item.has_variations ? props.variation.order_max : props.item.order_max,
+);
 
 const inputName = computed(() => {
 	if (props.item.has_variations) {
-		return `variation_${props.item.id}_${props.variation.id}`
+		return `variation_${props.item.id}_${props.variation.id}`;
 	}
-	return `item_${props.item.id}`
-})
+	return `item_${props.item.id}`;
+});
 
 const unavailabilityReasonMessage = computed(() => {
-	const reason = props.item.current_unavailability_reason || props.variation?.current_unavailability_reason
+	const reason =
+		props.item.current_unavailability_reason ||
+		props.variation?.current_unavailability_reason;
 	if (reason) {
-		return STRINGS[`unavailable_${reason}`] || reason
+		return STRINGS[`unavailable_${reason}`] || reason;
 	}
-	return ''
-})
+	return "";
+});
 
-const voucherJumpLink = computed(() => `#${store.htmlId}-voucher-input`)
+const voucherJumpLink = computed(() => `#${store.htmlId}-voucher-input`);
 
-const ariaLabelledby = computed(() => `${store.htmlId}-item-label-${props.item.id}`)
+const ariaLabelledby = computed(
+	() => `${store.htmlId}-item-label-${props.item.id}`,
+);
 
 const decLabel = computed(() => {
 	// TODO
-	const name = props.item.has_variations ? props.variation.value : props.item.name
-	return `- ${name}: ${STRINGS.quantity_dec}`
-})
+	const name = props.item.has_variations
+		? props.variation.value
+		: props.item.name;
+	return `- ${name}: ${STRINGS.quantity_dec}`;
+});
 
 const incLabel = computed(() => {
-	const name = props.item.has_variations ? props.variation.value : props.item.name
-	return `+ ${name}: ${STRINGS.quantity_inc}`
-})
+	const name = props.item.has_variations
+		? props.variation.value
+		: props.item.name;
+	return `+ ${name}: ${STRINGS.quantity_inc}`;
+});
 
 const labelSelectItem = computed(() => {
-	if (props.item.has_variations) return STRINGS.select_variant.replace('%s', props.variation.value)
-	return STRINGS.select_item.replace('%s', props.item.name)
-})
+	if (props.item.has_variations)
+		return STRINGS.select_variant.replace("%s", props.variation.value);
+	return STRINGS.select_item.replace("%s", props.item.name);
+});
 
-const waitingListShow = computed(() => avail.value[0] < 100 && store.waitingListEnabled && props.item.allow_waitinglist)
+const waitingListShow = computed(
+	() =>
+		avail.value[0] < 100 &&
+		store.waitingListEnabled &&
+		props.item.allow_waitinglist,
+);
 
 const waitingListUrl = computed(() => {
-	let u = `${store.targetUrl}w/${globalWidgetId}/waitinglist/?locale=${LANG}&item=${props.item.id}`
+	let u = `${store.targetUrl}w/${globalWidgetId}/waitinglist/?locale=${LANG}&item=${props.item.id}`;
 	if (props.item.has_variations && props.variation) {
-		u += `&var=${props.variation.id}`
+		u += `&var=${props.variation.id}`;
 	}
 	if (store.subevent) {
-		u += `&subevent=${store.subevent}`
+		u += `&subevent=${store.subevent}`;
 	}
-	u += `&widget_data=${encodeURIComponent(store.widgetDataJson)}`
-	u += store.consentParameter
-	return u
-})
+	u += `&widget_data=${encodeURIComponent(store.widgetDataJson)}`;
+	u += store.consentParameter;
+	return u;
+});
 
-function onStep (e: Event) {
-	const target = e.target as HTMLElement
-	const button = target.tagName === 'BUTTON' ? target : target.closest('button')
-	if (!button || !quantity.value) return
+function onStep(e: Event) {
+	const target = e.target as HTMLElement;
+	const button =
+		target.tagName === "BUTTON" ? target : target.closest("button");
+	if (!button || !quantity.value) return;
 
-	const step = parseFloat(button.getAttribute('data-step') || '0')
-	const input = quantity.value
-	const min = parseFloat(input.min) || 0
-	const max = parseFloat(input.max) || Number.MAX_SAFE_INTEGER
-	const currentValue = parseInt(input.value || '0')
-	input.value = String(Math.max(min, Math.min(max, currentValue + step)))
-	input.dispatchEvent(new CustomEvent('change', { bubbles: true }))
+	const step = parseFloat(button.getAttribute("data-step") || "0");
+	const input = quantity.value;
+	const min = parseFloat(input.min) || 0;
+	const max = parseFloat(input.max) || Number.MAX_SAFE_INTEGER;
+	const currentValue = parseInt(input.value || "0");
+	input.value = String(Math.max(min, Math.min(max, currentValue + step)));
+	input.dispatchEvent(new CustomEvent("change", { bubbles: true }));
 }
 
 onMounted(() => {
 	// Auto-select first item if single item with no variations
 	if (
-		!store.cartExists
-		&& store.itemnum === 1
-		&& (!store.categories[0]?.items[0]?.has_variations || store.categories[0]?.items[0]?.variations.length < 2)
-		&& !store.hasSeatingPlan
-		&& quantity.value
+		!store.cartExists &&
+		store.itemnum === 1 &&
+		(!store.categories[0]?.items[0]?.has_variations ||
+			store.categories[0]?.items[0]?.variations.length < 2) &&
+		!store.hasSeatingPlan &&
+		quantity.value
 	) {
-		quantity.value.value = '1'
-		if (orderMax.value === 1 && quantity.value.type === 'checkbox') {
-			;(quantity.value as HTMLInputElement).checked = true
+		quantity.value.value = "1";
+		if (orderMax.value === 1 && quantity.value.type === "checkbox") {
+			(quantity.value as HTMLInputElement).checked = true;
 		}
 	}
-})
+});
 </script>
 <template lang="pug">
 .pretix-widget-availability-box
@@ -149,5 +169,4 @@ onMounted(() => {
 			)
 				span +
 </template>
-<style lang="sass">
-</style>
+<style lang="sass"></style>

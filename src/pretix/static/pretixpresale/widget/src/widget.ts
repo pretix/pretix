@@ -1,24 +1,29 @@
-import { createApp, type App } from 'vue'
-import WidgetComponent from '~/components/Widget.vue'
-import { createWidgetStore, StoreKey } from '~/sharedStore'
-import { makeid } from '~/utils'
-import type { WidgetData } from '~/types'
+import { createApp, type App } from "vue";
+import WidgetComponent from "~/components/Widget.vue";
+import { createWidgetStore, StoreKey } from "~/sharedStore";
+import { makeid } from "~/utils";
+import type { WidgetData } from "~/types";
 
-export function createWidgetInstance (element: Element, htmlId?: string): App {
-	let targetUrl = element.attributes.event.value
+export function createWidgetInstance(element: Element, htmlId?: string): App {
+	let targetUrl = element.attributes.event.value;
 	if (!targetUrl.match(/\/$/)) {
-		targetUrl += '/'
+		targetUrl += "/";
 	}
 
-	const displayEventInfoAttr = element.attributes['display-event-info']?.value
+	const displayEventInfoAttr = element.attributes["display-event-info"]?.value;
 	// null means "auto" (as before), everything other than "false" is true
-	const displayEventInfo: boolean | null
-		= 'display-event-info' in element.attributes && displayEventInfoAttr !== 'auto' ? displayEventInfoAttr !== 'false' : null
+	const displayEventInfo: boolean | null =
+		"display-event-info" in element.attributes &&
+		displayEventInfoAttr !== "auto"
+			? displayEventInfoAttr !== "false"
+			: null;
 
-	const widgetData: WidgetData = JSON.parse(JSON.stringify(window.PretixWidget.widget_data))
+	const widgetData: WidgetData = JSON.parse(
+		JSON.stringify(window.PretixWidget.widget_data),
+	);
 	for (const attr of Array.from(element.attributes)) {
 		if (attr.name.match(/^data-.*$/)) {
-			widgetData[attr.name.replace(/^data-/, '')] = attr.value
+			widgetData[attr.name.replace(/^data-/, "")] = attr.value;
 		}
 	}
 
@@ -26,11 +31,14 @@ export function createWidgetInstance (element: Element, htmlId?: string): App {
 		targetUrl,
 		voucher: element.attributes.voucher?.value || null,
 		subevent: element.attributes.subevent?.value || null,
-		listType: element.attributes['list-type']?.value || element.attributes.style?.value || null,
-		skipSsl: 'skip-ssl-check' in element.attributes,
-		disableIframe: 'disable-iframe' in element.attributes,
-		disableVouchers: 'disable-vouchers' in element.attributes,
-		disableFilters: 'disable-filters' in element.attributes,
+		listType:
+			element.attributes["list-type"]?.value ||
+			element.attributes.style?.value ||
+			null,
+		skipSsl: "skip-ssl-check" in element.attributes,
+		disableIframe: "disable-iframe" in element.attributes,
+		disableVouchers: "disable-vouchers" in element.attributes,
+		disableFilters: "disable-filters" in element.attributes,
 		displayEventInfo,
 		filter: element.attributes.filter?.value || null,
 		items: element.attributes.items?.value || null,
@@ -38,36 +46,41 @@ export function createWidgetInstance (element: Element, htmlId?: string): App {
 		variations: element.attributes.variations?.value || null,
 		widgetData,
 		htmlId: htmlId || element.id || makeid(16),
-		keepCart: true
-	})
+		keepCart: true,
+	});
 
 	const observer = new MutationObserver((mutationList) => {
 		for (const mutation of mutationList) {
-			if (mutation.type === 'attributes' && mutation.attributeName?.startsWith('data-')) {
-				const attrName = mutation.attributeName.substring(5)
-				const attrValue = (mutation.target as Element).getAttribute(mutation.attributeName)
-				store.widgetData[attrName] = attrValue
+			if (
+				mutation.type === "attributes" &&
+				mutation.attributeName?.startsWith("data-")
+			) {
+				const attrName = mutation.attributeName.substring(5);
+				const attrValue = (mutation.target as Element).getAttribute(
+					mutation.attributeName,
+				);
+				store.widgetData[attrName] = attrValue;
 			}
 		}
-	})
+	});
 
-	const app = createApp(WidgetComponent)
-	app.provide(StoreKey, store)
+	const app = createApp(WidgetComponent);
+	app.provide(StoreKey, store);
 	app.config.errorHandler = (error, _vm, info) => {
-		console.error('[pretix-widget]', info, error)
-	}
+		console.error("[pretix-widget]", info, error);
+	};
 	// Instead of mounting to the element directly, replicate vue2.7 behaviour, where
 	// the HTML-element gets replaced instead of vue3’s behaviour to replace innerHTML.
 	// The latter can cause issues with custom CSS as HTML structure would change.
 	// app.mount(element)
 	// observer.observe(element, { attributes: true })
-	const fragment = document.createDocumentFragment()
-	app.mount(fragment)
+	const fragment = document.createDocumentFragment();
+	app.mount(fragment);
 	for (const attr of element.attributes) {
-		fragment.firstChild.setAttribute(attr.name, attr.value)
+		fragment.firstChild.setAttribute(attr.name, attr.value);
 	}
-	observer.observe(fragment.firstChild, { attributes: true })
-	element.parentNode.replaceChild(fragment, element)
+	observer.observe(fragment.firstChild, { attributes: true });
+	element.parentNode.replaceChild(fragment, element);
 
-	return app
+	return app;
 }

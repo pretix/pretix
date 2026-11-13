@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { CheckinList } from '../api'
-import { formatSubevent } from '../i18n'
+import { computed } from "vue";
+import type { CheckinList } from "../api";
+import { formatSubevent } from "../i18n";
 
 const props = defineProps<{
-	list: CheckinList
-}>()
+	list: CheckinList;
+}>();
 
 defineEmits<{
-	selected: [list: CheckinList]
-}>()
+	selected: [list: CheckinList];
+}>();
 
-const subevent = computed(() => formatSubevent(props.list.subevent))
+const subevent = computed(() => formatSubevent(props.list.subevent));
 </script>
 <template lang="pug">
 a.list-group-item(href="#", @click.prevent="$emit('selected', list)")

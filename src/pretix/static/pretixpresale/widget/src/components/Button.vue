@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
-import { StoreKey } from '~/sharedStore'
-import Overlay from './Overlay.vue'
+import { computed, inject, ref } from "vue";
+import { StoreKey } from "~/sharedStore";
+import Overlay from "./Overlay.vue";
 
-const lang = LANG // we need this so the template sees the variable
+const lang = LANG; // we need this so the template sees the variable
 
-const store = inject(StoreKey)!
+const store = inject(StoreKey)!;
 
-const form = ref<HTMLFormElement>()
+const form = ref<HTMLFormElement>();
 
 const formMethod = computed(() => {
 	if (!store.useIframe && store.isButton && store.items.length === 0) {
-		return 'get'
+		return "get";
 	}
-	return 'post'
-})
+	return "post";
+});
 
-function handleBuy (event: Event) {
+function handleBuy(event: Event) {
 	if (form.value) {
-		const formData = new FormData(form.value)
-		store.buy(formData, event)
+		const formData = new FormData(form.value);
+		store.buy(formData, event);
 	}
 }
 
 defineExpose({
 	form,
 	buy: handleBuy,
-})
+});
 </script>
 <template lang="pug">
 .pretix-widget-wrapper
@@ -50,5 +50,4 @@ defineExpose({
 
 	Overlay
 </template>
-<style lang="sass">
-</style>
+<style lang="sass"></style>

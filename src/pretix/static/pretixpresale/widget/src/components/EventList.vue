@@ -1,44 +1,50 @@
 <script setup lang="ts">
-import { computed, inject, nextTick } from 'vue'
-import { StoreKey } from '~/sharedStore'
-import { STRINGS } from '~/i18n'
-import EventListEntry from './EventListEntry.vue'
-import EventListFilterForm from './EventListFilterForm.vue'
+import { computed, inject, nextTick } from "vue";
+import { StoreKey } from "~/sharedStore";
+import { STRINGS } from "~/i18n";
+import EventListEntry from "./EventListEntry.vue";
+import EventListFilterForm from "./EventListFilterForm.vue";
 
-const store = inject(StoreKey)!
+const store = inject(StoreKey)!;
 
-const displayEventInfo = computed(() => store.displayEventInfo || (store.displayEventInfo === null && store.parentStack.length > 0))
+const displayEventInfo = computed(
+	() =>
+		store.displayEventInfo ||
+		(store.displayEventInfo === null && store.parentStack.length > 0),
+);
 
-async function backToCalendar (event: MouseEvent) {
+async function backToCalendar(event: MouseEvent) {
 	// make sure to always focus content element
-	await nextTick()
-	const rootEl = (event.target as HTMLElement).closest('.pretix-widget-wrapper') as HTMLElement | null
-	rootEl?.focus()
+	await nextTick();
+	const rootEl = (event.target as HTMLElement).closest(
+		".pretix-widget-wrapper",
+	) as HTMLElement | null;
+	rootEl?.focus();
 
-	store.offset = 0
-	store.appendEvents = false
+	store.offset = 0;
+	store.appendEvents = false;
 
 	if (store.weeks) {
-		store.events = null
-		store.view = 'weeks'
-		store.name = null
-		store.frontpageText = null
+		store.events = null;
+		store.view = "weeks";
+		store.name = null;
+		store.frontpageText = null;
 	} else {
-		store.loading++
-		store.targetUrl = store.parentStack.pop() || store.targetUrl
-		store.error = null
-		store.reload()
+		store.loading++;
+		store.targetUrl = store.parentStack.pop() || store.targetUrl;
+		store.error = null;
+		store.reload();
 	}
 }
 
-function loadMore () {
-	store.appendEvents = true
-	store.offset += 50
-	store.loading++
-	store.reload()
+function loadMore() {
+	store.appendEvents = true;
+	store.offset += 50;
+	store.loading++;
+	store.reload();
 }
 
-console.log(store)
+console.log(store);
 </script>
 <template lang="pug">
 .pretix-widget-event-list
@@ -67,5 +73,4 @@ console.log(store)
 	p.pretix-widget-event-list-load-more(v-if="store.hasMoreEvents")
 		button(@click.prevent.stop="loadMore") {{ STRINGS.load_more }}
 </template>
-<style lang="sass">
-</style>
+<style lang="sass"></style>
