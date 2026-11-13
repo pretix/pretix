@@ -54,7 +54,7 @@ locale                                string                                 The
 active                                boolean                                Deleted resources will have this set to false
 phone                                 string                                 The resource's phone number (or ``null``)
 address                               string                                 The resource's address
-notification_email                    string                                 The email address to send confirmation emails to when a planning is created.  Ignored and left out of responses when type.is_human is True
+notification_email                    string                                 The email address to send planning change emails to.  Ignored and left out of responses when type.is_human is True
 confirmation_required                 boolean                                Does this resource require confirmation when a planning is created for it.
 can_invoice                           boolean                                Can this resource invoice the organizer?
 external_identifier                   string                                 External ID of the resource (or ``null``)
