@@ -27,6 +27,7 @@ from decimal import Decimal
 
 from django import forms
 from django.db.models import F, Sum
+from django.db.models.aggregates import Min
 from django.db.models.functions import Coalesce
 from django.utils.formats import date_format
 from django.utils.html import escape
@@ -41,7 +42,8 @@ from reportlab.platypus import (
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.models import (
-    GiftCardTransaction, OrderFee, OrderPayment, OrderRefund, Transaction,
+    GiftCardTransaction, Order, OrderFee, OrderPayment, OrderRefund,
+    Transaction,
 )
 from pretix.base.templatetags.money import money_filter, tax_rate_format
 from pretix.base.timeframes import (
@@ -116,25 +118,34 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             dt_start, df_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(
                 now(), form_data["date_range"], self.timezone
             )
-            if dt_start:
-                filters.append(
-                    _("Begin")
-                    + ": "
-                    + date_format(
+        else:
+            dt_start = Order.objects.filter(
+                event__in=self.events,
+            ).aggregate(min_datetime=Min('datetime'))['min_datetime']
+            df_end = now()
+
+        if dt_start:
+            filters.append(
+                "{label}: {value}{hint}".format(
+                    label=_("Begin"),
+                    value=date_format(
                         dt_start.astimezone(self.timezone), "SHORT_DATETIME_FORMAT"
-                    )
+                    ),
+                    hint="" if form_data["date_range"] else " ({})".format(_("first order received"))
                 )
-            if df_end:
-                filters.append(
-                    _("End")
-                    + ": "
-                    + date_format(
-                        (df_end - datetime.timedelta.resolution).astimezone(
-                            self.timezone
-                        ),
-                        "SHORT_DATETIME_FORMAT",
-                    )
+            )
+
+        if df_end:
+            filters.append(
+                _("End")
+                + ": "
+                + date_format(
+                    (df_end - datetime.timedelta.resolution).astimezone(
+                        self.timezone
+                    ),
+                    "SHORT_DATETIME_FORMAT",
                 )
+            )
 
         if not form_data["no_testmode"]:
             filters.append(_("Report includes test orders which may be deleted later!"))
