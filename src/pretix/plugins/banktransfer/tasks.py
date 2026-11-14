@@ -37,9 +37,10 @@ import logging
 import operator
 import re
 from decimal import Decimal
-from functools import reduce
+from functools import lru_cache, reduce
 
 import dateutil.parser
+from babel import Locale, UnknownLocaleError
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.db import transaction
@@ -294,11 +295,21 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, regex_match_to_s
     trans.save()
 
 
+@lru_cache
+def _region_writes_day_first(region):
+    try:
+        return Locale.parse(f"und_{region}").date_formats["short"].pattern.startswith("d")
+    except (UnknownLocaleError, ValueError):
+        return False
+
+
 def parse_date(date_str, region=None):
+    # dateutil reads 2020-07-01 or 20200701 as 7 January when dayfirst is set
+    year_first = re.match(r"\s*\d{4}(\D|\d{4}(\D|$))", date_str)
     try:
         return dateutil.parser.parse(
             date_str,
-            dayfirst="." in date_str or region in ["GB"],
+            dayfirst=not year_first and ("." in date_str or bool(region) and _region_writes_day_first(region)),
         ).date()
     except (ValueError, OverflowError):
         pass
