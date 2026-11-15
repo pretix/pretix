@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 10:48+0000\n"
-"PO-Revision-Date: 2026-11-14 23:00+0000\n"
+"PO-Revision-Date: 2026-11-15 23:00+0000\n"
 "Last-Translator: Ikuisuus <kkujala@paivola.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -297,22 +297,16 @@ msgid "The bundled item must not have bundles on its own."
 msgstr "Niputettavalla tuotteella ei saa olla nippuja."
 
 #: pretix/api/serializers/item.py
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program start must not be empty."
-msgstr "Maksu on liian myöhässä hyväksyttäväksi."
+msgstr "Ohjelman alku ei voi olla tyhjä."
 
 #: pretix/api/serializers/item.py
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program end must not be empty."
-msgstr "Maksu on liian myöhässä hyväksyttäväksi."
+msgstr "Ohjelman loppu ei saa olla tyhjä."
 
 #: pretix/api/serializers/item.py pretix/base/models/items.py
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The program end must not be before the program start."
-msgstr "Enimmäismäärän on oltava suurempi kuin vähimmäismäärä."
+msgstr "Ohjelma ei voi päättyä ennen kuin se alkaa."
 
 #: pretix/api/serializers/item.py pretix/base/models/items.py
 #, fuzzy
@@ -8362,6 +8356,8 @@ msgid ""
 "Includes the ability to give someone (including oneself) additional "
 "permissions."
 msgstr ""
+"Sisältää mahdollisuuden antaa jollekulle (itsesi mukaanlukien) lisää "
+"oikeuksia."
 
 #: pretix/base/permissions.py pretix/control/navigation.py
 msgid "Devices"
@@ -8372,6 +8368,8 @@ msgid ""
 "Includes the ability to give access to events and data oneself does not have "
 "access to."
 msgstr ""
+"Sisältää mahdollisuuden antaa oikeuksia tapahtumiin ja dataan henkilöllä ei "
+"ole vielä oikeuksia."
 
 #: pretix/base/permissions.py
 #, fuzzy
@@ -8382,7 +8380,7 @@ msgstr "Istumajärjestys"
 #: pretix/base/permissions.py pretix/control/navigation.py
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 msgid "Outgoing emails"
-msgstr ""
+msgstr "Lähtevät viestit"
 
 #: pretix/base/plugins.py
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html
@@ -8391,19 +8389,19 @@ msgstr "Ominaisuudet"
 
 #: pretix/base/plugins.py
 msgid "Integrations"
-msgstr ""
+msgstr "Integraatiot"
 
 #: pretix/base/plugins.py
 msgid "Customizations"
-msgstr ""
+msgstr "Kustomoinnit"
 
 #: pretix/base/plugins.py
 msgid "Output and export formats"
-msgstr ""
+msgstr "Ulostulon ja vientien formaatit"
 
 #: pretix/base/plugins.py
 msgid "API features"
-msgstr ""
+msgstr "API ominaisuudet"
 
 #: pretix/base/reldate.py
 msgid "Event start"
@@ -8465,6 +8463,7 @@ msgstr "Ei asetettu"
 #, python-brace-format
 msgid "A relative date cannot be expressed as \"before\" for \"{}\""
 msgstr ""
+"Suhteellista päivämäärää ei voida ilmaista muodossa \"Ennen\" \"{}\" varten"
 
 #: pretix/base/reldate.py
 #, python-brace-format
@@ -8500,7 +8499,7 @@ msgstr "Tapahtuma peruttu"
 
 #: pretix/base/services/cancelevent.py
 msgid "Confirm event cancellation and bulk refund"
-msgstr ""
+msgstr "Vahvista tapahtuman peruminen ja rahojen palauttaminen massana"
 
 #: pretix/base/services/cart.py pretix/base/services/modelimport.py
 #: pretix/base/services/orders.py
@@ -8534,6 +8533,8 @@ msgid ""
 "Some products can no longer be purchased and have been removed from your "
 "cart for the following reason: %s"
 msgstr ""
+"Joitain tuotteista ei voida enää ostaa ja ne on poistettu ostoskoristasi "
+"seuraavasta syystä: %s"
 
 #: pretix/base/services/cart.py
 msgid ""
@@ -9414,7 +9415,7 @@ msgstr "Kuponkia ei voi luoda ilman koodia."
 #, python-brace-format
 msgid ""
 "Voucher codes must be unique. Code \"{code}\" already exists in this import."
-msgstr ""
+msgstr "Kuponkikoodien täytyy olla uniikkeja. Koodi \"{code}\" on jo olemassa."
 
 #: pretix/base/services/modelimport.py
 #, python-brace-format
@@ -9423,13 +9424,19 @@ msgid ""
 msgid_plural ""
 "Voucher codes must be unique. Import contains existing voucher codes {code}."
 msgstr[0] ""
+"Kuponkikoodien tulee olla uniikkeja. Tuoduissa tiedoissa on mukana olemassa "
+"oleva kuponkikoodi {code}."
 msgstr[1] ""
+"Kuponkikoodien tulee olla uniikkeja. Tuoduissa tiedoissa on mukana olemassa "
+"olevia kuponkikoodeja {code}."
 
 #: pretix/base/services/modelimport.py
 msgid ""
 "Vouchers could not be imported, probably due to a voucher code already being "
 "in use."
 msgstr ""
+"Kuponkeja ei voitu tuoda, todennäköisesti koska kupongin koodi on jo "
+"käytössä."
 
 #: pretix/base/services/orders.py
 msgid ""
@@ -9908,17 +9915,19 @@ msgstr "Kuponki on lähetetty {recipient}."
 
 #: pretix/base/settings.py
 msgid "Compute taxes for every line individually"
-msgstr ""
+msgstr "Laske verot jokaiselle riville yksittäin"
 
 #: pretix/base/settings.py
 msgid "Compute taxes based on net total"
-msgstr ""
+msgstr "Laske verot kokonaissumman perusteella"
 
 #: pretix/base/settings.py
 msgid ""
 "For business customers, compute taxes based on net total. For individuals, "
 "use line-based rounding"
 msgstr ""
+"Lasket verot nettosumman pohjalta yritysasiakkaille. Käytä rivipohjaista "
+"pyöristystä yksityishenkilöille"
 
 #: pretix/base/settings.py
 msgid "Compute taxes based on net total with stable gross prices"
@@ -9954,7 +9963,7 @@ msgstr ""
 
 #: pretix/base/settings.py
 msgid "Require login to access order confirmation pages"
-msgstr ""
+msgstr "Vaadi kirjautumista tilausvahvistus sivuille pääsyyn"
 
 #: pretix/base/settings.py
 msgid ""
@@ -9963,6 +9972,10 @@ msgid ""
 "placing an order, the restriction only becomes active after the customer "
 "account is activated."
 msgstr ""
+"Jos tämä on päällä, käyttäjien, jotka olivat kirjautuneena ostoksen aikana, "
+"täytyy kirjautua sisään myös päästäkseen käsiksi tilausvahvistukseensa. Jos "
+"käyttäjätili on luotu tilauksen yhteydessä, rajoite astuu voimaan vasta kun "
+"käyttäjätili on aktivoitu."
 
 #: pretix/base/settings.py
 msgid "Match orders based on email address"
@@ -10164,7 +10177,7 @@ msgstr "Vaaditaan puhelinnumero tilausta kohden"
 
 #: pretix/base/settings.py
 msgid "Rounding of taxes"
-msgstr ""
+msgstr "Verojen pyöristys"
 
 #: pretix/base/settings.py
 msgid ""
@@ -10172,6 +10185,10 @@ msgid ""
 "for tax reporting, you need to make sure to account for possible rounding "
 "differences if your external system rounds differently than pretix."
 msgstr ""
+"Huomaa, että jos siirrät myyntidataa Pretixistä ulkoiseen järjestelmään "
+"verojen ilmoittamista varten, on hyvä varmistaa mahdollisten pyöristys "
+"erojen käsittely mikäli ulkoinen järjestelmäsi pyöristää eri tavalla kuin "
+"Pretix."
 
 #: pretix/base/settings.py
 msgid "Ask for invoice address"
@@ -10315,6 +10332,9 @@ msgid ""
 "ID in all countries. VAT ID will be required for all business addresses in "
 "the selected countries."
 msgstr ""
+"Veronumero on vapaaehtoinen oletusarvoisesti, koska kaikkilla yrityksillä ei "
+"ole veronumeroa kaikissa maissa. Veronumero vaaditaan kaikilta yritys "
+"osoitteilta valituissa maissa."
 
 #: pretix/base/settings.py
 msgid "Invoice address explanation"
@@ -10470,12 +10490,12 @@ msgstr ""
 
 #: pretix/base/settings.py
 msgid "No dates match your criteria."
-msgstr ""
+msgstr "Yksikään päivämäärä ei vastaa kriteereitäsi."
 
 #: pretix/base/settings.py
 msgctxt "subevents"
 msgid "Text for empty date results"
-msgstr ""
+msgstr "Teksti tyhjille päivämäärätuloksille"
 
 #: pretix/base/settings.py
 msgctxt "subevents"
@@ -10486,6 +10506,11 @@ msgid ""
 "touch with you to arrange further dates. We do not recommend more than one "
 "or two sentences."
 msgstr ""
+"Tämä teksti näytetään jos kalenteri tai päivämäärälista on tyhjä. "
+"Esimerkiksi jos kuukausi ei vastaa päivämäärää tai käyttäjän valitsema "
+"filtteriin vastaamia tuloksia ei löydy.  Voit käyttää tätä mainostamaan "
+"tapoja ottaa yhteyttä teihin tulevien päivämäärien sopimiseksi. Emme "
+"suosittele enempää kuin yhtä tai kahta lausetta."
 
 #: pretix/base/settings.py
 msgid "Guidance text"
@@ -10670,6 +10695,9 @@ msgid ""
 "their order without selecting a payment method. This is useful whenever "
 "orders are not created by the same person who is making the payment."
 msgstr ""
+"Jos maksun viivästäminen on sallittu myyntikanavassa, asiakkaat voivat "
+"asettaa tilauksen valitsematta maksutapaa. Tämä on kätevää kun tilaukset "
+"eivät ole saman henkilön tekemiä, joka maksaa tilauksen."
 
 #: pretix/base/settings.py
 msgid "Show start date"
@@ -10753,10 +10781,13 @@ msgid ""
 "Automatic based on ticket-specific validity, membership validity, event "
 "series date, or event date"
 msgstr ""
+"Automaattinen perustuen lippukohtaiseen voimassaoloon, jäsenyyden voimassa "
+"oloon, tapahtumasarjan päivämäärään tai tapahtuman päivämäärään"
 
 #: pretix/base/settings.py
 msgid "Automatic, but prefer invoice date over event date"
 msgstr ""
+"Automaattinen, mutta suosi laskun päivämäärää tapahtuman päivämäärän sijaan"
 
 #: pretix/base/settings.py
 #, fuzzy
@@ -10777,6 +10808,8 @@ msgid ""
 "This controls what dates are shown on the invoice, but is especially "
 "important for electronic invoicing."
 msgstr ""
+"Tämä kontrolloi mitkä päivämäärät näytetään laskulla ja on erityisen tärkeä "
+"sähköisessä laskutuksessa."
 
 #: pretix/base/settings.py
 msgid "Automatically cancel and reissue invoice on address changes"
@@ -10955,6 +10988,12 @@ msgid ""
 "page. Note that pretix still is a system built around events and the date "
 "may still show up in other places."
 msgstr ""
+"Jätä tämä laatikko valitsematta vain jos myyt jotain millä ei ole erillistä "
+"päivää, kuten lahjakortti tai lippu, jonka voi käyttää koska tahansa. "
+"Järjestelmä lakkaa näyttämästä tapahtuma päivää joissain paikoissa kuten "
+"tapahtuman aloitussivulla. Huomaathan että Pretix on silti järjestelmä, joka "
+"on rakennettu tapahtumien ympärille ja päivämäärä saatetaan silti näyttää "
+"muissa paikoissa."
 
 #: pretix/base/settings.py
 msgid "Show event end date"
@@ -13250,7 +13289,7 @@ msgstr "Sinun on vaadittava laskuosoitteet yritysten nimille."
 #: pretix/base/settings.py
 #, python-brace-format
 msgid "VAT-ID is not supported for \"{}\"."
-msgstr ""
+msgstr "Veronumeroa ei tueta \"{}\" varten."
 
 #: pretix/base/settings.py
 msgid "The last payment date cannot be before the end of presale."
@@ -13509,7 +13548,7 @@ msgstr ""
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 msgid "You requested to cancel an event that involves a large bulk refund:"
-msgstr ""
+msgstr "Pyyntösi perua tapahtuma, joka sisältää suuren massapalautuksen:"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 #, fuzzy
@@ -13519,7 +13558,7 @@ msgstr "Hyvitettävä summa"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 msgid "To confirm, paste the following code into the cancellation form:"
-msgstr ""
+msgstr "Vahvistaaksesi kopioi seuraava koodi peruutus lomakkeelle:"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 #, python-format
@@ -13527,6 +13566,7 @@ msgid ""
 "Don't share this code with anyone. The %(instance)s team will never ask you "
 "for it."
 msgstr ""
+"Älä jaa tätä koodia kenellekää. %(instance)s tiimi ei koskaan kysy sitä."
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 #: pretix/base/templates/pretixbase/email/export_failed.txt
@@ -13535,6 +13575,8 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team"
 msgstr ""
+"Kiitos,  \n"
+"%(instance)s tiimi"
 
 #: pretix/base/templates/pretixbase/email/email_footer.html
 #, python-format
@@ -13580,10 +13622,8 @@ msgstr "Vaihda asetuksia"
 
 #: pretix/base/templates/pretixbase/email/notification.html
 #: pretix/base/templates/pretixbase/email/notification.txt
-#, fuzzy
-#| msgid "Click here disable all notifications immediately."
 msgid "Disable all notifications"
-msgstr "Klikkaa tästä poista kaikki ilmoitukset käytöstä välittömästi."
+msgstr "Poista kaikki ilmoitukset käytöstä"
 
 #: pretix/base/templates/pretixbase/email/order_details.html
 msgid ""
@@ -13633,7 +13673,7 @@ msgstr "Saat tämän sähköpostiviestin, koska olet tehnyt {event}tilauksen."
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html
 msgid "Details"
-msgstr ""
+msgstr "Yksityiskohdat"
 
 #: pretix/base/templates/pretixbase/email/order_details.html
 #: pretix/presale/templates/pretixpresale/event/base.html
