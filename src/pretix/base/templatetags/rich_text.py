@@ -445,3 +445,11 @@ def rich_text_snippet(text: str, **kwargs):
     )
     body_md = markdown_compile(text, linker, snippet=True)
     return mark_safe(body_md)
+
+
+def markdown_escape(plain: str) -> str:
+    """
+    Escape formatting characters in markdown with backslash.
+    """
+    translation_map = {ord(k): f'\\{k}' for k in "\\`*_{}[]<>()#+-.!|"}
+    return plain.translate(translation_map)
