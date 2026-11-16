@@ -95,6 +95,10 @@ if not settings.DEBUG:
 
 
 DEFAULT_VARIABLES = OrderedDict((
+    # For performance reasons, `evaluate` functions are not allowed to cause additional database
+    # queries, except if an additional `evaluate_bulk` function is provided.
+    # Alternatively, `evaluate_bulk` can be set to False, hiding the variable by default, making
+    # it only available to consumers that call get_variables with allow_non_bulk_evaluatable=True.
     ("secret", {
         "label": _("Ticket code (barcode content)"),
         "editor_sample": "tdmruoekvkpbv1o2mv8xccvqcikvr58u",
