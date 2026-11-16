@@ -177,7 +177,7 @@ def oauth_return(request, *args, **kwargs):
 def webhook(request, *args, **kwargs):
     try:
         event_json = json.loads(request.body.decode('utf-8'))
-    except (UnicodeDecodeError, JSONDecodeError):
+    except (json.UnicodeDecodeError, json.JSONDecodeError):
         return HttpResponse("No valid JSON provided.", status=400)
     try:
         # We do not check for the event type as we are not interested in the event it self,
