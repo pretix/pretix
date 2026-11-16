@@ -29,18 +29,18 @@ const theme = computed(() => {
 			.pass-inner.f-column
 				.f-row.head-row
 					img.logo(:src="settings['logo']?.url")
-					div.logo-text {{ fieldgroup_contents['logo_text']?.[0]?.content }}
-					FieldGroupEntries.header.f-row(fieldgroup="header" :fieldgroup_contents="fieldgroup_contents")
+					div.logo-text {{ fieldgroupContents['logo_text']?.[0]?.content }}
+					FieldGroupEntries.header.f-row(fieldgroup="header" :fieldgroupContents="fieldgroupContents")
 
 				.f-column
-					FieldGroupEntries.primary(fieldgroup="primary" :fieldgroup_contents="fieldgroup_contents")
-					FieldGroupEntries.f-row(fieldgroup="secondary" :fieldgroup_contents="fieldgroup_contents")
-					FieldGroupEntries.f-row(fieldgroup="auxiliary" :fieldgroup_contents="fieldgroup_contents")
+					FieldGroupEntries.primary(fieldgroup="primary" :fieldgroupContents="fieldgroupContents")
+					FieldGroupEntries.f-row(fieldgroup="secondary" :fieldgroupContents="fieldgroupContents")
+					FieldGroupEntries.f-row(fieldgroup="auxiliary" :fieldgroupContents="fieldgroupContents")
 
-				.qrcode-inner(v-for="qrcode in fieldgroup_contents['code']") {{ qrcode.label }}
+				.qrcode-inner(v-for="qrcode in fieldgroupContents['code']") {{ qrcode.label }}
 
 		.pass-container.apple-pass-back
-			FieldGroupEntries.pass-inner.f-column(fieldgroup="back" :fieldgroup_contents="fieldgroup_contents")
+			FieldGroupEntries.pass-inner.f-column(fieldgroup="back" :fieldgroupContents="fieldgroupContents")
 
 </template>
 

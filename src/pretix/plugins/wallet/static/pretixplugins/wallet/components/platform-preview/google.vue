@@ -10,7 +10,7 @@ function isActive (fieldgroup: string) {
 	return props.fieldgroups[fieldgroup]?.active
 }
 
-const qrcode = computed(() => props.fieldgroup_contents['code']?.[0])
+const qrcode = computed(() => props.fieldgroupContents['code']?.[0])
 </script>
 
 <template lang="pug">

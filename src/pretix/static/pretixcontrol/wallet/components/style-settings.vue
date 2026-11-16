@@ -13,14 +13,15 @@ const store = inject(StoreKey)!
 	h2.h3 {{ gettext("Settings") }}
 	SettingsField(v-for="field of store.style.settings" :key="field.identifier" :field="field")
 	h2.h3 {{ gettext("Field Groups") }}
-	div(v-for="(fieldgroup, fieldgroupId) in store.style.fieldgroups" :id="'fieldgroup-' + fieldgroup.identifier")
+	div(v-for="fieldgroup in store.style.fieldgroups" :id="'fieldgroup-' + fieldgroup.identifier")
 		PlaceholderFieldSettings(
 			v-if="fieldgroup.type == 'placeholder'"
 			v-model="store.layout.fieldgroups[fieldgroup.identifier]"
 			:fieldgroup="fieldgroup"
 		)
 		PredefinedFieldSettings(
-v-else-if="fieldgroup.type == 'predefined'"
-					v-model="store.layout.fieldgroups[fieldgroup.identifier]"
-					:fieldgroup="fieldgroup")
+			v-else-if="fieldgroup.type == 'predefined'"
+			v-model="store.layout.fieldgroups[fieldgroup.identifier]"
+			:fieldgroup="fieldgroup"
+		)
 </template>

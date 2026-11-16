@@ -133,5 +133,5 @@ const placeholders = computed(() => {
 				button.btn.btn-default(type="button" @click="addEntry")
 					i.fa.fa-plus
 					|  {{ gettext("Add field") }}
-			Select(v-model="fieldConfig.overflow" :label="gettext('Overflow to …')" :choices="overflowOptions" :help_text="overflowText")
+			Select(v-model="fieldConfig.overflow" :label="gettext('Overflow to …')" :choices="overflowOptions" :helpText="overflowText")
 </template>

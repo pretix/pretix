@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useId, watchEffect } from 'vue'
+import { computed, ref, useId } from 'vue'
 
 const gettext = (window as any).gettext
 
@@ -8,7 +8,7 @@ const selectedFile = defineModel<{ name: string; url: string; }>()
 const props = defineProps<{
 	label?: LocalizableString;
 	errors?: string[];
-	help_text?: string;
+	helpText?: string;
 	default?: string;
 }>()
 const id = useId()
@@ -48,13 +48,14 @@ const hasFile = computed(() => {
 				i.fa.fa-trash
 				span.sr-only {{ gettext("Clear") }}
 		input.hidden(:id="id" v-bind="$attrs" ref="inputRef" :required="!!$attrs.required" type="file" @change="onChange")
-		.help-block(v-if="!!help_text || !!props.default")
-			template(v-if="!!help_text") {{ help_text }}
-			br(v-if="!!help_text && !!props.default")
+		.help-block(v-if="!!helpText || !!props.default")
+			template(v-if="!!helpText") {{ helpText }}
+			br(v-if="!!helpText && !!props.default")
 			template(v-if="!!props.default")
 				a(:href="props.default" data-lightbox="input") {{ gettext("Show default") }}
 
-		.help-block(v-for="error in errors" v-if="!!errors") {{ error }}
+		template(v-if="!!errors")
+			.help-block(v-for="error in errors") {{ error }}
 </template>
 
 <style lang="css" scoped>

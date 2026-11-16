@@ -5,7 +5,6 @@ import ts from 'typescript-eslint'
 import stylistic from '@stylistic/eslint-plugin'
 import vue from 'eslint-plugin-vue'
 import vuePug from 'eslint-plugin-vue-pug'
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 const ignores = globalIgnores([
 	'**/node_modules',
@@ -56,7 +55,7 @@ const ignores = globalIgnores([
 	'src/pretix/static/pretixpresale/js/ui/cart.js',
 	'src/pretix/static/pretixpresale/js/ui/main.js',
 	'src/pretix/static/pretixpresale/js/ui/questions.js',
-	'src/pretix/static/pretixpresale/js/widget/floatformat.js',
+	'src/pretix/static/pretixpresale/js/floatformat.js',
 	'src/pretix/static/pretixpresale/js/widget/widget.js',
 	'src/pretix/plugins/banktransfer/static',
 	'src/pretix/plugins/paypal2/static',

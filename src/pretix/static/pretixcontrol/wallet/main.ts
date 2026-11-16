@@ -16,7 +16,7 @@ const store = createWalletStore({
 	locales: JSON.parse(document.querySelector('#locales')?.textContent ?? '{}'),
 	csrfToken: document.querySelector<HTMLInputElement>(
 		'input[name=csrfmiddlewaretoken]',
-	)?.value!,
+	).value!,
 	layoutId: mountEl.dataset.layoutId!,
 	baseUrl: mountEl.dataset.baseUrl!,
 	previewUrl: mountEl.dataset.previewUrl!,

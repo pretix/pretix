@@ -2,8 +2,6 @@
 import { watchEffect } from 'vue'
 import Checkbox from './input/checkbox.vue'
 
-const gettext = (window as any).gettext
-
 const props = defineProps<{
 	fieldgroup: FieldGroupDefinition;
 }>()

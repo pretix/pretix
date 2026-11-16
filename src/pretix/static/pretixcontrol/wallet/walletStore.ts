@@ -81,7 +81,10 @@ export function createWalletStore (config: {
 			},
 			settings () {
 				const settings: Record<string, SettingValue> = {}
-				for (const setting of this.style?.settings) {
+				if (!this.style) {
+					return settings
+				}
+				for (const setting of this.style.settings) {
 					if (
 						setting.type == 'text'
 						|| setting.type == 'color'
@@ -103,7 +106,10 @@ export function createWalletStore (config: {
 			},
 			settingsValues (): Record<string, SettingValue> {
 				const settings: Record<string, SettingValue> = {}
-				for (const setting of this.style?.settings) {
+				if (!this.style) {
+					return settings
+				}
+				for (const setting of this.style.settings) {
 					if (
 						setting.type == 'text'
 						|| setting.type == 'color'
@@ -241,7 +247,11 @@ export function createWalletStore (config: {
 				}
 			},
 			getSetting (identifier: string): Setting {
-				for (const setting of this.style?.settings) {
+				if (!this.style) {
+					throw Error('No style set')
+				}
+
+				for (const setting of this.style.settings) {
 					if (setting.identifier === identifier) {
 						return setting
 					}

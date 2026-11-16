@@ -25,7 +25,7 @@ export default defineConfig({
 		// Pin shared deps to pretix's node_modules to prevent duplicate instances
 		// across plugins whose node_modules live in sibling directories
 		dedupe: [...SHARED_DEPS, '@vue/runtime-core', '@vue/reactivity', '@vue/shared'],
-	    alias: {
+		alias: {
 			'@': path.resolve(import.meta.dirname, 'src'),
 		}
 	},

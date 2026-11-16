@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref, watchEffect } from 'vue'
+import { computed, inject } from 'vue'
 import StyleSettings from './style-settings.vue'
 import Select from './input/select.vue'
 import Input from './input/input.vue'
@@ -54,19 +54,19 @@ const previewData = computed(() => {
 	return {
 		data: store.style?.preview_data,
 		fieldgroups: store.layout.fieldgroups,
-		fieldgroup_contents: store.renderedFieldGroups,
+		fieldgroupContents: store.renderedFieldGroups,
 		settings: store.settingsValues,
 	}
 })
 
 const previewRenderer = computed(() => {
-	console.log('previewRenderer', store.style?.preview_renderer, JSON.stringify(Object.keys(window.pretix_wallet_preview_renderers)), store.style?.preview_renderer in window.pretix_wallet_preview_renderers)
 	if (
 		!!store.style?.preview_renderer
 		&& store.style?.preview_renderer in window.pretix_wallet_preview_renderers
 	) {
 		return window.pretix_wallet_preview_renderers[store.style?.preview_renderer]
 	}
+	return null
 })
 </script>
 

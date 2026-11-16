@@ -11,10 +11,10 @@ const props = defineProps<PreviewProps>()
 <template lang="pug">
 	Google(v-bind="props")
 		template(#card-rows)
-			FieldGroupEntries.card-row(fieldgroup="second_row" :fieldgroup_contents="fieldgroup_contents")
-			FieldGroupEntries.card-row(fieldgroup="third_row" :fieldgroup_contents="fieldgroup_contents")
+			FieldGroupEntries.card-row(fieldgroup="second_row" :fieldgroupContents="fieldgroupContents")
+			FieldGroupEntries.card-row(fieldgroup="third_row" :fieldgroupContents="fieldgroupContents")
 
 		template(#details)
-			FieldGroupEntries.f-column(fieldgroup="details" :fieldgroup_contents="fieldgroup_contents")
+			FieldGroupEntries.f-column(fieldgroup="details" :fieldgroupContents="fieldgroupContents")
 
 </template>

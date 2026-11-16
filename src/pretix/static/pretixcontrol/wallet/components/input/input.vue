@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useId, computed, onMounted, useTemplateRef, onUnmounted, onUpdated, onBeforeUpdate } from 'vue'
+import { useId, computed, onMounted, useTemplateRef, onUnmounted } from 'vue'
 
 const gettext = (window as any).gettext
 
@@ -18,7 +18,7 @@ const {
 	label?: string;
 	errors?: string[];
 	type?: string;
-	help_text?: string;
+	helpText?: string;
 	inline?: boolean;
 	min?: number;
 	max?: number;
@@ -57,7 +57,9 @@ onMounted(() => {
 			},
 		})
 		jq_elem.on('changeColor', (e) => e.value && (modelValue.value = e.value))
-		jq_elem.on('showPicker', () => { jq_elem.colorpicker('setValue', modelValue.value || defaultVal) })
+		jq_elem.on('showPicker', () => {
+			jq_elem.colorpicker('setValue', modelValue.value || defaultVal)
+		})
 	}
 })
 
@@ -75,8 +77,9 @@ onUnmounted(() => {
 		span.optional(v-if="!$attrs.required")  {{ gettext("Optional") }}
 	div(:class="{'col-md-9': inline}")
 		input.form-control(:id="id" ref="input" v-model="modelValue" v-bind="{...$attrs, ...attrs}" :placeholder="defaultVal")
-		.help-block(v-if="!!help_text") {{ help_text }}
-		.help-block(v-for="error in errors" v-if="!!errors") {{ error }}
+		.help-block(v-if="!!helpText") {{ helpText }}
+		template(v-if="!!errors")
+			.help-block(v-for="error in errors") {{ error }}
 </template>
 
 <style lang="css" scoped>

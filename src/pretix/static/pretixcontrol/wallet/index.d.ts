@@ -103,7 +103,7 @@ type LayoutData = {
 type PlatformLayout = {
 	style: string;
 	fieldgroups: Record<string, FieldGroupConfig>;
-	settings: {};
+	settings: unknown; // TODO(wallet): add settings type
 	file_settings: Record<string, WalletFile>;
 }
 type ServerSideFile = { url: string; name: string }
@@ -113,7 +113,7 @@ type WalletFile = ServerSideFile | ClientSideFile
 type PreviewProps = {
 	data: any;
 	fieldgroups: Record<string, FieldGroupConfig>;
-	fieldgroup_contents: Record<
+	fieldgroupContents: Record<
 		string,
 		{ label?: LocalizableString; content: LocalizableString }
 	>;
