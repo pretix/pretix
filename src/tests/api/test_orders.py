@@ -288,15 +288,6 @@ TEST_ORDERPOSITION_RES = {
             "options": [],
             "option_identifiers": []
         },
-        {
-            "datafield": "ABC",
-            "question": 1000000101,
-            "answer": "S",
-            "question_identifier": "ABC",
-            "options": [],
-            "option_identifiers": [],
-            "questionnaire_id": 1
-        }
     ],
     "subevent": None,
     "canceled": False,
@@ -426,8 +417,6 @@ def test_order_list_filter_subevent_date(token_client, device, organizer, event,
     res["positions"][0]["item"] = item.pk
     res["positions"][0]["subevent"] = subevent.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
-    res["positions"][0]["answers"][1]["question"] = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
-    res["positions"][0]["answers"][1]["questionnaire_id"] = questionnaire.pk
     res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
     res["fees"][0]["tax_rule"] = taxrule.pk
     res["fees"][0]["id"] = fee.pk
@@ -484,8 +473,6 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
         res["positions"][0]["print_logs"][0]["device_id"] = device.device_id
     res["positions"][0]["item"] = item.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
-    res["positions"][0]["answers"][1]["question"] = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
-    res["positions"][0]["answers"][1]["questionnaire_id"] = questionnaire.pk
     res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
     res["fees"][0]["tax_rule"] = taxrule.pk
 
@@ -602,8 +589,6 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
     res["positions"][0]["item"] = item.pk
     res["fees"][0]["tax_rule"] = taxrule.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
-    res["positions"][0]["answers"][1]["question"] = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
-    res["positions"][0]["answers"][1]["questionnaire_id"] = questionnaire.pk
     res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(organizer.slug, event.slug,
                                                                                 order.code))
@@ -1115,8 +1100,6 @@ def test_orderposition_list_limited_read(
         res["item"] = item.pk
         res["variation"] = var.pk
         res["answers"][0]["question"] = question.pk
-        res["answers"][1]["question"] = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
-        res["answers"][1]["questionnaire_id"] = questionnaire.pk
         res["print_logs"][0]["id"] = op.print_logs.first().pk
         res["print_logs"][0]["device_id"] = device.device_id
 
@@ -1167,8 +1150,6 @@ def test_orderposition_list(
         res["item"] = item.pk
         res["variation"] = var.pk
         res["answers"][0]["question"] = question.pk
-        res["answers"][1]["question"] = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
-        res["answers"][1]["questionnaire_id"] = questionnaire.pk
         res["print_logs"][0]["id"] = op.print_logs.first().pk
         res["print_logs"][0]["device_id"] = device.device_id
         if endpoint_type == "organizer":
@@ -1246,10 +1227,10 @@ def test_orderposition_list(
         'type': 'entry'
     }]
     if '/events/' in endpoint:
-        with django_assert_num_queries(17):
+        with django_assert_num_queries(16):
             resp = token_client.get(endpoint + '?has_checkin=true')
     else:
-        with django_assert_num_queries(16):
+        with django_assert_num_queries(15):
             resp = token_client.get(endpoint + '?has_checkin=true')
     assert [res] == resp.data['results']
 
@@ -1272,15 +1253,13 @@ def test_orderposition_list(
 
 @pytest.mark.django_db
 def test_orderposition_detail(token_client, organizer, event, order, item, question, questionnaire):
-    res = dict(TEST_ORDERPOSITION_RES)
+    res = copy.deepcopy(TEST_ORDERPOSITION_RES)
     with scopes_disabled():
         op = order.positions.first()
         res["print_logs"][0]["id"] = op.print_logs.first().pk
     res["id"] = op.pk
     res["item"] = item.pk
     res["answers"][0]["question"] = question.pk
-    res["answers"][1]["question"] = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
-    res["answers"][1]["questionnaire_id"] = questionnaire.pk
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
                                                                                         op.pk))
     assert resp.status_code == 200
@@ -2119,7 +2098,7 @@ def test_blocked_secret_list(token_client, organizer, event):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_pdf_data(token_client, organizer, event, order, item, django_assert_max_num_queries):
+def test_pdf_data(token_client, organizer, event, order, item, django_assert_num_queries):
     # order detail
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?pdf_data=true'.format(
         organizer.slug, event.slug, order.code
@@ -2135,7 +2114,7 @@ def test_pdf_data(token_client, organizer, event, order, item, django_assert_max
     assert not resp.data['positions'][0].get('pdf_data')
 
     # order list
-    with django_assert_max_num_queries(35):
+    with django_assert_num_queries(34):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))
@@ -2154,13 +2133,14 @@ def test_pdf_data(token_client, organizer, event, order, item, django_assert_max
         order.answers.create(question=df, answer='Hello')
         order.positions.create(item=item, price=Decimal("23"), attendee_name_parts={"full_name": "Jane", "_scheme": "full"}, canceled=False, positionid=3)
 
-    with django_assert_max_num_queries(35):
+    with django_assert_num_queries(34):  # this number should stay the same as in the django_assert_num_queries above!
+                                             # otherwise, we have probably created a N+1 queries situation
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))
 
     # position list
-    with django_assert_max_num_queries(36):
+    with django_assert_num_queries(33):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))
@@ -2189,3 +2169,100 @@ def test_pdf_data(token_client, organizer, event, order, item, django_assert_max
     ))
     assert resp.status_code == 200
     assert not resp.data.get('pdf_data')
+
+
+@pytest.mark.django_db
+def test_order_compat_answers(device_client, token_client, organizer, event, order, item, taxrule, question, questionnaire, device):
+    res = copy.deepcopy(TEST_ORDER_RES)
+    with scopes_disabled():
+        device.software_brand = 'pretixPOS'
+        device.save()
+        res["positions"][0]["id"] = order.positions.first().pk
+        res["fees"][0]["id"] = order.fees.first().pk
+        res["positions"][0]["print_logs"][0]["id"] = order.positions.first().print_logs.first().pk
+        res["positions"][0]["print_logs"][0]["device_id"] = device.device_id
+    res["positions"][0]["item"] = item.pk
+    res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
+    res["fees"][0]["tax_rule"] = taxrule.pk
+    res["positions"][0]["answers"][0]["question"] = question.pk
+
+    resp = device_client.get('/api/v1/organizers/{}/events/{}/orders/?compat_answers=false'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+    res["positions"][0]["answers"].append({
+        "datafield": "ABC",
+        "question": QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None),
+        "answer": "S",
+        "question_identifier": "ABC",
+        "options": [],
+        "option_identifiers": [],
+        "questionnaire_id": questionnaire.pk,
+    })
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?compat_answers=true'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+    resp = device_client.get('/api/v1/organizers/{}/events/{}/orders/'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?compat_answers=true&code=FOO'.format(organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+    resp = device_client.get('/api/v1/organizers/{}/events/{}/orders/?code=FOO'.format(organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?compat_answers=true&code=BAR'.format(organizer.slug, event.slug))
+    assert [] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?compat_answers=true&include_canceled_positions=false'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert len(resp.data['results'][0]['positions']) == 1
+    assert [res] == resp.data['results']
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?compat_answers=true&include_canceled_positions=true'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert len(resp.data['results'][0]['positions']) == 2
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?compat_answers=true'.format(organizer.slug, event.slug,
+                                                                                order.code))
+    assert resp.status_code == 200
+    assert json.loads(json.dumps(res)) == json.loads(json.dumps(resp.data))
+
+    resp = device_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(organizer.slug, event.slug,
+                                                                                order.code))
+    assert resp.status_code == 200
+    assert json.loads(json.dumps(res)) == json.loads(json.dumps(resp.data))
+
+
+@pytest.mark.django_db
+def test_orderposition_compat_answers(device_client, device, organizer, event, order, item, question, questionnaire):
+    res = copy.deepcopy(TEST_ORDERPOSITION_RES)
+    with scopes_disabled():
+        device.software_brand = 'pretixPOS'
+        device.save()
+        op = order.positions.first()
+        res["print_logs"][0]["id"] = op.print_logs.first().pk
+    res["id"] = op.pk
+    res["item"] = item.pk
+    res["answers"][0]["question"] = question.pk
+    res["answers"].append({
+        "datafield": "ABC",
+        "question": QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None),
+        "answer": "S",
+        "question_identifier": "ABC",
+        "options": [],
+        "option_identifiers": [],
+        "questionnaire_id": questionnaire.pk,
+    })
+    resp = device_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
+                                                                                        op.pk))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+    order.status = 'p'
+    order.save()
+    event.settings.ticketoutput_pdf__enabled = True
+    resp = device_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
+                                                                                        op.pk))
+    assert len(resp.data['downloads']) == 1
