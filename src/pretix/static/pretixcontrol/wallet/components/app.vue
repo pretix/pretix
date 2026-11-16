@@ -1,196 +1,195 @@
 <script setup lang="ts">
-import { computed, inject, ref, watchEffect } from "vue";
-import StyleSettings from "./style-settings.vue";
-import Select from "./input/select.vue";
-import Input from "./input/input.vue";
-import { StoreKey } from "../walletStore";
+import { computed, inject, ref, watchEffect } from 'vue'
+import StyleSettings from './style-settings.vue'
+import Select from './input/select.vue'
+import Input from './input/input.vue'
+import { StoreKey } from '../walletStore'
 
-const store = inject(StoreKey)!;
-const gettext = (window as any).gettext;
+const store = inject(StoreKey)!
+const gettext = (window as any).gettext
 
-function openForm(url: string, data: Record<string, string | object>) {
-    let form = document.createElement("form");
-    form.target = "_blank";
-    form.method = "POST";
-    form.action = url;
-    form.style.display = "none";
+function openForm (url: string, data: Record<string, string | object>) {
+	let form = document.createElement('form')
+	form.target = '_blank'
+	form.method = 'POST'
+	form.action = url
+	form.style.display = 'none'
 
-    for (var key in data) {
-        var input = document.createElement("input");
-        input.type = "hidden";
-        input.name = key;
-        let value = data[key];
-        if (value instanceof Object) {
-            value = JSON.stringify(data[key]);
-        }
-        input.value = value;
-        form.appendChild(input);
-    }
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
+	for (let key in data) {
+		let input = document.createElement('input')
+		input.type = 'hidden'
+		input.name = key
+		let value = data[key]
+		if (value instanceof Object) {
+			value = JSON.stringify(data[key])
+		}
+		input.value = value
+		form.appendChild(input)
+	}
+	document.body.appendChild(form)
+	form.submit()
+	document.body.removeChild(form)
 }
 
-async function openPreview(e: Event) {
-    e.preventDefault();
-    openForm(store.previewUrl, {
-        csrfmiddlewaretoken: store.csrfToken,
-        id: store.layoutId,
-        ...(await store.serializeCurrentPlatformLayout()),
-    });
+async function openPreview (e: Event) {
+	e.preventDefault()
+	openForm(store.previewUrl, {
+		csrfmiddlewaretoken: store.csrfToken,
+		id: store.layoutId,
+		...(await store.serializeCurrentPlatformLayout()),
+	})
 }
 
 const platformChoices = computed((): [string, string][] => {
-    return [
-        [null, "Do not generate pass"],
-        ...Object.values(store.platform.styles).map((x): [string, string] => [
-            x.identifier,
-            x.name,
-        ]),
-    ];
-});
-
+	return [
+		[null, 'Do not generate pass'],
+		...Object.values(store.platform.styles).map((x): [string, string] => [
+			x.identifier,
+			x.name,
+		]),
+	]
+})
 
 const previewData = computed(() => {
-    return {
-        data: store.style?.preview_data,
-        fieldgroups: store.layout.fieldgroups,
-        fieldgroup_contents: store.renderedFieldGroups,
-        settings: store.settingsValues,
-    };
-});
+	return {
+		data: store.style?.preview_data,
+		fieldgroups: store.layout.fieldgroups,
+		fieldgroup_contents: store.renderedFieldGroups,
+		settings: store.settingsValues,
+	}
+})
 
 const previewRenderer = computed(() => {
-    console.log("previewRenderer", store.style?.preview_renderer, JSON.stringify(Object.keys(window.pretix_wallet_preview_renderers)), store.style?.preview_renderer in window.pretix_wallet_preview_renderers)
-    if (
-        !!store.style?.preview_renderer &&
-        store.style?.preview_renderer in window.pretix_wallet_preview_renderers
-    ) {
-        return window.pretix_wallet_preview_renderers[store.style?.preview_renderer];
-    }
-});
+	console.log('previewRenderer', store.style?.preview_renderer, JSON.stringify(Object.keys(window.pretix_wallet_preview_renderers)), store.style?.preview_renderer in window.pretix_wallet_preview_renderers)
+	if (
+		!!store.style?.preview_renderer
+		&& store.style?.preview_renderer in window.pretix_wallet_preview_renderers
+	) {
+		return window.pretix_wallet_preview_renderers[store.style?.preview_renderer]
+	}
+})
 </script>
 
 <template lang="pug">
-    // TODO: add :key for all `v-for`s
-    // TODO: proper spinner
+	// TODO: add :key for all `v-for`s
+	// TODO: proper spinner
 
-    template(v-if="!store.loaded") {{ gettext("Loading...") }}
-    form(v-else @submit.prevent="store.save")
-        .form-group
-            Input(label="Name" v-model="store.name" required="true")
-        nav
-            ul.nav.nav-tabs
-                li(v-for="platform in store.platforms" :class="{'active': store.platform.identifier === platform.identifier}")
-                    a(role="tab" @click="store.setPlatform(platform.identifier)") {{ platform.name }}
-        .tabbed-form.tab-content
-            .tab-pane.active.row
-                .col-md-6.col-lg-8
-                    Select.form-group(label="Style" :modelValue="store.style?.identifier || null" @update:modelValue="store.setStyle" :choices="platformChoices")
-                    StyleSettings(v-if="!!store.style")
-                .col-md-6.col-lg-4(style="position: sticky; top: 10px;")
-                    .panel.panel-default
-                        .panel-heading Preview
-                        .panel-body
-                            div(v-if="previewRenderer")
-                                p.text-muted {{ gettext("The preview below is only a rough representation of what the pass might look like. Please check the generated pass.") }}
-                                component(:is="previewRenderer" v-bind="previewData")
-                            div(v-else) Preview not supported
-        .form-group.submit-group
-            button.btn.btn-lg.btn-default(v-if="!!store.style" type="button" @click="openPreview") Preview
-            button.btn.btn-primary.btn-save(type="submit") Submit
+	template(v-if="!store.loaded") {{ gettext("Loading...") }}
+	form(v-else @submit.prevent="store.save")
+		.form-group
+			Input(v-model="store.name" label="Name" required="true")
+		nav
+			ul.nav.nav-tabs
+				li(v-for="platform in store.platforms" :class="{'active': store.platform.identifier === platform.identifier}")
+					a(role="tab" @click="store.setPlatform(platform.identifier)") {{ platform.name }}
+		.tabbed-form.tab-content
+			.tab-pane.active.row
+				.col-md-6.col-lg-8
+					Select.form-group(label="Style" :modelValue="store.style?.identifier || null" :choices="platformChoices" @update:modelValue="store.setStyle")
+					StyleSettings(v-if="!!store.style")
+				.col-md-6.col-lg-4(style="position: sticky; top: 10px;")
+					.panel.panel-default
+						.panel-heading Preview
+						.panel-body
+							div(v-if="previewRenderer")
+								p.text-muted {{ gettext("The preview below is only a rough representation of what the pass might look like. Please check the generated pass.") }}
+								component(:is="previewRenderer" v-bind="previewData")
+							div(v-else) Preview not supported
+		.form-group.submit-group
+			button.btn.btn-lg.btn-default(v-if="!!store.style" type="button" @click="openPreview") Preview
+			button.btn.btn-primary.btn-save(type="submit") Submit
 
 </template>
 
 <style lang="css">
 .walletsettings-panel .panel-heading {
-    .checkbox {
-        padding: 0;
-        margin: 0;
-        display: inline-block;
-        input[type="checkbox"] {
-            margin-top: 0;
-            margin-right: 5px;
-            margin-left: 0px;
-            position: relative;
-            top: 1px;
-        }
-        label {
-            padding-left: 0;
-        }
-    }
+	.checkbox {
+		padding: 0;
+		margin: 0;
+		display: inline-block;
+		input[type="checkbox"] {
+			margin-top: 0;
+			margin-right: 5px;
+			margin-left: 0px;
+			position: relative;
+			top: 1px;
+		}
+		label {
+			padding-left: 0;
+		}
+	}
 }
 .walletsettings-panel .panel-body {
-    > :is(h1, h2, h3, h4, h5, h6):first-child {
-        margin-top: 0;
-    }
+	> :is(h1, h2, h3, h4, h5, h6):first-child {
+		margin-top: 0;
+	}
 }
 
 .pass-container {
-    min-width: 0;
-    width: 100%;
-    min-height: 0;
+	min-width: 0;
+	width: 100%;
+	min-height: 0;
 
-    border: solid 1px #949494;
-    padding: 1em;
+	border: solid 1px #949494;
+	padding: 1em;
 
-    overflow: hidden;
-    position: relative;
+	overflow: hidden;
+	position: relative;
 
-    background-image: var(--background-image);
-    background-color: var(--background-color);
-    color: var(--bg-color);
-    background-size: cover;
-    background-position: center;
+	background-image: var(--background-image);
+	background-color: var(--background-color);
+	color: var(--bg-color);
+	background-size: cover;
+	background-position: center;
 }
 
 .blur-bg::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(10px);
-    pointer-events: none;
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	backdrop-filter: blur(10px);
+	pointer-events: none;
 }
 
 .f-row {
-    display: flex;
-    flex-direction: row;
-    gap: inherit;
-    > div {
-        min-width: 0;
-    }
+	display: flex;
+	flex-direction: row;
+	gap: inherit;
+	> div {
+		min-width: 0;
+	}
 }
 .f-column {
-    display: flex;
-    flex-direction: column;
-    gap: inherit;
+	display: flex;
+	flex-direction: column;
+	gap: inherit;
 }
 
 .pass-inner {
-    position: relative;
-    gap: 1em;
+	position: relative;
+	gap: 1em;
 
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .qrcode-inner {
-    font-weight: bold;
-    background-color: lightgray;
-    color: black;
-    width: 50%;
-    aspect-ratio: 1;
-    align-self: center;
+	font-weight: bold;
+	background-color: lightgray;
+	color: black;
+	width: 50%;
+	aspect-ratio: 1;
+	align-self: center;
 
-    /* center content */
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    padding: 1em;
-    overflow-wrap: anywhere;
+	/* center content */
+	display: flex;
+	align-items: center;
+	text-align: center;
+	justify-content: center;
+	padding: 1em;
+	overflow-wrap: anywhere;
 }
 </style>

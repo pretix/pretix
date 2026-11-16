@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { dateTimeFormat } from '@/pretix/static/pretixcontrol/wallet/helpers'
 import Google from './google.vue'
-import { i18nstring_localize } from '@/pretix/static/pretixbase/js/i18nstring.ts'
-import type { PreviewProps } from 'src/pretix/static/pretixcontrol/wallet/index.d.ts'
+import { localize_string } from '@/pretix/static/pretixbase/js/i18n'
+import type { PreviewProps } from '@/pretix/static/pretixcontrol/wallet/preview.d.ts'
 
 const gettext = (window as any).gettext
 
@@ -14,46 +14,46 @@ function isActive (fieldgroup: string) {
 </script>
 
 <template lang="pug">
-    Google(v-bind="props")
-        template(#card-rows)
-            div.card-row(v-if="isActive('date')")
-                div
-                    div.pass-label {{ gettext("Date") }}
-                    div.pass-content {{ dateTimeFormat(data.date_from, {"dateStyle": "medium"}) }}
-                div
-                    div.pass-label {{ gettext("Time") }}
-                    div.pass-content {{ dateTimeFormat(data.date_from, {"timeStyle": "short"}) }}
-            div.card-row(v-if="isActive('seating')")
-                div
-                    div.pass-label {{ gettext("Section") }}
-                    div.pass-content {{ gettext("Ground floor") }}
-                div
-                    div.pass-label {{ gettext("Row") }} / {{ gettext("Seat") }}
-                    div.pass-content 5 / 2
+	Google(v-bind="props")
+		template(#card-rows)
+			div.card-row(v-if="isActive('date')")
+				div
+					div.pass-label {{ gettext("Date") }}
+					div.pass-content {{ dateTimeFormat(data.date_from, {"dateStyle": "medium"}) }}
+				div
+					div.pass-label {{ gettext("Time") }}
+					div.pass-content {{ dateTimeFormat(data.date_from, {"timeStyle": "short"}) }}
+			div.card-row(v-if="isActive('seating')")
+				div
+					div.pass-label {{ gettext("Section") }}
+					div.pass-content {{ gettext("Ground floor") }}
+				div
+					div.pass-label {{ gettext("Row") }} / {{ gettext("Seat") }}
+					div.pass-content 5 / 2
 
-        template(#details)
-            div.pass-details-row(v-if="isActive('ticket_holder')")
-                div.pass-label {{ gettext("Ticket Holder") }}
-                div.pass-content {{ gettext("John Doe") }}
-            div.pass-details-row(v-if="isActive('venue')")
-                div.pass-label  {{ i18nstring_localize(data.venue?.[0]) }}
-                div.pass-content {{ i18nstring_localize(data.venue?.[1]) }}
-            div.pass-details-row(v-if="isActive('date')")
-                div.pass-label {{ gettext("Event Start Time") }}
-                div.pass-content {{ i18nstring_localize(data.venue?.[1]) }}
-            div.pass-details-row
-                div.pass-label {{ gettext("Ticket Type") }}
-                div.pass-content {{ gettext("Sample product") }}
-            div.pass-details-row
-                div.pass-label {{ gettext("Ticket Number") }}
-                div.pass-content ABCDE-1
-            div.pass-details-row
-                div.pass-label {{ gettext("Order Number") }}
-                div.pass-content ABCDE
-            a.pass-details-link.f-row(:href="data.event_page")
-                div
-                    i.fa.fa-globe
-                div.pass-label
-                    | {{ " " + gettext("Website") }}
+		template(#details)
+			div.pass-details-row(v-if="isActive('ticket_holder')")
+				div.pass-label {{ gettext("Ticket Holder") }}
+				div.pass-content {{ gettext("John Doe") }}
+			div.pass-details-row(v-if="isActive('venue')")
+				div.pass-label  {{ localize_string(data.venue?.[0]) }}
+				div.pass-content {{ localize_string(data.venue?.[1]) }}
+			div.pass-details-row(v-if="isActive('date')")
+				div.pass-label {{ gettext("Event Start Time") }}
+				div.pass-content {{ localize_string(data.venue?.[1]) }}
+			div.pass-details-row
+				div.pass-label {{ gettext("Ticket Type") }}
+				div.pass-content {{ gettext("Sample product") }}
+			div.pass-details-row
+				div.pass-label {{ gettext("Ticket Number") }}
+				div.pass-content ABCDE-1
+			div.pass-details-row
+				div.pass-label {{ gettext("Order Number") }}
+				div.pass-content ABCDE
+			a.pass-details-link.f-row(:href="data.event_page")
+				div
+					i.fa.fa-globe
+				div.pass-label
+					| {{ " " + gettext("Website") }}
 
 </template>

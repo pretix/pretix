@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { useId, computed, onMounted, useTemplateRef, onUnmounted, onUpdated, onBeforeUpdate } from "vue";
+import { useId, computed, onMounted, useTemplateRef, onUnmounted, onUpdated, onBeforeUpdate } from 'vue'
 
-const gettext = (window as any).gettext;
+const gettext = (window as any).gettext
 
 defineOptions({
 	inheritAttrs: false,
-});
+})
 
 const {
 	label,
 	errors,
-	type = "text",
-	min=null,
-	max=null,
-	defaultVal=null
+	type = 'text',
+	min = null,
+	max = null,
+	defaultVal = null
 } = defineProps<{
 	label?: string;
 	errors?: string[];
@@ -23,26 +23,26 @@ const {
 	min?: number;
 	max?: number;
 	defaultVal?: string;
-}>();
-const modelValue = defineModel<string | null>();
-const id = useId();
-const inputRef = useTemplateRef("input");
+}>()
+const modelValue = defineModel<string | null>()
+const id = useId()
+const inputRef = useTemplateRef('input')
 
 const attrs = computed(() => {
-	if (type === "float") {
-		return { class: "appear-text", type: "number", step: "any", min, max };
+	if (type === 'float') {
+		return { class: 'appear-text', type: 'number', step: 'any', min, max }
 	} else {
-		return { type: "text" };
+		return { type: 'text' }
 	}
-});
+})
 
 onMounted(() => {
-	if (type == "color") {
+	if (type == 'color') {
 		const jq_elem = $(inputRef.value)
 		jq_elem.colorpicker({
-			format: "hex",
-			align: "left",
-			customClass: "colorpicker-2x",
+			format: 'hex',
+			align: 'left',
+			customClass: 'colorpicker-2x',
 			sliders: {
 				saturation: {
 					maxLeft: 200,
@@ -57,26 +57,26 @@ onMounted(() => {
 			},
 		})
 		jq_elem.on('changeColor', (e) => e.value && (modelValue.value = e.value))
-		jq_elem.on('showPicker', () => {jq_elem.colorpicker('setValue', modelValue.value || defaultVal)});
+		jq_elem.on('showPicker', () => { jq_elem.colorpicker('setValue', modelValue.value || defaultVal) })
 	}
-});
+})
 
 onUnmounted(() => {
-	if (type == "color") {
-		$(inputRef.value).colorpicker("destroy");
+	if (type == 'color') {
+		$(inputRef.value).colorpicker('destroy')
 	}
-});
+})
 </script>
 
 <template lang="pug">
 .form-group(:class="{'row':inline}")
-    label.control-label(:for="id" v-if="label" :class="{'col-md-3': inline}") {{ label }}
-        br(v-if="!$attrs.required")
-        span.optional(v-if="!$attrs.required")  {{ gettext("Optional") }}
-    div(:class="{'col-md-9': inline}")
-        input.form-control(:id="id" ref="input" v-model="modelValue" v-bind="{...$attrs, ...attrs}" :placeholder="defaultVal")
-        .help-block(v-if="!!help_text") {{ help_text }}
-        .help-block(v-if="!!errors" v-for="error in errors") {{ error }}
+	label.control-label(v-if="label" :for="id" :class="{'col-md-3': inline}") {{ label }}
+		br(v-if="!$attrs.required")
+		span.optional(v-if="!$attrs.required")  {{ gettext("Optional") }}
+	div(:class="{'col-md-9': inline}")
+		input.form-control(:id="id" ref="input" v-model="modelValue" v-bind="{...$attrs, ...attrs}" :placeholder="defaultVal")
+		.help-block(v-if="!!help_text") {{ help_text }}
+		.help-block(v-for="error in errors" v-if="!!errors") {{ error }}
 </template>
 
 <style lang="css" scoped>

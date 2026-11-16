@@ -15,8 +15,8 @@ function focusGroup () {
 </script>
 
 <template lang="pug">
-    div(@click="focusGroup")
-        div(v-for="entry in fieldgroup_contents[fieldgroup]")
-            div.pass-label {{ entry.label }}
-            div.pass-content {{ entry.content }}
+	div(@click="focusGroup")
+		div(v-for="entry in fieldgroup_contents[fieldgroup]")
+			div.pass-label {{ entry.label }}
+			div.pass-content {{ entry.content }}
 </template>

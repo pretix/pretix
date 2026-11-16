@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { PreviewProps } from 'src/pretix/static/pretixcontrol/wallet/index.d.ts'
+import type { PreviewProps } from '@/pretix/static/pretixcontrol/wallet/preview.d.ts'
 
 import FieldGroupEntries from './FieldGroupEntries.vue'
 
@@ -24,23 +24,23 @@ const theme = computed(() => {
 </script>
 
 <template lang="pug">
-    div.apple-pass-preview
-        .pass-container.blur-bg.apple-pass-front
-            .pass-inner.f-column
-                .f-row.head-row
-                    img.logo(:src="settings['logo']?.url")
-                    div.logo-text {{ fieldgroup_contents['logo_text']?.[0]?.content }}
-                    FieldGroupEntries.header.f-row(fieldgroup="header" :fieldgroup_contents="fieldgroup_contents")
+	div.apple-pass-preview
+		.pass-container.blur-bg.apple-pass-front
+			.pass-inner.f-column
+				.f-row.head-row
+					img.logo(:src="settings['logo']?.url")
+					div.logo-text {{ fieldgroup_contents['logo_text']?.[0]?.content }}
+					FieldGroupEntries.header.f-row(fieldgroup="header" :fieldgroup_contents="fieldgroup_contents")
 
-                .f-column
-                    FieldGroupEntries.primary(fieldgroup="primary" :fieldgroup_contents="fieldgroup_contents")
-                    FieldGroupEntries.f-row(fieldgroup="secondary" :fieldgroup_contents="fieldgroup_contents")
-                    FieldGroupEntries.f-row(fieldgroup="auxiliary" :fieldgroup_contents="fieldgroup_contents")
+				.f-column
+					FieldGroupEntries.primary(fieldgroup="primary" :fieldgroup_contents="fieldgroup_contents")
+					FieldGroupEntries.f-row(fieldgroup="secondary" :fieldgroup_contents="fieldgroup_contents")
+					FieldGroupEntries.f-row(fieldgroup="auxiliary" :fieldgroup_contents="fieldgroup_contents")
 
-                .qrcode-inner(v-for="qrcode in fieldgroup_contents['code']") {{ qrcode.label }}
+				.qrcode-inner(v-for="qrcode in fieldgroup_contents['code']") {{ qrcode.label }}
 
-        .pass-container.apple-pass-back
-            FieldGroupEntries.pass-inner.f-column(fieldgroup="back" :fieldgroup_contents="fieldgroup_contents")
+		.pass-container.apple-pass-back
+			FieldGroupEntries.pass-inner.f-column(fieldgroup="back" :fieldgroup_contents="fieldgroup_contents")
 
 </template>
 

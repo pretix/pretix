@@ -162,5 +162,10 @@ export default defineConfig([
 			},
 		},
 	},
-	eslintPluginPrettierRecommended,
+	{
+		files: ['**/*.{vue,ts,tsx,mts,cts}'],
+		rules: {
+			'no-undef': 'off',
+		},
+	},
 ])

@@ -4,7 +4,8 @@
 		"src/pretix/static/**/*.vue",
 		"src/pretix/plugins/webcheckin/**/*",
 		"src/pretix/plugins/webcheckin/**/*.vue",
-		"src/pretix/static/pretixcontrol/wallet/**/*",
+		"src/pretix/plugins/wallet/**/*",
+		"src/pretix/plugins/wallet/**/*.vue",
 	],
 	"exclude": ["**/*.js"],
 	"compilerOptions": {

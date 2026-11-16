@@ -110,7 +110,7 @@ type ServerSideFile = { url: string; name: string }
 type ClientSideFile = { file: File | null; identifier?: string; url: string }
 type WalletFile = ServerSideFile | ClientSideFile
 
-export type PreviewProps = {
+type PreviewProps = {
 	data: any;
 	fieldgroups: Record<string, FieldGroupConfig>;
 	fieldgroup_contents: Record<

@@ -1,35 +1,35 @@
-import { createApp } from "vue";
-import App from "./components/app.vue";
-import { createWalletStore, StoreKey } from "./walletStore";
+import { createApp } from 'vue'
+import App from './components/app.vue'
+import { createWalletStore, StoreKey } from './walletStore'
 
 // TODO: rename
 window.pretix_wallet_preview_renderers = {}
 
-const mountEl = document.querySelector<HTMLElement>("#editor")!;
+const mountEl = document.querySelector<HTMLElement>('#editor')!
 const store = createWalletStore({
 	platforms: JSON.parse(
-		document.querySelector("#platforms")?.textContent ?? "{}",
+		document.querySelector('#platforms')?.textContent ?? '{}',
 	),
 	placeholders: JSON.parse(
-		document.querySelector("#placeholders")?.textContent ?? "{}",
+		document.querySelector('#placeholders')?.textContent ?? '{}',
 	),
-	locales: JSON.parse(document.querySelector("#locales")?.textContent ?? "{}"),
+	locales: JSON.parse(document.querySelector('#locales')?.textContent ?? '{}'),
 	csrfToken: document.querySelector<HTMLInputElement>(
-		"input[name=csrfmiddlewaretoken]",
-	)?.value!!,
+		'input[name=csrfmiddlewaretoken]',
+	)?.value!,
 	layoutId: mountEl.dataset.layoutId!,
 	baseUrl: mountEl.dataset.baseUrl!,
 	previewUrl: mountEl.dataset.previewUrl!,
-});
-store.load();
-const app = createApp(App);
-app.provide(StoreKey, store);
-app.mount(mountEl);
+})
+store.load()
+const app = createApp(App)
+app.provide(StoreKey, store)
+app.mount(mountEl)
 
 app.config.globalProperties.window = window
 app.config.errorHandler = (error, _vm, info) => {
 	// vue fatals on errors by default, which is a weird choice
 	// https://github.com/vuejs/core/issues/3525
 	// https://github.com/vuejs/router/discussions/2435
-	console.error("[VUE]", info, error);
-};
+	console.error('[VUE]', info, error)
+}

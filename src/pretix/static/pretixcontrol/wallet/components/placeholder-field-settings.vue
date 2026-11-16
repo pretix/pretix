@@ -1,135 +1,137 @@
 <script setup lang="ts">
-import { computed, inject, watchEffect } from "vue";
-import Select from "./input/select.vue";
-import I18nInput from "@/pretix/static/pretixbase/components/i18n-input.vue";
-import TextContent from "./text-content.vue";
-import { StoreKey } from "../walletStore";
-import { localize_string } from "@/pretix/static/pretixbase/js/i18n";
+import { computed, inject, watchEffect } from 'vue'
+import Select from './input/select.vue'
+import I18nInput from '@/pretix/static/pretixbase/components/i18n-input.vue'
+import TextContent from './text-content.vue'
+import { StoreKey } from '../walletStore'
+import { localize_string } from '@/pretix/static/pretixbase/js/i18n'
 
-const store = inject(StoreKey)!;
+const store = inject(StoreKey)!
 
-const gettext = (window as any).gettext;
-const ngettext = (window as any).ngettext;
+const gettext = (window as any).gettext
+const ngettext = (window as any).ngettext
 
-const interpolate = (window as any).interpolate;
+const interpolate = (window as any).interpolate
 
 const props = defineProps<{
-    fieldgroup: PlaceholderFieldGroupDefinition;
-}>();
+	fieldgroup: PlaceholderFieldGroupDefinition;
+}>()
 const fieldConfig = defineModel<PlaceholderFieldGroupConfig>({
-    required: true,
-});
+	required: true,
+})
 
 const overflowOptions = computed((): Array<[string | null, string]> => {
-    if (props.fieldgroup.overflows.length > 0) {
-        return [
-            ...props.fieldgroup.overflows.map((x): [string, string] => [x, store.fieldgroups[x]?.name]),
-            [null, "Do not overflow"],
-        ];
-    } else {
-        return [];
-    }
-});
+	if (props.fieldgroup.overflows.length > 0) {
+		return [
+			...props.fieldgroup.overflows.map((x): [string, string] => [x, store.fieldgroups[x]?.name]),
+			[null, 'Do not overflow'],
+		]
+	} else {
+		return []
+	}
+})
 
-function addEntry() {
-    fieldConfig.value.entries.push({ type: "placeholder", label: "", content: null });
+function addEntry () {
+	fieldConfig.value.entries.push({ type: 'placeholder', label: '', content: null })
 }
 
 watchEffect(() => {
-    if (!fieldConfig.value) {
-        fieldConfig.value = {
-            overflow: props.fieldgroup.default_overflow,
-            entries: JSON.parse(JSON.stringify(props.fieldgroup.default_entries)),
-        };
-    }
-    if (fieldConfig.value && !fieldConfig.value.entries) {
-        fieldConfig.value.entries = JSON.parse(
-            JSON.stringify(props.fieldgroup.default_entries),
-        );
-    }
-});
+	if (!fieldConfig.value) {
+		fieldConfig.value = {
+			overflow: props.fieldgroup.default_overflow,
+			entries: JSON.parse(JSON.stringify(props.fieldgroup.default_entries)),
+		}
+	}
+	if (fieldConfig.value && !fieldConfig.value.entries) {
+		fieldConfig.value.entries = JSON.parse(
+			JSON.stringify(props.fieldgroup.default_entries),
+		)
+	}
+})
 
 const placeholderChoices = computed(() => {
-    const availableContext = new Set(props.fieldgroup.context_args);
-    const choices = Object.entries(store.placeholders.text)
-        .filter(([_, { required_context }]) =>
-            new Set(required_context).isSubsetOf(availableContext),
-        )
-        .map(([k, v]): [string, string] => [k, localize_string(v.label)]);
-    choices.push(["other", gettext("Other…")]);
-    return choices;
-});
+	const availableContext = new Set(props.fieldgroup.context_args)
+	const choices = Object.entries(store.placeholders.text)
+		.filter(([_, { required_context }]) =>
+			new Set(required_context).isSubsetOf(availableContext),
+		)
+		.map(([k, v]): [string, string] => [k, localize_string(v.label)])
+	choices.push(['other', gettext('Other…')])
+	return choices
+})
 
 const overflowText = computed(() => {
-    if (!props.fieldgroup.max_entries) {
-        return ""
-    }
-    const formats = ngettext(
-        'Maximum one field in this fieldgroup can be shown on the pass. The remaining fields will be shown in the selected fieldgroup.',
-        'Maximum %s fields in this fieldgroup can be shown on the pass. The remaining fields will be shown in the selected fieldgroup.',
-        props.fieldgroup.max_entries
-    );
-    return interpolate(formats, [props.fieldgroup.max_entries])
+	if (!props.fieldgroup.max_entries) {
+		return ''
+	}
+	const formats = ngettext(
+		'Maximum one field in this fieldgroup can be shown on the pass. The remaining fields will be shown in the selected fieldgroup.',
+		'Maximum %s fields in this fieldgroup can be shown on the pass. The remaining fields will be shown in the selected fieldgroup.',
+		props.fieldgroup.max_entries
+	)
+	return interpolate(formats, [props.fieldgroup.max_entries])
 })
 
 const placeholders = computed(() => {
-    return fieldConfig.value.entries.map((entry) => {
-        const placeholder =
-                entry.type === "placeholder"
-                    ? store.placeholders[props.fieldgroup.content_type][entry.content]
-                    : null;
-        const placeholders = {};
-        let base;
-        if (localize_string(entry.label)) {
-            base = entry.label
-        } else if (placeholder) {
-            base = placeholder.label
-        } else {
-            return null
-        }
-        for (const locale of Object.keys(store.locales)) {
-            placeholders[locale] = localize_string(base, locale)
-        }
-        return placeholders
-    })
-});
+	return fieldConfig.value.entries.map((entry) => {
+		const placeholder
+			= entry.type === 'placeholder'
+				? store.placeholders[props.fieldgroup.content_type][entry.content]
+				: null
+		const placeholders = {}
+		let base
+		if (localize_string(entry.label)) {
+			base = entry.label
+		} else if (placeholder) {
+			base = placeholder.label
+		} else {
+			return null
+		}
+		for (const locale of Object.keys(store.locales)) {
+			placeholders[locale] = localize_string(base, locale)
+		}
+		return placeholders
+	})
+})
 </script>
 
 <template lang="pug">
-    .panel.panel-default.walletsettings-panel
-        .panel-heading
-            h3.panel-title {{ fieldgroup.name }}
-        .panel-body(v-if="fieldConfig")
-            span.text-muted(v-if="fieldgroup.description") {{ fieldgroup.description }}
-            h4 {{ gettext("Content") }}
-            .form-group
-                table.table.table-hover
-                    thead
-                        tr
-                            th.col-5(v-if="fieldgroup.display == 'with_label'") {{ gettext('Label') }}
-                            th(:class="'col-' + (fieldgroup.display == 'with_label' ? '6' : '11')") {{ gettext('Content') }}
-                            th.col-xs-1
-                    tbody
-                        tr(v-for="n, i in fieldConfig.entries.length" :key="i")
-                            td(v-if="fieldgroup.display == 'with_label'")
-                                .i18n-form-group
-                                    I18nInput(v-model="fieldConfig.entries[n - 1].label" :placeholders="placeholders[n - 1]" :locales="store.locales")
-                            td
-                                TextContent(v-if='fieldgroup.content_type == "text"'
-                                            v-model="fieldConfig.entries[n - 1]"
-                                            :placeholderChoices="placeholderChoices")
-                                Select(v-else-if='fieldgroup.content_type == "image"'
-                                        v-model="fieldConfig.entries[n - 1].content"
-                                        :choices="Object.entries(store.placeholders.image).map(([k, v]) => [k, localize_string(v.label)])"
-                                    )
-                            td.text-right
-                                button.btn.btn-danger.form-control-static(type="button" @click="fieldConfig.entries.splice(n - 1, 1)" v-if="fieldConfig.entries.length > (fieldgroup.min_entries||0)")
-                                    i.fa.fa-trash
-                                    span.sr-only {{ gettext('Delete') }}
-                                .text-left.text-muted(v-else) {{  gettext("At least one field in this group is required") }}
+	.panel.panel-default.walletsettings-panel
+		.panel-heading
+			h3.panel-title {{ fieldgroup.name }}
+		.panel-body(v-if="fieldConfig")
+			span.text-muted(v-if="fieldgroup.description") {{ fieldgroup.description }}
+			h4 {{ gettext("Content") }}
+			.form-group
+				table.table.table-hover
+					thead
+						tr
+							th.col-5(v-if="fieldgroup.display == 'with_label'") {{ gettext('Label') }}
+							th(:class="'col-' + (fieldgroup.display == 'with_label' ? '6' : '11')") {{ gettext('Content') }}
+							th.col-xs-1
+					tbody
+						tr(v-for="n, i in fieldConfig.entries.length" :key="i")
+							td(v-if="fieldgroup.display == 'with_label'")
+								.i18n-form-group
+									I18nInput(v-model="fieldConfig.entries[n - 1].label" :placeholders="placeholders[n - 1]" :locales="store.locales")
+							td
+								TextContent(
+									v-if="fieldgroup.content_type == 'text'"
+									v-model="fieldConfig.entries[n - 1]"
+									:placeholderChoices="placeholderChoices")
+								Select(
+									v-else-if="fieldgroup.content_type == 'image'"
+									v-model="fieldConfig.entries[n - 1].content"
+									:choices="Object.entries(store.placeholders.image).map(([k, v]) => [k, localize_string(v.label)])"
+								)
+							td.text-right
+								button.btn.btn-danger.form-control-static(v-if="fieldConfig.entries.length > (fieldgroup.min_entries||0)" type="button" @click="fieldConfig.entries.splice(n - 1, 1)")
+									i.fa.fa-trash
+									span.sr-only {{ gettext('Delete') }}
+								.text-left.text-muted(v-else) {{ gettext("At least one field in this group is required") }}
 
-                button.btn.btn-default(type="button" @click="addEntry")
-                    i.fa.fa-plus
-                    |  {{ gettext("Add field") }}
-            Select(:label="gettext('Overflow to …')" :choices="overflowOptions" v-model="fieldConfig.overflow" :help_text="overflowText")
+				button.btn.btn-default(type="button" @click="addEntry")
+					i.fa.fa-plus
+					|  {{ gettext("Add field") }}
+			Select(v-model="fieldConfig.overflow" :label="gettext('Overflow to …')" :choices="overflowOptions" :help_text="overflowText")
 </template>
