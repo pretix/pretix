@@ -38,7 +38,7 @@ from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.cancellation import (
-    CancellationResult, CheckResult, CheckTypes, FeeType, RuleResult,
+    CancellationResult, CheckResult, CheckTypes, FeeMode, FeeType, RuleResult,
 )
 from pretix.base.reldate import ModelRelativeDateTimeField, RelativeDateWrapper
 from pretix.base.templatetags.money import money_filter
@@ -220,19 +220,27 @@ class PositionCancellationRule(CancellationRule):
         on_delete=models.CASCADE
     )
 
-    fee_percentage_per_position = models.DecimalField(
+    fee = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator(Decimal("0.00")), MaxValueValidator(Decimal("100.00"))],
-        verbose_name=_("Fee percentage per order position"),
+        validators=[MinValueValidator(Decimal("0.00"))],
+        verbose_name=_("Fee per order position"),
+        blank=False,
+        null=False,
         default=Decimal("0.00"),
     )
-    fee_absolute_per_position = models.DecimalField(
-        max_digits=13,
-        decimal_places=2,
-        verbose_name=_("Absolute fee per order position"),
-        default=Decimal("0.00"),
-        validators=[MinValueValidator(Decimal("0.00"))],
+
+    fee_mode = models.CharField(
+        verbose_name=_("How the total fee is calculated"),
+        help_text=_("Fees can either be defined as a percentage of the position or as an absolute value."),
+        choices=[
+            (FeeMode.PERCENTAGE, FeeMode.PERCENTAGE.label),
+            (FeeMode.FIXED, FeeMode.FIXED.label),
+        ],
+        blank=False,
+        null=False,
+        default=FeeMode.FIXED,
+        max_length=15,
     )
 
     all_products = models.BooleanField(
@@ -258,12 +266,12 @@ class PositionCancellationRule(CancellationRule):
 
     @property
     def display_fee(self) -> str | Promise:
-        if self.fee_absolute_per_position == Decimal("0.00") and self.fee_absolute_per_position == Decimal("0.00"):
+        if self.fee == Decimal("0.00"):
             return _("No fee")
-        if self.fee_absolute_per_position != Decimal("0.00"):
-            return money_filter(self.fee_absolute_per_position, self.event.currency)
+        if self.fee_mode == FeeMode.FIXED:
+            return money_filter(self.fee, self.event.currency)
         else:
-            return _("{percentage} %").format(percentage=self.fee_absolute_per_position)
+            return _("{percentage} %").format(percentage=self.fee)
 
     def _position_matches_rule(self, position: "OrderPosition") -> Optional[CheckResult]:
         with ensure_no_queries():
@@ -346,15 +354,12 @@ class PositionCancellationRule(CancellationRule):
             rule_check_results.append(match)
         rule_check_results.extend(self._evaluate_cancellation_moment(position, check_at))
 
-        if self.fee_percentage_per_position and self.fee_absolute_per_position:
-            raise NotImplementedError(
-                "Combination of fee_percentage_per position and fee_absolute_per_position is not valid")
-        elif self.fee_absolute_per_position != Decimal("0"):
+        if self.fee_mode == FeeMode.FIXED:
             return RuleResult.from_absolute_fee(
                 id=self.id,
                 partial_results=rule_check_results,
                 fee_type=FeeType.POSITION,
-                absolute_fee=self.fee_absolute_per_position
+                absolute_fee=self.fee
             )
         else:
             return RuleResult.from_relative_fee(
@@ -362,7 +367,7 @@ class PositionCancellationRule(CancellationRule):
                 partial_results=rule_check_results,
                 fee_type=FeeType.POSITION,
                 position_price=position.price,
-                percentage=self.fee_percentage_per_position,
+                percentage=self.fee,
                 currency=order.event.currency
             )
 
@@ -383,15 +388,15 @@ class ProcessCancellationRule(CancellationRule):
         on_delete=models.CASCADE
     )
 
-    fee_cancellation_process = models.DecimalField(
+    fee = models.DecimalField(
         max_digits=13,
         decimal_places=2,
-        verbose_name=_("Absolute fee per cancellation"),
+        verbose_name=_("Fee per cancellation"),
         default=Decimal("0.00"),
         validators=[MinValueValidator(Decimal("0.00"))],
     )
 
-    fee_mode = models.CharField(
+    fee_type = models.CharField(
         verbose_name=_("The method with which process and position fees are combined."),
         help_text=_("Process fees can either be used to set the minimum cancellation fee that is charged or "
                     "they can be charged in addition to all position fees."),
@@ -415,8 +420,8 @@ class ProcessCancellationRule(CancellationRule):
 
     @property
     def display_fee(self) -> str | Promise:
-        fee_amount = money_filter(self.fee_cancellation_process, self.event.currency)
-        if self.fee_mode == FeeType.MINIMUM:
+        fee_amount = money_filter(self.fee, self.event.currency)
+        if self.fee_type == FeeType.MINIMUM:
             return _("Position fees or minimum of {fee}").format(fee=fee_amount)
         else:
             return _("Position fees plus {fee}").format(fee=fee_amount)
@@ -490,7 +495,7 @@ class ProcessCancellationRule(CancellationRule):
 
     def evaluate_process_rule(self, order: "Order", _keep: Set["OrderPosition"], position_fees: Decimal,
                               check_at: datetime.datetime) -> Optional[RuleResult]:
-        fee_mode = self.fee_mode
+        fee_mode = self.fee_type
         if fee_mode not in (FeeType.MINIMUM, FeeType.ADDITIONAL):
             raise ValueError(f"Unexpected fee_mode: {fee_mode!r}")
 
@@ -500,6 +505,6 @@ class ProcessCancellationRule(CancellationRule):
             id=self.id,
             partial_results=check_results,
             fee_type=fee_mode,
-            absolute_fee=self.fee_cancellation_process,
+            absolute_fee=self.fee,
             reference_price=position_fees,
         )

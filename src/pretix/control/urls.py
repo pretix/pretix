@@ -301,7 +301,7 @@ urlpatterns = [
                 name='event.settings.cancellation_rule.edit'),
         re_path(r'^settings/cancel/add/(?P<ruletype>[^/]+)$', event.CancelRuleCreate.as_view(),
                 name='event.settings.cancellation_rule.add'),
-        re_path(r'^settings/cancel/(?P<rule>\d+)/delete$', event.CancelRuleCreate.as_view(),
+        re_path(r'^settings/cancel/(?P<ruletype>[^/]+)/(?P<rule>\d+)/delete$', event.CancelRuleDelete.as_view(),
                 name='event.settings.cancellation_rule.delete'),
         re_path(r'^settings/cancel', event.CancelSettings.as_view(), name='event.settings.cancel'),
         re_path(r'^settings/invoice$', event.InvoiceSettings.as_view(), name='event.settings.invoice'),

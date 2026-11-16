@@ -188,6 +188,11 @@ class FeeType(models.TextChoices):
     POSITION = "position_fee", _("Position fee")
 
 
+class FeeMode(models.TextChoices):
+    PERCENTAGE = "percentage", _("Percentage based fee")
+    FIXED = "fixed", _("Fixed value fee")
+
+
 @dataclass(frozen=True)
 class RuleResult:
     """

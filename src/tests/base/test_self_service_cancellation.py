@@ -31,7 +31,7 @@ from django.utils.timezone import now
 from django_scopes import scope
 
 from pretix.base.cancellation import (
-    CancellationCheck, PositionResult, ProcessResult,
+    CancellationCheck, FeeMode, PositionResult, ProcessResult,
 )
 from pretix.base.models import (
     CancellationRule, Checkin, Event, Order, OrderPosition, Organizer,
@@ -677,7 +677,7 @@ class TestCancellationRule:
                     r = rule_object.objects.create(event=event, all_products=True)
                 elif rule_type_variants == "process":
                     rule_object = ProcessCancellationRule
-                    r = rule_object.objects.create(event=event, fee_mode=FeeType.MINIMUM)
+                    r = rule_object.objects.create(event=event, fee_type=FeeType.MINIMUM)
                 else:
                     raise ValueError("Unknown cancellation rule type: {}".format(rule_type_variants))
 
@@ -709,16 +709,16 @@ class TestCancellationRule:
             check_at = reference - timedelta(hours=1)
 
             PositionCancellationRule.objects.create(event=event, all_products=True,
-                                                    fee_absolute_per_position=Decimal("10.00"),
+                                                    fee_mode=FeeMode.FIXED, fee=Decimal("10.00"),
                                                     allowed_until=RelativeDateWrapper(reference))
             PositionCancellationRule.objects.create(event=event, all_products=True,
-                                                    fee_absolute_per_position=Decimal("10.00"),
+                                                    fee_mode=FeeMode.FIXED, fee=Decimal("10.00"),
                                                     allowed_until=RelativeDateWrapper(reference - timedelta(days=1)))
-            ProcessCancellationRule.objects.create(event=event, fee_cancellation_process=Decimal("10.00"),
-                                                   fee_mode=FeeType.ADDITIONAL,
+            ProcessCancellationRule.objects.create(event=event, fee=Decimal("10.00"),
+                                                   fee_type=FeeType.ADDITIONAL,
                                                    allowed_until=RelativeDateWrapper(reference))
-            ProcessCancellationRule.objects.create(event=event, fee_cancellation_process=Decimal("10.00"),
-                                                   fee_mode=FeeType.ADDITIONAL,
+            ProcessCancellationRule.objects.create(event=event, fee=Decimal("10.00"),
+                                                   fee_type=FeeType.ADDITIONAL,
                                                    allowed_until=RelativeDateWrapper(reference - timedelta(days=1)))
 
             with scope(organizer=event.organizer):

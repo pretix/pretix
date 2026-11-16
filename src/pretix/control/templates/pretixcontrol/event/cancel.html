@@ -13,7 +13,7 @@
                     {% blocktrans trimmed %}
                         Cancellation rules allow you finegrained control about the scenarios in which it is possible to
                         cancel orders and the fees associated with that cancellation.
-                        A process cancellation rule regulates wether a cancellation can be performed at all,
+                        A process cancellation rule regulates whether a cancellation can be performed at all,
                         depending on conditions like the event timeline.
                         A position cancellation rule regulates which products and variations can be canceled.
                         When a customer wants to cancel their order, all position and process rules are evaluated at
@@ -24,6 +24,8 @@
                         resulting fees will be used.
                     {% endblocktrans %}
                 </p>
+
+                <h4>{% trans "Position cancellation rules" %}</h4>
 
                 {% if position_cancellation_rules|length == 0 %}
                     <div class="empty-collection">
@@ -42,20 +44,20 @@
                     <div class="table-responsive">
                         <table class="table table-hover table-quotas">
                             <thead>
-                            <tr>
-                                <th>{% trans "Name" %}</th>
-                                <th>{% trans "Products and Variants" %}</th>
-                                <th>{% trans "Allowed until" %}</th>
-                                <th>{% trans "Except after" %}</th>
-                                <th>{% trans "Fee" %}</th>
-                                <th class="action-col-2"></th>
-                            </tr>
+                                <tr>
+                                    <th class="col-sm-2">{% trans "Name" %}</th>
+                                    <th class="col-sm-3">{% trans "Products and Variants" %}</th>
+                                    <th class="col-sm-2">{% trans "Allowed until" %}</th>
+                                    <th class="col-sm-2">{% trans "Except after" %}</th>
+                                    <th class="col-sm-2">{% trans "Fee" %}</th>
+                                    <th class="action-col-2"></th>
+                                </tr>
                             </thead>
                             <tbody>
                             {% for cr in position_cancellation_rules %}
                                 <tr>
                                     <td>
-                                        {% if "event.settings.tax:write" in request.eventpermset %}
+                                        {% if "event.settings.general:write" in request.eventpermset %}
                                             <strong><a
                                                     href="{%  url "control:event.settings.cancellation_rule.edit" organizer=request.event.organizer.slug event=request.event.slug ruletype=cr.ruletype rule=cr.id %}">
                                                 {{ cr.internal_name }}
@@ -91,7 +93,7 @@
                                         {% if "event.settings.general:write" in request.eventpermset %}
                                             <a href="{% url "control:event.settings.cancellation_rule.edit" organizer=request.event.organizer.slug event=request.event.slug ruletype=cr.ruletype rule=cr.id %}"
                                                class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                                            <a href="{# url "control:event.settings.tax.delete" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id #}"
+                                            <a href="{% url "control:event.settings.cancellation_rule.delete" organizer=request.event.organizer.slug event=request.event.slug ruletype=cr.ruletype rule=cr.id %}"
                                                class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                         {% endif %}
                                     </td>
@@ -100,7 +102,7 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                                <td colspan="5">
+                                <td colspan="6">
                                     {% if "event.settings.general:write" in request.eventpermset %}
                                         <a href="{% url "control:event.settings.cancellation_rule.add" organizer=request.event.organizer.slug event=request.event.slug ruletype="position" %}"
                                            class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new position cancellation rule" %}
@@ -112,7 +114,7 @@
                         </table>
                     </div>
                 {% endif %}
-
+                <h4>{% trans "Process cancellation rules" %}</h4>
                  {% if process_cancellation_rules|length == 0 %}
                     <div class="empty-collection">
                         <p>
@@ -131,9 +133,10 @@
                         <table class="table table-hover table-quotas">
                             <thead>
                             <tr>
-                                <th>{% trans "Name" %}</th>
-                                <th>{% trans "Valid time range" %}</th>
-                                <th>{% trans "Fee" %}</th>
+                                <th class="col-sm-5">{% trans "Name" %}</th>
+                                <th class="col-sm-2">{% trans "Allowed until" %}</th>
+                                <th class="col-sm-2">{% trans "Except after" %}</th>
+                                <th class="col-sm-2">{% trans "Fee" %}</th>
                                 <th class="action-col-2"></th>
                             </tr>
                             </thead>
@@ -151,7 +154,10 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        TODO: übersetzbarer serializer für relative date
+                                        {{ cr.allowed_until }}
+                                    </td>
+                                    <td>
+                                        {{ cr.except_after }}
                                     </td>
                                     <td>
                                         {{ cr.display_fee }}
@@ -160,7 +166,7 @@
                                         {% if "event.settings.general:write" in request.eventpermset %}
                                             <a href="{% url "control:event.settings.cancellation_rule.edit" organizer=request.event.organizer.slug event=request.event.slug ruletype=cr.ruletype rule=cr.id %}"
                                                class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                                            <a href="{# url "control:event.settings.tax.delete" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id #}"
+                                            <a href="{% url "control:event.settings.cancellation_rule.delete" organizer=request.event.organizer.slug event=request.event.slug ruletype=cr.ruletype rule=cr.id %}"
                                                class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                         {% endif %}
                                     </td>
@@ -172,7 +178,7 @@
                                 <td colspan="5">
                                     {% if "event.settings.general:write" in request.eventpermset %}
                                         <a href="{% url "control:event.settings.cancellation_rule.add" organizer=request.event.organizer.slug event=request.event.slug ruletype="process" %}"
-                                           class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new position cancellation rule" %}
+                                           class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new process cancellation rule" %}
                                         </a>
                                     {% endif %}
                                 </td>
@@ -183,26 +189,18 @@
                 {% endif %}
             </fieldset>
             <fieldset>
-                <legend>{% trans "Unpaid or free orders" %}</legend>
+                <legend>{% trans "Cancellation Settings" %}</legend>
+                <h4>{% trans "Unpaid or free orders" %}</h4>
                 {% bootstrap_field form.cancel_allow_user layout="control" %}
-                {% bootstrap_field form.cancel_allow_user_until layout="control" %}
-                {% bootstrap_field form.cancel_allow_user_unpaid_keep layout="control" %}
-                {% bootstrap_field form.cancel_allow_user_unpaid_keep_percentage layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_unpaid_keep_fees layout="control" %}
                 {% bootstrap_field form.cancel_terms_unpaid layout="control" %}
-            </fieldset>
-            <fieldset>
-                <legend>{% trans "Paid orders" %}</legend>
+                <h4>{% trans "Paid orders" %}</h4>
                 {% bootstrap_field form.cancel_allow_user_paid layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_require_approval layout="control" %}
                 <div data-display-dependency="#id_cancel_allow_user_paid_require_approval">
                     {% bootstrap_field form.cancel_allow_user_paid_require_approval_fee_unknown layout="control" %}
                 </div>
-                {% bootstrap_field form.cancel_allow_user_paid_keep layout="control" %}
-                {% bootstrap_field form.cancel_allow_user_paid_keep_percentage layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_keep_fees layout="control" %}
-                {% bootstrap_field form.tax_rule_cancellation layout="control" %}
-                {% bootstrap_field form.cancel_allow_user_paid_until layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_adjust_fees layout="control" %}
                 <div data-display-dependency="#id_cancel_allow_user_paid_adjust_fees">
                     {% bootstrap_field form.cancel_allow_user_paid_adjust_fees_explanation layout="control" %}
@@ -222,6 +220,9 @@
                         </a>
                     </div>
                 {% endif %}
+
+                <h4>{% trans "Tax Settings" %}</h4>
+                {% bootstrap_field form.tax_rule_cancellation layout="control" %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Order changes" %}</legend>
@@ -259,6 +260,48 @@
                         {% endblocktrans %}
                     </p>
                 </div>
+            </fieldset>
+            {# TODO: drop legacy forms #}
+            <fieldset>
+                <legend>{% trans "Unpaid or free orders (Legacy)" %}</legend>
+                {% bootstrap_field form.cancel_allow_user layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_until layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_unpaid_keep layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_unpaid_keep_percentage layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_unpaid_keep_fees layout="control" %}
+                {% bootstrap_field form.cancel_terms_unpaid layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Paid orders (Legacy)" %}</legend>
+                {% bootstrap_field form.cancel_allow_user_paid layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_paid_require_approval layout="control" %}
+                <div data-display-dependency="#id_cancel_allow_user_paid_require_approval">
+                    {% bootstrap_field form.cancel_allow_user_paid_require_approval_fee_unknown layout="control" %}
+                </div>
+                {% bootstrap_field form.cancel_allow_user_paid_keep layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_paid_keep_percentage layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_paid_keep_fees layout="control" %}
+                {% bootstrap_field form.tax_rule_cancellation layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_paid_until layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_paid_adjust_fees layout="control" %}
+                <div data-display-dependency="#id_cancel_allow_user_paid_adjust_fees">
+                    {% bootstrap_field form.cancel_allow_user_paid_adjust_fees_explanation layout="control" %}
+                    {% bootstrap_field form.cancel_allow_user_paid_adjust_fees_step layout="control" %}
+                </div>
+                {% bootstrap_field form.cancel_allow_user_paid_refund_as_giftcard layout="control" %}
+                {% bootstrap_field form.cancel_terms_paid layout="control" %}
+                {% if not gets_notification %}
+                    <div class="alert alert-warning">
+                        {% blocktrans trimmed %}
+                            If a user requests cancels a paid order and the money can not be refunded automatically, e.g.
+                            due to the selected payment method, you will need to take manual action. However, you have
+                            currently turned off notifications for this event.
+                        {% endblocktrans %}
+                        <a href="{% url "control:user.settings.notifications" %}" class="btn btn-default">
+                            {% trans "Change notification settings" %}
+                        </a>
+                    </div>
+                {% endif %}
             </fieldset>
         </div>
         <div class="form-group submit-group">
