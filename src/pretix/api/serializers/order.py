@@ -23,6 +23,7 @@ import json
 import logging
 import os
 from collections import Counter, defaultdict
+from contextlib import nullcontext
 from datetime import timedelta
 from decimal import Decimal
 from typing import Any
@@ -85,6 +86,7 @@ from pretix.base.settings import (
 from pretix.base.signals import register_ticket_outputs
 from pretix.helpers.countries import CachedCountries
 from pretix.multidomain.urlreverse import eventreverse_absolute
+from pretix.testutils.queries import assert_num_queries
 
 logger = logging.getLogger(__name__)
 
@@ -657,7 +659,10 @@ class PdfDataSerializer(serializers.Field):
             return {}
 
         ev = instance.subevent or instance.order.event
-        with language(instance.order.locale, instance.order.event.settings.region):
+        with (
+            language(instance.order.locale, instance.order.event.settings.region),
+            assert_num_queries(0) if settings.DEBUG else nullcontext(),  # PDF vars should not introduce additional queries per-order / per-position!
+        ):
             # This needs to have some extra performance improvements to avoid creating hundreds of queries when
             # we serialize a list.
 
