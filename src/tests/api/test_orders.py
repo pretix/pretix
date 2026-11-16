@@ -2176,7 +2176,7 @@ def test_pdf_data(token_client, organizer, event, order, item, django_assert_num
     assert not resp.data['positions'][0].get('pdf_data')
 
     # order list
-    with django_assert_num_queries(32):
+    with django_assert_num_queries(31):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))
@@ -2196,13 +2196,13 @@ def test_pdf_data(token_client, organizer, event, order, item, django_assert_num
         order.positions.create(item=item, price=Decimal("23"), attendee_name_parts={"full_name": "Jane", "_scheme": "full"}, canceled=False, positionid=3)
 
     # test order list again, with more objects (to detect N+1 database queries bugs due to missing prefetch)
-    with django_assert_num_queries(35):  # <-- this number should stay the same as in the django_assert_num_queries above!
+    with django_assert_num_queries(31):  # <-- this number should stay the same as in the django_assert_num_queries above!
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))
 
     # position list
-    with django_assert_max_num_queries(36):
+    with django_assert_max_num_queries(33):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))
