@@ -2160,7 +2160,7 @@ def test_blocked_secret_list(token_client, organizer, event):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_pdf_data(token_client, organizer, event, order, item, django_assert_max_num_queries):
+def test_pdf_data(token_client, organizer, event, order, item, django_assert_num_queries, django_assert_max_num_queries):
     # order detail
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?pdf_data=true'.format(
         organizer.slug, event.slug, order.code
@@ -2176,7 +2176,7 @@ def test_pdf_data(token_client, organizer, event, order, item, django_assert_max
     assert not resp.data['positions'][0].get('pdf_data')
 
     # order list
-    with django_assert_max_num_queries(35):
+    with django_assert_num_queries(32):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))
@@ -2191,11 +2191,12 @@ def test_pdf_data(token_client, organizer, event, order, item, django_assert_max
     assert not resp.data['results'][0]['positions'][0].get('pdf_data')
 
     with scopes_disabled():
-        df = event.questions.create(container_type='O', internal_name='Another order-level', type='S')
+        df = event.questions.create(container_type='O', question='Another order-level', type='S')
         order.answers.create(question=df, answer='Hello')
         order.positions.create(item=item, price=Decimal("23"), attendee_name_parts={"full_name": "Jane", "_scheme": "full"}, canceled=False, positionid=3)
 
-    with django_assert_max_num_queries(35):
+    # test order list again, with more objects (to detect N+1 database queries bugs due to missing prefetch)
+    with django_assert_num_queries(35):  # <-- this number should stay the same as in the django_assert_num_queries above!
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))
