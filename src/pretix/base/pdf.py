@@ -386,13 +386,14 @@ DEFAULT_VARIABLES = OrderedDict((
             str(p) for p in generate_compressed_addon_list(op, order, ev)
         ])
     }),
-    ("checked_in_addons", {
-        "label": _("List of Checked-In Add-Ons"),
-        "editor_sample": _("Add-on 1\n2x Add-on 2"),
-        "evaluate": lambda op, order, ev: "\n".join([
-            str(p) for p in generate_compressed_addon_list(op, order, ev, only_checked_in=True)
-        ])
-    }),
+    # TODO(questionnaires)  -  re-add this once PR 6778 or similar is merged
+    # ("checked_in_addons", {
+    #     "label": _("List of Checked-In Add-Ons"),
+    #     "editor_sample": _("Add-on 1\n2x Add-on 2"),
+    #     "evaluate": lambda op, order, ev: "\n".join([
+    #         str(p) for p in generate_compressed_addon_list(op, order, ev, only_checked_in=True)
+    #     ])
+    # }),
     ("organizer", {
         "label": _("Organizer name"),
         "editor_sample": _("Event organizer company"),
