@@ -67,6 +67,8 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
     minfilesize = 10
     checkin_qr_warning = False
     title = None
+    allow_non_bulk_evaluatable = False  # only set to True in subclasses if this layout is never used by
+                                        # one of our apps, that fetch their placeholders using `?pdf_data=true`
 
     def get(self, request, *args, **kwargs):
         if 'placeholders' in request.GET:
@@ -278,7 +280,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         return HttpResponseBadRequest()
 
     def get_variables(self):
-        return get_variables(self.request.event)
+        return get_variables(self.request.event, allow_non_bulk_evaluatable=self.allow_non_bulk_evaluatable)
 
     def get_images(self):
         return get_images(self.request.event)
