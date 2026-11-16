@@ -449,7 +449,7 @@ def paymentintent_webhook(event, event_json, paymentintent_id, rso):
         )
 
     if event_json["type"] == "payment_intent.payment_failed":
-        rso.payment.fail(info=event_json)
+        rso.payment.fail(info=paymentintent, log_data=event_json)
 
     return HttpResponse(status=200)
 
