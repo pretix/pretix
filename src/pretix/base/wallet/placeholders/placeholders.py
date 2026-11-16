@@ -5,7 +5,7 @@ from django.dispatch import receiver
 from pretix.base.models.event import Event
 from pretix.base.templatetags.money import money_filter
 from pretix.multidomain.urlreverse import eventreverse_absolute
-from pretix.helpers.i18n import (
+from pretix.base.i18n import (
     FormattingLocalizableString,
     GettextLocalizableString,
     LocalizableDatetime,

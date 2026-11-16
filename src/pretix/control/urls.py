@@ -43,6 +43,16 @@ from pretix.control.views import (
     waitinglist,
 )
 
+from pretix.control.views.wallet import (
+    LayoutCreateView,
+    LayoutDelete,
+    LayoutEditorView,
+    LayoutListView,
+    LayoutPreviewView,
+    LayoutSetDefault,
+    WalletGetView,
+)
+
 urlpatterns = [
     re_path(r'^logout$', auth.logout, name='auth.logout'),
     re_path(r'^login$', auth.login, name='auth.login'),
@@ -503,6 +513,41 @@ urlpatterns = [
         re_path(r'^checkinlists/(?P<list>\d+)/delete$', checkin.CheckinListDelete.as_view(),
                 name='event.orders.checkinlists.delete'),
         re_path(r'^datasync/failedjobs/$', datasync.EventFailedSyncJobsView.as_view(), name='event.datasync.failedjobs'),
+        re_path(
+            r'^wallet/$',
+            LayoutListView.as_view(),
+            name='event.wallet.index',
+        ),
+        re_path(
+            r'^wallet/add/$',
+            LayoutCreateView.as_view(),
+            name='event.wallet.add',
+        ),
+        re_path(
+            r'^wallet/edit/(?P<layout>[^/]+)/$',
+            LayoutEditorView.as_view(),
+            name='event.wallet.edit',
+        ),
+        re_path(
+            r'^wallet/preview/$',
+            LayoutPreviewView.as_view(),
+            name='event.wallet.preview',
+        ),
+        re_path(
+            r'^wallet/default/(?P<layout>[^/]+)/$',
+            LayoutSetDefault.as_view(),
+            name='event.wallet.default',
+        ),
+        re_path(
+            r'^wallet/delete/(?P<layout>[^/]+)/$',
+            LayoutDelete.as_view(),
+            name='event.wallet.delete',
+        ),
+        re_path(
+            r'^orders/(?P<code>[0-9A-Z]+)/wallet/(?P<position>\d+)/(?P<platform>[^/]+)/$',
+            WalletGetView.as_view(),
+            name='event.order.wallet.get',
+        ),
     ])),
     re_path(r'^event/(?P<organizer>[^/]+)/$', RedirectView.as_view(pattern_name='control:organizer'), name='event.organizerredirect'),
 ]

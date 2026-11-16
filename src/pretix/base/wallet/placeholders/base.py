@@ -4,7 +4,7 @@ from typing import Any
 
 from django.core.files import File
 
-from pretix.helpers.i18n import MaybeTranslatedString
+from pretix.base.i18n import MaybeTranslatedString
 
 
 class BaseWalletPlaceholder:

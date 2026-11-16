@@ -16,10 +16,9 @@
     {{ locales|json_script:"locales" }}
     <div id="editor" data-layout-id="{{ object.pk }}"
         data-base-url="{% url 'api-v1:walletlayout-list' organizer=request.organizer.slug event=request.event.slug %}"
-        data-preview-url="{% url 'plugins:wallet:preview' organizer=request.organizer.slug event=request.event.slug %}"></div>
+        data-preview-url="{% url 'control:event.wallet.preview' organizer=request.organizer.slug event=request.event.slug %}"></div>
     {% vite_hmr %}
     {% vite_asset "src/pretix/static/pretixcontrol/wallet/main.ts" %}
-    {% vite_asset "src/pretix/plugins/wallet/static/pretixplugins/wallet/main.ts" %}
 
     {% csrf_token %}
 {% endblock %}

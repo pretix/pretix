@@ -54,7 +54,7 @@ from pretix.api.serializers.event import (
     CloneEventSerializer, DeviceEventSettingsSerializer, EventSerializer,
     EventSettingsSerializer, ItemMetaPropertiesSerializer,
     SeatBulkBlockInputSerializer, SeatSerializer, SubEventSerializer,
-    TaxRuleSerializer,
+    TaxRuleSerializer, WalletLayoutSerializer
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
@@ -62,7 +62,9 @@ from pretix.base.models import (
     TaxRule, TeamAPIToken,
 )
 from pretix.base.models.event import SubEvent
+from pretix.base.models.wallet import WalletLayout
 from pretix.base.services.quotas import QuotaAvailability
+from pretix.base.services import tickets
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.i18n import i18ncomp
 from pretix.presale.views.organizer import filter_qs_by_attr
@@ -797,3 +799,31 @@ class SeatViewSet(ConditionalListView, UpdateModelMixin, viewsets.ReadOnlyModelV
     @action(methods=["POST"], detail=False)
     def bulk_unblock(self, request, *args, **kwargs):
         return self.bulk_change_blocked(False)
+
+
+class WalletLayoutViewSet(viewsets.ModelViewSet):
+    model = WalletLayout
+    queryset = WalletLayout.objects.none()
+    serializer_class = WalletLayoutSerializer
+    permission = "event.settings.general:write"
+
+    def get_queryset(self):
+        return self.request.event.wallet_layouts.all()
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx["event"] = self.request.event
+        return ctx
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        serializer.instance.log_action(
+            action="pretix.plugins.wallet.layout.changed",
+            user=self.request.user,
+            auth=self.request.auth,
+            data=serializer.to_representation(serializer.instance),
+        )
+        tickets.invalidate_cache.apply_async(
+            kwargs={"event": self.request.event.pk, "provider": "wallet"}
+        )

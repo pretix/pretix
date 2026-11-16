@@ -12,7 +12,7 @@
             <p>{% blocktrans %}You cannot delete the default layout.{% endblocktrans %}</p>
         {% endif %}
         <div class="form-group submit-group">
-            <a href="{% url "plugins:wallet:index" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+            <a href="{% url "control:event.wallet.index" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>
             {% if object.allow_delete %}

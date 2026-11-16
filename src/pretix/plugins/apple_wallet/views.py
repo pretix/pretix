@@ -1,0 +1,208 @@
+import datetime
+from functools import cached_property
+import logging
+
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import AnonymousUser
+from django.utils.decorators import method_decorator
+from django.utils.translation import gettext as _
+from django.views.decorators.http import condition
+from django.http.response import Http404
+from django.views import View
+from rest_framework import exceptions, permissions, serializers
+from rest_framework.authentication import (
+    BaseAuthentication, get_authorization_header,
+)
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from pretix.base.models.orders import OrderPosition
+from pretix.helpers.http import ChunkBasedFileResponse
+from .models import AppleWalletDevice, AppleWalletPass, CombinedAppleWalletPass
+from pretix.presale.views import EventViewMixin
+from pretix.presale.views.order import OrderDetailMixin
+
+logger = logging.getLogger("pretix.plugins.apple_wallet")
+
+
+class ApplePassAuthentication(BaseAuthentication):
+    keyword = "ApplePass"
+    model = AppleWalletPass
+
+    def authenticate(self, request):
+        auth = get_authorization_header(request).split()
+
+        if not auth or auth[0].lower() != self.keyword.lower().encode():
+            return None
+
+        if len(auth) == 1:
+            msg = _("Invalid token header. No credentials provided.")
+            raise exceptions.AuthenticationFailed(msg)
+        elif len(auth) > 2:
+            msg = _("Invalid token header. Token string should not contain spaces.")
+            raise exceptions.AuthenticationFailed(msg)
+
+        try:
+            token = auth[1].decode()
+        except UnicodeError:
+            msg = _(
+                "Invalid token header. Token string should not contain invalid characters."
+            )
+            raise exceptions.AuthenticationFailed(msg)
+
+        if ":" not in token:
+            msg = _(
+                "Invalid token header. Missing seperator."
+            )
+            raise exceptions.AuthenticationFailed(msg)
+
+        try:
+            pass_obj = AppleWalletPass.objects.get_by_auth_token(
+                token
+            )
+        except AppleWalletPass.DoesNotExist:
+            raise exceptions.AuthenticationFailed(_("Invalid token."))
+
+        return (AnonymousUser(), pass_obj)
+
+    def authenticate_header(self, request):
+        return self.keyword
+
+
+class ApplePassPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if not isinstance(request.auth, AppleWalletPass):
+            return False
+        pass_obj = request.auth
+        if pass_obj.serial_number != view.kwargs["serial_number"]:
+            return False
+        if (
+            request.event.settings.wallet_apple_pass_type_id
+            != view.kwargs["pass_type_identifier"]
+        ):
+            return False
+
+        return True
+
+
+class RegisterPassSerializer(serializers.Serializer):
+    push_token = serializers.CharField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["push_token"].field_name = "pushToken"
+
+
+class LogEntrySerializer(serializers.Serializer):
+    logs = serializers.ListField()
+
+
+class DeviceRegistrationView(APIView):
+    authentication_classes = [ApplePassAuthentication]
+    permission_classes = [ApplePassPermission]
+
+    def post(self, request, *args, device_library_identifier, **kwargs):
+        serializer = RegisterPassSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        device, _ = AppleWalletDevice.objects.get_or_create(
+            device_library_id=device_library_identifier,
+            defaults={"push_token": serializer.data["pushToken"]},
+        )
+        device.passes.add(request.auth)
+        return Response({})
+
+    def delete(self, request, *args, device_library_identifier, **kwargs):
+        try:
+            device = AppleWalletDevice.objects.get(
+                device_library_id=device_library_identifier,
+            )
+        except AppleWalletDevice.DoesNotExist:
+            return Response({})
+        device.passes.remove(request.auth)
+        if not device.passes.exists():
+            device.delete()
+
+        return Response({})
+
+
+class DeviceGetUpdatablePassesView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    def get(
+        self, request, *args, device_library_identifier, pass_type_identifier, **kwargs
+    ):
+        try:
+            device = AppleWalletDevice.objects.get(
+                device_library_id=device_library_identifier,
+            )
+        except AppleWalletDevice.DoesNotExist:
+            raise exceptions.NotFound(_("Unknown device library identifier."))
+
+        passes = device.passes.filter(pass_type=pass_type_identifier)
+        try:
+            last_update = datetime.datetime.fromtimestamp(int(request.GET.get("passesUpdatedSince", 0)), datetime.UTC)
+            passes = passes.filter(
+                updated_at__gt=last_update
+            )
+        except ValueError:
+            pass
+
+        return Response(
+            {
+                "serialNumbers": passes.values_list("serial_number", flat=True),
+                "lastUpdated": str(int(datetime.datetime.now(datetime.UTC).timestamp())),
+            }
+        )
+
+
+class GetPassView(APIView):
+    authentication_classes = [ApplePassAuthentication]
+    permission_classes = [ApplePassPermission]
+
+    @method_decorator(
+        condition(
+            last_modified_func=lambda request, *args, **kwargs: request.auth.updated_at
+        )
+    )
+    def get(self, request, *args, **kwargs):
+        resp = ChunkBasedFileResponse(request.auth.content)
+        resp["Content-Type"] = "application/vnd.apple.pkpass"
+        return resp
+
+
+class LogView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    def post(self, request, *args, **kwargs):
+        serializer = LogEntrySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        logger.info("Received apple wallet log messages: %s", serializer.data["logs"])
+        return Response({})
+
+
+class DownloadPassView(EventViewMixin, OrderDetailMixin, View):
+    @cached_property
+    def order_position(self):
+        try:
+            return self.order.positions.get(pk=self.kwargs.get('position'))
+        except OrderPosition.DoesNotExist:
+            return None
+
+    def get(self, request, *args, **kwargs):
+        if not self.order_position:
+            return Http404()
+        pass_obj = get_object_or_404(AppleWalletPass, order_position=self.order_position)
+        resp = ChunkBasedFileResponse(pass_obj.content.file, content_type="application/vnd.apple.pkpass")
+        resp['Content-Disposition'] = 'attachment; filename="{}"'.format(pass_obj.serial_number + ".pkpass").encode('ascii', 'ignore')
+        return resp
+
+
+class DownloadCombinedPassView(EventViewMixin, OrderDetailMixin, View):
+    def get(self, request, *args, **kwargs):
+        pass_obj = get_object_or_404(CombinedAppleWalletPass, order=self.order)
+        resp = ChunkBasedFileResponse(pass_obj.file.file, content_type="application/vnd.apple.pkpasses")
+        resp['Content-Disposition'] = 'attachment; filename="{}"'.format(self.order.code + ".pkpasses").encode('ascii', 'ignore')
+        return resp

@@ -56,8 +56,7 @@
                 {% endif %}
             {% endfor %}
             {% for b in wallet_buttons.combined %}
-                {# TODO(wallet): move view to core #}
-                <form action="{% eventurl event "plugins:wallet:presale_event.order.wallet.get.combined" secret=order.secret order=order.code platform=b.identifier %}"
+                <form action="{% eventurl event "presale:event.order.wallet.get.combined" secret=order.secret order=order.code platform=b.identifier %}"
                         method="post" data-asynctask data-asynctask-download class="download-btn-form">
                     {% csrf_token %}
                     <button type="submit"

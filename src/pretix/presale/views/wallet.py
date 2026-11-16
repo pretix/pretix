@@ -64,7 +64,7 @@ class OrderDownloadMixin:
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
-class PresaleWalletGetPass(OrderDownloadMixin, EventViewMixin, OrderDetailMixin, AsyncAction, View):
+class WalletGetPass(OrderDownloadMixin, EventViewMixin, OrderDetailMixin, AsyncAction, View):
     def get_error_url(self):
         return self.get_order_url()
 
@@ -83,7 +83,7 @@ class PresaleWalletGetPass(OrderDownloadMixin, EventViewMixin, OrderDetailMixin,
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
-class PresaleWalletGetPassPosition(OrderDownloadMixin, EventViewMixin, OrderPositionDetailMixin, AsyncAction, View):
+class WalletGetPassPosition(OrderDownloadMixin, EventViewMixin, OrderPositionDetailMixin, AsyncAction, View):
     def get_error_url(self):
         return self.get_position_url()
 

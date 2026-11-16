@@ -14,7 +14,8 @@ from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import PluginAwareRegistry, is_app_active
 from pretix.base.models.wallet import WalletLayout, WalletPlatformLayout
 
-from pretix.helpers.i18n import MaybeTranslatedString, localizable_to_dict
+from pretix.base.i18n import MaybeTranslatedString
+from pretix.helpers.i18n import localizable_to_dict
 from pretix.base.wallet.placeholders import (
     WalletPlaceholderRenderer,
     get_available_context,
@@ -663,7 +664,7 @@ class PassStyle:
                 .get("overflow")
             ):
                 fields.setdefault(overflow_group, [])
-                fields[overflow_group] += fields[group.identifier][group.max_entries :]
+                fields[overflow_group] += fields[group.identifier][group.max_entries:]
             fields[group.identifier] = fields[group.identifier][: group.max_entries]
 
         return fields

@@ -23,11 +23,11 @@
     {% comment %} TODO(wallet): move views to core {% endcomment %}
     <form
         action="{% spaceless %}{% if position_page and line.addon_to %}
-            {% eventurl event "plugins:wallet:presale_event.order.position.wallet.get" secret=line.addon_to.web_secret order=order.code platform=b.identifier pid=line.pk position=line.addon_to.positionid %}
+            {% eventurl event "presale:event.order.position.wallet.get" secret=line.addon_to.web_secret order=order.code platform=b.identifier pid=line.pk position=line.addon_to.positionid %}
         {% elif position_page %}
-            {% eventurl event "plugins:wallet:presale_event.order.position.wallet.get" secret=line.web_secret order=order.code platform=b.identifier pid=line.pk position=line.positionid %}
+            {% eventurl event "presale:event.order.position.wallet.get" secret=line.web_secret order=order.code platform=b.identifier pid=line.pk position=line.positionid %}
         {% else %}
-            {% eventurl event "plugins:wallet:presale_event.order.wallet.get" secret=order.secret order=order.code platform=b.identifier position=line.pk %}
+            {% eventurl event "presale:event.order.wallet.get" secret=order.secret order=order.code platform=b.identifier position=line.pk %}
         {% endif %}{% endspaceless %}"
             method="post" data-asynctask data-asynctask-download class="download-btn-form">
         {% csrf_token %}

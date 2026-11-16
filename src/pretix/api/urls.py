@@ -100,6 +100,8 @@ event_router.register(r'scheduled_exports', exporters.ScheduledEventExportViewSe
 event_router.register(r'exporters', exporters.EventExportersViewSet, basename='exporters')
 event_router.register(r'shredders', shredders.EventShreddersViewSet, basename='shredders')
 event_router.register(r'item_meta_properties', event.ItemMetaPropertiesViewSet)
+event_router.register(r'walletlayouts', event.WalletLayoutViewSet)
+
 
 subevent_router = routers.DefaultRouter()
 subevent_router.register(r'seats', event.SeatViewSet)

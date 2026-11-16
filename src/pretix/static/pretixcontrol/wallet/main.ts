@@ -2,8 +2,7 @@ import { createApp } from 'vue'
 import App from './components/app.vue'
 import { createWalletStore, StoreKey } from './walletStore'
 
-// TODO: rename
-window.pretix_wallet_preview_renderers = {}
+window.pretix_wallet_preview_renderers = window.pretix_wallet_preview_renderers || {}
 
 const mountEl = document.querySelector<HTMLElement>('#editor')!
 const store = createWalletStore({

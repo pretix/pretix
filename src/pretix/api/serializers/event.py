@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import logging
+import os.path
 
 from django.conf import settings
 from django.core.exceptions import (
@@ -65,6 +66,7 @@ from pretix.base.models.items import (
     ItemMetaProperty, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.models.tax import CustomRulesValidator
+from pretix.base.models.wallet import WalletLayout, WalletPlatformLayout
 from pretix.base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
 )
@@ -76,6 +78,11 @@ from pretix.base.settings import (
     LazyI18nStringList, validate_event_settings,
 )
 from pretix.base.signals import api_event_settings_fields
+from pretix.base.wallet.platforms import (
+    pass_style_registry,
+    wallet_platform_registry,
+)
+
 from pretix.multidomain.urlreverse import eventreverse_absolute
 
 logger = logging.getLogger(__name__)
@@ -1140,3 +1147,95 @@ class SeatSerializer(I18nAwareModelSerializer):
             from pretix.api.serializers.voucher import VoucherSerializer
             self.fields['voucher'] = VoucherSerializer(read_only=True)
             del self.fields['voucher'].fields['seat']
+
+
+class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
+    platform = serializers.ChoiceField(choices=[])
+    style = serializers.CharField(allow_null=True, required=False)
+    file_settings = serializers.JSONField(default=dict, required=False)
+
+    class Meta:
+        model = WalletPlatformLayout
+        fields = ("platform", "style", "layout", "file_settings")
+
+    def get_fields(self):
+        fields = super().get_fields()
+        fields["platform"].choices = [
+            p.identifier
+            for p, _ in wallet_platform_registry.filter(active_in=self.context["event"])
+        ]
+        return fields
+
+    def validate_layout(self, value):
+        if not isinstance(value, dict):
+            raise ValidationError(_("Layout must be a dict"))
+        return value
+
+    def validate(self, data):
+        platform = data.get("platform")
+        style = data.get("style")
+        layout = data.get("layout")
+        if platform and style and layout:
+            style, _meta = pass_style_registry.get(
+                active_in=self.context["event"], identifier=(platform, style)
+            )
+            if not style:
+                raise ValidationError({"style": _("Invalid style")})
+
+            obj = style(event=self.context["event"], layout=data["layout"])
+            obj.validate()
+            data["file_settings"] = obj.extract_file_settings(
+                self.context["request"], data.get("file_settings", {})
+            )
+
+        return data
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret["file_settings"] = {}
+        for file_setting in instance.file_settings.all():
+            try:
+                url = file_setting.file.url
+            except AttributeError:
+                continue
+            request = self.context["request"]
+            ret["file_settings"][file_setting.key] = {
+                "url": request.build_absolute_uri(url),
+                "name": os.path.basename(file_setting.file.name).split(".", 1)[-1],
+            }
+        return ret
+
+
+class WalletLayoutSerializer(I18nAwareModelSerializer):
+    platform_layouts = WalletPlatformLayoutSerializer(many=True)
+
+    class Meta:
+        model = WalletLayout
+        fields = ("id", "name", "platform_layouts")
+        read_only_fields = ("id",)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs, event=self.context["event"])
+
+    def update(self, instance, validated_data):
+        platform_layouts = validated_data.pop("platform_layouts")
+        for layout in platform_layouts:
+            if layout["style"]:
+                file_settings = layout.pop("file_settings", {})
+                obj, _ = instance.platform_layouts.update_or_create(
+                    platform=layout["platform"], defaults=layout
+                )
+                obj.file_settings.exclude(key__in=file_settings.keys()).delete()
+                for key, file in file_settings.items():
+                    if file != "keep":
+                        file_setting, _ = obj.file_settings.get_or_create(key=key)
+                        file_setting.file.save(os.path.basename(file.name), file)
+
+        instance.platform_layouts.exclude(
+            platform__in={
+                layout["platform"]
+                for layout in platform_layouts
+                if layout["style"] is not None
+            }
+        ).delete()
+        return super().update(instance, validated_data)

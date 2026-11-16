@@ -13,7 +13,7 @@
             </p>
 
             {% if "event.settings.general:write" in request.eventpermset %}
-                <a href="{% url "plugins:wallet:add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                <a href="{% url "control:event.wallet.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                         class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new layout" %}
                 </a>
             {% endif %}
@@ -33,7 +33,7 @@
                     <tr>
                         <td>
                             {% if "can_change_event_settings" in request.eventpermset %}
-                                <strong><a href="{% url "plugins:wallet:edit" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}">
+                                <strong><a href="{% url "control:event.wallet.edit" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}">
                                     {{ l.name }}
                                 </a></strong>
                             {% else %}
@@ -48,7 +48,7 @@
                                 </span>
                             {% elif "can_change_event_settings" in request.eventpermset %}
                                 <form class="form-inline" method="post"
-                                        action="{% url "plugins:wallet:default" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}">
+                                        action="{% url "control:event.wallet.default" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}">
                                     {% csrf_token %}
                                     <button class="btn btn-default btn-sm">
                                         {% trans "Make default" %}
@@ -58,11 +58,11 @@
                         </td>
                         <td class="text-right flip">
                             {% if "can_change_event_settings" in request.eventpermset %}
-                                <a href="{% url "plugins:wallet:edit" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                                <a href="{% url "plugins:wallet:add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ l.id }}"
+                                <a href="{% url "control:event.wallet.edit" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{% url "control:event.wallet.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ l.id }}"
                                         class="btn btn-default btn-sm" title="{% trans "Clone" %}" data-toggle="tooltip"><i class="fa fa-copy"></i></a>
                                 {% if l.allow_delete %}
-                                    <a href="{% url "plugins:wallet:delete" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                    <a href="{% url "control:event.wallet.delete" organizer=request.event.organizer.slug event=request.event.slug layout=l.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                 {% else %}
                                     <button class="btn btn-danger btn-sm" disabled><i class="fa fa-trash"></i></button>
                                 {% endif %}

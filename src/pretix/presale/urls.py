@@ -48,6 +48,7 @@ import pretix.presale.views.theme
 import pretix.presale.views.user
 import pretix.presale.views.waiting
 import pretix.presale.views.widget
+import pretix.presale.views.wallet
 
 # This is not a valid Django URL configuration, as the final
 # configuration is done by the pretix.multidomain package.
@@ -166,6 +167,22 @@ event_patterns = [
     re_path(r'^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/modify$',
             pretix.presale.views.order.OrderPositionModify.as_view(),
             name='event.order.position.modify'),
+
+    re_path(
+        r"^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/wallet/download/(?P<position>[0-9]+)/(?P<platform>[^/]+)$",
+        pretix.presale.views.wallet.WalletGetPass.as_view(),
+        name="event.order.wallet.get",
+    ),
+    re_path(
+        r"^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/wallet/download/(?P<platform>[^/]+)$",
+        pretix.presale.views.wallet.WalletGetPass.as_view(),
+        name="event.order.wallet.get.combined",
+    ),
+    re_path(
+        r"^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/wallet/download/(?P<pid>[0-9]+)/(?P<platform>[^/]+)$",
+        pretix.presale.views.wallet.WalletGetPassPosition.as_view(),
+        name="event.order.position.wallet.get",
+    ),
 
     re_path(r'^ical/?$',
             pretix.presale.views.event.EventIcalDownload.as_view(),
