@@ -103,6 +103,7 @@ from pretix.base.signals import (
 )
 from pretix.control.signals import order_search_filter_q
 from pretix.helpers import OF_SELF
+from pretix.presale.views import prefetch_relevant_questionnaires
 
 logger = logging.getLogger(__name__)
 
@@ -241,7 +242,9 @@ class OrderViewSetMixin:
             qs = qs.select_related('invoice_address')
         if 'customer' not in self.request.GET.getlist('exclude'):
             qs = qs.select_related('customer')
-
+        qs = qs.prefetch_related(
+            'answers', 'answers__options', 'answers__question',  # answers to order-level questions
+        )
         qs = qs.select_related('sales_channel').prefetch_related(self._positions_prefetch(self.request))
         return qs
 
@@ -250,6 +253,12 @@ class OrderViewSetMixin:
             opq = OrderPosition.all
         else:
             opq = OrderPosition.objects
+        serializer = self.get_serializer()
+        if ('positions' in serializer.fields and 'answers' in serializer.fields['positions'].child.fields
+                and serializer.fields['positions'].child.fields['answers'].is_compat_request()):
+            opq = opq.prefetch_related(
+                prefetch_relevant_questionnaires(None, None)
+            )
         if request.query_params.get('pdf_data', 'false').lower() == 'true' and getattr(request, 'event', None):
             prefetch_related_objects([request.organizer], 'meta_properties')
             prefetch_related_objects(
@@ -1182,6 +1191,10 @@ class OrderPositionViewSetMixin:
                 'answers', 'answers__options', 'answers__question', 'order__event', 'order__event__organizer'
             ).select_related(
                 'item', 'order', 'seat'
+            )
+        if self.get_serializer().fields['answers'].is_compat_request():
+            qs = qs.prefetch_related(
+                prefetch_relevant_questionnaires(None, None)
             )
         return qs
 
