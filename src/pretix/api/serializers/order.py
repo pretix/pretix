@@ -21,17 +21,14 @@
 #
 import json
 import logging
-import os
 from collections import Counter, defaultdict
 from contextlib import nullcontext
 from datetime import timedelta
 from decimal import Decimal
-from typing import Any
 
 import pycountry
 from django.conf import settings
 from django.core.exceptions import ValidationError as BaseValidationError
-from django.core.files import File
 from django.db import models
 from django.db.models import F, Q
 from django.utils.encoding import force_str
@@ -250,26 +247,27 @@ class MixedAnswerListSerializer(ListSerializer):
     def get_value(self, dictionary):
         return dictionary
 
-    def to_representation(self, data):
-        try:
-            answers_qs = get_attribute(data, ['answers'])
-        except (KeyError, AttributeError):
-            return None
-        answers = super().to_representation(answers_qs)
+    def is_compat_request(self):
+        if request := self.context.get('request'):
+            if 'compat_answers' in request.query_params:
+                return request.query_params.get('compat_answers').lower() == 'true'
+            return (isinstance(request.auth, Device) and (request.auth.software_brand or '').startswith('pretixPOS'))
+
+    def add_compat_answers(self, answers, container_obj):
         answers_dict = {answer["question"]: answer for answer in answers}
-        for qc in QuestionnaireRow.objects.filter(
+        for qc in getattr(container_obj, 'relevant_questionnaires', QuestionnaireRow.objects.filter(
                 Q(system_datafield__isnull=False) | Q(user_datafield_id__isnull=False),
-                questionnaire__items__id=data.item_id
-        ):
+                questionnaire__items__id=container_obj.item_id
+        )):
             if qc.user_datafield_id:
                 if answer := answers_dict.get(qc.user_datafield_id):
                     answer = dict(answer)
                     answer["question"] = qc.cooked_id
                     answer["questionnaire_id"] = qc.questionnaire_id
                     answers.append(answer)
-            elif (sys_answer := data.system_answers[qc.system_datafield]) is not None:
+            elif qc.system_datafield and (sys_answer := container_obj.system_answers[qc.system_datafield]) is not None:
                 if qc.system_datafield == QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS:
-                    name_parts = data.attendee_name_parts
+                    name_parts = container_obj.attendee_name_parts
                     settings = self.context['event'].settings
                     for k, v, w, *__ in PERSON_NAME_SCHEMES.get(settings.name_scheme)['fields']:
                         if k in name_parts:
@@ -303,6 +301,16 @@ class MixedAnswerListSerializer(ListSerializer):
                     "option_identifiers": [],
                     "questionnaire_id": qc.questionnaire_id,
                 })
+
+
+    def to_representation(self, data):
+        try:
+            answers_qs = get_attribute(data, ['answers'])
+        except (KeyError, AttributeError):
+            return None
+        answers = super().to_representation(answers_qs)
+        if self.is_compat_request():
+            self.add_compat_answers(answers, data)
         return answers
 
     def run_child_validation(self, data):
