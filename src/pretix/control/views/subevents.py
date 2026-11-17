@@ -60,7 +60,7 @@ from django.views.generic import (
 )
 
 from pretix.base.models import CartPosition, LogEntry, OrderPosition
-from pretix.base.models.checkin import CheckinList, Checkin
+from pretix.base.models.checkin import Checkin, CheckinList
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import (
     Item, ItemVariation, Quota, SubEventItem, SubEventItemVariation,
