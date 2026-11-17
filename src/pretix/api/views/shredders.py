@@ -21,7 +21,6 @@
 #
 from datetime import timedelta
 
-from celery.result import AsyncResult
 from django.conf import settings
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -40,6 +39,7 @@ from pretix.api.serializers.shredders import (
 from pretix.base.models import CachedFile
 from pretix.base.services.shredder import export, shred
 from pretix.base.shredder import shred_constraints
+from pretix.helpers.celery import get_task_result
 from pretix.helpers.http import ChunkBasedFileResponse
 
 
@@ -87,7 +87,7 @@ class ShreddersMixin:
                 status=status.HTTP_410_GONE
             )
 
-        res = AsyncResult(kwargs['asyncid'])
+        res = get_task_result(kwargs['asyncid'], task_name=export)
         if res.failed():
             if isinstance(res.info, dict) and res.info['exc_type'] in ('ShredError', 'ExportError'):
                 msg = res.info['exc_message']
@@ -108,7 +108,7 @@ class ShreddersMixin:
     @action(detail=False, methods=['GET'], url_name='status', url_path='status/(?P<asyncid>[^/]+)/(?P<cfid>[^/]+)')
     def status(self, *args, **kwargs):
         if settings.HAS_CELERY:
-            res = AsyncResult(kwargs['asyncid'])
+            res = get_task_result(kwargs['asyncid'], task_name=shred)
             if res.failed():
                 if isinstance(res.info, dict) and res.info['exc_type'] in ('ShredError', 'ExportError'):
                     msg = res.info['exc_message']
@@ -141,12 +141,17 @@ class ShreddersMixin:
                 status=status.HTTP_410_GONE
             )
 
-        return Response(
-            {
-                'status': 'running' if res.state in ('PROGRESS', 'STARTED', 'SUCCESS') else 'waiting',
-            },
-            status=status.HTTP_409_CONFLICT
-        )
+        if settings.HAS_CELERY:
+            return Response(
+                {
+                    'status': 'running' if res.state in ('PROGRESS', 'STARTED', 'SUCCESS') else 'waiting',
+                },
+                status=status.HTTP_409_CONFLICT
+            )
+        else:
+            # This can't happen for clients who follow the api spec. They would need have to constructed the url themselves
+            # from a valid shredder cached file, e.g. by modifying the URL retured by `export`.
+            raise Http404()
 
     @action(detail=False, methods=['POST'], url_name='shred', url_path='shred/(?P<asyncid>[^/]+)/(?P<cfid>[^/]+)')
     def shred(self, *args, **kwargs):
@@ -163,11 +168,10 @@ class ShreddersMixin:
             raise Http404()
         if cf.file:
             async_result = self.do_shred(cf)
-            url_kwargs = {
+            url_kwargs = self.kwargs | {
                 'asyncid': str(async_result.id),
                 'cfid': str(cf.id),
             }
-            url_kwargs.update(self.kwargs)
             return Response({
                 'status': reverse('api-v1:shredders-status', kwargs=url_kwargs, request=self.request),
             }, status=status.HTTP_202_ACCEPTED)
@@ -177,7 +181,7 @@ class ShreddersMixin:
                 status=status.HTTP_410_GONE
             )
 
-        res = AsyncResult(kwargs['asyncid'])
+        res = get_task_result(kwargs['asyncid'], task_name=export)
         if res.failed():
             if isinstance(res.info, dict) and res.info['exc_type'] in ('ShredError', 'ExportError'):
                 msg = res.info['exc_message']
