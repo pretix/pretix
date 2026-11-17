@@ -506,6 +506,99 @@ def test_organizer_edit_restrictions(client, env):
     assert _can_see_but_not_edit_org_export(client, user1, s2)
 
 
+def _patch_org_export(client, user, scheduled, data):
+    client.login(email=user.email, password="dummy")
+
+    response = client.get("/control/organizer/dummy/export/")
+    assert f"export/{scheduled.pk}/delete".encode() in response.content
+    response = client.get(f"/control/organizer/dummy/export/?identifier={scheduled.export_identifier}&scheduled={scheduled.pk}")
+    if response.status_code == 404:
+        return False
+
+    assert response.status_code == 200
+    doc = BeautifulSoup(response.content, "lxml")
+    form_data = extract_form_fields(doc.select("form[data-asynctask]")[0])
+    form_data["schedule"] = "save"
+    for k, v in data.items():
+        if v is None:
+            form_data.pop(k, None)
+        else:
+            form_data[k] = v
+
+    response = client.post(f"/control/organizer/dummy/export/?identifier={scheduled.export_identifier}&scheduled={scheduled.pk}",
+                           data=form_data, follow=True)
+    assert response.status_code == 200
+
+    return b"alert-success" in response.content and b"therefore you cannot" not in response.content
+
+
+@pytest.mark.django_db(transaction=True)
+def test_organizer_edit_restrictions_event_expansion(client, env):
+    # This tests the prevention of a possible privilege escalation where user A creates a scheduled export and
+    # user B has settings permission (= they can see the export configuration), and enough permission
+    # to run the export themselves, but not enough permission to add events. Without this check, user B could
+    # modify the export and add themselves as a recipient. Thereby, user B would gain access to data they can't have.
+    user = env[1]
+    user2 = User.objects.create_user("dummy2@dummy.dummy", "dummy")
+    event1 = env[0]
+    event2 = Event.objects.create(
+        organizer=env[0].organizer, name="Dummy", slug="dummy2",
+        date_from=now(), plugins="pretix.plugins.banktransfer,pretix.plugins.stripe,tests.testdummy"
+    )
+
+    # Team 1 has access only to one event
+    team1 = env[2]
+    team1.all_organizer_permissions = False
+    team1.all_event_permissions = False
+    team1.all_events = False
+    team1.limit_organizer_permissions = {"organizer.settings.general:write": True}
+    team1.limit_event_permissions = {"event.orders:read": True, "event.settings.general:write": True}
+    team1.save()
+    team1.limit_events.add(event1)
+    team1.members.add(user)
+
+    # Team 2 has full admin access
+    team2 = env[0].organizer.teams.create(
+        all_organizer_permissions=True, all_event_permissions=True, all_events=True,
+    )
+    team2.members.add(user2)
+
+    s1 = ScheduledOrganizerExport.objects.create(
+        organizer=env[0].organizer,
+        owner=user2,
+        export_identifier="dummy_orders",
+        export_form_data={"all_events": False, "events": [event1.pk]},
+        mail_subject="Test",
+        mail_template="Test",
+        locale="en",
+        schedule_rrule="DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO",
+        schedule_rrule_time=datetime.time(2, 30, 0)
+    )
+    # User 1 can change …
+    assert _patch_org_export(
+        client, user, s1,
+        {"schedule-mail_subject": "Hello"},
+    )
+    # … but not expand scope
+    assert not _patch_org_export(
+        client, user, s1,
+        {"dummy_orders-events": [event1.pk, event2.pk]},
+    )
+    assert not _patch_org_export(
+        client, user, s1,
+        {"dummy_orders-all_events": "on", "dummy_orders-events": None},
+    )
+    # User 2 can expand
+    assert _patch_org_export(
+        client, user2, s1,
+        {"dummy_orders-all_events": "on", "dummy_orders-events": None},
+    )
+    assert _patch_org_export(
+        client, user2, s1,
+        {"dummy_orders-events": [event1.pk, event2.pk]},
+    )
+
+
 def _can_see_but_not_edit_event_export(client, user, scheduled):
     client.login(email=user.email, password="dummy")
 
