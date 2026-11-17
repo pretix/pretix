@@ -62,7 +62,7 @@ dependencies = [
   "geoip2==5.*",
   "isoweek",
   "jsonschema",
-  "kombu==5.6.*",
+  "kombu==5.7.*",
   "libsass==0.23.*",
   "lxml",
   "markdown==3.11.2",
