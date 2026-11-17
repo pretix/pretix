@@ -107,29 +107,34 @@ def test_run_success(token_client, order, organizer, team, event):
     event.date_from = now() - timedelta(days=91)
     event.date_to = now() - timedelta(days=90)
     event.save()
-    resp = token_client.post(
+    export_resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/shredders/export/'.format(organizer.slug, event.slug),
         data={
             'shredders': ['order_emails']
         }, format='json'
     )
-    assert resp.status_code == 202
-    assert "download" in resp.data
-    assert "shred" in resp.data
+    assert export_resp.status_code == 202
+    assert "download" in export_resp.data
+    assert "shred" in export_resp.data
 
-    resp2 = token_client.get("/" + resp.data["download"].split("/", 3)[3])
-    assert resp2.status_code == 200
-    assert resp2["Content-Type"] == "application/zip"
+    download_resp = token_client.get("/" + export_resp.data["download"].split("/", 3)[3])
+    assert download_resp.status_code == 200
+    assert download_resp["Content-Type"] == "application/zip"
 
-    resp3 = token_client.post("/" + resp.data["shred"].split("/", 3)[3])
-    assert resp3.status_code == 202
-    assert "status" in resp3.data
+    status_resp = token_client.get("/" + export_resp.data["shred"].split("/", 3)[3].replace("/shred/", "/status/"))
+    assert status_resp.status_code == 404  # cannot get the status of a shred task that does not exists
 
-    resp4 = token_client.get("/" + resp3.data["status"].split("/", 3)[3])
-    assert resp4.status_code == 410  # because we have no celery
+    shred_resp = token_client.post("/" + export_resp.data["shred"].split("/", 3)[3])
+    assert shred_resp.status_code == 202
+    assert "status" in shred_resp.data
 
-    resp2 = token_client.get("/" + resp.data["download"].split("/", 3)[3])
-    assert resp2.status_code == 404  # shredded now
+    assert export_resp.data['shred'].split("/")[11] != shred_resp.data['status'].split("/")[11]  # shredding should have a different task id than exporting
+
+    status_resp = token_client.get("/" + shred_resp.data["status"].split("/", 3)[3])
+    assert status_resp.status_code == 410  # because we have no celery
+
+    download_resp = token_client.get("/" + export_resp.data["download"].split("/", 3)[3])
+    assert download_resp.status_code == 404  # shredded now
 
     order.refresh_from_db()
     assert not order.email

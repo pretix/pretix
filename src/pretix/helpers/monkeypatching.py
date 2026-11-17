@@ -25,6 +25,7 @@ import types
 from datetime import datetime
 from http import cookies
 
+from celery.backends.base import Backend
 from django.conf import settings
 from django.core.exceptions import SuspiciousFileOperation
 from PIL import Image
@@ -249,6 +250,26 @@ def monkeypatch_json_constants():
     del _CONSTANTS['NaN']
 
 
+def monkeypatch_celery_result_meta():
+    """
+    We basically want `result_extended` from Celery to tie results to the tasks that created them,
+    but just enabling `result_extended` will include full `args` and `kwargs` to the result which
+    might contain large or sensitive data and we currently have no interest in storing them in the
+    task backend without necessity.
+    """
+    old__get_result_meta = Backend._get_result_meta
+
+    def new__get_result_meta(self, result, state, traceback, request, *args, **kwargs):
+        meta = types.MethodType(old__get_result_meta, self)(
+            result, state, traceback, request, *args, **kwargs,
+        )
+        if request and 'name' not in meta:
+            meta['name'] = getattr(request, 'task', None)
+        return meta
+
+    Backend._get_result_meta = new__get_result_meta
+
+
 def monkeypatch_all_at_ready():
     monkeypatch_vobject_performance()
     monkeypatch_pillow_safer()
@@ -257,3 +278,4 @@ def monkeypatch_all_at_ready():
     monkeypatch_cookie_morsel()
     monkeypatch_reportlab_imagereader()
     monkeypatch_json_constants()
+    monkeypatch_celery_result_meta()
