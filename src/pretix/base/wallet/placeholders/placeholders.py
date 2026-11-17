@@ -2,21 +2,17 @@ from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.dispatch import receiver
 
+from pretix.base.i18n import (
+    FormattingLocalizableString, GettextLocalizableString, LocalizableDatetime,
+)
 from pretix.base.models.event import Event
+from pretix.base.signals import register_wallet_placeholders
 from pretix.base.templatetags.money import money_filter
 from pretix.multidomain.urlreverse import eventreverse_absolute
-from pretix.base.i18n import (
-    FormattingLocalizableString,
-    GettextLocalizableString,
-    LocalizableDatetime,
-)
 
-from pretix.base.signals import register_wallet_placeholders
 from .base import (
-    BaseWalletPlaceholder,
-    FunctionalContextTransformation,
-    FunctionalWalletTextPlaceholder,
-    WalletPlaceholderRenderer,
+    BaseWalletPlaceholder, FunctionalContextTransformation,
+    FunctionalWalletTextPlaceholder, WalletPlaceholderRenderer,
 )
 
 

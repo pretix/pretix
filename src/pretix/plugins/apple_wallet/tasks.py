@@ -1,13 +1,15 @@
+import ssl
+import tempfile
+
+import httpx
+from django.db.models import Exists, OuterRef
+from django.utils.timezone import now
+from django_scopes import scopes_disabled
+
 from pretix.base.models import Event
 from pretix.celery_app import app
-import ssl
-import httpx
-import tempfile
-from django.utils.timezone import now
-from django.db.models import OuterRef, Exists
 
-from .models import AppleWalletPass, AppleWalletDevice
-from django_scopes import scopes_disabled
+from .models import AppleWalletDevice, AppleWalletPass
 
 
 @app.task

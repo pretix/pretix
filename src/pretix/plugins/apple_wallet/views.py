@@ -1,14 +1,14 @@
 import datetime
-from functools import cached_property
 import logging
+from functools import cached_property
 
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import AnonymousUser
+from django.http.response import Http404
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
-from django.views.decorators.http import condition
-from django.http.response import Http404
 from django.views import View
+from django.views.decorators.http import condition
 from rest_framework import exceptions, permissions, serializers
 from rest_framework.authentication import (
     BaseAuthentication, get_authorization_header,
@@ -18,9 +18,10 @@ from rest_framework.views import APIView
 
 from pretix.base.models.orders import OrderPosition
 from pretix.helpers.http import ChunkBasedFileResponse
-from .models import AppleWalletDevice, AppleWalletPass, CombinedAppleWalletPass
 from pretix.presale.views import EventViewMixin
 from pretix.presale.views.order import OrderDetailMixin
+
+from .models import AppleWalletDevice, AppleWalletPass, CombinedAppleWalletPass
 
 logger = logging.getLogger("pretix.plugins.apple_wallet")
 

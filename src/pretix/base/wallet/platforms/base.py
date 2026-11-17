@@ -5,27 +5,25 @@ from typing import Any, Iterable, TypedDict
 import jsonschema
 from django.core.exceptions import ValidationError
 from django.core.files import File
+from django.utils.functional import classproperty
+from django.utils.html import format_html
+from django.utils.translation import gettext as _
 from i18nfield.strings import LazyI18nString
 
 from pretix.api.helpers import handle_file_upload
+from pretix.base.i18n import MaybeTranslatedString
 from pretix.base.models import OrderPosition
 from pretix.base.models.orders import Order
+from pretix.base.models.wallet import WalletLayout, WalletPlatformLayout
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import PluginAwareRegistry, is_app_active
-from pretix.base.models.wallet import WalletLayout, WalletPlatformLayout
-
-from pretix.base.i18n import MaybeTranslatedString
-from pretix.helpers.i18n import localizable_to_dict
 from pretix.base.wallet.placeholders import (
-    WalletPlaceholderRenderer,
-    get_available_context,
-    get_wallet_placeholder_renderer,
-    get_wallet_placeholders,
+    WalletPlaceholderRenderer, get_available_context,
+    get_wallet_placeholder_renderer, get_wallet_placeholders,
 )
+from pretix.helpers.i18n import localizable_to_dict
+
 from .settings import SettingsField, SettingsFile
-from django.utils.translation import gettext as _
-from django.utils.html import format_html
-from django.utils.functional import classproperty
 
 
 class WalletPlatform:

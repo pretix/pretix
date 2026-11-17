@@ -1,11 +1,9 @@
 from typing import Iterable
+
 from pretix.base.models import Event
 
 from .base import (
-    PassStyle,
-    WalletPlatform,
-    WalletPlatformRegistry,
-    PassStyleRegistry,
+    PassStyle, PassStyleRegistry, WalletPlatform, WalletPlatformRegistry,
 )
 
 wallet_platform_registry = WalletPlatformRegistry()

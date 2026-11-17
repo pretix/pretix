@@ -1,10 +1,8 @@
 from pretix.celery_app import app
-from .google_wallet import (
-    Resource, State,
-)
-from .platform import GooglePlatform
 
+from .google_wallet import Resource, State
 from .models import GoogleWalletInstance
+from .platform import GooglePlatform
 
 
 @app.task()

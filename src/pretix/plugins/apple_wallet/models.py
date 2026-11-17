@@ -21,7 +21,9 @@
 #
 
 from django.db import models
-from django.utils.crypto import salted_hmac, get_random_string, constant_time_compare
+from django.utils.crypto import (
+    constant_time_compare, get_random_string, salted_hmac,
+)
 
 from pretix.base.models import OrderPosition
 from pretix.base.models.orders import Order

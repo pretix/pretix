@@ -1,8 +1,7 @@
 from pretix.base.models import Order, OrderPosition
 from pretix.base.services.tasks import ProfiledTask
-from pretix.celery_app import app
-
 from pretix.base.wallet.platforms import get_platform
+from pretix.celery_app import app
 
 
 @app.task(base=ProfiledTask)

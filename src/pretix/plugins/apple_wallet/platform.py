@@ -1,36 +1,32 @@
-from collections import OrderedDict
 import hashlib
 import io
 import json
 import logging
 import tempfile
 import zipfile
+from collections import OrderedDict
 
 import cryptography
 import cryptography.hazmat.primitives.hashes
 import cryptography.hazmat.primitives.serialization.pkcs7
 import cryptography.x509
+from django import forms
+from django.core.files.base import ContentFile
 from django.utils.encoding import force_bytes
+from django.utils.functional import classproperty
 from django.utils.translation import gettext as _
 
-from pretix.base.models.orders import Order
-from pretix.multidomain.urlreverse import eventreverse_absolute
-from pretix.base.i18n import (
-    MaybeTranslatedString,
-)
-from pretix.base.wallet.platforms import (
-    WalletPlatform, wallet_platform_registry
-)
-from .models import CombinedAppleWalletPass
-
-from django.core.files.base import ContentFile
-from django import forms
-from django.utils.functional import classproperty
-
 from pretix.base.forms import SecretKeySettingsField
+from pretix.base.i18n import MaybeTranslatedString
+from pretix.base.models.orders import Order
+from pretix.base.wallet.platforms import (
+    WalletPlatform, wallet_platform_registry,
+)
 from pretix.control.forms import ClearableBasenameFileInput
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 from .forms import CertificateFileField, validate_rsa_privkey
+from .models import CombinedAppleWalletPass
 
 logger = logging.getLogger("pretix.plugins.wallet.apple")
 

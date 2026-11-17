@@ -3,28 +3,25 @@ import logging
 from typing import Any
 
 from django.core.files.base import ContentFile, File
-from django.utils.translation import gettext as _
 from django.db import transaction
+from django.utils.translation import gettext as _
 
-from pretix.base.models import OrderPosition
-from pretix.helpers import OF_SELF
-from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.base.i18n import (
-    FormattingLocalizableString,
-    GettextLocalizableString,
+    FormattingLocalizableString, GettextLocalizableString,
 )
-from .models import AppleWalletPass
+from pretix.base.models import OrderPosition
+from pretix.base.wallet.platforms import pass_style_registry
 from pretix.base.wallet.platforms.base import (
-    FieldGroup,
-    FieldGroupDisplay,
-    PassStyle,
-    PlaceholderFieldEntry,
+    FieldGroup, FieldGroupDisplay, PassStyle, PlaceholderFieldEntry,
     TextFieldGroup,
 )
-from pretix.base.wallet.platforms import pass_style_registry
-from pretix.base.wallet.platforms.settings import ImageSettingsField
+from pretix.base.wallet.platforms.settings import (
+    ColorSettingsField, FloatSettingsField, ImageSettingsField, convert_to_png,
+)
+from pretix.helpers import OF_SELF
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
-from pretix.base.wallet.platforms.settings import ColorSettingsField, FloatSettingsField, convert_to_png
+from .models import AppleWalletPass
 from .platform import ApplePlatform, SignedZipFile, StringResource
 
 logger = logging.getLogger("pretix.plugins.apple_wallet")

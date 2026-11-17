@@ -22,12 +22,8 @@
 from django.urls import re_path
 
 from .views import (
-    DeviceGetUpdatablePassesView,
-    DeviceRegistrationView,
-    GetPassView,
-    LogView,
-    DownloadPassView,
-    DownloadCombinedPassView
+    DeviceGetUpdatablePassesView, DeviceRegistrationView,
+    DownloadCombinedPassView, DownloadPassView, GetPassView, LogView,
 )
 
 event_patterns = [
