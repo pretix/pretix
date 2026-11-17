@@ -139,34 +139,37 @@ def user():
 
 @pytest.fixture
 @scopes_disabled()
-def user_client(client, team, user):
+def user_client(team, user):
+    c = APIClient()
     if not team.all_event_permissions:
         team.limit_event_permissions["event.orders:read"] = True
         team.limit_event_permissions["event.vouchers:read"] = True
     team.all_events = True
     team.save()
     team.members.add(user)
-    client.force_authenticate(user=user)
-    return client
+    c.force_authenticate(user=user)
+    return c
 
 
 @pytest.fixture
 @scopes_disabled()
-def token_client(client, team):
+def token_client(team):
+    c = APIClient()
     if not team.all_event_permissions:
         team.limit_event_permissions["event.orders:read"] = True
         team.limit_event_permissions["event.vouchers:read"] = True
     team.all_events = True
     team.save()
     t = team.tokens.create(name='Foo')
-    client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
-    return client
+    c.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
+    return c
 
 
 @pytest.fixture
-def device_client(client, device):
-    client.credentials(HTTP_AUTHORIZATION='Device ' + device.api_token)
-    return client
+def device_client(device):
+    c = APIClient()
+    c.credentials(HTTP_AUTHORIZATION='Device ' + device.api_token)
+    return c
 
 
 @pytest.fixture
