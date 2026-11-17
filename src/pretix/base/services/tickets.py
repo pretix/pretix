@@ -267,8 +267,6 @@ def get_download_buttons(event, show_disabled):
     responses = register_ticket_outputs.send(event)
     for receiver, response in responses:
         provider = response(event)
-        if provider.is_meta:
-            continue
         if not provider.is_enabled and not show_disabled:
             continue
         buttons.append({

@@ -22,9 +22,13 @@
 
 from django.dispatch import receiver
 from django.template.loader import get_template
+from django.utils.translation import gettext as _
 
 from pretix.base.models.event import Event
-from pretix.base.signals import invalidate_ticket_cache
+from pretix.base.shredder import BaseDataShredder, slow_delete
+from pretix.base.signals import (
+    invalidate_ticket_cache, register_data_shredders,
+)
 from pretix.base.wallet.tasks import get_pass
 from pretix.control.signals import html_head
 
@@ -33,7 +37,7 @@ from .platform import get_object_id
 from .tasks import disable_wallet_instance
 
 
-@receiver(invalidate_ticket_cache, dispatch_uid="invalidate_ticket_cache_wallet_google")
+@receiver(invalidate_ticket_cache, dispatch_uid="invalidate_ticket_cache_google_wallet")
 def invalidate_google(
     sender: Event, item: int | None, provider: str | None, order: int | None, **kwargs
 ):
@@ -66,5 +70,27 @@ def invalidate_google(
 
 @receiver(html_head, dispatch_uid="html_head_google_wallet")
 def html_head_google_wallet(request, **kwargs):
-    template = get_template('pretixplugins/google_wallet/control_head.html')
+    template = get_template("pretixplugins/google_wallet/control_head.html")
     return template.render({})
+
+
+class GoogleWalletShredder(BaseDataShredder):
+    verbose_name = _("Google Wallet")
+    identifier = "google_wallet"
+    description = _(
+        "This will remove all data regarding google wallet passes. No download will be offered."
+    )
+
+    def generate_files(self):
+        pass
+
+    def shred_data(self, progress_callback=None):
+        qs = GoogleWalletInstance.objects.filter(event=self.event)
+        total = qs.count()
+
+        slow_delete(qs, progress_callback=progress_callback, progress_total=total)
+
+
+@receiver(register_data_shredders, dispatch_uid="shredders_google_wallet")
+def shredders_google_wallet(**kwargs):
+    return [GoogleWalletShredder]

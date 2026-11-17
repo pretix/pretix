@@ -29,13 +29,11 @@
                 {% for provider in providers %}
                     <div class="panel panel-default ticketoutput-panel">
                         <div class="panel-heading">
-                            {% if not provider.is_meta %}
-                                <a href="{% url "control:event.settings.tickets.preview" event=request.event.slug organizer=request.organizer.slug output=provider.identifier %}"
-                                        class="btn btn-default btn-sm pull-right flip {% if not provider.evaluated_preview_allowed %}disabled{% endif %}"
-                                        target="_blank">
-                                    {% trans "Preview" %}
-                                </a>
-                            {% endif %}
+                            <a href="{% url "control:event.settings.tickets.preview" event=request.event.slug organizer=request.organizer.slug output=provider.identifier %}"
+                                    class="btn btn-default btn-sm pull-right flip {% if not provider.evaluated_preview_allowed %}disabled{% endif %}"
+                                    target="_blank">
+                                {% trans "Preview" %}
+                            </a>
                             <h3 class="panel-title">
                                 {% with 'ticketoutput_'|add:provider.identifier|add:'__enabled' as field_name %}
                                     {% bootstrap_field provider.form|getitem:field_name layout='inline' label=provider.verbose_name %}
@@ -50,7 +48,27 @@
                             {% endwith %}
                         </div>
                     </div>
-                {% empty %}
+                {% endfor %}
+                {% if show_wallet %}
+                    <div class="panel panel-default ticketoutput-panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                {% translate "Wallet" as wallet_label %}
+                                {% bootstrap_field form.ticket_wallet_enabled layout="inline" label=wallet_label %}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <p>
+                                <a class="btn btn-primary btn-lg" target="_blank"
+                                        href="{% url "control:event.wallet.index" organizer=request.organizer.slug event=request.event.slug %}">
+                                    <span class="fa fa-paint-brush"></span>
+                                    {% trans "Edit layouts" %}
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if not providers and not show_wallet %}
                     <div class="alert alert-warning">
                         {% url "control:event.settings.plugins" event=request.event.slug organizer=request.organizer.slug as plugin_settings_url %}
                         {% blocktrans trimmed with plugin_settings_href='href="'|add:plugin_settings_url|add:'"'|safe %}
@@ -58,7 +76,7 @@
                             <a {{ plugin_settings_href }}>plugin settings</a> and activate one or more ticket output plugins.
                         {% endblocktrans %}
                     </div>
-                {% endfor %}
+                {% endif %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Download time" %}</legend>

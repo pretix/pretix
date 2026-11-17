@@ -193,17 +193,6 @@ class BaseTicketOutput:
         pass
 
     @property
-    def is_meta(self) -> bool:
-        """
-        Returns whether or whether not this output is a "meta" output that only works as a settings holder
-        and should never be used directly. This is a trick to implement outputs with multiple formats but
-        unified settings.
-
-        .. note:: You should set is_enabled to False for meta outputs.
-        """
-        return False
-
-    @property
     def download_button_text(self) -> str:
         """
         The text on the download button in the frontend.

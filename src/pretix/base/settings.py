@@ -1872,6 +1872,16 @@ DEFAULTS = {
                         "the email. Does not affect orders performed through other sales channels."),
         )
     },
+    'ticket_wallet_enabled': {
+        'default': 'False',
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
+        'form_class': forms.BooleanField,
+        'form_kwargs': dict(
+            label=_("Generate wallet passes"),
+            help_text=_('If this is off, no wallet passes will be generated.'),
+        )
+    },
     'low_availability_percentage': {
         'default': None,
         'type': int,

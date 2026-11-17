@@ -79,10 +79,8 @@ from pretix.base.settings import (
 )
 from pretix.base.signals import api_event_settings_fields
 from pretix.base.wallet.platforms import (
-    pass_style_registry,
-    wallet_platform_registry,
+    pass_style_registry, wallet_platform_registry,
 )
-
 from pretix.multidomain.urlreverse import eventreverse_absolute
 
 logger = logging.getLogger(__name__)
@@ -812,6 +810,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'ticket_download_nonadm',
         'ticket_download_pending',
         'ticket_download_require_validated_email',
+        'ticket_wallet_enabled',
         'ticket_secret_length',
         'mail_prefix',
         'mail_from_name',
@@ -969,6 +968,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'ticket_download_addons',
         'ticket_download_nonadm',
         'ticket_download_pending',
+        'ticket_wallet_enabled',
         'invoice_address_asked',
         'invoice_address_required',
         'invoice_address_vatid',

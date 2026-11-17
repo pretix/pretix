@@ -133,12 +133,10 @@ def get_all_payment_providers():
             if isinstance(prov, list):
                 for p in prov:
                     p = p(event)
-                    if not p.is_meta:
-                        choices.append((p.identifier, p.verbose_name))
+                    choices.append((p.identifier, p.verbose_name))
             else:
                 prov = prov(event)
-                if not prov.is_meta:
-                    choices.append((prov.identifier, prov.verbose_name))
+                choices.append((prov.identifier, prov.verbose_name))
     PAYMENT_PROVIDERS = choices
     return choices
 
