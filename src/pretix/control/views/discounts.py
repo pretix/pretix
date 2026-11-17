@@ -256,8 +256,9 @@ def reorder_discounts(request, organizer, event):
         ids = json.loads(request.body.decode('utf-8'))['ids']
     except (JSONDecodeError, KeyError, ValueError):
         return HttpResponseBadRequest("expected JSON: {ids:[]}")
+    ids = [int(i) for i in ids if isinstance(i, int) or i.isdigit()]
 
-    input_discounts = list(request.event.discounts.filter(id__in=[i for i in ids if i.isdigit()]))
+    input_discounts = list(request.event.discounts.filter(id__in=ids))
 
     if len(input_discounts) != len(ids):
         raise Http404(_("Some of the provided object ids are invalid."))
@@ -266,7 +267,7 @@ def reorder_discounts(request, organizer, event):
         raise Http404(_("Not all discounts have been selected."))
 
     for c in input_discounts:
-        pos = ids.index(str(c.pk))
+        pos = ids.index(c.pk)
         if pos != c.position:  # Save unneccessary UPDATE queries
             c.position = pos
             c.save(update_fields=['position'])
