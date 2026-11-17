@@ -43,7 +43,6 @@ from datetime import datetime, time, timedelta
 from decimal import Decimal, DecimalException
 from urllib.parse import quote, urlencode
 
-from celery.result import AsyncResult
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -136,6 +135,7 @@ from pretix.control.permissions import (
 from pretix.control.signals import order_search_forms
 from pretix.control.views import PaginationMixin
 from pretix.helpers import OF_SELF
+from pretix.helpers.celery import get_task_result
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.hierarkey import clean_filename
@@ -3168,7 +3168,7 @@ class EventCancelConfirm(EventPermissionRequiredMixin, AsyncAction, FormView):
 
     @cached_property
     def dryrun_result(self):
-        res = AsyncResult(self.kwargs.get("task"))
+        res = get_task_result(self.kwargs.get("task"), task_name=self.task)
         if not res.ready():
             raise Http404()
         if not res.successful():
