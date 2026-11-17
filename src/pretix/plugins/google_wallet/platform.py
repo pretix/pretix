@@ -1,3 +1,4 @@
+import base64
 import json
 import uuid
 from functools import cached_property
@@ -6,7 +7,6 @@ from typing import OrderedDict
 from django import forms
 from django.conf import settings
 from django.db import transaction
-from django.utils import translation
 from django.utils.crypto import salted_hmac
 from django.utils.functional import classproperty
 from django.utils.html import format_html
@@ -21,15 +21,14 @@ from pretix.base.wallet.platforms import (
 
 from .google_wallet import BaseGoogleWalletObject, ButtonJWT, Comms
 from .models import GoogleWalletInstance
-import base64
 
 
 def _get_instance_uuid():
     gs = GlobalSettingsObject()
-    if not gs.settings.wallet_google_instance_uuid:
-        gs.settings.wallet_google_instance_uuid = str(uuid.uuid4())
+    if not gs.settings.update_check_id:
+        gs.settings.set('update_check_id', uuid.uuid4().hex)
 
-    return gs.settings.wallet_google_instance_uuid
+    return gs.settings.update_check_id
 
 
 def get_class_id(event: Event, op: OrderPosition):
@@ -46,7 +45,6 @@ def get_class_id(event: Event, op: OrderPosition):
 
 
 def get_object_id(op: OrderPosition):
-    # instance_uuid = _get_instance_uuid()
     issuer_id = op.order.event.settings.wallet_google_issuer_id
     event = op.order.event
     organizer = event.organizer
@@ -61,28 +59,9 @@ def get_object_id(op: OrderPosition):
     return f"{issuer_id}.pretix-{organizer.slug}-{event.slug}-{op_secret}"
 
 
-def get_translated_dict(string, locales):
-    translated = {}
-
-    for locale in locales:
-        translation.activate(locale)
-        translated[locale] = _(string)
-        translation.deactivate()
-
-    return translated
-
-
-def get_translated_string(string, locale):
-    translation.activate(locale)
-    translated = _(string)
-    translation.deactivate()
-
-    return translated
-
-
-def dedup(list):
+def dedup(objects: list[BaseGoogleWalletObject]):
     new = []
-    for i in list:
+    for i in objects:
         if not any(x.data == i.data for x in new):
             new.append(i)
     return new
@@ -187,7 +166,7 @@ class GooglePlatform(WalletPlatform):
                 origins=[settings.SITE_URL],
                 issuer=self.comms.client_email,
                 payload={"eventTicketObjects": ticket_objects},
-                precreated=True,
+                precreated=False,
             ).serialize()
         )
 

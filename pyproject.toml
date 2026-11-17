@@ -60,7 +60,7 @@ dependencies = [
   "djangorestframework>=3.18.3",
   "drf_ujson2==1.7.*",
   "geoip2==5.*",
-  "google-auth=2.62.*",
+  "google-auth==2.62.*",
   "httpx==0.28.*",
   "isoweek",
   "jsonschema",
@@ -84,6 +84,7 @@ dependencies = [
   "pycparser==3.12",
   "pycryptodome==3.24.*",
   "pypdf==6.20.*",
+  "python-bcp47 @ git+https://github.com/pretix/python-bcp47.git@v0.0.1",
   "python-bidi==0.6.*",  # Support for Arabic in reportlab
   "python-dateutil==4.0.*",
   "pytz",

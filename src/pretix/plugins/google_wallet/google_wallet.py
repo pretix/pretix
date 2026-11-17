@@ -6,6 +6,7 @@ import struct
 import time
 from typing import Iterable
 
+import bcp47
 import requests
 from Crypto.Hash import SHA256
 from Crypto.PublicKey import ECC
@@ -101,19 +102,27 @@ def card_row_template_info(fields: Iterable[str]):
         }
 
 
+def ensure_bcp47(locale: str):
+    return bcp47.ParsedLanguage(locale).unparse()
+
+
 def localized_string(
     string: MaybeTranslatedString, locales: set[str], default_locale: str
 ):
+
     if isinstance(string, str):
         return {
             "defaultValue": {
-                "language": default_locale,
+                "language": ensure_bcp47(default_locale),
                 "value": string,
             }
         }
     else:
         string_dict = localizable_to_dict(string, locales)
         default_string = string_dict.pop(default_locale)
+        default_locale = ensure_bcp47(default_locale)
+
+        string_dict = {ensure_bcp47(k): v for k, v in string_dict.items()}
 
         return {
             "defaultValue": {
@@ -121,7 +130,7 @@ def localized_string(
                 "value": default_string,
             },
             "translatedValues": [
-                {"language": key, "value": value} for key, value in string_dict.items()
+                {"language": key, "value": value} for key, value in string_dict.items() if key != default_locale
             ],
         }
 
