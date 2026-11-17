@@ -43,7 +43,7 @@ from dateutil.tz import datetime_exists
 from django.core.files import File
 from django.db import IntegrityError
 from django.db.models import (
-    BooleanField, Case, Count, ExpressionWrapper, F, IntegerField, Max, Min,
+    BooleanField, Case, Count, Exists, ExpressionWrapper, F, IntegerField, Max, Min,
     OuterRef, Q, Subquery, TextField, Value, When,
 )
 from django.db.models.functions import Coalesce, TruncDate
@@ -58,7 +58,7 @@ from pretix.base.models import (
     Checkin, CheckinList, Device, Event, Gate, Item, ItemVariation, Order,
     OrderPosition, Questionnaire, QuestionnaireRow, QuestionOption,
 )
-from pretix.base.models.orders import QuestionnaireRenderer
+from pretix.base.models.orders import QuestionAnswer, QuestionnaireRenderer
 from pretix.base.signals import checkin_created, periodic_task
 from pretix.helpers import OF_SELF
 from pretix.helpers.database import conditional_atomic
@@ -949,6 +949,7 @@ def _save_answers(op, existing_answer_objects, given_answers):
 def _get_checkin_questions(op):
     return list(
         QuestionnaireRow.objects.filter(
+            ~Exists(QuestionAnswer.objects.filter(orderposition=op, question=OuterRef('user_datafield'))),
             questionnaire__type=Questionnaire.QuestionnaireType.POSITION_CHECKIN,
             questionnaire__items__in=[op.item_id],
         ).select_related('user_datafield', 'questionnaire')

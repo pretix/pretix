@@ -450,10 +450,14 @@ class AnswerSerializer(I18nAwareModelSerializer):
         elif data.get('question').type == Question.TYPE_FILE:
             return self._handle_file_upload(data)
         elif data.get('question').type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
-            if not data.get('options') and not data.get("option_identifiers") and not self.allow_empty:
-                raise ValidationError(
-                    'You need to specify either options or option_identifiers if the data field is of a choice type.'
-                )
+            if not data.get('options') and not data.get("option_identifiers"):
+                if self.allow_empty:
+                    data['answer'] = None
+                    return data
+                else:
+                    raise ValidationError(
+                        'You need to specify either options or option_identifiers if the data field is of a choice type.'
+                    )
             if 'options' in data and "option_identifiers" in data:
                 raise ValidationError(
                     'You need to specify either options or option_identifiers, not both.'
