@@ -34,12 +34,9 @@
 
 from collections import OrderedDict, namedtuple
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError as BaseValidationError
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-from rest_framework.exceptions import ValidationError
-from rest_framework.settings import api_settings
-from rest_framework.utils import html
 
 from pretix.api.auth.utils import get_session_key_for_api_request
 
@@ -100,7 +97,7 @@ class UploadedFileField(serializers.Field):
                 pass
             elif cf.session_key != get_session_key_for_api_request(request):
                 self.fail('not_found')
-        except (ValidationError, IndexError):  # invalid uuid
+        except (BaseValidationError, IndexError):  # invalid uuid
             self.fail('not_found')
         except CachedFile.DoesNotExist:
             self.fail('not_found')
