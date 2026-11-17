@@ -21,7 +21,6 @@
 #
 from datetime import timedelta
 
-from celery.result import AsyncResult
 from django.conf import settings
 from django.db import transaction
 from django.http import Http404
@@ -49,6 +48,7 @@ from pretix.base.services.export import (
     ExportError, export, init_event_exporters, init_organizer_exporters,
     multiexport,
 )
+from pretix.helpers.celery import get_task_result
 from pretix.helpers.http import ChunkBasedFileResponse
 
 
@@ -91,7 +91,7 @@ class ExportersMixin:
                 status=status.HTTP_410_GONE
             )
 
-        res = AsyncResult(kwargs['asyncid'])
+        res = get_task_result(kwargs['asyncid'], task_name=self.task)
         if res.failed():
             if isinstance(res.info, dict) and res.info['exc_type'] == 'ExportError':
                 msg = res.info['exc_message']
@@ -139,6 +139,7 @@ class ExportersMixin:
 
 class EventExportersViewSet(ExportersMixin, viewsets.ViewSet):
     permission = None
+    task = export
 
     @cached_property
     def exporters(self):
@@ -173,6 +174,7 @@ class EventExportersViewSet(ExportersMixin, viewsets.ViewSet):
 
 class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
     permission = None
+    task = multiexport
 
     @cached_property
     def exporters(self):

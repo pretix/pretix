@@ -21,7 +21,6 @@
 #
 from datetime import timedelta
 
-from celery.result import AsyncResult
 from django.conf import settings
 from django.db import transaction
 from django.db.models import QuerySet
@@ -38,6 +37,7 @@ from rest_framework.reverse import reverse
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
+from pretix.helpers.celery import get_task_result
 
 from ...api.serializers.fields import UploadedFileField
 from ...base.models import CachedFile, OrderPosition, SalesChannel
@@ -257,7 +257,7 @@ class TicketRendererViewSet(viewsets.ViewSet):
                 status=status.HTTP_410_GONE
             )
 
-        res = AsyncResult(kwargs['asyncid'])
+        res = get_task_result(kwargs['asyncid'], task_name=bulk_render)
         if res.failed():
             if isinstance(res.info, dict) and res.info['exc_type'] == 'ExportError':
                 msg = res.info['exc_message']
