@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-	const COOKIE_NAME = '__Host-pretix_csrftoken'
+	const COOKIE_NAME = window.location.protocol === 'https:' ? '__Host-pretix_csrftoken' : 'pretix_csrftoken'
 	const RELOAD_FLAG = 'csrfReloadPerformed'
 	const REASON_PARAM = 'csrf_reload'
 	const CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
