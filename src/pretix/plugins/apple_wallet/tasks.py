@@ -14,7 +14,7 @@ from django_scopes import scopes_disabled
 @scopes_disabled()
 def send_update_apns():
     events_to_push = Event.objects.filter(
-        plugins__icontains="pretix.plugins.wallet"
+        plugins__icontains="pretix.plugins.apple_wallet"
     ).filter(
         Exists(
             AppleWalletDevice.objects.filter(
