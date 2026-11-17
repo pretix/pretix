@@ -156,6 +156,8 @@ class ExportFormDataField(serializers.Field):
                 return JobRunSerializer(exporter=exporter).to_internal_value(data["export_form_data"])
             else:
                 return data['export_form_data']
+        else:  # partial PATCH without export_form_data keeps it unchanged
+            return self.parent.instance.export_form_data
 
 
 class ScheduledExportSerializer(serializers.ModelSerializer):
@@ -187,6 +189,12 @@ class ScheduledExportSerializer(serializers.ModelSerializer):
         if len(d.split(',')) > 25:
             raise ValidationError('Please enter less than 25 recipients.')
         return d
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        if self.instance and self.instance.pk and 'export_identifier' in attrs and self.instance.export_identifier != attrs['export_identifier']:
+            raise ValidationError({"export_identifier": "export_identifier cannot be changed for existing exports."})
+        return attrs
 
 
 class ScheduledEventExportSerializer(ScheduledExportSerializer):

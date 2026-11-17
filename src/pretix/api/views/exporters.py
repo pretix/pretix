@@ -262,6 +262,8 @@ class ScheduledEventExportViewSet(ScheduledExportersViewSet):
             perm_holder = self.request.auth if isinstance(self.request.auth, (TeamAPIToken, Device)) else self.request.user
             if not perm_holder.has_event_permission(self.request.organizer, self.request.event, exporter.get_required_event_permission()):
                 raise PermissionDenied("No permission to edit exports you could not run.")
+            # An additional check for the new config, such as on organizer level, is not necessary. Since the event is
+            # fixed and the export_identifier is read-only, the update cannot include a meaningful change of permissions.
 
         serializer.save(event=self.request.event)
         serializer.instance.compute_next_run()
@@ -332,43 +334,52 @@ class ScheduledOrganizerExportViewSet(ScheduledExportersViewSet):
         ))
         return {e.identifier: e for e in exporters}
 
+    def _check_permission_for_export(self, identifier, form_data):
+        perm_holder = (
+            self.request.auth if isinstance(self.request.auth, (Device, TeamAPIToken)) else self.request.user
+        )
+        exporter = self.exporters.get(identifier)
+        if not exporter:
+            raise PermissionDenied("No access to exporter.")
+        if isinstance(exporter, OrganizerLevelExportMixin):
+            if not perm_holder.has_organizer_permission(
+                self.request.organizer, exporter.get_required_organizer_permission(), request=self.request,
+            ):
+                raise PermissionDenied("No permission to edit exports you could not run.")
+        else:
+            if form_data.get("all_events", False):
+                if isinstance(self.request.auth, Device):
+                    if not self.request.auth.all_events:
+                        raise PermissionDenied("No permission to edit exports you could not run.")
+                elif isinstance(self.request.auth, TeamAPIToken):
+                    if not self.request.auth.team.all_events:
+                        raise PermissionDenied("No permission to edit exports you could not run.")
+                elif self.request.user.is_authenticated:
+                    if not self.request.user.teams.filter(
+                        TeamQuerySet.event_permission_q(exporter.get_required_event_permission()),
+                        all_events=True,
+                    ).exists():
+                        raise PermissionDenied("No permission to edit exports you could not run.")
+            else:
+                events_selected = form_data.get("events", [])
+                events_permission = set(perm_holder.get_events_with_permission(
+                    exporter.get_required_event_permission(), request=self.request
+                ).values_list("pk", flat=True))
+                if not all(e in events_permission for e in events_selected):
+                    raise PermissionDenied("No permission to edit exports you could not run.")
+
     def perform_update(self, serializer):
         if not self.request.user.is_authenticated or self.request.user != serializer.instance.owner:
             # This is to prevent a possible privilege escalation where user A creates a scheduled export and
             # user B has settings permission (= they can see the export configuration), but not enough permission
             # to run the export themselves. Without this check, user B could modify the export and add themselves
             # as a recipient. Thereby, user B would gain access to data they can't have.
-            exporter = self.exporters.get(serializer.instance.export_identifier)
-            if not exporter:
-                raise PermissionDenied("No access to exporter.")
-            perm_holder = (self.request.auth if isinstance(self.request.auth, (Device, TeamAPIToken))
-                           else self.request.user)
-            if isinstance(exporter, OrganizerLevelExportMixin):
-                if not perm_holder.has_organizer_permission(
-                        self.request.organizer, exporter.get_required_organizer_permission(), request=self.request,
-                ):
-                    raise PermissionDenied("No permission to edit exports you could not run.")
-            else:
-                if serializer.instance.export_form_data.get("all_events", False):
-                    if isinstance(self.request.auth, Device):
-                        if not self.request.auth.all_events:
-                            raise PermissionDenied("No permission to edit exports you could not run.")
-                    elif isinstance(self.request.auth, TeamAPIToken):
-                        if not self.request.auth.team.all_events:
-                            raise PermissionDenied("No permission to edit exports you could not run.")
-                    elif self.request.user.is_authenticated:
-                        if not self.request.user.teams.filter(
-                                TeamQuerySet.event_permission_q(exporter.get_required_event_permission()),
-                                all_events=True,
-                        ).exists():
-                            raise PermissionDenied("No permission to edit exports you could not run.")
-                else:
-                    events_selected = serializer.instance.export_form_data.get("events", [])
-                    events_permission = set(perm_holder.get_events_with_permission(
-                        exporter.get_required_event_permission(), request=self.request
-                    ).values_list("pk", flat=True))
-                    if not all(e in events_permission for e in events_selected):
-                        raise PermissionDenied("No permission to edit exports you could not run.")
+            self._check_permission_for_export(serializer.instance.export_identifier, serializer.instance.export_form_data)
+            # After we checked that the API user can work with the original export, we also need to check that they can
+            # work with the changed export, otherwise they could change e.g. from "some events" to "all events" and add
+            # themselves as a recipient.
+            if serializer.validated_data.get('export_form_data') is not None:
+                self._check_permission_for_export(serializer.instance.export_identifier, serializer.validated_data['export_form_data'])
 
         serializer.save(organizer=self.request.organizer)
         serializer.instance.compute_next_run()
