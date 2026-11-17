@@ -130,8 +130,8 @@ use_gift_cards                        list of strings            List of unique 
 answers                               list of objects            **NEW** Values of data fields (answers to user-defined questions)
 ├ datafield                           string                     The data field's ``identifier`` (internal reference)
 ├ answer                              string                     Text representation of the answer
-├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
-└ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
+├ options                             list of integers           Internal IDs of selected option(s) (only for choice types)
+└ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s) (only for choice types)
 ===================================== ========================== =======================================================
 
 
@@ -177,7 +177,7 @@ answers                               list of objects            **NEW** Values 
 
 .. versionchanged:: 2027.1
 
-   The ``answers`` attribute has been added.
+   The ``answers`` attribute has been added to the order resource.
 
 .. _order-position-resource:
 
@@ -251,8 +251,8 @@ downloads                             list of objects            List of ticket 
 answers                               list of objects            Values of data fields (answers to user-defined questions)
 ├ datafield                           string                     **NEW** The data field's ``identifier`` (internal reference)
 ├ answer                              string                     Text representation of the answer
-├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
-├ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
+├ options                             list of integers           Internal IDs of selected option(s) (only for choice types)
+├ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s) (only for choice types)
 ├ question                            integer                    **Deprecated.** Internal ID of the data field
 └ question_identifier                 string                     **Read-only, deprecated.** The data field's ``identifier`` (internal reference)
 seat                                  objects                    The assigned seat. Can be ``null``.
@@ -281,6 +281,11 @@ plugin_data                           object                     Additional data
 .. versionchanged:: 2025.2
 
    The ``plugin_data`` attribute has been added.
+
+.. versionchanged:: 2027.1
+
+   Attributes of the objects in the ``answers`` attribute have been updated: ``datafield`` was added, ``question`` and
+   ``question_identifier`` was deprecated. ``option_identifiers`` was changed from read-only to read-write.
 
 .. _order-payment-resource:
 
@@ -2022,8 +2027,10 @@ Manipulating individual positions
 
    * ``answers``: If specified, you will need to provide **all** answers for this order position.
      Validation is handled the same way as when creating orders through the API. You are therefore
-     expected to provide ``datafield``, ``answer``, and possibly ``options``. ``question`` is deprecated. ``question_identifier``
-     and ``option_identifiers`` will be ignored. As a special case, you can submit the magic value
+     expected to provide ``datafield``, ``answer`` (and possibly ``options`` or ``option_identifiers``).
+     For choice fields, exactly one of ``options`` or ``option_identifiers`` must be provided, containing either
+     internal ``id`` or the assigned ``identifier`` of the selected option(s).
+     ``question`` is deprecated. ``question_identifier`` will be ignored. As a special case, you can submit the magic value
      ``"file:keep"`` as the answer to a file question to keep the current value without re-uploading it.
 
    * ``item``
@@ -2117,10 +2124,12 @@ Manipulating individual positions
 
    * ``state``
 
-   * ``answers``: Validation is handled the same way as when creating orders through the API. You are therefore
-     expected to provide ``datafield``, ``answer``, and possibly ``options``. ``question`` is deprecated. ``question_identifier``
-     and ``option_identifiers`` will be ignored. As a special case, you can submit the magic value
-     ``"file:keep"`` as the answer to a file question to keep the current value without re-uploading it.
+   * ``answers``: If specified, you will need to provide **all** answers for this order position.
+     Validation is handled the same way as when creating orders through the API. You are therefore
+     expected to provide ``datafield``, ``answer`` (and possibly ``options`` or ``option_identifiers``).
+     For choice fields, exactly one of ``options`` or ``option_identifiers`` must be provided, containing either
+     internal ``id`` or the assigned ``identifier`` of the selected option(s).
+     ``question`` is deprecated. ``question_identifier`` will be ignored.
 
    * ``valid_from``
 
