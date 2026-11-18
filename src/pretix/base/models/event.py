@@ -940,7 +940,7 @@ class Event(EventMixin, LoggedModel):
                 )
             )
 
-        sales_channel_map = {s.identifier: s for s in self.organizer.sales_channels.all()}
+        sales_channel_map = defaultdict(lambda: None, {s.identifier: s for s in self.organizer.sales_channels.all()})
 
         if not skip_meta_data:
             for emv in EventMetaValue.objects.filter(event=other):
