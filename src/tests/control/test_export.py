@@ -46,10 +46,8 @@ def env():
     t.members.add(user)
     t.limit_events.add(event)
 
-    Item.objects.create(
-        event=event, name="Early-bird ticket", category=None, default_price=23,
-        admission=True, personalized=True
-    )
+    item = event.items.create(name="Early-bird ticket", category=None, default_price=23, admission=True)
+    event.get_default_questionnaire().items.add(item)
     return event, user, t
 
 

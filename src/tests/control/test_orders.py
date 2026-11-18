@@ -82,8 +82,8 @@ def env():
     )
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                  category=None, default_price=23,
-                                 admission=True, personalized=True)
-    event.settings.set('attendee_names_asked', True)
+                                 admission=True)
+    event.get_default_questionnaire().items.add(ticket)
     event.settings.set('locales', ['en', 'de'])
     OrderPosition.objects.create(
         order=o,
@@ -109,7 +109,8 @@ def test_order_list(client, env):
     with scopes_disabled():
         otherticket = Item.objects.create(event=env[0], name='Early-bird ticket',
                                           category=None, default_price=23,
-                                          admission=True, personalized=True)
+                                          admission=True)
+        env[0].get_default_questionnaire().items.add(otherticket)
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/')
     assert o.code in response.content.decode()
@@ -149,8 +150,7 @@ def test_order_list(client, env):
     assert o.code in response.content.decode()
 
     with scopes_disabled():
-        q = Question.objects.create(event=env[0], question="Q", type="N", required=True)
-        q.items.add(env[3])
+        q = Question.objects.create(event=env[0], internal_name="Q", type="N")
         op = env[2].positions.first()
         qa = QuestionAnswer.objects.create(question=q, orderposition=op, answer="12")
     response = client.get('/control/event/dummy/dummy/orders/?question=%d&answer=12' % q.pk)
@@ -1497,7 +1497,7 @@ class OrderChangeTests(SoupTest):
             mtype = self.event.organizer.membership_types.create(name='Week pass', transferable=True, allow_parallel_usage=True)
             self.ticket.require_membership = True
             self.ticket.require_membership_types.add(mtype)
-            self.ticket.personalized = True
+            self.event.get_default_questionnaire().items.add(self.ticket)
             self.ticket.save()
             customer = self.event.organizer.customers.create(email='john@example.org', is_verified=True)
             self.order.customer = customer
@@ -2414,7 +2414,8 @@ def test_refund_paid_order_offsetting_to_wrong_currency(client, env):
         )
         ticket2 = Item.objects.create(event=event2, name='Early-bird ticket',
                                       category=None, default_price=23,
-                                      admission=True, personalized=True)
+                                      admission=True)
+        event2.get_default_questionnaire().items.add(ticket2)
         o = Order.objects.create(
             code='BAZ', event=event2, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
@@ -2455,7 +2456,8 @@ def test_refund_paid_order_offsetting_to_wrong_permissions(client, env):
         )
         ticket2 = Item.objects.create(event=event2, name='Early-bird ticket',
                                       category=None, default_price=23,
-                                      admission=True, personalized=True)
+                                      admission=True)
+        event2.get_default_questionnaire().items.add(ticket2)
         o = Order.objects.create(
             code='BAZ', event=event2, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,

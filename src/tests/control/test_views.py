@@ -92,7 +92,7 @@ def order(item):
 
 @pytest.fixture
 def question(event):
-    return Question.objects.create(event=event, question="What is your shoe size?", type="N", required=True)
+    return Question.objects.create(event=event, internal_name="What is your shoe size?", type="N")
 
 
 @pytest.fixture

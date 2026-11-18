@@ -61,8 +61,8 @@ def env():
     t.limit_events.add(event)
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                  category=None, default_price=23,
-                                 admission=True, personalized=True)
-    event.settings.set('attendee_names_asked', True)
+                                 admission=True)
+    event.get_default_questionnaire().items.add(ticket)
     event.settings.set('locales', ['en', 'de'])
     return event, user, ticket
 

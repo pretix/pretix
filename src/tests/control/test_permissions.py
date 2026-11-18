@@ -349,7 +349,6 @@ event_permission_urls = [
     (None, "questions/", 200, HTTP_GET),
     (None, "questions/2/", 404, HTTP_GET),
     ("event.items:write", "questions/2/delete", 404, HTTP_GET),
-    ("event.items:write", "questions/reorder", 400, HTTP_POST),
     ("event.items:write", "questions/add", 200, HTTP_GET),
     (None, "quotas/", 200, HTTP_GET),
     ("event.items:write", "quotas/2/change", 404, HTTP_GET),

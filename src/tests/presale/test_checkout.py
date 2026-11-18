@@ -48,7 +48,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.customers import CustomerSSOProvider
 from pretix.base.models.items import (
-    ItemAddOn, ItemBundle, ItemVariation, SubEventItem, SubEventItemVariation,
+    ItemAddOn, ItemBundle, ItemVariation, Questionnaire, QuestionnaireRow, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.cart import CartManager
 from pretix.base.services.orders import OrderError, _perform_order
@@ -76,7 +76,8 @@ class BaseCheckoutTestCase:
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=5)
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                           category=self.category, default_price=23, admission=True,
-                                          personalized=True, tax_rule=self.tr19)
+                                          tax_rule=self.tr19)
+        self.event.get_default_questionnaire().items.add(self.ticket)
         self.quota_tickets.items.add(self.ticket)
         self.event.settings.set('timezone', 'UTC')
         self.event.settings.set('attendee_names_asked', False)
@@ -1080,8 +1081,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             assert o.phone == '+49622199999'
 
     def test_attendee_email_required(self):
-        self.event.settings.set('attendee_emails_asked', True)
-        self.event.settings.set('attendee_emails_required', True)
+        self.event.get_default_questionnaire().rows.create(system_datafield=QuestionnaireRow.SystemDatafield.ATTENDEE_EMAIL, required=True)
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -1114,8 +1114,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.assertEqual(cr1.attendee_email, 'foo@localhost')
 
     def test_attendee_company_required(self):
-        self.event.settings.set('attendee_company_asked', True)
-        self.event.settings.set('attendee_company_required', True)
+        self.event.get_default_questionnaire().rows.create(system_datafield=QuestionnaireRow.SystemDatafield.COMPANY, required=True)
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -1148,8 +1147,12 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.assertEqual(cr1.company, 'foobar')
 
     def test_attendee_address_required(self):
-        self.event.settings.set('attendee_addresses_asked', True)
-        self.event.settings.set('attendee_addresses_required', True)
+        qaire = self.event.get_default_questionnaire()
+        qaire.rows.create(system_datafield=QuestionnaireRow.SystemDatafield.STREET, required=True)
+        qaire.rows.create(system_datafield=QuestionnaireRow.SystemDatafield.ZIPCODE, required=True)
+        qaire.rows.create(system_datafield=QuestionnaireRow.SystemDatafield.CITY, required=True)
+        qaire.rows.create(system_datafield=QuestionnaireRow.SystemDatafield.STATE, required=True)
+        qaire.rows.create(system_datafield=QuestionnaireRow.SystemDatafield.COUNTRY, required=True)
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -1192,8 +1195,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.assertEqual(cr1.country, 'DE')
 
     def test_attendee_name_required(self):
-        self.event.settings.set('attendee_names_asked', True)
-        self.event.settings.set('attendee_names_required', True)
+        self.event.get_default_questionnaire().rows.get().update(required=True)
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -1226,10 +1228,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.assertEqual(cr1.attendee_name, 'Peter')
 
     def test_attendee_name_not_required_if_ticket_unpersonalized(self):
-        self.event.settings.set('attendee_names_asked', True)
-        self.event.settings.set('attendee_names_required', True)
-        self.ticket.personalized = False
-        self.ticket.save()
+        self.event.get_default_questionnaire().rows.get().update(required=True)
+        self.event.get_default_questionnaire().items.clear()
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -2544,11 +2544,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         cr1.attendee_name_parts = {"full_name": 'Peter', "_scheme": "full"}
         cr1.save()
         with scopes_disabled():
-            q1 = Question.objects.create(
-                event=self.event, question='Age', type=Question.TYPE_NUMBER,
-                required=True
-            )
-        self.ticket.questions.add(q1)
+            q1 = Question.objects.create(event=self.event, question='Age', type=Question.TYPE_NUMBER)
+            qaire = self.ticket.questionnaires.create(event=self.event, internal_name='Questions', type=Questionnaire.QuestionnaireType.POSITION_PURCHASE)
+            qaire.rows.add(user_datafield=q1, required=True, label='Age')
 
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),

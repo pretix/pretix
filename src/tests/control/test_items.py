@@ -41,7 +41,7 @@ from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import (
     Discount, Event, Item, ItemCategory, ItemVariation, Order, OrderPosition,
-    Organizer, Question, Quota, Team, User,
+    Organizer, Question, Questionnaire, Quota, Team, User,
 )
 
 
@@ -139,7 +139,7 @@ class DatafieldsTest(ItemFormTest):
     def test_create(self):
         doc = self.get_doc('/control/event/%s/%s/questions/add' % (self.orga1.slug, self.event1.slug))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
-        form_data['question_0'] = 'What is your shoe size?'
+        form_data['internal_name'] = 'What is your shoe size?'
         form_data['type'] = 'N'
         doc = self.post_doc('/control/event/%s/%s/questions/add' % (self.orga1.slug, self.event1.slug), form_data)
         assert doc.select(".alert-success")
@@ -147,7 +147,7 @@ class DatafieldsTest(ItemFormTest):
 
     def test_update_choices(self):
         with scopes_disabled():
-            c = Question.objects.create(event=self.event1, question="What country are you from?", type="C", required=True)
+            c = Question.objects.create(event=self.event1, internal_name="What country are you from?", type="C")  # was required=True
             o1 = c.options.create(answer='Germany')
         doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, c.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
@@ -166,7 +166,7 @@ class DatafieldsTest(ItemFormTest):
 
     def test_delete_choices(self):
         with scopes_disabled():
-            c = Question.objects.create(event=self.event1, question="What country are you from?", type="C", required=True)
+            c = Question.objects.create(event=self.event1, internal_name="What country are you from?", type="C")  # was required=True
             o1 = c.options.create(answer='Germany')
         doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, c.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
@@ -185,7 +185,7 @@ class DatafieldsTest(ItemFormTest):
 
     def test_add_choices(self):
         with scopes_disabled():
-            c = Question.objects.create(event=self.event1, question="What country are you from?", type="N", required=True)
+            c = Question.objects.create(event=self.event1, internal_name="What country are you from?", type="N")  # was required=True
         doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, c.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         form_data['type'] = 'C'
@@ -204,22 +204,23 @@ class DatafieldsTest(ItemFormTest):
 
     def test_update(self):
         with scopes_disabled():
-            c = Question.objects.create(event=self.event1, question="What is your shoe size?", type="N", required=True)
+            c = Question.objects.create(event=self.event1, internal_name="What is your shoe size?", type="N", show_during_checkin=True)  # was required=True
         doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, c.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
-        form_data['question_0'] = 'How old are you?'
+        form_data['internal_name'] = 'How old are you?'
         doc = self.post_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, c.id),
                             form_data)
         self.assertIn("How old", doc.select("#page-wrapper table")[0].text)
         self.assertNotIn("shoe size", doc.select("#page-wrapper table")[0].text)
         with scopes_disabled():
             c = Question.objects.get(id=c.id)
-            self.assertTrue(c.required)
-            assert str(Question.objects.get(id=c.id).question) == 'How old are you?'
+            self.assertTrue(c.show_during_checkin)
+            self.assertFalse(c.print_on_invoice)
+            assert str(Question.objects.get(id=c.id).internal_name) == 'How old are you?'
 
     def test_delete(self):
         with scopes_disabled():
-            c = Question.objects.create(event=self.event1, question="What is your shoe size?", type="N", required=True)
+            c = Question.objects.create(event=self.event1, internal_name="What is your shoe size?", type="N")  # was required=True
         doc = self.get_doc('/control/event/%s/%s/questions/%s/delete' % (self.orga1.slug, self.event1.slug, c.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         doc = self.post_doc('/control/event/%s/%s/questions/%s/delete' % (self.orga1.slug, self.event1.slug, c.id),
@@ -231,7 +232,7 @@ class DatafieldsTest(ItemFormTest):
 
     def test_question_view(self):
         with scopes_disabled():
-            c = Question.objects.create(event=self.event1, question="What is your shoe size?", type="N", required=True)
+            c = Question.objects.create(event=self.event1, internal_name="What is your shoe size?", type="N")  # was required=True
 
             item1 = Item.objects.create(event=self.event1, name="Standard", default_price=0, position=1)
             o = Order.objects.create(code='FOO', event=self.event1, email='dummy@dummy.test',
@@ -275,8 +276,8 @@ class DatafieldsTest(ItemFormTest):
 
     def test_set_dependency(self):
         with scopes_disabled():
-            q1 = Question.objects.create(event=self.event1, question="What country are you from?", type="C", required=True)
-            q2 = Question.objects.create(event=self.event1, question="What city are you from?", type="T", required=True)
+            q1 = Question.objects.create(event=self.event1, internal_name="What country are you from?", type="C")  # was required=True
+            q2 = Question.objects.create(event=self.event1, internal_name="What city are you from?", type="T")  # was required=True
             o1 = q1.options.create(answer='Germany')
         doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q2.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
@@ -292,9 +293,9 @@ class DatafieldsTest(ItemFormTest):
 
     def test_set_dependency_circular(self):
         with scopes_disabled():
-            q1 = Question.objects.create(event=self.event1, question="What country are you from?", type="C", required=True)
+            q1 = Question.objects.create(event=self.event1, internal_name="What country are you from?", type="C")  # was required=True
             o1 = q1.options.create(answer='Germany')
-            q2 = Question.objects.create(event=self.event1, question="What city are you from?", type="C", required=True,
+            q2 = Question.objects.create(event=self.event1, internal_name="What city are you from?", type="C",  # was required=True
                                          dependency_question=q1, dependency_values=[o1.identifier])
         doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q1.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
@@ -306,8 +307,8 @@ class DatafieldsTest(ItemFormTest):
 
     def test_set_dependency_to_non_choice(self):
         with scopes_disabled():
-            q1 = Question.objects.create(event=self.event1, question="What country are you from?", type="N", required=True)
-            q2 = Question.objects.create(event=self.event1, question="What city are you from?", type="T", required=True)
+            q1 = Question.objects.create(event=self.event1, internal_name="What country are you from?", type="N")  # was required=True
+            q2 = Question.objects.create(event=self.event1, internal_name="What city are you from?", type="T")  # was required=True
         doc = self.get_doc('/control/event/%s/%s/questions/%s/change' % (self.orga1.slug, self.event1.slug, q2.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         form_data['dependency_question'] = q1.pk
@@ -674,8 +675,8 @@ class ItemsTest(ItemFormTest):
 
     def test_create_copy(self):
         with scopes_disabled():
-            q = Question.objects.create(event=self.event1, question="Size", type="N")
-            q.items.add(self.item2)
+            qaire = Questionnaire.objects.create(event=self.event1, internal_name="My questions", type=Questionnaire.QuestionnaireType.POSITION_PURCHASE)
+            qaire.items.add(self.item2)
             self.item2.limit_sales_channels.set(self.orga1.sales_channels.filter(identifier__in=["web", "bar"]))
             self.item2.all_sales_channels = False
             self.item2.save()
@@ -715,7 +716,7 @@ class ItemsTest(ItemFormTest):
             assert set(i_new.limit_sales_channels.values_list("identifier", flat=True)) == {"web", "bar"}
             assert set(v2_new.limit_sales_channels.values_list("identifier", flat=True)) == {"web"}
             assert i_new.meta_data == i_old.meta_data == {"Foo": "Bar"}
-            assert set(i_new.questions.all()) == set(i_old.questions.all())
+            assert set(i_new.questionnaires.all()) == set(i_old.questionnaires.all())
             assert set([str(v.value) for v in i_new.variations.all()]) == set([str(v.value) for v in i_old.variations.all()])
             assert i_old.program_times.first().start == i_new.program_times.first().start
             assert i_old.program_times.first().end == i_new.program_times.first().end

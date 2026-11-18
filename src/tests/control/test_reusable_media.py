@@ -115,7 +115,8 @@ def test_typeahead(organizer, admin_user, client, gift_card):
             total=14, locale='en',
             sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
-        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True, personalized=True)
+        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True)
+        event.get_default_questionnaire().items.add(ticket)
         op = o.positions.create(item=ticket, price=Decimal("14"))
 
         team = organizer.teams.get()

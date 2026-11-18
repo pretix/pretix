@@ -77,11 +77,10 @@ class BaseOrdersTest(TestCase):
         self.quota_shirts.variations.add(self.shirt_red)
         self.quota_shirts.variations.add(self.shirt_blue)
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=5)
-        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
-                                          category=self.category, default_price=23,
-                                          admission=True, personalized=True)
+        self.ticket = self.event.items.create(name='Early-bird ticket', category=self.category, default_price=23,
+                                              admission=True)
+        self.event.get_default_questionnaire().items.add(self.ticket)
         self.quota_tickets.items.add(self.ticket)
-        self.event.settings.set('attendee_names_asked', True)
         self.question = Question.objects.create(internal_name='Foo', type=Question.TYPE_STRING, event=self.event,
                                                 required=False)
         self.ticket.questions.add(self.question)
