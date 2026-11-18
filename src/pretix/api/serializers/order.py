@@ -360,6 +360,7 @@ class MixedAnswerListSerializer(ListSerializer):
         result = {}
         if 'answers' in data:
             answers = super().to_internal_value(data['answers'])
+            result['answers'] = []
             for answer in answers:
                 if type(answer) is tuple:
                     k, v = answer
@@ -368,7 +369,7 @@ class MixedAnswerListSerializer(ListSerializer):
                     else:
                         result[k] = v
                 else:
-                    result.setdefault('answers', []).append(answer)
+                    result['answers'].append(answer)
         return result
 
 
