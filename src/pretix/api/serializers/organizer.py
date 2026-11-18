@@ -45,6 +45,7 @@ from pretix.base.models import (
     Membership, MembershipType, OrderPosition, Organizer, ReusableMedium,
     SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
+from pretix.base.models.devices import Gate
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.permissions import (
     get_all_event_permission_groups, get_all_organizer_permission_groups,
@@ -475,6 +476,15 @@ class DeviceSerializer(serializers.ModelSerializer):
         self.fields['security_profile'].choices = [(k, v.verbose_name) for k, v in get_all_security_profiles().items()]
         if not self.context['can_see_tokens']:
             del self.fields['initialization_token']
+
+
+class GateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=190)
+    identifier = serializers.CharField(max_length=190, required=False)
+
+    class Meta:
+        model = Gate
+        fields = ('id', 'name', 'identifier')
 
 
 class TeamInviteSerializer(serializers.ModelSerializer):
