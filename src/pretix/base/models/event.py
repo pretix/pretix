@@ -911,7 +911,8 @@ class Event(EventMixin, LoggedModel):
         from ..signals import event_copy_data
         from . import (
             Discount, Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue,
-            ItemProgramTime, ItemVariationMetaValue, Question, Quota,
+            ItemProgramTime, ItemVariationMetaValue, Question, Questionnaire,
+            QuestionnaireRow, Quota,
         )
 
         is_cross_organizer = other.organizer_id != self.organizer_id
@@ -939,6 +940,8 @@ class Event(EventMixin, LoggedModel):
                     identifier__in=other.limit_sales_channels.values_list("identifier", flat=True)
                 )
             )
+
+        sales_channel_map = {s.identifier: s for s in self.organizer.sales_channels.all()}
 
         if not skip_meta_data:
             for emv in EventMetaValue.objects.filter(event=other):
@@ -1111,12 +1114,17 @@ class Event(EventMixin, LoggedModel):
             if not d.all_sales_channels:
                 d.limit_sales_channels.set(self.organizer.sales_channels.filter(identifier__in=[s.identifier for s in limit_sales_channels]))
 
-        question_map = copy_objects(Question.objects.filter(event=other).prefetch_related('items', 'options'),
-                        parent=('event', self), child_relations=('options',), mapped_relations=[('items', item_map)])
+        question_map = copy_objects(
+            Question.objects.filter(event=other).prefetch_related('options'),
+            parent=('event', self), child_relations=('options',))
 
-        for q in self.questions.filter(dependency_question__isnull=False):
-            q.dependency_question = question_map[q.dependency_question_id]
-            q.save(update_fields=['dependency_question'])
+        questionnaire_map = copy_objects(
+            Questionnaire.objects.filter(event=other).prefetch_related('items', 'limit_sales_channels'),
+            parent=('event', self), mapped_relations=[('items', 'pk', item_map), ('limit_sales_channels', 'identifier', sales_channel_map)])
+
+        copy_objects(
+            QuestionnaireRow.objects.filter(questionnaire__event=other).prefetch_related('user_datafield'),
+            mapped_relations=[('questionnaire', 'pk', questionnaire_map), ('user_datafield', 'pk', question_map), ('dependency_question', 'pk', 'SELF')])
 
         def _walk_rules(rules):
             if isinstance(rules, dict):
