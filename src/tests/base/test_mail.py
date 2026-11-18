@@ -733,7 +733,7 @@ def test_mail_encoding(env, mailoutbox):
     assert m.status == OutgoingMail.STATUS_SENT
 
     assert len(mailoutbox) == 1
-    mail_plain = mailoutbox[0].message().as_string()
+    headers, mail_plain = mailoutbox[0].message().as_string().split('\n\n', 1)
 
     assert "ä" not in mail_plain
     assert "Ä" not in mail_plain
