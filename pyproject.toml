@@ -123,6 +123,7 @@ dev = [
   "pytest-sugar",
   "pytest-xdist==3.8.*",
   "pytest-playwright",
+  "pytest-base-url",
   "pytest==9.2.*",
   "playwright",
   "responses",
