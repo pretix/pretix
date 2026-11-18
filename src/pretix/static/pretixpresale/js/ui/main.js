@@ -54,6 +54,8 @@ let form_handlers = function (el) {
 		if ($(this).is('[data-min]')) {
 			opts['minDate'] = $(this).attr('data-min')
 			opts['viewDate'] = $(this).attr('data-min')
+		} else {
+			opts['minDate'] = '1900-01-01'
 		}
 		if ($(this).is('[data-max]')) {
 			opts['maxDate'] = $(this).attr('data-max')
