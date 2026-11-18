@@ -30,21 +30,16 @@ from urllib.parse import quote
 import jwt
 import pytest
 from bs4 import BeautifulSoup
-from Crypto.PublicKey import RSA
 from cryptography.hazmat.primitives.asymmetric.rsa import (
     RSAPublicKey, RSAPublicNumbers,
 )
-from cryptography.hazmat.primitives.serialization import (
-    Encoding, PublicFormat, load_pem_public_key,
-)
+from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from freezegun import freeze_time
 from tests.base import extract_form_fields
 
-from pretix.base.customersso.oidc import (
-    _get_or_create_server_keypair, _hash_scheme,
-)
+from pretix.base.customersso.oidc import _hash_scheme
 from pretix.base.models import Event, Organizer
 from pretix.base.models.customers import (
     CustomerSSOAccessToken, CustomerSSOClient,
@@ -707,17 +702,3 @@ def test_keys_endpoint(env, client, ssoclient):
     ).decode()
 
     assert representation.strip() == env[0].settings.sso_server_signing_key_rsa256_public.strip()
-
-
-@pytest.mark.django_db
-def test_library(env):
-    _, pubkey = _get_or_create_server_keypair(env[0])
-
-    # pycryptodome
-    cryptodome_res = RSA.import_key(pubkey)
-
-    cryptography_res = load_pem_public_key(pubkey.encode())
-    assert isinstance(cryptography_res, RSAPublicKey)
-
-    assert cryptodome_res.e == cryptography_res.public_numbers().e
-    assert cryptodome_res.n == cryptography_res.public_numbers().n
