@@ -1146,21 +1146,23 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
-class AnswerDownload(EventViewMixin, OrderDetailMixin, View):
+class AnswerDownload(EventViewMixin, View):
     def get(self, request, *args, **kwargs):
         answid = kwargs.get('answer')
         token = request.GET.get('token', '')
 
-        answer = get_object_or_404(QuestionAnswer, orderposition__order=self.order, id=answid)
-        if not answer.file:
-            raise Http404()
-        if not check_token(request, answer, token):
+        answer = get_object_or_404(
+            QuestionAnswer,
+            Q(orderposition__order__event=self.request.event),
+            id=answid,
+        )
+        if not answer.file or not check_token(request, answer, token):
             raise Http404(_("This link is no longer valid. Please go back, refresh the page, and try again."))
 
         ftype, ignored = mimetypes.guess_type(answer.file.name)
         resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
         resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
-            self.request.event.slug.upper(), self.order.code,
+            self.request.event.slug.upper(), answer.orderposition.order.code,
             answer.orderposition.positionid,
             os.path.basename(answer.file.name).split('.', 1)[1]
         )

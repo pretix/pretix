@@ -570,13 +570,11 @@
                                                 class="btn btn-xs btn-default">
                                             <span class="fa fa-qrcode"></span> {% trans "Ticket code" %}
                                         </button>
-                                        {% if not line.addon_to %}
-                                            <a href="{% eventurl request.event "presale:event.order.position" order=order.code secret=line.web_secret position=line.positionid %}"
-                                                    class="btn btn-xs btn-default" target="_blank">
-                                                <span class="fa fa-eye"></span>
-                                                {% trans "Ticket page" %}
-                                            </a>
-                                        {% endif %}
+                                        <a href="{% eventurl request.event "presale:event.order.position" order=order.code secret=line.web_secret position=line.positionid %}"
+                                                class="btn btn-xs btn-default" target="_blank">
+                                            <span class="fa fa-eye"></span>
+                                            {% trans "Ticket page" %}
+                                        </a>
                                         {% eventsignal event "pretix.control.signals.order_position_buttons" order=order position=line request=request %}
                                     </div>
                                 {% endif %}
@@ -667,7 +665,7 @@
                                                 {% if q.answer %}
                                                     {% if q.answer.file %}
                                                         <span class="fa fa-file"></span>
-                                                        <a href="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}">
+                                                        <a href="{% answer_url request q.answer %}">
                                                             {{ q.answer.file_name }}
                                                         </a>
                                                         <span class="label label-danger" data-toggle="tooltip"
@@ -676,9 +674,9 @@
                                                         </span>
                                                         {% if q.answer.is_image %}
                                                             <br>
-                                                            <a href="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}" data-lightbox="order"
+                                                            <a href="{% answer_url request q.answer %}" data-lightbox="order"
                                                                 class="answer-thumb">
-                                                                <img src="{{ q.answer.backend_file_url }}?token={% answer_token request q.answer %}">
+                                                                <img src="{% answer_url request q.answer %}">
                                                             </a>
                                                         {% endif %}
                                                     {% elif q.type == "M" %}

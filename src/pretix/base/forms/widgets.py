@@ -174,19 +174,13 @@ class UploadedFileWidget(forms.ClearableFileInput):
 
         @property
         def url(self):
-            from pretix.base.models import OrderPosition
-            from pretix.multidomain.urlreverse import eventreverse
+            from pretix.base.templatetags.safelink import answer_url, get_token
 
-            if isinstance(self.position, OrderPosition):
-                return eventreverse(self.event, 'presale:event.order.download.answer', kwargs={
-                    'order': self.position.order.code,
-                    'secret': self.position.order.secret,
-                    'answer': self.answer.pk,
-                })
+            token = get_token(self.request, self.answer)
+            if self.request.resolver_match.namespace == 'control':
+                return self.answer.backend_file_url + '?token=' + token
             else:
-                return eventreverse(self.event, 'presale:event.cart.download.answer', kwargs={
-                    'answer': self.answer.pk,
-                })
+                return answer_url(self.request, self.answer)
 
     def get_context(self, name, value, attrs):
         # Browsers can't recognize that the server already has a file uploaded

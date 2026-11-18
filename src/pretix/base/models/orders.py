@@ -1366,25 +1366,6 @@ class QuestionAnswer(models.Model):
         return ""
 
     @property
-    def frontend_file_url(self):
-        from pretix.multidomain.urlreverse import eventreverse
-
-        if self.file:
-            if self.orderposition:
-                url = eventreverse(self.orderposition.order.event, 'presale:event.order.download.answer', kwargs={
-                    'order': self.orderposition.order.code,
-                    'secret': self.orderposition.order.secret,
-                    'answer': self.pk,
-                })
-            else:
-                url = eventreverse(self.cartposition.event, 'presale:event.cart.download.answer', kwargs={
-                    'answer': self.pk,
-                })
-
-            return url
-        return ""
-
-    @property
     def is_image(self):
         return any(self.file.name.lower().endswith(e) for e in settings.FILE_UPLOAD_EXTENSIONS_QUESTION_IMAGE)
 

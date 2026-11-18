@@ -22,6 +22,7 @@
 from django import template
 
 from pretix.helpers.safedownload import get_token
+from pretix.multidomain.urlreverse import eventreverse
 
 from ..views.redirect import safelink as sl
 
@@ -36,3 +37,19 @@ def safelink(url):
 @register.simple_tag
 def answer_token(request, answer):
     return get_token(request, answer)
+
+
+@register.simple_tag
+def answer_url(request, answer):
+    if answer.file:
+        if answer.orderposition:
+            url = eventreverse(answer.orderposition.order.event, 'presale:event.download.answer', kwargs={
+                'answer': answer.pk,
+            })
+        else:
+            url = eventreverse(request.event, 'presale:event.cart.download.answer', kwargs={
+                'answer': answer.pk,
+            })
+
+        return url + "?token=" + get_token(request, answer)
+    return ""
