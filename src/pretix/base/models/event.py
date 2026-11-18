@@ -738,9 +738,20 @@ class Event(EventMixin, LoggedModel):
         self.settings.mail_send_order_approved_attendee = True
         self.settings.mail_send_order_approved_free_attendee = True
         self.settings.mail_send_download_reminder_attendee = True
+        self.get_default_questionnaire()
+
+    def get_default_questionnaire(self):
         from . import Questionnaire, QuestionnaireRow
-        q = self.questionnaires.create(internal_name=str(_('Attendee data')), type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, position=0, compat_personalization=True)
-        q.rows.create(label=str(_('Attendee name')), system_datafield=QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS, position=0)
+        questionnaire, created = self.request.event.questionnaires.get_or_create(compat_personalization=True, defaults={
+            'position': 0, 'internal_name': str(_('Attendee data')),
+            'type': Questionnaire.QuestionnaireType.POSITION_PURCHASE,
+        })
+        if created:
+            questionnaire.rows.create(
+                position=0, label=str(_('Attendee name')),
+                system_datafield=QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS)
+        return questionnaire
+
 
     @property
     def social_image(self):

@@ -1940,8 +1940,8 @@ class QuickSetupForm(I18nForm):
     )
     attendee_names_required = forms.BooleanField(
         label=_("Require all attendees to fill in their names"),
-        help_text=_("By default, we will ask for names but not require them. You can turn this off completely in the "
-                    "settings."),
+        help_text=_("By default, we will ask for names but not require them. You can turn this off completely by changing "
+                    "the attendee data questionnaire."),
         required=False
     )
     imprint_url = forms.URLField(

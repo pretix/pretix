@@ -105,7 +105,7 @@ from pretix.presale.views.widget import (
 
 from ...base.i18n import language
 from ...base.models.items import (
-    Item, ItemCategory, ItemMetaProperty, Question, Quota,
+    Item, ItemCategory, ItemMetaProperty, Question, Questionnaire, QuestionnaireRow, Quota,
 )
 from ...base.permissions import AnyPermissionOf
 from ...base.plugins import (
@@ -1669,8 +1669,8 @@ class QuickSetupView(EventPermissionRequiredMixin, FormView):
             category.log_action('pretix.event.category.added', data={'name': gettext('Tickets')},
                                 user=self.request.user)
 
+        questionnaire = self.request.event.get_default_questionnaire()
         subevent = self.request.event.subevents.first()
-        questionnaire = self.request.event.questionnaires.first()
         for i, f in enumerate(self.formset):
             if f in self.formset.deleted_forms or not f.has_changed():
                 continue
@@ -1685,8 +1685,7 @@ class QuickSetupView(EventPermissionRequiredMixin, FormView):
                 position=i,
                 all_sales_channels=True,
             )
-            if questionnaire:
-                item.questionnaires.add(questionnaire)
+            item.questionnaires.add(questionnaire)
             item.log_action('pretix.event.item.added', user=self.request.user, data=dict(f.cleaned_data))
             if f.cleaned_data['quota'] or not form.cleaned_data['total_quota']:
                 quota = self.request.event.quotas.create(
