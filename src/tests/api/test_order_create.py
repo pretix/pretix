@@ -1013,6 +1013,58 @@ def test_order_create_tax_rules(token_client, organizer, event, item, quota, que
 
 
 @pytest.mark.django_db
+def test_order_create_tax_rule_explicit(token_client, organizer, event, item, quota, question, taxrule):
+    item.tax_rule = None
+    item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['tax_rule'] = taxrule.pk
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['tax_rule'] = taxrule.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos = o.positions.first()
+    assert pos.item == item
+    assert pos.tax_rate == Decimal('19.00')
+    assert pos.tax_value == Decimal('3.67')
+    assert pos.tax_rule == taxrule
+    assert pos.tax_code == "S/standard"
+
+
+@pytest.mark.django_db
+def test_order_create_tax_rule_custom_rate_and_code(token_client, organizer, event, item, quota, question, taxrule):
+    item.tax_rule = None
+    item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['tax_rule'] = taxrule.pk
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['tax_rule'] = taxrule.pk
+    res['positions'][0]['tax_code'] = 'S/reduced'
+    res['positions'][0]['tax_rate'] = "7.00"
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos = o.positions.first()
+    assert pos.item == item
+    assert pos.tax_rate == Decimal('7.00')
+    assert pos.tax_value == Decimal('1.50')
+    assert pos.tax_rule == taxrule
+    assert pos.tax_code == "S/reduced"
+
+
+@pytest.mark.django_db
 def test_order_create_fee_type_validation(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['fees'][0]['fee_type'] = 'unknown'
@@ -1108,6 +1160,75 @@ def test_order_create_fee_with_auto_tax(token_client, organizer, event, item, qu
 
 
 @pytest.mark.django_db
+def test_order_create_fee_with_explicit_tax_and_percentage(token_client, organizer, event, item, quota, question, taxrule):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['tax_rate'] = '7.00'
+    res['fees'][0]['tax_rule'] = taxrule.pk
+    res['fees'][0]['_split_taxes_like_products'] = False
+    res['fees'][0]['_treat_value_as_percentage'] = True
+    res['fees'][0]['value'] = '10.00'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    item.tax_rule = taxrule
+    item.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        fee = o.fees.first()
+        assert fee.value == Decimal('2.30')
+        assert fee.tax_rate == Decimal('7.00')
+        assert fee.tax_value == Decimal('0.15')
+        assert o.total == Decimal('25.30')
+
+
+@pytest.mark.django_db
+def test_order_create_fee_with_explicit_tax_and_split_requested(token_client, organizer, event, item, quota, question, taxrule):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['tax_rate'] = '7.00'
+    res['fees'][0]['tax_rule'] = taxrule.pk
+    res['fees'][0]['_split_taxes_like_products'] = True
+    res['fees'][0]['_treat_value_as_percentage'] = True
+    res['fees'][0]['value'] = '10.00'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    item.tax_rule = taxrule
+    item.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'fees': [{'tax_rate': ['You cannot ask for the value to be distributed over tax rates if you already set the tax rate or computed taxes.']}],
+    }
+
+    res['fees'][0]['tax_rate'] = '7.00'
+    res['fees'][0]['tax_value'] = '1.50'
+    res['fees'][0]['tax_rule'] = taxrule.pk
+    res['fees'][0]['_treat_value_as_percentage'] = True
+    res['fees'][0]['value'] = '10.00'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    item.tax_rule = taxrule
+    item.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'fees': [{'tax_value': ['You cannot ask for the value to be treated as a percentage if you already computed taxes.']}],
+    }
+
+
+@pytest.mark.django_db
 def test_order_create_negative_fee_with_auto_tax(token_client, organizer, event, item, quota, question, taxrule):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['fees'][0]['_split_taxes_like_products'] = True
@@ -1136,6 +1257,7 @@ def test_order_create_tax_rule_wrong_event(token_client, organizer, event, item,
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['fees'][0]['tax_rule'] = taxrule2.pk
     res['positions'][0]['item'] = item.pk
+    res['positions'][0]['tax_rule'] = taxrule2.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -1143,7 +1265,10 @@ def test_order_create_tax_rule_wrong_event(token_client, organizer, event, item,
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == {'fees': [{'tax_rule': ['The specified tax rate does not belong to this event.']}]}
+    assert resp.data == {
+        'positions': [{'tax_rule': ['The specified tax rule does not belong to this event.']}],
+        'fees': [{'tax_rule': ['The specified tax rule does not belong to this event.']}],
+    }
 
 
 @pytest.mark.django_db
@@ -3693,3 +3818,119 @@ def test_order_create_use_gift_card_invalid_secret(token_client, organizer, even
         assert o.payments.count() == 2
         assert o.payments.all()[0].state == OrderPayment.PAYMENT_STATE_FAILED
         assert o.payments.all()[1].state == OrderPayment.PAYMENT_STATE_CONFIRMED
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("rounding_mode,data,error", [
+    ("line", {"tax_value": "2.40"}, "Tax value 2.40 in position 1 does not match backend computation of 2.39."),
+    ("line", {"tax_value": "2.39"}, None),
+    ("line", {"price_includes_rounding_correction": "0.01"}, "Price rounding 0.01 in position 1 does not match backend computation of 0.00."),
+    ("line", {"tax_value_includes_rounding_correction": "0.01"}, "Tax rounding 0.01 in position 1 does not match backend computation of 0.00."),
+    ("sum_by_net",
+     {"tax_value": "2.39"},
+     "Tax value 2.39 in position 1 does not match backend computation of 2.40."),
+    ("sum_by_net",
+     {"tax_value": "2.40", "price": "15.01", "price_includes_rounding_correction": "0.01"},
+     None),
+    ("sum_by_net",
+     {"tax_value": "2.40", "price": "15.00", "price_includes_rounding_correction": "0.00"},
+     "Price rounding 0.00 in position 1 does not match backend computation of 0.01."),
+    ("sum_by_net",
+     {"tax_value": "2.40", "price": "15.01", "price_includes_rounding_correction": "0.01", "tax_value_includes_rounding_correction": "0.00"},
+     "Tax rounding 0.00 in position 1 does not match backend computation of 0.01."),
+])
+def test_order_tax_match_validation(token_client, organizer, event, item, quota, question, taxrule,
+                                    rounding_mode, data, error):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    del res['fees']
+    res['tax_rounding_mode'] = rounding_mode
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['price'] = "15.00"
+    res['positions'][0]['tax_rule'] = taxrule.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0].update(data)
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    if error:
+        assert resp.status_code == 400
+        assert resp.data == [error]
+    else:
+        assert resp.status_code == 201
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("rounding_mode,data,error", [
+    ("line", {"tax_value": "1.61"}, "Tax value 1.61 in fee does not match backend computation of 1.60."),
+    ("line", {"tax_value": "1.60"}, None),
+    ("line", {"value_includes_rounding_correction": "0.01"},
+     "Price rounding 0.01 in fee does not match backend computation of 0.00."),
+    ("line", {"tax_value_includes_rounding_correction": "0.01"},
+     "Tax rounding 0.01 in fee does not match backend computation of 0.00."),
+    ("sum_by_net",
+     {"tax_value": "1.60"},
+     "Tax value 1.60 in fee does not match backend computation of 1.59."),
+    ("sum_by_net",
+     {"tax_value": "1.59", "value": "9.99", "value_includes_rounding_correction": "-0.01"},
+     None),
+    ("sum_by_net",
+     {"tax_value": "1.59", "value": "10.00", "value_includes_rounding_correction": "0.00"},
+     "Price rounding 0.00 in fee does not match backend computation of -0.01."),
+    ("sum_by_net",
+     {"tax_value": "1.59", "value": "9.99", "value_includes_rounding_correction": "-0.01",
+      "tax_value_includes_rounding_correction": "0.00"},
+     "Tax rounding 0.00 in fee does not match backend computation of -0.01."),
+])
+def test_order_tax_match_validation_of_fee(token_client, organizer, event, item, quota, question, taxrule,
+                                           rounding_mode, data, error):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['tax_rounding_mode'] = rounding_mode
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['price'] = "5.00"
+    res['positions'][0]['tax_rule'] = taxrule.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['fees'][0]['value'] = "10.00"
+    res['fees'][0]['tax_rule'] = taxrule.pk
+    res['fees'][0].update(data)
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    if error:
+        assert resp.status_code == 400
+        assert resp.data == [error]
+    else:
+        assert resp.status_code == 201
+
+
+@pytest.mark.django_db
+def test_order_expect_total(token_client, organizer, event, item, quota, question, taxrule):
+    # Force a rounding difference to make sure it's the last step of total computation that is compared
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    del res['fees']
+    res['tax_rounding_mode'] = "sum_by_net"
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['price'] = "15.00"
+    res['positions'][0]['tax_rule'] = taxrule.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['total'] = "15.00"
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'total': ['Order total of 15.00 does not match backend computation of 15.01.']
+    }
+
+    res['total'] = "15.01"
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
