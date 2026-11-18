@@ -2273,6 +2273,7 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
                     # Test scenario 1/2 in test_organizer_edit_restrictions
                     return self.request.user.teams.filter(
                         TeamQuerySet.event_permission_q(self.exporter.get_required_event_permission()),
+                        organizer=self.request.organizer,
                         all_events=True,
                     ).exists()
                 else:
