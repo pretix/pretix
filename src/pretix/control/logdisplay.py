@@ -899,13 +899,16 @@ class EventPluginStateLogEntryType(EventLogEntryType):
         if 'plugin' in logentry.parsed_data:
             app = app_cache.get(logentry.parsed_data['plugin'])
             if app and hasattr(app, 'PretixPluginMeta'):
-                return {
-                    'href': reverse('control:event.settings.plugins', kwargs={
-                        'organizer': logentry.event.organizer.slug,
-                        'event': logentry.event.slug,
-                    }) + '#plugin_' + logentry.parsed_data['plugin'],
-                    'val': app.PretixPluginMeta.name
-                }
+                if logentry.event:
+                    return {
+                        'href': reverse('control:event.settings.plugins', kwargs={
+                            'organizer': logentry.event.organizer.slug,
+                            'event': logentry.event.slug,
+                        }) + '#plugin_' + logentry.parsed_data['plugin'],
+                        'val': app.PretixPluginMeta.name
+                    }
+                else:
+                    return {'val': app.PretixPluginMeta.name}
 
 
 @log_entry_types.new_from_dict({
