@@ -1652,7 +1652,6 @@ class QuickSetupView(EventPermissionRequiredMixin, FormView):
 
         self.request.event.settings.show_quota_left = form.cleaned_data['show_quota_left']
         self.request.event.settings.waiting_list_enabled = form.cleaned_data['waiting_list_enabled']
-        self.request.event.settings.attendee_names_required = form.cleaned_data['attendee_names_required']
         self.request.event.settings.contact_mail = form.cleaned_data['contact_mail']
         self.request.event.settings.imprint_url = form.cleaned_data['imprint_url']
         self.request.event.log_action('pretix.event.settings', user=self.request.user, data={
@@ -1670,6 +1669,10 @@ class QuickSetupView(EventPermissionRequiredMixin, FormView):
                                 user=self.request.user)
 
         questionnaire = self.request.event.get_default_questionnaire()
+        questionnaire.rows.filter(system_datafield=QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS).update(
+            required=form.cleaned_data['attendee_names_required']
+        )
+
         subevent = self.request.event.subevents.first()
         for i, f in enumerate(self.formset):
             if f in self.formset.deleted_forms or not f.has_changed():
