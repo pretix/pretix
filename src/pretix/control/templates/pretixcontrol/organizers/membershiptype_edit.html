@@ -9,7 +9,23 @@
     {% endif %}
     <form class="form-horizontal" action="" method="post">
         {% csrf_token %}
-        {% bootstrap_form form layout="control" %}
+        {% bootstrap_form_errors form %}
+        <fieldset>
+            <legend>{% trans "General information" %}</legend>
+            {% bootstrap_field form.name layout="control" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Usage restrictions" %}</legend>
+            <p>
+                {% blocktrans trimmed %}
+                    The following restrictions apply whenever the membership is used to buy a product or variation that
+                    is only available to membership holders.
+                {% endblocktrans %}
+            </p>
+            {% bootstrap_field form.transferable layout="control" %}
+            {% bootstrap_field form.allow_parallel_usage layout="control" %}
+            {% bootstrap_field form.max_usages layout="control" %}
+        </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}

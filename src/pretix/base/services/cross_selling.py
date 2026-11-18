@@ -113,6 +113,13 @@ class CrossSellingService:
             return category.items.filter(pk__in=potential_discount_items), potential_discount_items
 
     @cached_property
+    def memberships(self):
+        if self.customer:
+            return self.customer.memberships.filter(testmode=self.event.testmode).select_related('membership_type')
+        else:
+            return []
+
+    @cached_property
     def _potential_discounts_by_subevent_and_item_for_current_cart(self):
         potential_discounts_by_cartpos = defaultdict(list)
 
@@ -123,7 +130,8 @@ class CrossSellingService:
             [
                 (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.line_price_gross,
                  cp.addon_to, cp.is_bundled,
-                 cp.listed_price - cp.price_after_voucher)
+                 cp.listed_price - cp.price_after_voucher,
+                 cp.memberships_valid_by_time(self.memberships))
                 for cp in self.cartpositions
             ],
             collect_potential_discounts=potential_discounts_by_cartpos
