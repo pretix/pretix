@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.db.models import Prefetch
+from django.db.models import Exists, OuterRef, Prefetch
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
@@ -28,7 +28,7 @@ from openpyxl.utils import get_column_letter
 
 from ...helpers.safe_openpyxl import SafeCell
 from ..exporter import ListExporter
-from ..models import ItemMetaValue, ItemVariation, ItemVariationMetaValue
+from ..models import ItemMetaValue, ItemVariation, ItemVariationMetaValue, Questionnaire, QuestionnaireRow
 from ..signals import register_data_exporters
 
 
@@ -124,6 +124,11 @@ class ItemDataExporter(ListExporter):
                     ),
                 ),
             ),
+            Prefetch('questionnaires', Questionnaire.objects.annotate(
+                has_attendee_data=Exists(QuestionnaireRow.objects.filter(
+                    questionnaire=OuterRef('pk'), system_datafield__in=('@attendee_name_parts', '@attendee_email')
+                ))
+            )),
         ).select_related('category', 'tax_rule'):
             vars = list(i.variations.all())
 
@@ -153,7 +158,7 @@ class ItemDataExporter(ListExporter):
                         _("Yes") if i.free_price else "",
                         str(i.tax_rule) if i.tax_rule else "",
                         _("Yes") if i.admission else "",
-                        _("Yes") if i.personalized else "",
+                        _("Yes") if any(q.has_attendee_data for q in i.questionnaires.all()) else "",
                         _("Yes") if i.generate_tickets else (_("Default") if i.generate_tickets is None else ""),
                         _("Yes") if i.allow_waitinglist else "",
                         date_format(_max(i.available_from, v.available_from).astimezone(self.timezone),
@@ -201,7 +206,7 @@ class ItemDataExporter(ListExporter):
                     _("Yes") if i.free_price else "",
                     str(i.tax_rule) if i.tax_rule else "",
                     _("Yes") if i.admission else "",
-                    _("Yes") if i.personalized else "",
+                    _("Yes") if any(q.has_attendee_data for q in i.questionnaires.all()) else "",
                     _("Yes") if i.generate_tickets else (_("Default") if i.generate_tickets is None else ""),
                     _("Yes") if i.allow_waitinglist else "",
                     date_format(i.available_from.astimezone(self.timezone),
