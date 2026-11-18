@@ -1786,15 +1786,13 @@ class OrdersTest(BaseOrdersTest):
         assert match
 
         response = self.client.get(
-            '/%s/%s/order/%s/%s/answer/%s/?token=%s' % (self.orga.slug, self.event.slug, self.order.code,
-                                                        self.order.secret, a.pk, match.group(1))
+            '/%s/%s/answer/%s/?token=%s' % (self.orga.slug, self.event.slug, a.pk, match.group(1))
         )
         assert response.status_code == 200
 
         client2 = self.client_class()
         response = client2.get(
-            '/%s/%s/order/%s/%s/answer/%s/?token=%s' % (self.orga.slug, self.event.slug, self.order.code,
-                                                        self.order.secret, a.pk, match.group(1))
+            '/%s/%s/answer/%s/?token=%s' % (self.orga.slug, self.event.slug, a.pk, match.group(1))
         )
         assert response.status_code == 404
 
