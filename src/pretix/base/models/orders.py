@@ -1101,7 +1101,7 @@ class Order(OrderLevelAnswerableMixin, LockModel, LoggedModel):
         if self.event.settings.get('invoice_address_asked', as_type=bool) or self.event.settings.get('invoice_name_required', as_type=bool):
             return True
         for cp in positions:
-            if cp.item.get_asked_questions(questionnaire_type=Questionnaire.QuestionnaireType.POSITION_PURCHASE):
+            if cp.item.get_asked_questions(questionnaire_type=Questionnaire.QuestionnaireType.POSITION_PURCHASE):  # TODO(questionnaires) : use prefetched data
                 return True
 
         return False  # nothing there to modify

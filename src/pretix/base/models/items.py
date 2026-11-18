@@ -824,12 +824,10 @@ class Item(LoggedModel):
 
     def get_relevant_questionnaires(self, questionnaire_type, sales_channel):
         """
-        Creates a new property on the object:
-        question_data: a list of QuestionnaireRow objects, extended by an 'answer' property
+        Questionnaires attached to this item, optionally filtered by type and sales channel.
+        If the model was fetched via a QuerySet on which prefetch_relevant_questionnaires was used,
+        the cached list is returned. In that case, the sales_channel parameter is ignored.
         """
-        # We need to clone our question objects, otherwise we will override the cached
-        # answers of other items in the same cart if the question objects have been
-        # selected via prefetch_related
         cache_key = 'relevant_questionnaires' + (f'_{questionnaire_type}' if questionnaire_type else '')
         if (questionnaires := getattr(self, cache_key, None)) is not None:
             return questionnaires

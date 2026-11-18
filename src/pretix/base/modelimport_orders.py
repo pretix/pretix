@@ -665,7 +665,7 @@ class CheckinTextColumn(ImportColumn):
         order.checkin_text = value
 
 
-class QuestionColumn(ImportColumn):
+class BaseQuestionColumn(ImportColumn):
     def __init__(self, event, q):
         self.q = q
         self.option_resolve_cache = defaultdict(set)
@@ -714,6 +714,16 @@ class QuestionColumn(ImportColumn):
             else:
                 return self.q.clean_answer(value)
 
+    def save(self, order):
+        for a in getattr(order, '_answers', []):
+            a.order = a.order  # This is apparently required after save() again
+            a.orderposition = a.orderposition  # This is apparently required after save() again
+            a.save()
+            if hasattr(a, '_options'):
+                a.options.add(*a._options)
+
+
+class PositionQuestionColumn(BaseQuestionColumn):
     def assign(self, value, order, position, invoice_address, **kwargs):
         if value is not None:
             if not hasattr(order, '_answers'):
@@ -729,12 +739,24 @@ class QuestionColumn(ImportColumn):
             else:
                 order._answers.append(QuestionAnswer(question=self.q, answer=str(value), orderposition=position))
 
-    def save(self, order):
-        for a in getattr(order, '_answers', []):
-            a.orderposition = a.orderposition  # This is apparently required after save() again
-            a.save()
-            if hasattr(a, '_options'):
-                a.options.add(*a._options)
+
+class OrderQuestionColumn(BaseQuestionColumn):
+    order_level = True
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        if value is not None:
+            if not hasattr(order, '_answers'):
+                order._answers = []
+            if isinstance(value, QuestionOption):
+                a = QuestionAnswer(order=order, question=self.q, answer=str(value))
+                a._options = [value]
+                order._answers.append(a)
+            elif isinstance(value, list):
+                a = QuestionAnswer(order=order, question=self.q, answer=', '.join(str(v) for v in value))
+                a._options = value
+                order._answers.append(a)
+            else:
+                order._answers.append(QuestionAnswer(question=self.q, answer=str(value), order=order))
 
 
 class CustomerColumn(ImportColumn):
@@ -788,6 +810,8 @@ def get_order_import_columns(event):
         InvoiceAddressVATID(event),
         InvoiceAddressReference(event),
     ]
+    for q in event.orderdatafields.prefetch_related('options').exclude(type=Question.TYPE_FILE):
+        default.append(OrderQuestionColumn(event, q))
     for n, l, w in scheme['fields']:
         default.append(AttendeeNamePart(event, n, l))
     default += [
@@ -811,7 +835,7 @@ def get_order_import_columns(event):
         Comment(event),
     ]
     for q in event.positiondatafields.prefetch_related('options').exclude(type=Question.TYPE_FILE):
-        default.append(QuestionColumn(event, q))
+        default.append(PositionQuestionColumn(event, q))
 
     for recv, resp in order_import_columns.send(sender=event):
         default += resp

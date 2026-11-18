@@ -575,7 +575,7 @@ def get_data_fields(event, for_model=None):
         ]
         + [
             DataFieldInfo(
-                ORDER,
+                ORDER_POSITION,
                 CAT_ORDER_POSITION_DATAFIELDS,
                 "question_" + q.identifier,
                 _("Data field: {name}").format(name=str(q.internal_name)),
