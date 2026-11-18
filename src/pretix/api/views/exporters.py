@@ -371,6 +371,7 @@ class ScheduledOrganizerExportViewSet(ScheduledExportersViewSet):
                 elif self.request.user.is_authenticated:
                     if not self.request.user.teams.filter(
                         TeamQuerySet.event_permission_q(exporter.get_required_event_permission()),
+                        organizer=self.request.organizer,
                         all_events=True,
                     ).exists():
                         raise PermissionDenied("No permission to edit exports you could not run.")
