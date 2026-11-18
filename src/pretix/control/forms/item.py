@@ -536,6 +536,9 @@ class ItemCreateForm(I18nModelForm):
             Questionnaire.check_constraints(self.event)
         except ValidationError as exc:
             raise ValidationError({'questionnaires': exc})
+        for questionnaire in self.cleaned_data['questionnaires']:
+            questionnaire.log_action('pretix.event.questionnaire.changed', user=self.user,
+                                     data={'item_added': self.instance.pk})
 
         if not self.event.has_subevents and not self.cleaned_data.get('has_variations'):
             if self.cleaned_data.get('quota_option') == self.EXISTING and self.cleaned_data.get('quota_add_existing') is not None:
@@ -583,11 +586,6 @@ class ItemCreateForm(I18nModelForm):
                 )
 
         if self.cleaned_data.get('copy_from'):
-            for question in self.cleaned_data['copy_from'].questions.all():
-                question.items.add(instance)
-                question.log_action('pretix.event.question.changed', user=self.user, data={
-                    'item_added': self.instance.pk
-                })
             for a in self.cleaned_data['copy_from'].addons.all():
                 instance.addons.create(addon_category=a.addon_category, min_count=a.min_count, max_count=a.max_count,
                                        price_included=a.price_included, position=a.position,
