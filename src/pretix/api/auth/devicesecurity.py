@@ -155,7 +155,6 @@ class PretixScanNoSyncNoSearchSecurityProfile(AllowListSecurityProfile):
         ('POST', 'api-v1:upload'),
         ('POST', 'api-v1:checkinrpc.redeem'),
         ('POST', 'api-v1:checkinrpc.annull'),
-        ('GET', 'api-v1:checkinrpc.search'),
     )
 
 
