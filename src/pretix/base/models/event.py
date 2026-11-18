@@ -911,8 +911,7 @@ class Event(EventMixin, LoggedModel):
         from ..signals import event_copy_data
         from . import (
             Discount, Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue,
-            ItemProgramTime, ItemVariationMetaValue, Question, Questionnaire,
-            QuestionnaireRow, Quota,
+            ItemProgramTime, ItemVariationMetaValue, Question, Questionnaire, Quota,
         )
 
         is_cross_organizer = other.organizer_id != self.organizer_id
@@ -1116,15 +1115,17 @@ class Event(EventMixin, LoggedModel):
 
         question_map = copy_objects(
             Question.objects.filter(event=other).prefetch_related('options'),
-            parent=('event', self), child_relations=('options',))
+            to=('event', self), child_relations=[('options', dict())]
+        )
 
-        questionnaire_map = copy_objects(
-            Questionnaire.objects.filter(event=other).prefetch_related('items', 'limit_sales_channels'),
-            parent=('event', self), mapped_relations=[('items', 'pk', item_map), ('limit_sales_channels', 'identifier', sales_channel_map)])
-
+        qrow_map = dict()
         copy_objects(
-            QuestionnaireRow.objects.filter(questionnaire__event=other).prefetch_related('user_datafield'),
-            mapped_relations=[('questionnaire', 'pk', questionnaire_map), ('user_datafield', 'pk', question_map), ('dependency_question', 'pk', 'SELF')])
+            Questionnaire.objects.filter(event=other).prefetch_related('items', 'limit_sales_channels'),
+            to=('event', self), translate=[('items', 'id', item_map), ('limit_sales_channels', 'identifier', sales_channel_map)],
+            child_relations=[
+                ('rows', dict(obj_map=qrow_map, translate=[('user_datafield', 'id', question_map), ('dependency_question', 'id', qrow_map)]))
+            ],
+        )
 
         def _walk_rules(rules):
             if isinstance(rules, dict):

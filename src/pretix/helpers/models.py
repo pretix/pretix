@@ -19,13 +19,15 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import collections
 import copy
 from decimal import Decimal
 
 from django.core.files import File
 from django.db import models
 from django.db.models.fields import DecimalField
-from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor, ManyToManyDescriptor, \
+from django.db.models.fields.related_descriptors import ForeignKeyDeferredAttribute, ForwardManyToOneDescriptor, \
+    ManyToManyDescriptor, \
     ReverseManyToOneDescriptor
 
 from pretix.settings import DEBUG
@@ -52,40 +54,54 @@ def modelcopy(obj: models.Model, **kwargs):
     return n
 
 
-def copy_objects(qs, parent=None, child_relations=(), mapped_relations=()):
-    obj_map = {}
+def copy_objects(qs, to, translate=(), child_relations=(), obj_map=None):
+    # Validate arguments
+    for rel, kwargs in child_relations:
+        assert isinstance(getattr(qs.model, rel), ReverseManyToOneDescriptor)
+    for (rel, key, map) in translate:
+        assert isinstance(map, collections.abc.Mapping)
+        assert isinstance(getattr(qs.model, rel), (ReverseManyToOneDescriptor, ManyToManyDescriptor, ForwardManyToOneDescriptor))
+
+    if obj_map is None:
+        obj_map = {}
     for o in qs:
+        # Fetch data for child relations
         inst_child_rels = []
-        for rel in child_relations:
-            assert isinstance(getattr(type(o), rel), ReverseManyToOneDescriptor)
-            inst_child_rels.append((getattr(o, rel).field, getattr(o, rel).all()))
+        for rel, kwargs in child_relations:
+            qs = getattr(o, rel).all()
+            bool(qs)  # ensure query set is fetched
+            inst_child_rels.append((getattr(o, rel).field, qs, kwargs))
 
-        inst_mapped_multi_rels = []
-        inst_mapped_single_rels = []
-        for (rel, key, map) in mapped_relations:
-            if map == 'SELF': map = obj_map
+        # Fetch data and apply translation (via mapping dict) for translated relations
+        inst_trans_multi_rels = []
+        inst_trans_single_rels = []
+        for (rel, key, map) in translate:
             if isinstance(getattr(type(o), rel), (ReverseManyToOneDescriptor, ManyToManyDescriptor)):
-                inst_mapped_multi_rels.append(
-                    (rel, [map[key] for key in getattr(o, rel).all().values_list(key, flat=True)]))
+                inst_trans_multi_rels.append((rel, [map[key] for key in getattr(o, rel).all().values_list(key, flat=True) if map[key] is not None]))
             elif isinstance(getattr(type(o), rel), ForwardManyToOneDescriptor):
-                rel_obj = getattr(o, rel)
-                inst_mapped_single_rels.append((rel, map[getattr(rel_obj, key)] if rel_obj is not None else None))
-            else:
-                raise ValueError('Invalid mapped relation ' + rel)
+                if key == 'id' and isinstance(getattr(type(o), f'{rel}_id'), ForeignKeyDeferredAttribute):
+                    value = getattr(o, f'{rel}_id')
+                    inst_trans_single_rels.append((rel, map[value] if value is not None else None))
+                else:
+                    rel_obj = getattr(o, rel)
+                    inst_trans_single_rels.append((rel, map[getattr(rel_obj, key)] if rel_obj is not None else None))
 
+        # Clone this object
         obj_map[o.pk] = o
         o.pk = None
         o._prefetched_objects_cache = {}
-        if parent:
-            setattr(o, parent[0], parent[1])
-        for (field_name, rel_obj) in inst_mapped_single_rels:
+        if to:
+            setattr(o, to[0], to[1])
+        for (field_name, rel_obj) in inst_trans_single_rels:
             setattr(o, field_name, rel_obj)
         o.save(force_insert=True)
-        o.log_action('pretix.object.cloned')
+        if hasattr(o, 'log_action'):
+            o.log_action('pretix.object.cloned')
 
-        for (field, children) in inst_child_rels:
-            copy_objects(children, parent=(field.name, o))
-        for (rel_name, rel_objs) in inst_mapped_multi_rels:
+        # Copy objects from child relations
+        for (field, children, kwargs) in inst_child_rels:
+            copy_objects(children, to=(field.name, o), **kwargs)
+        for (rel_name, rel_objs) in inst_trans_multi_rels:
             getattr(o, rel_name).add(*rel_objs)
     return obj_map
 
