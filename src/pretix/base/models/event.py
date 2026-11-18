@@ -79,7 +79,7 @@ from pretix.helpers.thumb import get_thumbnail
 
 from ..settings import settings_hierarkey
 from .organizer import Organizer, Team
-from ...helpers.models import filter_with_cache
+from ...helpers.models import copy_objects, filter_with_cache
 
 if TYPE_CHECKING:
     from hierarkey.proxy import HierarkeyProxy
@@ -1111,23 +1111,8 @@ class Event(EventMixin, LoggedModel):
             if not d.all_sales_channels:
                 d.limit_sales_channels.set(self.organizer.sales_channels.filter(identifier__in=[s.identifier for s in limit_sales_channels]))
 
-        question_map = {}
-        for q in Question.objects.filter(event=other).prefetch_related('items', 'options'):
-            items = list(q.items.all())
-            opts = list(q.options.all())
-            question_map[q.pk] = q
-            q.pk = None
-            q._prefetched_objects_cache = {}
-            q.event = self
-            q.save(force_insert=True)
-            q.log_action('pretix.object.cloned')
-
-            for i in items:
-                q.items.add(item_map[i.pk])
-            for o in opts:
-                o.pk = None
-                o.question = q
-                o.save(force_insert=True)
+        question_map = copy_objects(Question.objects.filter(event=other).prefetch_related('items', 'options'),
+                        parent=('event', self), child_relations=('options',), mapped_relations=[('items', item_map)])
 
         for q in self.questions.filter(dependency_question__isnull=False):
             q.dependency_question = question_map[q.dependency_question_id]
