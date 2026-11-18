@@ -42,7 +42,8 @@ from django.utils.timezone import now
 from rest_framework.test import APIClient
 
 from pretix.base.models import (
-    CachedFile, Event, ScheduledEventExport, ScheduledOrganizerExport, User,
+    CachedFile, Event, Organizer, ScheduledEventExport,
+    ScheduledOrganizerExport, User,
 )
 
 SAMPLE_EXPORTER_CONFIG = {
@@ -917,6 +918,10 @@ def test_organizer_edit_restrictions(client, event, organizer, user, team):
     team1.save()
     team1.limit_events.add(event1)
     team1.members.add(user)
+
+    organizer2 = Organizer.objects.create(name='Dummy2', slug='dummy2')
+    org2_team = organizer2.teams.create(all_events=True, all_event_permissions=True, name="Admins")
+    org2_team.members.add(user)
 
     t = team.tokens.create(name='Foo')
     client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
