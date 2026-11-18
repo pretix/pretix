@@ -742,9 +742,6 @@ class DatafieldSerializer(I18nAwareModelSerializer):
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
         full_data.update(data)
 
-        if full_data.get('ask_during_checkin') and full_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
-            raise ValidationError(_('This type of question cannot be asked during check-in.'))
-
         if full_data.get('show_during_checkin') and full_data.get('type') in Question.SHOW_DURING_CHECKIN_UNSUPPORTED:
             raise ValidationError(_('This type of question cannot be shown during check-in.'))
 
@@ -1057,20 +1054,11 @@ class QuestionnaireSerializer(I18nAwareModelSerializer):
             # we already have invalid state in the database, what should we do? hope it gets better after saving?
             logger.exception("Invalid state in database, ignoring some validations!")
         else:
-            #if full_data.get('ask_during_checkin') and full_data.get('dependency_question'):
-            #    raise ValidationError('Dependencies are not supported during check-in.')
-
-            #if full_data.get('ask_during_checkin') and full_data.get('type') in Question.ASK_DURING_CHECKIN_UNSUPPORTED:
-            #    raise ValidationError(_('This type of question cannot be asked during check-in.'))
-
-            #if full_data.get('show_during_checkin') and full_data.get('type') in Question.SHOW_DURING_CHECKIN_UNSUPPORTED:
-            #    raise ValidationError(_('This type of question cannot be shown during check-in.'))
-
-            #Question.clean_items(event, full_data.get('items') or [])
-
-            if (full_data.get('type') == Questionnaire.QuestionnaireType.POSITION_CHECKIN
-                    and any(c.get('dependency_question') for c in full_data['rows'])):
-                raise ValidationError('Dependencies are not supported during check-in.')
+            if full_data.get('type') == Questionnaire.QuestionnaireType.POSITION_CHECKIN:
+                if any(c.get('dependency_question') for c in full_data['rows']):
+                    raise ValidationError('Dependencies are not supported during check-in.')
+                if any(c.get('user_datafield') and c.get('user_datafield').type in Question.ASK_DURING_CHECKIN_UNSUPPORTED for c in full_data['rows']):
+                    raise ValidationError(_('This type of question cannot be asked during check-in.'))
 
             if (not full_data.get('type').startswith('position_')
                     and any(c['system_datafield'] for c in full_data['rows'])):
