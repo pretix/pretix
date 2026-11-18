@@ -257,7 +257,7 @@ class ActionView(View):
                 for i in range(2, 12):
                     invoice_nos.add(u.zfill(i))
 
-        qs = self.order_qs().order_by('pk').filter(
+        qs = self.order_qs().order_by('-pk').filter(
             code
             | Q(email__icontains=u)
             | Q(all_positions__attendee_name_cached__icontains=u)
