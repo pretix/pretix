@@ -31,8 +31,12 @@ import jwt
 import pytest
 from bs4 import BeautifulSoup
 from Crypto.PublicKey import RSA
-from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
-from cryptography.hazmat.primitives.serialization import load_pem_public_key
+from cryptography.hazmat.primitives.asymmetric.rsa import (
+    RSAPublicKey, RSAPublicNumbers,
+)
+from cryptography.hazmat.primitives.serialization import (
+    Encoding, PublicFormat, load_pem_public_key,
+)
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from freezegun import freeze_time
@@ -695,8 +699,13 @@ def test_keys_endpoint(env, client, ssoclient):
 
     e = decode_int(data['keys'][0]['e'])
     n = decode_int(data['keys'][0]['n'])
-    pubkey = RSA.construct((n, e))
-    representation = pubkey.export_key('PEM').decode()
+    pubkey = RSAPublicNumbers(e, n).public_key()
+    assert isinstance(pubkey, RSAPublicKey)
+
+    representation = pubkey.public_bytes(
+        Encoding.PEM, PublicFormat.SubjectPublicKeyInfo
+    ).decode()
+
     assert representation.strip() == env[0].settings.sso_server_signing_key_rsa256_public.strip()
 
 
