@@ -36,6 +36,34 @@ subevent_moved_email_template         multi-lingual string       Template for mo
 is_human                              boolean                    Does the resource represent a human (read-only after creation)
 ===================================== ========================== =======================================================
 
+Property resource
+-----------------
+
+The property resource contains the following public fields:
+
+.. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+id                                    integer                    Internal ID in pretix
+name                                  string                     Property name.  Must be unique within the resource type.
+===================================== ========================== =======================================================
+
+Value resource
+--------------
+
+The value resource contains the following public fields:
+
+.. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+id                                    integer                    Internal ID in pretix
+value                                 string                     Value's human-readable name.  Must be unique within the property.
+===================================== ========================== =======================================================
+
 Resource resource
 -----------------
 
@@ -86,34 +114,6 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the user in pretix
 email                                 string                     The manager's email address, must be an existing user's email address
-===================================== ========================== =======================================================
-
-Property resource
------------------
-
-The property resource contains the following public fields:
-
-.. rst-class:: rest-resource-table
-
-===================================== ========================== =======================================================
-Field                                 Type                       Description
-===================================== ========================== =======================================================
-id                                    integer                    Internal ID in pretix
-name                                  string                     Property name.  Must be unique within the resource type.
-===================================== ========================== =======================================================
-
-Value resource
---------------
-
-The value resource contains the following public fields:
-
-.. rst-class:: rest-resource-table
-
-===================================== ========================== =======================================================
-Field                                 Type                       Description
-===================================== ========================== =======================================================
-id                                    integer                    Internal ID in pretix
-value                                 string                     Value's human-readable name.  Must be unique within the property.
 ===================================== ========================== =======================================================
 
 Rule resource
@@ -506,6 +506,381 @@ Resource type endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it **or** the type still has resources attached to it.
    :statuscode 404: The requested resource type does not exist
+
+Property endpoints
+------------------
+
+.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/
+
+   Returns a list of all properties for a resource type.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/resourcetypes/1/properties/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 1,
+            "name": "My Property"
+          }
+        ]
+      }
+
+   :query page: The page number in case of a multi-page result set, default is 1
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type does not exist
+
+.. http:post:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/
+
+   Create a property for a resource type.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/resourcetypes/1/properties/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+      {
+        "name": "My Property"
+      }
+
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "name": "My Property"
+      }
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
+   :statuscode 201: no error
+   :statuscode 400: The property could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type does not exist
+
+.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
+
+   Returns information on one property, identified by its ID.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/resourcetypes/1/properties/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "name": "My Property"
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param resource_type: The ``id`` field of a valid resource type
+   :param id: The ``id`` field of the property to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type or property does not exist
+
+.. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
+
+   Update a property. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
+   the property, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
+   want to change.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/resourcetypes/1/properties/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 34
+
+      {
+        "name": "New Property"
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "name": "New Property"
+      }
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
+   :param id: The ``id`` field of the property to update
+   :statuscode 200: no error
+   :statuscode 400: The property could not be modified due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type or property does not exist
+
+.. http:delete:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
+
+   Delete a property.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/resourcetypes/1/properties/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+      Content-Type: application/json
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
+   :param id: The ``id`` field of the property to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it **or** the property has values linked to a requirement.
+   :statuscode 404: The requested type or property does not exist
+
+Value endpoints
+---------------
+
+.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/
+
+   Returns a list of all values for a property and an organizer.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 1,
+            "value": "My Value"
+          }
+        ]
+      }
+
+   :query page: The page number in case of a multi-page result set, default is 1
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
+   :param property: The ``id`` field of a valid property
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type or property does not exist
+
+.. http:post:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/
+
+   Create a value for a property and an organizer.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+      {
+        "value": "My Value"
+      }
+
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "value": "My Value"
+      }
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
+   :param property: The ``id`` field of a valid property
+   :statuscode 201: no error
+   :statuscode 400: The value could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type or property does not exist
+
+.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
+
+   Returns information on one value, identified by its ID.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "value": "My Value"
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param resource_type: The ``id`` field of a valid resource type
+   :param property: The ``id`` field of a valid property
+   :param id: The ``id`` field of the value to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type, property, or value does not exist
+
+.. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
+
+   Update a value. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
+   the value, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
+   want to change.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 34
+
+      {
+        "value": "New Value"
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "value": "New Value"
+      }
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
+   :param property: The ``id`` field of a valid property
+   :param id: The ``id`` field of the value to update
+   :statuscode 200: no error
+   :statuscode 400: The value could not be modified due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+   :statuscode 404: The requested type, property, or value does not exist
+
+.. http:delete:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
+
+   Delete a value.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+      Content-Type: application/json
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param resource_type: The ``id`` field of a valid resource type
+   :param property: The ``id`` field of a valid property
+   :param id: The ``id`` field of the value to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it **or** the value is linked to a requirement.
+   :statuscode 404: The requested type, property, or value does not exist
 
 Resource endpoints
 ------------------
@@ -1076,381 +1451,6 @@ Manager endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
    :statuscode 404: The requested resource or manager does not exist
-
-Property endpoints
-------------------
-
-.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/
-
-   Returns a list of all properties for a resource type.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      GET /api/v1/organizers/bigevents/resourcetypes/1/properties/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "count": 1,
-        "next": null,
-        "previous": null,
-        "results": [
-          {
-            "id": 1,
-            "name": "My Property"
-          }
-        ]
-      }
-
-   :query page: The page number in case of a multi-page result set, default is 1
-   :param organizer: The ``slug`` field of a valid organizer
-   :param resource_type: The ``id`` field of a valid resource type
-   :statuscode 200: no error
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested type does not exist
-
-.. http:post:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/
-
-   Create a property for a resource type.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      POST /api/v1/organizers/bigevents/resourcetypes/1/properties/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-      {
-        "name": "My Property"
-      }
-
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 201 Created
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "id": 1,
-        "name": "My Property"
-      }
-
-   :param organizer: The ``slug`` field of a valid organizer
-   :param resource_type: The ``id`` field of a valid resource type
-   :statuscode 201: no error
-   :statuscode 400: The property could not be created due to invalid submitted data.
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested type does not exist
-
-.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
-
-   Returns information on one property, identified by its ID.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      GET /api/v1/organizers/bigevents/resourcetypes/1/properties/1/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "id": 1,
-        "name": "My Property"
-      }
-
-   :param organizer: The ``slug`` field of the organizer to fetch
-   :param resource_type: The ``id`` field of a valid resource type
-   :param id: The ``id`` field of the property to fetch
-   :statuscode 200: no error
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested type or property does not exist
-
-.. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
-
-   Update a property. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the property, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
-   want to change.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      PATCH /api/v1/organizers/bigevents/resourcetypes/1/properties/1/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-      Content-Type: application/json
-      Content-Length: 34
-
-      {
-        "name": "New Property"
-      }
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "id": 1,
-        "name": "New Property"
-      }
-
-   :param organizer: The ``slug`` field of a valid organizer
-   :param resource_type: The ``id`` field of a valid resource type
-   :param id: The ``id`` field of the property to update
-   :statuscode 200: no error
-   :statuscode 400: The property could not be modified due to invalid submitted data.
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested type or property does not exist
-
-.. http:delete:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
-
-   Delete a property.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      DELETE /api/v1/organizers/bigevents/resourcetypes/1/properties/1/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-      Content-Type: application/json
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 204 No Content
-      Vary: Accept
-      Content-Type: application/json
-
-   :param organizer: The ``slug`` field of a valid organizer
-   :param resource_type: The ``id`` field of a valid resource type
-   :param id: The ``id`` field of the property to delete
-   :statuscode 204: no error
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it **or** the property has values linked to a requirement.
-   :statuscode 404: The requested type or property does not exist
-
-Value endpoints
----------------
-
-.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/
-
-   Returns a list of all values for a property and an organizer.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      GET /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "count": 1,
-        "next": null,
-        "previous": null,
-        "results": [
-          {
-            "id": 1,
-            "value": "My Value"
-          }
-        ]
-      }
-
-   :query page: The page number in case of a multi-page result set, default is 1
-   :param organizer: The ``slug`` field of a valid organizer
-   :param resource_type: The ``id`` field of a valid resource type
-   :param property: The ``id`` field of a valid property
-   :statuscode 200: no error
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested type or property does not exist
-
-.. http:post:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/
-
-   Create a value for a property and an organizer.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      POST /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-      {
-        "value": "My Value"
-      }
-
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 201 Created
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "id": 1,
-        "value": "My Value"
-      }
-
-   :param organizer: The ``slug`` field of a valid organizer
-   :param resource_type: The ``id`` field of a valid resource type
-   :param property: The ``id`` field of a valid property
-   :statuscode 201: no error
-   :statuscode 400: The value could not be created due to invalid submitted data.
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested type or property does not exist
-
-.. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
-
-   Returns information on one value, identified by its ID.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      GET /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/1/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "id": 1,
-        "value": "My Value"
-      }
-
-   :param organizer: The ``slug`` field of the organizer to fetch
-   :param resource_type: The ``id`` field of a valid resource type
-   :param property: The ``id`` field of a valid property
-   :param id: The ``id`` field of the value to fetch
-   :statuscode 200: no error
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested type, property, or value does not exist
-
-.. http:patch:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
-
-   Update a value. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
-   the value, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
-   want to change.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      PATCH /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/1/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-      Content-Type: application/json
-      Content-Length: 34
-
-      {
-        "value": "New Value"
-      }
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 200 OK
-      Vary: Accept
-      Content-Type: application/json
-
-      {
-        "id": 1,
-        "value": "New Value"
-      }
-
-   :param organizer: The ``slug`` field of a valid organizer
-   :param resource_type: The ``id`` field of a valid resource type
-   :param property: The ``id`` field of a valid property
-   :param id: The ``id`` field of the value to update
-   :statuscode 200: no error
-   :statuscode 400: The value could not be modified due to invalid submitted data.
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
-   :statuscode 404: The requested type, property, or value does not exist
-
-.. http:delete:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
-
-   Delete a value.
-
-   **Example request**:
-
-   .. sourcecode:: http
-
-      DELETE /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/1/ HTTP/1.1
-      Host: pretix.eu
-      Accept: application/json, text/javascript
-      Content-Type: application/json
-
-   **Example response**:
-
-   .. sourcecode:: http
-
-      HTTP/1.1 204 No Content
-      Vary: Accept
-      Content-Type: application/json
-
-   :param organizer: The ``slug`` field of a valid organizer
-   :param resource_type: The ``id`` field of a valid resource type
-   :param property: The ``id`` field of a valid property
-   :param id: The ``id`` field of the value to delete
-   :statuscode 204: no error
-   :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to view it **or** the value is linked to a requirement.
-   :statuscode 404: The requested type, property, or value does not exist
 
 Availability rule endpoints
 ---------------------------
