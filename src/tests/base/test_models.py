@@ -59,7 +59,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
-    ItemBundle, SubEventItem, SubEventItemVariation,
+    ItemBundle, Questionnaire, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.orders import OrderError, cancel_order, perform_order
@@ -91,8 +91,9 @@ class BaseQuotaTestCase(TestCase):
             date_from=now(), plugins='tests.testdummy'
         )
         self.quota = Quota.objects.create(name="Test", size=2, event=self.event)
-        self.item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
-                                         admission=True, personalized=True)
+        self.attendee_data_questionnaire = self.event.get_default_questionnaire()
+        self.item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23, admission=True)
+        self.attendee_data_questionnaire.items.add(self.item1)
         self.item2 = Item.objects.create(event=self.event, name="T-Shirt", default_price=23)
         self.item3 = Item.objects.create(event=self.event, name="Goodie", default_price=23)
         self.var1 = ItemVariation.objects.create(item=self.item2, value='S')
@@ -1304,14 +1305,16 @@ class OrderTestCase(BaseQuotaTestCase):
     @classscope(attr='o')
     def test_can_modify_answers(self):
         self.event.settings.set('invoice_address_asked', False)
-        self.event.settings.set('attendee_names_asked', True)
+        # self.event.settings.set('attendee_names_asked', True) - already true
         assert self.order.can_modify_answers
         assert not self.op1.can_modify_answers
 
         self.event.settings.set('allow_modifications', 'attendee')
         assert self.op1.can_modify_answers
 
-        self.event.settings.set('attendee_names_asked', False)
+        # self.event.settings.set('attendee_names_asked', False)
+        self.attendee_data_questionnaire.items.clear()
+
         assert not self.order.can_modify_answers
         assert not self.op1.can_modify_answers
         self.event.settings.set('invoice_address_asked', True)
@@ -1321,8 +1324,10 @@ class OrderTestCase(BaseQuotaTestCase):
         self.event.settings.set('invoice_name_required', True)
         assert self.order.can_modify_answers
         assert not self.op1.can_modify_answers
+        qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE)
+        qaire.items.add(self.item1)
         q = Question.objects.create(internal_name='Foo', type=Question.TYPE_BOOLEAN, event=self.event)
-        self.item1.questions.add(q)
+        qaire.rows.create(user_datafield=q, label='Foo')
         assert self.order.can_modify_answers
         assert self.op1.can_modify_answers
         self.order.status = Order.STATUS_CANCELED
@@ -2249,8 +2254,10 @@ class EventTest(TestCase):
         q1 = event1.quotas.create(name='Quota 1', size=50)
         q1.items.add(i1)
         q1.variations.add(v1)
+        qaire1 = event1.questionnaires.create(internal_name='Custom questions', type=Questionnaire.QuestionnaireType.POSITION_PURCHASE)
+        qaire1.items.add(i1)
         que1 = event1.questions.create(internal_name="Age", type="N")
-        que1.items.add(i1)
+        qaire1.rows.create(user_datafield=que1, label="Age")
         event1.settings.foo_setting = 23
         cl1 = event1.checkin_lists.create(
             name="All", all_products=False,
@@ -2292,7 +2299,9 @@ class EventTest(TestCase):
         assert q1new.items.get(pk=i1new.pk)
         que1new = event2.questions.first()
         assert que1new.type == que1.type
-        assert que1new.items.get(pk=i1new.pk)
+        qaire1new = event2.questionnaires.get(internal_name='Custom questions')
+        assert qaire1new.items.get().pk == i1new.pk
+        assert qaire1new.rows.get().user_datafield_id == que1new.pk
         assert event2.settings.foo_setting == '23'
         assert event2.cached_default_tax_rule == trnew
         assert event2.checkin_lists.count() == 1
@@ -3053,10 +3062,10 @@ def test_question_answer_validation_choice():
             organizer=organizer, name='Dummy', slug='dummy',
             date_from=now(), date_to=now() - timedelta(hours=1),
         )
-        q = Question.objects.create(type='C', event=event, question='Q')
+        q = Question.objects.create(type='C', event=event, internal_name='Q')
         o1 = q.options.create(answer='A')
         o2 = q.options.create(answer='B')
-        q2 = Question.objects.create(type='C', event=event, question='Q2')
+        q2 = Question.objects.create(type='C', event=event, internal_name='Q2')
         o3 = q2.options.create(answer='C')
         assert q.clean_answer(str(o1.pk)) == o1
         assert q.clean_answer(o1.pk) == o1
@@ -3078,11 +3087,11 @@ def test_question_answer_validation_multiple_choice():
             organizer=organizer, name='Dummy', slug='dummy',
             date_from=now(), date_to=now() - timedelta(hours=1),
         )
-        q = Question.objects.create(type='M', event=event, question='Q')
+        q = Question.objects.create(type='M', event=event, internal_name='Q')
         o1 = q.options.create(answer='A')
         o2 = q.options.create(answer='B')
         q.options.create(answer='D')
-        q2 = Question.objects.create(type='M', event=event, question='Q2')
+        q2 = Question.objects.create(type='M', event=event, internal_name='Q2')
         o3 = q2.options.create(answer='C')
         assert q.clean_answer("{},{}".format(str(o1.pk), str(o2.pk))) == [o1, o2]
         assert q.clean_answer([str(o1.pk), str(o2.pk)]) == [o1, o2]

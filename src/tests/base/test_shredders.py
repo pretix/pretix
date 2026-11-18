@@ -31,7 +31,7 @@ from django_scopes import scope
 
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, Order,
-    OrderPayment, OrderPosition, Organizer, OutgoingMail, QuestionAnswer,
+    OrderPayment, OrderPosition, Organizer, OutgoingMail, QuestionAnswer, Questionnaire,
 )
 from pretix.base.services.invoices import generate_invoice, invoice_pdf_task
 from pretix.base.services.tickets import generate
@@ -89,7 +89,9 @@ def order(event, item):
 @pytest.fixture
 def question(event, item):
     q = event.questions.create(internal_name="T-Shirt size", type="C", identifier="ABC")
-    q.items.add(item)
+    qaire = event.questionnaires.create(internal_name="Custom questions", type=Questionnaire.QuestionnaireType.POSITION_PURCHASE)
+    qaire.items.add(item)
+    qaire.rows.create(user_datafield=q, label="T-Shirt size")
     q.options.create(answer="XL", identifier="LVETRWVU")
     return q
 
@@ -300,17 +302,19 @@ def test_question_answer_shredder(event, order, question):
     f = list(s.generate_files())
     assert json.loads(f[-1][2]) == {
         '{}-1'.format(order.code): [{
-            'question': question.pk,
+            'datafield': question.identifier,
             'answer': 'S',
-            'question_identifier': question.identifier,
             'options': [opt.pk],
             'option_identifiers': [opt.identifier],
+            'question': question.pk,
+            'question_identifier': question.identifier,
         }, {
-            'question': q2.pk,
+            'datafield': q2.identifier,
             'answer': f'/api/v1/organizers/dummy/events/dummy/orderpositions/{qa2.orderposition_id}/answer/{qa2.question_id}/',
-            'question_identifier': q2.identifier,
             'options': [],
             'option_identifiers': [],
+            'question': q2.pk,
+            'question_identifier': q2.identifier,
         }]
     }
     assert f[0][0].endswith('.pdf')

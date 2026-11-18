@@ -33,7 +33,7 @@ from pretix.base.datasync.datasync import (
 )
 from pretix.base.datasync.utils import assign_properties
 from pretix.base.models import (
-    Event, InvoiceAddress, Item, Order, Organizer, Question,
+    Event, InvoiceAddress, Item, Order, Organizer, Question, Questionnaire,
 )
 from pretix.base.models.datasync import (
     MODE_APPEND_LIST, MODE_OVERWRITE, MODE_SET_IF_EMPTY, MODE_SET_IF_NEW,
@@ -53,10 +53,11 @@ def event():
     with scope(organizer=o):
         ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                      default_price=Decimal('23.00'), admission=True)
-        question = ticket.questions.create(internal_name="Whats's your favourite colour?", type=Question.TYPE_STRING,
-                                           event=event, required=False, identifier="FAV_COLOR")
-        question2 = ticket.questions.create(internal_name="Food preference", type=Question.TYPE_CHOICE,
-                                            event=event, required=False, identifier="FOOD_PREF")
+        qaire = ticket.questionnaires.create(internal_name="Custom questions", type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, event=event)
+        question = event.questions.create(internal_name="Color", type=Question.TYPE_STRING, identifier="FAV_COLOR")
+        qaire.rows.create(user_datafield=question, label="Whats's your favourite colour?", required=False)
+        question2 = event.questions.create(internal_name="Food preference", type=Question.TYPE_CHOICE, identifier="FOOD_PREF")
+        qaire.rows.create(user_datafield=question2, label="Food preference", required=False)
         option1 = question2.options.create(identifier="F1", answer="vegetarian")
         option2 = question2.options.create(identifier="F2", answer="vegan")
 

@@ -334,7 +334,7 @@ def test_question_filled_previously(event, position, clist, required_checkin_que
 
 @pytest.mark.django_db
 def test_question_filled(event, position, clist, required_checkin_question):
-    perform_checkin(position, clist, {required_checkin_question.user_datafield: 'Foo'}, questions_supported=True)
+    perform_checkin(position, clist, [{'question': required_checkin_question.user_datafield, 'answer': 'Foo'}], questions_supported=True)
     a = position.answers.get()
     assert a.question == required_checkin_question.user_datafield
     assert a.answer == 'Foo'

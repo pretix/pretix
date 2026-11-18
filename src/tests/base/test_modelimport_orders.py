@@ -872,14 +872,16 @@ def test_import_question_validate(user, event, item):
 @scopes_disabled()
 def test_import_question_valid(user, event, item):
     settings = dict(DEFAULT_SETTINGS)
-    q1 = event.questions.create(internal_name='Foo', type=Question.TYPE_CHOICE_MULTIPLE)
+    q1 = event.questions.create(internal_name='A) Foo', type=Question.TYPE_CHOICE_MULTIPLE)
     o1 = q1.options.create(answer='Foo', identifier='Foo')
     o2 = q1.options.create(answer='Bar', identifier='Bar')
-    q2 = event.questions.create(internal_name='Boolean', type=Question.TYPE_BOOLEAN)
+    q2 = event.questions.create(internal_name='B) Boolean', type=Question.TYPE_BOOLEAN)
+    olq1 = event.questions.create(container_type=Question.ContainerType.ORDER, internal_name='Order-level custom country field', type=Question.TYPE_COUNTRYCODE)
     settings['item'] = 'static:{}'.format(item.pk)
     settings['attendee_email'] = 'csv:C'
     settings['question_{}'.format(q1.pk)] = 'csv:I'
     settings['question_{}'.format(q2.pk)] = 'csv:L'
+    settings['question_{}'.format(olq1.pk)] = 'csv:G'
 
     import_orders.apply(
         args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
@@ -904,6 +906,11 @@ def test_import_question_valid(user, event, item):
     assert a6.count() == 1
     assert a6.first().question == q1
     assert a6.last().question == q1
+
+    # order level question
+    assert list(QuestionAnswer.objects.filter(
+        question=olq1, order__isnull=False, orderposition__isnull=True
+    ).values_list('answer', flat=True)) == ['US', 'DE', 'XK']
 
 # TODO: validate question
 
