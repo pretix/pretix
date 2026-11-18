@@ -3161,7 +3161,7 @@ class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
 
 class EventCancelConfirm(EventPermissionRequiredMixin, AsyncAction, FormView):
     template_name = 'pretixcontrol/orders/cancel_confirm.html'
-    permission = 'event.orders:write'
+    permission = 'event:cancel'
     form_class = EventCancelConfirmForm
     task = cancel_event
     known_errortypes = ['OrderError']
