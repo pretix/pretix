@@ -267,7 +267,7 @@ class CustomerStep(CartMixin, TemplateFlowStep):
                 else None
             ),
             prefix='login',
-            request=self.request.event,
+            request=self.request,
         )
         for field in f.fields.values():
             field._show_required = field.required
