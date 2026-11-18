@@ -40,7 +40,7 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    Event, ItemProgramTime, Organizer, Question, SeatingPlan,
+    Event, ItemProgramTime, Organizer, Question, Questionnaire, SeatingPlan,
 )
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 
@@ -106,7 +106,14 @@ def test_full_clone_same_organizer():
     question1 = event.questions.create(internal_name="Yes or no", type=Question.TYPE_BOOLEAN)
     question2 = event.questions.create(internal_name="Size", type=Question.TYPE_CHOICE_MULTIPLE,
                                        dependency_question=question1)
-    question2.options.create(answer="Foobar")
+    question2.options.create(answer="Foobar", identifier='IDENT')
+
+    questionnaire1 = event.get_default_questionnaire()
+    questionnaire1.items.add(item1)
+    questionnaire2 = event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='My Questions')
+    questionnaire2.items.add(item2)
+    qrow_2_1 = questionnaire2.rows.create(user_datafield=question1, label={"en": "Do you want a cup of coffee?"})
+    qrow_2_2 = questionnaire2.rows.create(user_datafield=question2, label={"en": "Coffee size"}, dependency_question=qrow_2_1, dependency_values=['IDENT'])
 
     event.seat_category_mappings.create(
         layout_category='Stalls', product=item1
@@ -194,8 +201,14 @@ def test_full_clone_same_organizer():
 
     copied_question1 = copied_event.questions.get(type=question1.type)
     copied_question2 = copied_event.questions.get(type=question2.type)
-    assert copied_question2.dependency_question == copied_question1
-    assert copied_question2.dependency_question == copied_question1
+    copied_questionnaire1 = copied_event.questionnaires.get(internal_name=questionnaire1.internal_name)
+    copied_questionnaire2 = copied_event.questionnaires.get(internal_name=questionnaire2.internal_name)
+    assert copied_questionnaire1.items.get() == copied_item1
+    assert copied_questionnaire2.items.get() == copied_item2
+    copied_qrow_2_1 = copied_questionnaire2.rows.get(user_datafield=copied_question1)
+    copied_qrow_2_2 = copied_questionnaire2.rows.get(user_datafield=copied_question2)
+    assert copied_qrow_2_2.dependency_question == copied_qrow_2_1
+    assert copied_qrow_2_2.dependency_values == ['IDENT']
 
     assert copied_event.seat_category_mappings.get().product == copied_item1
     assert copied_event.seats.get().product == copied_item1
