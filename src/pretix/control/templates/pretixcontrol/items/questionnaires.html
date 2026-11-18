@@ -40,6 +40,7 @@
     </p>
     <br>
 
+    {% csrf_token %}
     {{ request.event.settings.locales|json_script:"event_locales" }}
     {{ questionnaire_type_choices|json_script:"questionnaire_type_choices" }}
     {{ question_type_choices|json_script:"question_type_choices" }}
