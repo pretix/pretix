@@ -578,13 +578,11 @@
                                                 class="btn btn-xs btn-default">
                                             <span class="fa fa-qrcode"></span> {% trans "Ticket code" %}
                                         </button>
-                                        {% if not line.addon_to %}
-                                            <a href="{% eventurl request.event "presale:event.order.position" order=order.code secret=line.web_secret position=line.positionid %}"
-                                                    class="btn btn-xs btn-default" target="_blank">
-                                                <span class="fa fa-eye"></span>
-                                                {% trans "Ticket page" %}
-                                            </a>
-                                        {% endif %}
+                                        <a href="{% eventurl request.event "presale:event.order.position" order=order.code secret=line.web_secret position=line.positionid %}"
+                                                class="btn btn-xs btn-default" target="_blank">
+                                            <span class="fa fa-eye"></span>
+                                            {% trans "Ticket page" %}
+                                        </a>
                                         {% eventsignal event "pretix.control.signals.order_position_buttons" order=order position=line request=request %}
                                     </div>
                                 {% endif %}
