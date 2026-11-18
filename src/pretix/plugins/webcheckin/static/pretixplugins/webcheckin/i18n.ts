@@ -9,27 +9,6 @@ export const pretixLocale = body.dataset.pretixlocale ?? 'en'
 
 moment.locale(datetimeLocale)
 
-export function gettext (msgid: string): string {
-	if (typeof django !== 'undefined' && typeof django.gettext !== 'undefined') {
-		return django.gettext(msgid)
-	}
-	return msgid
-}
-
-export function ngettext (singular: string, plural: string, count: number): string {
-	if (typeof django !== 'undefined' && typeof django.ngettext !== 'undefined') {
-		return django.ngettext(singular, plural, count)
-	}
-	return plural
-}
-
-export type I18nString = string | Record<string, string> | null | undefined
-
-export function i18nstringLocalize (obj: I18nString): string {
-	// external
-	return i18nstring_localize(obj)
-}
-
 export const STRINGS: Record<string, string> = {
 	'checkinlist.select': gettext('Select a check-in list'),
 	'checkinlist.none': gettext('No active check-in lists found.'),
