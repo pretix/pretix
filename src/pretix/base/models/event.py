@@ -742,7 +742,7 @@ class Event(EventMixin, LoggedModel):
 
     def get_default_questionnaire(self):
         from . import Questionnaire, QuestionnaireRow
-        questionnaire, created = self.request.event.questionnaires.get_or_create(compat_personalization=True, defaults={
+        questionnaire, created = self.questionnaires.get_or_create(compat_personalization=True, defaults={
             'position': 0, 'internal_name': str(_('Attendee data')),
             'type': Questionnaire.QuestionnaireType.POSITION_PURCHASE,
         })
