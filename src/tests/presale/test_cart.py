@@ -53,7 +53,7 @@ from pretix.base.models import (
     Voucher,
 )
 from pretix.base.models.items import (
-    ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
+    ItemAddOn, ItemBundle, Questionnaire, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.cart import CartError, CartManager, error_messages
 from pretix.testutils.scope import classscope
@@ -172,11 +172,10 @@ class CartTest(CartTestMixin, TestCase):
         self.event.settings.attendee_names_asked = True
         self.event.settings.attendee_emails_asked = True
         with scopes_disabled():
-            q = self.event.questions.create(
-                event=self.event, question='What is your shoe size?', type=Question.TYPE_NUMBER,
-                required=True
-            )
-            q.items.add(self.ticket)
+            q = self.event.questions.create(internal_name='What is your shoe size?', type=Question.TYPE_NUMBER)
+            qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='Questions')
+            qaire.rows.create(user_datafield=q, label='What is your shoe size?', required=True)
+            qaire.items.add(self.ticket)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
             'widget_data': json.dumps({
@@ -203,11 +202,10 @@ class CartTest(CartTestMixin, TestCase):
         self.event.settings.attendee_names_asked = False
         self.event.settings.attendee_emails_asked = False
         with scopes_disabled():
-            q = self.event.questions.create(
-                event=self.event, question='What is your shoe size?', type=Question.TYPE_NUMBER,
-                required=True
-            )
-            q.items.add(self.ticket)
+            q = self.event.questions.create(internal_name='What is your shoe size?', type=Question.TYPE_NUMBER)
+            qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='Questions')
+            qaire.rows.create(user_datafield=q, label='What is your shoe size?', required=True)
+            qaire.items.add(self.ticket)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
             'widget_data': json.dumps({
@@ -232,11 +230,10 @@ class CartTest(CartTestMixin, TestCase):
         self.event.settings.attendee_names_asked = True
         self.event.settings.attendee_emails_asked = True
         with scopes_disabled():
-            q = self.event.questions.create(
-                event=self.event, question='What is your shoe size?', type=Question.TYPE_NUMBER,
-                required=True
-            )
-            q.items.add(self.ticket)
+            q = self.event.questions.create(internal_name='What is your shoe size?', type=Question.TYPE_NUMBER)
+            qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='Questions')
+            qaire.rows.create(user_datafield=q, label='What is your shoe size?', required=True)
+            qaire.items.add(self.ticket)
         self._set_session('widget_data', {
             'attendee-name': 'John Doe',
             'email': 'foo@example.com',
@@ -1378,11 +1375,10 @@ class CartTest(CartTestMixin, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
             )
-            q1 = Question.objects.create(
-                event=self.event, question='Age', type=Question.TYPE_NUMBER,
-                required=True
-            )
-            self.ticket.questions.add(q1)
+            q1 = self.event.questions.create(internal_name='Age', type=Question.TYPE_NUMBER)
+            qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='Questions')
+            qaire.rows.create(user_datafield=q, label='Age', required=True)
+            qaire.items.add(self.ticket)
             cr1.answers.add(QuestionAnswer.objects.create(
                 cartposition=cr1, question=q1, answer='23'
             ))

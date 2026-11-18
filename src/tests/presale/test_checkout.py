@@ -1000,11 +1000,10 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
 
     def test_question_file_upload(self):
         with scopes_disabled():
-            q1 = Question.objects.create(
-                event=self.event, question='Student ID', type=Question.TYPE_FILE,
-                required=False
-            )
-            self.ticket.questions.add(q1)
+            q1 = self.event.questions.create(internal_name='Student ID', type=Question.TYPE_FILE)
+            qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='Questions')
+            qaire.rows.create(user_datafield=q1, label=q1.internal_name, required=False)
+            qaire.items.add(self.ticket)
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
@@ -1195,7 +1194,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.assertEqual(cr1.country, 'DE')
 
     def test_attendee_name_required(self):
-        self.event.get_default_questionnaire().rows.get().update(required=True)
+        self.event.get_default_questionnaire().rows.update(required=True)
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -1228,7 +1227,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.assertEqual(cr1.attendee_name, 'Peter')
 
     def test_attendee_name_not_required_if_ticket_unpersonalized(self):
-        self.event.get_default_questionnaire().rows.get().update(required=True)
+        self.event.get_default_questionnaire().rows.update(required=True)
         self.event.get_default_questionnaire().items.clear()
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
@@ -2534,8 +2533,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
 
         self._set_payment()
 
-        self.event.settings.set('attendee_names_asked', True)
-        self.event.settings.set('attendee_names_required', True)
+        self.event.get_default_questionnaire().rows.update(required=True)  # make attendee_name required
 
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
@@ -2544,9 +2542,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         cr1.attendee_name_parts = {"full_name": 'Peter', "_scheme": "full"}
         cr1.save()
         with scopes_disabled():
-            q1 = Question.objects.create(event=self.event, question='Age', type=Question.TYPE_NUMBER)
+            q1 = Question.objects.create(event=self.event, internal_name='Age', type=Question.TYPE_NUMBER)
             qaire = self.ticket.questionnaires.create(event=self.event, internal_name='Questions', type=Questionnaire.QuestionnaireType.POSITION_PURCHASE)
-            qaire.rows.add(user_datafield=q1, required=True, label='Age')
+            qaire.rows.add(user_datafield=q1, label=q1.internal_name, required=True)
 
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
@@ -4781,21 +4779,15 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
     def test_timezone(self):
         """ Test basic timezone change handling by date and time questions """
         with scopes_disabled():
-            q1 = Question.objects.create(
-                event=self.event, question='When did you wake up today?', type=Question.TYPE_TIME,
-                required=True
-            )
-            q2 = Question.objects.create(
-                event=self.event, question='When was your last haircut?', type=Question.TYPE_DATE,
-                required=True
-            )
-            q3 = Question.objects.create(
-                event=self.event, question='When are you going to arrive?', type=Question.TYPE_DATETIME,
-                required=True
-            )
-            self.ticket.questions.add(q1)
-            self.ticket.questions.add(q2)
-            self.ticket.questions.add(q3)
+            qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='Questions')
+            qaire.items.add(self.ticket)
+            q1 = self.event.questions.create(internal_name='When did you wake up today?', type=Question.TYPE_TIME)
+            qaire.rows.create(user_datafield=q1, label=q1.internal_name, required=True)
+            q2 = self.event.questions.create(internal_name='When was your last haircut?', type=Question.TYPE_DATE)
+            qaire.rows.create(user_datafield=q2, label=q2.internal_name, required=True)
+            q3 = self.event.questions.create(internal_name='When are you going to arrive?', type=Question.TYPE_DATETIME)
+            qaire.rows.create(user_datafield=q3, label=q3.internal_name, required=True)
+
             cr = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
@@ -4830,12 +4822,11 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
 
     def test_addon_questions(self):
         with scopes_disabled():
-            q1 = Question.objects.create(
-                event=self.event, question='Age', type=Question.TYPE_NUMBER,
-                required=True
-            )
-            q1.items.add(self.ticket)
-            q1.items.add(self.workshop1)
+            qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='Questions')
+            qaire.items.add(self.ticket)
+            qaire.items.add(self.workshop1)
+            q1 = Question.objects.create(event=self.event, internal_name='Age', type=Question.TYPE_NUMBER)
+            qaire.rows.create(user_datafield=q1, label=q1.internal_name, required=True)
             ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1,
                                      price_included=True)
             cp1 = CartPosition.objects.create(
@@ -4859,16 +4850,13 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
 
     def test_questions(self):
         with scopes_disabled():
-            q1 = Question.objects.create(
-                event=self.event, question='Age', type=Question.TYPE_NUMBER,
-                required=True
-            )
-            q2 = Question.objects.create(
-                event=self.event, question='How have you heard from us?', type=Question.TYPE_STRING,
-                required=False
-            )
-            self.ticket.questions.add(q1)
-            self.ticket.questions.add(q2)
+            qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='Questions')
+            qaire.items.add(self.ticket)
+            q1 = Question.objects.create(event=self.event, internal_name='Age', type=Question.TYPE_NUMBER)
+            qaire.rows.create(user_datafield=q1, label=q1.internal_name, required=True)
+            q2 = Question.objects.create(event=self.event, internal_name='How have you heard from us?', type=Question.TYPE_STRING)
+            qaire.rows.create(user_datafield=q2, label=q2.internal_name, required=False)
+
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
@@ -4960,47 +4948,30 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
 
     @scopes_disabled()
     def _setup_dependency_questions(self):
-        self.q1 = self.event.questions.create(
-            event=self.event, question='What industry are you in?', type=Question.TYPE_CHOICE,
-            required=True
-        )
+        qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='Questions')
+        qaire.items.add(self.ticket)
+        self.q1 = self.event.questions.create(internal_name='What industry are you in?', type=Question.TYPE_CHOICE)
+        self.qr1 = qaire.rows.create(user_datafield=self.q1, label=self.q1.internal_name, required=True)
         self.q1.options.create(answer='Tech', identifier='TECH')
         self.q1.options.create(answer='Health', identifier='HEALTH')
         self.q1.options.create(answer='IT', identifier='IT')
 
-        self.q2a = self.event.questions.create(
-            event=self.event, question='What is your occupation?', type=Question.TYPE_CHOICE_MULTIPLE,
-            required=False, dependency_question=self.q1, dependency_values=['TECH', 'IT']
-        )
+        self.q2a = self.event.questions.create(internal_name='What is your occupation?', type=Question.TYPE_CHOICE_MULTIPLE)
+        self.qr2a = qaire.rows.create(user_datafield=self.q2a, label=self.q2a.internal_name, required=False, dependency_question=self.qr1, dependency_values=['TECH', 'IT'])
         self.q2a.options.create(answer='Software developer', identifier='DEV')
         self.q2a.options.create(answer='System administrator', identifier='ADMIN')
 
-        self.q2b = self.event.questions.create(
-            event=self.event, question='What is your occupation?', type=Question.TYPE_CHOICE_MULTIPLE,
-            required=True, dependency_question=self.q1, dependency_values=['HEALTH']
-        )
+        self.q2b = self.event.questions.create(internal_name='What is your occupation?', type=Question.TYPE_CHOICE_MULTIPLE)
+        self.qr2b = qaire.rows.create(user_datafield=self.q2b, label=self.q2b.internal_name, required=True, dependency_question=self.qr1, dependency_values=['HEALTH'])
         self.q2b.options.create(answer='Doctor', identifier='DOC')
         self.q2b.options.create(answer='Nurse', identifier='NURSE')
 
-        self.q3 = self.event.questions.create(
-            event=self.event, question='Do you like Python?', type=Question.TYPE_BOOLEAN,
-            required=False, dependency_question=self.q2a, dependency_values=['DEV']
-        )
-        self.q4a = self.event.questions.create(
-            event=self.event, question='Why?', type=Question.TYPE_TEXT,
-            required=True, dependency_question=self.q3, dependency_values=['True']
-        )
-        self.q4b = self.event.questions.create(
-            event=self.event, question='Why not?', type=Question.TYPE_TEXT,
-            required=True, dependency_question=self.q3, dependency_values=['False']
-        )
-
-        self.ticket.questions.add(self.q1)
-        self.ticket.questions.add(self.q2a)
-        self.ticket.questions.add(self.q2b)
-        self.ticket.questions.add(self.q3)
-        self.ticket.questions.add(self.q4a)
-        self.ticket.questions.add(self.q4b)
+        self.q3 = self.event.questions.create(internal_name='Do you like Python?', type=Question.TYPE_BOOLEAN)
+        self.qr3 = qaire.rows.create(user_datafield=self.q3, label=self.q3.internal_name, required=False, dependency_question=self.qr2a, dependency_values=['DEV'])
+        self.q4a = self.event.questions.create(internal_name='Why?', type=Question.TYPE_TEXT)
+        self.qr4a = qaire.rows.create(user_datafield=self.q4a, label=self.q4a.internal_name, required=True, dependency_question=self.qr3, dependency_values=['True'])
+        self.q4b = self.event.questions.create(internal_name='Why not?', type=Question.TYPE_TEXT)
+        self.qr4b = qaire.rows.create(user_datafield=self.q4b, label=self.q4b.internal_name, required=True, dependency_question=self.qr3, dependency_values=['False'])
 
     def test_question_dependencies_first_path(self):
         self._setup_dependency_questions()
