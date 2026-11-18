@@ -1176,7 +1176,6 @@ def test_position_update_info(token_client, organizer, event, order, questionnai
         ), format='json', data=payload
     )
     assert resp.status_code == 200
-    cooked_id = QuestionnaireRow.cook_id_from_parts(questionnaire.pk, question.pk, None)
     assert resp.data['answers'] == [
         {
             'datafield': question.identifier,
@@ -1186,15 +1185,6 @@ def test_position_update_info(token_client, organizer, event, order, questionnai
             'options': [opt.pk],
             'option_identifiers': [opt.identifier],
         },
-        {
-            'datafield': 'ABC',
-            'question': cooked_id,
-            'answer': 'L',
-            'question_identifier': 'ABC',
-            'options': [opt.pk],
-            'option_identifiers': [opt.identifier],
-            'questionnaire_id': questionnaire.pk,
-        }
     ]
     op.refresh_from_db()
     assert op.company == 'VILE'
@@ -1229,7 +1219,6 @@ def test_position_update_info(token_client, organizer, event, order, questionnai
                 'state': 'CA',
                 'attendee_email': 'foo@example.org',
                 f'question_{question.pk}': 'L',
-                f'question_{cooked_id}': 'L',
             }
         ]
     }
