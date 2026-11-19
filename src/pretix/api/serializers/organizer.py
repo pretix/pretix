@@ -479,8 +479,6 @@ class DeviceSerializer(serializers.ModelSerializer):
 
 
 class GateSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(max_length=190)
-    identifier = serializers.CharField(max_length=190, required=False)
 
     class Meta:
         model = Gate

@@ -13,7 +13,7 @@ name                                  string                     gate name
 identifier                            string                     Internal identifier to make it easier to match the data with other sources
 ===================================== ========================== =======================================================
 
-Device endpoints
+Endpoints
 ----------------
 
 .. http:get:: /api/v1/organizers/(organizer)/gates/
