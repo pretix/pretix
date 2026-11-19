@@ -311,7 +311,7 @@ def test_renderer_batch_invalid(env, token_client, position):
         format='json',
     )
     assert resp.status_code == 400
-    assert resp.data == {"parts": [{"orderposition": ["Invalid pk \"-2\" - object does not exist."]}]}
+    assert resp.data == {"parts": {0: {"orderposition": ["Invalid pk \"-2\" - object does not exist."]}}}
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/ticketpdfrenderer/render_batch/'.format(env[0].slug, env[0].slug),
@@ -326,7 +326,7 @@ def test_renderer_batch_invalid(env, token_client, position):
         format='json',
     )
     assert resp.status_code == 400
-    assert resp.data == {"parts": [{"override_layout": ["Invalid pk \"-2\" - object does not exist."]}]}
+    assert resp.data == {"parts": {0: {"override_layout": ["Invalid pk \"-2\" - object does not exist."]}}}
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/ticketpdfrenderer/render_batch/'.format(env[0].slug, env[0].slug),
@@ -341,7 +341,7 @@ def test_renderer_batch_invalid(env, token_client, position):
         format='json',
     )
     assert resp.status_code == 400
-    assert resp.data == {"parts": [{"override_channel": ["Object with identifier=magic does not exist."]}]}
+    assert resp.data == {"parts": {0: {"override_channel": ["Object with identifier=magic does not exist."]}}}
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/ticketpdfrenderer/render_batch/'.format(env[0].slug, env[0].slug),

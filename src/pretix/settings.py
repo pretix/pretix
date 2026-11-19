@@ -507,7 +507,6 @@ REST_FRAMEWORK = {
     ],
     'EXCEPTION_HANDLER': 'pretix.api.exception.custom_exception_handler',
     'UNICODE_JSON': False,
-    'LIST_SERIALIZER_ERRORS_AS_DICT': False
 }
 
 
