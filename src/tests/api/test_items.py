@@ -902,6 +902,51 @@ def test_item_create_with_addon(token_client, organizer, event, item, category, 
             "addons": [
                 {
                     "addon_category": category.pk,
+                    "min_count": 0,
+                    "max_count": 0,
+                    "position": 0,
+                    "multi_allowed": False,
+                    "price_included": True
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"addons":["The maximum count needs to be greater than zero."]}'
+    with scopes_disabled():
+        assert 2 == Item.objects.all().count()
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "issue_giftcard": False,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "checkin_text": None,
+            "has_variations": True,
+            "addons": [
+                {
+                    "addon_category": category.pk,
                     "min_count": 110,
                     "max_count": 10,
                     "position": 0,
@@ -1098,6 +1143,48 @@ def test_item_create_with_bundle(token_client, organizer, event, item, category,
     )
     assert resp.status_code == 400
     assert resp.content.decode() == '{"bundles":["The chosen variation does not belong to this item."]}'
+    with scopes_disabled():
+        v = item2.variations.create(value="foo")
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "checkin_text": None,
+            "has_variations": True,
+            "bundles": [
+                {
+                    "bundled_item": item.pk,
+                    "bundled_variation": None,
+                    "count": 0,
+                    "designated_price": "3.00",
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"bundles":["The count needs to be greater than zero."]}'
 
 
 @pytest.mark.django_db

@@ -1343,6 +1343,8 @@ class ItemVariation(models.Model):
                     quotacounter[q] += b.count
 
         for q, n in quotacounter.items():
+            if n == 0:
+                continue
             a = q.availability(count_waitinglist=count_waitinglist, _cache=_cache)
             if a[1] is None:
                 continue
@@ -1486,8 +1488,8 @@ class ItemAddOn(models.Model):
 
     @staticmethod
     def clean_max_count(max_count):
-        if max_count < 0:
-            raise ValidationError(_('The maximum count needs to be equal to or greater than zero.'))
+        if max_count < 1:
+            raise ValidationError(_('The maximum count needs to be greater than zero.'))
 
     @staticmethod
     def clean_max_min_count(max_count, min_count):
@@ -1568,8 +1570,8 @@ class ItemBundle(models.Model):
 
     @staticmethod
     def clean_count(count):
-        if count < 0:
-            raise ValidationError(_('The count needs to be equal to or greater than zero.'))
+        if count < 1:
+            raise ValidationError(_('The count needs to be greater than zero.'))
 
 
 class Question(LoggedModel):
