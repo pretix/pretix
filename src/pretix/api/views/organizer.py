@@ -51,11 +51,10 @@ from pretix.api.serializers.organizer import (
     TeamInviteSerializer, TeamMemberSerializer, TeamSerializer,
 )
 from pretix.base.models import (
-    Customer, Device, Event, EventMetaProperty, GiftCard, GiftCardTransaction,
-    LogEntry, Membership, MembershipType, Organizer, SalesChannel, SeatingPlan,
-    Team, TeamAPIToken, TeamInvite, User,
+    Customer, Device, Event, EventMetaProperty, Gate, GiftCard,
+    GiftCardTransaction, LogEntry, Membership, MembershipType, Organizer,
+    SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
-from pretix.base.models.devices import Gate
 from pretix.base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
 )

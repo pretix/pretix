@@ -41,11 +41,10 @@ from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.auth import get_auth_backends
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
-    Customer, Device, EventMetaProperty, GiftCard, GiftCardTransaction,
+    Customer, Device, EventMetaProperty, Gate, GiftCard, GiftCardTransaction,
     Membership, MembershipType, OrderPosition, Organizer, ReusableMedium,
     SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
-from pretix.base.models.devices import Gate
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.permissions import (
     get_all_event_permission_groups, get_all_organizer_permission_groups,
