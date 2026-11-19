@@ -25,17 +25,6 @@ from django_scopes import scopes_disabled
 from pretix.base.models import Gate
 
 
-@pytest.fixture
-def gate(organizer):
-    t = organizer.gates.create(
-        id=1,
-        name='Entry',
-        organizer=organizer,
-        identifier='entry'
-    )
-    return t
-
-
 TEST_RES = {
     "id": 1,
     "name": "Entry",

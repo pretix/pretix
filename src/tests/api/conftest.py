@@ -40,7 +40,7 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from rest_framework.test import APIClient
 
-from pretix.base.models import Device, Event, Organizer, Team, User
+from pretix.base.models import Device, Event, Gate, Organizer, Team, User
 from pretix.base.models.devices import generate_api_token
 
 
@@ -129,6 +129,16 @@ def device(organizer):
         name='Foo',
         initialized=now(),
         api_token=generate_api_token()
+    )
+
+
+@pytest.fixture
+@scopes_disabled()
+def gate(organizer):
+    return Gate.objects.create(
+        organizer=organizer,
+        name='Entry',
+        identifier='entry'
     )
 
 

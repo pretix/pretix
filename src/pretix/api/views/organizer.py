@@ -574,6 +574,7 @@ class DeviceViewSet(mixins.CreateModelMixin,
 class GateViewSet(viewsets.ModelViewSet):
     serializer_class = GateSerializer
     queryset = Gate.objects.none()
+    permission = 'organizer.devices:read'
     write_permission = 'organizer.devices:write'
 
     def get_queryset(self):
