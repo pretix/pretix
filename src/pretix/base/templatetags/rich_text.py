@@ -340,7 +340,14 @@ class LinkifyAndCleanExtension(Extension):
         )
 
 
-def markdown_compile_email(source, allowed_tags=None, allowed_attributes=ALLOWED_ATTRIBUTES, snippet=False, context=None):
+class SnippetExtension(markdown.extensions.Extension):
+    def extendMarkdown(self, md, *args, **kwargs):
+        md.parser.blockprocessors.deregister('olist')
+        md.parser.blockprocessors.deregister('ulist')
+        md.parser.blockprocessors.deregister('quote')
+
+
+def _get_email_markdown(allowed_tags=None, allowed_attributes=ALLOWED_ATTRIBUTES, snippet=False, context=None):
     if allowed_tags is None:
         allowed_tags = ALLOWED_TAGS_SNIPPET if snippet else ALLOWED_TAGS
 
@@ -381,20 +388,16 @@ def markdown_compile_email(source, allowed_tags=None, allowed_attributes=ALLOWED
     ]
     if snippet:
         exts.append(SnippetExtension())
-    return markdown.markdown(
-        source,
-        extensions=exts
-    )
+
+    return markdown.Markdown(extensions=exts)
 
 
-class SnippetExtension(markdown.extensions.Extension):
-    def extendMarkdown(self, md, *args, **kwargs):
-        md.parser.blockprocessors.deregister('olist')
-        md.parser.blockprocessors.deregister('ulist')
-        md.parser.blockprocessors.deregister('quote')
+def markdown_compile_email(source, allowed_tags=None, allowed_attributes=ALLOWED_ATTRIBUTES, snippet=False, context=None):
+    md = _get_email_markdown(allowed_tags, allowed_attributes, snippet, context)
+    return md.convert(source)
 
 
-def markdown_compile(source, linker, snippet=False):
+def _get_markdown(linker, snippet=False):
     tags = ALLOWED_TAGS_SNIPPET if snippet else ALLOWED_TAGS
     exts = [
         'markdown.extensions.sane_lists',
@@ -409,10 +412,13 @@ def markdown_compile(source, linker, snippet=False):
     ]
     if snippet:
         exts.append(SnippetExtension())
-    return markdown.markdown(
-        source,
-        extensions=exts
-    )
+
+    return markdown.Markdown(extensions=exts)
+
+
+def markdown_compile(source, linker, snippet=False):
+    md = _get_markdown(linker, snippet)
+    return md.convert(source)
 
 
 @register.filter
@@ -445,3 +451,25 @@ def rich_text_snippet(text: str, **kwargs):
     )
     body_md = markdown_compile(text, linker, snippet=True)
     return mark_safe(body_md)
+
+
+def _md_escape(md: markdown.Markdown, plain: str):
+    escaped_chars = md.ESCAPED_CHARS
+    translation_map = {ord(x): f"\\{x}" for x in escaped_chars}
+    return plain.translate(translation_map)
+
+
+def markdown_escape(plain: str) -> str:
+    """
+    Escape formatting characters in markdown with backslash using the default markdown renderer config.
+    """
+    md = _get_markdown(bleach.Linker())
+    return _md_escape(md, plain)
+
+
+def markdown_email_escape(plain: str) -> str:
+    """
+    Escape formatting characters in markdown with backslash using the default email markdown renderer config.
+    """
+    md = _get_email_markdown(None, False)
+    return _md_escape(md, plain)
