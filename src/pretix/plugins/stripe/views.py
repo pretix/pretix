@@ -193,10 +193,6 @@ def webhook(request, *args, **kwargs):
         func = charge_webhook
         objid = event_json['data']['object']['charge']
         lookup_ids = [objid]
-    elif event_json['data']['object']['object'] == "source":
-        func = source_webhook
-        objid = event_json['data']['object']['id']
-        lookup_ids = [objid]
     elif event_json['data']['object']['object'] == "payment_intent":
         func = paymentintent_webhook
         objid = event_json['data']['object']['id']
@@ -350,79 +346,6 @@ def charge_webhook(event, event_json, charge_id, rso):
     return HttpResponse(status=200)
 
 
-def source_webhook(event, event_json, source_id, rso):
-    import stripe
-
-    from pretix.plugins.stripe.payment import StripeCC
-
-    prov = StripeCC(event)
-    prov._init_api()
-    try:
-        src = stripe.Source.retrieve(source_id, **prov.api_kwargs)
-    except stripe.error.StripeError:
-        logger.exception('Stripe error on webhook. Event data: %s' % str(event_json))
-        return HttpResponse('Charge not found', status=500)
-
-    metadata = src['metadata']
-    if 'event' not in metadata:
-        return HttpResponse('Event not given in charge metadata', status=200)
-
-    if int(metadata['event']) != event.pk:
-        return HttpResponse('Not interested in this event', status=200)
-
-    with transaction.atomic():
-        if rso and rso.payment:
-            order = rso.payment.order
-            payment = rso.payment
-        elif rso:
-            order = rso.order
-            payment = None
-        else:
-            try:
-                order = event.orders.get(id=metadata['order'])
-            except Order.DoesNotExist:
-                return HttpResponse('Order not found', status=200)
-            payment = None
-
-        if payment:
-            payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
-        else:
-            payment = order.payments.filter(
-                info__icontains=src['id'],
-                provider__startswith='stripe',
-                amount=prov._amount_to_decimal(src['amount']) if src['amount'] is not None else order.total,
-            ).select_for_update(of=OF_SELF).last()
-        if not payment:
-            payment = order.payments.create(
-                state=OrderPayment.PAYMENT_STATE_CREATED,
-                provider=SOURCE_TYPES.get(src['type'], 'stripe'),
-                amount=prov._amount_to_decimal(src['amount']) if src['amount'] is not None else order.total,
-                info=str(src),
-            )
-
-        if payment.provider != prov.identifier:
-            prov = payment.payment_provider
-            prov._init_api()
-
-        order.log_action('pretix.plugins.stripe.event', data=event_json)
-        go = (event_json['type'] == 'source.chargeable' and
-              payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED) and
-              src.status == 'chargeable')
-        if go:
-            try:
-                prov._charge_source(None, source_id, payment)
-            except PaymentException:
-                logger.exception('Webhook error')
-        elif src.status == 'failed':
-            payment.fail(info=str(src))
-        elif src.status == 'canceled' and payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
-            payment.info = str(src)
-            payment.state = OrderPayment.PAYMENT_STATE_CANCELED
-            payment.save()
-
-    return HttpResponse(status=200)
-
-
 def paymentintent_webhook(event, event_json, paymentintent_id, rso):
     import stripe
 
@@ -494,59 +417,6 @@ class StripeOrderView:
             'order': self.order.code,
             'secret': self.order.secret
         }) + ('?paid=yes' if self.order.status == Order.STATUS_PAID else ''))
-
-
-@method_decorator(xframe_options_exempt, 'dispatch')
-class ReturnView(StripeOrderView, View):
-    def get(self, request, *args, **kwargs):
-        import stripe
-
-        prov = self.pprov
-        prov._init_api()
-        try:
-            src = stripe.Source.retrieve(request.GET.get('source'), **prov.api_kwargs)
-        except stripe.error.InvalidRequestError:
-            logger.exception('Could not retrieve source')
-            messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
-                                           'in your emails to continue.'))
-            return redirect_to_url(eventreverse(self.request.event, 'presale:event.index'))
-
-        if src.client_secret != request.GET.get('client_secret'):
-            messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
-                                           'in your emails to continue.'))
-            return redirect_to_url(eventreverse(self.request.event, 'presale:event.index'))
-
-        with transaction.atomic():
-            self.order.refresh_from_db()
-            self.payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=self.payment.pk)
-            if self.payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
-                if 'payment_stripe_token' in request.session:
-                    del request.session['payment_stripe_token']
-                return self._redirect_to_order()
-
-            if src.status == 'chargeable':
-                try:
-                    prov._charge_source(request, src.id, self.payment)
-                except PaymentException as e:
-                    messages.error(request, str(e))
-                    return self._redirect_to_order()
-                finally:
-                    if 'payment_stripe_token' in request.session:
-                        del request.session['payment_stripe_token']
-            elif src.status == 'consumed':
-                # Webhook was faster, wow! ;)
-                if 'payment_stripe_token' in request.session:
-                    del request.session['payment_stripe_token']
-                return self._redirect_to_order()
-            elif src.status == 'pending':
-                self.payment.state = OrderPayment.PAYMENT_STATE_PENDING
-                self.payment.info = str(src)
-                self.payment.save()
-            else:  # failed or canceled
-                self.payment.fail(info=str(src))
-                messages.error(self.request, _('We had trouble authorizing your card payment. Please try again and '
-                                               'get in touch with us if this problem persists.'))
-        return self._redirect_to_order()
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
