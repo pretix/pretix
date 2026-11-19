@@ -95,6 +95,10 @@ if not settings.DEBUG:
 
 
 DEFAULT_VARIABLES = OrderedDict((
+    # For performance reasons, `evaluate` functions are not allowed to cause additional database
+    # queries, except if an additional `evaluate_bulk` function is provided.
+    # Alternatively, `evaluate_bulk` can be set to False, hiding the variable by default, making
+    # it only available to consumers that call get_variables with allow_non_bulk_evaluatable=True.
     ("secret", {
         "label": _("Ticket code (barcode content)"),
         "editor_sample": "tdmruoekvkpbv1o2mv8xccvqcikvr58u",
@@ -390,7 +394,8 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Add-on 1\n2x Add-on 2"),
         "evaluate": lambda op, order, ev: "\n".join([
             str(p) for p in generate_compressed_addon_list(op, order, ev, only_checked_in=True)
-        ])
+        ]),
+        "evaluate_bulk": False,
     }),
     ("organizer", {
         "label": _("Organizer name"),
@@ -664,7 +669,7 @@ def get_images(event):
     return v
 
 
-def get_variables(event):
+def get_variables(event, allow_non_bulk_evaluatable=False):
     v = copy.copy(DEFAULT_VARIABLES)
 
     templating_context = PlaceholderContext(event=event)
@@ -716,6 +721,11 @@ def get_variables(event):
 
     for recv, res in layout_text_variables.send(sender=event):
         v.update(res)
+
+    if not allow_non_bulk_evaluatable:
+        for k in list(v.keys()):
+            if v[k].get('evaluate_bulk') is False:
+                del v[k]
 
     return v
 
@@ -818,7 +828,7 @@ class Renderer:
     def __init__(self, event, layout, background_file):
         self.layout = layout
         self.background_file = background_file
-        self.variables = get_variables(event)
+        self.variables = get_variables(event, allow_non_bulk_evaluatable=True)
         self.images = get_images(event)
         self.event = event
         if self.background_file:

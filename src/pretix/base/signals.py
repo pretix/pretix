@@ -1072,10 +1072,13 @@ dictionaries as values that contain keys like in the following example::
     }
 
 The ``evaluate`` member will be called with the order position, order and event as arguments. The event might
-also be a subevent, if applicable.
+also be a subevent, if applicable. For performance reasons, ``evaluate`` functions are not allowed to cause 
+additional database queries (all data must be retrieved from already prefetched attributes), except if an 
+additional `evaluate_bulk` function is provided.
 
 The ``evaluate_bulk`` member is optional but can significantly improve performance in some situations because you
-can perform database fetches in bulk instead of single queries for every position.
+can perform database fetches in bulk instead of single queries for every position. If set to False, the variable 
+is hidden by default, making it only available to consumers that call get_variables with allow_non_bulk_evaluatable=True.
 """
 
 

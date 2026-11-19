@@ -271,7 +271,7 @@ class OrderViewSetMixin:
                         Prefetch('meta_values', ItemVariationMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
                     )),
                     'answers', 'answers__options', 'answers__question',
-                    'item__category',
+                    'item__category', 'item__program_times',
                     'addon_to__answers', 'addon_to__answers__options', 'addon_to__answers__question',
                     Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(
                         Prefetch('meta_values', to_attr='meta_values_cached', queryset=SubEventMetaValue.objects.select_related('property'))
@@ -1115,7 +1115,7 @@ class OrderPositionViewSetMixin:
                 )),
                 'variation',
                 'answers', 'answers__options', 'answers__question',
-                'item__category',
+                'item__category', 'item__program_times',
                 'addon_to__answers', 'addon_to__answers__options', 'addon_to__answers__question',
                 Prefetch('addons', qs.select_related('item', 'variation')),
                 Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(
