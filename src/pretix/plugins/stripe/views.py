@@ -175,34 +175,39 @@ def oauth_return(request, *args, **kwargs):
 @require_POST
 @scopes_disabled()
 def webhook(request, *args, **kwargs):
-    event_json = json.loads(request.body.decode('utf-8'))
-
-    # We do not check for the event type as we are not interested in the event it self,
-    # we just use it as a trigger to look the charge up to be absolutely sure.
-    # Another reason for this is that stripe events are not authenticated, so they could
-    # come from anywhere.
-
-    if event_json['data']['object']['object'] == "charge":
-        func = charge_webhook
-        objid = event_json['data']['object']['id']
-        lookup_ids = [
-            objid,
-            (event_json['data']['object'].get('source') or {}).get('id')
-        ]
-    elif event_json['data']['object']['object'] == "dispute":
-        func = charge_webhook
-        objid = event_json['data']['object']['charge']
-        lookup_ids = [objid]
-    elif event_json['data']['object']['object'] == "source":
-        func = source_webhook
-        objid = event_json['data']['object']['id']
-        lookup_ids = [objid]
-    elif event_json['data']['object']['object'] == "payment_intent":
-        func = paymentintent_webhook
-        objid = event_json['data']['object']['id']
-        lookup_ids = [objid]
-    else:
-        return HttpResponse("Not interested in this data type", status=200)
+    try:
+        event_json = json.loads(request.body.decode('utf-8'))
+    except (json.UnicodeDecodeError, json.JSONDecodeError):
+        return HttpResponse("No valid JSON provided.", status=400)
+    try:
+        # We do not check for the event type as we are not interested in the event it self,
+        # we just use it as a trigger to look the charge up to be absolutely sure.
+        # Another reason for this is that stripe events are not authenticated, so they could
+        # come from anywhere.
+        obj_type = event_json['data']['object']['object']
+        if obj_type == "charge":
+            func = charge_webhook
+            objid = event_json['data']['object']['id']
+            lookup_ids = [
+                objid,
+                (event_json['data']['object'].get('source') or {}).get('id')
+            ]
+        elif obj_type == "dispute":
+            func = charge_webhook
+            objid = event_json['data']['object']['charge']
+            lookup_ids = [objid]
+        elif obj_type == "source":
+            func = source_webhook
+            objid = event_json['data']['object']['id']
+            lookup_ids = [objid]
+        elif obj_type == "payment_intent":
+            func = paymentintent_webhook
+            objid = event_json['data']['object']['id']
+            lookup_ids = [objid]
+        else:
+            return HttpResponse("Not interested in this data type", status=200)
+    except (KeyError, TypeError):
+        return HttpResponse("Unknown object type", status=400)
 
     rso = ReferencedStripeObject.objects.select_related('order', 'order__event').filter(
         reference__in=[lid for lid in lookup_ids if lid]
@@ -210,7 +215,7 @@ def webhook(request, *args, **kwargs):
     if rso:
         return func(rso.order.event, event_json, objid, rso)
     else:
-        if event_json['data']['object']['object'] == "charge" and 'payment_intent' in event_json['data']['object']:
+        if obj_type == "charge" and 'payment_intent' in event_json['data']['object']:
             # If we receive a charge webhook *before* the payment intent webhook, we don't know the charge ID yet
             # and can't match it -- but we know the payment intent ID!
             try:
@@ -444,7 +449,7 @@ def paymentintent_webhook(event, event_json, paymentintent_id, rso):
         )
 
     if event_json["type"] == "payment_intent.payment_failed":
-        rso.payment.fail(info=event_json)
+        rso.payment.fail(info=paymentintent, log_data=event_json)
 
     return HttpResponse(status=200)
 
