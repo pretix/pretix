@@ -163,6 +163,32 @@ def test_event_export_schedule(client, env):
 
 
 @pytest.mark.django_db(transaction=True)
+def test_event_export_schedule_copy_new_owner(client, env):
+    env[2].all_events = True
+    env[2].save()
+    user2 = User.objects.create_user("dummy2@dummy.dummy", "dummy")
+
+    s1 = ScheduledEventExport(event=env[0], owner=user2, export_identifier="itemdata")
+    s1.schedule_rrule = "DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO"
+    s1.schedule_rrule_time = datetime.time(2, 30, 0)
+    s1.error_counter = 5
+    s1.mail_subject = "RULE1"
+    s1.mail_template = "RULE1 Text"
+    s1.save()
+
+    client.login(email="dummy@dummy.dummy", password="dummy")
+    response = client.get(f"/control/event/dummy/dummy/orders/export/?identifier=itemdata&scheduled_copy_from={s1.pk}")
+    doc = BeautifulSoup(response.content, "lxml")
+    form_data = extract_form_fields(doc.select("form[data-asynctask]")[0])
+    form_data["schedule"] = "save"
+
+    client.post(f"/control/event/dummy/dummy/orders/export/?identifier=itemdata&scheduled_copy_from={s1.pk}", form_data)
+    new = ScheduledEventExport.objects.get(pk__gt=s1.pk)
+    assert new.owner == env[1]
+    assert new.error_counter == 0
+
+
+@pytest.mark.django_db(transaction=True)
 def test_event_limited_permission(client, env):
     env[2].all_event_permissions = False
     env[2].limit_event_permissions = {"event.orders:read": True}
@@ -328,6 +354,33 @@ def test_organizer_export_schedule(client, env):
     assert b"Product data, my friend!" in response.content
     client.post(f"/control/organizer/dummy/export/{s.pk}/delete")
     assert env[0].organizer.scheduled_exports.count() == 0
+
+
+@pytest.mark.django_db(transaction=True)
+def test_organizer_export_schedule_copy_new_owner(client, env):
+    env[2].all_organizer_permissions = True
+    env[2].save()
+    user2 = User.objects.create_user("dummy2@dummy.dummy", "dummy")
+
+    s1 = ScheduledOrganizerExport(organizer=env[0].organizer, owner=user2, export_identifier="eventdata")
+    s1.schedule_rrule = "DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO"
+    s1.schedule_rrule_time = datetime.time(2, 30, 0)
+    s1.error_counter = 5
+    s1.mail_subject = "RULE1"
+    s1.mail_template = "RULE1 Text"
+    s1.export_form_data = {"all_events": True}
+    s1.save()
+
+    client.login(email="dummy@dummy.dummy", password="dummy")
+    response = client.get(f"/control/organizer/dummy/export/?identifier=eventdata&scheduled_copy_from={s1.pk}")
+    doc = BeautifulSoup(response.content, "lxml")
+    form_data = extract_form_fields(doc.select("form[data-asynctask]")[0])
+    form_data["schedule"] = "save"
+
+    client.post(f"/control/organizer/dummy/export/?identifier=eventdata&scheduled_copy_from={s1.pk}", form_data)
+    new = ScheduledOrganizerExport.objects.get(pk__gt=s1.pk)
+    assert new.owner == env[1]
+    assert new.error_counter == 0
 
 
 @pytest.mark.django_db(transaction=True)

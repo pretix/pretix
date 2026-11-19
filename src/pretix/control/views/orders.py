@@ -2744,7 +2744,11 @@ class ExportMixin:
     @cached_property
     def scheduled_copy_from(self):
         if "scheduled_copy_from" in self.request.GET:
-            return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.GET.get("scheduled_copy_from"))
+            return get_object_or_404(
+                self.get_scheduled_queryset(),
+                pk=self.request.GET.get("scheduled_copy_from"),
+                export_identifier=self.request.GET.get("identifier") or self.request.POST.get("exporter") or self.request.GET.get("exporter"),
+            )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -2896,6 +2900,10 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
         if self.scheduled_copy_from:
             instance = copy.copy(self.scheduled_copy_from)
             instance.pk = None
+            instance.owner = self.request.user
+            instance.schedule_next_run = None
+            instance.error_counter = 0
+            instance.last_error = None
         else:
             instance = self.scheduled or ScheduledEventExport(
                 event=self.request.event,
