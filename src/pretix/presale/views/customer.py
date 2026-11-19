@@ -890,7 +890,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
             )
 
         if not customer.is_active:
-            self._fail(
+            return self._fail(
                 AuthenticationForm.error_messages['inactive'],
                 popup_origin,
             )
