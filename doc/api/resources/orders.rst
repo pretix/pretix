@@ -46,8 +46,6 @@ sales_channel                         string                     Channel this sa
                                                                  ``"web"``.
 datetime                              datetime                   Time of order creation
 expires                               datetime                   The order will expire, if it is still pending by this time
-payment_date                          date                       **DEPRECATED AND INACCURATE** Date of payment receipt
-payment_provider                      string                     **DEPRECATED AND INACCURATE** Payment provider used for this order
 total                                 money (string)             Total value of this order
 tax_rounding_mode                     string                     Tax rounding mode, see :ref:`algorithms-rounding`
 comment                               string                     Internal comment on this order
@@ -383,8 +381,6 @@ List of all orders
             "datetime": "2017-12-01T10:00:00Z",
             "expires": "2017-12-10T10:00:00Z",
             "last_modified": "2017-12-01T10:00:00Z",
-            "payment_date": "2017-12-05",
-            "payment_provider": "banktransfer",
             "fees": [],
             "total": "23.00",
             "tax_rounding_mode": "line",
@@ -637,8 +633,6 @@ Fetching individual orders
         "datetime": "2017-12-01T10:00:00Z",
         "expires": "2017-12-10T10:00:00Z",
         "last_modified": "2017-12-01T10:00:00Z",
-        "payment_date": "2017-12-05",
-        "payment_provider": "banktransfer",
         "fees": [],
         "total": "23.00",
         "tax_rounding_mode": "line",
