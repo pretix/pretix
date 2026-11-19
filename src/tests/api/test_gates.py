@@ -24,9 +24,7 @@ from django_scopes import scopes_disabled
 
 from pretix.base.models import Gate
 
-
 TEST_RES = {
-    "id": 1,
     "name": "Entry",
     "identifier": "entry"
 }
@@ -38,6 +36,8 @@ def test_gate_list(token_client, organizer, gate):
 
     resp = token_client.get('/api/v1/organizers/{}/gates/'.format(organizer.slug))
     assert resp.status_code == 200
+    gate.refresh_from_db()
+    res["id"] = gate.pk
     assert [res] == resp.data['results']
 
 
@@ -46,6 +46,8 @@ def test_gate_detail(token_client, organizer, gate):
     res = dict(TEST_RES)
     resp = token_client.get('/api/v1/organizers/{}/gates/{}/'.format(organizer.slug, gate.id))
     assert resp.status_code == 200
+    gate.refresh_from_db()
+    res["id"] = gate.pk
     assert res == resp.data
 
 
