@@ -91,7 +91,7 @@ dependencies = [
   "redis==7.4.*",
   "reportlab==5.1.*",
   "requests==2.34.*",
-  "sentry-sdk==2.71.*",
+  "sentry-sdk==2.75.*",
   "sepaxml==2.7.*",
   "stripe==7.9.*",
   "text-unidecode==1.*",
