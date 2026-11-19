@@ -171,7 +171,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # Real-time payments
 # - Swish: ✓
 # - UPI: ✗
-# - Pix: ✗
+# - Pix: ✓
 # - PayTo: ✗
 # - PayNow: ✗
 # - PromptPay: ✓
@@ -463,6 +463,14 @@ class StripeSettingsHolder(BasePaymentProvider):
                  forms.BooleanField(
                      label='PromptPay',
                      disabled=self.event.currency != 'THB',
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before they work properly.'),
+                     required=False,
+                 )),
+                ('method_pix',
+                 forms.BooleanField(
+                     label='Pix',
+                     disabled=self.event.currency != 'BRL',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
                                  'before they work properly.'),
                      required=False,
@@ -1922,6 +1930,93 @@ class StripePromptPay(StripeRedirectMethod):
                 },
             },
         }
+
+
+class StripePix(StripeRedirectMethod):
+    identifier = 'stripe_pix'
+    verbose_name = _('Pix via Stripe')
+    public_name = 'Pix'
+    method = 'pix'
+    confirmation_method = 'automatic'
+    explanation = _(
+        'Pix is a real-time payment method from Brazil. After placing your order, you will be shown a QR code '
+        'that you can scan with your banking app, or a Pix code that you can copy into your banking app.'
+    )
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        return super().is_allowed(request, total) and request.event.currency == "BRL"
+
+    def payment_form_render(self, request) -> str:
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple.html')
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'settings': self.settings,
+            'explanation': self.explanation,
+            'form': self.payment_form(request)
+        }
+        return template.render(ctx)
+
+    @property
+    def payment_form_fields(self):
+        return OrderedDict([
+            ('name', forms.CharField(
+                label=_('Full name'),
+            )),
+            ('tax_id', forms.CharField(
+                label=_('CPF or CNPJ'),
+                required=False,
+                help_text=_('Your Brazilian tax identifier (CPF for individuals, CNPJ for businesses). '
+                            'Depending on the country of the organizer, this may be required to complete '
+                            'the payment.'),
+            )),
+        ])
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        try:
+            return super().execute_payment(request, payment)
+        finally:
+            for key in ('name', 'tax_id'):
+                if f'payment_stripe_{self.method}_{key}' in request.session:
+                    del request.session[f'payment_stripe_{self.method}_{key}']
+
+    def checkout_prepare(self, request, cart):
+        form = self.payment_form(request)
+        if form.is_valid():
+            request.session[f"payment_stripe_{self.method}_payment_method_id"] = None
+            for key in ('name', 'tax_id'):
+                request.session[f'payment_stripe_{self.method}_{key}'] = form.cleaned_data[key]
+            return True
+        return False
+
+    def _payment_intent_kwargs(self, request, payment):
+        billing_details = {
+            "name": request.session.get(f"payment_stripe_{self.method}_name") or gettext("unknown name"),
+            "email": payment.order.email,
+        }
+        tax_id = request.session.get(f"payment_stripe_{self.method}_tax_id")
+        if tax_id:
+            # Stripe expects the tax ID without any punctuation
+            billing_details["tax_id"] = re.sub(r"[^0-9A-Za-z]", "", tax_id)
+
+        kwargs = {
+            "payment_method_data": {
+                "type": "pix",
+                "billing_details": billing_details,
+            },
+        }
+
+        # Pix codes expire after 4 hours by default. Align the expiration with the order's payment deadline,
+        # as long as it is within the bounds allowed by Stripe (60 seconds to 14 days).
+        expires_after_seconds = int((payment.order.expires - now()).total_seconds())
+        if expires_after_seconds > 60:
+            kwargs["payment_method_options"] = {
+                "pix": {
+                    "expires_after_seconds": min(expires_after_seconds, 14 * 24 * 60 * 60),
+                },
+            }
+
+        return kwargs
 
 
 class StripeTwint(StripeRedirectMethod):
