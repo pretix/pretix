@@ -79,8 +79,8 @@ class WaitingListEntryEditForm(I18nModelForm):
             self.fields['name_parts'] = NamePartsFormField(
                 max_length=255,
                 required=self.event.settings.waiting_list_names_required,
-                scheme=self.event.organizer.settings.name_scheme,
-                titles=self.event.organizer.settings.name_scheme_titles,
+                scheme=self.event.settings.name_scheme,
+                titles=self.event.settings.name_scheme_titles,
                 label=_('Name'),
             )
         else:
