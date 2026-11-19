@@ -42,7 +42,7 @@ from pretix.base.models import LogEntry
 from pretix.base.services.tasks import ProfiledTask, TransactionAwareTask
 from pretix.base.signals import periodic_task
 from pretix.celery_app import app
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 from pretix.helpers.celery import get_task_priority
 
 logger = logging.getLogger(__name__)
@@ -678,7 +678,7 @@ def manually_retry_all_calls(webhook_id: int):
     with scope(organizer=webhook.organizer), transaction.atomic():
         for whcr in webhook.retries.select_for_update(
             skip_locked=connection.features.has_select_for_update_skip_locked,
-            of=OF_SELF
+            **LOCK_SELF_NO_KEY
         ):
             send_webhook.apply_async(
                 args=(whcr.logentry_id, whcr.action_type, whcr.webhook_id, whcr.retry_count),
@@ -692,7 +692,7 @@ def schedule_webhook_retries_on_celery(sender, **kwargs):
     with transaction.atomic():
         for whcr in WebHookCallRetry.objects.select_for_update(
             skip_locked=connection.features.has_select_for_update_skip_locked,
-            of=OF_SELF
+            **LOCK_SELF_NO_KEY
         ).filter(retry_not_before__lt=now()):
             send_webhook.apply_async(
                 args=(whcr.logentry_id, whcr.action_type, whcr.webhook_id, whcr.retry_count),

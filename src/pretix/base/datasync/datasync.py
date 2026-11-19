@@ -40,7 +40,7 @@ from pretix.base.i18n import language
 from pretix.base.logentrytype_registry import make_link
 from pretix.base.models.datasync import OrderSyncQueue, OrderSyncResult
 from pretix.base.signals import PluginAwareRegistry
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 
 logger = logging.getLogger(__name__)
 
@@ -199,7 +199,7 @@ class OutboundSyncProvider:
                 try:
                     sq = (
                         OrderSyncQueue.objects
-                        .select_for_update(of=OF_SELF, nowait=True)
+                        .select_for_update(**LOCK_SELF_NO_KEY, nowait=True)
                         .select_related("order")
                         .get(pk=queue_item.pk)
                     )

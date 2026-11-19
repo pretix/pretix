@@ -85,7 +85,7 @@ from pretix.base.settings import PERSON_NAME_SCHEMES, ROUNDING_MODES
 from pretix.base.signals import allow_ticket_download, order_gracefully_delete
 from pretix.base.timemachine import time_machine_now
 
-from ...helpers import OF_SELF
+from ...helpers import LOCK_SELF_NO_KEY
 from ...helpers.countries import CachedCountries, FastCountryField
 from ...helpers.models import NormalizedDecimalField
 from ...helpers.names import build_name
@@ -1859,7 +1859,7 @@ class OrderPayment(models.Model):
         :param send_mail: Whether an email should be sent to the user about this event (default: ``True``).
         """
         with transaction.atomic():
-            locked_instance = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=self.pk)
+            locked_instance = OrderPayment.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=self.pk)
             if locked_instance.state in (
                 OrderPayment.PAYMENT_STATE_CONFIRMED,
                 OrderPayment.PAYMENT_STATE_FAILED,
@@ -1928,7 +1928,7 @@ class OrderPayment(models.Model):
         :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
         """
         with transaction.atomic():
-            locked_instance = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=self.pk)
+            locked_instance = OrderPayment.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=self.pk)
             if locked_instance.state == self.PAYMENT_STATE_CONFIRMED:
                 # Race condition detected, this payment is already confirmed
                 logger.info('Confirmed payment {} but ignored due to likely race condition.'.format(

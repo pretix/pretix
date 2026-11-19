@@ -33,7 +33,7 @@ from rest_framework import status
 
 from pretix.api.models import ApiCall
 from pretix.base.models import Organizer
-from pretix.helpers import OF_SELF
+from pretix.helpers.database import LOCK_SELF_NO_KEY
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +60,7 @@ class IdempotencyMiddleware:
         idempotency_key = request.headers.get('X-Idempotency-Key', '')
 
         with transaction.atomic(durable=True):
-            call, created = ApiCall.objects.select_for_update(of=OF_SELF).get_or_create(
+            call, created = ApiCall.objects.select_for_update(**LOCK_SELF_NO_KEY).get_or_create(
                 auth_hash=auth_hash,
                 idempotency_key=idempotency_key,
                 defaults={

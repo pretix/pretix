@@ -55,7 +55,7 @@ from pretix.base.signals import (
     EventPluginSignal, event_copy_data, periodic_task,
 )
 from pretix.control.signals import nav_event
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 from pretix.plugins.sendmail.models import Rule, ScheduledMail
 from pretix.plugins.sendmail.views import OrderSendView, WaitinglistSendView
 
@@ -206,7 +206,7 @@ def sendmail_run_rules(sender, **kwargs):
 
             with transaction.atomic(durable=True):
                 m = ScheduledMail.objects.select_for_update(
-                    of=OF_SELF,
+                    **LOCK_SELF_NO_KEY,
                     skip_locked=connection.features.has_select_for_update_skip_locked
                 ).filter(pk=m_id).first()
                 if not m or m.state not in (ScheduledMail.STATE_SCHEDULED, ScheduledMail.STATE_FAILED):

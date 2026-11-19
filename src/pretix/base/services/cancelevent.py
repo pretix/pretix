@@ -45,7 +45,7 @@ from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.services.tax import split_fee_for_taxes
 from pretix.base.templatetags.money import money_filter
 from pretix.celery_app import app
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 
 logger = logging.getLogger(__name__)
 
@@ -286,7 +286,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
             if dry_run:
                 o = event.orders.get(pk=o)
             else:
-                o = event.orders.select_for_update(of=OF_SELF).get(pk=o)
+                o = event.orders.select_for_update(**LOCK_SELF_NO_KEY).get(pk=o)
             total = Decimal('0.00')
             fee = Decimal('0.00')
             positions = []

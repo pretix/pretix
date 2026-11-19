@@ -43,7 +43,7 @@ from pretix.base.models import (
     ReusableMedium,
 )
 from pretix.base.models.orders import PrintLog
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 from pretix.helpers.dicts import merge_dicts
 
 with scopes_disabled():
@@ -119,7 +119,7 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic()
     def perform_update(self, serializer):
-        rm = ReusableMedium.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
+        rm = ReusableMedium.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=self.get_object().pk)
         prev_linked_ops_pks = list(rm.linked_orderpositions.values_list("pk", flat=True))
         inst = serializer.save(identifier=serializer.instance.identifier, type=serializer.instance.type)
         linked_ops_pks = inst.linked_orderpositions.values_list("pk", flat=True)

@@ -56,7 +56,7 @@ from pretix.base.forms.questions import guess_country
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.settings import SettingsSandbox
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 from pretix.helpers.urls import mainreverse_absolute
 from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.plugins.paypal2.client.core.environment import (
@@ -675,7 +675,7 @@ class PaypalMethod(BasePaymentProvider):
         return False
 
     def _execute_payment(self, request: HttpRequest, payment: OrderPayment):
-        payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
+        payment = OrderPayment.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=payment.pk)
         if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
             # payment is already confirmed; possible return-view/webhook race-condition
             return
@@ -1002,7 +1002,7 @@ class PaypalMethod(BasePaymentProvider):
         self.init_api()
         with transaction.atomic():
             # Lock payment that we are creating refund for to prevent race condition with incoming webhook
-            OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=refund.payment_id)
+            OrderPayment.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=refund.payment_id)
             try:
                 pp_payment = None
                 payment_info_data = None

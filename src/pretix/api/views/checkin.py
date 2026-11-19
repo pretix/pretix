@@ -75,7 +75,7 @@ from pretix.base.services.checkin import (
 )
 from pretix.base.services.media import perform_media_exchange
 from pretix.base.signals import checkin_annulled
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 
 with scopes_disabled():
     class CheckinListFilter(FilterSet):
@@ -1184,14 +1184,14 @@ class CheckinRPCAnnulView(views.APIView):
                 if isinstance(request.auth, Device):
                     qs = qs.filter(device=request.auth)
                 ci = qs.select_for_update(
-                    of=OF_SELF,
+                    **LOCK_SELF_NO_KEY,
                 ).select_related("position", "position__order", "position__order__event").get(
                     list__in=s.validated_data['lists'],
                     nonce=s.validated_data['nonce'],
                 )
                 if connection.features.has_select_for_update_of and ci.position_id:
                     # Lock position as well, can't do it with of= above because relation is nullable
-                    OrderPosition.objects.select_for_update(of=OF_SELF).get(pk=ci.position_id)
+                    OrderPosition.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=ci.position_id)
 
                 if not ci.successful or not ci.position:
                     raise ValidationError("Cannot annul an unsuccessful checkin")

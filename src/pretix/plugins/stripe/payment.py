@@ -72,7 +72,7 @@ from pretix.base.payment import (
 from pretix.base.plugins import get_all_plugins
 from pretix.base.settings import SettingsSandbox
 from pretix.base.views.redirect import safelink
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.http import get_client_ip
 from pretix.helpers.urls import mainreverse_absolute
@@ -753,7 +753,7 @@ class StripeMethod(BasePaymentProvider):
         self._init_api()
 
         payment_info = refund.payment.info_data
-        OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=refund.payment.pk)
+        OrderPayment.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=refund.payment.pk)
 
         if not payment_info:
             raise PaymentException(_('No payment information found.'))

@@ -60,7 +60,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.views.event import DecoupleMixin
 from pretix.control.views.organizer import OrganizerDetailViewMixin
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.stripe.forms import OrganizerStripeSettingsForm
@@ -279,13 +279,13 @@ def charge_webhook(event, event_json, charge_id, rso):
 
     with transaction.atomic():
         if payment:
-            payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
+            payment = OrderPayment.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=payment.pk)
         else:
             payment = order.payments.filter(
                 info__icontains=charge['id'],
                 provider__startswith='stripe',
                 amount=prov._amount_to_decimal(charge['amount']),
-            ).select_for_update(of=OF_SELF).last()
+            ).select_for_update(**LOCK_SELF_NO_KEY).last()
         if not payment:
             payment = order.payments.create(
                 state=OrderPayment.PAYMENT_STATE_CREATED,
