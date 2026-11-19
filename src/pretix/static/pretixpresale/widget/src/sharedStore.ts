@@ -152,12 +152,9 @@ export function createWidgetStore (config: {
 				return ''
 			},
 			additionalURLParams (): string {
-				if (!window.location.search.includes('utm_')) {
-					return ''
-				}
 				const params = new URLSearchParams(window.location.search)
 				for (const [key] of params.entries()) {
-					if (!key.startsWith('utm_')) {
+					if (!key.startsWith('utm_') || key !== 'gclid' || key !== '_gl') {
 						params.delete(key)
 					}
 				}
