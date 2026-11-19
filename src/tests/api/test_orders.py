@@ -321,7 +321,6 @@ TEST_ORDER_RES = {
     "customer": None,
     "datetime": "2017-12-01T10:00:00Z",
     "expires": "2017-12-10T10:00:00Z",
-    "payment_date": "2017-12-01",
     "sales_channel": "web",
     "fees": [
         {
@@ -336,7 +335,6 @@ TEST_ORDER_RES = {
         }
     ],
     "url": "http://example.com/dummy/dummy/order/FOO/k24fiuwvu8kxz3y1/",
-    "payment_provider": "banktransfer",
     "total": "23.00",
     "tax_rounding_mode": "line",
     "comment": "",
