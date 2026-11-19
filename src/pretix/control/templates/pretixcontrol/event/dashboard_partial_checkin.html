@@ -1,0 +1,23 @@
+{% load i18n %}
+{% load icon %}
+{% load humanize %}
+{% for cl in lists %}
+    <a class="quotabox quotabox-full availability"
+       href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}">
+        <strong>{{ cl.name }}</strong>
+        <div class="progress">
+            <div class="progress-bar progress-bar-success progress-bar-{{ cl.percent }}">
+            </div>
+        </div>
+        <div class="numbers">
+            {% icon "sign-in" %}
+            {{ cl.checkin_count|default_if_none:0|intcomma }} /
+            {{ cl.position_count|default_if_none:0|intcomma }}
+            <br>
+            {% icon "user" %}
+            {% blocktrans trimmed with n=cl.inside_count|intcomma %}
+                {{ n }} present
+            {% endblocktrans %}
+        </div>
+    </a>
+{% endfor %}
