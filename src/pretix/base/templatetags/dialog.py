@@ -23,17 +23,13 @@ from django import template
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
-from pretix.helpers.templatetags.simple_block_tag import (
-    register_simple_block_tag,
-)
-
 from django.utils.translation import gettext_lazy as _  # NOQA
 
 
 register = template.Library()
 
 
-@register_simple_block_tag(register)
+@register.simple_block_tag
 def dialog(content, html_id, title, description, *args, **kwargs):
     format_kwargs = {
         "id": html_id,
