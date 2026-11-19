@@ -47,6 +47,3 @@ class Paypal2App(AppConfig):
 
     def ready(self):
         from . import signals  # NOQA
-
-    def is_available(self, event):
-        return 'pretix.plugins.paypal' not in event.plugins.split(',')
