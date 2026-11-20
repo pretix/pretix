@@ -90,12 +90,12 @@ from pretix.base.models import (
     Membership, MembershipType, Order, OrderPayment, OrderPosition, Organizer,
     ReusableMedium, ScheduledOrganizerExport, Team, TeamInvite, User,
 )
+from pretix.base.models.cancellation import CancellationRequest
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
 from pretix.base.models.giftcards import (
     GiftCardAcceptance, GiftCardTransaction, gen_giftcard_secret,
 )
-from pretix.base.models.orders import CancellationRequest
 from pretix.base.models.organizer import (
     SalesChannel, TeamAPIToken, TeamQuerySet,
 )
@@ -3169,10 +3169,12 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             ).annotate(
                 pcnt=Subquery(s, output_field=IntegerField()),
                 icnt=Subquery(i, output_field=IntegerField()),
-                has_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef('pk')))
+                has_open_cancellation_request=Exists(
+                    CancellationRequest.objects.filter(order=OuterRef('pk'), state__in=[
+                        CancellationRequest.STATE_CREATED, CancellationRequest.STATE_PENDING]))
             ).values(
                 'pk', 'pcnt', 'is_overpaid', 'is_underpaid', 'is_pending_with_full_payment', 'has_external_refund',
-                'has_pending_refund', 'has_cancellation_request', 'computed_payment_refund_sum', 'icnt'
+                'has_pending_refund', 'has_open_cancellation_request', 'computed_payment_refund_sum', 'icnt'
             )
         }
 
@@ -3185,7 +3187,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             o.is_pending_with_full_payment = annotated.get(o.pk)['is_pending_with_full_payment']
             o.has_external_refund = annotated.get(o.pk)['has_external_refund']
             o.has_pending_refund = annotated.get(o.pk)['has_pending_refund']
-            o.has_cancellation_request = annotated.get(o.pk)['has_cancellation_request']
+            o.has_open_cancellation_request = annotated.get(o.pk)['has_open_cancellation_request']
             o.computed_payment_refund_sum = annotated.get(o.pk)['computed_payment_refund_sum']
             o.icnt = annotated.get(o.pk)['icnt']
 

@@ -644,6 +644,7 @@ class Order(LockModel, LoggedModel):
         return self.total - self.tax_total
 
     def cancel_allowed(self):
+        # TODO turn into check after replacing cancellation machinery
         return (
             self.status in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED) and self.count_positions
         )
@@ -712,13 +713,15 @@ class Order(LockModel, LoggedModel):
         """
         Returns whether or not this order can be canceled by the user.
         """
+        from .cancellation import CancellationRequest
         from .checkin import Checkin
         from .items import ItemAddOn
 
         if self.status not in (Order.STATUS_PENDING, Order.STATUS_PAID) or not self.count_positions:
             return False
 
-        if self.cancellation_requests.exists():
+        if self.cancellation_requests.filter(
+                state__in=[CancellationRequest.STATE_CREATED, CancellationRequest.STATE_PENDING]).exists():
             return False
 
         if self.require_approval:
@@ -753,36 +756,13 @@ class Order(LockModel, LoggedModel):
         """
         Returns whether or not this order can be canceled by the user.
         """
-        from .checkin import Checkin
-
-        if self.cancellation_requests.exists() or not self.cancel_allowed():
+        from ..services.cancellation import evaluate_cancellation
+        from .cancellation import CancellationRequest
+        if self.cancellation_requests.filter(
+                state__in=[CancellationRequest.STATE_CREATED, CancellationRequest.STATE_PENDING]).exists():
             return False
-        positions = list(
-            self.positions.all().annotate(
-                has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk'), list__consider_tickets_used=True))
-            ).select_related('item').prefetch_related('issued_gift_cards')
-        )
-        cancelable = all([op.item.allow_cancel and not op.has_checkin and not op.blocked for op in positions])
-        if not cancelable or not positions:
-            return False
-        for op in positions:
-            for gc in op.issued_gift_cards.all():
-                if gc.value != op.price:
-                    return False
-            if op.granted_memberships.with_usages().filter(usages__gt=0):
-                return False
-        if self.user_cancel_deadline and time_machine_now() > self.user_cancel_deadline:
-            return False
-
-        if self.status == Order.STATUS_PAID:
-            if self.total == Decimal('0.00'):
-                return self.event.settings.cancel_allow_user
-            return self.event.settings.cancel_allow_user_paid
-        elif self.payment_refund_sum > Decimal('0.00'):
-            return False
-        elif self.status == Order.STATUS_PENDING:
-            return self.event.settings.cancel_allow_user
-        return False
+        res = evaluate_cancellation(event=self.event, order=self, keep=set(), check_at=time_machine_now())
+        return res.cancellation_possible
 
     def propose_auto_refunds(self, amount: Decimal, payments: list=None):
         # Algorithm to choose which payments are to be refunded to create the least hassle
@@ -3617,13 +3597,6 @@ class CachedCombinedTicket(models.Model):
     extension = models.CharField(max_length=255)
     file = models.FileField(null=True, blank=True, upload_to=cachedcombinedticket_name, max_length=255)
     created = models.DateTimeField(auto_now_add=True)
-
-
-class CancellationRequest(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='cancellation_requests')
-    created = models.DateTimeField(auto_now_add=True)
-    cancellation_fee = models.DecimalField(max_digits=13, decimal_places=2)
-    refund_as_giftcard = models.BooleanField(default=False)
 
 
 class RevokedTicketSecret(models.Model):

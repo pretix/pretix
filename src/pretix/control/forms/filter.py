@@ -62,6 +62,7 @@ from pretix.base.models import (
     SalesChannel, SubEvent, SubEventMetaValue, Team, TeamAPIToken, TeamInvite,
     User, Voucher,
 )
+from pretix.base.models.cancellation import CancellationRequest
 from pretix.base.signals import register_payment_providers
 from pretix.base.timeframes import (
     DateFrameField,
@@ -327,7 +328,9 @@ class OrderFilterForm(FilterForm):
                 qs = qs.filter(is_overpaid=True)
             elif s == 'rc':
                 qs = qs.filter(
-                    cancellation_requests__isnull=False
+                    cancellation_requests__isnull=False,
+                    cancellation_requests__state__in=[CancellationRequest.STATE_CREATED,
+                                                      CancellationRequest.STATE_PENDING]
                 ).annotate(
                     cancellation_request_time=Max('cancellation_requests__created')
                 ).order_by(

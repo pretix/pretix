@@ -2619,6 +2619,7 @@ def test_refund_list(client, env):
 
 @pytest.mark.django_db
 def test_delete_cancellation_request(client, env):
+    # TODO: fix
     with scopes_disabled():
         r = env[2].cancellation_requests.create(
             cancellation_fee=Decimal('4.00'),
@@ -2633,6 +2634,7 @@ def test_delete_cancellation_request(client, env):
 
 @pytest.mark.django_db
 def test_approve_cancellation_request(client, env):
+    # TODO: fix
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
         o.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=o.total)
