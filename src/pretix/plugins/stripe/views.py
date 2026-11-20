@@ -352,7 +352,7 @@ def paymentintent_webhook(untrusted_json, paymentintent_id, rso):
     return HttpResponse(status=200)
 
 
-@event_permission_required('event.settings.general:write')
+@event_permission_required('event.settings.payment:write')
 def oauth_disconnect(request, **kwargs):
     if request.method != "POST":
         return render(request, 'pretixplugins/stripe/oauth_disconnect.html', {})
