@@ -36,6 +36,7 @@ import json
 import logging
 
 import requests
+from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
 from django.http import Http404, HttpResponse
@@ -177,7 +178,11 @@ def oauth_return(request, *args, **kwargs):
 def webhook(request, *args, **kwargs):
     try:
         event_json = json.loads(request.body.decode('utf-8'))
-    except (json.UnicodeDecodeError, json.JSONDecodeError):
+    except (json.UnicodeDecodeError, json.JSONDecodeError) as e:
+        logger.exception('stripe webhook failed: No valid JSON provided')
+        if settings.SENTRY_ENABLED:
+            import sentry_sdk
+            sentry_sdk.capture_exception(e)
         return HttpResponse("No valid JSON provided.", status=400)
     try:
         # We do not check for the event type as we are not interested in the event it self,
@@ -206,7 +211,11 @@ def webhook(request, *args, **kwargs):
             lookup_ids = [objid]
         else:
             return HttpResponse("Not interested in this data type", status=200)
-    except (KeyError, TypeError):
+    except (KeyError, TypeError) as e:
+        logger.exception('stripe webhook failed: Unknown object type')
+        if settings.SENTRY_ENABLED:
+            import sentry_sdk
+            sentry_sdk.capture_exception(e)
         return HttpResponse("Unknown object type", status=400)
 
     rso = ReferencedStripeObject.objects.select_related('order', 'order__event').filter(
