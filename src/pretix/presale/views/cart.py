@@ -247,28 +247,6 @@ def _items_from_post_data(request, warn_if_empty=True):
         pass
 
     items = []
-    if 'raw' in request.POST:
-        for obj in json.loads(request.POST.get("raw")):
-            try:
-                amount = int(obj['count'])
-                if amount <= 0:
-                    continue
-                items.append({
-                    'item': int(obj['item']),
-                    'variation': int(obj['variation']) if obj.get('variation') else None,
-                    'count': amount,
-                    'seat': obj.get('seat'),
-                    'price': obj.get('price', ''),
-                    'voucher': obj.get('voucher'),
-                    'voucher_ignore_if_redeemed': obj.get('voucher_ignore_if_redeemed'),
-                    'subevent': int(obj['subevent']) if obj.get('subevent') else None,
-                })
-            except ValueError:
-                messages.error(request, _('Please enter numbers only.'))
-                return
-            except KeyError:
-                messages.error(request, _('Your input was not valid.'))
-                return
 
     for key, values in req_items:
         for value in values:
