@@ -20,19 +20,26 @@
 # <https://www.gnu.org/licenses/>.
 #
 
+from collections import OrderedDict
+
+from django import forms
 from django.db.models import Exists, OuterRef
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.translation import gettext as _
 
+from pretix.base.forms import SecretKeySettingsField
 from pretix.base.models.event import Event
 from pretix.base.shredder import BaseDataShredder, slow_delete
 from pretix.base.signals import (
     invalidate_ticket_cache, periodic_task, register_data_shredders,
+    register_global_settings,
 )
 from pretix.base.wallet.tasks import get_pass
+from pretix.control.forms import ClearableBasenameFileInput
 from pretix.control.signals import html_head
 
+from .forms import CertificateFileField, validate_rsa_privkey
 from .models import AppleWalletDevice, AppleWalletPass, CombinedAppleWalletPass
 from .tasks import send_update_apns
 
@@ -133,3 +140,65 @@ class AppleWalletShredder(BaseDataShredder):
 @receiver(register_data_shredders, dispatch_uid="shredders_apple_wallet")
 def shredders_apple_wallet(**kwargs):
     return [AppleWalletShredder]
+
+
+@receiver(register_global_settings, dispatch_uid="apple_wallet_global_settings")
+def global_settings_apple_wallet(**kwargs):
+    return OrderedDict(
+        [
+            (
+                # TODO: extract from pass certificate
+                "wallet_apple_team_id",
+                forms.CharField(
+                    label=_("Apple Wallet Pass team ID"),
+                    required=False,
+                ),
+            ),
+            (
+                # TODO: extract from pass certificate
+                "wallet_apple_pass_type_id",
+                forms.CharField(
+                    label=_("Apple Wallet Pass type"),
+                    required=False,
+                ),
+            ),
+            (
+                "wallet_apple_certificate",
+                CertificateFileField(
+                    label=_("Apple Wallet Pass certificate file"),
+                    required=False,
+                ),
+            ),
+            (
+                # TODO: download this server-side
+                "wallet_apple_ca_certificate",
+                CertificateFileField(
+                    label=_("Apple Wallet Pass CA Certificate"),
+                    help_text=_(
+                        "You can download the current CA certificate from apple at "
+                        "https://www.apple.com/certificateauthority/AppleWWDRCAG4.cer"
+                    ),
+                    required=False,
+                ),
+            ),
+            (
+                "wallet_apple_key",
+                forms.FileField(
+                    label=_("Apple Wallet Pass secret key"),
+                    required=False,
+                    validators=[validate_rsa_privkey],
+                    widget=ClearableBasenameFileInput,
+                ),
+            ),
+            (
+                "wallet_apple_key_password",
+                SecretKeySettingsField(
+                    label=_("Apple Wallet Pass key password"),
+                    required=False,
+                    help_text=_(
+                        "Optional, only necessary if the key entered above requires a password to use."
+                    ),
+                ),
+            ),
+        ]
+    )

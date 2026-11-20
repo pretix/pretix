@@ -529,7 +529,7 @@ class PluginAwareRegistry(Registry):
 
         super().__init__({"plugin": get_plugin, **keys})
 
-    def filter(self, active_in=None, **kwargs):
+    def filter(self, *, active_in=None, **kwargs):
         result = super().filter(**kwargs)
         if active_in is not None:
             result = (
@@ -539,7 +539,7 @@ class PluginAwareRegistry(Registry):
             )
         return result
 
-    def get(self, active_in=None, **kwargs):
+    def get(self, *, active_in=None, **kwargs):
         return super().get(active_in=active_in, **kwargs)
 
 

@@ -11,11 +11,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    ListView,
-    View,
+    CreateView, DeleteView, DetailView, ListView, View,
 )
 
 from pretix.base.i18n import language
@@ -26,22 +22,18 @@ from pretix.base.services import tickets
 from pretix.base.services.tickets import get_preview_position
 from pretix.base.views.tasks import AsyncAction
 from pretix.base.wallet.placeholders import (
-    get_wallet_placeholder_renderer,
-    get_wallet_placeholders,
+    get_wallet_placeholder_renderer, get_wallet_placeholders,
 )
 from pretix.base.wallet.platforms import (
-    get_available_platforms,
-    get_platform,
-    pass_style_registry,
-    wallet_platform_registry,
+    get_available_platforms, get_platform, pass_style_registry,
 )
 from pretix.base.wallet.tasks import get_pass
+from pretix.control.forms.event import WalletLayoutCreateForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.orders import OrderView
 from pretix.helpers.database import rolledback_transaction
 from pretix.helpers.i18n import localizable_to_dict
 from pretix.helpers.models import modelclone
-from pretix.control.forms.event import WalletLayoutCreateForm
 
 
 def get_editor_placeholders(event):
@@ -142,14 +134,22 @@ class LayoutCreateView(WalletLayoutMixin, EventPermissionRequiredMixin, CreateVi
             for pl in self.copy_from.platform_layouts.all():
                 modelclone(pl, parent=self.object).save()
         else:
-            for platform, _meta in wallet_platform_registry.filter(active_in=self.request.event):
+            for platform in get_available_platforms(
+                event=self.request.event, show_disabled=True
+            ):
                 if not platform.default_style:
                     continue
-                style, _meta = pass_style_registry.get(active_in=self.request.event, identifier=(platform.identifier, platform.default_style))
+                style, _meta = pass_style_registry.get(
+                    active_in=self.request.event,
+                    identifier=(platform.identifier, platform.default_style),
+                )
                 if not style:
                     continue
                 layout = style(self.request.event).default_layout
-                self.object.platform_layouts.get_or_create(platform=platform.identifier, defaults={"style": style.identifier, "layout": layout})
+                self.object.platform_layouts.get_or_create(
+                    platform=platform.identifier,
+                    defaults={"style": style.identifier, "layout": layout},
+                )
 
         return HttpResponseRedirect(self.get_success_url())
 

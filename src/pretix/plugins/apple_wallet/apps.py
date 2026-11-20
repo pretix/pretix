@@ -35,8 +35,11 @@ class WalletApp(AppConfig):
         version = version
         category = "FORMAT"
         description = _(
-            "Issue wallet passes apple wallet"
+            "Issue tickets as Apple Wallet passes"
         )
+        settings_links = [
+            ((_("Settings"), _("Wallet Layouts")), "control:event.wallet.index", {}),
+        ]
 
     def ready(self):
         from . import receivers  # NOQA

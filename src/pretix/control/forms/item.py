@@ -61,6 +61,7 @@ from pretix.base.models import (
     QuestionOption, Quota,
 )
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
+from pretix.base.models.wallet import WalletLayout, WalletLayoutItem
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
     ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,
@@ -1439,3 +1440,32 @@ class ItemProgramTimeForm(I18nModelForm):
             'start': SplitDateTimePickerWidget(without_seconds=True),
             'end': SplitDateTimePickerWidget(without_seconds=True),
         }
+
+
+class WalletLayoutItemForm(forms.ModelForm):
+    is_layouts = True
+    layout = forms.ModelChoiceField(
+        queryset=WalletLayout.objects.none(),
+        label=_("Wallet Layout"),
+        empty_label=_("(Event default)"),
+        required=False,
+    )
+
+    class Meta:
+        model = WalletLayoutItem
+        fields = ("layout",)
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop("event")
+        super().__init__(*args, **kwargs)
+        self.fields["layout"].queryset = self.event.wallet_layouts.all()
+
+    def save(self, commit=True):
+        if self.has_changed():
+            if self.cleaned_data["layout"] is None:
+                if self.instance.pk:
+                    self.instance.delete()
+            else:
+                self.instance.layout = self.cleaned_data["layout"]
+                super().save(commit=commit)
+        return self.instance

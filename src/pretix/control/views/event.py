@@ -84,7 +84,7 @@ from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
 from pretix.base.signals import get_defining_app, register_ticket_outputs
 from pretix.base.templatetags.rich_text import markdown_compile_email
-from pretix.base.wallet.platforms import wallet_platform_registry
+from pretix.base.wallet.platforms import get_available_platforms
 from pretix.control.forms.event import (
     CancelSettingsForm, CommentForm, ConfirmTextFormset, EventDeleteForm,
     EventFooterLinkFormset, EventMetaValueForm, EventSettingsForm,
@@ -1013,7 +1013,9 @@ class TicketSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
         context['providers'] = self.provider_forms
-        context['show_wallet'] = any(wallet_platform_registry.filter(active_in=self.request.event))
+        context["show_wallet"] = any(
+            get_available_platforms(event=self.request.event, show_disabled=True)
+        )
 
         context['any_enabled'] = False
         responses = register_ticket_outputs.send(self.request.event)

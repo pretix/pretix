@@ -4,28 +4,23 @@ import json
 import logging
 import tempfile
 import zipfile
-from collections import OrderedDict
 
 import cryptography
 import cryptography.hazmat.primitives.hashes
 import cryptography.hazmat.primitives.serialization.pkcs7
 import cryptography.x509
-from django import forms
 from django.core.files.base import ContentFile
 from django.utils.encoding import force_bytes
 from django.utils.functional import classproperty
 from django.utils.translation import gettext as _
 
-from pretix.base.forms import SecretKeySettingsField
 from pretix.base.i18n import MaybeTranslatedString
 from pretix.base.models.orders import Order
 from pretix.base.wallet.platforms import (
     WalletPlatform, wallet_platform_registry,
 )
-from pretix.control.forms import ClearableBasenameFileInput
 from pretix.multidomain.urlreverse import eventreverse_absolute
 
-from .forms import CertificateFileField, validate_rsa_privkey
 from .models import CombinedAppleWalletPass
 
 logger = logging.getLogger("pretix.plugins.wallet.apple")
@@ -35,67 +30,6 @@ logger = logging.getLogger("pretix.plugins.wallet.apple")
 class ApplePlatform(WalletPlatform):
     identifier = "apple"
     name = _("Apple Wallet")
-
-    @classmethod
-    def get_global_settings(cls, **kwargs):
-        return OrderedDict(
-            [
-                (
-                    # TODO: extract from pass certificate
-                    "wallet_apple_team_id",
-                    forms.CharField(
-                        label=_("Apple Wallet Pass team ID"),
-                        required=False,
-                    ),
-                ),
-                (
-                    # TODO: extract from pass certificate
-                    "wallet_apple_pass_type_id",
-                    forms.CharField(
-                        label=_("Apple Wallet Pass type"),
-                        required=False,
-                    ),
-                ),
-                (
-                    "wallet_apple_certificate",
-                    CertificateFileField(
-                        label=_("Apple Wallet Pass certificate file"),
-                        required=False,
-                    ),
-                ),
-                (
-                    # TODO: download this server-side
-                    "wallet_apple_ca_certificate",
-                    CertificateFileField(
-                        label=_("Apple Wallet Pass CA Certificate"),
-                        help_text=_(
-                            "You can download the current CA certificate from apple at "
-                            "https://www.apple.com/certificateauthority/AppleWWDRCAG4.cer"
-                        ),
-                        required=False,
-                    ),
-                ),
-                (
-                    "wallet_apple_key",
-                    forms.FileField(
-                        label=_("Apple Wallet Pass secret key"),
-                        required=False,
-                        validators=[validate_rsa_privkey],
-                        widget=ClearableBasenameFileInput,
-                    ),
-                ),
-                (
-                    "wallet_apple_key_password",
-                    SecretKeySettingsField(
-                        label=_("Apple Wallet Pass key password"),
-                        required=False,
-                        help_text=_(
-                            "Optional, only necessary if the key entered above requires a password to use."
-                        ),
-                    ),
-                ),
-            ]
-        )
 
     def generate(self, position, layout=None) -> str:
         if not layout:

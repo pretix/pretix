@@ -79,7 +79,7 @@ from pretix.base.settings import (
 )
 from pretix.base.signals import api_event_settings_fields
 from pretix.base.wallet.platforms import (
-    pass_style_registry, wallet_platform_registry,
+    get_available_platforms, pass_style_registry,
 )
 from pretix.multidomain.urlreverse import eventreverse_absolute
 
@@ -1161,8 +1161,7 @@ class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
     def get_fields(self):
         fields = super().get_fields()
         fields["platform"].choices = [
-            p.identifier
-            for p, _ in wallet_platform_registry.filter(active_in=self.context["event"])
+            p.identifier for p in get_available_platforms(self.context["event"])
         ]
         return fields
 

@@ -37,6 +37,9 @@ class WalletApp(AppConfig):
         description = _(
             "Issue tickets as Google Wallet passes"
         )
+        settings_links = [
+            ((_("Settings"), _("Wallet Layouts")), "control:event.wallet.index", {}),
+        ]
 
     def ready(self):
         from . import receivers  # NOQA

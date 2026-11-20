@@ -20,14 +20,17 @@
 # <https://www.gnu.org/licenses/>.
 #
 
+from collections import OrderedDict
+
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.translation import gettext as _
 
+from pretix.base import forms
 from pretix.base.models.event import Event
 from pretix.base.shredder import BaseDataShredder, slow_delete
 from pretix.base.signals import (
-    invalidate_ticket_cache, register_data_shredders,
+    invalidate_ticket_cache, register_data_shredders, register_global_settings,
 )
 from pretix.base.wallet.tasks import get_pass
 from pretix.control.signals import html_head
@@ -94,3 +97,45 @@ class GoogleWalletShredder(BaseDataShredder):
 @receiver(register_data_shredders, dispatch_uid="shredders_google_wallet")
 def shredders_google_wallet(**kwargs):
     return [GoogleWalletShredder]
+
+
+@receiver(register_global_settings, dispatch_uid="google_wallet_global_settings")
+def global_settings(**kwargs):
+    return OrderedDict(
+        [
+            (
+                "wallet_google_issuer_id",
+                forms.CharField(
+                    label=_("Google Wallet Issuer/Merchant ID"),
+                    help_text=_(
+                        # TODO: update text
+                        "After getting accepted by Google into the Google Pay API for Passes program, "
+                        "your Issuer ID can be found in the Merchant center at "
+                        "https://wallet.google.com/merchant/walletobjects/"
+                    ),
+                    required=False,
+                ),
+            ),
+            (
+                "wallet_google_credentials",
+                forms.FileField(
+                    label=_("Google Wallet Service Account Credentials"),
+                    help_text=_(
+                        "Please upload the JSON credentials file of the service "
+                        "account you tied to your Google Pay API for Passes Issuer ID."
+                    ),
+                    required=False,
+                    # TODO: add validator
+                    # validators=[validate_json_credentials]
+                ),
+            ),
+            (
+                "wallet_google_instance_uuid",
+                forms.CharField(
+                    label=_("Google Wallet Pass Instance UUID"),
+                    help_text=_("Instance-specific part to be added to the wallet ids"),
+                    required=False,
+                ),
+            ),
+        ]
+    )

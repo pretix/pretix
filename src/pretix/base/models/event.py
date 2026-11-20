@@ -1555,6 +1555,10 @@ class Event(EventMixin, LoggedModel):
             if presale_start > presale_end:
                 raise ValidationError(_('The event\'s presale cannot end before it starts.'))
 
+    @cached_property
+    def cached_default_wallet_layout(self):
+        return self.wallet_layouts.filter(default=True).first()
+
 
 class SubEvent(EventMixin, LoggedModel):
     """

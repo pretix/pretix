@@ -13,6 +13,7 @@ from i18nfield.strings import LazyI18nString
 from pretix.api.helpers import handle_file_upload
 from pretix.base.i18n import MaybeTranslatedString
 from pretix.base.models import OrderPosition
+from pretix.base.models.event import Event
 from pretix.base.models.orders import Order
 from pretix.base.models.wallet import WalletLayout, WalletPlatformLayout
 from pretix.base.settings import SettingsSandbox
@@ -45,13 +46,6 @@ class WalletPlatform:
 
     def is_available_for_position(self, op: OrderPosition):
         return op.generate_ticket and bool(self.get_layout(op))
-
-    @classmethod
-    def get_global_settings(cls, **kwargs):
-        """
-        Return a list of fields for the global settings form, as a dict of (setting name, form field).
-        """
-        return {}
 
     @classproperty
     def default_style(cls) -> None | str:  # noqa: N805
@@ -688,7 +682,7 @@ class PluginAwareClassRegistry[T](PluginAwareRegistry):
         return super().register(*objs)
 
     def filter(
-        self, active_in=None, **kwargs
+        self, *, active_in=None, **kwargs
     ) -> Iterable[tuple[type[T], dict[str, Any]]]:
         result = super().filter(**kwargs)
         if active_in is not None:
@@ -710,6 +704,18 @@ class WalletPlatformRegistry(PluginAwareClassRegistry[WalletPlatform]):
 
     def __init__(self):
         super().__init__({"identifier": lambda o: o.identifier})
+
+    def filter(
+        self, *, available_in: Event | None = None, active_in=None, **kwargs
+    ):
+        result = super().filter(active_in=active_in, **kwargs)
+        if available_in:
+            result = (
+                (entry, meta)
+                for entry, meta in result
+                if entry(available_in).is_available()
+            )
+        return result
 
 
 class PassStyleRegistry(PluginAwareClassRegistry[PassStyle]):

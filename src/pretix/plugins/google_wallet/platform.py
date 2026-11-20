@@ -2,9 +2,7 @@ import base64
 import json
 import uuid
 from functools import cached_property
-from typing import OrderedDict
 
-from django import forms
 from django.conf import settings
 from django.db import transaction
 from django.utils.crypto import salted_hmac
@@ -88,50 +86,6 @@ class GooglePlatform(WalletPlatform):
                 '<span class="fa fa-download"></span> {}',
                 _("Add to {wallet}").format(wallet=self.name),
             ),
-        )
-
-    @classmethod
-    def get_global_settings(cls, **kwargs):
-        return OrderedDict(
-            [
-                (
-                    "wallet_google_issuer_id",
-                    forms.CharField(
-                        label=_("Google Wallet Issuer/Merchant ID"),
-                        help_text=_(
-                            # TODO: update text
-                            "After getting accepted by Google into the Google Pay API for Passes program, "
-                            "your Issuer ID can be found in the Merchant center at "
-                            "https://wallet.google.com/merchant/walletobjects/"
-                        ),
-                        required=False,
-                    ),
-                ),
-                (
-                    "wallet_google_credentials",
-                    forms.FileField(
-                        label=_("Google Wallet Service Account Credentials"),
-                        help_text=_(
-                            "Please paste the contents of the JSON credentials file "
-                            "of the service account you tied to your Google Pay API "
-                            "for Passes Issuer ID"
-                        ),
-                        required=False,
-                        # TODO: add validator
-                        # validators=[validate_json_credentials]
-                    ),
-                ),
-                (
-                    "wallet_google_instance_uuid",
-                    forms.CharField(
-                        label=_("Google Wallet Pass Instance UUID"),
-                        help_text=_(
-                            "Instance-specific part to be added to the wallet ids"
-                        ),
-                        required=False,
-                    ),
-                ),
-            ]
         )
 
     @classproperty

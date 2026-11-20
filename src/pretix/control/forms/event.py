@@ -64,7 +64,7 @@ from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
 from pretix.base.models.organizer import TeamQuerySet
 from pretix.base.models.tax import TAX_CODE_LISTS, VAT_ID_COUNTRIES
-from pretix.base.models.wallet import WalletLayout, WalletLayoutItem
+from pretix.base.models.wallet import WalletLayout
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.services.placeholders import FormPlaceholderMixin
 from pretix.base.settings import (
@@ -2137,32 +2137,3 @@ class WalletLayoutCreateForm(forms.ModelForm):
     def save(self, *args, **kwargs):
         self.instance.event = self.event
         return super().save(*args, **kwargs)
-
-
-class WalletLayoutItemForm(forms.ModelForm):
-    is_layouts = True
-    layout = forms.ModelChoiceField(
-        queryset=WalletLayout.objects.none(),
-        label=_("Wallet Layout"),
-        empty_label=_("(Event default)"),
-        required=False,
-    )
-
-    class Meta:
-        model = WalletLayoutItem
-        fields = ("layout",)
-
-    def __init__(self, *args, **kwargs):
-        self.event = kwargs.pop("event")
-        super().__init__(*args, **kwargs)
-        self.fields["layout"].queryset = self.event.wallet_layouts.all()
-
-    def save(self, commit=True):
-        if self.has_changed():
-            if self.cleaned_data["layout"] is None:
-                if self.instance.pk:
-                    self.instance.delete()
-            else:
-                self.instance.layout = self.cleaned_data["layout"]
-                super().save(commit=commit)
-        return self.instance

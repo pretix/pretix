@@ -60,6 +60,7 @@ from pretix.base.models import (
     TaxRule,
 )
 from pretix.base.models.orders import PrintLog
+from pretix.base.models.wallet import WalletLayout
 from pretix.base.signals import (
     app_cache, logentry_display, orderposition_blocked_display,
 )
@@ -1033,3 +1034,28 @@ class LegacyCheckinLogEntryType(OrderLogEntryType):
 })
 class CoreWaitingListEntryLogEntryType(WaitingListEntryLogEntryType):
     pass
+
+
+@log_entry_types.new_from_dict(
+    {
+        "pretix.plugins.wallet.layout.created": _(
+            "The wallet layout has been created."
+        ),
+        "pretix.plugins.wallet.layout.changed": _(
+            "The wallet layout has been changed."
+        ),
+        "pretix.plugins.wallet.layout.deleted": _(
+            "The wallet layout has been deleted."
+        ),
+    }
+)
+class WalletLogEntryType(EventLogEntryType):
+    object_link_wrapper = _("Wallet Layout {val}")
+    object_link_viewname = "plugins:wallet:edit"
+    content_type = WalletLayout
+
+    def object_link_args(self, content_object):
+        return {"layout": content_object.pk}
+
+    def object_link_display_name(self, content_object):
+        return content_object.name

@@ -73,6 +73,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
+from pretix.base.models.wallet import WalletLayoutItem
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
@@ -84,7 +85,7 @@ from pretix.control.forms.item import (
     ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemProgramTimeForm,
     ItemProgramTimeFormSet, ItemUpdateForm, ItemVariationForm,
     ItemVariationsFormSet, QuestionForm, QuestionOptionForm, QuotaBulkEditForm,
-    QuotaForm,
+    QuotaForm, WalletLayoutItemForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -1436,6 +1437,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
             else:
                 forms.append(resp)
 
+        forms.append(self.wallet_form)
         for form in forms:
             if has_truthy_attr(form, "title") and has_truthy_attr(form, "is_layout"):
                 raise ValueError("`title` and `is_layout` must not both be truthy values")
@@ -1677,6 +1679,20 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 f['p-{}'.format(i)] = resp
                 i += 1
         return f
+
+    @cached_property
+    def wallet_form(self):
+        try:
+            inst = WalletLayoutItem.objects.get(item=self.item)
+        except WalletLayoutItem.DoesNotExist:
+            inst = WalletLayoutItem(item=self.item)
+
+        return WalletLayoutItemForm(
+            instance=inst,
+            event=self.request.event,
+            data=(self.request.POST if self.request.method == "POST" else None),
+            prefix="wallet",
+        )
 
 
 class ItemDelete(EventPermissionRequiredMixin, CompatDeleteView):
