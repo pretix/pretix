@@ -139,7 +139,7 @@ from pretix.control.permissions import (
 from pretix.control.signals import nav_organizer
 from pretix.control.views import LargeResultSetPaginator, PaginationMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
-from pretix.helpers import OF_SELF, GroupConcat
+from pretix.helpers import LOCK_SELF_NO_KEY, GroupConcat
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.format import SafeFormatter, format_map
@@ -1795,7 +1795,7 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
     def post(self, request, *args, **kwargs):
         if not request.user.has_organizer_permission(request.organizer, "organizer.giftcards:write", request=request):
             raise PermissionDenied()
-        self.object = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
+        self.object = GiftCard.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=self.get_object().pk)
         if 'revert' in request.POST:
             t = get_object_or_404(self.object.transactions.all(), pk=request.POST.get('revert'), order__isnull=False)
             if self.object.value - t.value < Decimal('0.00'):

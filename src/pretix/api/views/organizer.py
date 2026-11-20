@@ -58,7 +58,7 @@ from pretix.base.models import (
 from pretix.base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
 )
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 from pretix.helpers.dicts import merge_dicts
 
 
@@ -274,7 +274,7 @@ class GiftCardViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         if 'include_accepted' in self.request.GET:
             raise PermissionDenied("Accepted gift cards cannot be updated, use transact instead.")
-        GiftCard.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
+        GiftCard.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=self.get_object().pk)
 
         value = serializer.validated_data.pop('value', None)
 
@@ -310,7 +310,7 @@ class GiftCardViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["POST"])
     @transaction.atomic()
     def transact(self, request, **kwargs):
-        gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
+        gc = GiftCard.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=self.get_object().pk)
         value = serializers.DecimalField(max_digits=13, decimal_places=2).to_internal_value(
             request.data.get('value')
         )

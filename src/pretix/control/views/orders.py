@@ -135,7 +135,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.signals import order_search_forms
 from pretix.control.views import PaginationMixin
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.hierarkey import clean_filename
@@ -1161,7 +1161,7 @@ class OrderRefundView(OrderView):
 
     @transaction.atomic()
     def perform_refund(self, comment, full_refund, payments):
-        order = Order.objects.select_for_update(of=OF_SELF).get(pk=self.order.pk)
+        order = Order.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=self.order.pk)
 
         if self.request.POST.get("last_known_refund_id", "0") != str(self.order.refunds.aggregate(m=Max("id"))["m"] or 0):
             messages.error(self.request, _('The refund was prevented due to a refund already being processed at the '
@@ -1477,7 +1477,7 @@ class OrderTransition(OrderView):
     @transaction.atomic()
     def post(self, request, *args, **kwargs):
         to = self.request.POST.get('status', '')
-        self.order = Order.objects.select_for_update(of=OF_SELF).get(pk=self.order.pk)
+        self.order = Order.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=self.order.pk)
 
         if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p' and self.mark_paid_form.is_valid():
             ps = self.mark_paid_form.cleaned_data['amount']
@@ -1618,7 +1618,7 @@ class OrderInvoiceCreate(OrderView):
 
     def post(self, *args, **kwargs):
         with transaction.atomic():
-            order = Order.objects.select_for_update(of=OF_SELF).get(pk=self.order.pk)
+            order = Order.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=self.order.pk)
             has_inv = order.invoices.exists() and not (
                 order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
                 and order.invoices.filter(is_cancellation=True).count() >= order.invoices.filter(is_cancellation=False).count()
@@ -1727,7 +1727,7 @@ class OrderInvoiceRetransmit(OrderView):
     def post(self, *args, **kwargs):
         with transaction.atomic(durable=True):
             try:
-                invoice = self.order.invoices.select_for_update(of=OF_SELF).get(pk=kwargs.get("id"))
+                invoice = self.order.invoices.select_for_update(**LOCK_SELF_NO_KEY).get(pk=kwargs.get("id"))
             except Invoice.DoesNotExist:
                 messages.error(self.request, _('Unknown invoice.'))
                 return redirect(self.get_order_url())
@@ -1757,7 +1757,7 @@ class OrderInvoiceReissue(OrderView):
 
     def post(self, *args, **kwargs):
         with transaction.atomic():
-            order = Order.objects.select_for_update(of=OF_SELF).get(pk=self.order.pk)
+            order = Order.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=self.order.pk)
             try:
                 inv = order.invoices.get(pk=kwargs.get('id'))
             except Invoice.DoesNotExist:

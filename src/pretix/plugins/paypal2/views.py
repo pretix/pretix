@@ -61,7 +61,7 @@ from pretix.base.payment import PaymentException
 from pretix.base.services.cart import add_payment_to_cart, get_fees
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal2.client.customer.partners_merchantintegrations_get_request import (
@@ -460,7 +460,7 @@ def webhook(request, *args, **kwargs):
 
             with transaction.atomic():
                 # Lock payment in case a refund is currently still running
-                payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
+                payment = OrderPayment.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=payment.pk)
                 known_refunds = {r.info_data.get('id'): r for r in payment.refunds.all()}
                 if refund['id'] not in known_refunds:
                     payment.create_external_refund(

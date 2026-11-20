@@ -50,7 +50,7 @@ from pretix.base.signals import (
     periodic_task, register_data_exporters, register_multievent_data_exporters,
 )
 from pretix.celery_app import app
-from pretix.helpers import OF_SELF, repeatable_reads_transaction
+from pretix.helpers import LOCK_SELF_NO_KEY, repeatable_reads_transaction
 from pretix.helpers.urls import mainreverse_absolute
 
 logger = logging.getLogger(__name__)
@@ -501,7 +501,7 @@ def run_scheduled_exports(sender, **kwargs):
     qs = ScheduledEventExport.objects.filter(
         schedule_next_run__lt=now(),
         error_counter__lt=5,
-    ).select_for_update(skip_locked=connection.features.has_select_for_update_skip_locked, of=OF_SELF).select_related('event')
+    ).select_for_update(skip_locked=connection.features.has_select_for_update_skip_locked, **LOCK_SELF_NO_KEY).select_related('event')
     for s in qs:
         scheduled_event_export.apply_async(kwargs={
             'event': s.event_id,
@@ -512,7 +512,7 @@ def run_scheduled_exports(sender, **kwargs):
     qs = ScheduledOrganizerExport.objects.filter(
         schedule_next_run__lt=now(),
         error_counter__lt=5,
-    ).select_for_update(skip_locked=connection.features.has_select_for_update_skip_locked, of=OF_SELF).select_related('organizer')
+    ).select_for_update(skip_locked=connection.features.has_select_for_update_skip_locked, **LOCK_SELF_NO_KEY).select_related('organizer')
     for s in qs:
         scheduled_organizer_export.apply_async(kwargs={
             'organizer': s.organizer_id,

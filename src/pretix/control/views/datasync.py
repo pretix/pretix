@@ -43,7 +43,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.signals import order_info
 from pretix.control.views.orders import OrderView
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 
 
 @receiver(order_info, dispatch_uid="datasync_control_order_info")
@@ -83,7 +83,7 @@ class ControlSyncJob(OrderView):
         elif self.request.POST.get("cancel_job"):
             with transaction.atomic():
                 try:
-                    job = self.order.queued_sync_jobs.select_for_update(of=OF_SELF).get(
+                    job = self.order.queued_sync_jobs.select_for_update(**LOCK_SELF_NO_KEY).get(
                         pk=self.request.POST.get("cancel_job")
                     )
                 except OrderSyncQueue.DoesNotExist:
@@ -97,7 +97,7 @@ class ControlSyncJob(OrderView):
         elif self.request.POST.get("run_job_now"):
             with transaction.atomic():
                 try:
-                    job = self.order.queued_sync_jobs.select_for_update(of=OF_SELF).get(
+                    job = self.order.queued_sync_jobs.select_for_update(**LOCK_SELF_NO_KEY).get(
                         pk=self.request.POST.get("run_job_now")
                     )
                 except OrderSyncQueue.DoesNotExist:

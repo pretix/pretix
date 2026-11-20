@@ -67,7 +67,7 @@ from pretix.base.signals import (
     build_invoice_data, invoice_line_text, periodic_task,
 )
 from pretix.celery_app import app
-from pretix.helpers.database import OF_SELF, rolledback_transaction
+from pretix.helpers.database import LOCK_SELF_NO_KEY, rolledback_transaction
 from pretix.helpers.models import modelcopy
 
 logger = logging.getLogger(__name__)
@@ -688,7 +688,7 @@ def send_invoices_to_organizer(sender, **kwargs):
         with transaction.atomic():
             qs = Invoice.objects.filter(
                 sent_to_organizer__isnull=True
-            ).prefetch_related('event', 'order').select_for_update(of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked)
+            ).prefetch_related('event', 'order').select_for_update(**LOCK_SELF_NO_KEY, skip_locked=connection.features.has_select_for_update_skip_locked)
             for i in qs[:batch_size]:
                 if i.event.settings.invoice_email_organizer:
                     with language(i.event.settings.locale):
@@ -724,7 +724,7 @@ def retry_stuck_invoices(sender, **kwargs):
             transmission_status=Invoice.TRANSMISSION_STATUS_INFLIGHT,
             transmission_date__lte=now() - timedelta(hours=48),
         ).select_for_update(
-            of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked
+            **LOCK_SELF_NO_KEY, skip_locked=connection.features.has_select_for_update_skip_locked
         )
         batch_size = 5000
         for invoice in qs[:batch_size]:
@@ -749,7 +749,7 @@ def send_pending_invoices(sender, **kwargs):
             transmission_status=Invoice.TRANSMISSION_STATUS_PENDING,
             created__lte=now() - timedelta(minutes=15),
         ).select_for_update(
-            of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked
+            **LOCK_SELF_NO_KEY, skip_locked=connection.features.has_select_for_update_skip_locked
         )
         batch_size = 5000
         for invoice in qs[:batch_size]:
@@ -760,7 +760,7 @@ def send_pending_invoices(sender, **kwargs):
 def transmit_invoice(sender, invoice_id, allow_retransmission=True, **kwargs):
     with transaction.atomic(durable='tests.testdummy' not in settings.INSTALLED_APPS):
         # We need durable=True for transactional correctness, but can't have it during tests
-        invoice = Invoice.objects.select_for_update(of=OF_SELF).get(pk=invoice_id)
+        invoice = Invoice.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=invoice_id)
 
         if invoice.transmission_status == Invoice.TRANSMISSION_STATUS_INFLIGHT:
             logger.info(f"Did not transmit invoice {invoice.pk} due to being in inflight state.")

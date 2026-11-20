@@ -29,7 +29,6 @@ from django.db.models import (
     Aggregate, Expression, F, Field, Func, IntegerField, JSONField, Lookup,
     OrderBy, Value,
 )
-from django.utils.functional import lazy
 
 
 class DummyRollbackException(Exception):
@@ -213,9 +212,12 @@ class PostgresWindowFrame(Expression):
         }
 
 
-# This is a short-hand for .select_for_update(of=("self,")), that falls back gracefully on databases that don't support
-# the SELECT FOR UPDATE OF ... query.
-OF_SELF = lazy(lambda: ("self",) if connection.features.has_select_for_update_of else (), tuple)()
+# OF_SELF is kept for backwards-compatibility. Since we do not need MySQL any more, you can just use `of=("self",)`
+# SQLite will not fail, but just ignore it
+OF_SELF = ("self",)
+# Provided as a constant for convenience because `("self",)` is annoying to type and this way we can more easily update
+# things across the codebase if required
+LOCK_SELF_NO_KEY = {"of": OF_SELF, "no_key": True}
 
 
 def get_deterministic_ordering(model, ordering):

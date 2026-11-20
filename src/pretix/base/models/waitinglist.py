@@ -35,7 +35,7 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import User, Voucher
 from pretix.base.services.mail import mail
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 
 from ...helpers.names import build_name
 from .base import LoggedModel
@@ -191,7 +191,7 @@ class WaitingListEntry(LoggedModel):
             raise WaitingListException(_('This entry is anonymized and can no longer be used.'))
 
         with transaction.atomic():
-            locked_wle = WaitingListEntry.objects.select_for_update(of=OF_SELF).get(pk=self.pk)
+            locked_wle = WaitingListEntry.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=self.pk)
             locked_wle.event = event
             if locked_wle.voucher:
                 raise WaitingListException(_('A voucher has already been sent to this person.'))

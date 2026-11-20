@@ -102,7 +102,7 @@ from pretix.base.signals import (
     order_modified, order_paid, order_placed, register_ticket_outputs,
 )
 from pretix.control.signals import order_search_filter_q
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 
 logger = logging.getLogger(__name__)
 
@@ -600,7 +600,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
     @transaction.atomic()
     def create_invoice(self, request, **kwargs):
         order = self.get_object()
-        order = Order.objects.select_for_update(of=OF_SELF).get(pk=order.pk)
+        order = Order.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=order.pk)
         has_inv = order.invoices.exists() and not (
             order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
             and order.invoices.filter(is_cancellation=True).count() >= order.invoices.filter(is_cancellation=False).count()
@@ -2026,7 +2026,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             raise PermissionDenied('The invoice file is no longer stored on the server.')
 
         with transaction.atomic(durable=True):
-            invoice = Invoice.objects.select_for_update(of=OF_SELF).get(pk=invoice.pk)
+            invoice = Invoice.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=invoice.pk)
 
             if invoice.transmission_status == Invoice.TRANSMISSION_STATUS_INFLIGHT:
                 raise CurrentlyInflightException()
@@ -2080,7 +2080,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         elif inv.shredded:
             raise PermissionDenied('The invoice file is no longer stored on the server.')
         else:
-            order = Order.objects.select_for_update(of=OF_SELF).get(pk=inv.order_id)
+            order = Order.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=inv.order_id)
             c = generate_cancellation(inv)
             if invoice_qualified(order):
                 inv = generate_invoice(order)

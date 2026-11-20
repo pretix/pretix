@@ -33,7 +33,7 @@ from pretix.base.models import (
     OrderPosition, SubEvent,
 )
 from pretix.base.timemachine import time_machine_now
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 
 
 def membership_validity(item: Item, subevent: Optional[SubEvent], event: Event):
@@ -125,7 +125,7 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
     base_qs = Membership.objects.with_usages(ignored_order=ignored_order)
 
     if lock:
-        base_qs = base_qs.select_for_update(of=OF_SELF)
+        base_qs = base_qs.select_for_update(**LOCK_SELF_NO_KEY)
 
     membership_cache = base_qs\
         .select_related('membership_type')\

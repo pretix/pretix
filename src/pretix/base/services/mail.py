@@ -80,7 +80,7 @@ from pretix.base.signals import (
     email_filter, global_email_filter, periodic_task,
 )
 from pretix.celery_app import app
-from pretix.helpers import OF_SELF
+from pretix.helpers import LOCK_SELF_NO_KEY
 from pretix.helpers.format import (
     FormattedString, PlainHtmlAlternativeString, SafeFormatter, format_map,
 )
@@ -412,7 +412,7 @@ def mail_send_task(self, **kwargs) -> bool:
 
     with transaction.atomic():
         try:
-            outgoing_mail = OutgoingMail.objects.select_for_update(of=OF_SELF).get(pk=outgoing_mail)
+            outgoing_mail = OutgoingMail.objects.select_for_update(**LOCK_SELF_NO_KEY).get(pk=outgoing_mail)
         except OutgoingMail.DoesNotExist:
             logger.info(f"Ignoring job for non existing email {outgoing_mail}")
             return False
@@ -1107,7 +1107,7 @@ def retry_stuck_inflight_mails(sender, **kwargs):
         for m in OutgoingMail.objects.filter(
             status=OutgoingMail.STATUS_INFLIGHT,
             inflight_since__lt=now() - timedelta(hours=1),
-        ).select_for_update(of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked):
+        ).select_for_update(**LOCK_SELF_NO_KEY, skip_locked=connection.features.has_select_for_update_skip_locked):
             m.status = OutgoingMail.STATUS_QUEUED
             m.save()
             mail_send_task.apply_async(kwargs={"outgoing_mail": m.pk})
