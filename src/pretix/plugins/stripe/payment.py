@@ -773,6 +773,8 @@ class StripeMethod(BasePaymentProvider):
             r = stripe.Refund.create(
                 charge=chargeid,
                 amount=self._get_amount(refund),
+                # Refunds should only be started once, a retry is a new refund
+                idempotency_key=chargeid + refund.full_id,
                 **self.api_kwargs,
                 **kwargs,
             )
