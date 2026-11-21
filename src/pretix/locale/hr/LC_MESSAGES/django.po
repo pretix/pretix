@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 10:48+0000\n"
-"PO-Revision-Date: 2025-03-04 16:16+0000\n"
-"Last-Translator: Martin Gross <gross@rami.io>\n"
+"PO-Revision-Date: 2026-11-21 11:00+0000\n"
+"Last-Translator: Pavle Ergović <pavleergovic@gmail.com>\n"
 "Language-Team: Croatian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hr/>\n"
 "Language: hr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 2026.11.2\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -58,7 +58,7 @@ msgstr "Češki"
 
 #: pretix/_base_settings.py
 msgid "Croatian"
-msgstr ""
+msgstr "Hrvatski"
 
 #: pretix/_base_settings.py
 msgid "Danish"
@@ -94,7 +94,7 @@ msgstr ""
 
 #: pretix/_base_settings.py
 msgid "Hungarian"
-msgstr ""
+msgstr "Mađarski"
 
 #: pretix/_base_settings.py
 msgid "Indonesian"
@@ -424,7 +424,7 @@ msgstr ""
 #: pretix/api/serializers/organizer.py pretix/control/views/organizer.py
 #, python-format
 msgid "You've been invited to join %(organizer)s"
-msgstr ""
+msgstr "Pozvani ste da se pridružite %(organizer)s"
 
 #: pretix/api/serializers/organizer.py pretix/control/views/organizer.py
 msgid "This user already has been invited for this team."
@@ -598,10 +598,8 @@ msgid "Event series date deleted"
 msgstr "Datum serije događaja izbrisan"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Product name"
 msgid "Product changed"
-msgstr "Naziv proizvoda"
+msgstr "Proizvod je promijenjen"
 
 #: pretix/api/webhooks.py
 #, fuzzy
@@ -626,6 +624,9 @@ msgid ""
 "This includes related events like creation, deletion, opening or closing of "
 "quotas. No webhook is sent for changes to the resulting availability."
 msgstr ""
+"Ovo uključuje povezane događaje kao što su stvaranje, brisanje, otvaranje "
+"ili zatvaranje kvota. Za promjene u rezultirajućoj raspoloživosti ne šalje "
+"se webhook."
 
 #: pretix/api/webhooks.py
 msgid "Shop taken live"
@@ -660,28 +661,24 @@ msgid "Waiting list entry received voucher"
 msgstr "Unos na listu čekanja za primljeni vaučer"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "Kôd vaučera"
+msgstr "Vaučer dodan"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Voucher assigned"
 msgid "Voucher changed"
-msgstr "Vaučer dodijeljen"
+msgstr "Vaučer promijenjen"
 
 #: pretix/api/webhooks.py
 msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
 msgstr ""
+"Uključuje samo izričite izmjene vaučera, a ne, primjerice, povećanje broja "
+"iskorištavanja."
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Voucher redeemed"
 msgid "Voucher deleted"
-msgstr "Vaučer iskorišten"
+msgstr "Vaučer obrisan"
 
 #: pretix/api/webhooks.py
 msgid "Customer account created"
@@ -696,22 +693,16 @@ msgid "Customer account anonymized"
 msgstr "Korisnički profil anonimiziran"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card added"
-msgstr "Kod poklon kartice"
+msgstr "Poklon kartica dodana"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card modified"
-msgstr "Kod poklon kartice"
+msgstr "Poklon kartica uređena"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Gift card transactions"
 msgid "Gift card used in transaction"
-msgstr "Transakcije poklon kartica"
+msgstr "Poklon kartica iskorištena u transakciji"
 
 #: pretix/base/addressvalidation.py pretix/base/forms/questions.py
 #: pretix/base/payment.py pretix/control/forms/event.py
@@ -854,6 +845,7 @@ msgid ""
 "Field \"{field_name}\" does not exist. Please check your {provider_name} "
 "settings."
 msgstr ""
+"Polje „{field_name}” ne postoji. Provjerite postavke za {provider_name}."
 
 #: pretix/base/datasync/datasync.py
 #, python-brace-format
@@ -868,18 +860,16 @@ msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
 msgstr ""
+"Molimo ažurirajte mapiranje vrijednosti za polje „{field_name}” – opcija „"
+"{val}” nije dodijeljena"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy
-#| msgid "Order positions"
 msgid "Order position details"
-msgstr "Pozicije narudžbe"
+msgstr "Detalji pozicija narudžbe"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee details"
-msgstr "E-pošta sudionika"
+msgstr "Podaci o sudioniku"
 
 #: pretix/base/datasync/sourcefields.py pretix/base/exporters/answers.py
 #: pretix/base/models/items.py pretix/control/navigation.py
@@ -888,10 +878,8 @@ msgid "Questions"
 msgstr "Pitanja"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy
-#| msgid "Product data"
 msgid "Product details"
-msgstr "Podaci o proizvodu"
+msgstr "Detalji o proizvodu"
 
 #: pretix/base/datasync/sourcefields.py
 #: pretix/control/templates/pretixcontrol/event/settings.html
@@ -906,17 +894,13 @@ msgid "Invoice address"
 msgstr "Adresa računa"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy
-#| msgid "Meta information"
 msgid "Event information"
-msgstr "Meta informacije"
+msgstr "Informacije o događaju"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy
-#| msgid "Send recovery information"
 msgctxt "subevent"
 msgid "Event or date information"
-msgstr "Pošalji informacije za oporavak"
+msgstr "Informacije o događaju ili datumu"
 
 #: pretix/base/datasync/sourcefields.py pretix/base/exporters/orderlist.py
 #: pretix/base/forms/questions.py pretix/base/modelimport_orders.py
@@ -935,10 +919,8 @@ msgid "Attendee name"
 msgstr "Ime sudionika"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee"
-msgstr "Ime sudionika"
+msgstr "Sudionik"
 
 #: pretix/base/datasync/sourcefields.py pretix/base/exporters/orderlist.py
 #: pretix/base/forms/questions.py pretix/base/models/customers.py
@@ -963,16 +945,12 @@ msgid "Attendee company"
 msgstr "Tvrtka sudionika"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address street"
-msgstr "Adresa sudionika"
+msgstr "Ulica sudionika"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy
-#| msgid "Attendee ZIP code"
 msgid "Attendee address ZIP code"
-msgstr "Poštanski broj sudionika"
+msgstr "Poštanski broj adrese sudionika"
 
 #: pretix/base/datasync/sourcefields.py
 #, fuzzy
