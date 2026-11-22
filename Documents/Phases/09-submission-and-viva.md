@@ -2,7 +2,7 @@
 
 [Phase list](01-windows-setup.md#phase-files) · [Previous phase](08-mutation-and-ci.md)
 
-Tawassul leads the integrated clean run and assembles the submission. Each author provides their commit SHAs, PR or report links and observed results. Use the documented Windows PowerShell, Docker Desktop and fixture commands in `sqe/handoff.md`. [Teammate commits](../04-teammate-commits.md)
+Tawassul leads the integrated clean run and assembles the submission. Each author provides their commit SHAs, PR or report links and observed results. Use the documented native Windows PowerShell and fixture commands in `sqe/handoff.md`. [Teammate commits](../04-teammate-commits.md)
 
 **Evidence.** Clean-start verification, a release or hold decision, one course PDF and one repository ZIP with history.
 
@@ -30,6 +30,6 @@ Tawassul leads the integrated clean run and assembles the submission. Each autho
 ### Source references
 
 - [Course brief, pages 1–7](SQE_Final_Project%20Fall%202026.pdf).
-- [Pinned development instructions](../../doc/development/setup.rst), [Dockerfile](../../Dockerfile), [container entrypoint](../../deployment/docker/pretix.bash), and [Python metadata](../../pyproject.toml).
+- [Pinned development instructions](../../doc/development/setup.rst), [Windows test settings](../../sqe/windows_settings.py), and [Python metadata](../../pyproject.toml).
 - [REST order actions](../../src/pretix/api/views/order.py), [control panel views](../../src/pretix/control/views/orders.py), and [order forms](../../src/pretix/control/forms/orders.py).
 - [Order models and payment logic](../../src/pretix/base/models/orders.py) and [cancellation service](../../src/pretix/base/services/orders.py).

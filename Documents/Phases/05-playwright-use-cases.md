@@ -2,9 +2,9 @@
 
 [Phase list](01-windows-setup.md#phase-files) · [Previous phase](04-openapi-and-api-tests.md) · [Next phase](06-usability-accessibility-and-security.md)
 
-Use the Phase 2 fixture contract, Phase 4 readback, and the RTM to test W1 manual payment and W2 cancellation in the pretix control panel. Run Chromium from PowerShell against the dedicated Docker Desktop test instance on Windows loopback. [Orders scope](01-windows-setup.md#selected-module-and-scope) · [Seed and reset plan](02-seed-reset-and-test-planning.md) · [API readbacks](04-openapi-and-api-tests.md)
+Use the Phase 2 fixture contract, Phase 4 readback, and the RTM to test W1 manual payment and W2 cancellation in the pretix control panel. Run Chromium from PowerShell against the dedicated native Windows test instance on loopback. [Orders scope](01-windows-setup.md#selected-module-and-scope) · [Seed and reset plan](02-seed-reset-and-test-planning.md) · [API readbacks](04-openapi-and-api-tests.md)
 
-The team Playwright project, fixture commands, and E2E run evidence are pending. Use the run commands below once the runner and fixtures are in place.
+Use the shared Playwright project and fixture commands for Tawassul's UC-01 and UC-02. See the handoff for measured results and teammate integration status. [Windows handoff](../../sqe/handoff.md)
 
 | Owner | Use cases | Deliverables |
 | --- | --- | --- |
@@ -27,7 +27,7 @@ Use role and label locators and Playwright's waiting assertions. Turn off custom
 | UC-01 main | Manager opens a pending order, selects **Mark as paid**, and submits EUR 20.00 with **Create payment**. | Payment confirmation appears. Order becomes `p`. Exactly one new confirmed manual payment is EUR 20.00 and the ticket position is unchanged. |
 | UC-01 alt 1 | Record EUR 20.00 with a valid prior payment date. | Confirmation appears. Read back the confirmed payment and the chosen date in the event timezone. |
 | UC-01 alt 2 | Pay an expired order with available quota and late payment enabled. | Confirmation appears. Order becomes `p` with one confirmed payment. |
-| UC-01 exc 1 | Enter EUR 20.001 in the payment amount. | Field error appears. Order remains pending with no new confirmed payment. |
+| UC-01 exc 1 | Enter EUR 20.001 in the payment amount. | The order detail still shows Pending and no success message appears. Stored state is unchanged. The missing field-level error is recorded in the test basis. |
 | UC-01 exc 2 | Try to pay an expired order with exhausted quota and leave the force option off. | Rejection appears. Order remains expired with no new confirmed payment. Record any failed payment attempt separately. |
 | UC-02 main | Manager opens a paid order, selects **Cancel order**, leaves the fee empty, and selects **Yes, cancel order**. | Cancellation confirmation or refund prompt appears. Order becomes `c` with a cancellation date and zero cancellation fees. The confirmed payment is still present. |
 | UC-02 alt 1 | Cancel a pending order with an empty fee. | Cancellation confirmation appears. Order becomes `c` with zero cancellation fees and no new payment. |
@@ -48,14 +48,15 @@ Use role and label locators and Playwright's waiting assertions. Turn off custom
 
 Each author runs their cases against reset fixtures and commits their own changes. Include IDs, commands, observed results and evidence links in the PR. Tawassul runs all six cases together. If PRs are still open, use a candidate checkout that combines the authored commits and record its SHA. Confirm that the manager can perform both workflows, the viewer can read the order, and both viewer write denials leave the relevant records unchanged. Link the payment task, keyboard submission and fee-correction checks for [Phase 6](06-usability-accessibility-and-security.md).
 
-From the team repository root, record `git rev-parse HEAD`, start and reset the dedicated app using `sqe/handoff.md`, and load local test configuration. Once the team Playwright project exists, run these commands in PowerShell.
+From the repository root, record `git rev-parse HEAD` and reset the dedicated app. Playwright starts and stops the loopback server and reads the fixture configuration from the ignored local directory.
 
 ```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\sqe\windows.ps1 reset
+$env:PLAYWRIGHT_BROWSERS_PATH = Join-Path (Get-Location) 'local\sqe\browsers'
 Set-Location .\src\tests\team\e2e
-npm ci
-npm exec -- playwright install chromium
-npm exec -- playwright test --project=chromium
-npm exec -- playwright show-report
+npm.cmd ci
+npm.cmd exec -- playwright install chromium --only-shell
+npm.cmd test
 ```
 
 | Evidence | What to record |
