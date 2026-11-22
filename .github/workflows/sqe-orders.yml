@@ -1,0 +1,66 @@
+name: SQE Orders on Windows
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  orders:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+      - name: Install pretix in the Windows test environment
+        run: |
+          python -m venv local/sqe/venv
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          local/sqe/venv/Scripts/python.exe -m pip install -e '.[dev]'
+      - name: Build pretix assets
+        run: |
+          npm.cmd ci --no-audit --no-fund
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm.cmd run build
+      - name: Check pretix and run Orders white-box tests
+        run: |
+          ./sqe/windows.ps1 check
+          ./sqe/windows.ps1 unit
+      - name: Verify both Orders-specific mutations are detected
+        run: ./sqe/windows.ps1 mutation
+      - name: Verify the fixtures and payment-to-cancellation journey
+        run: |
+          ./sqe/windows.ps1 reset
+          ./sqe/windows.ps1 verify
+          ./sqe/windows.ps1 reset
+      - name: Run Orders Playwright tests
+        working-directory: src/tests/team/e2e
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/local/sqe/browsers
+        run: |
+          npm.cmd ci --no-audit --no-fund
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm.cmd exec -- playwright install chromium --only-shell
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm.cmd test
+      - name: Upload unit and coverage results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sqe-orders-windows
+          path: |
+            local/sqe/evidence/unit.xml
+            local/sqe/evidence/coverage.xml
+            local/sqe/evidence/coverage.json
+            local/sqe/evidence/mutation-*.xml
