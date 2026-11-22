@@ -93,7 +93,7 @@ from ...testutils.middleware import debugflags_var
 from ._transactions import (
     _fail, _transactions_mark_order_clean, _transactions_mark_order_dirty,
 )
-from .base import LockModel, LoggedModel
+from .base import LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
 
@@ -136,7 +136,7 @@ class OrderQuerySet(models.QuerySet):
         return order
 
 
-class Order(LockModel, LoggedModel):
+class Order(LoggedModel):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
     several OrderPositions and is connected to a user. It has an
