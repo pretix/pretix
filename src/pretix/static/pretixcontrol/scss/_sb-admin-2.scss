@@ -193,7 +193,9 @@ body {
             vertical-align: middle;
         }
         span.context-meta {
-            opacity: 0.7;
+            /* was opacity: 0.7; 11px text fell below the WCAG 2 AA 4.5:1 contrast ratio on the navbar
+               (axe: 4.26:1 even at 0.9), so the full text colour is used */
+            opacity: 1;
             font-size: 11px;
         }
     }
