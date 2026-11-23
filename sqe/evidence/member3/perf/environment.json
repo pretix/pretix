@@ -1,0 +1,16 @@
+﻿{
+    "date":  "2026-11-23T22:54:36",
+    "commit":  "297f75796102fe0decaa2e0831e84e1f1fb2a2ae",
+    "branch":  "zubair/feature/recovery-performance",
+    "os":  "Microsoft Windows 11 Pro 10.0.26300 build 26300",
+    "cpu":  "11th Gen Intel(R) Core(TM) i7-11850H @ 2.50GHz (8 cores / 16 threads)",
+    "ramGB":  31.7,
+    "freeRamGBAtStart":  15.7,
+    "powerPlan":  "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)",
+    "python":  "Python 3.12.10",
+    "django":  "5.2.19",
+    "k6":  "k6.exe v2.4.0 (commit/dd9395906d, go1.26.11, windows/amd64)",
+    "server":  "Django runserver 127.0.0.1:18081 --noreload, settings sqe.windows_perf_settings (DEBUG=False), SQLite local/sqe/windows/orders.sqlite3",
+    "data":  "fresh reset: 34 synthetic orders; measured order M3R01 (paid, 1 position, 1 payment)",
+    "operation":  "GET /api/v1/organizers/sqe-orders/events/orders/orders/M3R01/ with viewer token"
+}

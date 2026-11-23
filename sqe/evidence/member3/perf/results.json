@@ -1,0 +1,54 @@
+[
+  {
+    "run": "1vu-a",
+    "vus": 1,
+    "requests": 73,
+    "p95_ms": 56.5,
+    "p95_k6_ms": 56.5,
+    "median_ms": 37.2,
+    "max_ms": 65.2,
+    "req_per_s": 0.97,
+    "unexpected_fail_pct": 0.0,
+    "p95_limit_ms": 300,
+    "pass": true
+  },
+  {
+    "run": "1vu-b",
+    "vus": 1,
+    "requests": 72,
+    "p95_ms": 58.3,
+    "p95_k6_ms": 58.3,
+    "median_ms": 39.0,
+    "max_ms": 69.9,
+    "req_per_s": 0.96,
+    "unexpected_fail_pct": 0.0,
+    "p95_limit_ms": 300,
+    "pass": true
+  },
+  {
+    "run": "5vu-a",
+    "vus": 5,
+    "requests": 352,
+    "p95_ms": 135.7,
+    "p95_k6_ms": 135.7,
+    "median_ms": 66.5,
+    "max_ms": 293.8,
+    "req_per_s": 4.69,
+    "unexpected_fail_pct": 0.0,
+    "p95_limit_ms": 800,
+    "pass": true
+  },
+  {
+    "run": "5vu-b",
+    "vus": 5,
+    "requests": 349,
+    "p95_ms": 177.9,
+    "p95_k6_ms": 177.9,
+    "median_ms": 68.0,
+    "max_ms": 331.8,
+    "req_per_s": 4.65,
+    "unexpected_fail_pct": 0.0,
+    "p95_limit_ms": 800,
+    "pass": true
+  }
+]
