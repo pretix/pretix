@@ -1,3 +1,5 @@
+import { localize_string } from '@/pretix/static/pretixbase/js/i18n'
+
 const body = document.body
 
 export const timezone = body.dataset.timezone ?? 'UTC'
@@ -62,7 +64,7 @@ export interface SubEvent {
 
 export function formatSubevent (subevent: SubEvent | null | undefined): string {
 	if (!subevent) return ''
-	const name = i18nstringLocalize(subevent.name)
+	const name = localize_string(subevent.name)
 	const date = moment.utc(subevent.date_from).tz(timezone).format(datetimeFormat)
 	return `${name} · ${date}`
 }

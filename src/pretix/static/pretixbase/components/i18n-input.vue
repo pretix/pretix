@@ -12,20 +12,26 @@ const props = defineProps<{
 	multiline?: boolean;
 }>()
 
-const modelValue = defineModel<Record<string, string> | string>({ default: () => ({}) })
+const modelValue = defineModel<Record<string, string> | string>()
 
 watchEffect(() => {
-	if (typeof modelValue.value === 'string') {
-		const oldVal = modelValue.value
-		modelValue.value = Object.fromEntries(
-			Object.keys(props.locales).map((x): [string, string] => [x, oldVal]),
+	let value = modelValue.value
+
+	if (!value) {
+		value = {}
+	}
+
+	if (typeof value === 'string') {
+		value = Object.fromEntries(
+			Object.keys(props.locales).map((x): [string, string] => [x, value]),
 		)
 	}
 
-	const additionalLocales = new Set(Object.keys(modelValue.value)).difference(new Set(Object.keys(props.locales)))
+	const additionalLocales = new Set(Object.keys(value)).difference(new Set(Object.keys(props.locales)))
 	for (const additionalLocale of additionalLocales) {
-		delete modelValue.value[additionalLocale]
+		delete value[additionalLocale]
 	}
+	modelValue.value = value
 })
 </script>
 

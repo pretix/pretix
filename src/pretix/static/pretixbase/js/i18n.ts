@@ -1,6 +1,6 @@
 export type LocalizableString = null | string | Record<string, string>
 
-export function localize_string (s: LocalizableString, locale?: string): string {
+export function localize_string (s: LocalizableString, locale?: string): string | null {
 	if (typeof s === 'string') {
 		return s
 	}
@@ -8,7 +8,7 @@ export function localize_string (s: LocalizableString, locale?: string): string 
 		return null
 	}
 	if (!locale) {
-		locale = document.body.attributes['data-pretixlocale'].value
+		locale = document.body.attributes['data-pretixlocale']!.value
 	}
 	const short_locale = locale.split('-')[0]
 	if (locale in s) return s[locale]
@@ -28,4 +28,5 @@ export function localize_string (s: LocalizableString, locale?: string): string 
 			return s[k]
 		}
 	}
+	return null
 }

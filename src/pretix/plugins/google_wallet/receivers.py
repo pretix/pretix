@@ -22,11 +22,11 @@
 
 from collections import OrderedDict
 
+from django import forms
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.translation import gettext as _
 
-from pretix.base import forms
 from pretix.base.models.event import Event
 from pretix.base.shredder import BaseDataShredder, slow_delete
 from pretix.base.signals import (

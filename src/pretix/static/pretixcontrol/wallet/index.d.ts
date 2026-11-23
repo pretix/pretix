@@ -101,7 +101,7 @@ type LayoutData = {
 type PlatformLayout = {
 	style: string;
 	fieldgroups: Record<string, FieldGroupConfig>;
-	settings: unknown; // TODO(wallet): add settings type
+	settings: Record<string, SettingValue>;
 	file_settings: Record<string, WalletFile>;
 }
 type ServerPlatformLayout = {
@@ -109,7 +109,7 @@ type ServerPlatformLayout = {
 	style: string;
 	layout: {
 		fieldgroups: Record<string, FieldGroupConfig>;
-		settings: unknown; // TODO(wallet): add settings type
+		settings: Record<string, SettingValue>;
 	};
 	file_settings: Record<string, WalletFile>;
 }
@@ -118,8 +118,9 @@ type ServerWalletLayout = {
 	platform_layouts: ServerPlatformLayout[];
 }
 type ServerSideFile = { url: string; name: string }
-type ClientSideFile = { file: File | null; identifier?: string; url: string }
-type WalletFile = ServerSideFile | ClientSideFile
+type ClientSideFile = { file: File; identifier?: string; url: string }
+type RemovedFile = { file: null }
+type WalletFile = ServerSideFile | ClientSideFile | RemovedFile
 
 type PreviewProps = {
 	data: any;

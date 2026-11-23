@@ -9,6 +9,7 @@ import vuePug from 'eslint-plugin-vue-pug'
 const ignores = globalIgnores([
 	'**/node_modules',
 	'**/dist',
+	'**/static.dist',
 	// Vendored code
 	'src/pretix/static/leaflet',
 	'src/pretix/static/clipboard',

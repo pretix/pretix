@@ -10,7 +10,7 @@ function getDefaultFieldgroupState (
 ): FieldGroupConfig {
 	if (fieldgroup.type == 'predefined') {
 		return { active: fieldgroup.required || fieldgroup.default_active }
-	} else if (fieldgroup.type == 'placeholder') {
+	} else {
 		return {
 			overflow: fieldgroup.default_overflow,
 			entries: JSON.parse(JSON.stringify(fieldgroup.default_entries)),
@@ -29,7 +29,7 @@ function parseExistingFieldgroupState (
 		return {
 			active: 'active' in existing ? existing.active : fieldgroup.required,
 		}
-	} else if (fieldgroup.type == 'placeholder') {
+	} else {
 		return {
 			overflow: 'overflow' in existing ? existing.overflow : null,
 			// TODO: check that placeholders are possible
@@ -56,11 +56,11 @@ export function createWalletStore (config: {
 			...config,
 			loaded: false,
 			activePlatform: config.platforms[0].identifier,
-			name: null as string | null,
+			name: '',
 			platformLayouts: {} as Record<string, PlatformLayout>,
 		}),
 		getters: {
-			platform (): Platform {
+			platform (): Platform | undefined {
 				return this.getPlatform(this.activePlatform)
 			},
 			layout () {
@@ -69,18 +69,18 @@ export function createWalletStore (config: {
 				}
 				return this.platformLayouts[this.activePlatform] || null
 			},
-			style (): Style {
-				if (this.layout) {
+			style (): Style | null {
+				if (this.layout && this.platform) {
 					return this.platform.styles[this.layout.style]
 				} else {
 					return null
 				}
 			},
-			styles () {
-				return this.platform.styles
+			styles (): Styles {
+				return this.platform?.styles || {}
 			},
-			settings () {
-				const settings: Record<string, SettingValue> = {}
+			settings (): Record<string, SettingValue | null> {
+				const settings = {}
 				if (!this.style) {
 					return settings
 				}
@@ -92,9 +92,9 @@ export function createWalletStore (config: {
 						|| setting.type == 'bool'
 					) {
 						settings[setting.identifier]
-							= this.layout.settings[setting.identifier]
+							= this.layout?.settings?.[setting.identifier]
 					} else if (setting.type == 'image') {
-						const val = this.layout.file_settings[setting.identifier]
+						const val = this.layout?.file_settings[setting.identifier]
 						if (val) {
 							settings[setting.identifier] = val
 						} else {
@@ -117,9 +117,9 @@ export function createWalletStore (config: {
 						|| setting.type == 'bool'
 					) {
 						settings[setting.identifier]
-							= this.layout.settings[setting.identifier] || setting.default
+							= this.layout?.settings?.[setting.identifier] || setting.default
 					} else if (setting.type == 'image') {
-						const val = this.layout.file_settings[setting.identifier]
+						const val = this.layout?.file_settings[setting.identifier]
 						if (val && 'url' in val && val.url) {
 							settings[setting.identifier] = val
 						} else if (setting.default) {
@@ -134,17 +134,18 @@ export function createWalletStore (config: {
 				const placeholderFieldGroups = this.style?.fieldgroups.filter(
 					(x) => x.type === 'placeholder',
 				)
+				if (!placeholderFieldGroups) {
+					return content
+				}
 				for (const fieldgroup of placeholderFieldGroups) {
 					content[fieldgroup.identifier] = []
-					const layout_group = this.layout.fieldgroups[
-						fieldgroup.identifier
-					] as any as PlaceholderFieldGroupConfig
+					const layout_group = this.layout?.fieldgroups[fieldgroup.identifier] as any as PlaceholderFieldGroupConfig | undefined
+					if (!layout_group) continue
 					for (const entry of layout_group.entries) {
-						let label = localize_string(entry.label)
-						let value = null
+						let label = entry.label ? localize_string(entry.label) : null
+						let value: string | null = null
 						if (entry.type === 'placeholder') {
-							const placeholder
-								= this.placeholders[fieldgroup.content_type][entry.content]
+							const placeholder = entry.content ? this.placeholders[fieldgroup.content_type][entry.content] : null
 							if (!placeholder) {
 								continue
 							}
@@ -153,7 +154,7 @@ export function createWalletStore (config: {
 							}
 							value = placeholder?.sample
 						} else if (entry.type == 'custom') {
-							value = localize_string(entry.content)
+							value = entry.content ? localize_string(entry.content) : null
 						}
 						content[fieldgroup.identifier].push({
 							label,
@@ -162,8 +163,9 @@ export function createWalletStore (config: {
 					}
 				}
 				for (const fieldgroup of placeholderFieldGroups) {
-					const layout_group: PlaceholderFieldGroupConfig
-						= this.layout.fieldgroups[fieldgroup.identifier]
+					const layout_group = this.layout?.fieldgroups[fieldgroup.identifier] as any as PlaceholderFieldGroupConfig | undefined
+					if (!layout_group) continue
+
 					if (
 						fieldgroup.max_entries
 						&& content[fieldgroup.identifier].length > fieldgroup.max_entries
@@ -180,9 +182,13 @@ export function createWalletStore (config: {
 				return content
 			},
 			fieldgroups (): Record<string, FieldGroupDefinition> {
-				return Object.fromEntries(
-					this.style?.fieldgroups.map((x) => [x.identifier, x]),
-				)
+				if (this.style) {
+					return Object.fromEntries(
+						this.style.fieldgroups.map((x) => [x.identifier, x]),
+					)
+				} else {
+					return {}
+				}
 			},
 		},
 		actions: {
@@ -212,9 +218,10 @@ export function createWalletStore (config: {
 						settings: layout.layout.settings || {},
 						file_settings: layout.file_settings,
 					}
-					const styleDefinition = this.getPlatform(layout.platform).styles[
+					const styleDefinition = this.getPlatform(layout.platform)?.styles[
 						layout.style
 					]
+					if (!styleDefinition) continue
 					for (const fieldgroup of styleDefinition.fieldgroups) {
 						clientLayout.fieldgroups[fieldgroup.identifier]
 							= parseExistingFieldgroupState(
@@ -231,14 +238,14 @@ export function createWalletStore (config: {
 			setStyle (style: string | null) {
 				if (style === null) {
 					delete this.platformLayouts[this.activePlatform]
-				} else if (Object.keys(this.platform.styles).includes(style)) {
+				} else if (Object.keys(this.styles).includes(style)) {
 					const newLayout = {
 						style,
 						fieldgroups: {},
 						settings: {},
 						file_settings: {},
 					}
-					for (const fieldgroup of this.platform.styles[style].fieldgroups) {
+					for (const fieldgroup of this.styles[style].fieldgroups) {
 						newLayout.fieldgroups[fieldgroup.identifier]
 							= getDefaultFieldgroupState(fieldgroup)
 					}
@@ -267,9 +274,9 @@ export function createWalletStore (config: {
 					|| setting.type == 'float'
 					|| setting.type == 'bool'
 				) {
-					return this.layout.settings[setting.identifier] || setting.default
+					return this.layout?.settings?.[setting.identifier] || setting.default
 				} else if (setting.type == 'image') {
-					const val = this.layout.file_settings[setting.identifier]
+					const val = this.layout?.file_settings[setting.identifier]
 					if (val && 'url' in val && val.url) {
 						return val
 					} else if (setting.default) {
@@ -278,19 +285,20 @@ export function createWalletStore (config: {
 				}
 			},
 			setSetting (identifier: string, value: string | File) {
+				if (!this.layout) return
+
 				const setting = this.getSetting(identifier)
 				if (!setting) return
 
 				if (setting.type === 'image') {
-					if (this.layout.file_settings[setting.identifier]?.url) {
-						URL.revokeObjectURL(
-							this.layout.file_settings[setting.identifier].url,
-						)
+					const oldUrl = this.layout.file_settings[setting.identifier]?.['url']
+					if (oldUrl) {
+						URL.revokeObjectURL(oldUrl)
 					}
 					if (value instanceof File) {
 						this.layout.file_settings[setting.identifier] = {
 							file: value,
-							url: value === null ? null : URL.createObjectURL(value),
+							url: URL.createObjectURL(value),
 							name: value.name,
 						}
 					} else if (value === null) {
@@ -328,12 +336,12 @@ export function createWalletStore (config: {
 					})
 					.catch(alert)
 			},
-			serializeFieldgroups (platform, layout: PlatformLayout): FieldGroupConfig {
-				const styleDefinition = this.getPlatform(platform).styles[layout.style]
+			serializeFieldgroups (platform, layout: PlatformLayout): Record<string, FieldGroupConfig> {
+				const styleDefinition = this.getPlatform(platform)!.styles[layout.style]
 
 				return Object.fromEntries(
 					Object.entries(layout.fieldgroups)
-						.map(([k, v]) => {
+						.map(([k, v]): [string, FieldGroupConfig] | undefined => {
 							const fieldgroupDefinition = styleDefinition.fieldgroups.find(
 								(x) => x.identifier == k,
 							)
@@ -361,8 +369,8 @@ export function createWalletStore (config: {
 							Object.entries(layout.file_settings).map(async ([k, v]) => {
 								if ('identifier' in v) {
 									return [k, v.identifier]
-								} else if ('file' in v && v.file instanceof File) {
-									return [k, await this.uploadFile(v)]
+								} else if ('file' in v && v instanceof File) {
+									return [k, await this.uploadFile(v as ClientSideFile)]
 								} else if ('file' in v && v.file == null) {
 									return [k, null]
 								} else if ('url' in v) {
@@ -382,7 +390,8 @@ export function createWalletStore (config: {
 					},
 				}
 			},
-			async serializeCurrentPlatformLayout (): Promise<ServerPlatformLayout> {
+			async serializeCurrentPlatformLayout (): Promise<ServerPlatformLayout | undefined> {
+				if (!this.layout) return
 				return this.serializePlatformLayout(this.activePlatform, this.layout)
 			},
 			async serializeLayout (): Promise<ServerWalletLayout> {
