@@ -84,8 +84,12 @@ def snapshot(order_pk):
 
 
 @pytest.mark.parametrize('failure_point', [
-    pytest.param('pretix.base.services.orders.assign_ticket_secret', id='REC-01-secret-generator-before-order-save'),
-    pytest.param('pretix.base.models.Order.create_transactions', id='REC-01b-ledger-after-order-save'),
+    # Fails before the first database write: shows that nothing partial is stored when a dependency is down
+    # early. (A sensitivity probe showed this case still passes with the transaction removed.)
+    pytest.param('pretix.base.services.orders.assign_ticket_secret', id='REC-01-secret-generator-before-first-write'),
+    # Fails after the order, positions and fee were written: only the atomic block in _cancel_order can undo
+    # them, so this case is the atomicity check (it fails when transaction.atomic is replaced by a no-op).
+    pytest.param('pretix.base.models.Order.create_transactions', id='REC-01b-ledger-after-writes-atomic-rollback'),
 ])
 def test_rec01_cancellation_rolls_back_completely_and_retry_has_no_duplicates(make_order, failure_point):
     order = make_order(Order.STATUS_PAID, paid=True)
@@ -97,7 +101,8 @@ def test_rec01_cancellation_rolls_back_completely_and_retry_has_no_duplicates(ma
         with pytest.raises(DependencyUnavailable):
             _cancel_order(order.pk, cancellation_fee=FEE, send_mail=False)
 
-    # 2. Persisted state after the failure is exactly the state before it (one atomic transaction).
+    # 2. Persisted state after the failure is exactly the state before it (REC-01: nothing written yet;
+    #    REC-01b: the writes already made are rolled back by the atomic block).
     assert snapshot(order.pk) == before
 
     # 3. Dependency restored: retry the same operation.
