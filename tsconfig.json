@@ -25,6 +25,8 @@
 		"noImplicitThis": true,
 		"isolatedModules": true,
 		"noEmit": true,
+		"strictNullChecks": true,
+		"skipLibCheck": true,
 	},
 	"vueCompilerOptions": {
 		"plugins": ["@vue/language-plugin-pug"]

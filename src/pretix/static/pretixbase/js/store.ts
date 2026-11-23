@@ -10,7 +10,7 @@ type GetterReturnTypes<G> = {
 	readonly [K in keyof G]: G[K] extends () => infer R ? R : never
 }
 
-type Store<S, G, A> = UnwrapNestedRefs<S> & GetterReturnTypes<G> & A & StoreMethods
+type Store<S, G, A extends ActionsTree> = UnwrapNestedRefs<S> & GetterReturnTypes<G> & A & StoreMethods
 type GettersTree<S> = Record<string, (this: S, state: S) => any> | Record<string, () => any>
 type ActionsTree = Record<string, (...args: any[]) => any>
 
@@ -19,7 +19,6 @@ export function createStore<
 	G extends GettersTree<S>,
 	A extends ActionsTree
 > (
-	// name: string,
 	config: {
 		state: () => S
 		getters?: G & ThisType<UnwrapNestedRefs<S> & GetterReturnTypes<G> & A & StoreMethods>

@@ -1,5 +1,5 @@
 import { nextTick, type InjectionKey } from 'vue'
-import { createStore } from '~/lib/store'
+import { createStore } from '@/pretix/static/pretixbase/js/store'
 import { fetchProductList, submitCart, checkAsyncTask, ApiError, createCart } from '~/api'
 import type { CartResponse } from '~/api'
 import { STRINGS } from '~/i18n'

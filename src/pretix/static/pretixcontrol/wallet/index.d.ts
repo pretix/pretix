@@ -33,8 +33,7 @@ type BaseFieldGroupDefinition = {
 }
 
 type FieldGroupDefinition
-	= | PlaceholderFieldGroupDefinition
-		| PredefinedFieldGroupDefinition
+	= PlaceholderFieldGroupDefinition | PredefinedFieldGroupDefinition
 
 type FieldGroupDisplay = 'plain' | 'with_label'
 type FieldGroupType = 'placeholder' | 'predefined'
@@ -92,8 +91,7 @@ type PredefinedFieldGroupConfig = {
 }
 
 type FieldGroupConfig
-	= | PlaceholderFieldGroupConfig
-		| PredefinedFieldGroupConfig
+	= PlaceholderFieldGroupConfig | PredefinedFieldGroupConfig
 
 type LayoutData = {
 	fieldgroups?: Record<string, FieldGroupConfig>;
@@ -105,6 +103,19 @@ type PlatformLayout = {
 	fieldgroups: Record<string, FieldGroupConfig>;
 	settings: unknown; // TODO(wallet): add settings type
 	file_settings: Record<string, WalletFile>;
+}
+type ServerPlatformLayout = {
+	platform: string;
+	style: string;
+	layout: {
+		fieldgroups: Record<string, FieldGroupConfig>;
+		settings: unknown; // TODO(wallet): add settings type
+	};
+	file_settings: Record<string, WalletFile>;
+}
+type ServerWalletLayout = {
+	name: string;
+	platform_layouts: ServerPlatformLayout[];
 }
 type ServerSideFile = { url: string; name: string }
 type ClientSideFile = { file: File | null; identifier?: string; url: string }

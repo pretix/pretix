@@ -1,5 +1,5 @@
-import { localize_string } from '@/pretix/static/pretixbase/js/i18n.ts'
-import { createStore } from '@/pretix/static/pretixpresale/widget/src/lib/store.ts'
+import { localize_string } from '@/pretix/static/pretixbase/js/i18n'
+import { createStore } from '@/pretix/static/pretixbase/js/store'
 import { toRaw, type InjectionKey } from 'vue'
 
 export type WidgetStore = ReturnType<typeof createWalletStore>
@@ -186,7 +186,7 @@ export function createWalletStore (config: {
 			},
 		},
 		actions: {
-			getPlatform (identifier: string): Platform {
+			getPlatform (identifier: string): Platform | undefined {
 				for (const platform of this.platforms) {
 					if (platform.identifier === identifier) {
 						return platform
@@ -246,7 +246,7 @@ export function createWalletStore (config: {
 					// TODO: keep old fieldgroups & settings if matching
 				}
 			},
-			getSetting (identifier: string): Setting {
+			getSetting (identifier: string): Setting | undefined {
 				if (!this.style) {
 					throw Error('No style set')
 				}
@@ -257,7 +257,7 @@ export function createWalletStore (config: {
 					}
 				}
 			},
-			getSettingValue (identifier: string): SettingValue {
+			getSettingValue (identifier: string): SettingValue | undefined {
 				const setting = this.getSetting(identifier)
 				if (!setting) return
 
@@ -311,7 +311,7 @@ export function createWalletStore (config: {
 					this.layout.settings[setting.identifier] = value
 				}
 			},
-			async uploadFile (file: ClientSideFile) {
+			async uploadFile (file: ClientSideFile): Promise<string> {
 				return await fetch('/api/v1/upload', {
 					method: 'POST',
 					body: file.file,
@@ -328,7 +328,7 @@ export function createWalletStore (config: {
 					})
 					.catch(alert)
 			},
-			serializeFieldgroups (platform, layout: PlatformLayout) {
+			serializeFieldgroups (platform, layout: PlatformLayout): FieldGroupConfig {
 				const styleDefinition = this.getPlatform(platform).styles[layout.style]
 
 				return Object.fromEntries(
@@ -354,7 +354,7 @@ export function createWalletStore (config: {
 						.filter((x) => !!x),
 				)
 			},
-			async serializePlatformLayout (platform, layout: PlatformLayout) {
+			async serializePlatformLayout (platform, layout: PlatformLayout): Promise<ServerPlatformLayout> {
 				const uploadedFiles = Object.fromEntries(
 					(
 						await Promise.all(
@@ -382,10 +382,10 @@ export function createWalletStore (config: {
 					},
 				}
 			},
-			async serializeCurrentPlatformLayout () {
+			async serializeCurrentPlatformLayout (): Promise<ServerPlatformLayout> {
 				return this.serializePlatformLayout(this.activePlatform, this.layout)
 			},
-			async serializeLayout () {
+			async serializeLayout (): Promise<ServerWalletLayout> {
 				const layoutPromises = Object.entries(this.platformLayouts).map(
 					([platform, layout]) =>
 						this.serializePlatformLayout(platform, layout),
@@ -395,7 +395,7 @@ export function createWalletStore (config: {
 					platform_layouts: await Promise.all(layoutPromises),
 				}
 			},
-			async save () {
+			async save (): Promise<undefined> {
 				const serializedLayout = await this.serializeLayout()
 				// TODO: error handling / proper api client
 				fetch(
