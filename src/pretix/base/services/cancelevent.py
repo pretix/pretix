@@ -65,7 +65,7 @@ def _send_wle_mail(wle: WaitingListEntry, subject: LazyI18nString, message: Lazy
 
 
 def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, subevent: SubEvent,
-               refund_amount: Decimal, user: User, positions: list):
+               refund_amount: Decimal, user: User, positions: list, send_attendees: bool = True):
     with language(order.locale, order.event.settings.region):
         try:
             ia = order.invoice_address
@@ -80,49 +80,32 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
             user,
         )
 
-        # todo before pr ready: (aka note to myself)
-        #  check if we use a checkbox in the form here
-        #  (because before, we didn't check for it and maybe we don't want to here)
-        #  also: do we really want to inform attendees about the refund_amount
-        #  or do we need to because else the template does not work?
-        _attendee_mail_send_helper(
-            event=order.event,
-            order=order,
-            positions=positions,
-            template=message,
-            subject=subject,
-            log_entry_type='pretix.event.order.email.event_canceled',
-            user=user,
-            subevent=subevent,
-        )
-
-        # for p in positions:
-        #     if subevent and p.subevent_id != subevent.id:
-        #         continue
-        #
-        #     if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-        #         email_context = get_email_context(event_or_subevent=p.subevent or order.event,
-        #                                           event=order.event,
-        #                                           refund_amount=refund_amount,
-        #                                           position_or_address=p,
-        #                                           order=order, position=p)
-        #         order.send_mail(
-        #             subject, message, email_context,
-        #             'pretix.event.order.email.event_canceled',
-        #             position=p,
-        #             user=user
-        #         )
+        # send_attendees defaults to true, for backwards compatibility (we used to send to everyone)
+        if send_attendees:
+            _attendee_mail_send_helper(
+                event=order.event,
+                order=order,
+                positions=positions,
+                template=message,
+                subject=subject,
+                log_entry_type='pretix.event.order.email.event_canceled',
+                user=user,
+                subevent=subevent,
+            )
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
                  keep_fee_fixed: str, keep_fee_per_ticket: str, keep_fee_percentage: str, keep_fees: list=None,
-                 manual_refund: bool=False, send: bool=False, send_subject: dict=None, send_message: dict=None,
+                 manual_refund: bool = False, send: bool = False, send_subject: dict = None, send_message: dict = None,
+                 send_attendees: bool = False, send_subject_attendees: dict = None, send_message_attendees: dict = None,
                  send_waitinglist: bool=False, send_waitinglist_subject: dict={}, send_waitinglist_message: dict={},
                  user: int=None, refund_as_giftcard: bool=False, giftcard_expires=None, giftcard_conditions=None,
                  subevents_from: str=None, subevents_to: str=None, dry_run=False):
     send_subject = LazyI18nString(send_subject)
     send_message = LazyI18nString(send_message)
+    send_subject_attendees = LazyI18nString(send_subject)
+    send_message_attendees = LazyI18nString(send_message)
     send_waitinglist_subject = LazyI18nString(send_waitinglist_subject)
     send_waitinglist_message = LazyI18nString(send_waitinglist_message)
     if user:
@@ -183,6 +166,9 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
                         "send": send,
                         "send_subject": send_subject,
                         "send_message": send_message,
+                        "send_attendees": send_attendees,
+                        "send_subject_attendees": send_subject_attendees,
+                        "send_message_attendees": send_message_attendees,
                         "send_waitinglist": send_waitinglist,
                         "send_waitinglist_subject": send_waitinglist_subject,
                         "send_waitinglist_message": send_waitinglist_message,
@@ -215,6 +201,9 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
                     "send": send,
                     "send_subject": send_subject,
                     "send_message": send_message,
+                    "send_attendees": send_attendees,
+                    "send_subject_attendees": send_subject_attendees,
+                    "send_message_attendees": send_message_attendees,
                     "send_waitinglist": send_waitinglist,
                     "send_waitinglist_subject": send_waitinglist_subject,
                     "send_waitinglist_message": send_waitinglist_message,
@@ -283,7 +272,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
                                          comment=gettext('Event canceled'))
                 finally:
                     if send:
-                        _send_mail(o, send_subject, send_message, subevent, refund_amount, user, o.positions.all())
+                        _send_mail(o, send_subject, send_message, subevent, refund_amount, user, o.positions.all(),
+                                   send_attendees)
 
             counter += 1
             if not self.request.called_directly and counter % max(10, total // 100) == 0:
@@ -369,7 +359,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
                                      comment=gettext('Event canceled'))
 
                 if send:
-                    _send_mail(o, send_subject, send_message, subevent, refund_amount, user, positions)
+                    _send_mail(o, send_subject, send_message, subevent, refund_amount, user, positions, send_attendees)
 
             counter += 1
             if not self.request.called_directly and counter % max(10, total // 100) == 0:

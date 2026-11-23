@@ -50,6 +50,11 @@
             {% bootstrap_field form.send layout="control" %}
             {% bootstrap_field form.send_subject layout="horizontal" %}
             {% bootstrap_field form.send_message layout="horizontal" %}
+            <div data-display-dependency="#id_send">
+                {% bootstrap_field form.send_attendees layout="control" %}
+                {% bootstrap_field form.send_subject_attendees layout="horizontal" %}
+                {% bootstrap_field form.send_message_attendees layout="horizontal" %}
+            </div>
             <div class="alert alert-info" data-display-dependency="#id_refund_as_giftcard">
                 {% blocktrans trimmed %}
                     Since you are refunding your customers orders to gift cards, you should explain to them how to
