@@ -538,6 +538,14 @@ $(function () {
 		return true
 	})
 
+	$('textarea[maxlength]').each(function () {
+		let maxlength = this.maxLength
+		$(this).on('input', function () {
+			let linebreaks = (this.value.match(/\n/g) || []).length
+			this.maxLength = Math.max(maxlength - linebreaks, 0)
+		}).trigger('input')
+	})
+
 	$('input[data-required-if], select[data-required-if], textarea[data-required-if]').each(function () {
 		let dependent = $(this),
 			dependentLabel = $('label[for=' + this.id + ']'),
