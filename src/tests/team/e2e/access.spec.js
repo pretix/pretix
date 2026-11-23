@@ -35,6 +35,13 @@ async function postTransition(page, code, form, { withCsrf = true } = {}) {
     return page.request.post(url, { form, headers, maxRedirects: 0 });
 }
 
+/** Page title of an HTML response and whether it is the CSRF failure page (pretix csrffail.html, title "Verification failed"). */
+async function describe(response) {
+    const text = await response.text();
+    const title = (text.match(/<title>([\s\S]*?)<\/title>/i) || [])[1]?.replace(/\s+/g, ' ').trim() || '';
+    return { title, csrfFailurePage: /Verification failed/.test(title) };
+}
+
 const PAY_FORM = { status: 'p', amount: ORDER_TOTAL, payment_date: today() };
 const CANCEL_FORM = { status: 'c', cancellation_fee: '' };
 
@@ -100,11 +107,14 @@ for (const { id, alias, action, method, query, form } of viewerUiDenials) {
             ? await page.request.get(controlOrder(code) + 'transition' + query, { maxRedirects: 0 })
             : await postTransition(page, code, form);
         const after = await orders.read(alias);
+        const page403 = await describe(response);
         await record(testInfo, {
             id, role: 'viewer', action, expected: 'denied',
             observed: response.status() === 403 && JSON.stringify(after) === JSON.stringify(before) ? 'denied' : 'allowed',
-            evidence: { http: response.status(), statusBefore: before.status, statusAfter: after.status },
+            evidence: { http: response.status(), ...page403, statusBefore: before.status, statusAfter: after.status },
         });
+        // The denial must come from the role check, not from CSRF protection (the token sent is valid).
+        expect(page403.csrfFailurePage, `${id} 403 must come from the role check, not CSRF`).toBe(false);
     });
 }
 
@@ -156,11 +166,13 @@ test('SEC-C3 state-changing POST without a CSRF token is rejected', async ({ pag
     const before = await orders.read(alias);
     const response = await postTransition(page, fixtures.orders[alias], CANCEL_FORM, { withCsrf: false });
     const after = await orders.read(alias);
+    const page403 = await describe(response);
     await record(testInfo, {
         id: 'SEC-C3', role: 'manager', action: 'POST cancel without CSRF token', expected: 'denied',
         observed: response.status() === 403 && JSON.stringify(after) === JSON.stringify(before) ? 'denied' : 'allowed',
-        evidence: { http: response.status(), statusAfter: after.status },
+        evidence: { http: response.status(), ...page403, statusAfter: after.status },
     });
+    expect(page403.csrfFailurePage, 'the 403 must come from CSRF protection').toBe(true);
 });
 
 test('SEC-C1 session cookie attributes on the http test instance', async ({ page, orders }, testInfo) => {
