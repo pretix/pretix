@@ -1,0 +1,84 @@
+{
+  "phase": "after",
+  "runs": 3,
+  "screens": {
+    "S1-order-detail": {
+      "accessibility": {
+        "runs": [
+          92,
+          92,
+          92
+        ],
+        "median": 92
+      },
+      "best-practices": {
+        "runs": [
+          100,
+          100,
+          100
+        ],
+        "median": 100
+      },
+      "seo": {
+        "runs": [
+          58,
+          58,
+          58
+        ],
+        "median": 58
+      }
+    },
+    "S2-mark-paid-form": {
+      "accessibility": {
+        "runs": [
+          100,
+          100,
+          100
+        ],
+        "median": 100
+      },
+      "best-practices": {
+        "runs": [
+          100,
+          100,
+          100
+        ],
+        "median": 100
+      },
+      "seo": {
+        "runs": [
+          58,
+          58,
+          58
+        ],
+        "median": 58
+      }
+    },
+    "S3-cancel-form": {
+      "accessibility": {
+        "runs": [
+          100,
+          100,
+          100
+        ],
+        "median": 100
+      },
+      "best-practices": {
+        "runs": [
+          100,
+          100,
+          100
+        ],
+        "median": 100
+      },
+      "seo": {
+        "runs": [
+          58,
+          58,
+          58
+        ],
+        "median": 58
+      }
+    }
+  }
+}
