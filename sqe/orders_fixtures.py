@@ -39,12 +39,44 @@ ORDERS = {
     'journey': ('SQE02', 'n'),
     'retained_fee': ('SQE03', 'p'),
     'quota_holder': ('SQE04', 'p'),
+    # Member 3 fixtures (M3 prefix): UC-05, UC-06, access matrix, accessibility scans, performance.
+    'm3_partial': ('M3P01', 'n'),
+    'm3_reuse': ('M3P02', 'n'),
+    'm3_overpay': ('M3P03', 'n'),
+    'm3_bad_date': ('M3P04', 'n'),
+    'm3_canceled': ('M3P05', 'c'),
+    'm3_neg_amount': ('M3P06', 'n'),
+    'm3_kbd_paid': ('M3K01', 'p'),
+    'm3_zero_fee': ('M3K02', 'n'),
+    'm3_abandon': ('M3K03', 'p'),
+    'm3_fee_fix': ('M3K04', 'p'),
+    'm3_neg_fee': ('M3K05', 'p'),
+    'm3_sec_pay': ('M3S01', 'n'),
+    'm3_sec_cancel': ('M3S02', 'p'),
+    'm3_sec_api_pay': ('M3S03', 'n'),
+    'm3_sec_api_cancel': ('M3S04', 'p'),
+    'm3_sec_mgr_pay': ('M3S05', 'n'),
+    'm3_sec_mgr_cancel': ('M3S06', 'p'),
+    'm3_lh_pending': ('M3L01', 'n'),
+    'm3_lh_paid': ('M3L02', 'p'),
+    'm3_perf': ('M3R01', 'p'),
 }
+
+# Orders seeded with an unconfirmed manual payment that the payment form can reuse (UC-05 alt 1).
+CREATED_PAYMENT = {'m3_reuse'}
 
 
 def fixture_config():
     if CONFIG.is_file():
-        return json.loads(CONFIG.read_text(encoding='utf-8'))
+        config = json.loads(CONFIG.read_text(encoding='utf-8'))
+        # Keep existing credentials, but publish aliases added after the file was first written.
+        wanted = {alias: code for alias, (code, _) in ORDERS.items()}
+        if config.get('orders') != wanted:
+            config['orders'] = wanted
+            scratch = CONFIG.with_suffix('.tmp')
+            scratch.write_text(json.dumps(config, indent=2) + '\n', encoding='utf-8')
+            scratch.replace(CONFIG)
+        return config
 
     config = {
         'roles': {
@@ -110,6 +142,8 @@ def seed(config):
                     provider='manual', amount=TOTAL, state=OrderPayment.PAYMENT_STATE_CONFIRMED,
                     payment_date=timestamp,
                 )
+            if alias in CREATED_PAYMENT:
+                order.payments.create(provider='manual', amount=TOTAL, state=OrderPayment.PAYMENT_STATE_CREATED)
             order.create_transactions()
 
 

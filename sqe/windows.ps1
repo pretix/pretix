@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory)]
-    [ValidateSet('check', 'reset', 'verify', 'serve', 'unit', 'mutation')]
+    [ValidateSet('check', 'reset', 'verify', 'serve', 'serve-perf', 'unit', 'mutation', 'recovery')]
     [string] $Action
 )
 
@@ -17,11 +17,15 @@ $oldConfig = $env:PRETIX_CONFIG_FILE
 $env:PYTHONPATH = "$repo;$repo\src"
 Push-Location (Join-Path $repo 'src')
 try {
-    if ($Action -in 'unit', 'mutation') {
+    if ($Action -in 'unit', 'mutation', 'recovery') {
         $env:DJANGO_SETTINGS_MODULE = 'sqe.windows_unit_settings'
         $env:PRETIX_CONFIG_FILE = 'tests/ci_sqlite.cfg'
         if ($Action -eq 'mutation') {
             & $python -m sqe.mutation
+        } elseif ($Action -eq 'recovery') {
+            $evidence = Join-Path $repo 'local\sqe\evidence'
+            New-Item -ItemType Directory -Force -Path $evidence | Out-Null
+            & $python -m pytest tests/team/recovery -v "--junitxml=$evidence\recovery.xml"
         } else {
             $evidence = Join-Path $repo 'local\sqe\evidence'
             New-Item -ItemType Directory -Force -Path $evidence | Out-Null
@@ -37,6 +41,10 @@ try {
             'reset'  { & $python -m sqe.orders_fixtures reset }
             'verify' { & $python -m sqe.orders_fixtures verify }
             'serve'  { & $python manage.py runserver 127.0.0.1:18081 --noreload }
+            'serve-perf' {
+                $env:DJANGO_SETTINGS_MODULE = 'sqe.windows_perf_settings'
+                & $python manage.py runserver 127.0.0.1:18081 --noreload
+            }
         }
     }
     if ($LASTEXITCODE -ne 0) {
