@@ -168,6 +168,45 @@ class CartTest(CartTestMixin, TestCase):
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, 23)
 
+    def _test_simple_tax_code(self, tr):
+        self.ticket.tax_rule = tr
+        self.ticket.save()
+
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('Early-bird', doc.select('.cart .cart-row')[0].select('strong')[0].text)
+        self.assertIn('1', doc.select('.cart .cart-row')[0].select('.count')[0].text)
+        self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[0].text)
+        self.assertIn('23', doc.select('.cart .cart-row')[0].select('.price')[1].text)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+        assert objs[0].tax_code == tr.code
+        assert objs[0].tax_rate == tr.rate
+
+    def test_simple_tax_standard(self):
+        tr_standard = self.event.tax_rules.create(
+            name='VAT',
+            rate=Decimal('19.00'),
+            code="S/standard",
+        )
+        self._test_simple_tax_code(tr_standard)
+
+    def test_simple_tax_outside(self):
+        tr_o = self.event.tax_rules.create(
+            name='VAT',
+            rate=Decimal('0'),
+            code="O",
+        )
+        self._test_simple_tax_code(tr_o)
+
     def test_widget_data_post(self):
         self.event.settings.attendee_names_asked = True
         self.event.settings.attendee_emails_asked = True
