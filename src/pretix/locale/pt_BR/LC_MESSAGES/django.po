@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 10:48+0000\n"
-"PO-Revision-Date: 2026-10-30 03:00+0000\n"
-"Last-Translator: vihumelo <victordimelo@gmail.com>\n"
+"PO-Revision-Date: 2026-11-23 21:00+0000\n"
+"Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.10.1\n"
+"X-Generator: Weblate 2026.11.2\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -19401,7 +19401,7 @@ msgstr "Deslogar"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "Organizer account"
-msgstr "Conta de organizado"
+msgstr "Conta de organizador"
 
 #: pretix/control/templates/pretixcontrol/base.html
 msgid "Search for events"
@@ -25703,7 +25703,7 @@ msgstr "Você ainda não conectou nenhum dispositivo de hardware."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Connect a device"
-msgstr "Conectar umn dispositivo"
+msgstr "Conectar um dispositivo"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
 msgid "Hardware model"
@@ -29075,6 +29075,9 @@ msgid ""
 "automatically. We recommend that you rename these in your source file to "
 "avoid problems during import."
 msgstr ""
+"Múltiplas colunas do arquivo CSV têm o mesmo nome e serão renomeadas "
+"automaticamente. Recomendamos que você renomeie elas no seu arquivo para "
+"evitar problemas durante a importação."
 
 #: pretix/control/views/modelimport.py
 msgid "The import was successful."
