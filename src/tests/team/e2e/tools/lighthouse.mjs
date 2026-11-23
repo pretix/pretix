@@ -6,8 +6,10 @@
 //
 // How the login is shared: Playwright launches a *persistent* Chromium profile (its default browser context)
 // with a remote debugging port, logs in, and Lighthouse connects to that same browser. disableStorageReset
-// stops Lighthouse from clearing the session cookie before it loads the page.
+// stops Lighthouse from clearing the session cookie, and emulatedUserAgent=false keeps the User-Agent that
+// pretix pinned the session to.
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 import { chromium } from '@playwright/test';
 import lighthouse from 'lighthouse';
 
@@ -34,6 +36,9 @@ const config = {
         screenEmulation: { mobile: false, width: 1350, height: 940, deviceScaleFactor: 1, disabled: false },
         throttlingMethod: 'provided',
         disableStorageReset: true,
+        // pretix pins a backend session to the browser's User-Agent (helpers/security.py) and ends it on change,
+        // so Lighthouse must keep the real UA instead of emulating its own.
+        emulatedUserAgent: false,
     },
 };
 
@@ -41,7 +46,7 @@ const median = (values) => [...values].sort((a, b) => a - b)[Math.floor(values.l
 
 await rm(profile, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
-const context = await chromium.launchPersistentContext(profile.pathname.replace(/^\/([A-Za-z]:)/, '$1'), {
+const context = await chromium.launchPersistentContext(fileURLToPath(profile), {
     headless: true, args: [`--remote-debugging-port=${PORT}`],
 });
 
