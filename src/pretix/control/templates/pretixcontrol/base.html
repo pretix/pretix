@@ -8,7 +8,8 @@
 {% load dialog %}
 {% load icon %}
 <!DOCTYPE html>
-<html{% if rtl %} dir="rtl" class="rtl"{% endif %}>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE|default:"en" }}"{% if rtl %} dir="rtl" class="rtl"{% endif %}>
 	<head>
 		<title>{% block title %}{% endblock %}{% if url_name != "index" %} :: {% endif %}
             {{ settings.PRETIX_INSTANCE_NAME }}</title>
@@ -98,7 +99,7 @@
             {% if request.event %}data-event="{{ request.event.slug }}"{% endif %}
             data-select2-locale="{{ select2locale }}" data-longdateformat="{{ js_long_date_format }}" class="nojs">
         <div id="wrapper">
-            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+            <nav class="navbar navbar-inverse navbar-static-top" role="navigation" aria-label="{% trans "Top navigation" %}">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle"
                             data-toggle="collapse" data-target=".navbar-nav-collapse">
@@ -129,7 +130,7 @@
                         </a>
                     {% endif %}
                     <a class="navbar-brand" href="{% url "control:index" %}">
-                        <img src="{% static "pretixbase/img/pretix-icon-white-mini.svg" %}" />
+                        <img src="{% static "pretixbase/img/pretix-icon-white-mini.svg" %}" alt="" />
                         <span>
                             {{ settings.PRETIX_INSTANCE_NAME }}
                         </span>
@@ -228,7 +229,7 @@
                         </a>
                     </li>
                 </ul>
-                <div class="navbar-default sidebar" role="navigation">
+                <div class="navbar-default sidebar" role="navigation" aria-label="{% trans "Sidebar navigation" %}">
                     <div class="sidebar-nav navbar-nav-collapse navbar-collapse">
                         <div class="dropdown context-selector">
                             {% if request.event %}
@@ -304,8 +305,8 @@
                                             {{ nav.label }}
                                         </a>
                                         {% if nav.children %}
-                                            <a href="#" class="arrow">
-                                                <span class="fa arrow"></span>
+                                            <a href="#" class="arrow" aria-label="{% blocktrans trimmed with label=nav.label %}Show or hide the {{ label }} sub-menu{% endblocktrans %}">
+                                                <span class="fa arrow" aria-hidden="true"></span>
                                             </a>
                                             <ul class="nav nav-second-level">
                                                 {% for item in nav.children %}
@@ -382,7 +383,7 @@
                     {% endif %}
                 </div>
             {% endif %}
-            <div id="page-wrapper">
+            <main id="page-wrapper">
                 <div class="container-fluid">
                     {% signal "pretix.control.signals.html_page_start" request %}
                     {% if messages %}
@@ -468,7 +469,7 @@
                         {% endif %}
                     </footer>
                 </div>
-            </div>
+            </main>
         </div>
         <div id="ajaxerr" class="modal-wrapper" hidden>
         </div>
