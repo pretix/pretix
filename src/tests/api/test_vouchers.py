@@ -1061,7 +1061,7 @@ def test_create_multiple_vouchers_one_invalid(token_client, organizer, event, it
         ], format='json'
     )
     assert resp.status_code == 400
-    assert resp.data == [{}, {'code': ['Ensure this field has at least 5 characters.']}]
+    assert resp.data == {1: {'code': ['Ensure this field has at least 5 characters.']}}
     with scopes_disabled():
         assert Voucher.objects.count() == 0
 
@@ -1106,7 +1106,7 @@ def test_create_multiple_vouchers_duplicate_code(token_client, organizer, event,
         ], format='json'
     )
     assert resp.status_code == 400
-    assert resp.data == [{}, {'code': ['Duplicate voucher code in request.']}]
+    assert resp.data == {1: {'code': ['Duplicate voucher code in request.']}}
     with scopes_disabled():
         assert Voucher.objects.count() == 0
 
@@ -1214,7 +1214,7 @@ def test_create_multiple_vouchers_duplicate_seat(token_client, organizer, event,
         ], format='json'
     )
     assert resp.status_code == 400
-    assert resp.data == [{}, {'code': ['Duplicate seat ID in request.']}]
+    assert resp.data == {1: {'code': ['Duplicate seat ID in request.']}}
     with scopes_disabled():
         assert Voucher.objects.count() == 0
 
