@@ -1,0 +1,1 @@
+{"session":{"name":"pretix_session","httpOnly":true,"secure":false,"sameSite":"Lax"},"csrf":{"name":"pretix_csrftoken","httpOnly":false,"secure":false,"sameSite":"Lax"}}

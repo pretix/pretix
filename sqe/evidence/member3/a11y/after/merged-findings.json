@@ -1,0 +1,130 @@
+{
+  "phase": "after",
+  "issues": [
+    {
+      "screen": "S1-order-detail",
+      "rule": "color-contrast",
+      "element": ".items.panel-default.panel > .panel-heading > .pull-right.flip > a:nth-child(1)",
+      "html": "<a href=\"/control/event/sqe-orders/orders/orders/M3L02/info\">\n                                <span class=\"fa fa-edit\"></span>\n             ",
+      "tools": "axe+lighthouse",
+      "impact": "serious",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "wcag": "wcag2aa wcag143"
+    },
+    {
+      "screen": "S1-order-detail",
+      "rule": "color-contrast",
+      "element": ".pull-right.flip > a:nth-child(2)",
+      "html": "<a href=\"/control/event/sqe-orders/orders/orders/M3L02/change\">\n                                <span class=\"fa fa-edit\"></span>\n           ",
+      "tools": "axe+lighthouse",
+      "impact": "serious",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "wcag": "wcag2aa wcag143"
+    },
+    {
+      "screen": "S1-order-detail",
+      "rule": "color-contrast",
+      "element": ".col-md-6:nth-child(1) > .panel-default.panel > .panel-heading > .pull-right.flip > a",
+      "html": "<a href=\"/control/event/sqe-orders/orders/orders/M3L02/info\">\n                                            <span class=\"fa fa-edit\"></span>\n ",
+      "tools": "axe+lighthouse",
+      "impact": "serious",
+      "help": "Elements must meet minimum color contrast ratio thresholds",
+      "wcag": "wcag2aa wcag143"
+    },
+    {
+      "screen": "S1-order-detail",
+      "rule": "link-name",
+      "element": "dd:nth-child(8) > .btn-xs.btn.btn-default",
+      "html": "<a href=\"/control/event/sqe-orders/orders/orders/M3L02/locale\" class=\"btn btn-default btn-xs\">\n                                    <span cla",
+      "tools": "axe+lighthouse",
+      "impact": "serious",
+      "help": "Links must have discernible text",
+      "wcag": "wcag2a wcag244 wcag412"
+    },
+    {
+      "screen": "S1-order-detail",
+      "rule": "link-name",
+      "element": "dd:nth-child(10) > .btn-xs.btn.btn-default:nth-child(1)",
+      "html": "<a href=\"/control/event/sqe-orders/orders/orders/M3L02/contact\" class=\"btn btn-default btn-xs\">\n                                    <span cl",
+      "tools": "axe+lighthouse",
+      "impact": "serious",
+      "help": "Links must have discernible text",
+      "wcag": "wcag2a wcag244 wcag412"
+    },
+    {
+      "screen": "S1-order-detail",
+      "rule": "link-name",
+      "element": "dd:nth-child(10) > .btn-xs.btn.btn-default:nth-child(2)",
+      "html": "<a href=\"/control/event/sqe-orders/orders/orders/M3L02/sendmail\" class=\"btn btn-default btn-xs\">\n                                        <sp",
+      "tools": "axe+lighthouse",
+      "impact": "serious",
+      "help": "Links must have discernible text",
+      "wcag": "wcag2a wcag244 wcag412"
+    },
+    {
+      "screen": "S1-order-detail",
+      "rule": "heading-order",
+      "element": ".panel-primary > .panel-heading > h3",
+      "html": "<h3 class=\"panel-title\">\n                        Order details\n                    </h3>",
+      "tools": "axe+lighthouse",
+      "impact": "moderate",
+      "help": "Heading levels should only increase by one"
+    }
+  ],
+  "pageLevel": [
+    {
+      "screen": "S1-order-detail",
+      "category": "best-practices",
+      "rule": "valid-source-maps",
+      "help": "Missing source maps for large first-party JavaScript"
+    },
+    {
+      "screen": "S1-order-detail",
+      "category": "seo",
+      "rule": "is-crawlable",
+      "help": "Page is blocked from indexing"
+    },
+    {
+      "screen": "S1-order-detail",
+      "category": "seo",
+      "rule": "meta-description",
+      "help": "Document does not have a meta description"
+    },
+    {
+      "screen": "S2-mark-paid-form",
+      "category": "best-practices",
+      "rule": "valid-source-maps",
+      "help": "Missing source maps for large first-party JavaScript"
+    },
+    {
+      "screen": "S2-mark-paid-form",
+      "category": "seo",
+      "rule": "is-crawlable",
+      "help": "Page is blocked from indexing"
+    },
+    {
+      "screen": "S2-mark-paid-form",
+      "category": "seo",
+      "rule": "meta-description",
+      "help": "Document does not have a meta description"
+    },
+    {
+      "screen": "S3-cancel-form",
+      "category": "best-practices",
+      "rule": "valid-source-maps",
+      "help": "Missing source maps for large first-party JavaScript"
+    },
+    {
+      "screen": "S3-cancel-form",
+      "category": "seo",
+      "rule": "is-crawlable",
+      "help": "Page is blocked from indexing"
+    },
+    {
+      "screen": "S3-cancel-form",
+      "category": "seo",
+      "rule": "meta-description",
+      "help": "Document does not have a meta description"
+    }
+  ]
+}

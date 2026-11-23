@@ -16,7 +16,15 @@ export default defineConfig({
         ['list'],
         ['html', { outputFolder: evidence + 'playwright-report', open: 'never' }],
     ],
-    use: { baseURL, locale: 'en-US', timezoneId: 'UTC', actionTimeout: 10_000, trace: 'retain-on-failure' },
+    use: {
+        baseURL, locale: 'en-US', timezoneId: 'UTC', actionTimeout: 10_000, trace: 'retain-on-failure',
+        // Optional OWASP ZAP passive scan: set ZAP_PROXY=http://127.0.0.1:8090. Chromium bypasses proxies for
+        // loopback hosts by default, so <-loopback> is required or ZAP sees no traffic.
+        ...(process.env.ZAP_PROXY ? {
+            proxy: { server: process.env.ZAP_PROXY, bypass: '<-loopback>' },
+            launchOptions: { args: ['--proxy-bypass-list=<-loopback>'] },
+        } : {}),
+    },
     projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
     webServer: {
         command: 'powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\\sqe\\windows.ps1 serve',
