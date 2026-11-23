@@ -20,7 +20,12 @@ export const PARTIAL_PAYMENT = '12.00';
 export const REMAINING_AFTER_PARTIAL = '8.00';
 export const OVERPAYMENT = '25.00';
 export const NEGATIVE_PAYMENT = '-0.01';
-export const INVALID_DATE = '2026-13-45';
+/** The date picker replaces an unparseable date with the last valid one client-side (finding U-01), so the
+ *  invalid date the server can actually receive is an empty one (the field is required). */
+export const UNPARSEABLE_DATE = '2026-13-45';
+export const EMPTY_DATE = '';
+/** A non-numeric amount passes the browser (text input) and is rejected by the server-side form. */
+export const NON_NUMERIC_AMOUNT = 'abc';
 
 /** Messages the application shows. */
 export const MSG = {
