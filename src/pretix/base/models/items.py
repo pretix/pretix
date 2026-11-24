@@ -621,7 +621,8 @@ class Item(LoggedModel):
         verbose_name=_('This product can only be bought using a voucher.'),
         default=False,
         help_text=_('To buy this product, the user needs a voucher that applies to this product '
-                    'either directly or via a quota.')
+                    'either directly or via a quota. Please note that the waitinglist is not '
+                    'available for products requiring a voucher.')
     )
     require_approval = models.BooleanField(
         verbose_name=_('Buying this product requires approval'),
