@@ -1950,7 +1950,7 @@ class EventFilterForm(FilterForm):
     orders = {
         'slug': 'slug',
         'organizer': 'organizer__name',
-        'date_from': 'order_from',
+        'date_from': 'order_from_min',
         'date_to': 'order_to',
         'live': 'live',
     }
