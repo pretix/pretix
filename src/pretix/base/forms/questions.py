@@ -287,7 +287,7 @@ class NamePartsFormField(forms.MultiValueField):
             v = value.get(fname)
             if not v:
                 continue
-            special_chars = re.findall('[$€/%§{}<>~]', v)
+            special_chars = re.findall('[$€/%§{}<>~=]', v)
             if special_chars:
                 raise forms.ValidationError(
                     _('The field "%(label)s" may not contain special characters such as "%(chars)s".'),
