@@ -6,13 +6,11 @@
 <nav aria-label="{% trans "calendar navigation" %}">
     <ul class="row calendar-nav">
         <li class="text-left flip">
-            {% if subevent_list.has_before %}
-                <a href="?{% url_replace request "date" subevent_list.before|date:"Y-m" %}"
-                        class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with month=subevent_list.before|date:"F Y" %}Show previous month, {{ month }}{% endblocktrans %}">
-                    {% icon "arrow-left" %}
-                    <span class="hidden-xs">{{ subevent_list.before|date:"F Y" }}</span>
-                </a>
-            {% endif %}
+            <a {% if subevent_list.has_before %}href="?{% url_replace request "date" subevent_list.before|date:"Y-m" %}"{% else %}disabled{% endif %}
+                    class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with month=subevent_list.before|date:"F Y" %}Show previous month, {{ month }}{% endblocktrans %}">
+                {% icon "arrow-left" %}
+                <span class="hidden-xs">{{ subevent_list.before|date:"F Y" }}</span>
+            </a>
         </li>
         <li class="text-center">
             <form class="form-inline" method="get" id="monthselform" action="{% eventurl event "presale:event.index" cart_namespace=cart_namespace %}">
@@ -41,13 +39,11 @@
             </form>
         </li>
         <li class="text-right flip">
-            {% if subevent_list.has_after %}
-                <a href="?{% url_replace request "date" subevent_list.after|date:"Y-m" %}"
-                    class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with month=subevent_list.after|date:"F Y" %}Show next month, {{ month }}{% endblocktrans %}">
-                    <span class="hidden-xs">{{ subevent_list.after|date:"F Y" }}</span>
-                    {% icon "arrow-right" %}
-                </a>
-            {% endif %}
+            <a {% if subevent_list.has_after %}href="?{% url_replace request "date" subevent_list.after|date:"Y-m" %}"{% else %}disabled{% endif %}
+                class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with month=subevent_list.after|date:"F Y" %}Show next month, {{ month }}{% endblocktrans %}">
+                <span class="hidden-xs">{{ subevent_list.after|date:"F Y" }}</span>
+                {% icon "arrow-right" %}
+            </a>
         </li>
     </ul>
 </nav>
