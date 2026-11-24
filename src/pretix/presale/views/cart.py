@@ -620,9 +620,6 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
             u += "&locale=" + quote(self.request.GET.get('locale'))
         if "next_error" in self.request.GET:
             u += "&next_error=" + quote(self.request.GET.get('next_error'))
-        if ajax:
-            cart_id = get_or_create_cart_id(self.request)
-            u += '&take_cart_id=' + cart_id
         return u
 
     def post(self, request, *args, **kwargs):
