@@ -134,10 +134,17 @@ def _attendee_mail_send_helper(
     attach_ical: bool = False,
     attach_other_files: list = None,
     subevent: SubEvent = None,
+    reminder: bool = False,
 ):
     parent_op = None
     sent_to_positions = set()
     for p in positions:
+        if reminder and (not p.subevent_id or now() < (
+            p.subevent.date_from - timedelta(days=event.reminder_days)).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )):
+            continue
+
         if subevent and p.subevent_id != subevent.id:
             continue
 
@@ -1689,29 +1696,15 @@ def send_download_reminders(sender, **kwargs):
                     )
 
                     if event.settings.mail_send_download_reminder_attendee:
-                        send_to_positions = []
-                        for p in positions:
-                            if p.subevent_id:
-                                reminder_date = (p.subevent.date_from - timedelta(days=event.reminder_days)).replace(
-                                    hour=0, minute=0, second=0, microsecond=0
-                                )
-                                if now() < reminder_date:
-                                    continue
-                                else:
-                                    send_to_positions.append(p)
-                        # todo before pr ready (aka note to myself):
-                        #  order's send_mail used before, check if there was a good reason to not
-                        #  use postion's send_mail
-                        #  if not, look for a way to not use double iteration over positions (see above)
-                        #  otherwise: rewrite this without this helper function anyway
                         _attendee_mail_send_helper(
                             event=event,
                             order=o,
-                            positions=send_to_positions,
+                            positions=positions,
                             email_template=event.settings.mail_text_download_reminder_attendee,
                             email_subject=event.settings.mail_subject_download_reminder_attendee,
                             log_entry_type='pretix.event.order.email.download_reminder_sent',
                             attach_tickets=True,
+                            reminder=True,
                         )
 
 
