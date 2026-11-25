@@ -57,6 +57,7 @@ seating_plan                          integer                    If reserved sea
 seat_category_mapping                 object                     An object mapping categories of the seating plan
                                                                  (strings) to items in the event (integers or ``null``).
 last_modified                         datetime                   Last modification of this object
+comment                               string                     Internal comment for this subevent (or ``null``)
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 2023.8.0
@@ -117,7 +118,10 @@ Endpoints
               }
             ],
             "variation_price_overrides": [],
-            "meta_data": {}
+            "meta_data": {},
+            "frontpage_text": {},
+            "last_modified": "2017-12-01T10:00:30Z",
+            "comment": "internal comment"
           }
         ]
       }
@@ -187,7 +191,9 @@ Endpoints
           }
         ],
         "variation_price_overrides": [],
-        "meta_data": {}
+        "meta_data": {},
+        "last_modified": "2017-12-01T10:00:30Z",
+        "comment": ""
       }
 
 
@@ -224,7 +230,9 @@ Endpoints
           }
         ],
         "variation_price_overrides": [],
-        "meta_data": {}
+        "meta_data": {},
+        "last_modified": "2017-12-01T10:00:30Z",
+        "comment": ""
       }
 
 
@@ -282,7 +290,9 @@ Endpoints
           }
         ],
         "variation_price_overrides": [],
-        "meta_data": {}
+        "meta_data": {},
+        "last_modified": "2017-12-01T10:00:30Z",
+        "comment": ""
       }
 
    :param organizer: The ``slug`` field of a valid organizer
@@ -443,7 +453,9 @@ Endpoints
               }
             ],
             "variation_price_overrides": [],
-            "meta_data": {}
+            "meta_data": {},
+            "last_modified": "2017-12-01T10:00:30Z",
+            "comment": ""
           }
         ]
       }

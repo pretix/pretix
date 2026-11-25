@@ -117,6 +117,7 @@ class TransmissionInfoSerializer(serializers.Serializer):
         super().__init__(*args, **kwargs)
         for k, v in transmission_type.invoice_address_form_fields.items():
             self.fields[k] = form_field_to_serializer_field(v)
+            self.fields[k].required = False  # invoice_address_form_fields_required is checked by parent serializer
 
 
 class InvoiceAddressSerializer(I18nAwareModelSerializer):

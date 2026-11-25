@@ -25,8 +25,10 @@ import tempfile
 
 tmpdir = tempfile.TemporaryDirectory()
 os.environ.setdefault('DATA_DIR', tmpdir.name)
-if os.path.exists('test/sqlite.cfg'):
-    os.environ.setdefault('PRETIX_CONFIG_FILE', 'test/sqlite.cfg')
+if os.path.exists('tests/ci_sqlite.cfg'):
+    os.environ.setdefault('PRETIX_CONFIG_FILE', 'tests/ci_sqlite.cfg')
+else:
+    os.environ.setdefault("PRETIX_CONFIG_FILE", "")
 
 from pretix.settings import *  # NOQA
 
@@ -100,3 +102,4 @@ class DisableMigrations(object):
 
 if not os.environ.get("GITHUB_WORKFLOW", ""):
     MIGRATION_MODULES = DisableMigrations()
+    VITE_DEV_MODE = True

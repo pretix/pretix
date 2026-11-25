@@ -1207,6 +1207,11 @@ class ItemAddOnForm(I18nModelForm):
             }
         )
         self.fields['addon_category'].widget.choices = self.fields['addon_category'].choices
+        self.fields['max_count'] = forms.IntegerField(
+            min_value=1,
+            label=self.fields['max_count'].label,
+            widget=forms.NumberInput(attrs={'placeholder': '1'}),
+        )
 
     class Meta:
         model = ItemAddOn
@@ -1318,6 +1323,12 @@ class ItemBundleForm(I18nModelForm):
                 choices.append((str(i.pk), '%s' % pname))
         self.fields['itemvar'].choices = choices
         change_decimal_field(self.fields['designated_price'], self.event.currency)
+
+        self.fields['count'] = forms.IntegerField(
+            min_value=1,
+            label=self.fields['count'].label,
+            widget=forms.NumberInput(attrs={'placeholder': '1'}),
+        )
 
     def clean(self):
         d = super().clean()

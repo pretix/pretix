@@ -35,6 +35,7 @@ import calendar
 import hashlib
 import math
 import operator
+import re
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta
 from functools import reduce
@@ -381,7 +382,11 @@ class EventListMixin:
     def _set_week_year(self):
         if 'date' in self.request.GET:
             try:
-                iso = dateutil.parser.isoparse(self.request.GET.get('date')).isocalendar()
+                input = self.request.GET.get('date')
+                # Our parameters for the single-digit weeks of the year are 2027-W2, as emitted by Django's "W" format code,
+                # but dateutil 4.0 is strict about ISO and only accepts 2027-W02 as valid.
+                input = re.sub('-W([0-9])$', '-W0\\1', input)
+                iso = dateutil.parser.isoparse(input).isocalendar()
             except ValueError:
                 iso = time_machine_now().isocalendar()
             self.year = iso[0]

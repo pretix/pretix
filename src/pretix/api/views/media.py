@@ -183,9 +183,18 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
                         type=s.validated_data["type"],
                         identifier=s.validated_data["identifier"],
                     )
-                m.customer = None  # not relevant for cross-organizer
                 s = self.get_serializer(m)
-                return Response({"result": s.data})
+                data = s.data
+                # Remove fields that are not relevant for cross-organizer usage
+                data["customer"] = None
+                data["linked_orderposition"] = None
+                data["linked_orderpositions"] = []
+                data["info"] = {}
+                data["notes"] = None
+                data["claim_token"] = None
+                data["label"] = None
+
+                return Response({"result": data})
             except ReusableMedium.DoesNotExist:
                 mt = MEDIA_TYPES.get(s.validated_data["type"])
                 if mt:

@@ -313,7 +313,14 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False, allow_
     # makes the query SIGNIFICANTLY faster
     from .organizer import SalesChannel
 
-    assert isinstance(channel, (SalesChannel, str))
+    assert isinstance(channel, (SalesChannel, str, list))
+
+    if isinstance(channel, SalesChannel):
+        channel = [channel]
+
+    if isinstance(channel, list):
+        assert all(isinstance(c, SalesChannel) for c in channel)
+
     q = (
         # IMPORTANT: If this is updated, also update the ItemVariation query
         # in models/event.py: EventMixin.annotated()
@@ -325,7 +332,7 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False, allow_
     if isinstance(channel, str):
         q &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel))
     else:
-        q &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels=channel))
+        q &= Q(Q(all_sales_channels=True) | Q(limit_sales_channels__in=channel))
 
     if not allow_addons:
         q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))
@@ -614,7 +621,8 @@ class Item(LoggedModel):
         verbose_name=_('This product can only be bought using a voucher.'),
         default=False,
         help_text=_('To buy this product, the user needs a voucher that applies to this product '
-                    'either directly or via a quota.')
+                    'either directly or via a quota. Please note that the waitinglist is not '
+                    'available for products requiring a voucher.')
     )
     require_approval = models.BooleanField(
         verbose_name=_('Buying this product requires approval'),
@@ -1336,6 +1344,8 @@ class ItemVariation(models.Model):
                     quotacounter[q] += b.count
 
         for q, n in quotacounter.items():
+            if n == 0:
+                continue
             a = q.availability(count_waitinglist=count_waitinglist, _cache=_cache)
             if a[1] is None:
                 continue
@@ -1479,8 +1489,8 @@ class ItemAddOn(models.Model):
 
     @staticmethod
     def clean_max_count(max_count):
-        if max_count < 0:
-            raise ValidationError(_('The maximum count needs to be equal to or greater than zero.'))
+        if max_count < 1:
+            raise ValidationError(_('The maximum count needs to be greater than zero.'))
 
     @staticmethod
     def clean_max_min_count(max_count, min_count):
@@ -1561,8 +1571,8 @@ class ItemBundle(models.Model):
 
     @staticmethod
     def clean_count(count):
-        if count < 0:
-            raise ValidationError(_('The count needs to be equal to or greater than zero.'))
+        if count < 1:
+            raise ValidationError(_('The count needs to be greater than zero.'))
 
 
 class Question(LoggedModel):

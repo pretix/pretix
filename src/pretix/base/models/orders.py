@@ -93,7 +93,7 @@ from ...testutils.middleware import debugflags_var
 from ._transactions import (
     _fail, _transactions_mark_order_clean, _transactions_mark_order_dirty,
 )
-from .base import LockModel, LoggedModel
+from .base import LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
 
@@ -136,7 +136,7 @@ class OrderQuerySet(models.QuerySet):
         return order
 
 
-class Order(LockModel, LoggedModel):
+class Order(LoggedModel):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
     several OrderPositions and is connected to a user. It has an
@@ -1347,25 +1347,6 @@ class QuestionAnswer(models.Model):
                     'organizer': self.associated_order.event.organizer.slug,
                     'answer': self.pk,
                 })
-        return ""
-
-    @property
-    def frontend_file_url(self):
-        from pretix.multidomain.urlreverse import eventreverse
-
-        if self.file:
-            if self.associated_order:
-                url = eventreverse(self.associated_order.event, 'presale:event.order.download.answer', kwargs={
-                    'order': self.associated_order.code,
-                    'secret': self.associated_order.secret,
-                    'answer': self.pk,
-                })
-            else:
-                url = eventreverse(self.event, 'presale:event.cart.download.answer', kwargs={
-                    'answer': self.pk,
-                })
-
-            return url
         return ""
 
     @property

@@ -23,10 +23,10 @@ import json
 import logging
 import pathlib
 import re
+from importlib import metadata
 from urllib.parse import urljoin
 from urllib.request import urlopen
 
-import importlib_metadata as metadata
 from django import template
 from django.conf import settings
 from django.utils.safestring import mark_safe

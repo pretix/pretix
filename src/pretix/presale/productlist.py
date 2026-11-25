@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import sys
+from collections import Counter
 from datetime import datetime
 from typing import Optional
 
@@ -472,3 +473,11 @@ def _item_num_options(item):
 
 def get_item_option_count(items):
     return sum(_item_num_options(item) for item in items)
+
+
+def get_item_var_sums(positions, subevent):
+    itemvarsums = Counter()
+    for pos in positions:
+        if pos.subevent == subevent:
+            itemvarsums[pos.variation or pos.item] += 1
+    return itemvarsums

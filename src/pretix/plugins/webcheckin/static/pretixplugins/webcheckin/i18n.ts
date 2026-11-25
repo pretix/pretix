@@ -1,3 +1,6 @@
+import { localize_string } from '@/pretix/static/pretixbase/js/i18n'
+import '@/pretix/static/pretixbase/js/gettextstub'
+
 const body = document.body
 
 export const timezone = body.dataset.timezone ?? 'UTC'
@@ -8,27 +11,6 @@ export const datetimeLocale = body.dataset.datetimelocale ?? 'en'
 export const pretixLocale = body.dataset.pretixlocale ?? 'en'
 
 moment.locale(datetimeLocale)
-
-export function gettext (msgid: string): string {
-	if (typeof django !== 'undefined' && typeof django.gettext !== 'undefined') {
-		return django.gettext(msgid)
-	}
-	return msgid
-}
-
-export function ngettext (singular: string, plural: string, count: number): string {
-	if (typeof django !== 'undefined' && typeof django.ngettext !== 'undefined') {
-		return django.ngettext(singular, plural, count)
-	}
-	return plural
-}
-
-export type I18nString = string | Record<string, string> | null | undefined
-
-export function i18nstringLocalize (obj: I18nString): string {
-	// external
-	return i18nstring_localize(obj)
-}
 
 export const STRINGS: Record<string, string> = {
 	'checkinlist.select': gettext('Select a check-in list'),
@@ -83,7 +65,7 @@ export interface SubEvent {
 
 export function formatSubevent (subevent: SubEvent | null | undefined): string {
 	if (!subevent) return ''
-	const name = i18nstringLocalize(subevent.name)
+	const name = localize_string(subevent.name)
 	const date = moment.utc(subevent.date_from).tz(timezone).format(datetimeFormat)
 	return `${name} · ${date}`
 }

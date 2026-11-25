@@ -76,7 +76,7 @@ from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
-    invoice_qualified,
+    invoice_qualified, transmit_invoice,
 )
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _try_auto_refund, cancel_order,
@@ -907,6 +907,9 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
                         self.order.log_action('pretix.event.order.invoice.reissued', data={
                             'invoice': inv.pk
                         })
+                        transmit_invoice.apply_async(args=(c.event_id, c.pk, True))
+                        if c.pk != inv.pk:
+                            transmit_invoice.apply_async(args=(inv.event_id, inv.pk, True))
                         messages.success(self.request, _('The invoice has been reissued.'))
                 except Exception as e:
                     self.order.log_action("pretix.event.order.invoice.failed", data={
@@ -1156,25 +1159,23 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
-class AnswerDownload(EventViewMixin, OrderDetailMixin, View):
+class AnswerDownload(EventViewMixin, View):
     def get(self, request, *args, **kwargs):
         answid = kwargs.get('answer')
         token = request.GET.get('token', '')
 
         answer = get_object_or_404(
             QuestionAnswer,
-            Q(orderposition__order=self.order) | Q(order=self.order),
+            Q(orderposition__order__event=self.request.event) | Q(order__event=self.request.event),
             id=answid,
         )
-        if not answer.file:
-            raise Http404()
-        if not check_token(request, answer, token):
+        if not answer.file or not check_token(request, answer, token):
             raise Http404(_("This link is no longer valid. Please go back, refresh the page, and try again."))
 
         ftype, ignored = mimetypes.guess_type(answer.file.name)
         resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
         resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
-            self.request.event.slug.upper(), self.order.code,
+            self.request.event.slug.upper(), answer.associated_order.code,
             answer.orderposition.positionid if answer.orderposition else '',
             os.path.basename(answer.file.name).split('.', 1)[1]
         )

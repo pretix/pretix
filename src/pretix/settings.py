@@ -37,11 +37,12 @@ import configparser
 import logging
 import os
 import sys
+import warnings
 from json import loads
 from pathlib import Path
 from urllib.parse import urlparse
 
-import importlib_metadata as metadata
+from importlib import metadata
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.crypto import get_random_string
 from kombu import Queue
@@ -383,6 +384,7 @@ if HAS_CELERY:
         CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = loads(config.get('celery', 'backend_transport_options'))
     CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
+    _redis_types = ("redis://", "rediss://", "sentinel://", "redis+socket://")
     if CELERY_BROKER_URL.startswith("amqp://"):
         # https://docs.celeryq.dev/en/latest/userguide/routing.html#routing-options-rabbitmq-priorities
         # Enable priorities for all queues
@@ -395,7 +397,9 @@ if HAS_CELERY:
         PRIORITY_CELERY_HIGHEST_FUNC = max
         # Set default
         CELERY_TASK_DEFAULT_PRIORITY = PRIORITY_CELERY_MID
-    elif CELERY_BROKER_URL.startswith("redis://"):
+        warnings.warn("pretix only officially supports running with redis as a celery task broker. "
+                      "Unexpected behavior might occur.")
+    elif any(CELERY_BROKER_URL.startswith(p) for p in _redis_types):
         # https://docs.celeryq.dev/en/latest/userguide/routing.html#redis-message-priorities
         CELERY_BROKER_TRANSPORT_OPTIONS.update({
             "queue_order_strategy": "priority",
@@ -417,6 +421,12 @@ if HAS_CELERY:
         PRIORITY_CELERY_HIGH = 0
         PRIORITY_CELERY_LOWEST_FUNC = min
         PRIORITY_CELERY_HIGHEST_FUNC = max
+        warnings.warn("pretix only officially supports running with redis as a celery task broker. "
+                      "Unexpected behavior might occur.")
+
+    if not any(CELERY_RESULT_BACKEND.startswith(p) for p in _redis_types):
+        warnings.warn("pretix only officially supports running with redis as a celery task backend. "
+                      "Unexpected behavior might occur.")
 else:
     CELERY_TASK_ALWAYS_EAGER = True
     PRIORITY_CELERY_LOW = 0
@@ -721,9 +731,9 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
     from sentry_sdk.integrations.logging import (
         LoggingIntegration, ignore_logger,
     )
-    from sentry_sdk.scrubber import DEFAULT_DENYLIST, EventScrubber
+    from sentry_sdk.scrubber import DEFAULT_DENYLIST
 
-    from .sentry import PretixSentryIntegration, setup_custom_filters
+    from .sentry import PretixSentryIntegration, PretixEventScrubber, setup_custom_filters
 
     SENTRY_TOKEN = config.get('sentry', 'traces_sample_token', fallback='')
     SENTRY_ENABLE_LOGS = config.getboolean('sentry', 'enable_logs', fallback=False)
@@ -759,7 +769,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
         traces_sampler=traces_sampler,
         environment=urlparse(SITE_URL).netloc,
         release=__version__,
-        event_scrubber=EventScrubber(denylist=pretix_denylist, recursive=True),
+        event_scrubber=PretixEventScrubber(denylist=pretix_denylist, recursive=True),
         send_default_pii=False,
         propagate_traces=False,  # see https://github.com/getsentry/sentry-python/issues/1717
     )

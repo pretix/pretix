@@ -37,12 +37,9 @@ tax_rule                                integer                    The internal 
 admission                               boolean                    ``true`` for items that grant admission to the event
                                                                    (such as primary tickets) and ``false`` for others
                                                                    (such as add-ons or merchandise).
-personalized                            boolean                    ``true`` for items that require personalization according
+personalized                            boolean                    **DEPRECATED.** ``true`` for items that require personalization according
                                                                    to event settings. Only affects system-level fields, not
-                                                                   custom questions. Currently only allowed for products with
-                                                                   ``admission`` set to ``true``. For backwards compatibility,
-                                                                   when creating new items and this field is not given, it defaults
-                                                                   to the same value as ``admission``.
+                                                                   custom questions. Defaults to ``false``.
 position                                integer                    An integer, used for sorting
 picture                                 file                       A product picture to be displayed in the shop
                                                                    (can be ``null``).
@@ -232,6 +229,17 @@ meta_data                               object                     Values set fo
 .. versionchanged:: 2025.9
 
    The ``program_times`` attribute has been added.
+
+.. versionchanged:: 2027.1
+
+   The ``personalized`` attribute has been deprecated.
+
+   For compatibility with existing applications:
+
+   * When retrieving products, `personalized` is `True` if any attached questionnaire asks for `attendee_name` and/or `attendee_email`.
+   * When creating a new product, setting the `personalized` field to `True` will attach the "Attendee data" questionnaire to the new product. If no such questionnaire exists, it will be created.
+     Before, the `personalized` field defaulted to the same value as `admission`. Now, it defaults to `false`.
+   * When updating a product, the `personalized` field cannot be changed, returning an HTTP 400 error if attempted.
 
 Notes
 -----

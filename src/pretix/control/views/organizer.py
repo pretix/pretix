@@ -2056,7 +2056,11 @@ class ExportMixin:
     @cached_property
     def scheduled_copy_from(self):
         if "scheduled_copy_from" in self.request.GET:
-            return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.GET.get("scheduled_copy_from"))
+            return get_object_or_404(
+                self.get_scheduled_queryset(),
+                pk=self.request.GET.get("scheduled_copy_from"),
+                export_identifier=self.request.GET.get("identifier") or self.request.POST.get("exporter") or self.request.GET.get("exporter"),
+            )
 
 
 class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, TemplateView):
@@ -2124,7 +2128,7 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
     @transaction.atomic()
     def post(self, request, *args, **kwargs):
         if request.POST.get("schedule") == "save":
-            if self.scheduled and self.scheduled.pk and not self.has_permission_to_edit_scheduled():
+            if self.scheduled and self.scheduled.pk and not self.has_permission_to_edit_scheduled(self.scheduled.export_form_data):
                 messages.error(
                     self.request,
                     _(
@@ -2143,6 +2147,16 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
                 )
                 return super().get(request, *args, **kwargs)
             elif self.exporter.form.is_valid() and self.rrule_form.is_valid() and self.schedule_form.is_valid():
+                if self.scheduled and self.scheduled.pk and not self.has_permission_to_edit_scheduled(self.exporter.form.cleaned_data):
+                    messages.error(
+                        self.request,
+                        _(
+                            "This report runs with the permissions of a different user and you do not have access to all "
+                            "events, therefore you cannot change it to cover additional events."
+                        )
+                    )
+                    return super().get(request, *args, **kwargs)
+
                 self.schedule_form.instance.export_identifier = self.exporter.identifier
                 self.schedule_form.instance.export_form_data = self.exporter.form.cleaned_data
                 self.schedule_form.instance.schedule_rrule = str(self.rrule_form.to_rrule())
@@ -2196,6 +2210,10 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
         if self.scheduled_copy_from:
             instance = copy.copy(self.scheduled_copy_from)
             instance.pk = None
+            instance.owner = self.request.user
+            instance.schedule_next_run = None
+            instance.error_counter = 0
+            instance.last_error = None
         else:
             instance = self.scheduled or ScheduledOrganizerExport(
                 organizer=self.request.organizer,
@@ -2224,7 +2242,7 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
     def get_queryset(self):
         return self.get_scheduled_queryset()
 
-    def has_permission_to_edit_scheduled(self):
+    def has_permission_to_edit_scheduled(self, export_form_data):
         # Exports can be edited by
         # - their owner
         # - any staff session user
@@ -2249,15 +2267,16 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
                     self.request.organizer, self.exporter.get_required_organizer_permission(), request=self.request
                 )
             else:
-                if self.scheduled.export_form_data.get("all_events", False):
+                if export_form_data.get("all_events", False):
                     # Test scenario 1/2 in test_organizer_edit_restrictions
                     return self.request.user.teams.filter(
                         TeamQuerySet.event_permission_q(self.exporter.get_required_event_permission()),
+                        organizer=self.request.organizer,
                         all_events=True,
                     ).exists()
                 else:
                     # Test scenario 3/4 in test_organizer_edit_restrictions
-                    events_selected = self.scheduled.export_form_data.get("events", [])
+                    events_selected = export_form_data.get("events", [])
                     events_permission = set(self.request.user.get_events_with_permission(
                         self.exporter.get_required_event_permission(), request=self.request,
                     ).values_list("pk", flat=True))
@@ -2285,7 +2304,7 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
             ctx['rrule_form'] = self.rrule_form
             ctx['scheduled_copy_from'] = self.scheduled_copy_from
 
-            if self.scheduled and self.scheduled.pk and not self.has_permission_to_edit_scheduled() and self.exporter:
+            if self.scheduled and self.scheduled.pk and not self.has_permission_to_edit_scheduled(self.scheduled.export_form_data) and self.exporter:
                 ctx['no_save'] = True
                 for f in self.exporter.form.fields.values():
                     f.disabled = True
