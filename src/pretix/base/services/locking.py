@@ -28,6 +28,7 @@ from django.db import DatabaseError, connection
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Membership, Quota, Seat, Voucher
+from pretix.helpers import OF_SELF
 from pretix.testutils.middleware import debugflags_var
 
 logger = logging.getLogger('pretix.base.locking')
@@ -119,7 +120,7 @@ def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_sh
 
     else:
         for model, instances in groupby(objects, key=lambda o: type(o)):
-            model.objects.select_for_update().filter(pk__in=[o.pk for o in instances])
+            model.objects.select_for_update(of=OF_SELF).filter(pk__in=[o.pk for o in instances])
 
 
 class NoLockManager:

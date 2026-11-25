@@ -30,6 +30,8 @@ class PretixHelpersConfig(AppConfig):
         from .monkeypatching import monkeypatch_all_at_ready
         monkeypatch_all_at_ready()
 
+        from .database import guard_select_for_update  # noqa
+
         # Ensure reportlab does not make any calls to the internet or the local disk
         from reportlab import rl_config
         rl_config.trustedHosts = []

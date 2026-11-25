@@ -20,19 +20,29 @@
 # <https://www.gnu.org/licenses/>.
 #
 import contextlib
+import logging
+import re
 
 from django.conf import settings
 from django.contrib.postgres.indexes import BrinIndex
 from django.core.exceptions import FieldDoesNotExist, ImproperlyConfigured
 from django.db import connection, transaction
+from django.db.backends.signals import connection_created
 from django.db.models import (
     Aggregate, Expression, F, Field, Func, IntegerField, JSONField, Lookup,
     OrderBy, Value,
 )
+from django.dispatch import receiver
 from django.utils.functional import lazy
+
+logger = logging.getLogger(__name__)
 
 
 class DummyRollbackException(Exception):
+    pass
+
+
+class UnsafeSQLQueryException(Exception):
     pass
 
 
@@ -324,3 +334,21 @@ class UnixTimestamp(Func):
 
     def as_sqlite(self, compiler, connection):
         return self.as_sql(compiler, connection, template="CAST(strftime('%%%%s', datetime(%(expressions)s)) AS INT)")
+
+
+REGEX = re.compile(r'FOR (NO KEY )?UPDATE(?! OF)')
+
+
+def query_wrapper_select_for_update(execute, sql, params, many, context):
+    if REGEX.search(sql) and "JOIN" in sql:
+        if settings.DEBUG:
+            raise UnsafeSQLQueryException("Never use 'FOR UPDATE' without 'OF' if query causes any JOINs")
+        else:
+            logger.warning("SQL used 'FOR UPDATE' without 'OF' if query causes any JOINs", stack_info=True)
+    return execute(sql, params, many, context)
+
+
+@receiver(connection_created)
+def guard_select_for_update(sender, connection, **kwargs):
+    if query_wrapper_select_for_update not in connection.execute_wrappers:
+        connection.execute_wrappers.append(query_wrapper_select_for_update)
