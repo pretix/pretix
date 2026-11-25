@@ -402,8 +402,6 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
         'customer': None,
         'locale': 'en',
         'datetime': None,
-        'payment_date': None,
-        'payment_provider': None,
         'valid_if_pending': True,
         'fees': [
             {

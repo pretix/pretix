@@ -735,27 +735,6 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
             self.fields['addons'] = subl
 
 
-class OrderPaymentTypeField(serializers.Field):
-    # TODO: Remove after pretix 2.2
-    def to_representation(self, instance: Order):
-        t = None
-        if instance.pk:
-            for p in instance.payments.all():
-                t = p.provider
-        return t
-
-
-class OrderPaymentDateField(serializers.DateField):
-    # TODO: Remove after pretix 2.2
-    def to_representation(self, instance: Order):
-        t = None
-        if instance.pk:
-            for p in instance.payments.all():
-                t = p.payment_date or t
-        if t:
-            return super().to_representation(t.date())
-
-
 class OrderFeeSerializer(I18nAwareModelSerializer):
     tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
 
@@ -872,8 +851,6 @@ class OrderSerializer(I18nAwareModelSerializer):
     downloads = OrderDownloadsField(source='*', read_only=True)
     payments = OrderPaymentSerializer(many=True, read_only=True)
     refunds = OrderRefundSerializer(many=True, read_only=True)
-    payment_date = OrderPaymentDateField(source='*', read_only=True)
-    payment_provider = OrderPaymentTypeField(source='*', read_only=True)
     url = OrderURLField(source='*', read_only=True)
     customer = serializers.SlugRelatedField(slug_field='identifier', read_only=True)
     sales_channel = serializers.SlugRelatedField(
@@ -887,15 +864,15 @@ class OrderSerializer(I18nAwareModelSerializer):
         model = Order
         list_serializer_class = OrderListSerializer
         fields = (
-            'code', 'event', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
-            'payment_provider', 'fees', 'total', 'tax_rounding_mode', 'comment', 'custom_followup_at', 'invoice_address',
+            'code', 'event', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires',
+            'fees', 'total', 'tax_rounding_mode', 'comment', 'custom_followup_at', 'invoice_address',
             'positions', 'downloads', 'checkin_attention', 'checkin_text', 'last_modified', 'payments', 'refunds',
             'require_approval', 'sales_channel', 'url', 'customer', 'valid_if_pending', 'api_meta', 'cancellation_date',
             'plugin_data',
         )
         read_only_fields = (
-            'code', 'status', 'testmode', 'secret', 'datetime', 'expires', 'payment_date',
-            'payment_provider', 'fees', 'total', 'tax_rounding_mode', 'positions', 'downloads', 'customer',
+            'code', 'status', 'testmode', 'secret', 'datetime', 'expires',
+            'fees', 'total', 'tax_rounding_mode', 'positions', 'downloads', 'customer',
             'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel', 'cancellation_date',
         )
 
