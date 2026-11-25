@@ -55,13 +55,14 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, pgettext
 from django_countries import countries
+from phonenumber_field.formfields import PhoneNumberField
 from text_unidecode import unidecode
 
 from pretix import __version__
 from pretix.base.decimal import round_decimal
 from pretix.base.forms import SecretKeySettingsField
 from pretix.base.forms.questions import (
-    guess_country, guess_country_from_request,
+    WrappedPhoneNumberPrefixWidget, guess_country, guess_country_from_request,
 )
 from pretix.base.models import (
     Event, InvoiceAddress, Order, OrderPayment, OrderRefund, Quota,
@@ -116,7 +117,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - Stablecoins and Crypto: ✗
 # - Kakao Pay: ✗
 # - Naver Pay: ✗
-# - MB Way: ✗
+# - MB Way: ✓
 # - Satis Pay: ✗
 # - WeChat Pay: ✓
 # - PAYCO: ✗
@@ -537,6 +538,14 @@ class StripeSettingsHolder(BasePaymentProvider):
                                  'before they work properly.'),
                      required=False,
                  )),
+                ('method_mb_way',
+                    forms.BooleanField(
+                        label=_('MB WAY'),
+                        disabled=self.event.currency not in 'EUR',
+                        help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                    'before they work properly.'),
+                        required=False,
+                    )),
             ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
         )
         if not self.settings.connect_client_id or self.settings.secret_key:
@@ -1946,4 +1955,64 @@ class StripeWero(StripeRedirectMethod):
     explanation = _(
         'This payment method is available to European online banking users, whose banking institutions support WERO '
         'either through their native banking apps or through the WERO wallet app. Please have you app ready.'
+    )
+
+
+class StripeRedirectWithPhoneNumberMethod(StripeRedirectMethod):
+    def payment_form_render(self, request) -> str:
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple.html')
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'settings': self.settings,
+            'explanation': self.explanation,
+            'form': self.payment_form(request)
+        }
+        return template.render(ctx)
+
+    @property
+    def payment_form_fields(self):
+        return OrderedDict([
+            ('phone', PhoneNumberField(
+                label=_('Phone'),
+                required=True,
+                widget=WrappedPhoneNumberPrefixWidget()
+            )),
+        ])
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        try:
+            return super().execute_payment(request, payment)
+        finally:
+            if f'payment_stripe_{self.method}_phone' in request.session:
+                del request.session[f'payment_stripe_{self.method}_phone']
+
+    def checkout_prepare(self, request, cart):
+        form = self.payment_form(request)
+        if form.is_valid():
+            request.session[f"payment_stripe_{self.method}_payment_method_id"] = None
+            request.session[f'payment_stripe_{self.method}_phone'] = form.cleaned_data['phone'].as_e164
+            return True
+        return False
+
+    def _payment_intent_kwargs(self, request, payment):
+        breakpoint()
+        return {
+            "payment_method_data": {
+                "type": self.method,
+                "billing_details": {
+                    "phone": request.session.get(f"payment_stripe_{self.method}_phone")
+                }
+            }
+        }
+
+
+class StripeMBWay(StripeRedirectWithPhoneNumberMethod):
+    identifier = 'stripe_mb_way'
+    verbose_name = _('MB WAY via Stripe')
+    public_name = 'MB WAY'
+    method = 'mb_way'
+    confirmation_method = 'automatic'
+    explanation = _(
+        'This payment method is available to users of the MB WAY App in Portugal. Please have your app ready.'
     )
