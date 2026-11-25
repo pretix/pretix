@@ -3360,11 +3360,12 @@ class CartPosition(AbstractPosition):
             bundled_sum=sum([b.price_after_voucher for b in bundled_positions]),
             is_bundled=self.is_bundled,
         )
-        if line_price.gross != self.line_price_gross or line_price.rate != self.tax_rate:
+
+        if line_price.gross != self.line_price_gross or line_price.rate != self.tax_rate or line_price.code != self.tax_code:
             self.line_price_gross = line_price.gross
             self.tax_rate = line_price.rate
             self.tax_code = line_price.code
-            self.save(update_fields=['line_price_gross', 'tax_rate'])
+            self.save(update_fields=['line_price_gross', 'tax_rate', 'tax_code'])
 
     @property
     def discount_percentage(self):
