@@ -398,6 +398,10 @@ class Invoice(models.Model):
         from pretix.base.invoicing.transmission import transmission_types
         return transmission_types.get(identifier=self.transmission_type)[0]
 
+    @property
+    def transmission_type_destination_description(self):
+        return self.transmission_type_instance.describe_invoice_destination(self)
+
     def set_transmission_failed(self, provider, data):
         self.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
         self.transmission_date = now()
