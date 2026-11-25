@@ -36,6 +36,7 @@ import json
 import mimetypes
 import os
 import urllib
+from base64 import b32encode
 from decimal import Decimal
 from urllib.parse import quote
 
@@ -47,7 +48,7 @@ from django.db.models import Q
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import translation
-from django.utils.crypto import get_random_string
+from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -276,7 +277,8 @@ def generate_cart_id(request=None, prefix=''):
         if request:
             if not request.session.session_key:
                 request.session.create()
-            new_id += "@" + request.session.session_key
+            hashed_key = b32encode(salted_hmac(key_salt=b'cart_id', value=request.session.session_key).digest()).decode().strip('=')
+            new_id += "@" + hashed_key
         if not CartPosition.objects.filter(cart_id=new_id).exists():
             return new_id
 
