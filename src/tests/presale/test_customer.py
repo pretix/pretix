@@ -317,7 +317,7 @@ def _sso_login(client, provider, email='test@example.org', popup_origin=None, ex
     assert "/authorize" in r['Location']
     u = urlparse(r['Location'])
     state = parse_qs(u.query)['state'][0]
-    r = client.get(f'/bigevents/account/login/{provider.pk}/return?code=test_code&state={quote(state)}')
+    r = return_response = client.get(f'/bigevents/account/login/{provider.pk}/return?code=test_code&state={quote(state)}')
     if not expect_fail:
         if popup_origin:
             assert r.status_code == 200
@@ -335,6 +335,8 @@ def _sso_login(client, provider, email='test@example.org', popup_origin=None, ex
 
         r = client.get('/bigevents/account/')
         assert r.status_code == 302
+
+    return return_response
 
 
 @pytest.mark.django_db
@@ -394,6 +396,42 @@ def test_org_sso_login_new_customer_popup_invalid_origin(env, client, provider):
     KnownDomain.objects.create(organizer=env[0], event=env[1], domainname="popuporigin")
     with pytest.raises(AssertionError):
         _sso_login(client, provider, popup_origin="https://forbidden")
+
+
+@pytest.mark.django_db
+def test_org_sso_login_inactive_customer_popup(env, client, provider, mocker):
+    from pretix.base.signals import customer_signed_in
+
+    KnownDomain.objects.create(organizer=env[0], event=env[1], domainname="popuporigin")
+    _sso_login(client, provider, popup_origin="https://popuporigin")
+    with scopes_disabled():
+        c = Customer.objects.get(provider=provider)
+        c.is_active = False
+        c.save()
+
+    mocker.patch('pretix.base.signals.customer_signed_in.send')
+    client.get('/bigevents/account/logout')
+    r = _sso_login(client, provider, popup_origin="https://popuporigin", expect_fail=True)
+    content = r.content.decode()
+    assert '"status": "error"' in content
+    assert '"status": "ok"' not in content
+    customer_signed_in.send.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_org_sso_login_inactive_customer(env, client, provider, mocker):
+    from pretix.base.signals import customer_signed_in
+
+    _sso_login(client, provider)
+    with scopes_disabled():
+        c = Customer.objects.get(provider=provider)
+        c.is_active = False
+        c.save()
+
+    mocker.patch('pretix.base.signals.customer_signed_in.send')
+    client.get('/bigevents/account/logout')
+    _sso_login(client, provider, expect_fail=True)
+    customer_signed_in.send.assert_not_called()
 
 
 @pytest.mark.django_db
