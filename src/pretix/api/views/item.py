@@ -722,7 +722,7 @@ class POSCompatQuestionViewSet(DeprecationWarningMixin, viewsets.ReadOnlyModelVi
             Q(user_datafield_id__isnull=False) | Q(system_datafield__isnull=False),
             questionnaire__event=self.request.event,
             # we do legacy compat only for position-level questions
-            questionnaire__type__startswith='P',
+            questionnaire__type__startswith='position_',
         ).prefetch_related(
             'user_datafield', 'user_datafield__options', 'questionnaire'
         ).order_by('questionnaire__position', 'position', 'id')
@@ -738,7 +738,6 @@ class POSCompatQuestionViewSet(DeprecationWarningMixin, viewsets.ReadOnlyModelVi
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
 
         qid, dfid, sys_df = QuestionnaireRow.uncook_id(self.kwargs[lookup_url_kwarg])
-        print(self.kwargs[lookup_url_kwarg], qid, dfid, sys_df)
         if qid and sys_df:
             obj = get_object_or_404(queryset, questionnaire__pk=qid, system_datafield=sys_df)
         elif qid and dfid:
