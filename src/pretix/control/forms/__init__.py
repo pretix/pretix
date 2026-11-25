@@ -424,6 +424,8 @@ class SplitDateTimeField(forms.SplitDateTimeField):
                 return None
             if data_list[1] in self.empty_values:
                 raise ValidationError(self.error_messages['invalid_date'], code='invalid_date')
+            if data_list[0] < datetime.date(1900, 1, 1):
+                raise ValidationError(self.error_messages['invalid_date'], code='invalid_date')
             result = datetime.datetime.combine(*data_list)
             return from_current_timezone(result)
         return None
