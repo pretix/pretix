@@ -32,25 +32,83 @@ footer {
     font-size: 11px;
 }
 
+/* Navbar styles */
 nav.navbar {
     margin: 0;
     border: 0;
-}
-.navbar-brand {
-  position: relative;
-  padding-bottom: 10px;
-  padding-top: 10px;
-  padding-left: 10px;
-}
-.navbar-brand span {
-  padding: 4px 8px 6px; // Optical alignment next to logo
-  display: inline-block;
-}
-.navbar-brand img {
-    width: auto;
-    height: 100%;
-    display: inline-block;
-    vertical-align: top;
+    .navbar-header {
+        margin: 0 0 0 10px;
+        .navbar-brand {
+            position: relative;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            padding-left: 10px;
+            padding-right: 8px; margin-left: -10px;
+            img {
+                width: auto;
+                height: 100%;
+                display: inline-block;
+                vertical-align: top;
+            }
+            span {
+                padding: 5px 0 6px 8px; // Optical alignment next to logo
+                display: inline-block;
+            }
+        }
+        a.navbar-context-breadcrumb {
+            padding-left: 0;
+            padding-right: 8px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            text-decoration: none;
+            display: inline-block;
+            line-height: $line-height-computed;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            font-size: 18px;
+            @media (max-width: $screen-sm-max) {
+                font-size: 16px;
+                padding-right: 3px;
+            }
+            color: $navbar-inverse-link-color;
+            &::before {
+                content: "›"; color: #9a81a6; font-weight: normal;
+                padding: 0 10px 0 5px;
+                @media (max-width: $screen-sm-max) {
+                    padding-right: 3px;
+                }
+            }
+            &:hover,
+            &:focus {
+                color: $navbar-inverse-link-hover-color;
+                background-color: $navbar-inverse-link-hover-bg;
+            }
+        }
+        a.navbar-context-breadcrumb.active {
+            font-weight: bold;
+        }
+        a.navbar-context-breadcrumb.unknown {
+            color: #cdb2d9; font-style: italic;
+        }
+        :not(.navbar-toggle) + .navbar-toggle { margin-left: auto; }
+    }
+    @media (min-width: $grid-float-breakpoint) {
+        .navbar-header {
+            flex: 0 1 auto;  /* shrink but dont grow */
+            overflow: hidden;
+        }
+        .navbar-top-links.navbar-left {
+            flex: 1 0 auto;  /* grow but dont shrink */
+        }
+        .navbar-top-links {
+            min-width: 50px;
+        }
+    }
+    .navbar-nav { margin: 0; }
 }
 
 #side-menu img.fa-img {
@@ -516,6 +574,7 @@ table td ul:last-child {
         rgba(255, 255, 255, .5) 24px);
 }
 
+.panel-default.admin-only > .panel-heading.admin-only { background-color: rgba(161, 161, 161, 0.42); }
 
 .danger.admin-only {
     background-image: repeating-linear-gradient(135deg, 
@@ -524,6 +583,7 @@ table td ul:last-child {
         transparent 12px,
         transparent 22px, 
         rgba(0, 0, 0, .1) 24px);
+    color: white;
 }
 
 .quotabox {

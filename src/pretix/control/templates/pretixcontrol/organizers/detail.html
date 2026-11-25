@@ -2,10 +2,19 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load static %}
+{% load eventurl %}
 {% block inner %}
     <h1>
+        <a href="{% eventurl request.organizer "presale:organizer.index" %}" class="btn btn-lg btn-default pull-right hidden-xs" target="_blank">
+                                <i class="fa fa-eye"></i> {% trans "Public profile" %}
+        </a>
         {% blocktrans with name=request.organizer.name %}Organizer: {{ name }}{% endblocktrans %}
     </h1>
+    <p class="visible-xs">
+        <a href="{% eventurl request.organizer "presale:organizer.index" %}" class="btn btn-lg btn-default" target="_blank">
+                                <i class="fa fa-eye"></i> {% trans "Public profile" %}
+        </a>
+    </p>
     {% if events|length == 0 and not filter_form.filtered %}
         {% if "organizer.events:create" in request.orgapermset %}
             <p>
@@ -19,10 +28,10 @@
             <em>{% trans "You currently do not have access to any events." %}</em>
         </p>
     {% else %}
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <details class="panel panel-default" open data-stateful="organizer_detail_filter">
+            <summary class="panel-heading">
                 <h3 class="panel-title">{% trans "Filter" %}</h3>
-            </div>
+            </summary>
             <form class="panel-body filter-form" action="" method="get">
                 <div class="row">
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -50,7 +59,7 @@
                     </button>
                 </div>
             </form>
-        </div>
+        </details>
         {% if "organizer.events:create" in request.orgapermset %}
             <p>
                 <a href="{% url "control:events.add" %}?organizer={{ request.organizer.slug }}" class="btn btn-primary">
@@ -59,7 +68,7 @@
                 </a>
             </p>
         {% endif %}
-        <table class="table table-condensed table-hover">
+        <div class="table-responsive"><table class="table table-condensed table-hover">
             <thead>
             <tr>
                 <th>{% trans "Event name" %}</th>
@@ -157,7 +166,7 @@
                 </tr>
             {% endfor %}
             </tbody>
-        </table>
+        </table></div>
         {% include "pretixcontrol/pagination.html" %}
     {% endif %}
 {% endblock %}
