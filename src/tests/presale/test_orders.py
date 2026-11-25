@@ -422,37 +422,42 @@ class OrdersTest(BaseOrdersTest):
         with scopes_disabled():
             assert self.order.invoices.count() == 1
 
-        response = self.client.post(
-            '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
-                'zipcode': '12345',
-                'street': 'Main Street',
-                'city': 'Heidelberg',
-                'country': 'DE',
-                'transmission_type': 'email',
-            }, follow=True)
-        self.assertRedirects(response,
-                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
-                                                      self.order.secret),
-                             target_status_code=200)
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.post(
+                '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                    '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+                    'zipcode': '12345',
+                    'street': 'Main Street',
+                    'city': 'Heidelberg',
+                    'country': 'DE',
+                    'transmission_type': 'email',
+                }, follow=True)
+            self.assertRedirects(response,
+                                 '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret),
+                                 target_status_code=200)
         with scopes_disabled():
             assert self.order.invoices.count() == 3
+            last_two = self.order.invoices.order_by('-pk')[:2]
+            for inv in last_two:
+                assert inv.transmission_status != Invoice.TRANSMISSION_STATUS_PENDING
 
         self.event.settings.set('invoice_reissue_after_modify', False)
 
-        response = self.client.post(
-            '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-                '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
-                'zipcode': '54321',
-                'street': 'Main Street',
-                'city': 'Heidelberg',
-                'country': 'DE',
-                'transmission_type': 'email',
-            }, follow=True)
-        self.assertRedirects(response,
-                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
-                                                      self.order.secret),
-                             target_status_code=200)
+        with self.captureOnCommitCallbacks(execute=True):
+            response = self.client.post(
+                '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                    '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+                    'zipcode': '54321',
+                    'street': 'Main Street',
+                    'city': 'Heidelberg',
+                    'country': 'DE',
+                    'transmission_type': 'email',
+                }, follow=True)
+            self.assertRedirects(response,
+                                 '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.order.secret),
+                                 target_status_code=200)
         with scopes_disabled():
             assert self.order.invoices.count() == 3
 
@@ -1786,15 +1791,13 @@ class OrdersTest(BaseOrdersTest):
         assert match
 
         response = self.client.get(
-            '/%s/%s/order/%s/%s/answer/%s/?token=%s' % (self.orga.slug, self.event.slug, self.order.code,
-                                                        self.order.secret, a.pk, match.group(1))
+            '/%s/%s/answer/%s/?token=%s' % (self.orga.slug, self.event.slug, a.pk, match.group(1))
         )
         assert response.status_code == 200
 
         client2 = self.client_class()
         response = client2.get(
-            '/%s/%s/order/%s/%s/answer/%s/?token=%s' % (self.orga.slug, self.event.slug, self.order.code,
-                                                        self.order.secret, a.pk, match.group(1))
+            '/%s/%s/answer/%s/?token=%s' % (self.orga.slug, self.event.slug, a.pk, match.group(1))
         )
         assert response.status_code == 404
 

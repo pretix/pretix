@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 10:48+0000\n"
-"PO-Revision-Date: 2026-10-19 02:00+0000\n"
+"PO-Revision-Date: 2026-11-03 08:12+0000\n"
 "Last-Translator: Christiaan de Die le Clercq <contact@techwolf12.nl>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1\n"
+"X-Generator: Weblate 2026.11\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -8379,12 +8379,12 @@ msgstr "Niet ingesteld"
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative date cannot be expressed as \"before\" for \"{}\""
-msgstr ""
+msgstr "Een relatieve datum kan niet worden uitgedrukt als \"voor\" voor \"{}\""
 
 #: pretix/base/reldate.py
 #, python-brace-format
 msgid "A relative date cannot be expressed as \"after\" for \"{}\""
-msgstr ""
+msgstr "Een relatieve datum kan niet worden uitgedrukt als \"na\" voor \"{}\""
 
 #: pretix/base/reldate.py
 #, python-brace-format
@@ -8415,7 +8415,7 @@ msgstr "Evenement geannuleerd"
 
 #: pretix/base/services/cancelevent.py
 msgid "Confirm event cancellation and bulk refund"
-msgstr ""
+msgstr "Evenementannulering en bulkterugbetaling bevestigen"
 
 #: pretix/base/services/cart.py pretix/base/services/modelimport.py
 #: pretix/base/services/orders.py
@@ -9355,6 +9355,7 @@ msgstr "Een voucher kan niet worden aangemaakt zonder code."
 msgid ""
 "Voucher codes must be unique. Code \"{code}\" already exists in this import."
 msgstr ""
+"Vouchercodes moeten uniek zijn. Code \"{code}\" bestaat al in deze import."
 
 #: pretix/base/services/modelimport.py
 #, python-brace-format
@@ -9363,13 +9364,18 @@ msgid ""
 msgid_plural ""
 "Voucher codes must be unique. Import contains existing voucher codes {code}."
 msgstr[0] ""
+"Vouchercodes moeten uniek zijn. Import bevat al bestaande vouchercode {code}."
 msgstr[1] ""
+"Vouchercodes moeten uniek zijn. Import bevat al bestaande vouchercodes {code}"
+"."
 
 #: pretix/base/services/modelimport.py
 msgid ""
 "Vouchers could not be imported, probably due to a voucher code already being "
 "in use."
 msgstr ""
+"Vouchers konden niet worden geïmporteerd, waarschijnlijk omdat een "
+"vouchercode al in gebruik is."
 
 #: pretix/base/services/orders.py
 msgid ""
@@ -10431,7 +10437,7 @@ msgstr ""
 
 #: pretix/base/settings.py
 msgid "No dates match your criteria."
-msgstr ""
+msgstr "Geen data voldoen aan je zoekcriteria."
 
 #: pretix/base/settings.py
 msgctxt "subevents"
@@ -10632,6 +10638,10 @@ msgid ""
 "their order without selecting a payment method. This is useful whenever "
 "orders are not created by the same person who is making the payment."
 msgstr ""
+"Als uitgestelde betaling is toegestaan op een verkoopkanaal, kunnen klanten "
+"hun bestelling afronden zonder een betaalmethode te kiezen. Dit is handig "
+"wanneer bestellingen niet worden geplaatst door dezelfde persoon als degene "
+"die de betaling uitvoert."
 
 #: pretix/base/settings.py
 msgid "Show start date"
@@ -11603,6 +11613,10 @@ msgid ""
 "the email address above. Please note that you still need to add a contact "
 "email address that will be shared with all emails you send."
 msgstr ""
+"Als je dit instelt, verwijst de contactlink in de voettekst hiernaartoe in "
+"plaats van naar het bovenstaande e-mailadres. Let op dat je nog steeds een "
+"contact-e-mailadres moet toevoegen dat wordt meegestuurd met alle e-mails "
+"die je verzendt."
 
 #: pretix/base/settings.py pretix/control/forms/event.py
 msgid "Imprint URL"
@@ -13494,6 +13508,8 @@ msgid ""
 "Don't share this code with anyone. The %(instance)s team will never ask you "
 "for it."
 msgstr ""
+"Deel deze code met niemand. Het %(instance)s-team zal je hier nooit om "
+"vragen."
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 #: pretix/base/templates/pretixbase/email/export_failed.txt
@@ -13502,6 +13518,8 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team"
 msgstr ""
+"Bedankt,  \n"
+"Het %(instance)s-team"
 
 #: pretix/base/templates/pretixbase/email/email_footer.html
 #, python-format
@@ -13698,11 +13716,14 @@ msgstr "Ga verder in een nieuw tabblad"
 #: pretix/base/templates/pretixbase/framebreak.html
 msgid "For security reasons, the following step is only possible in a new tab."
 msgstr ""
+"Om veiligheidsredenen is de volgende stap alleen mogelijk in een nieuw "
+"tabblad."
 
 #: pretix/base/templates/pretixbase/framebreak.html
 msgid ""
 "If the new tab did not open automatically, please click the following button:"
 msgstr ""
+"Als het nieuwe tabblad niet automatisch opent, klik dan op de volgende knop:"
 
 #: pretix/base/templates/pretixbase/framebreak.html
 #: pretix/presale/templates/pretixpresale/event/cookies.html
@@ -37134,6 +37155,10 @@ msgid ""
 "before retrying can help. As a last step, try using a different browser or "
 "another device (for example, a desktop or laptop computer)."
 msgstr ""
+"Als het probleem zich blijft voordoen, kan het helpen om alle "
+"browservensters te sluiten en cookies te verwijderen voordat je het opnieuw "
+"probeert. Als laatste stap kun je proberen een andere browser of een ander "
+"apparaat (bijvoorbeeld een desktop of laptop) te gebruiken."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
 msgid "Your membership"

@@ -39,6 +39,16 @@
                             </button>
                             {% endif %}
                         </dd>
+                        <dt>{% trans "Claim token" context "reusable_media" %}</dt>
+                        <dd>
+                            {% if medium.claim_token %}
+                                {% if staff_session %}
+                                    <code>{{ medium.claim_token }}</code>
+                                {% else %}
+                                    *****
+                                {% endif %}
+                            {% endif %}
+                        </dd>
                         <dt>{% trans "Status" %}</dt>
                         <dd>
                             {% if not medium.active %}

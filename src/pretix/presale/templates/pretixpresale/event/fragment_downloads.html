@@ -61,7 +61,7 @@
         {% elif tickets_with_download|length == 1 %}
             <div>
                 {% for b in download_buttons %}
-                    <form action="{% if position_page and tickets_with_download.0.addon_to %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.addon_to.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=tickets_with_download.0.pk %}{% endif %}"
+                    <form action="{% if position_page %}{% eventurl event "presale:event.order.position.download" secret=position_page.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=position_page.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=tickets_with_download.0.pk %}{% endif %}"
                           method="post" data-asynctask data-asynctask-download
                           class="download-btn-form{% if b.javascript_required %} requirejs{% endif %}">
                         {% csrf_token %}

@@ -103,3 +103,6 @@ body {
 .panel-pdf-editor .panel-heading form > .btn-group {
     margin-right: 1em;
 }
+#nocheckin-notice {
+    display: none;
+}

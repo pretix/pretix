@@ -7,7 +7,9 @@
 	],
 	"compilerOptions": {
 		"baseUrl": ".",
-		"paths": {},
+		"paths": {
+			"@/*": ["./src/*"],
+		},
 		"strict": false,
 		"allowJs": true,
 		"checkJs": true,

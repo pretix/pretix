@@ -255,6 +255,12 @@ org_permission_sub_urls = [
     ('get', 'organizer.devices:read', 'devices/1/', 404),
     ('put', 'organizer.devices:write', 'devices/1/', 404),
     ('patch', 'organizer.devices:write', 'devices/1/', 404),
+    ('get', 'organizer.devices:read', 'gates/', 200),
+    ('post', 'organizer.devices:write', 'gates/', 400),
+    ('get', 'organizer.devices:read', 'gates/1/', 404),
+    ('put', 'organizer.devices:write', 'gates/1/', 404),
+    ('patch', 'organizer.devices:write', 'gates/1/', 404),
+    ('delete', 'organizer.devices:write', 'gates/1/', 404),
     ('get', 'organizer.teams:write', 'teams/', 200),
     ('post', 'organizer.teams:write', 'teams/', 400),
     ('get', 'organizer.teams:write', 'teams/{team_id}/', 200),
@@ -317,6 +323,13 @@ def test_organizer_not_allowed(token_client, organizer):
 def test_organizer_not_allowed_device(device_client, organizer):
     o2 = Organizer.objects.create(slug='o2', name='Organizer 2')
     resp = device_client.get('/api/v1/organizers/{}/events/'.format(o2.slug))
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
+def test_organizer_not_allowed_gate(token_client, organizer):
+    o2 = Organizer.objects.create(slug='o2', name='Organizer 2')
+    resp = token_client.get('/api/v1/organizers/{}/gates/'.format(o2.slug))
     assert resp.status_code == 403
 
 

@@ -26,6 +26,7 @@ from unittest import mock
 
 import pytest
 from django.core import mail as djmail
+from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
@@ -248,7 +249,14 @@ def test_order_update_state_validation(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
-def test_order_update_transmission_validation(token_client, organizer, event, order):
+def test_order_update_transmission_validation(token_client, organizer, event, order, monkeypatch):
+    def mock_validate(self, value):
+        if value == "9930:DE111111111":
+            return value
+        raise ValidationError("Invalid")
+
+    monkeypatch.setattr("pretix.base.invoicing.peppol.PeppolIdValidator._validate_peppol_id_online", mock_validate)
+
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/orders/{}/'.format(
             organizer.slug, event.slug, order.code
@@ -325,7 +333,6 @@ def test_order_update_transmission_validation(token_client, organizer, event, or
     assert resp.status_code == 400
     assert resp.data == {"invoice_address": {"transmission_info": {
         "transmission_it_sdi_pec": ["Enter a valid email address.", "Enter a valid email address."],
-        "transmission_it_sdi_recipient_code": ["This field is required."]
     }}}
 
     resp = token_client.patch(
@@ -374,7 +381,7 @@ def test_order_update_transmission_validation(token_client, organizer, event, or
                 "vat_id": "",
                 "transmission_type": "peppol",
                 "transmission_info": {
-                    "transmission_peppol_participant_id": "9930:DE811569869",
+                    "transmission_peppol_participant_id": "9930:DE111111111",
                     "ignored": "parameter",
                 },
             }
@@ -384,7 +391,7 @@ def test_order_update_transmission_validation(token_client, organizer, event, or
     order.invoice_address.refresh_from_db()
     assert order.invoice_address.transmission_type == "peppol"
     assert order.invoice_address.transmission_info == {
-        "transmission_peppol_participant_id": "9930:DE811569869",
+        "transmission_peppol_participant_id": "9930:DE111111111",
     }
 
 

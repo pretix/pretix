@@ -147,6 +147,7 @@ def test_api_create(env, token_client):
     assert resp.status_code == 201
     tl = env[0].ticket_layouts.get(pk=resp.data["id"])
     assert tl.background
+    assert "cachedfile" not in tl.background.name
 
 
 @pytest.mark.django_db
@@ -162,6 +163,21 @@ def test_api_create_validate_default(env, token_client):
     )
     assert resp.status_code == 400
     assert resp.data == {"non_field_errors": ["You cannot have two layouts with default = True"]}
+
+    env[0].ticket_layouts.filter(default=True).update(default=False)
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/ticketlayouts/'.format(env[0].slug, env[0].slug),
+        {
+            'name': 'Foo',
+            'default': True,
+            'layout': [],
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    tl = env[0].ticket_layouts.get(pk=resp.data["id"])
+    assert tl.default
 
 
 @pytest.mark.django_db
@@ -215,6 +231,7 @@ def test_api_update(env, token_client):
     assert json.loads(env[1].layout) == [
         {"type": "barcodearea", "left": "7.00", "bottom": "11.15", "size": "45.00", "content": "secret"}
     ]
+    assert "cachedfile" not in env[1].background.name
 
 
 @pytest.mark.django_db
@@ -229,6 +246,18 @@ def test_api_update_validate_default(env, token_client):
     )
     assert resp.status_code == 400
     assert resp.data == {"non_field_errors": ["You cannot have two layouts with default = True"]}
+
+    env[0].ticket_layouts.filter(default=True).update(default=False)
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/ticketlayouts/{}/'.format(env[0].slug, env[0].slug, tl2.pk),
+        {
+            "default": True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    tl2.refresh_from_db()
+    assert tl2.default
 
 
 @pytest.mark.django_db
@@ -327,3 +356,22 @@ def test_renderer_batch_invalid(env, token_client, position):
     )
     assert resp.status_code == 400
     assert resp.data == {"parts": ["Please do not submit more than 1000 parts."]}
+
+
+@pytest.mark.django_db
+def test_api_permission(env, token_client):
+    t = env[0].organizer.teams.get()
+    t.limit_event_permissions = {"event.orders:read": True}
+    t.all_event_permissions = False
+    t.save()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/ticketlayouts/{}/'.format(env[0].slug, env[0].slug, env[1].pk),
+        {
+            "name": "Bar",
+            "layout": [
+                {"type": "barcodearea", "left": "7.00", "bottom": "11.15", "size": "45.00", "content": "secret"}
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 403

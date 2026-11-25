@@ -19,7 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from typing import Union
+
+from celery import Task
+from celery.result import AsyncResult
 from django.conf import settings
+from django.core.exceptions import SuspiciousOperation
 
 THRESHOLD_DOWNGRADE_TO_MID = 50
 THRESHOLD_DOWNGRADE_TO_LOW = 250
@@ -60,3 +65,27 @@ def get_task_priority(shard, organizer_id):
         return settings.PRIORITY_CELERY_MID
     else:
         return settings.PRIORITY_CELERY_HIGH
+
+
+class SafeAsyncResult(AsyncResult):
+    def __init__(self, *args, expected_task_name, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__expected_task_name = expected_task_name
+
+    def _maybe_set_cache(self, meta):
+        if meta and meta['status'] != "PENDING":
+            if meta.get('name') != self.__expected_task_name:
+                raise SuspiciousOperation(
+                    f"Received task result for {meta.get('name')!r}, but expected '{self.__expected_task_name}'"
+                )
+        return super()._maybe_set_cache(meta)
+
+
+def get_task_result(task_id: str, task_name: Union[Task, str]) -> SafeAsyncResult:
+    """
+    Returns an AsyncResult by it's ID in a safe way, i.e. do not return anything if the task
+    name does not match the expected task.
+    """
+    if isinstance(task_name, Task):
+        task_name = task_name.name
+    return SafeAsyncResult(task_id, expected_task_name=task_name)

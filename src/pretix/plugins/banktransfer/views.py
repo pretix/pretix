@@ -239,7 +239,7 @@ class ActionView(View):
             })
 
     def get(self, request, *args, **kwargs):
-        u = request.GET.get('query', '')
+        u = request.GET.get('query', '').strip()
         if len(u) < 2:
             return JsonResponse({'results': []})
 

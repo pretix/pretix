@@ -152,12 +152,9 @@ export function createWidgetStore (config: {
 				return ''
 			},
 			additionalURLParams (): string {
-				if (!window.location.search.includes('utm_')) {
-					return ''
-				}
 				const params = new URLSearchParams(window.location.search)
 				for (const [key] of params.entries()) {
-					if (!key.startsWith('utm_')) {
+					if (!key.startsWith('utm_') || key !== 'gclid' || key !== '_gl') {
 						params.delete(key)
 					}
 				}
@@ -165,10 +162,7 @@ export function createWidgetStore (config: {
 			},
 			newTabTarget (): string {
 				let url = this.subevent ? `${this.targetUrl}${this.subevent}/` : this.targetUrl
-				let parameters = this.consentParameter
-				if (this.additionalURLParams) {
-					parameters += `&${this.additionalURLParams}`
-				}
+				const parameters = this.additionalURLParams + this.consentParameter
 				if (parameters) {
 					url += '?' + parameters.replace(/^&/, '')
 				}
@@ -199,8 +193,9 @@ export function createWidgetStore (config: {
 				if (!this.cartExists) {
 					checkoutUrl += 'checkout/start'
 				}
-				if (this.additionalURLParams) {
-					checkoutUrl += `?${this.additionalURLParams}`
+				const parameters = this.additionalURLParams + this.consentParameter
+				if (parameters) {
+					checkoutUrl += '?' + parameters.replace(/^&/, '')
 				}
 
 				let formTarget = `${this.targetUrl}w/${globalWidgetId}/cart/add?iframe=1&next=${encodeURIComponent(checkoutUrl)}`

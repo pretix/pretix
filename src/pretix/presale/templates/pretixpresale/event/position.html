@@ -25,7 +25,7 @@
         <dd class="text-muted">{% include "pretixpresale/event/fragment_order_status.html" with order=order event=request.event %}</dd>
     </dl>
     {% eventsignal event "pretix.presale.signals.position_info_top" order=order position=position request=request %}
-    {% include "pretixpresale/event/fragment_downloads.html" with position_page=True %}
+    {% include "pretixpresale/event/fragment_downloads.html" with position_page=position %}
     <div class="panel panel-primary cart">
         <div class="panel-heading">
             <h3 class="panel-title">
@@ -38,7 +38,7 @@
             </h3>
         </div>
         <div class="panel-body">
-            {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event download=can_download position_page=True editable=False hide_prices=request.event.settings.hide_prices_from_attendees %}
+            {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event download=can_download position_page=position editable=False hide_prices=request.event.settings.hide_prices_from_attendees %}
         </div>
     </div>
     <div class="panel panel-primary">
