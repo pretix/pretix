@@ -36,7 +36,7 @@
 {
     "urls": {
         "lists": "{% url "api-v1:checkinlist-list" event=request.event.slug organizer=request.organizer.slug %}",
-        "questions": "{% url "api-v1:question-list" event=request.event.slug organizer=request.organizer.slug %}"
+        "questions": "{% url "api-v1:positiondatafield-list" event=request.event.slug organizer=request.organizer.slug %}"
     }
 }
 </script>
