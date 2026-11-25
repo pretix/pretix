@@ -1812,7 +1812,7 @@ class OrderChangeManagerTests(BaseOrderChangeManagerTestCase, TestCase):
         assert self.op1.item == self.shirt
         assert self.op1.price == Decimal('12.00')
         assert self.op1.tax_rate == self.shirt.tax_rule.rate
-        assert self.op1.tax_rate == self.shirt.tax_rule.code
+        assert self.op1.tax_code == self.shirt.tax_rule.code
         assert round_decimal(self.op1.price * (1 - 100 / (100 + self.op1.tax_rate))) == self.op1.tax_value
         assert self.order.total == self.op1.price + self.op2.price
 
