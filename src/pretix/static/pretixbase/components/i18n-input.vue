@@ -31,17 +31,18 @@ watchEffect(() => {
 
 <template lang="pug">
     template(v-if="!!modelValue")
-        component.form-control(
-            :is="multiline ? 'textarea' : 'input'"
-            v-for="(human_readable, locale) in locales"
-            v-bind="$attrs"
-            :key="locale"
-            :lang="locale"
-            :title="human_readable"
-            :placeholder="placeholders?.[locale] || human_readable"
-            :value="modelValue[locale]"
-            @input="event => modelValue[locale] = event.target.value"
-        )
+        div.i18n-form-group
+            component.form-control(
+                :is="multiline ? 'textarea' : 'input'"
+                v-for="(human_readable, locale) in locales"
+                v-bind="$attrs"
+                :key="locale"
+                :lang="locale"
+                :title="human_readable"
+                :placeholder="placeholders?.[locale] || human_readable"
+                :value="modelValue[locale]"
+                @input="event => modelValue[locale] = event.target.value"
+            )
         template(v-if="!!errors")
             .help-block(v-for="error in errors") {{ error }}
 </template>
