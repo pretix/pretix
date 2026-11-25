@@ -1,4 +1,5 @@
 import { localize_string } from '@/pretix/static/pretixbase/js/i18n'
+import '@/pretix/static/pretixbase/js/gettextstub'
 
 const body = document.body
 
