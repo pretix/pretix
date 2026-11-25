@@ -311,7 +311,7 @@ Algorithm identifier: ``sum_by_gross``
 In this algorithm, the net prices of some the individual lines will be modified such that the end values will be consistent with a computation from the gross sum.
 This will lead to different net prices to be shown for tickets of the same type, but the gross price will stay always the same.
 
-**This is the most sensible algorithm when dealing mostly with consumer or when advertising gross prices, and you still need to issue e-invoices. Technically, it is incompliant with EN 16931, but at least for Germany, the Federal Ministry of Finance (BMF) allows to use it until end of 2027 in lieu of a better solution.**
+**This is the most sensible algorithm when dealing mostly with consumer or when advertising gross prices, and you still need to issue e-invoices. Technically, it is not compliant with EN 16931, but at least for Germany, the Federal Ministry of Finance (BMF) allows to use it until end of 2027 in lieu of a better solution.**
 
 For the example above:
 
