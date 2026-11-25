@@ -371,11 +371,10 @@ export function createWidgetStore (config: {
 				return formTarget
 			},
 			handleCartResponse (data: CartResponse) {
+				if (data.cart_id) {
+					this.setCartId(data.cart_id)
+				}
 				if (data.redirect) {
-					if (data.cart_id) {
-						this.setCartId(data.cart_id)
-					}
-
 					let url = data.redirect
 					if (url.substring(0, 1) === '/') {
 						url = `${this.targetUrl.replace(/^([^/]+:\/\/[^/]+)\/.*$/, '$1')}${url}`
@@ -404,7 +403,7 @@ export function createWidgetStore (config: {
 				} else {
 					this.asyncTaskId = data.async_id
 					if (data.check_url) {
-						this.asyncTaskCheckUrl = `${this.targetUrl.replace(/^([^/]+:\/\/[^/]+)\/.*$/, '$1')}${data.check_url}`
+						this.asyncTaskCheckUrl = `${this.targetUrl.replace(/^([^/]+:\/\/[^/]+)\/.*$/, '$1')}${data.check_url}&take_cart_id=${this.cartId}`
 					}
 					this.asyncTaskTimeout = window.setTimeout(() => this.pollAsyncTask(), this.asyncTaskInterval)
 					this.asyncTaskInterval = 250
