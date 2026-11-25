@@ -26,7 +26,8 @@ from binascii import unhexlify
 from datetime import timedelta
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
-from Crypto.PublicKey import RSA
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
+from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from django.db import transaction
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -498,7 +499,9 @@ class KeysView(View):
     def get(self, request, *args, **kwargs):
         privkey, pubkey = _get_or_create_server_keypair(request.organizer)
         kid = hashlib.sha256(pubkey.encode()).hexdigest()[:16]
-        pubkey = RSA.import_key(pubkey)
+        public_key = load_pem_public_key(pubkey.encode())
+        assert isinstance(public_key, RSAPublicKey)
+        public_numbers = public_key.public_numbers()
 
         return JsonResponse({
             'keys': [
@@ -507,8 +510,8 @@ class KeysView(View):
                     'alg': 'RS256',
                     'kid': kid,
                     'use': 'sig',
-                    'e': self._encode_int(pubkey.e).decode().rstrip("="),
-                    'n': self._encode_int(pubkey.n).decode().rstrip("="),
+                    'e': self._encode_int(public_numbers.e).decode().rstrip("="),
+                    'n': self._encode_int(public_numbers.n).decode().rstrip("="),
                 }
             ]
         })
