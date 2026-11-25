@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 10:48+0000\n"
-"PO-Revision-Date: 2026-11-25 12:31+0000\n"
+"PO-Revision-Date: 2026-11-25 15:37+0000\n"
 "Last-Translator: william donzelli <willskymaker@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -21194,27 +21194,23 @@ msgstr "Nessun risultato"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
-#, fuzzy
 msgid "Email settings"
 msgstr "Impostazioni email"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
-#, fuzzy
 msgid "Sending method"
-msgstr "Metodo di rimborso"
+msgstr "Metodo di invio"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
-#, fuzzy
 msgid "Custom SMTP server"
-msgstr "Cliente"
+msgstr "Server SMTP personalizzato"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
-#, fuzzy
 msgid "System-provided email server"
-msgstr "Server di posta elettronica fornito dal sistema"
+msgstr "Server email fornito dal sistema"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html
@@ -21236,14 +21232,12 @@ msgid "Edit"
 msgstr "Modifica"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
-#, fuzzy
 msgid "Calendar invites"
-msgstr "Tutte le fatture"
+msgstr "Inviti del calendario"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
-#, fuzzy
 msgid "Email design"
-msgstr "Progettazione email"
+msgstr "Aspetto delle email"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html
@@ -21255,17 +21249,14 @@ msgstr "Anteprima"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
-#, fuzzy
 msgid "Email content"
-msgstr "Contenuto email"
+msgstr "Contenuto delle email"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
-#, fuzzy
 msgid "Placed order"
-msgstr "Ordine depositato"
+msgstr "Ordine effettuato"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
-#, fuzzy
 msgid "Paid order"
 msgstr "Ordine pagato"
 
@@ -21275,12 +21266,10 @@ msgstr "Ordine gratuito"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
 #: pretix/control/templates/pretixcontrol/order/index.html
-#, fuzzy
 msgid "Resend link"
-msgstr "Riinvia il collegamento"
+msgstr "Invia di nuovo il link"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
-#, fuzzy
 msgid "Payment reminder"
 msgstr "Promemoria di pagamento"
 
@@ -21289,35 +21278,29 @@ msgid "Payment failed"
 msgstr "Pagamento rifiutato"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
-#, fuzzy
 msgid "Waiting list notification"
-msgstr "Notifica lista d'attesa"
+msgstr "Notifica della lista d'attesa"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
-#, fuzzy
 msgid "Order custom mail"
 msgstr "Email personalizzata per l'ordine"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
-#, fuzzy
 msgid "Reminder to download tickets"
 msgstr "Promemoria per il download dei biglietti"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
-#, fuzzy
 msgid "Order approval process"
 msgstr "Procedura di approvazione dell'ordine"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html
-#, fuzzy
 msgid "Attachments"
-msgstr "Vai al negozio"
+msgstr "Allegati"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html
 #: pretix/control/templates/pretixcontrol/user/settings.html
 #: pretix/plugins/sendmail/models.py
-#, fuzzy
 msgid "Enabled"
 msgstr "Abilitato"
 
@@ -23845,9 +23828,8 @@ msgstr "Capacità rimanente"
 #: pretix/control/templates/pretixcontrol/subevents/index.html
 #: pretix/control/templates/pretixcontrol/vouchers/index.html
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
-#, fuzzy
 msgid "select row for batch-operation"
-msgstr "Seleziona una riga per un'operazione in batch"
+msgstr "Seleziona la riga per l'operazione in blocco"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html
 #: pretix/control/templates/pretixcontrol/subevents/index.html
