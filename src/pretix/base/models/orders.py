@@ -2004,10 +2004,10 @@ class OrderPayment(models.Model):
             if self.order.event.settings.mail_send_order_paid_attendee:
                 # todo re note: paid_mail for attendees (formerly models/orders _send_paid_mail_attendee)
                 from pretix.base.services.orders import (
-                    _attendee_mail_send_helper,
+                    _attendee_email,
                 )
 
-                _attendee_mail_send_helper(
+                _attendee_email(
                     event=self.order.event,
                     order=self.order,
                     positions=self.order.positions.all(),

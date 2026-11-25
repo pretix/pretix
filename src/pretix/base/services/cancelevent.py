@@ -39,7 +39,7 @@ from pretix.base.models import (
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import mail
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, _attendee_mail_send_helper, _cancel_order,
+    OrderChangeManager, OrderError, _attendee_email, _cancel_order,
     _try_auto_refund,
 )
 from pretix.base.services.tasks import ProfiledEventTask
@@ -82,7 +82,7 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
 
         # send_attendees defaults to true, for backwards compatibility (we used to send to everyone)
         if send_attendees:
-            _attendee_mail_send_helper(
+            _attendee_email(
                 event=order.event,
                 order=order,
                 positions=positions,

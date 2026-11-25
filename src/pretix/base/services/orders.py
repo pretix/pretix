@@ -121,7 +121,7 @@ from pretix.testutils.middleware import debugflags_var
 #  and/or maybe we want to generalize this thing to also include order mails
 #  (let's maybe not rewrite the whole mail logic?!)
 #  but also, remember to write tests - a whole bunch of tests
-def _attendee_mail_send_helper(
+def _attendee_email(
     event: Event,
     order: Order,
     positions: list,
@@ -539,7 +539,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
             )
 
             if email_attendees:
-                _attendee_mail_send_helper(
+                _attendee_email(
                     event=order.event,
                     order=order,
                     positions=order.positions.all(),
@@ -1485,7 +1485,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
             )
             if email_attendees:
                 # todo re note: order_placed_email for attendees (formerly services/orders _order_placed_email_attendee)
-                _attendee_mail_send_helper(
+                _attendee_email(
                     event=event,
                     order=order,
                     positions=order.positions.all(),
@@ -1696,7 +1696,7 @@ def send_download_reminders(sender, **kwargs):
                     )
 
                     if event.settings.mail_send_download_reminder_attendee:
-                        _attendee_mail_send_helper(
+                        _attendee_email(
                             event=event,
                             order=o,
                             positions=positions,

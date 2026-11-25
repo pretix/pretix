@@ -92,7 +92,7 @@ from pretix.base.services.invoices import (
     regenerate_invoice, transmit_invoice,
 )
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, _attendee_mail_send_helper,
+    OrderChangeManager, OrderError, _attendee_email,
     _order_placed_email, approve_order, cancel_order, deny_order, extend_order,
     mark_order_expired, mark_order_refunded, reactivate_order,
 )
@@ -807,7 +807,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                 if email_attendees:
                     ev = request.event
                     # todo re note: order_placed_email for attendees (formerly services/orders _order_placed_email_attendee)
-                    _attendee_mail_send_helper(
+                    _attendee_email(
                         event=ev,
                         order=order,
                         positions=order.positions.all(),
@@ -830,7 +830,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                     if self.request.event.settings.mail_send_order_paid_attendee:
                         ev = request.event
                         # todo re note: paid_mail for attendees (formerly models/orders _send_paid_mail_attendee)
-                        _attendee_mail_send_helper(
+                        _attendee_email(
                             event=ev,
                             order=order,
                             positions=order.positions.all(),
