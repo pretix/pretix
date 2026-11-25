@@ -83,8 +83,7 @@ class CheckoutView(View):
                 return self.redirect(previous_step.get_step_url(request) if previous_step else self.get_index_url(request))
 
             if 'step' not in kwargs:
-                utm_params = {k: v for k, v in request.GET.items() if k.startswith("utm_") or k == "gclid" or k == "_gl"}
-                return self.redirect(step.get_step_url(request) + '?' + urlencode(utm_params))
+                return self.redirect(step.get_step_url(request))
             is_selected = (step.identifier == kwargs.get('step', ''))
 
             if not is_asyncaction_call and not is_selected and not step.is_completed(request, warn=not is_selected):
@@ -105,6 +104,6 @@ class CheckoutView(View):
         raise Http404()
 
     def redirect(self, url):
-        if 'cart_id' in self.request.GET:
-            url += ('&' if '?' in url else '?') + 'cart_id=' + quote(self.request.GET.get('cart_id'))
+        params = {k: v for k, v in self.request.GET.items() if k in ("cart_id", "gclid", "_gl") or k.startswith("utm_")}
+        url += ('&' if '?' in url else '?') + urlencode(params)
         return redirect_to_url(url)
