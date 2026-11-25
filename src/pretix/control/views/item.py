@@ -38,6 +38,7 @@ from collections import OrderedDict, namedtuple
 from itertools import groupby
 from json.decoder import JSONDecodeError
 
+from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
@@ -741,6 +742,10 @@ class QuestionnairesEditor(EventPermissionRequiredMixin, TemplateView):
         ctx['questionnaire_type_choices'] = textchoices_to_json(Questionnaire.QuestionnaireType, self.request.event)
         ctx['system_question_choices'] = textchoices_to_json(QuestionnaireRow.SystemDatafield, self.request.event)
         ctx['question_type_choices'] = textchoices_to_json(Question.FieldType, self.request.event)
+        ctx["locales"] = {
+            l: dict(settings.LANGUAGES).get(l, l)
+            for l in self.request.event.settings.get("locales")
+        }
         return ctx
 
 

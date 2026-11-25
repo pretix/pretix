@@ -1,25 +1,18 @@
 <script setup lang="ts">
 import {useId, ref, computed, onMounted, watch, Ref, inject} from 'vue'
 import QuestionnaireRowElement from "./QuestionnaireRowElement.vue";
-import {
-  i18n_any,
-  QUESTION_TYPE,
-  QUESTION_TYPE_LABEL,
-  QUESTIONNAIRE_TYPE,
-  QUESTIONNAIRE_TYPE_LABEL, setListState,
-  SYSTEM_DATAFIELDS, TYPES_ALLOWED_AS_DEPENDENCIES
-} from "./helper";
+import { setListState, TYPES_ALLOWED_AS_DEPENDENCIES } from "./helper";
 import { gettext } from './gettextstub';
-import I18nTextField from "./I18nTextField.vue";
+import I18nInput from '@/pretix/static/pretixbase/components/i18n-input.vue';
 import NativeDialog from "./NativeDialog.vue";
 import { SlickList, SlickItem, DragHandle } from 'vue-slicksort';
-import {getDatafieldCreateUrl} from "./api";
+import {getDatafieldCreateUrl, getEventLocales} from "./api";
 import DjangoDialog from "./DjangoDialog.vue";
 import * as api from './api';
 import QuestionnaireEditForm from "./QuestionnaireEditForm.vue";
 import SalesChannelIcon from "./SalesChannelIcon.vue";
 import {SalesChannel} from "./model";
-import I18nTextArea from "./I18nTextArea.vue";
+import { localize_string } from "@/pretix/static/pretixbase/js/i18n";
 
 const dlgEditor = ref()
 const dlgAddExisting = ref()
@@ -28,6 +21,8 @@ const dlgNewDatafield = ref()
 
 const newTextblockTitle = ref()
 const newTextblockText = ref()
+
+const locales = getEventLocales();
 
 const id = useId();
 const props = defineProps(['questionnaire', 'datafields', 'selected_product', 'grouped_items', 'preview_mode', 'err_mes'])
@@ -243,7 +238,7 @@ details[open] > summary.list-group-item {
           <template v-for="field in datafields">
 					  <a v-if="field.identifier.startsWith('@') && !addressFieldIdentifiers.has(field.identifier)"
                href="javascript:" @click="addExistingDatafield(field)"
-               :class="`list-group-item ${askedDatafields.has(field.identifier) ? 'exists' : ''}`">{{ i18n_any(field.question) }}</a>
+               :class="`list-group-item ${askedDatafields.has(field.identifier) ? 'exists' : ''}`">{{ localize_string(field.question) }}</a>
           </template>
 
           <a v-if="allAddressFields.length"
@@ -255,7 +250,7 @@ details[open] > summary.list-group-item {
             <template v-for="field in datafields">
               <a v-if="addressFieldIdentifiers.has(field.identifier)"
                  href="javascript:" @click="addExistingDatafield(field)"
-                 :class="`list-group-item ${askedDatafields.has(field.identifier) ? 'exists' : ''}`">{{ i18n_any(field.question) }}</a>
+                 :class="`list-group-item ${askedDatafields.has(field.identifier) ? 'exists' : ''}`">{{ localize_string(field.question) }}</a>
             </template>
           </details>
 				</div>
@@ -280,7 +275,7 @@ details[open] > summary.list-group-item {
             {{ gettext('Title') }}
           </label>
           <div class="col-md-9">
-            <I18nTextField :value="newTextblockTitle"/>
+            <I18nInput :multiline="false" :locales="locales" v-model="newTextblockTitle" />
           </div>
         </div>
         <div class="form-group">
@@ -288,7 +283,7 @@ details[open] > summary.list-group-item {
             {{ gettext('Text') }}
           </label>
           <div class="col-md-9">
-            <I18nTextArea :value="newTextblockText"/>
+            <I18nInput :multiline="true" :locales="locales" v-model="newTextblockText"/>
           </div>
         </div>
 

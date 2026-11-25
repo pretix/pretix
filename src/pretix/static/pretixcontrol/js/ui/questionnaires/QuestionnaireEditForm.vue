@@ -2,8 +2,9 @@
 import {gettext} from "./gettextstub";
 import {GroupedItems, Questionnaire, SalesChannel} from "./model";
 import {inject, Ref, useId} from "vue";
-import {i18n_any, QUESTIONNAIRE_TYPE, QUESTIONNAIRE_TYPE_LABEL, setListState} from "./helper";
+import {QUESTIONNAIRE_TYPE, QUESTIONNAIRE_TYPE_LABEL, setListState} from "./helper";
 import SalesChannelIcon from "./SalesChannelIcon.vue";
+import {localize_string} from "@/pretix/static/pretixbase/js/i18n";
 
 const sales_channels: Ref<SalesChannel[]> = inject('pretix:env:organizer:sales_channels')
 
@@ -53,7 +54,7 @@ const props = defineProps<{
 								 @change="e => setListState(questionnaire.limit_sales_channels, (e.target as HTMLInputElement).checked, channel.identifier)"
 								 :disabled="questionnaire.all_sales_channels">
           <SalesChannelIcon :sales-channel="channel"/>
-					{{ i18n_any(channel.label) }}
+					{{ localize_string(channel.label) }}
 				</label>
 			</div>
 		</div>
@@ -64,10 +65,10 @@ const props = defineProps<{
 		</label>
 		<div class="col-md-9">
 			<div v-for="[category, items] in grouped_items">
-				<div class="category-header">{{ category.internal_name || i18n_any(category.name) }}</div>
+				<div class="category-header">{{ category.internal_name || localize_string(category.name) }}</div>
 				<div class="checkbox" v-for="item in items">
 					<label :for="id + '_' + item.id">
-						<input :id="id + '_' + item.id" type="checkbox" :checked="questionnaire.items.indexOf(item.id) !== -1" @change="e => setListState(questionnaire.items, (e.target as HTMLInputElement).checked, item.id)"> {{ item.internal_name || i18n_any(item.name) }}
+						<input :id="id + '_' + item.id" type="checkbox" :checked="questionnaire.items.indexOf(item.id) !== -1" @change="e => setListState(questionnaire.items, (e.target as HTMLInputElement).checked, item.id)"> {{ item.internal_name || localize_string(item.name) }}
 					</label>
 				</div>
 			</div>

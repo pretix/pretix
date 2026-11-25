@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import {
-  i18n_any,
   QUESTION_TYPE,
-  QUESTION_TYPE_LABEL,
   QUESTION_TYPE_LABEL_FROM_VALUE,
   SYSTEM_DATAFIELDS
 } from './helper';
 import NativeDialog from './NativeDialog.vue';
-import I18nTextField from './I18nTextField.vue';
+import I18nInput from '@/pretix/static/pretixbase/components/i18n-input.vue';
 import {useId, ref, computed} from 'vue'
-import { DragHandle } from 'vue-slicksort';
-import {getDatafieldCreateUrl, getDatafieldEditUrl, getDatafieldViewUrl} from "./api";
-import I18nTextArea from "./I18nTextArea.vue";
+import { getDatafieldEditUrl, getDatafieldViewUrl, getEventLocales} from "./api";
 import DjangoDialog from "./DjangoDialog.vue";
+import {localize_string} from "@/pretix/static/pretixbase/js/i18n";
+
+const locales = getEventLocales();
 
 const id = useId();
 const props = defineProps(['question', 'datafields', 'editable', 'possible_dependencies'])
@@ -34,7 +33,7 @@ const dependency_values_options = computed(() => {
   if (dependency?.type === 'B') return [{identifier: 'True', answer: {_: gettext('Yes')}}, {identifier: 'False', answer: {_: gettext('No')}}]
   else return dependency?.options
 });
-const dependency_values_resolved = computed(() => question.value.dependency_values.map(ident => i18n_any(dependency_values_options.value.find(opt => opt.identifier === ident)?.answer) ?? ident));
+const dependency_values_resolved = computed(() => question.value.dependency_values.map(ident => localize_string(dependency_values_options.value.find(opt => opt.identifier === ident)?.answer) ?? ident));
 
 if (!question.value.label) question.value.label = {};
 if (!question.value.help_text) question.value.help_text = {};
@@ -53,14 +52,14 @@ const editor = ref();
 					</div>
 					<div class="col-md-3 control-label label-empty" v-if="df.type === QUESTION_TYPE.BOOLEAN"></div>
 					<label class="col-md-3 control-label" :for="id" v-else>
-						{{ i18n_any(question.label) }}
+						{{ localize_string(question.label) }}
 					</label>
 					<div class="col-md-9">
 						<input :id="id" type="text" v-if="df.type === QUESTION_TYPE.STRING || df.type === QUESTION_TYPE.PHONENUMBER" class="form-control">
 						<textarea :id="id" v-if="df.type === QUESTION_TYPE.TEXT" class="form-control"></textarea>
 						<div class="checkbox" v-if="df.type === QUESTION_TYPE.BOOLEAN">
 							<label :for="id">
-								<input :id="id" type="checkbox"> {{ i18n_any(question.label) }}
+								<input :id="id" type="checkbox"> {{ localize_string(question.label) }}
 							</label>
 						</div>
 						<input :id="id" type="number" v-if="df.type === QUESTION_TYPE.NUMBER" class="form-control">
@@ -68,18 +67,18 @@ const editor = ref();
 						<select :id="id" class="form-control"
 							v-if="df.type === QUESTION_TYPE.CHOICE || df.type === QUESTION_TYPE.COUNTRYCODE">
 							<option></option>
-							<option v-for="opt in df.options">{{ i18n_any(opt.answer) }}</option>
+							<option v-for="opt in df.options">{{ localize_string(opt.answer) }}</option>
 						</select>
 						<div class="checkbox" v-if="df.type === QUESTION_TYPE.CHOICE_MULTIPLE" v-for="(opt, index) in df.options">
 							<label :for="`${id}-${index}`">
-								<input :id="`${id}-${index}`" type="checkbox"> {{ i18n_any(opt.answer) }}
+								<input :id="`${id}-${index}`" type="checkbox"> {{ localize_string(opt.answer) }}
 							</label>
 						</div>
 						<div class="help-block" v-html="question.rendered_help_text" v-if="question.rendered_help_text"></div>
 					</div>
 				</template>
 				<div v-else class="col-md-9 col-md-push-3">
-					<h4>{{ i18n_any(question.label) }}</h4>
+					<h4>{{ localize_string(question.label) }}</h4>
 					<p v-html="question.rendered_help_text" v-if="question.rendered_help_text"></p>
 				</div>
 			</div>
@@ -100,7 +99,7 @@ const editor = ref();
             {{ df ? gettext('Question') : gettext('Headline') }}
           </label>
           <div class="col-md-9">
-            <I18nTextField :value="question.label"/>
+            <I18nInput :locales="locales" v-model="question.label"/>
           </div>
         </div>
         <div class="form-group">
@@ -108,7 +107,7 @@ const editor = ref();
             {{ gettext('Help text') }}
           </label>
           <div class="col-md-9">
-            <I18nTextArea :value="question.help_text"/>
+            <I18nInput :multiline="true" :locales="locales" v-model="question.help_text"/>
             <div class="help-block">{{ gettext('If the question needs to be explained or clarified, do it here!') }}</div>
           </div>
         </div>
@@ -119,7 +118,7 @@ const editor = ref();
           <div class="col-md-9">
             <div class="form-control-static">
 							<template v-if="question.datafield.startsWith('@')">
-								{{ i18n_any(df.question) }} <span class="label label-default pull-right">{{gettext('System-defined field')}}</span>
+								{{ localize_string(df.question) }} <span class="label label-default pull-right">{{gettext('System-defined field')}}</span>
 							</template>
 							<template v-else>
 								{{ df.internal_name }}
@@ -155,10 +154,10 @@ const editor = ref();
           <div class="col-md-9">
             <select v-model="question.dependency_datafield" class="form-control">
               <option :value="null">{{ gettext('(none)') }}</option>
-              <option v-for="(qc, index) in possible_dependencies" :value="qc.datafield">{{ i18n_any(qc.label) }}</option>
+              <option v-for="(qc, index) in possible_dependencies" :value="qc.datafield">{{ localize_string(qc.label) }}</option>
             </select>
             <select v-model="question.dependency_values" class="form-control" multiple>
-              <option v-for="(qc, index) in dependency_values_options" :value="qc.identifier">{{ i18n_any(qc.answer) }}</option>
+              <option v-for="(qc, index) in dependency_values_options" :value="qc.identifier">{{ localize_string(qc.answer) }}</option>
             </select>
 						<div v-if="question.dependency_datafield">
 							<p><span class="debuginfo">depends on {{ question.dependency_datafield }} = {{ dependency_values_resolved }}</span></p>

@@ -2,11 +2,12 @@
 import QuestionnaireElement from './QuestionnaireElement.vue';
 import * as api from './api';
 import {Datafield, Questionnaire} from './model';
-import {i18n_any, sort, numericComp, groupBy, SYSTEM_DATAFIELDS} from './helper';
+import {SYSTEM_DATAFIELDS} from './helper';
 import { gettext } from './gettextstub';
 import {computed, inject, nextTick, onMounted, onUnmounted, ref} from 'vue';
 import { SlickList, SlickItem } from 'vue-slicksort';
 import { ProgressBar } from "./ProgressBar";
+import {localize_string} from "@/pretix/static/pretixbase/js/i18n";
 
 const grouped_items = inject('pretix:env:event:grouped_items')
 const all_items = inject('pretix:env:event:items')
@@ -196,15 +197,15 @@ const preview_mode = ref(false)
 	<div :class="`questionnaires-editor ${selected_product ? 'product-selected':''} ${preview_mode ? 'preview-mode':''}`">
 		<div class="filter-row" v-if="preview_mode">
 			<button class="btn btn-default" @click="preview_mode = false"><span class="fa fa-chevron-left"></span> {{ gettext('Back') }}</button>
-			Preview of questionnaires for product <em>{{ selected_product_details?.internal_name || i18n_any(selected_product_details?.name) }}</em>
+			Preview of questionnaires for product <em>{{ selected_product_details?.internal_name || localize_string(selected_product_details?.name) }}</em>
 		</div>
 		<div class="filter-row" v-else>
 			Questionnaires for product:
 			<select v-model="selected_product">
 				<option value="">(all)</option>
-				<optgroup v-for="[category, items] in grouped_items" :label="category.internal_name || i18n_any(category.name)">
+				<optgroup v-for="[category, items] in grouped_items" :label="category.internal_name || localize_string(category.name)">
 					<option v-for="item in items" :value="item.id">
-						{{ item.internal_name || i18n_any(item.name) }}
+						{{ item.internal_name || localize_string(item.name) }}
 					</option>
 				</optgroup>
 			</select>
@@ -216,7 +217,7 @@ const preview_mode = ref(false)
 			<details class="panel panel-default details-open" open>
 				<summary class="panel-heading">
 					<h4 class="panel-title">
-						<strong>{{ selected_product_details?.internal_name || i18n_any(selected_product_details?.name) }}</strong>
+						<strong>{{ selected_product_details?.internal_name || localize_string(selected_product_details?.name) }}</strong>
 					</h4>
 				</summary>
 
