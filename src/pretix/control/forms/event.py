@@ -974,26 +974,41 @@ class TaxSettingsForm(EventSettingsValidationMixin, SettingsForm):
         self.fields["display_net_prices"].widget = DisplayNetPricesBooleanSelect()
         help_text = {
             "line": _(
-                "Recommended when e-invoicing is not required. Each product will be sold with the advertised "
-                "net and gross price. However, in orders of more than one product, the total tax amount "
-                "can differ from when it would be computed from the order total."
+                "Each product will be sold with the advertised net and gross price. Net and gross prices stay stable on "
+                "order splits. However, in orders of more than one product, the total tax amount can differ from when "
+                "it would be computed from the order total."
             ),
             "sum_by_net": _(
                 "Recommended for e-invoicing when you primarily sell to business customers and "
-                "show prices to customers excluding tax. "
+                "show prices to customers excluding tax. Created e-invoices are fully compliant with EN 16931. "
                 "The gross price of some products may be changed to ensure correct rounding, while the net "
                 "prices will be kept as configured. This may cause the actual payment amount to differ."
             ),
-            "sum_by_net_only_business": _(
-                "Same as above, but only applied to business customers. Line-based rounding will be used for consumers. "
-                "Recommended when e-invoicing is only used for business customers and consumers do not receive "
-                "invoices. This can cause the payment amount to change when the invoice address is changed."
+            "sum_by_gross": _(
+                "Recommended for e-invoicing when you primarily sell to consumers or show prices to customers including tax. "
+                "The net price of some products may be changed to ensure correct rounding, while the gross "
+                "prices will be kept as configured. This actual payment amount always stays as expected. This is "
+                "technically not compliant with European e-invoicing standards, but e.g. allowed within Germany at "
+                "least until end of 2027."
             ),
-            "sum_by_net_keep_gross": _(
-                "Recommended for e-invoicing when you primarily sell to consumers. "
-                "The gross or net price of some products may be changed automatically to ensure correct "
-                "rounding of the order total. The system attempts to keep gross prices as configured whenever "
-                "possible. Gross prices may still change if they are impossible to derive from a rounded net price."
+            "sum_by_net_business_else_gross": _(
+                "Recommended if you sell to business customers who care about e-invoices compliant to EN 16931 and to "
+                "consumers who care about advertised prices at the same time. However, this can cause the payment amount "
+                "to change when the invoice address is changed."
+            ),
+            "sum_by_net_keep_gross": format_html(
+                "<span class='label label-default'>{}</span> {}",
+                _('Not recommended'),
+                _(
+                    "The gross or net price of some products may be changed automatically to ensure correct "
+                    "rounding of the order total. The system attempts to keep gross prices as configured whenever "
+                    "possible. Gross prices may still change if they are impossible to derive from a rounded net price."
+                )
+            ),
+            "sum_by_net_only_business": format_html(
+                "<span class='label label-default'>{}</span> {}",
+                _('Not recommended'),
+                "This can cause the payment amount to change when the invoice address is changed."
             ),
         }
         self.fields["tax_rounding"].choices = (
