@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 10:48+0000\n"
-"PO-Revision-Date: 2026-11-25 09:51+0000\n"
+"PO-Revision-Date: 2026-11-25 12:31+0000\n"
 "Last-Translator: william donzelli <willskymaker@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -30007,16 +30007,15 @@ msgid "Your changes have not been saved, see below for errors."
 msgstr "Le tue modifiche non sono state salvate, vedi gli errori sotto."
 
 #: pretix/control/views/global_settings.py
-#, fuzzy
 msgid ""
 "You are in violation of the license. If you're not sure whether you qualify "
 "for the additional permission or if you offer the functionality of pretix to "
 "others, you must either use pretix under AGPLv3 terms or obtain a pretix "
 "Enterprise license."
 msgstr ""
-"Sei in violazione del licenziamento. Se non sei certo di poter beneficiare "
-"del permesso aggiuntivo o se offri la funzionalità di pretix ad altri, devi "
-"usare pretix sotto i termini AGPLv3 o ottenere una licenza Enterprise."
+"Sei in violazione della licenza. Se non sei sicuro di rientrare nel permesso "
+"aggiuntivo o se offri la funzionalità di pretix ad altri, devi usare pretix "
+"secondo i termini AGPLv3 oppure ottenere una licenza pretix Enterprise."
 
 #: pretix/control/views/global_settings.py
 #, fuzzy
