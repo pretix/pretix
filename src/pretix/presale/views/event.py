@@ -244,6 +244,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['items_by_category'] = item_group_by_category(items)
             context['display_add_to_cart'] = display_add_to_cart
 
+        context['max_items'] = self.request.event.max_items_per_order
         context['cart'] = self.get_cart()
         context['itemvarsums'] = get_item_var_sums(context['cart'].get('raw', []), self.subevent)
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))

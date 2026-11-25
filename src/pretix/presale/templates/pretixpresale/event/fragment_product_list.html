@@ -7,6 +7,25 @@
 {% load getitem %}
 {% load eventsignal %}
 {% load rich_text %}
+<fieldset data-max-count="{{ max_items }}" data-multi-allowed data-count-in-cart>
+<p class="count-desc" id="count-desc">
+    {% if max_items == 1 %}
+        {% blocktrans trimmed %}
+            You can choose only one product.
+        {% endblocktrans %}
+    {% else %}
+        {% blocktrans trimmed with max_count=max_items %}
+            You can choose up to {{ max_count }} products.
+        {% endblocktrans %}
+    {% endif %}
+    {% if cart.itemcount > 0 %}
+        {% blocktrans trimmed count count=cart.itemcount %}
+            You have already made one selection.
+        {% plural %}
+            You have already selected {{ count }} products.
+        {% endblocktrans %}
+    {% endif %}
+</p>
 {% for tup in items_by_category %}{% with category=tup.0 items=tup.1 form_prefix=tup.2 %}
     {% if category %}
         <section class="item-category" aria-labelledby="{{ form_prefix }}category-{{ category.id }}"{% if category.description %} aria-describedby="{{ form_prefix }}category-info-{{ category.id }}"{% endif %}>
@@ -169,6 +188,7 @@
                                             <span class="input-group-addon">{{ event.currency }}</span>
                                             <input type="number" class="form-control input-item-price"
                                                    id="{{ form_prefix }}price-variation-{{ item.pk }}-{{ var.pk }}"
+                                                   already-in-cart="{{ cart.itemvarsums|getitem:var|default:0 }}"
                                                    {% if not ev.presale_is_running %}disabled{% endif %}
                                                    placeholder="0"
                                                    min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
@@ -228,6 +248,7 @@
                                                 <input type="radio" name="{{ form_prefix }}_selected_item"
                                                         {% if itemnum == 1 %}checked="checked"{% endif %}
                                                         {% if not ev.presale_is_running %}disabled{% endif %}
+                                                        already-in-cart="{{ cart.itemvarsums|getitem:var|default:0 }}"
                                                         id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                         value="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                         aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend"
@@ -240,10 +261,11 @@
                                                 <label class="btn btn-default btn-checkbox{% if not ev.presale_is_running %} disabled{% endif %}">
                                                     <input type="checkbox" value="1"
                                                         {% if item.free_price %}
-                                                        data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
+                                                            data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
                                                         {% endif %}
                                                         {% if not ev.presale_is_running %}disabled{% endif %}
                                                         {% if itemnum == 1 %}checked="checked"{% endif %}
+                                                        already-in-cart="{{ cart.itemvarsums|getitem:var|default:0 }}"
                                                         id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                         name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                         aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend {{ form_prefix }}item-{{ item.pk }}-legend"
@@ -258,11 +280,12 @@
                                                         {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
                                                     <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                         {% if not ev.presale_is_running %}disabled{% endif %}
-                                                            {% if item.free_price %}
+                                                        {% if item.free_price %}
                                                             data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
-                                                            {% endif %}
-                                                        max="{{ var.order_max }}"
+                                                        {% endif %}
                                                         {% if itemnum == 1 %}checked="checked"{% endif %}
+                                                        max-selection="{{ var.order_max }}"
+                                                        already-in-cart="{{ cart.itemvarsums|getitem:var|default:0 }}"
                                                         id="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                         name="{{ form_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                         aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend {{ form_prefix }}item-{{ item.pk }}-legend">
@@ -354,13 +377,14 @@
                                 <input type="number" class="form-control input-item-price" placeholder="0"
                                        id="{{ form_prefix }}price-item-{{ item.pk }}"
                                        {% if not ev.presale_is_running %}disabled{% endif %}
+                                       already-in-cart="{{ cart.itemvarsums|getitem:item|default:0 }}"
                                        min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                        name="{{ form_prefix }}price_{{ item.id }}"
                                        {% if item.suggested_price.gross != item.display_price.gross %}
                                            {% if event.settings.display_net_prices %}
                                                 title="{% blocktrans trimmed with item=item.name price=item.display_price.net|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
                                            {% else %}
-                                               title="{% blocktrans trimmed with item=item.name price=item.display_price.gross|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
+                                                title="{% blocktrans trimmed with item=item.name price=item.display_price.gross|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
                                            {% endif %}
                                        {% else %}
                                            title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
@@ -410,6 +434,7 @@
                                     <input type="radio" name="{{ form_prefix }}_selected_item"
                                         {% if itemnum == 1 %}checked="checked"{% endif %}
                                         {% if not ev.presale_is_running %}disabled{% endif %}
+                                        already-in-cart="{{ cart.itemvarsums|getitem:item|default:0 }}"
                                         id="{{ form_prefix }}item_{{ item.id }}"
                                         value="{{ form_prefix }}item_{{ item.id }}"
                                         aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend"
@@ -422,9 +447,10 @@
                                     <label class="btn btn-default btn-checkbox{% if not ev.presale_is_running %} disabled{% endif %}">
                                         <input type="checkbox" value="1" {% if itemnum == 1 %}checked{% endif %}
                                             {% if item.free_price %}
-                                            data-checked-onchange="price-item-{{ item.pk }}"
+                                                data-checked-onchange="price-item-{{ item.pk }}"
                                             {% endif %}
                                             {% if not ev.presale_is_running %}disabled{% endif %}
+                                            already-in-cart="{{ cart.itemvarsums|getitem:item|default:0 }}"
                                             name="{{ form_prefix }}item_{{ item.id }}" id="{{ form_prefix }}item_{{ item.id }}"
                                             aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend"
                                             {% if item.description %}aria-describedby="{{ form_prefix }}item-{{ item.id }}-description"{% endif %}>
@@ -439,10 +465,11 @@
                                         <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                             {% if not ev.presale_is_running %}disabled{% endif %}
                                             {% if itemnum == 1 %}value="1"{% endif %}
-                                                {% if item.free_price %}
+                                            {% if item.free_price %}
                                                 data-checked-onchange="price-item-{{ item.pk }}"
-                                                {% endif %}
-                                            max="{{ item.order_max }}"
+                                            {% endif %}
+                                            already-in-cart="{{ cart.itemvarsums|getitem:item|default:0 }}"
+                                            max-selection="{{ item.order_max }}"
                                             name="{{ form_prefix }}item_{{ item.id }}"
                                             id="{{ form_prefix }}item_{{ item.id }}"
                                             aria-labelledby="{{ form_prefix }}item-{{ item.pk }}-legend">
@@ -461,3 +488,4 @@
         {% endfor %}
     </section>
 {% endwith %}{% endfor %}
+</fieldset>
