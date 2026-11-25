@@ -8,7 +8,7 @@
         <li class="text-left flip">
             <a {% if subevent_list.has_before %}href="?{% url_replace request "date" subevent_list.before|date:"Y-m" %}"{% else %}disabled{% endif %}
                     class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with month=subevent_list.before|date:"F Y" %}Show previous month, {{ month }}{% endblocktrans %}">
-                {% icon "arrow-left" %}
+                {% icon "chevron-left" %}
                 <span class="hidden-xs">{{ subevent_list.before|date:"F Y" }}</span>
             </a>
         </li>
@@ -32,7 +32,7 @@
                     </select>
                     <span class="input-group-btn">
                         <button type="submit" class="btn btn-default" aria-label="{% trans "Show month" %}">
-                            {% icon "check" %}
+                            {% icon "search" %}
                         </button>
                     </span>
                 </div>
@@ -42,7 +42,7 @@
             <a {% if subevent_list.has_after %}href="?{% url_replace request "date" subevent_list.after|date:"Y-m" %}"{% else %}disabled{% endif %}
                 class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with month=subevent_list.after|date:"F Y" %}Show next month, {{ month }}{% endblocktrans %}">
                 <span class="hidden-xs">{{ subevent_list.after|date:"F Y" }}</span>
-                {% icon "arrow-right" %}
+                {% icon "chevron-right" %}
             </a>
         </li>
     </ul>
