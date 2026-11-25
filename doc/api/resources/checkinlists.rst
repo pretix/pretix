@@ -605,19 +605,19 @@ Order position endpoints
    Tries to redeem an order position, identified by its internal ID, i.e. checks the attendee in. This endpoint
    accepts a number of optional requests in the body.
 
-   **Tip:** Instead of an ID, you can also use the ``secret`` field as the lookup parameter. In this case, you should
-   always set ``untrusted_input=true`` as a query parameter to avoid security issues.
+   **Deprecated behavior:** For legacy compatibility, the ``secret`` field is also accepted as the lookup parameter.
+   Do not depend on that behaviour as it will be removed in the future, such that only the internal ID is accepted.
 
    .. note::
 
-      We no longer recommend using this API if you're building a ticket scanning application, as it has a few design
+      Do not use this API to redeem tickets if you're building a ticket scanning application, as it has a few design
       flaws that can lead to `security issues`_ or compatibility issues due to barcode content characters that are not
       URL-safe. We recommend to use our new :ref:`check-in API <rest-checkin>` instead. Advanced features like medium
       exchange are only supported on the new API.
 
    :query boolean untrusted_input: If set to true, the lookup parameter is **always** interpreted as a ``secret``, never
                                    as an ``id``. This should be always set if you are passing through untrusted, scanned
-                                   data to avoid guessing of ticket IDs.
+                                   data to avoid guessing of ticket IDs. (**Deprecated**, use the new :ref:`check-in API <rest-checkin>` instead)
    :>json boolean questions_supported: When this parameter is set to ``true``, handling of questions is supported. If
                                        you do not implement question handling in your user interface, you **must**
                                        set this to ``false``. In that case, questions will just be ignored. Defaults
