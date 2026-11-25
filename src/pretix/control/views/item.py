@@ -245,7 +245,7 @@ class CategoryDelete(EventPermissionRequiredMixin, CompatDeleteView):
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self) -> str:
-        return reverse('control:event.items.categories', kwargs={
+        return reverse('control:event.items', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
         })
@@ -279,7 +279,7 @@ class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
-        return reverse('control:event.items.categories', kwargs={
+        return reverse('control:event.items', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
         })
@@ -297,7 +297,7 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
     context_object_name = 'category'
 
     def get_success_url(self) -> str:
-        return reverse('control:event.items.categories', kwargs={
+        return reverse('control:event.items', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
         })
@@ -381,7 +381,7 @@ def category_move(request, category, up=True):
 @require_http_methods(["POST"])
 def category_move_up(request, organizer, event, category):
     category_move(request, category, up=True)
-    return redirect('control:event.items.categories',
+    return redirect('control:event.items',
                     organizer=request.event.organizer.slug,
                     event=request.event.slug)
 
@@ -390,7 +390,7 @@ def category_move_up(request, organizer, event, category):
 @require_http_methods(["POST"])
 def category_move_down(request, organizer, event, category):
     category_move(request, category, up=False)
-    return redirect('control:event.items.categories',
+    return redirect('control:event.items',
                     organizer=request.event.organizer.slug,
                     event=request.event.slug)
 
