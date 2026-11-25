@@ -1,4 +1,4 @@
-import {localize_string} from "@/pretix/static/pretixbase/js/i18n";
+import { localize_string } from '@/pretix/static/pretixbase/js/i18n'
 
 const body = document.body
 
