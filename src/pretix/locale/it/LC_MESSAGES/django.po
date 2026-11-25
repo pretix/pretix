@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 10:48+0000\n"
-"PO-Revision-Date: 2026-11-25 09:47+0000\n"
+"PO-Revision-Date: 2026-11-25 09:51+0000\n"
 "Last-Translator: william donzelli <willskymaker@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -24386,9 +24386,8 @@ msgstr "NON SICURO"
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/event/fragment_question_answer.html
-#, fuzzy
 msgid "not answered"
-msgstr "non ha risposto"
+msgstr "senza risposta"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #, fuzzy, python-format
@@ -24684,7 +24683,6 @@ msgstr "Scansione dell'ingresso: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-#, fuzzy
 msgid "Voucher code used:"
 msgstr "Codice voucher utilizzato:"
 
@@ -24730,15 +24728,13 @@ msgstr "Totale"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/order.html
-#, fuzzy
 msgid "Successful payments"
-msgstr "Solo pagamenti con successo"
+msgstr "Pagamenti riusciti"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/presale/templates/pretixpresale/event/order.html
-#, fuzzy
 msgid "Pending total"
-msgstr "Ordini pendenti"
+msgstr "Totale in sospeso"
 
 #: pretix/control/templates/pretixcontrol/order/index.html
 #: pretix/control/templates/pretixcontrol/search/payments.html
@@ -25124,9 +25120,8 @@ msgstr "Invia"
 #: pretix/control/templates/pretixcontrol/order/transactions.html
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html
-#, fuzzy
 msgid "Transaction history"
-msgstr "Modifica dettagli"
+msgstr "Cronologia delle transazioni"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html
 #, fuzzy
@@ -25615,9 +25610,8 @@ msgstr "Ordine confermato"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html
-#, fuzzy
 msgid "Canceled (paid fee)"
-msgstr "Annullato (a pagamento)"
+msgstr "Annullato (commissione pagata)"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html
 #: pretix/control/templates/pretixcontrol/orders/import_start.html
@@ -25884,7 +25878,6 @@ msgstr "I rimborsi non sono attualmente disponibili."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
-#, fuzzy
 msgid "Actions"
 msgstr "Azioni"
 
@@ -25988,7 +25981,6 @@ msgstr "Anonimizza"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
-#, fuzzy
 msgid "Usages"
 msgstr "Usi"
 
