@@ -21,7 +21,6 @@
 #
 from datetime import timedelta
 
-from celery.result import AsyncResult
 from django.conf import settings
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -33,12 +32,14 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
+from pretix.api.auth.utils import get_session_key_for_api_request
 from pretix.api.serializers.shredders import (
     JobRunSerializer, ShredderSerializer,
 )
 from pretix.base.models import CachedFile
 from pretix.base.services.shredder import export, shred
 from pretix.base.shredder import shred_constraints
+from pretix.helpers.celery import get_task_result
 from pretix.helpers.http import ChunkBasedFileResponse
 
 
@@ -68,8 +69,14 @@ class ShreddersMixin:
         cf = get_object_or_404(
             CachedFile,
             id=kwargs['cfid'],
-            session_key=f'api-shredder-{str(type(self.request.user or self.request.auth))}-{(self.request.user or self.request.auth).pk}'
         )
+        if cf.session_key == "api-shredder-<class 'django.contrib.auth.models.AnonymousUser'>-None":
+            # OK, backwards-compatibility of a security bug fixed 2026-10, delete this at some point, but should
+            # also be harmless because all files with this key are expired one day after deployment of this fix
+            # and no new files with this key are created
+            pass
+        elif cf.session_key != get_session_key_for_api_request(self.request, prefix='api-shredder'):
+            raise Http404()
         if cf.file:
             resp = ChunkBasedFileResponse(cf.file.file, content_type=cf.type)
             resp['Content-Disposition'] = 'attachment; filename="{}"'.format(cf.filename).encode("ascii", "ignore")
@@ -80,7 +87,7 @@ class ShreddersMixin:
                 status=status.HTTP_410_GONE
             )
 
-        res = AsyncResult(kwargs['asyncid'])
+        res = get_task_result(kwargs['asyncid'], task_name=export)
         if res.failed():
             if isinstance(res.info, dict) and res.info['exc_type'] in ('ShredError', 'ExportError'):
                 msg = res.info['exc_message']
@@ -101,7 +108,7 @@ class ShreddersMixin:
     @action(detail=False, methods=['GET'], url_name='status', url_path='status/(?P<asyncid>[^/]+)/(?P<cfid>[^/]+)')
     def status(self, *args, **kwargs):
         if settings.HAS_CELERY:
-            res = AsyncResult(kwargs['asyncid'])
+            res = get_task_result(kwargs['asyncid'], task_name=shred)
             if res.failed():
                 if isinstance(res.info, dict) and res.info['exc_type'] in ('ShredError', 'ExportError'):
                     msg = res.info['exc_message']
@@ -118,37 +125,53 @@ class ShreddersMixin:
                 )
 
         try:
-            CachedFile.objects.get(
+            cf = CachedFile.objects.get(
                 id=kwargs['cfid'],
-                session_key=f'api-shredder-{str(type(self.request.user or self.request.auth))}-{(self.request.user or self.request.auth).pk}'
             )
+            if cf.session_key == "api-shredder-<class 'django.contrib.auth.models.AnonymousUser'>-None":
+                # OK, backwards-compatibility of a security bug fixed 2026-10, delete this at some point, but should
+                # also be harmless because all files with this key are expired one day after deployment of this fix
+                # and no new files with this key are created
+                pass
+            elif cf.session_key != get_session_key_for_api_request(self.request, prefix='api-shredder'):
+                raise CachedFile.DoesNotExist()
         except CachedFile.DoesNotExist:
             return Response(
                 {'status': 'gone', 'message': 'May have succeeded or timed out'},
                 status=status.HTTP_410_GONE
             )
 
-        return Response(
-            {
-                'status': 'running' if res.state in ('PROGRESS', 'STARTED', 'SUCCESS') else 'waiting',
-            },
-            status=status.HTTP_409_CONFLICT
-        )
+        if settings.HAS_CELERY:
+            return Response(
+                {
+                    'status': 'running' if res.state in ('PROGRESS', 'STARTED', 'SUCCESS') else 'waiting',
+                },
+                status=status.HTTP_409_CONFLICT
+            )
+        else:
+            # This can't happen for clients who follow the api spec. They would need have to constructed the url themselves
+            # from a valid shredder cached file, e.g. by modifying the URL retured by `export`.
+            raise Http404()
 
     @action(detail=False, methods=['POST'], url_name='shred', url_path='shred/(?P<asyncid>[^/]+)/(?P<cfid>[^/]+)')
     def shred(self, *args, **kwargs):
         cf = get_object_or_404(
             CachedFile,
             id=kwargs['cfid'],
-            session_key=f'api-shredder-{str(type(self.request.user or self.request.auth))}-{(self.request.user or self.request.auth).pk}'
         )
+        if cf.session_key == "api-shredder-<class 'django.contrib.auth.models.AnonymousUser'>-None":
+            # OK, backwards-compatibility of a security bug fixed 2026-10, delete this at some point, but should
+            # also be harmless because all files with this key are expired one day after deployment of this fix
+            # and no new files with this key are created
+            pass
+        elif cf.session_key != get_session_key_for_api_request(self.request, prefix='api-shredder'):
+            raise Http404()
         if cf.file:
             async_result = self.do_shred(cf)
-            url_kwargs = {
+            url_kwargs = self.kwargs | {
                 'asyncid': str(async_result.id),
                 'cfid': str(cf.id),
             }
-            url_kwargs.update(self.kwargs)
             return Response({
                 'status': reverse('api-v1:shredders-status', kwargs=url_kwargs, request=self.request),
             }, status=status.HTTP_202_ACCEPTED)
@@ -158,7 +181,7 @@ class ShreddersMixin:
                 status=status.HTTP_410_GONE
             )
 
-        res = AsyncResult(kwargs['asyncid'])
+        res = get_task_result(kwargs['asyncid'], task_name=export)
         if res.failed():
             if isinstance(res.info, dict) and res.info['exc_type'] in ('ShredError', 'ExportError'):
                 msg = res.info['exc_message']
@@ -184,7 +207,7 @@ class ShreddersMixin:
         cf = CachedFile(web_download=False)
         cf.date = now()
         cf.expires = now() + timedelta(hours=2)
-        cf.session_key = f'api-shredder-{str(type(self.request.user or self.request.auth))}-{(self.request.user or self.request.auth).pk}'
+        cf.session_key = get_session_key_for_api_request(self.request, prefix='api-shredder')
         cf.save()
         d = serializer.data
         for k, v in d.items():
@@ -224,7 +247,7 @@ class EventShreddersViewSet(ShreddersMixin, viewsets.ViewSet):
         return export.apply_async(args=(
             self.request.event.id,
             list(shredders),
-            f'api-shredder-{str(type(self.request.user or self.request.auth))}-{(self.request.user or self.request.auth).pk}',
+            get_session_key_for_api_request(self.request, prefix='api-shredder'),
             str(cf.pk)
         ))
 

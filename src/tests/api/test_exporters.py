@@ -42,7 +42,8 @@ from django.utils.timezone import now
 from rest_framework.test import APIClient
 
 from pretix.base.models import (
-    CachedFile, Event, ScheduledEventExport, ScheduledOrganizerExport, User,
+    CachedFile, Event, Organizer, ScheduledEventExport,
+    ScheduledOrganizerExport, User,
 )
 
 SAMPLE_EXPORTER_CONFIG = {
@@ -469,6 +470,22 @@ def test_event_scheduled_export_update_token(token_client, organizer, event, use
     assert created.export_form_data == {"_format": "xlsx", "date_range": "month_this", "items": []}
 
 
+@pytest.mark.django_db
+def test_event_scheduled_export_update_identifier_readonly(token_client, organizer, event, user, event_scheduled_export):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/scheduled_exports/{}/'.format(
+            organizer.slug, event.slug, event_scheduled_export.pk,
+        ),
+        data={
+            "export_identifier": "transactions",
+            "export_form_data": {"_format": "xlsx", "date_range": "month_this"},
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"export_identifier": ["export_identifier cannot be changed for existing exports."]}
+
+
 @pytest.fixture
 def org_scheduled_export(organizer, user):
     e = organizer.scheduled_exports.create(
@@ -635,6 +652,23 @@ def test_org_scheduled_export_update_token(token_client, organizer, user, org_sc
     created = organizer.scheduled_exports.get(id=resp.data["id"])
     assert created.export_form_data == {"_format": "xlsx", "date_range": "month_this", "event_date_range": "/"}
     assert created.timezone == "America/New_York"
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_update_identifier_readonly(token_client, organizer, user, org_scheduled_export):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/scheduled_exports/{}/'.format(
+            organizer.slug, org_scheduled_export.pk,
+        ),
+        data={
+            "export_identifier": "transactions",
+            "export_form_data": {"_format": "xlsx", "date_range": "month_this"},
+            "timezone": "America/New_York"
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"export_identifier": ["export_identifier cannot be changed for existing exports."]}
 
 
 @pytest.mark.django_db
@@ -885,6 +919,10 @@ def test_organizer_edit_restrictions(client, event, organizer, user, team):
     team1.limit_events.add(event1)
     team1.members.add(user)
 
+    organizer2 = Organizer.objects.create(name='Dummy2', slug='dummy2')
+    org2_team = organizer2.teams.create(all_events=True, all_event_permissions=True, name="Admins")
+    org2_team.members.add(user)
+
     t = team.tokens.create(name='Foo')
     client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
 
@@ -1010,6 +1048,87 @@ def _get_and_patch_event_export(client, scheduled, can_see=True, can_edit=True):
     else:
         assert response.status_code > 400 or (response.status_code == 400 and "export_identifier" in response.data)
     return True
+
+
+@pytest.mark.django_db(transaction=True)
+def test_organizer_edit_restrictions_event_expansion(client, event, organizer, user, team):
+    # This tests the prevention of a possible privilege escalation where user A creates a scheduled export and
+    # user B has settings permission (= they can see the export configuration), and enough permission
+    # to run the export themselves, but not enough permission to add events. Without this check, user B could
+    # modify the export and add themselves as a recipient. Thereby, user B would gain access to data they can't have.
+    user1_client = APIClient()
+    user1_client.force_authenticate(user=user)
+    user2 = User.objects.create_user("dummy2@dummy.dummy", "dummy")
+    user2_client = APIClient()
+    user2_client.force_authenticate(user=user2)
+
+    event1 = event
+    event2 = Event.objects.create(
+        organizer=organizer, name="Dummy", slug="dummy2",
+        date_from=now(), plugins="pretix.plugins.banktransfer,pretix.plugins.stripe,tests.testdummy"
+    )
+
+    # Team 1 has access only to one event
+    team1 = team
+    team1.all_organizer_permissions = False
+    team1.all_event_permissions = False
+    team1.all_events = False
+    team1.limit_organizer_permissions = {"organizer.settings.general:write": True}
+    team1.limit_event_permissions = {"event.orders:read": True, "event.settings.general:write": True}
+    team1.save()
+    team1.limit_events.add(event1)
+    team1.members.add(user)
+
+    # Team 2 has full admin access
+    team2 = organizer.teams.create(
+        all_organizer_permissions=True, all_event_permissions=True, all_events=True,
+    )
+    team2.members.add(user2)
+
+    s1 = ScheduledOrganizerExport.objects.create(
+        organizer=organizer,
+        owner=user2,
+        export_identifier="dummy_orders",
+        export_form_data={"all_events": False, "events": [event1.pk]},
+        mail_subject="Test",
+        mail_template="Test",
+        locale="en",
+        schedule_rrule="DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO",
+        schedule_rrule_time=time(2, 30, 0)
+    )
+    # User 1 can change …
+    response = user1_client.patch(
+        '/api/v1/organizers/{}/scheduled_exports/{}/'.format("dummy", s1.pk),
+        data={"mail_subject": "Hello"},
+        format='json',
+    )
+    assert response.status_code == 200
+    # … but not expand scope
+    response = user1_client.patch(
+        '/api/v1/organizers/{}/scheduled_exports/{}/'.format("dummy", s1.pk),
+        data={"export_form_data": {"all_events": False, "events": [event1.slug, event2.slug], "_format": "xlsx", "date_range": "year_this", "items": []}},
+        format='json',
+    )
+    assert response.status_code == 400
+    response = user1_client.patch(
+        '/api/v1/organizers/{}/scheduled_exports/{}/'.format("dummy", s1.pk),
+        data={"export_form_data": {"all_events": True, "events": [], "_format": "xlsx", "date_range": "year_this", "items": []}},
+        format='json',
+    )
+    assert response.status_code == 403
+    # User 2 can expand
+    response = user2_client.patch(
+        '/api/v1/organizers/{}/scheduled_exports/{}/'.format("dummy", s1.pk),
+        data={"export_form_data": {"all_events": True, "events": [], "_format": "xlsx", "date_range": "year_this", "items": []}},
+        format='json',
+    )
+    assert response.status_code == 200
+    response = user2_client.patch(
+        '/api/v1/organizers/{}/scheduled_exports/{}/'.format("dummy", s1.pk),
+        data={"export_form_data": {"all_events": False, "events": [event1.slug, event2.slug], "_format": "xlsx", "date_range": "year_this", "items": []}},
+        format='json',
+    )
+    assert response.status_code == 200
 
 
 @pytest.mark.django_db(transaction=True)

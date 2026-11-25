@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 07:26+0000\n"
+"POT-Creation-Date: 2026-10-28 10:48+0000\n"
 "PO-Revision-Date: 2026-10-02 05:00+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
-"Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
-"\n"
+"Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/"
+">\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -199,11 +199,12 @@ msgid "Allowed Post Logout URIs list, space separated"
 msgstr "รายการ Post Logout URI ที่อนุญาต (แยกด้วยการเว้นวรรค)"
 
 #: pretix/api/models.py pretix/base/models/customers.py
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
 #: pretix/plugins/paypal2/payment.py
 msgid "Client ID"
 msgstr "Client ID"
 
-#: pretix/api/models.py
+#: pretix/api/models.py pretix/control/views/organizer.py
 msgid "Client secret"
 msgstr "Client secret"
 
@@ -4012,8 +4013,7 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "To verify your email address {email} on {instance}, use the following code:"
-msgstr ""
-"หากต้องการยืนยันที่อยู่อีเมลของคุณ {email} บน {instance} โปรดใช้รหัสต่อไปนี้:"
+msgstr "หากต้องการยืนยันที่อยู่อีเมลของคุณ {email} บน {instance} โปรดใช้รหัสต่อไปนี้:"
 
 #: pretix/base/models/auth.py
 msgid "Your confirmation code"
@@ -4539,8 +4539,8 @@ msgid ""
 "This will be used to let users know if the event is in a different timezone, "
 "and to let us calculate the local time of a user."
 msgstr ""
-"ข้อความนี้จะถูกใช้แจ้งให้ผู้ใช้ทราบหากอีเวนต์อยู่ในเขตเวลาที่แตกต่างกัน และช่วยให้เราสามารถคำนวณเ"
-"วลาท้องถิ่นของผู้ใช้ได้"
+"ข้อความนี้จะถูกใช้แจ้งให้ผู้ใช้ทราบหากอีเวนต์อยู่ในเขตเวลาที่แตกต่างกัน "
+"และช่วยให้เราสามารถคำนวณเวลาท้องถิ่นของผู้ใช้ได้"
 
 #: pretix/base/models/event.py pretix/base/models/organizer.py
 #: pretix/control/navigation.py
@@ -4961,8 +4961,7 @@ msgstr "ต้องใช้สื่อใหม่ที่ไม่เคย
 
 #: pretix/base/models/items.py
 msgid "Require an existing medium to be reused, replacing any previous tickets"
-msgstr ""
-"กำหนดให้ใช้สื่อเดิมที่มีอยู่เพื่อนำกลับมาใช้ใหม่ โดยจะแทนที่ตั๋วก่อนหน้าทั้งหมด"
+msgstr "กำหนดให้ใช้สื่อเดิมที่มีอยู่เพื่อนำกลับมาใช้ใหม่ โดยจะแทนที่ตั๋วก่อนหน้าทั้งหมด"
 
 #: pretix/base/models/items.py
 msgid ""
@@ -4972,15 +4971,13 @@ msgstr "กำหนดให้ใช้สื่อเดิมที่มี
 
 #: pretix/base/models/items.py
 msgid "Require an existing medium to be reused, adding to any previous tickets"
-msgstr ""
-"กำหนดให้ใช้สื่อเดิมที่มีอยู่เพื่อนำกลับมาใช้ใหม่ โดยจะเพิ่มเข้าไปยังตั๋วก่อนหน้าที่มีอยู่"
+msgstr "กำหนดให้ใช้สื่อเดิมที่มีอยู่เพื่อนำกลับมาใช้ใหม่ โดยจะเพิ่มเข้าไปยังตั๋วก่อนหน้าที่มีอยู่"
 
 #: pretix/base/models/items.py
 msgid ""
 "Require either an existing or a new medium to be used, adding to any "
 "previous tickets"
-msgstr ""
-"กำหนดให้ใช้สื่อเดิมที่มีอยู่หรือสื่อใหม่ โดยจะเพิ่มเข้าไปยังตั๋วก่อนหน้าที่มีอยู่"
+msgstr "กำหนดให้ใช้สื่อเดิมที่มีอยู่หรือสื่อใหม่ โดยจะเพิ่มเข้าไปยังตั๋วก่อนหน้าที่มีอยู่"
 
 #: pretix/base/models/items.py
 msgid "Category"
@@ -5305,10 +5302,10 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
-"หากต้องการบันทึกสินค้านี้ลงในสื่อทางกายภาพที่ใช้ซ้ำได้ คุณสามารถแนบนโยบายสื่อได้ ซึ่งไม่จำเป็นสำหรับ"
-"ตั๋วทั่วไปที่ใช้บาร์โค้ดแบบใช้ครั้งเดียว แต่จะใช้สำหรับสินค้าอย่างตั๋วปีที่ต่ออายุได้หรือสายรัดข้อมือบัตรของข"
-"วัญแบบเติมเงินได้เท่านั้น นี่เป็นฟีเจอร์ขั้นสูงที่ต้องมีการตั้งค่าการออกตั๋วและการพิมพ์ที่เฉพาะเจาะจงร่วมด้"
-"วย"
+"หากต้องการบันทึกสินค้านี้ลงในสื่อทางกายภาพที่ใช้ซ้ำได้ คุณสามารถแนบนโยบายสื่อได้ "
+"ซึ่งไม่จำเป็นสำหรับตั๋วทั่วไปที่ใช้บาร์โค้ดแบบใช้ครั้งเดียว "
+"แต่จะใช้สำหรับสินค้าอย่างตั๋วปีที่ต่ออายุได้หรือสายรัดข้อมือบัตรของขวัญแบบเติมเงินได้เท่านั้น "
+"นี่เป็นฟีเจอร์ขั้นสูงที่ต้องมีการตั้งค่าการออกตั๋วและการพิมพ์ที่เฉพาะเจาะจงร่วมด้วย"
 
 #: pretix/base/models/items.py
 msgid "Reusable media type"
@@ -7291,6 +7288,18 @@ msgid "This gift card was used in the meantime. Please try again."
 msgstr "บัตรของขวัญนี้ถูกใช้งานไปแล้วในระหว่างที่ท่านทำรายการ โปรดลองอีกครั้ง"
 
 #: pretix/base/payment.py
+#, fuzzy
+#| msgid "Gift card code"
+msgid "Gift card not found."
+msgstr "รหัสบัตรของขวัญ"
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid "Only test gift cards can be used in test mode."
+msgid "Only test gift card can be used in test mode and vice versa."
+msgstr "เฉพาะบัตรของขวัญสำหรับทดสอบเท่านั้นที่สามารถใช้ในโหมดทดสอบได้"
+
+#: pretix/base/payment.py
 msgid ""
 "This payment provider exists for historical purposes only and is no longer "
 "usable."
@@ -8145,8 +8154,8 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
-"สามารถใช้โค้ดส่วนลด “%(voucher)s” ได้ก็ต่อเมื่อเลือกสินค้าที่ร่วมรายการอย่างน้อย %(number)s ร"
-"ายการ"
+"สามารถใช้โค้ดส่วนลด “%(voucher)s” ได้ก็ต่อเมื่อเลือกสินค้าที่ร่วมรายการอย่างน้อย %(number)s "
+"รายการ"
 
 #: pretix/base/services/cart.py
 #, python-format
@@ -8159,8 +8168,8 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
-"โค้ดส่วนลด “%(voucher)s” ใช้ได้เมื่อเลือกสินค้าที่เข้าเงื่อนไขอย่างน้อย %(number)s รายการ เรา"
-"จึงนำบางรายการออกจากตะกร้าของคุณ เนื่องจากไม่สามารถสั่งซื้อภายใต้เงื่อนไขนี้ได้อีก"
+"โค้ดส่วนลด “%(voucher)s” ใช้ได้เมื่อเลือกสินค้าที่เข้าเงื่อนไขอย่างน้อย %(number)s รายการ "
+"เราจึงนำบางรายการออกจากตะกร้าของคุณ เนื่องจากไม่สามารถสั่งซื้อภายใต้เงื่อนไขนี้ได้อีก"
 
 #: pretix/base/services/cart.py
 msgid ""
@@ -9348,8 +9357,8 @@ msgid ""
 "physical media such as wristbands or chip cards that may be reused for "
 "different tickets or gift cards later."
 msgstr ""
-"ฟีเจอร์สื่อบันทึกข้อมูลที่ใช้ซ้ำได้ช่วยให้คุณสามารถเชื่อมต่อตั๋วและบัตรของขวัญเข้ากับสื่อทางกายภาพ เช่น ส"
-"ายรัดข้อมือหรือบัตรชิปการ์ด ซึ่งสามารถนำกลับมาใช้ใหม่กับตั๋วใบอื่นได้ในภายหลัง"
+"ฟีเจอร์สื่อบันทึกข้อมูลที่ใช้ซ้ำได้ช่วยให้คุณสามารถเชื่อมต่อตั๋วและบัตรของขวัญเข้ากับสื่อทางกายภาพ เช่น "
+"สายรัดข้อมือหรือบัตรชิปการ์ด ซึ่งสามารถนำกลับมาใช้ใหม่กับตั๋วใบอื่นได้ในภายหลัง"
 
 #: pretix/base/settings.py
 msgid "Enforce the usage of issued reusable media for check-in"
@@ -9979,8 +9988,9 @@ msgid ""
 "their order without selecting a payment method. This is useful whenever "
 "orders are not created by the same person who is making the payment."
 msgstr ""
-"หากอนุญาตให้ชำระเงินภายหลังในช่องทางการขาย ลูกค้าจะสามารถทำรายการสั่งซื้อจนเสร็จสิ้นได้โดยไม่"
-"ต้องเลือกวิธีการชำระเงิน ซึ่งมีประโยชน์อย่างยิ่งเมื่อผู้สร้างคำสั่งซื้อกับผู้ชำระเงินเป็นคนละคนกัน"
+"หากอนุญาตให้ชำระเงินภายหลังในช่องทางการขาย "
+"ลูกค้าจะสามารถทำรายการสั่งซื้อจนเสร็จสิ้นได้โดยไม่ต้องเลือกวิธีการชำระเงิน "
+"ซึ่งมีประโยชน์อย่างยิ่งเมื่อผู้สร้างคำสั่งซื้อกับผู้ชำระเงินเป็นคนละคนกัน"
 
 #: pretix/base/settings.py
 msgid "Show start date"
@@ -15755,8 +15765,11 @@ msgid "Phone"
 msgstr "เบอร์โทรศัพท์"
 
 #: pretix/control/forms/organizer.py
+#, fuzzy
+#| msgctxt "sso_oidc"
+#| msgid "Base URL"
 msgctxt "sso_oidc"
-msgid "Base URL"
+msgid "Base URL / issuer"
 msgstr "URL พื้นฐาน (Base URL)"
 
 #: pretix/control/forms/organizer.py
@@ -15828,9 +15841,22 @@ msgstr ""
 "พารามิเตอร์การคิวรีเสริม ที่จะถูกเพิ่มเข้าไปในการเรียกใช้ Authorization endpoint "
 "ระบุในรูปแบบ: {example}"
 
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgctxt "sso_oidc"
+#| msgid "Base URL"
+msgid "Base URL / issuer"
+msgstr "URL พื้นฐาน (Base URL)"
+
 #: pretix/control/forms/organizer.py
 msgid "Invalidate old client secret and generate a new one"
 msgstr "ยกเลิก Client secret เดิมและสร้างใหม่"
+
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgid "will be retried"
+msgid "(will be generated)"
+msgstr "จะลองใหม่อีกครั้ง"
 
 #: pretix/control/forms/organizer.py
 msgid "Organizer short name"
@@ -17041,7 +17067,7 @@ msgstr "ผู้ให้บริการ SSO ถูกเปลี่ยน�
 msgid "The SSO provider has been deleted."
 msgstr "ลบผู้ให้บริการ SSO เรียบร้อยแล้ว"
 
-#: pretix/control/logdisplay.py
+#: pretix/control/logdisplay.py pretix/control/views/organizer.py
 msgid "The SSO client has been created."
 msgstr "สร้าง SSO Client เรียบร้อยแล้ว"
 
@@ -17195,8 +17221,8 @@ msgstr "สร้างรหัสฉุกเฉินสำหรับกา
 #: pretix/control/logdisplay.py
 msgid "Drift and throttle values for two-factor devices have been reset."
 msgstr ""
-"ค่าความคลาดเคลื่อนของเวลา (Drift) และขีดจำกัดการลองใหม่ (Throttle) สำหรับอุปกรณ์ยืนยันตัว"
-"ตนสองขั้นตอนถูกรีเซ็ตแล้ว"
+"ค่าความคลาดเคลื่อนของเวลา (Drift) และขีดจำกัดการลองใหม่ (Throttle) "
+"สำหรับอุปกรณ์ยืนยันตัวตนสองขั้นตอนถูกรีเซ็ตแล้ว"
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -20892,8 +20918,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
 msgid ""
 "We strongly recommend against using short forms of more than 16 characters."
-msgstr ""
-"เราขอแนะนำอย่างยิ่งให้หลีกเลี่ยงการใช้รูปแบบย่อที่มีความยาวมากกว่า 16 ตัวอักษร"
+msgstr "เราขอแนะนำอย่างยิ่งให้หลีกเลี่ยงการใช้รูปแบบย่อที่มีความยาวมากกว่า 16 ตัวอักษร"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html
 msgid "Display settings"
@@ -25016,8 +25041,32 @@ msgstr "SSO client:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
-msgid "Create a new SSO client"
+#, fuzzy
+#| msgid "Create a new SSO client"
+msgid "Create credentials for a new SSO client"
 msgstr "สร้าง SSO client ใหม่"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+msgid ""
+"After submitting this form, client credentials for your SSO client will be "
+"generated."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a "
+"href=\"%(url)s\">Using pretix as an SSO provider with external SSO clients</"
+"a>."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+msgid ""
+"\n"
+"    \t\"Login with pretix\" in external systems\n"
+"    "
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 msgid ""
@@ -25041,18 +25090,37 @@ msgid "This SSO provider cannot be deleted since it has already been used."
 msgstr "ไม่สามารถลบผู้ให้บริการ SSO นี้ได้ เนื่องจากถูกใช้งานในระบบไปแล้ว"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
-msgid "SSO provider:"
-msgstr "ผู้ให้บริการ SSO:"
+#, fuzzy
+#| msgid "Delete SSO provider:"
+msgid "External SSO provider:"
+msgstr "ลบผู้ให้บริการ SSO:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
-msgid "Create a new SSO provider"
+#, fuzzy
+#| msgid "Create a new SSO provider"
+msgid "Connect to an external SSO provider"
 msgstr "สร้างผู้ให้บริการ SSO ใหม่"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a href=\"%(url)s\" "
+"target=\"_blank\">Using pretix as an SSO client</a>."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 msgctxt "sso"
 msgid "Redirection URL"
 msgstr "URL สำหรับเปลี่ยนเส้นทาง (Redirection URL)"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+msgid ""
+"\n"
+"    \tConnect to an external login provider\n"
+"    "
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 msgid ""
@@ -25374,8 +25442,8 @@ msgid ""
 "You can upload a background PDF and then use this tool to place texts and a "
 "QR code on the ticket."
 msgstr ""
-"เครื่องมือแก้ไขนี้ช่วยให้คุณสามารถออกแบบตั๋ว PDF สำหรับงานของคุณได้ คุณสามารถอัปโหลดไฟล์ PDF พื้"
-"นหลัง แล้วใช้เครื่องมือนี้จัดวางข้อความและคิวอาร์โค้ดลงบนตั๋ว"
+"เครื่องมือแก้ไขนี้ช่วยให้คุณสามารถออกแบบตั๋ว PDF สำหรับงานของคุณได้ คุณสามารถอัปโหลดไฟล์ PDF "
+"พื้นหลัง แล้วใช้เครื่องมือนี้จัดวางข้อความและคิวอาร์โค้ดลงบนตั๋ว"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid ""
@@ -25385,8 +25453,8 @@ msgid ""
 "preview."
 msgstr ""
 "โปรดทราบว่าเครื่องมือแก้ไขนี้แสดงผลการแสดงตัวอย่างแบบคร่าวๆ เท่านั้น รายละเอียดบางอย่าง เช่น "
-"การแสดงผลตัวอักษร อาจแตกต่างไปเล็กน้อยในตั๋วฉบับจริง คุณสามารถคลิกปุ่ม \"แสดงตัวอย่าง\" ทางด้"
-"านขวาเพื่อดูผลลัพธ์ที่แม่นยำยิ่งขึ้น"
+"การแสดงผลตัวอักษร อาจแตกต่างไปเล็กน้อยในตั๋วฉบับจริง คุณสามารถคลิกปุ่ม \"แสดงตัวอย่าง\" "
+"ทางด้านขวาเพื่อดูผลลัพธ์ที่แม่นยำยิ่งขึ้น"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid ""
@@ -25395,17 +25463,17 @@ msgid ""
 "might have problems displaying your background PDF or loading the correct "
 "fonts."
 msgstr ""
-"เครื่องมือแก้ไขนี้ผ่านการทดสอบกับ Google Chrome, Mozilla Firefox และ Opera เวอร์ชันล่าสุด"
-"แล้ว เบราว์เซอร์อื่น โดยเฉพาะ Internet Explorer หรือ Microsoft Edge อาจมีปัญหาในการแส"
-"ดงผล PDF พื้นหลังหรือการโหลดฟอนต์ที่ถูกต้อง"
+"เครื่องมือแก้ไขนี้ผ่านการทดสอบกับ Google Chrome, Mozilla Firefox และ Opera "
+"เวอร์ชันล่าสุดแล้ว เบราว์เซอร์อื่น โดยเฉพาะ Internet Explorer หรือ Microsoft Edge "
+"อาจมีปัญหาในการแสดงผล PDF พื้นหลังหรือการโหลดฟอนต์ที่ถูกต้อง"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid ""
 "The editor requires JavaScript to work. Please enable JavaScript in your "
 "browser to continue."
 msgstr ""
-"เครื่องมือแก้ไขนี้จำเป็นต้องใช้ JavaScript ในการทำงาน โปรดเปิดใช้งาน JavaScript ในเบราว์เ"
-"ซอร์ของคุณเพื่อดำเนินการต่อ"
+"เครื่องมือแก้ไขนี้จำเป็นต้องใช้ JavaScript ในการทำงาน โปรดเปิดใช้งาน JavaScript "
+"ในเบราว์เซอร์ของคุณเพื่อดำเนินการต่อ"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Loading…"
@@ -25432,8 +25500,8 @@ msgid ""
 "You can upload a PDF to use as a custom background. The paper size will "
 "match the PDF."
 msgstr ""
-"คุณสามารถอัปโหลด PDF เพื่อใช้เป็นพื้นหลังแบบกำหนดเองได้ โดยขนาดกระดาษจะปรับตามไฟล์ PDF นั้น"
-"โดยอัตโนมัติ"
+"คุณสามารถอัปโหลด PDF เพื่อใช้เป็นพื้นหลังแบบกำหนดเองได้ โดยขนาดกระดาษจะปรับตามไฟล์ PDF "
+"นั้นโดยอัตโนมัติ"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 #, python-format
@@ -25452,8 +25520,7 @@ msgstr "หรือเลือกขนาดกระดาษแบบกำ
 msgid ""
 "To manually change the paper size, you need to create a new, empty "
 "background."
-msgstr ""
-"หากต้องการเปลี่ยนขนาดกระดาษด้วยตนเอง คุณจำเป็นต้องสร้างพื้นหลังเปล่าอันใหม่"
+msgstr "หากต้องการเปลี่ยนขนาดกระดาษด้วยตนเอง คุณจำเป็นต้องสร้างพื้นหลังเปล่าอันใหม่"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Width (mm)"
@@ -25575,9 +25642,9 @@ msgid ""
 "use pretixPRINT version %(print_version)s (or newer) or pretixSCAN Desktop "
 "version %(scan_version)s (or newer)."
 msgstr ""
-"รูปแบบนี้ใช้ฟีเจอร์ใหม่ หากคุณพิมพ์ตั๋วจากอุปกรณ์ โปรดตรวจสอบให้แน่ใจว่าได้ใช้ pretixPRINT เวอร์ชั"
-"น %(print_version)s (หรือใหม่กว่า) หรือ pretixSCAN Desktop เวอร์ชัน %(scan_version)"
-"s (หรือใหม่กว่า)"
+"รูปแบบนี้ใช้ฟีเจอร์ใหม่ หากคุณพิมพ์ตั๋วจากอุปกรณ์ โปรดตรวจสอบให้แน่ใจว่าได้ใช้ pretixPRINT "
+"เวอร์ชัน %(print_version)s (หรือใหม่กว่า) หรือ pretixSCAN Desktop เวอร์ชัน "
+"%(scan_version)s (หรือใหม่กว่า)"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html
 msgid "Available placeholders"
@@ -25592,10 +25659,11 @@ msgid ""
 "however most of them can also be empty in some cases depending on "
 "configuration."
 msgstr ""
-"คุณสามารถใช้ตัวแทนข้อความในเนื้อหาที่กำหนดเองบนตั๋วเพื่อแสดงข้อมูลเฉพาะบุคคลเพิ่มเติมได้ ตัวแทนข้อ"
-"ความที่สามารถใช้งานได้จะขึ้นอยู่กับการตั้งค่าอีเวนต์ ปลั๊กอินที่เปิดใช้งาน สินค้าที่เลือก รวมถึงข้อมูลที่ผู้ใช้"
-"นอกเหนือจากนี้กรอกเข้ามา หน้าเพจนี้จะแสดงตัวแทนข้อความทั้งหมดทางเทคนิคที่พร้อมใช้งานสำหรับอีเวน"
-"ต์ของคุณ อย่างไรก็ตาม บางส่วนอาจว่างเปล่าได้ขึ้นอยู่กับการกำหนดค่า"
+"คุณสามารถใช้ตัวแทนข้อความในเนื้อหาที่กำหนดเองบนตั๋วเพื่อแสดงข้อมูลเฉพาะบุคคลเพิ่มเติมได้ "
+"ตัวแทนข้อความที่สามารถใช้งานได้จะขึ้นอยู่กับการตั้งค่าอีเวนต์ ปลั๊กอินที่เปิดใช้งาน สินค้าที่เลือก "
+"รวมถึงข้อมูลที่ผู้ใช้นอกเหนือจากนี้กรอกเข้ามา "
+"หน้าเพจนี้จะแสดงตัวแทนข้อความทั้งหมดทางเทคนิคที่พร้อมใช้งานสำหรับอีเวนต์ของคุณ อย่างไรก็ตาม "
+"บางส่วนอาจว่างเปล่าได้ขึ้นอยู่กับการกำหนดค่า"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html
 msgid "Placeholder"
@@ -25644,8 +25712,9 @@ msgid ""
 "might be required to keep some of this data on file. You can therefore "
 "download the following file and store it in a safe place:"
 msgstr ""
-"คุณกำลังจะลบข้อมูลออกจากเซิร์ฟเวอร์อย่างถาวร แม้ว่าคุณอาจจำเป็นต้องเก็บรักษาข้อมูลบางส่วนนี้ไว้ตาม"
-"กฎหมายหรือข้อกำหนด คุณจึงสามารถดาวน์โหลดไฟล์ต่อไปนี้เพื่อจัดเก็บไว้ในที่ปลอดภัยได้:"
+"คุณกำลังจะลบข้อมูลออกจากเซิร์ฟเวอร์อย่างถาวร "
+"แม้ว่าคุณอาจจำเป็นต้องเก็บรักษาข้อมูลบางส่วนนี้ไว้ตามกฎหมายหรือข้อกำหนด "
+"คุณจึงสามารถดาวน์โหลดไฟล์ต่อไปนี้เพื่อจัดเก็บไว้ในที่ปลอดภัยได้:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html
 msgid "Download data"
@@ -25663,9 +25732,9 @@ msgid ""
 "confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
-"โปรดตรวจสอบอีกครั้งว่าคุณแน่ใจอย่างยิ่งที่จะลบประเภทข้อมูลที่เลือกออกจากอีเวนต์ <strong>%"
-"(event)s</strong> เพื่อยืนยันว่าคุณต้องการดำเนินการนี้จริง โปรดพิมพ์ชื่อย่อของอีเวนต์ (\"%"
-"(slug)s\") ลงในช่องนี้:"
+"โปรดตรวจสอบอีกครั้งว่าคุณแน่ใจอย่างยิ่งที่จะลบประเภทข้อมูลที่เลือกออกจากอีเวนต์ "
+"<strong>%(event)s</strong> เพื่อยืนยันว่าคุณต้องการดำเนินการนี้จริง โปรดพิมพ์ชื่อย่อของอีเวนต์ "
+"(\"%(slug)s\") ลงในช่องนี้:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html
 msgid "Event short name"
@@ -25681,16 +25750,16 @@ msgid ""
 "a six-character code. Please enter this code here to confirm that you "
 "successfully downloaded the file."
 msgstr ""
-"ในไฟล์ที่ดาวน์โหลดมา จะมีไฟล์ข้อความชื่อ \"CONFIRM_CODE.txt\" ซึ่งบรรจุรหัส 6 หลัก โปรดกรอก"
-"รหัสดังกล่าวที่นี่เพื่อยืนยันว่าคุณได้ดาวน์โหลดไฟล์เรียบร้อยแล้ว"
+"ในไฟล์ที่ดาวน์โหลดมา จะมีไฟล์ข้อความชื่อ \"CONFIRM_CODE.txt\" ซึ่งบรรจุรหัส 6 หลัก "
+"โปรดกรอกรหัสดังกล่าวที่นี่เพื่อยืนยันว่าคุณได้ดาวน์โหลดไฟล์เรียบร้อยแล้ว"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html
 msgid ""
 "Depending on the amount of data in your event, the following step may take a "
 "while to complete. We will inform you via email once it has been completed."
 msgstr ""
-"ขึ้นอยู่กับปริมาณข้อมูลในอีเวนต์ของคุณ ขั้นตอนถัดไปอาจใช้เวลาสักครู่ ระบบจะแจ้งให้คุณทราบทางอีเมลเมื่"
-"อการดำเนินการเสร็จสมบูรณ์"
+"ขึ้นอยู่กับปริมาณข้อมูลในอีเวนต์ของคุณ ขั้นตอนถัดไปอาจใช้เวลาสักครู่ "
+"ระบบจะแจ้งให้คุณทราบทางอีเมลเมื่อการดำเนินการเสร็จสมบูรณ์"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html
 msgid ""
@@ -25700,18 +25769,18 @@ msgid ""
 "will be removed from the server's database. The data might still exist in "
 "backups for a limited period of time."
 msgstr ""
-"ฟีเจอร์นี้ช่วยให้คุณสามารถลบข้อมูลส่วนบุคคลออกจากอีเวนต์นี้ได้ โดยเริ่มจากเลือกประเภทข้อมูลที่ต้องการ"
-"ทำลาย จากนั้นคุณสามารถดาวน์โหลดข้อมูลที่ได้รับผลกระทบ และหลังจากยืนยันการดาวน์โหลดแล้ว ข้อมูลจ"
-"ะถูกลบออกจากฐานข้อมูลของเซิร์ฟเวอร์ ทั้งนี้ ข้อมูลอาจยังคงอยู่ในไฟล์สำรองข้อมูล (Backup) ในช่วงร"
-"ะยะเวลาหนึ่ง"
+"ฟีเจอร์นี้ช่วยให้คุณสามารถลบข้อมูลส่วนบุคคลออกจากอีเวนต์นี้ได้ "
+"โดยเริ่มจากเลือกประเภทข้อมูลที่ต้องการทำลาย จากนั้นคุณสามารถดาวน์โหลดข้อมูลที่ได้รับผลกระทบ "
+"และหลังจากยืนยันการดาวน์โหลดแล้ว ข้อมูลจะถูกลบออกจากฐานข้อมูลของเซิร์ฟเวอร์ ทั้งนี้ "
+"ข้อมูลอาจยังคงอยู่ในไฟล์สำรองข้อมูล (Backup) ในช่วงระยะเวลาหนึ่ง"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html
 msgid ""
 "Using this will not remove the orders for your event, it just scrubs them of "
 "data that can be linked to individual persons."
 msgstr ""
-"การใช้ฟีเจอร์นี้จะไม่ลบคำสั่งซื้อออกจากอีเวนต์ของคุณ แต่จะเพียงแค่ลบข้อมูลที่สามารถเชื่อมโยงถึงตัวบุคค"
-"ลออกเท่านั้น"
+"การใช้ฟีเจอร์นี้จะไม่ลบคำสั่งซื้อออกจากอีเวนต์ของคุณ "
+"แต่จะเพียงแค่ลบข้อมูลที่สามารถเชื่อมโยงถึงตัวบุคคลออกเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html
 msgid ""
@@ -25719,9 +25788,9 @@ msgid ""
 "the affected data in your legislation, e.g. for reasons of taxation. In many "
 "countries, you need to keep some data in the live system in case of an audit."
 msgstr ""
-"คุณมีหน้าที่รับผิดชอบในการตรวจสอบด้วยตนเองว่าข้อกำหนดทางกฎหมายของคุณอนุญาตให้ลบข้อมูลที่ได้รับผล"
-"กระทบได้หรือไม่ (เช่น เหตุผลทางภาษี) ในหลายประเทศ คุณจำเป็นต้องรักษาข้อมูลบางส่วนไว้ในระบบเ"
-"พื่อรองรับการตรวจสอบบัญชี/ภาษี"
+"คุณมีหน้าที่รับผิดชอบในการตรวจสอบด้วยตนเองว่าข้อกำหนดทางกฎหมายของคุณอนุญาตให้ลบข้อมูลที่ได้รับผลกระทบได้หรือไม่ "
+"(เช่น เหตุผลทางภาษี) ในหลายประเทศ "
+"คุณจำเป็นต้องรักษาข้อมูลบางส่วนไว้ในระบบเพื่อรองรับการตรวจสอบบัญชี/ภาษี"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html
 msgid ""
@@ -25729,9 +25798,9 @@ msgid ""
 "to store it offline. Some kinds of data (such as some payment information) "
 "as well as historical log data cannot be downloaded at the moment."
 msgstr ""
-"สำหรับข้อมูลส่วนใหญ่ คุณจะสามารถดาวน์โหลดข้อมูลบางส่วนเพื่อจัดเก็บแบบออฟไลน์ได้ อย่างไรก็ตาม ข้อ"
-"มูลบางประเภท (เช่น ข้อมูลการชำระเงินบางส่วน) รวมถึงข้อมูลประวัติปักษ์บันทึก (Log) ไม่สามารถดา"
-"วน์โหลดได้ในขณะนี้"
+"สำหรับข้อมูลส่วนใหญ่ คุณจะสามารถดาวน์โหลดข้อมูลบางส่วนเพื่อจัดเก็บแบบออฟไลน์ได้ อย่างไรก็ตาม "
+"ข้อมูลบางประเภท (เช่น ข้อมูลการชำระเงินบางส่วน) รวมถึงข้อมูลประวัติปักษ์บันทึก (Log) "
+"ไม่สามารถดาวน์โหลดได้ในขณะนี้"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html
 msgid "Data selection"
@@ -25741,8 +25810,7 @@ msgstr "การเลือกข้อมูล"
 msgid ""
 "We recommend not to remove this data because you might need it in case of a "
 "tax audit."
-msgstr ""
-"ขอแนะนำให้ไม่ลบข้อมูลนี้ เนื่องจากคุณอาจจำเป็นต้องใช้ในกรณีที่มีการตรวจสอบภาษี"
+msgstr "ขอแนะนำให้ไม่ลบข้อมูลนี้ เนื่องจากคุณอาจจำเป็นต้องใช้ในกรณีที่มีการตรวจสอบภาษี"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 msgctxt "subevent"
@@ -26018,8 +26086,8 @@ msgid ""
 "Use a hardware token like the Yubikey, or other biometric authentication "
 "like fingerprint or face recognition."
 msgstr ""
-"ใช้ฮาร์ดแวร์โทเค็น เช่น YubiKey หรือการยืนยันตัวตนด้วยข้อมูลชีวมิติอื่นๆ เช่น สแกนลายนิ้วมือหรือการ"
-"จดจำใบหน้า"
+"ใช้ฮาร์ดแวร์โทเค็น เช่น YubiKey หรือการยืนยันตัวตนด้วยข้อมูลชีวมิติอื่นๆ เช่น "
+"สแกนลายนิ้วมือหรือการจดจำใบหน้า"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html
 msgid "To set up this device, please follow the following steps:"
@@ -26055,13 +26123,11 @@ msgstr "ใช้ตัวเลือก \"ป้อนคีย์รหัส
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html
 msgid "In \"Account name\", type your login name for pretix."
-msgstr ""
-"ในช่อง \"ชื่อบัญชี\" (Account name) ให้พิมพ์ชื่อเข้าใช้ระบบ pretix ของคุณ"
+msgstr "ในช่อง \"ชื่อบัญชี\" (Account name) ให้พิมพ์ชื่อเข้าใช้ระบบ pretix ของคุณ"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html
 msgid "In \"Secret\"/\"Account Key\", enter the following code:"
-msgstr ""
-"ในช่อง \"รหัสลับ\" (Secret) / \"คีย์บัญชี\" (Account Key) ให้กรอกรหัสต่อไปนี้:"
+msgstr "ในช่อง \"รหัสลับ\" (Secret) / \"คีย์บัญชี\" (Account Key) ให้กรอกรหัสต่อไปนี้:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html
 msgid "copy"
@@ -26088,8 +26154,8 @@ msgid ""
 "Please connect your WebAuthn device. If it has a button, touch it now. You "
 "might have to unplug the device and plug it back in again."
 msgstr ""
-"โปรดเชื่อมต่ออุปกรณ์ WebAuthn ของคุณ หากอุปกรณ์มีปุ่ม ให้กดปุ่มทันที คุณอาจจำเป็นต้องถอดอุปกรณ์ออก"
-"แล้วเสียบใหม่อีกครั้ง"
+"โปรดเชื่อมต่ออุปกรณ์ WebAuthn ของคุณ หากอุปกรณ์มีปุ่ม ให้กดปุ่มทันที "
+"คุณอาจจำเป็นต้องถอดอุปกรณ์ออกแล้วเสียบใหม่อีกครั้ง"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_webauthn.html
 msgid "Device registration failed."
@@ -26140,16 +26206,15 @@ msgstr "คุณต้องการเปิดใช้งานการย
 msgid ""
 "You will no longer be able to log in to pretix without one of your "
 "configured devices."
-msgstr ""
-"คุณจะไม่สามารถเข้าสู่ระบบ pretix ได้หากไม่มีอุปกรณ์ชิ้นใดชิ้นหนึ่งที่คุณตั้งค่าไว้"
+msgstr "คุณจะไม่สามารถเข้าสู่ระบบ pretix ได้หากไม่มีอุปกรณ์ชิ้นใดชิ้นหนึ่งที่คุณตั้งค่าไว้"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html
 msgid ""
 "Please make sure to print out or copy the emergency tokens and store them in "
 "a safe place."
 msgstr ""
-"โปรดตรวจสอบให้แน่ใจว่าได้พิมพ์หรือคัดลอกรหัสฉุกเฉิน (Emergency tokens) และจัดเก็บไว้ในที่ปลอด"
-"ภัย"
+"โปรดตรวจสอบให้แน่ใจว่าได้พิมพ์หรือคัดลอกรหัสฉุกเฉิน (Emergency tokens) "
+"และจัดเก็บไว้ในที่ปลอดภัย"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html
@@ -26183,9 +26248,10 @@ msgid ""
 "but also an additional token that is generated e.g. by an app on your "
 "smartphone or a hardware token generator and that changes on a regular basis."
 msgstr ""
-"การยืนยันตัวตนสองปัจจัยเป็นวิธีเพิ่มความปลอดภัยให้กับบัญชีของคุณ หากคุณเปิดใช้งาน คุณจะไม่เพียงแค่ต้อ"
-"งใช้รหัสผ่านในการเข้าสู่ระบบเท่านั้น แต่ยังต้องใช้รหัสโทเค็นเพิ่มเติมที่สร้างขึ้นจากแอปพลิเคชันบนสมาร์ต"
-"โฟนหรืออุปกรณ์สร้างโทเค็นฮาร์ดแวร์ ซึ่งจะเปลี่ยนรหัสเป็นประจำทุกๆ ช่วงเวลา"
+"การยืนยันตัวตนสองปัจจัยเป็นวิธีเพิ่มความปลอดภัยให้กับบัญชีของคุณ หากคุณเปิดใช้งาน "
+"คุณจะไม่เพียงแค่ต้องใช้รหัสผ่านในการเข้าสู่ระบบเท่านั้น "
+"แต่ยังต้องใช้รหัสโทเค็นเพิ่มเติมที่สร้างขึ้นจากแอปพลิเคชันบนสมาร์ตโฟนหรืออุปกรณ์สร้างโทเค็นฮาร์ดแวร์ "
+"ซึ่งจะเปลี่ยนรหัสเป็นประจำทุกๆ ช่วงเวลา"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html
 msgid "Obligatory usage of two-factor authentication"
@@ -26203,8 +26269,7 @@ msgstr "ในฐานะผู้ดูแลระบบ คุณจำเ�
 msgid ""
 "You are part of one or more organizer teams that require you to use two-"
 "factor authentication."
-msgstr ""
-"คุณเป็นส่วนหนึ่งของทีมผู้จัดงานอย่างน้อยหนึ่งทีมที่บังคับให้คุณต้องใช้การยืนยันตัวตนสองปัจจัย"
+msgstr "คุณเป็นส่วนหนึ่งของทีมผู้จัดงานอย่างน้อยหนึ่งทีมที่บังคับให้คุณต้องใช้การยืนยันตัวตนสองปัจจัย"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html
 msgid "Please set up at least one device below."
@@ -26234,8 +26299,7 @@ msgstr "การยืนยันตัวตนสองปัจจัยป
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html
 msgid "To enable it, you need to configure at least one device below."
-msgstr ""
-"หากต้องการเปิดใช้งาน คุณจำเป็นต้องตั้งค่าอุปกรณ์อย่างน้อยหนึ่งชิ้นด้านล่างนี้"
+msgstr "หากต้องการเปิดใช้งาน คุณจำเป็นต้องตั้งค่าอุปกรณ์อย่างน้อยหนึ่งชิ้นด้านล่างนี้"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html
 msgid "Registered devices"
@@ -26256,8 +26320,8 @@ msgid ""
 "to log in. We recommend to store them in a safe place, e.g. printed out or "
 "in a password manager. Every token can be used at most once."
 msgstr ""
-"หากคุณสูญเสียการเข้าถึงอุปกรณ์ของคุณ คุณสามารถใช้รหัสฉุกเฉินรหัสใดรหัสหนึ่งเพื่อเข้าสู่ระบบได้ ขอแนะ"
-"นำให้จัดเก็บรหัสไว้ในที่ปลอดภัย เช่น พิมพ์ลงบนกระดาษ หรือบันทึกไว้ในโปรแกรมจัดการรหัสผ่าน "
+"หากคุณสูญเสียการเข้าถึงอุปกรณ์ของคุณ คุณสามารถใช้รหัสฉุกเฉินรหัสใดรหัสหนึ่งเพื่อเข้าสู่ระบบได้ "
+"ขอแนะนำให้จัดเก็บรหัสไว้ในที่ปลอดภัย เช่น พิมพ์ลงบนกระดาษ หรือบันทึกไว้ในโปรแกรมจัดการรหัสผ่าน "
 "(Password manager) โดยแต่ละรหัสสามารถใช้งานได้สูงสุดเพียงครั้งเดียวเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html
@@ -26294,16 +26358,16 @@ msgid ""
 "This changes the email address used to login to your account, as well as "
 "where we send email notifications."
 msgstr ""
-"การดำเนินการนี้จะเปลี่ยนที่อยู่อีเมลที่ใช้เข้าสู่ระบบบัญชีของคุณ รวมถึงช่องทางที่ระบบส่งการแจ้งเตือนทาง"
-"อีเมล"
+"การดำเนินการนี้จะเปลี่ยนที่อยู่อีเมลที่ใช้เข้าสู่ระบบบัญชีของคุณ "
+"รวมถึงช่องทางที่ระบบส่งการแจ้งเตือนทางอีเมล"
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html
 msgid ""
 "We will send a confirmation code to your new email address, which you need "
 "to enter in the next step to confirm the email address is correct."
 msgstr ""
-"ระบบจะส่งรหัสยืนยันไปยังที่อยู่อีเมลใหม่ของคุณ ซึ่งคุณจำเป็นต้องกรอกในขั้นตอนถัดไปเพื่อยืนยันว่าที่อยู่อีเม"
-"ลถูกต้อง"
+"ระบบจะส่งรหัสยืนยันไปยังที่อยู่อีเมลใหม่ของคุณ "
+"ซึ่งคุณจำเป็นต้องกรอกในขั้นตอนถัดไปเพื่อยืนยันว่าที่อยู่อีเมลถูกต้อง"
 
 #: pretix/control/templates/pretixcontrol/user/change_password.html
 #: pretix/control/templates/pretixcontrol/user/settings.html
@@ -26404,8 +26468,8 @@ msgid ""
 "confirm your email address using a confirmation code we will send to your "
 "email address."
 msgstr ""
-"ที่อยู่อีเมลของคุณยังไม่ได้ยืนยัน เพื่อความปลอดภัยของบัญชี โปรดยืนยันที่อยู่อีเมลโดยใช้รหัสยืนยันที่เราจะส่"
-"งไปยังอีเมลของคุณ"
+"ที่อยู่อีเมลของคุณยังไม่ได้ยืนยัน เพื่อความปลอดภัยของบัญชี "
+"โปรดยืนยันที่อยู่อีเมลโดยใช้รหัสยืนยันที่เราจะส่งไปยังอีเมลของคุณ"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html
 msgid "Send confirmation email"
@@ -26457,9 +26521,9 @@ msgid ""
 "Everything you do in that session will be logged and you will later be asked "
 "to fill in a comment on what you did in your session for later reference."
 msgstr ""
-"ในการดำเนินการนี้ คุณจำเป็นต้องเริ่มเซสชันผู้ดูแลระบบก่อน ทุกการกระทำของคุณในเซสชันนี้จะถูกบันทึกไ"
-"ว้ และคุณจะต้องกรอกความคิดเห็นเกี่ยวกับสิ่งที่คุณได้ดำเนินการในเซสชันนั้นในภายหลังเพื่อใช้เป็นข้อมูลอ้า"
-"งอิง"
+"ในการดำเนินการนี้ คุณจำเป็นต้องเริ่มเซสชันผู้ดูแลระบบก่อน "
+"ทุกการกระทำของคุณในเซสชันนี้จะถูกบันทึกไว้ "
+"และคุณจะต้องกรอกความคิดเห็นเกี่ยวกับสิ่งที่คุณได้ดำเนินการในเซสชันนั้นในภายหลังเพื่อใช้เป็นข้อมูลอ้างอิง"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html
 msgid "Start session"
@@ -26577,9 +26641,10 @@ msgid ""
 "quota for this voucher above, the product can still be unavailable to the "
 "voucher holder if another quota associated with the product is sold out!"
 msgstr ""
-"หากคุณเลือก \"สินค้าใดก็ได้\" สำหรับโควตาเฉพาะ และเลือกสำรองโควตาสำหรับเวาเชอร์นี้ไว้ข้างต้"
-"น สินค้าดังกล่าวยังอาจไม่พร้อมใช้งานสำหรับผู้ถือเวาเชอร์ หากโควตาอื่นที่เกี่ยวข้องกับสินค้านั้นถูกขายจน"
-"หมดแล้ว!"
+"หากคุณเลือก \"สินค้าใดก็ได้\" สำหรับโควตาเฉพาะ "
+"และเลือกสำรองโควตาสำหรับเวาเชอร์นี้ไว้ข้างต้น "
+"สินค้าดังกล่าวยังอาจไม่พร้อมใช้งานสำหรับผู้ถือเวาเชอร์ "
+"หากโควตาอื่นที่เกี่ยวข้องกับสินค้านั้นถูกขายจนหมดแล้ว!"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk_edit.html
 msgid "Change multiple vouchers"
@@ -26609,8 +26674,8 @@ msgid ""
 "The following vouchers can't be deleted as they already have been redeemed, "
 "but they will be set to fully redeemed instead."
 msgstr ""
-"เวาเชอร์ต่อไปนี้ไม่สามารถลบได้เนื่องจากถูกแลกใช้ไปแล้ว แต่ระบบจะเปลี่ยนสถานะเป็นแลกใช้ครบแล้วแ"
-"ทน"
+"เวาเชอร์ต่อไปนี้ไม่สามารถลบได้เนื่องจากถูกแลกใช้ไปแล้ว "
+"แต่ระบบจะเปลี่ยนสถานะเป็นแลกใช้ครบแล้วแทน"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html
 msgid "Delete carts"
@@ -26631,8 +26696,9 @@ msgid ""
 "a purchase. This can be really confusing. Only use this if you know that the "
 "session is no longer in use."
 msgstr ""
-"การดำเนินการนี้จะลบสินค้าออกจากตะกร้าของผู้ซื้อที่กำลังทำรายการอยู่อย่างเงียบๆ ซึ่งอาจสร้างความสับ"
-"สนอย่างมาก โปรดใช้ตัวเลือกนี้เมื่อคุณแน่ใจว่าไม่มีการใช้งานเซสชันดังกล่าวแล้วเท่านั้น"
+"การดำเนินการนี้จะลบสินค้าออกจากตะกร้าของผู้ซื้อที่กำลังทำรายการอยู่อย่างเงียบๆ "
+"ซึ่งอาจสร้างความสับสนอย่างมาก "
+"โปรดใช้ตัวเลือกนี้เมื่อคุณแน่ใจว่าไม่มีการใช้งานเซสชันดังกล่าวแล้วเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "This voucher already has been used. It is not recommended to modify it."
@@ -26649,8 +26715,8 @@ msgid ""
 "This voucher is currently used in %(number)s cart sessions and might not be "
 "free to use until the cart sessions expire."
 msgstr ""
-"ขณะนี้เวาเชอร์นี้ถูกใช้งานอยู่ใน %(number)s เซสชันตะกร้าสินค้า และอาจยังไม่พร้อมใช้งานจนกว่าเซส"
-"ชันตะกร้าสินค้าจะหมดอายุ"
+"ขณะนี้เวาเชอร์นี้ถูกใช้งานอยู่ใน %(number)s เซสชันตะกร้าสินค้า "
+"และอาจยังไม่พร้อมใช้งานจนกว่าเซสชันตะกร้าสินค้าจะหมดอายุ"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 msgid "Remove cart positions"
@@ -26675,8 +26741,8 @@ msgid ""
 "Vouchers allow you to assign tickets to specific persons for a lower price. "
 "They also enable you to reserve some quota for your very special guests."
 msgstr ""
-"เวาเชอร์ช่วยให้คุณสามารถมอบสิทธิ์ซื้อตั๋วในราคาพิเศษให้กับบุคคลเฉพาะกลุ่ม รวมถึงช่วยสำรองโควตาให้"
-"กับแขกคนสำคัญของคุณได้"
+"เวาเชอร์ช่วยให้คุณสามารถมอบสิทธิ์ซื้อตั๋วในราคาพิเศษให้กับบุคคลเฉพาะกลุ่ม "
+"รวมถึงช่วยสำรองโควตาให้กับแขกคนสำคัญของคุณได้"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html
 msgid "Your search did not match any vouchers."
@@ -26724,8 +26790,7 @@ msgstr "แท็กเวาเชอร์"
 msgid ""
 "If you add a \"tag\" to a voucher, you can here see statistics on their "
 "usage."
-msgstr ""
-"หากคุณเพิ่ม \"แท็ก\" ให้กับเวาเชอร์ คุณจะสามารถดูสถิติการใช้งานของแท็กนั้นได้ที่นี่"
+msgstr "หากคุณเพิ่ม \"แท็ก\" ให้กับเวาเชอร์ คุณจะสามารถดูสถิติการใช้งานของแท็กนั้นได้ที่นี่"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html
 msgid "You haven't added any tags to vouchers yet."
@@ -26748,8 +26813,7 @@ msgstr "ลบรายการ"
 msgid ""
 "Are you sure you want to delete the following waiting list entry "
 "<strong>%(entry)s</strong>?"
-msgstr ""
-"คุณแน่ใจหรือไม่ว่าต้องการลบรายการในรายชื่อสำรอง <strong>%(entry)s</strong>?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบรายการในรายชื่อสำรอง <strong>%(entry)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html
 msgid "Delete entries"
@@ -26775,24 +26839,24 @@ msgid ""
 "The waiting list is disabled, so if the event is sold out, people cannot add "
 "themselves to this list. If you want to enable it, go to the event settings."
 msgstr ""
-"รายชื่อสำรองถูกปิดใช้งานอยู่ ดังนั้นหากอีเวนต์ขายตั๋วหมดแล้ว ผู้คนจะไม่สามารถลงชื่อในรายชื่อนี้ได้ หาก"
-"คุณต้องการเปิดใช้งาน โปรดไปที่การตั้งค่าอีเวนต์"
+"รายชื่อสำรองถูกปิดใช้งานอยู่ ดังนั้นหากอีเวนต์ขายตั๋วหมดแล้ว ผู้คนจะไม่สามารถลงชื่อในรายชื่อนี้ได้ "
+"หากคุณต้องการเปิดใช้งาน โปรดไปที่การตั้งค่าอีเวนต์"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid ""
 "The waiting list is no longer active for this event. The waiting list no "
 "longer affects quotas and no longer notifies waiting users."
 msgstr ""
-"รายชื่อสำรองไม่ได้เปิดใช้งานสำหรับอีเวนต์นี้อีกต่อไป โดยจะไม่ส่งผลกระทบต่อโควตาและจะไม่แจ้งเตือน"
-"ผู้ใช้ที่กำลังรออีกต่อไป"
+"รายชื่อสำรองไม่ได้เปิดใช้งานสำหรับอีเวนต์นี้อีกต่อไป "
+"โดยจะไม่ส่งผลกระทบต่อโควตาและจะไม่แจ้งเตือนผู้ใช้ที่กำลังรออีกต่อไป"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid ""
 "According to your event settings, sold out products are hidden from "
 "customers. This way, customers will not be able to discover the waiting list."
 msgstr ""
-"ตามการตั้งค่าอีเวนต์ของคุณ สินค้าที่ขายหมดแล้วจะถูกซ่อนไว้ไม่ให้ลูกค้าเห็น ทำให้ลูกค้าจะไม่สามารถค้นพ"
-"บรายชื่อสำรองได้"
+"ตามการตั้งค่าอีเวนต์ของคุณ สินค้าที่ขายหมดแล้วจะถูกซ่อนไว้ไม่ให้ลูกค้าเห็น "
+"ทำให้ลูกค้าจะไม่สามารถค้นพบรายชื่อสำรองได้"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "Send vouchers"
@@ -26806,17 +26870,18 @@ msgid ""
 "capacity is available, so don't worry if entries do not disappear here "
 "immediately. If you want, you can also send them out manually right now."
 msgstr ""
-"คุณได้ตั้งค่าให้ระบบส่งเวาเชอร์โดยอัตโนมัติไปยังบุคคลในรายชื่อนี้ที่รอนานที่สุดทันทีเมื่อมีโควตาว่าง การส่"
-"งเวาเชอร์อาจใช้เวลาสูงสุดครึ่งชั่วโมงหลังจากมีโควตาว่าง ดังนั้นโปรดอย่ากังวลหากรายชื่อไม่หายไปจา"
-"กตรงนี้ทันที ทั้งนี้ คุณสามารถกดส่งด้วยตนเองในตอนนี้ได้เช่นกัน"
+"คุณได้ตั้งค่าให้ระบบส่งเวาเชอร์โดยอัตโนมัติไปยังบุคคลในรายชื่อนี้ที่รอนานที่สุดทันทีเมื่อมีโควตาว่าง "
+"การส่งเวาเชอร์อาจใช้เวลาสูงสุดครึ่งชั่วโมงหลังจากมีโควตาว่าง "
+"ดังนั้นโปรดอย่ากังวลหากรายชื่อไม่หายไปจากตรงนี้ทันที ทั้งนี้ "
+"คุณสามารถกดส่งด้วยตนเองในตอนนี้ได้เช่นกัน"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid ""
 "Currently, no vouchers will be sent since your event is not live or is not "
 "selling tickets."
 msgstr ""
-"ในขณะนี้ จะไม่มีการส่งเวาเชอร์ใดๆ เนื่องจากอีเวนต์ของคุณยังไม่เปิดเผย (Live) หรือยังไม่ได้เปิดขา"
-"ยตั๋ว"
+"ในขณะนี้ จะไม่มีการส่งเวาเชอร์ใดๆ เนื่องจากอีเวนต์ของคุณยังไม่เปิดเผย (Live) "
+"หรือยังไม่ได้เปิดขายตั๋ว"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid ""
@@ -26826,9 +26891,11 @@ msgid ""
 "quota is available) or you can press the big button below this text to send "
 "out as many vouchers as currently possible to the persons who waited longest."
 msgstr ""
-"คุณได้ตั้งค่าไว้ว่าระบบจะ <strong>ไม่</strong> ส่งเวาเชอร์โดยอัตโนมัติ คุณสามารถเลือกส่งทีละรา"
-"ยการตามลำดับที่คุณต้องการได้โดยคลิกปุ่มข้างบรรทัดในตารางนี้ (หากมีโควตาเพียงพอ) หรือคลิกปุ่มใหญ่ด้"
-"านล่างข้อความนี้เพื่อส่งเวาเชอร์จำนวนมากที่สุดเท่าที่จะทำได้ไปยังบุคคลที่รอนานที่สุด ณ ขณะนี้"
+"คุณได้ตั้งค่าไว้ว่าระบบจะ <strong>ไม่</strong> ส่งเวาเชอร์โดยอัตโนมัติ "
+"คุณสามารถเลือกส่งทีละรายการตามลำดับที่คุณต้องการได้โดยคลิกปุ่มข้างบรรทัดในตารางนี้ "
+"(หากมีโควตาเพียงพอ) "
+"หรือคลิกปุ่มใหญ่ด้านล่างข้อความนี้เพื่อส่งเวาเชอร์จำนวนมากที่สุดเท่าที่จะทำได้ไปยังบุคคลที่รอนานที่สุด ณ "
+"ขณะนี้"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "Send as many vouchers as possible"
@@ -26845,8 +26912,8 @@ msgid ""
 "waiting list in, you could sell tickets worth an additional "
 "<strong>%(amount)s</strong>."
 msgstr ""
-"หากคุณสามารถเพิ่มพื้นที่ในอีเวนต์เพื่อรองรับบุคคลทั้งหมดในรายชื่อสำรองได้ คุณจะสามารถทำยอดขายตั๋วเ"
-"พิ่มขึ้นได้อีก <strong>%(amount)s</strong>"
+"หากคุณสามารถเพิ่มพื้นที่ในอีเวนต์เพื่อรองรับบุคคลทั้งหมดในรายชื่อสำรองได้ "
+"คุณจะสามารถทำยอดขายตั๋วเพิ่มขึ้นได้อีก <strong>%(amount)s</strong>"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "Successfully redeemed"
@@ -26861,15 +26928,14 @@ msgid ""
 "This entry has a modified priority. The higher this number is, the earlier "
 "this person will be assigned a voucher."
 msgstr ""
-"รายการนี้มีการปรับเปลี่ยนลำดับความสำคัญ ยิ่งตัวเลขนี้สูงเท่าใด บุคคลนี้จะได้รับจัดสรรเวาเชอร์เร็วขึ้นเ"
-"ท่านั้น"
+"รายการนี้มีการปรับเปลี่ยนลำดับความสำคัญ ยิ่งตัวเลขนี้สูงเท่าใด "
+"บุคคลนี้จะได้รับจัดสรรเวาเชอร์เร็วขึ้นเท่านั้น"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid ""
 "For safety reasons, the waiting list does not run if the quota is set to "
 "unlimited."
-msgstr ""
-"เพื่อเหตุผลด้านความปลอดภัย รายชื่อสำรองจะไม่ทำงานหากโควตาถูกตั้งค่าไว้เป็นไม่จำกัด"
+msgstr "เพื่อเหตุผลด้านความปลอดภัย รายชื่อสำรองจะไม่ทำงานหากโควตาถูกตั้งค่าไว้เป็นไม่จำกัด"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 msgid "Quota unlimited"
@@ -26884,8 +26950,8 @@ msgid ""
 "                                        "
 msgstr ""
 "\n"
-"                                            กำลังรอ (มีสินค้าพร้อมขาย %(num)s ชิ้น)"
-"\n"
+"                                            กำลังรอ (มีสินค้าพร้อมขาย %(num)s "
+"ชิ้น)\n"
 "                                        "
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
@@ -26919,9 +26985,10 @@ msgid ""
 "go to the organizer settings to change them for all your events or you can "
 "unlock them to change them for this event individually."
 msgstr ""
-"การตั้งค่าเหล่านี้ถูกกำหนดไว้ในระดับผู้จัดงาน ซึ่งช่วยให้คุณสามารถแก้ไขการตั้งค่าสำหรับทุกอีเวนต์ของคุณ"
-"พร้อมกันได้อย่างง่ายดาย คุณสามารถไปที่การตั้งค่าผู้จัดงานเพื่อเปลี่ยนแปลงสำหรับทุกอีเวนต์ หรือจะปลดล็"
-"อกเพื่อแก้ไขสำหรับอีเวนต์นี้แยกต่างหากก็ได้"
+"การตั้งค่าเหล่านี้ถูกกำหนดไว้ในระดับผู้จัดงาน "
+"ซึ่งช่วยให้คุณสามารถแก้ไขการตั้งค่าสำหรับทุกอีเวนต์ของคุณพร้อมกันได้อย่างง่ายดาย "
+"คุณสามารถไปที่การตั้งค่าผู้จัดงานเพื่อเปลี่ยนแปลงสำหรับทุกอีเวนต์ "
+"หรือจะปลดล็อกเพื่อแก้ไขสำหรับอีเวนต์นี้แยกต่างหากก็ได้"
 
 #: pretix/control/templatetags/hierarkey_form.py
 msgid ""
@@ -26930,9 +26997,10 @@ msgid ""
 "global settings to change them for all your organizers or you can unlock "
 "them to change them for this event individually."
 msgstr ""
-"การตั้งค่าเหล่านี้ถูกกำหนดไว้ในระดับทั่วทั้งระบบ ซึ่งช่วยให้คุณสามารถแก้ไขการตั้งค่าสำหรับผู้จัดงานทุกคน"
-"พร้อมกันได้อย่างง่ายดาย คุณสามารถไปที่การตั้งค่าทั่วทั้งระบบเพื่อเปลี่ยนแปลงสำหรับผู้จัดงานทั้งหมด หรือ"
-"จะปลดล็อกเพื่อแก้ไขสำหรับอีเวนต์นี้แยกต่างหากก็ได้"
+"การตั้งค่าเหล่านี้ถูกกำหนดไว้ในระดับทั่วทั้งระบบ "
+"ซึ่งช่วยให้คุณสามารถแก้ไขการตั้งค่าสำหรับผู้จัดงานทุกคนพร้อมกันได้อย่างง่ายดาย "
+"คุณสามารถไปที่การตั้งค่าทั่วทั้งระบบเพื่อเปลี่ยนแปลงสำหรับผู้จัดงานทั้งหมด "
+"หรือจะปลดล็อกเพื่อแก้ไขสำหรับอีเวนต์นี้แยกต่างหากก็ได้"
 
 #: pretix/control/templatetags/hierarkey_form.py
 msgid "Unlock"
@@ -26960,8 +27028,8 @@ msgid ""
 "address bar and make sure it is correct and that the link has not been used "
 "before."
 msgstr ""
-"คุณใช้ลิงก์ที่ไม่ถูกต้อง โปรดคัดลอกลิงก์จากอีเมลของคุณไปยังแถบที่อยู่เว็บ (Address bar) แล้วตรวจสอ"
-"บให้แน่ใจว่าลิงก์ถูกต้องและยังไม่เคยถูกใช้งานมาก่อน"
+"คุณใช้ลิงก์ที่ไม่ถูกต้อง โปรดคัดลอกลิงก์จากอีเมลของคุณไปยังแถบที่อยู่เว็บ (Address bar) "
+"แล้วตรวจสอบให้แน่ใจว่าลิงก์ถูกต้องและยังไม่เคยถูกใช้งานมาก่อน"
 
 #: pretix/control/views/auth.py
 #, python-brace-format
@@ -26970,8 +27038,8 @@ msgid ""
 "team. If you want to add a different user or create a new account, log out "
 "and click the invitation link again."
 msgstr ""
-"คุณไม่สามารถตอบรับคำเชิญสำหรับ \"{}\" ได้ เนื่องจากคุณเป็นส่วนหนึ่งของทีมนี้อยู่แล้ว หากคุณต้องการ"
-"เพิ่มผู้ใช้อื่นหรือสร้างบัญชีใหม่ โปรดออกจากระบบแล้วคลิกลิงก์คำเชิญใหม่อีกครั้ง"
+"คุณไม่สามารถตอบรับคำเชิญสำหรับ \"{}\" ได้ เนื่องจากคุณเป็นส่วนหนึ่งของทีมนี้อยู่แล้ว "
+"หากคุณต้องการเพิ่มผู้ใช้อื่นหรือสร้างบัญชีใหม่ โปรดออกจากระบบแล้วคลิกลิงก์คำเชิญใหม่อีกครั้ง"
 
 #: pretix/control/views/auth.py
 #, python-brace-format
@@ -26981,8 +27049,7 @@ msgstr "ขณะนี้คุณเป็นส่วนหนึ่งขอ
 #: pretix/control/views/auth.py
 #, python-brace-format
 msgid "Welcome to pretix! You are now part of the team \"{}\"."
-msgstr ""
-"ยินดีต้อนรับสู่ pretix! ขณะนี้คุณเป็นส่วนหนึ่งของทีม \"{}\" เรียบร้อยแล้ว"
+msgstr "ยินดีต้อนรับสู่ pretix! ขณะนี้คุณเป็นส่วนหนึ่งของทีม \"{}\" เรียบร้อยแล้ว"
 
 #: pretix/control/views/auth.py
 msgid ""
@@ -26990,8 +27057,8 @@ msgid ""
 "email containing further instructions. Please note that we will send at most "
 "one email every 24 hours."
 msgstr ""
-"หากที่อยู่อีเมลดังกล่าวลงทะเบียนกับบัญชีที่ใช้งานได้ ระบบได้ส่งอีเมลพร้อมคำแนะนำเพิ่มเติมให้คุณแล้ว ทั้ง"
-"นี้ โปรดทราบว่าระบบจะส่งอีเมลสูงสุดเพียง 1 ฉบับต่อทุกๆ 24 ชั่วโมง"
+"หากที่อยู่อีเมลดังกล่าวลงทะเบียนกับบัญชีที่ใช้งานได้ ระบบได้ส่งอีเมลพร้อมคำแนะนำเพิ่มเติมให้คุณแล้ว "
+"ทั้งนี้ โปรดทราบว่าระบบจะส่งอีเมลสูงสุดเพียง 1 ฉบับต่อทุกๆ 24 ชั่วโมง"
 
 #: pretix/control/views/auth.py
 msgid ""
@@ -27007,8 +27074,8 @@ msgid ""
 "three days and that the link can only be used once."
 msgstr ""
 "คุณคลิกลิงก์ที่ไม่ถูกต้อง โปรดตรวจสอบว่าคุณได้คัดลอกที่อยู่เว็บแบบเต็มลงในแถบที่อยู่เว็บ (Address "
-"bar) เรียบร้อยแล้ว ทั้งนี้ โปรดทราบว่าลิงก์จะมีอายุใช้งานเพียง 3 วัน และสามารถใช้งานได้เพียงครั้ง"
-"เดียวเท่านั้น"
+"bar) เรียบร้อยแล้ว ทั้งนี้ โปรดทราบว่าลิงก์จะมีอายุใช้งานเพียง 3 วัน "
+"และสามารถใช้งานได้เพียงครั้งเดียวเท่านั้น"
 
 #: pretix/control/views/auth.py
 msgid "We were unable to find the user you requested a new password for."
@@ -27024,8 +27091,7 @@ msgstr "โปรดลองใหม่อีกครั้ง"
 
 #: pretix/control/views/auth.py
 msgid "A recovery code for two-factor authentification was used to log in."
-msgstr ""
-"มีการใช้รหัสกู้คืน (Recovery code) สำหรับการยืนยันตัวตนสองปัจจัยในการเข้าสู่ระบบ"
+msgstr "มีการใช้รหัสกู้คืน (Recovery code) สำหรับการยืนยันตัวตนสองปัจจัยในการเข้าสู่ระบบ"
 
 #: pretix/control/views/auth.py
 msgid "Invalid code, please try again."
@@ -27149,8 +27215,8 @@ msgid ""
 "To start selling tickets, you need to create products or quotas. The fastest "
 "way to create this is to use our setup tool."
 msgstr ""
-"หากต้องการเริ่มจำหน่ายตั๋ว คุณจำเป็นต้องสร้างสินค้าหรือโควตาก่อน วิธีที่เร็วที่สุดคือการใช้เครื่องมือช่วย"
-"ตั้งค่าของเรา"
+"หากต้องการเริ่มจำหน่ายตั๋ว คุณจำเป็นต้องสร้างสินค้าหรือโควตาก่อน "
+"วิธีที่เร็วที่สุดคือการใช้เครื่องมือช่วยตั้งค่าของเรา"
 
 #: pretix/control/views/dashboards.py
 msgid "Set up event"
@@ -27237,8 +27303,7 @@ msgstr "ยังไม่ได้เลือกส่วนลดทั้ง
 msgid ""
 "You do not have sufficient permission to enable plugins that need to be "
 "enabled for the entire organizer account."
-msgstr ""
-"คุณไม่มีสิทธิ์เพียงพอในการเปิดใช้งานปลั๊กอินที่จำเป็นต้องเปิดใช้งานทั้งบัญชีผู้จัดงาน"
+msgstr "คุณไม่มีสิทธิ์เพียงพอในการเปิดใช้งานปลั๊กอินที่จำเป็นต้องเปิดใช้งานทั้งบัญชีผู้จัดงาน"
 
 #: pretix/control/views/event.py pretix/control/views/organizer.py
 #, python-brace-format
@@ -27280,8 +27345,7 @@ msgstr "ร้านค้าของคุณเปิดใช้งานจ
 
 #: pretix/control/views/event.py
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
-msgstr ""
-"เราปิดการเข้าถึงร้านค้าของคุณแล้ว คุณสามารถเปิดใช้งานใหม่อีกครั้งได้ทุกเมื่อที่ต้องการ!"
+msgstr "เราปิดการเข้าถึงร้านค้าของคุณแล้ว คุณสามารถเปิดใช้งานใหม่อีกครั้งได้ทุกเมื่อที่ต้องการ!"
 
 #: pretix/control/views/event.py
 msgid "Your shop is now in test mode!"
@@ -27291,8 +27355,7 @@ msgstr "ขณะนี้ร้านค้าของคุณอยู่ใ
 msgid ""
 "An order could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
-msgstr ""
-"ไม่สามารถลบคำสั่งซื้อได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน)"
+msgstr "ไม่สามารถลบคำสั่งซื้อได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน)"
 
 #: pretix/control/views/event.py
 msgid "We've disabled test mode for you. Let's sell some real tickets!"
@@ -27310,16 +27373,14 @@ msgstr "ลบอีเวนต์เรียบร้อยแล้ว"
 msgid ""
 "The event could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
-msgstr ""
-"ไม่สามารถลบอีเวนต์ได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน)"
+msgstr "ไม่สามารถลบอีเวนต์ได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน)"
 
 #: pretix/control/views/event.py
 #, python-brace-format
 msgid ""
 "Specifically, the following plugins still contain data depends on this "
 "event: {plugin_names}"
-msgstr ""
-"โดยเฉพาะอย่างยิ่ง ปลั๊กอินต่อไปนี้ยังคงมีข้อมูลที่ขึ้นอยู่กับอีเวนต์นี้: {plugin_names}"
+msgstr "โดยเฉพาะอย่างยิ่ง ปลั๊กอินต่อไปนี้ยังคงมีข้อมูลที่ขึ้นอยู่กับอีเวนต์นี้: {plugin_names}"
 
 #: pretix/control/views/event.py pretix/control/views/orders.py
 msgid "The comment has been updated."
@@ -27380,9 +27441,9 @@ msgid ""
 "others, you must either use pretix under AGPLv3 terms or obtain a pretix "
 "Enterprise license."
 msgstr ""
-"คุณกำลังละเมิดเงื่อนไขใบอนุญาตใช้งาน หากคุณไม่แน่ใจว่าได้รับสิทธิ์เพิ่มเติมหรือไม่ หรือหากคุณให้บริการ"
-"ฟังก์ชันของ pretix แก่ผู้อื่น คุณต้องใช้งาน pretix ภายใต้ข้อกำหนด AGPLv3 หรือขอรับใบอนุญาต "
-"pretix Enterprise"
+"คุณกำลังละเมิดเงื่อนไขใบอนุญาตใช้งาน หากคุณไม่แน่ใจว่าได้รับสิทธิ์เพิ่มเติมหรือไม่ "
+"หรือหากคุณให้บริการฟังก์ชันของ pretix แก่ผู้อื่น คุณต้องใช้งาน pretix ภายใต้ข้อกำหนด AGPLv3 "
+"หรือขอรับใบอนุญาต pretix Enterprise"
 
 #: pretix/control/views/global_settings.py
 msgid ""
@@ -27390,8 +27451,9 @@ msgid ""
 "license if you install any plugins licensed with strong copyleft, otherwise "
 "you are likely in violation of the license of these plugins."
 msgstr ""
-"คุณไม่สามารถใช้ประโยชน์จากสิทธิ์เพิ่มเติมหรือใบอนุญาต pretix Enterprise ได้ หากคุณติดตั้งปลั๊กอิน"
-"ใดๆ ที่ใช้ใบอนุญาตแบบ Strong Copyleft มิฉะนั้นคุณอาจละเมิดใบอนุญาตใช้งานของปลั๊กอินเหล่านั้น"
+"คุณไม่สามารถใช้ประโยชน์จากสิทธิ์เพิ่มเติมหรือใบอนุญาต pretix Enterprise ได้ "
+"หากคุณติดตั้งปลั๊กอินใดๆ ที่ใช้ใบอนุญาตแบบ Strong Copyleft "
+"มิฉะนั้นคุณอาจละเมิดใบอนุญาตใช้งานของปลั๊กอินเหล่านั้น"
 
 #: pretix/control/views/global_settings.py
 msgid ""
@@ -27404,8 +27466,7 @@ msgstr ""
 msgid ""
 "You must not use pretix under AGPL terms if you use pretix Enterprise "
 "plugins."
-msgstr ""
-"คุณต้องไม่ใช้งาน pretix ภายใต้ข้อกำหนด AGPL หากคุณใช้ปลั๊กอิน pretix Enterprise"
+msgstr "คุณต้องไม่ใช้งาน pretix ภายใต้ข้อกำหนด AGPL หากคุณใช้ปลั๊กอิน pretix Enterprise"
 
 #: pretix/control/views/global_settings.py
 msgid ""
@@ -27414,9 +27475,9 @@ msgid ""
 "license terms as pretix (AGPLv3 + additional restrictions). Make sure to "
 "keep it up to date!"
 msgstr ""
-"คุณจำเป็นต้องเปิดเผยการแก้ไขทั้งหมดที่คุณทำกับซอร์สโค้ดของ pretix ให้แก่ผู้เข้าชมเว็บไซต์ของคุณทุกค"
-"นโดยเสรีในรูปแบบซอร์สโค้ด ภายใต้ข้อกำหนดใบอนุญาตเดียวกันกับ pretix (AGPLv3 + ข้อจำกัดเพิ่มเ"
-"ติม) และโปรดตรวจสอบให้แน่ใจว่าได้อัปเดตข้อมูลเป็นปัจจุบันเสมอ!"
+"คุณจำเป็นต้องเปิดเผยการแก้ไขทั้งหมดที่คุณทำกับซอร์สโค้ดของ pretix "
+"ให้แก่ผู้เข้าชมเว็บไซต์ของคุณทุกคนโดยเสรีในรูปแบบซอร์สโค้ด ภายใต้ข้อกำหนดใบอนุญาตเดียวกันกับ "
+"pretix (AGPLv3 + ข้อจำกัดเพิ่มเติม) และโปรดตรวจสอบให้แน่ใจว่าได้อัปเดตข้อมูลเป็นปัจจุบันเสมอ!"
 
 #: pretix/control/views/global_settings.py
 msgid ""
@@ -27424,9 +27485,9 @@ msgid ""
 "visitor of your site in source code form under the same license terms as "
 "pretix (AGPLv3 + additional restrictions). Make sure to keep it up to date!"
 msgstr ""
-"คุณจำเป็นต้องเปิดเผยปลั๊กอินที่ติดตั้งทั้งหมดของคุณให้แก่ผู้เข้าชมเว็บไซต์ของคุณทุกคนโดยเสรีในรูปแบบซอร์"
-"สโค้ด ภายใต้ข้อกำหนดใบอนุญาตเดียวกันกับ pretix (AGPLv3 + ข้อจำกัดเพิ่มเติม) และโปรดตรวจสอ"
-"บให้แน่ใจว่าได้อัปเดตข้อมูลเป็นปัจจุบันเสมอ!"
+"คุณจำเป็นต้องเปิดเผยปลั๊กอินที่ติดตั้งทั้งหมดของคุณให้แก่ผู้เข้าชมเว็บไซต์ของคุณทุกคนโดยเสรีในรูปแบบซอร์สโค้ด "
+"ภายใต้ข้อกำหนดใบอนุญาตเดียวกันกับ pretix (AGPLv3 + ข้อจำกัดเพิ่มเติม) "
+"และโปรดตรวจสอบให้แน่ใจว่าได้อัปเดตข้อมูลเป็นปัจจุบันเสมอ!"
 
 #: pretix/control/views/global_settings.py
 #, python-brace-format
@@ -27434,8 +27495,8 @@ msgid ""
 "We found the plugin \"{plugin}\" with license \"{license}\" which this tool "
 "does not know about and therefore cannot give any recommendations."
 msgstr ""
-"ระบบพบปลั๊กอิน \"{plugin}\" ที่มีใบอนุญาต \"{license}\" ซึ่งเครื่องมือนี้ไม่รู้จัก จึงไม่สามารถให้"
-"คำแนะนำใดๆ ได้"
+"ระบบพบปลั๊กอิน \"{plugin}\" ที่มีใบอนุญาต \"{license}\" ซึ่งเครื่องมือนี้ไม่รู้จัก "
+"จึงไม่สามารถให้คำแนะนำใดๆ ได้"
 
 #: pretix/control/views/global_settings.py
 #, python-brace-format
@@ -27443,8 +27504,8 @@ msgid ""
 "You selected that you have no active pretix Enterprise licenses, but we "
 "found the following Enterprise plugin: {plugin}"
 msgstr ""
-"คุณระบุว่าไม่มีใบอนุญาต pretix Enterprise ที่เปิดใช้งานอยู่ แต่ระบบพบปลั๊กอิน Enterprise ต่อไป"
-"นี้: {plugin}"
+"คุณระบุว่าไม่มีใบอนุญาต pretix Enterprise ที่เปิดใช้งานอยู่ แต่ระบบพบปลั๊กอิน Enterprise "
+"ต่อไปนี้: {plugin}"
 
 #: pretix/control/views/global_settings.py
 #, python-brace-format
@@ -27452,8 +27513,8 @@ msgid ""
 "You selected that you have no copyleft-licensed plugins installed, but we "
 "found the plugin \"{plugin}\" with license \"{license}\"."
 msgstr ""
-"คุณระบุว่าไม่มีการติดตั้งปลั๊กอินที่ใช้ใบอนุญาต Copyleft แต่ระบบพบปลั๊กอิน \"{plugin}\" ที่มีใบอนุญา"
-"ต \"{license}\""
+"คุณระบุว่าไม่มีการติดตั้งปลั๊กอินที่ใช้ใบอนุญาต Copyleft แต่ระบบพบปลั๊กอิน \"{plugin}\" "
+"ที่มีใบอนุญาต \"{license}\""
 
 #: pretix/control/views/global_settings.py
 #, python-brace-format
@@ -27571,8 +27632,8 @@ msgid ""
 "participants won't be able to buy the bundle unless you remove this item "
 "from it."
 msgstr ""
-"คุณได้ปิดใช้งานรายการนี้แล้ว แต่รายการนี้ยังคงเป็นส่วนหนึ่งของแพ็กเกจสินค้า ผู้เข้าร่วมจะไม่สามารถซื้อ"
-"แพ็กเกจดังกล่าวได้จนกว่าคุณจะลบรายการนี้ออกจากแพ็กเกจ"
+"คุณได้ปิดใช้งานรายการนี้แล้ว แต่รายการนี้ยังคงเป็นส่วนหนึ่งของแพ็กเกจสินค้า "
+"ผู้เข้าร่วมจะไม่สามารถซื้อแพ็กเกจดังกล่าวได้จนกว่าคุณจะลบรายการนี้ออกจากแพ็กเกจ"
 
 #: pretix/control/views/item.py
 msgid ""
@@ -27580,8 +27641,8 @@ msgid ""
 "plug-ins) did not allow it. Deleting it could break reporting or other "
 "functionality, so the product has been disabled instead."
 msgstr ""
-"ไม่สามารถลบสินค้าได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน) การลบสินค้"
-"าอาจกระทบต่อรายงานหรือการทำงานส่วนอื่น ระบบจึงทำการปิดใช้งานสินค้านี้แทน"
+"ไม่สามารถลบสินค้าได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน) "
+"การลบสินค้าอาจกระทบต่อรายงานหรือการทำงานส่วนอื่น ระบบจึงทำการปิดใช้งานสินค้านี้แทน"
 
 #: pretix/control/views/item.py
 msgid "The selected product has been deleted."
@@ -27611,10 +27672,10 @@ msgid ""
 "the domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
-"ไม่พบการตั้งค่า SPF record สำหรับโดเมนที่คุณกำลังพยายามใช้งาน ซึ่งหมายความว่ามีความเสี่ยงสูงมา"
-"กที่อีเมลส่วนใหญ่จะถูกปฏิเสธหรือถูกทำเครื่องหมายเป็นสแปม เราขอแนะนำอย่างยิ่งให้ตั้งค่า SPF "
-"record ให้กับโดเมน โดยคุณสามารถจัดการได้ผ่านการตั้งค่า DNS ณ ผู้ให้บริการที่คุณจดทะเบียนโดเมนไ"
-"ว้"
+"ไม่พบการตั้งค่า SPF record สำหรับโดเมนที่คุณกำลังพยายามใช้งาน "
+"ซึ่งหมายความว่ามีความเสี่ยงสูงมากที่อีเมลส่วนใหญ่จะถูกปฏิเสธหรือถูกทำเครื่องหมายเป็นสแปม "
+"เราขอแนะนำอย่างยิ่งให้ตั้งค่า SPF record ให้กับโดเมน โดยคุณสามารถจัดการได้ผ่านการตั้งค่า DNS "
+"ณ ผู้ให้บริการที่คุณจดทะเบียนโดเมนไว้"
 
 #: pretix/control/views/mailsetup.py
 msgid ""
@@ -27624,9 +27685,10 @@ msgid ""
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
 msgstr ""
-"พบการตั้งค่า SPF record สำหรับโดเมนที่คุณกำลังใช้งานแล้ว แต่ไม่ได้ระบุเซิร์ฟเวอร์อีเมลของระบบนี้เ"
-"อาไว้ ซึ่งหมายความว่ามีความเสี่ยงสูงมากที่อีเมลส่วนใหญ่จะถูกปฏิเสธหรือถูกทำเครื่องหมายเป็นสแปม คุณ"
-"ควรอัปเดตการตั้งค่า DNS ของโดเมนเพื่อเพิ่มระบบนี้ลงใน SPF record"
+"พบการตั้งค่า SPF record สำหรับโดเมนที่คุณกำลังใช้งานแล้ว "
+"แต่ไม่ได้ระบุเซิร์ฟเวอร์อีเมลของระบบนี้เอาไว้ "
+"ซึ่งหมายความว่ามีความเสี่ยงสูงมากที่อีเมลส่วนใหญ่จะถูกปฏิเสธหรือถูกทำเครื่องหมายเป็นสแปม "
+"คุณควรอัปเดตการตั้งค่า DNS ของโดเมนเพื่อเพิ่มระบบนี้ลงใน SPF record"
 
 #: pretix/control/views/mailsetup.py
 msgid ""
@@ -27636,9 +27698,10 @@ msgid ""
 "DKIM through a CNAME record. You can do so through the DNS settings at the "
 "provider you registered your domain with."
 msgstr ""
-"ไม่พบ CNAME record ที่ชี้ไปยังคีย์ DKIM ของเราสำหรับโดเมนที่คุณกำลังพยายามใช้งาน ซึ่งหมายความ"
-"ว่ามีความเสี่ยงสูงมากที่อีเมลส่วนใหญ่จะถูกปฏิเสธหรือถูกทำเครื่องหมายเป็นสแปม เราขอแนะนำอย่างยิ่งใ"
-"ห้ตั้งค่า DKIM ผ่าน CNAME record ผ่านการตั้งค่า DNS ณ ผู้ให้บริการที่คุณจดทะเบียนโดเมนไว้"
+"ไม่พบ CNAME record ที่ชี้ไปยังคีย์ DKIM ของเราสำหรับโดเมนที่คุณกำลังพยายามใช้งาน "
+"ซึ่งหมายความว่ามีความเสี่ยงสูงมากที่อีเมลส่วนใหญ่จะถูกปฏิเสธหรือถูกทำเครื่องหมายเป็นสแปม "
+"เราขอแนะนำอย่างยิ่งให้ตั้งค่า DKIM ผ่าน CNAME record ผ่านการตั้งค่า DNS ณ "
+"ผู้ให้บริการที่คุณจดทะเบียนโดเมนไว้"
 
 #: pretix/control/views/mailsetup.py
 msgid ""
@@ -27647,9 +27710,9 @@ msgid ""
 "will be rejected or marked as spam. You should update the DNS settings of "
 "your domain."
 msgstr ""
-"พบ CNAME record สำหรับคีย์ DKIM แล้ว แต่ไม่ได้ชี้ไปยังตำแหน่งที่ถูกต้อง ซึ่งหมายความว่ามีความเสี่ย"
-"งสูงมากที่อีเมลส่วนใหญ่จะถูกปฏิเสธหรือถูกทำเครื่องหมายเป็นสแปม คุณควรอัปเดตการตั้งค่า DNS ของโด"
-"เมนของคุณ"
+"พบ CNAME record สำหรับคีย์ DKIM แล้ว แต่ไม่ได้ชี้ไปยังตำแหน่งที่ถูกต้อง "
+"ซึ่งหมายความว่ามีความเสี่ยงสูงมากที่อีเมลส่วนใหญ่จะถูกปฏิเสธหรือถูกทำเครื่องหมายเป็นสแปม "
+"คุณควรอัปเดตการตั้งค่า DNS ของโดเมนของคุณ"
 
 #: pretix/control/views/mailsetup.py
 msgid ""
@@ -27657,8 +27720,9 @@ msgid ""
 "very high chance most of the emails will be rejected or marked as spam. You "
 "should update the DNS settings of your domain."
 msgstr ""
-"ไม่พบ DMARC record สำหรับโดเมนของคุณ ซึ่งหมายความว่ามีความเสี่ยงสูงมากที่อีเมลส่วนใหญ่จะถูกปฏิ"
-"เสธหรือถูกทำเครื่องหมายเป็นสแปม คุณควรอัปเดตการตั้งค่า DNS ของโดเมนของคุณ"
+"ไม่พบ DMARC record สำหรับโดเมนของคุณ "
+"ซึ่งหมายความว่ามีความเสี่ยงสูงมากที่อีเมลส่วนใหญ่จะถูกปฏิเสธหรือถูกทำเครื่องหมายเป็นสแปม "
+"คุณควรอัปเดตการตั้งค่า DNS ของโดเมนของคุณ"
 
 #: pretix/control/views/mailsetup.py
 msgid "The verification code was incorrect, please try again."
@@ -27683,9 +27747,9 @@ msgid ""
 "period."
 msgstr ""
 "เราขอแนะนำให้หลีกเลี่ยงการใช้ Google Mail สำหรับส่งอีเมลการทำรายการ (Transactional "
-"emails) หากคุณพยายามส่งอีเมลจำนวนมากในระยะเวลาอันสั้น เช่น การส่งข้อมูลไปยังผู้ซื้อตั๋วทุกคน มีโ"
-"อกาสสูงที่ Google จะไม่นำส่งอีเมลทั้งหมดของคุณเนื่องจากมีการจำกัดจำนวนการส่งอีเมลสูงสุดต่อช่วงเว"
-"ลา"
+"emails) หากคุณพยายามส่งอีเมลจำนวนมากในระยะเวลาอันสั้น เช่น การส่งข้อมูลไปยังผู้ซื้อตั๋วทุกคน "
+"มีโอกาสสูงที่ Google "
+"จะไม่นำส่งอีเมลทั้งหมดของคุณเนื่องจากมีการจำกัดจำนวนการส่งอีเมลสูงสุดต่อช่วงเวลา"
 
 #: pretix/control/views/main.py
 msgid "You do not have permission to clone this event."
@@ -27709,8 +27773,8 @@ msgid ""
 "We could not identify the character encoding of the CSV file. Some "
 "characters were replaced with a placeholder."
 msgstr ""
-"ไม่สามารถระบุรหัสอักขระ (Encoding) ของไฟล์ CSV ได้ ระบบจึงแทนที่อักขระบางตัวด้วยอักขระตัวแท"
-"น"
+"ไม่สามารถระบุรหัสอักขระ (Encoding) ของไฟล์ CSV ได้ "
+"ระบบจึงแทนที่อักขระบางตัวด้วยอักขระตัวแทน"
 
 #: pretix/control/views/modelimport.py
 msgid ""
@@ -27718,8 +27782,8 @@ msgid ""
 "automatically. We recommend that you rename these in your source file to "
 "avoid problems during import."
 msgstr ""
-"มีหลายคอลัมน์ในไฟล์ CSV ที่ใช้ชื่อซ้ำกัน และถูกเปลี่ยนชื่อโดยอัตโนมัติ เราขอแนะนำให้คุณเปลี่ยนชื่อคอลัม"
-"น์เหล่านี้ในไฟล์ต้นทางเพื่อหลีกเลี่ยงปัญหาขณะนำเข้าข้อมูล"
+"มีหลายคอลัมน์ในไฟล์ CSV ที่ใช้ชื่อซ้ำกัน และถูกเปลี่ยนชื่อโดยอัตโนมัติ "
+"เราขอแนะนำให้คุณเปลี่ยนชื่อคอลัมน์เหล่านี้ในไฟล์ต้นทางเพื่อหลีกเลี่ยงปัญหาขณะนำเข้าข้อมูล"
 
 #: pretix/control/views/modelimport.py
 msgid "The import was successful."
@@ -27736,8 +27800,8 @@ msgid ""
 "generated. Please copy and save it right now as it will not be shown again: "
 "{secret}"
 msgstr ""
-"สร้างแอปพลิเคชันของคุณและสร้างรหัสลับแอปพลิเคชัน (Application secret) เรียบร้อยแล้ว โปรดคั"
-"ดลอกและบันทึกไว้ทันที เนื่องจากจะไม่แสดงซ้ำอีก: {secret}"
+"สร้างแอปพลิเคชันของคุณและสร้างรหัสลับแอปพลิเคชัน (Application secret) เรียบร้อยแล้ว "
+"โปรดคัดลอกและบันทึกไว้ทันที เนื่องจากจะไม่แสดงซ้ำอีก: {secret}"
 
 #: pretix/control/views/oauth.py
 #, python-brace-format
@@ -27745,8 +27809,8 @@ msgid ""
 "A new client secret has been generated. Please copy and save it right now as "
 "it will not be shown again: {secret}"
 msgstr ""
-"สร้างรหัสลับไคลเอนต์ (Client secret) ใหม่เรียบร้อยแล้ว โปรดคัดลอกและบันทึกไว้ทันที เนื่องจากจ"
-"ะไม่แสดงซ้ำอีก: {secret}"
+"สร้างรหัสลับไคลเอนต์ (Client secret) ใหม่เรียบร้อยแล้ว โปรดคัดลอกและบันทึกไว้ทันที "
+"เนื่องจากจะไม่แสดงซ้ำอีก: {secret}"
 
 #: pretix/control/views/oauth.py
 msgid "Access for the selected application has been revoked."
@@ -27760,8 +27824,7 @@ msgstr "ไม่สามารถประมวลผลข้อมูลท
 #, python-brace-format
 msgid ""
 "Successfully executed the action \"{label}\" on {success} of {total} orders."
-msgstr ""
-"ดำเนินการการกระทำ \"{label}\" สำเร็จใน {success} จากทั้งหมด {total} คำสั่งซื้อ"
+msgstr "ดำเนินการการกระทำ \"{label}\" สำเร็จใน {success} จากทั้งหมด {total} คำสั่งซื้อ"
 
 #: pretix/control/views/orders.py pretix/presale/views/order.py
 msgid "Unknown order code or not authorized to access this order."
@@ -27779,8 +27842,7 @@ msgstr "ลบคำสั่งซื้อเรียบร้อยแล้
 msgid ""
 "The order could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
-msgstr ""
-"ไม่สามารถลบคำสั่งซื้อได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน)"
+msgstr "ไม่สามารถลบคำสั่งซื้อได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน)"
 
 #: pretix/control/views/orders.py
 msgid "Only orders created in test mode can be deleted."
@@ -27856,8 +27918,8 @@ msgid ""
 "time. Please have a look at the order details and check if your refund is "
 "still necessary."
 msgstr ""
-"การคืนเงินถูกระงับไว้เนื่องจากมีการประมวลผลการคืนเงินอื่นในเวลาเดียวกัน โปรดตรวจสอบรายละเอีย"
-"ดคำสั่งซื้อเพื่อดูว่าการคืนเงินของคุณยังคงจำเป็นอยู่หรือไม่"
+"การคืนเงินถูกระงับไว้เนื่องจากมีการประมวลผลการคืนเงินอื่นในเวลาเดียวกัน "
+"โปรดตรวจสอบรายละเอียดคำสั่งซื้อเพื่อดูว่าการคืนเงินของคุณยังคงจำเป็นอยู่หรือไม่"
 
 #: pretix/control/views/orders.py
 msgid "You entered an order in an event with a different currency."
@@ -27877,8 +27939,7 @@ msgstr "คุณไม่สามารถคืนเงินเกินก
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
-msgstr ""
-"คุณเลือกการคืนเงินบางส่วนสำหรับวิธีการชำระเงินที่รองรับเฉพาะการคืนเงินเต็มจำนวนเท่านั้น"
+msgstr "คุณเลือกการคืนเงินบางส่วนสำหรับวิธีการชำระเงินที่รองรับเฉพาะการคืนเงินเต็มจำนวนเท่านั้น"
 
 #: pretix/control/views/orders.py
 msgid "The refunds you selected do not match the selected total refund amount."
@@ -27890,8 +27951,8 @@ msgid ""
 "One of the refunds failed to be processed. You should retry to refund in a "
 "different way. The error message was: {}"
 msgstr ""
-"หนึ่งในการคืนเงินไม่สามารถประมวลผลได้ คุณควรลองคืนเงินด้วยวิธีอื่นอีกครั้ง ข้อความแจ้งข้อผิดพลาดคื"
-"อ: {}"
+"หนึ่งในการคืนเงินไม่สามารถประมวลผลได้ คุณควรลองคืนเงินด้วยวิธีอื่นอีกครั้ง "
+"ข้อความแจ้งข้อผิดพลาดคือ: {}"
 
 #: pretix/control/views/orders.py
 #, python-brace-format
@@ -27904,15 +27965,15 @@ msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
 "as complete below."
 msgstr ""
-"บันทึกข้อมูลการคืนเงินจำนวน {} แล้ว แต่ยังไม่ได้ดำเนินการโดยสมบูรณ์ คุณสามารถบันทึกสถานะเป็นเสร็"
-"จสมบูรณ์ได้ที่ด้านล่าง"
+"บันทึกข้อมูลการคืนเงินจำนวน {} แล้ว แต่ยังไม่ได้ดำเนินการโดยสมบูรณ์ "
+"คุณสามารถบันทึกสถานะเป็นเสร็จสมบูรณ์ได้ที่ด้านล่าง"
 
 #: pretix/control/views/orders.py
 msgid ""
 "A new gift card was created. You can now send the user their gift card code."
 msgstr ""
-"สร้างบัตรของขวัญ (Gift card) ใหม่เรียบร้อยแล้ว ขณะนี้คุณสามารถส่งรหัสบัตรของขวัญให้กับผู้ใช้ได้เล"
-"ย"
+"สร้างบัตรของขวัญ (Gift card) ใหม่เรียบร้อยแล้ว "
+"ขณะนี้คุณสามารถส่งรหัสบัตรของขวัญให้กับผู้ใช้ได้เลย"
 
 #: pretix/control/views/orders.py
 msgid "Your gift card code"
@@ -27934,8 +27995,8 @@ msgstr ""
 "\n"
 "เราได้ทำการคืนเงินจำนวน {amount} สำหรับคำสั่งซื้อของคุณเรียบร้อยแล้ว\n"
 "\n"
-"คุณสามารถใช้รหัสบัตรของขวัญ {giftcard} เพื่อชำระเงินสำหรับการซื้อตั๋วครั้งถัดไปในร้านค้าของเราไ"
-"ด้\n"
+"คุณสามารถใช้รหัสบัตรของขวัญ {giftcard} "
+"เพื่อชำระเงินสำหรับการซื้อตั๋วครั้งถัดไปในร้านค้าของเราได้\n"
 "\n"
 "ทีมงาน {event} ของคุณ"
 
@@ -27947,8 +28008,7 @@ msgstr "สร้างรายการชำระเงินเรียบ
 msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
-msgstr ""
-"ยกเลิกคำสั่งซื้อเรียบร้อยแล้ว ขณะนี้คุณสามารถเลือกวิธีที่คุณต้องการโอนเงินคืนให้แก่ผู้ใช้ได้"
+msgstr "ยกเลิกคำสั่งซื้อเรียบร้อยแล้ว ขณะนี้คุณสามารถเลือกวิธีที่คุณต้องการโอนเงินคืนให้แก่ผู้ใช้ได้"
 
 #: pretix/control/views/orders.py
 msgid "No VAT ID specified."
@@ -27960,16 +28020,15 @@ msgstr "ไม่ได้ระบุประเทศ"
 
 #: pretix/control/views/orders.py
 msgid "VAT ID could not be checked since this country is not supported."
-msgstr ""
-"ไม่สามารถตรวจสอบหมายเลขประจำตัวผู้เสียภาษีได้ เนื่องจากไม่รองรับประเทศนี้"
+msgstr "ไม่สามารถตรวจสอบหมายเลขประจำตัวผู้เสียภาษีได้ เนื่องจากไม่รองรับประเทศนี้"
 
 #: pretix/control/views/orders.py
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
 msgstr ""
-"ไม่สามารถตรวจสอบหมายเลขประจำตัวผู้เสียภาษีได้ เนื่องจากระบบตรวจสอบภาษีของประเทศดังกล่าวไม่"
-"พร้อมใช้งานในขณะนี้"
+"ไม่สามารถตรวจสอบหมายเลขประจำตัวผู้เสียภาษีได้ "
+"เนื่องจากระบบตรวจสอบภาษีของประเทศดังกล่าวไม่พร้อมใช้งานในขณะนี้"
 
 #: pretix/control/views/orders.py
 msgid "This VAT ID is valid."
@@ -28008,8 +28067,8 @@ msgid ""
 "The invoice is currently being transmitted. You can start a new attempt "
 "after the current one has been completed."
 msgstr ""
-"ใบแจ้งหนี้/ใบกำกับภาษีอยู่ในระหว่างการนำส่ง คุณสามารถลองใหม่อีกครั้งหลังจากรายการปัจจุบันดำเนินก"
-"ารเสร็จสิ้น"
+"ใบแจ้งหนี้/ใบกำกับภาษีอยู่ในระหว่างการนำส่ง "
+"คุณสามารถลองใหม่อีกครั้งหลังจากรายการปัจจุบันดำเนินการเสร็จสิ้น"
 
 #: pretix/control/views/orders.py
 msgid "The invoice has been scheduled for retransmission."
@@ -28036,8 +28095,8 @@ msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
 msgstr ""
-"ยังไม่ได้สร้างไฟล์ใบแจ้งหนี้/ใบกำกับภาษี ระบบกำลังจะสร้างไฟล์ให้คุณในขณะนี้ โปรดลองอีกครั้งในอีกไม่"
-"กี่วินาที"
+"ยังไม่ได้สร้างไฟล์ใบแจ้งหนี้/ใบกำกับภาษี ระบบกำลังจะสร้างไฟล์ให้คุณในขณะนี้ "
+"โปรดลองอีกครั้งในอีกไม่กี่วินาที"
 
 #: pretix/control/views/orders.py
 msgid "The payment term has been changed."
@@ -28047,18 +28106,15 @@ msgstr "เปลี่ยนแปลงเงื่อนไข/กำหน�
 msgid ""
 "We were not able to process the request completely as the server was too "
 "busy."
-msgstr ""
-"ไม่สามารถประมวลผลคำขอได้โดยสมบูรณ์ เนื่องจากเซิร์ฟเวอร์มีปริมาณการใช้งานหนาแน่น"
+msgstr "ไม่สามารถประมวลผลคำขอได้โดยสมบูรณ์ เนื่องจากเซิร์ฟเวอร์มีปริมาณการใช้งานหนาแน่น"
 
 #: pretix/control/views/orders.py
 msgid "This action is only allowed for pending orders."
-msgstr ""
-"การดำเนินการนี้อนุญาตให้ใช้ได้เฉพาะกับคำสั่งซื้อที่อยู่ระหว่างดำเนินการ (Pending) เท่านั้น"
+msgstr "การดำเนินการนี้อนุญาตให้ใช้ได้เฉพาะกับคำสั่งซื้อที่อยู่ระหว่างดำเนินการ (Pending) เท่านั้น"
 
 #: pretix/control/views/orders.py
 msgid "This action is only allowed for canceled orders."
-msgstr ""
-"การดำเนินการนี้อนุญาตให้ใช้ได้เฉพาะกับคำสั่งซื้อที่ถูกยกเลิกแล้วเท่านั้น"
+msgstr "การดำเนินการนี้อนุญาตให้ใช้ได้เฉพาะกับคำสั่งซื้อที่ถูกยกเลิกแล้วเท่านั้น"
 
 #: pretix/control/views/orders.py pretix/presale/views/order.py
 msgid "An error occurred. Please see the details below."
@@ -28101,8 +28157,7 @@ msgstr "ข้อความของคุณเข้าสู่คิวแ
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
-msgstr ""
-"ลิงก์นี้ไม่สามารถใช้งานได้แล้ว โปรดย้อนกลับ รีเฟรชหน้าเว็บ แล้วลองใหม่อีกครั้ง"
+msgstr "ลิงก์นี้ไม่สามารถใช้งานได้แล้ว โปรดย้อนกลับ รีเฟรชหน้าเว็บ แล้วลองใหม่อีกครั้ง"
 
 #: pretix/control/views/orders.py
 msgid "There is no order with the given order code."
@@ -28114,15 +28169,13 @@ msgstr "ไม่พบตัวส่งออกข้อมูล (Exporter) 
 
 #: pretix/control/views/orders.py pretix/control/views/organizer.py
 msgid "There was a problem processing your input. See below for error details."
-msgstr ""
-"เกิดปัญหาในการประมวลผลข้อมูลที่คุณระบุ โปรดดูรายละเอียดข้อผิดพลาดด้านล่าง"
+msgstr "เกิดปัญหาในการประมวลผลข้อมูลที่คุณระบุ โปรดดูรายละเอียดข้อผิดพลาดด้านล่าง"
 
 #: pretix/control/views/orders.py pretix/control/views/organizer.py
 msgid ""
 "Your user account does not have sufficient permission to run this report, "
 "therefore you cannot change it."
-msgstr ""
-"บัญชีผู้ใช้ของคุณไม่มีสิทธิ์เพียงพอในการเรียกรายงานนี้ คุณจึงไม่สามารถแก้ไขรายงานนี้ได้"
+msgstr "บัญชีผู้ใช้ของคุณไม่มีสิทธิ์เพียงพอในการเรียกรายงานนี้ คุณจึงไม่สามารถแก้ไขรายงานนี้ได้"
 
 #: pretix/control/views/orders.py pretix/control/views/organizer.py
 msgid ""
@@ -28142,8 +28195,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py pretix/control/views/organizer.py
 msgid "Your export schedule has been saved, but no next export is planned."
-msgstr ""
-"บันทึกการกำหนดเวลาส่งออกข้อมูลเรียบร้อยแล้ว แต่ไม่มีแผนการส่งออกครั้งถัดไป"
+msgstr "บันทึกการกำหนดเวลาส่งออกข้อมูลเรียบร้อยแล้ว แต่ไม่มีแผนการส่งออกครั้งถัดไป"
 
 #: pretix/control/views/orders.py pretix/control/views/organizer.py
 #, python-brace-format
@@ -28167,8 +28219,8 @@ msgid ""
 "Depending on system load and type and size of export, this may take a few "
 "minutes."
 msgstr ""
-"การส่งออกข้อมูลของคุณเข้าสู่คิวแล้วและจะเริ่มดำเนินการเร็วๆ นี้ ระบบจะส่งผลลัพธ์ให้ทางอีเมล ทั้งนี้ อ"
-"าจใช้เวลาสองสามนาทีขึ้นอยู่กับภาระงานของระบบ รวมถึงประเภทและขนาดของข้อมูลที่ส่งออก"
+"การส่งออกข้อมูลของคุณเข้าสู่คิวแล้วและจะเริ่มดำเนินการเร็วๆ นี้ ระบบจะส่งผลลัพธ์ให้ทางอีเมล ทั้งนี้ "
+"อาจใช้เวลาสองสามนาทีขึ้นอยู่กับภาระงานของระบบ รวมถึงประเภทและขนาดของข้อมูลที่ส่งออก"
 
 #: pretix/control/views/orders.py
 msgid "All orders have been canceled."
@@ -28180,8 +28232,8 @@ msgid ""
 "The orders have been canceled. An error occurred with {count} orders, please "
 "check all uncanceled orders."
 msgstr ""
-"ยกเลิกคำสั่งซื้อเรียบร้อยแล้ว เกิดข้อผิดพลาดกับคำสั่งซื้อจำนวน {count} รายการ โปรดตรวจสอบคำสั่ง"
-"ซื้อทั้งหมดที่ยังไม่ได้ถูกยกเลิก"
+"ยกเลิกคำสั่งซื้อเรียบร้อยแล้ว เกิดข้อผิดพลาดกับคำสั่งซื้อจำนวน {count} รายการ "
+"โปรดตรวจสอบคำสั่งซื้อทั้งหมดที่ยังไม่ได้ถูกยกเลิก"
 
 #: pretix/control/views/orders.py
 msgid "Your input was not valid."
@@ -28203,8 +28255,7 @@ msgstr "ลบผู้จัดงานเรียบร้อยแล้ว
 msgid ""
 "The organizer could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
-msgstr ""
-"ไม่สามารถลบผู้จัดงานได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน)"
+msgstr "ไม่สามารถลบผู้จัดงานได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน)"
 
 #: pretix/control/views/organizer.py
 #, python-brace-format
@@ -28263,8 +28314,7 @@ msgstr ""
 msgid ""
 "The team could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
-msgstr ""
-"ไม่สามารถลบทีมได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน)"
+msgstr "ไม่สามารถลบทีมได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน)"
 
 #: pretix/control/views/organizer.py
 msgid "The selected team has been deleted."
@@ -28274,8 +28324,7 @@ msgstr "ลบทีมที่เลือกเรียบร้อยแล
 msgid ""
 "You cannot remove the last member from this team as no one would be left "
 "with the permission to change teams."
-msgstr ""
-"คุณไม่สามารถลบสมาชิกคนสุดท้ายออกจากทีมนี้ได้ เนื่องจากจะไม่เหลือผู้มีสิทธิ์ในการจัดการทีมอีก"
+msgstr "คุณไม่สามารถลบสมาชิกคนสุดท้ายออกจากทีมนี้ได้ เนื่องจากจะไม่เหลือผู้มีสิทธิ์ในการจัดการทีมอีก"
 
 #: pretix/control/views/organizer.py
 msgid "The member has been removed from the team."
@@ -28339,13 +28388,11 @@ msgstr "เพิกถอนสิทธิ์การเข้าถึงส
 msgid ""
 "All requests will now be scheduled for an immediate attempt. Please allow "
 "for a few minutes before they are processed."
-msgstr ""
-"กำหนดเวลาให้คำขอทั้งหมดลองดำเนินการทันทีแล้ว โปรดรอสักครู่ก่อนที่คำขอจะถูกประมวลผล"
+msgstr "กำหนดเวลาให้คำขอทั้งหมดลองดำเนินการทันทีแล้ว โปรดรอสักครู่ก่อนที่คำขอจะถูกประมวลผล"
 
 #: pretix/control/views/organizer.py
 msgid "All unprocessed webhooks have been stopped from retrying."
-msgstr ""
-"ยุติการพยายามส่งใหม่สำหรับเว็บฮุก (Webhooks) ที่ยังไม่ได้ประมวลผลทั้งหมดแล้ว"
+msgstr "ยุติการพยายามส่งใหม่สำหรับเว็บฮุก (Webhooks) ที่ยังไม่ได้ประมวลผลทั้งหมดแล้ว"
 
 #: pretix/control/views/organizer.py
 msgid "The selected organizer has been invited."
@@ -28416,29 +28463,21 @@ msgid "The provider has been created."
 msgstr "สร้างผู้ให้บริการ (Provider) เรียบร้อยแล้ว"
 
 #: pretix/control/views/organizer.py
-#, python-brace-format
+#, fuzzy
+#| msgid ""
+#| "Your changes have been saved. Please note down the following client "
+#| "secret, it will never be shown again: {secret}"
 msgid ""
-"The SSO client has been created. Please note down the following client "
-"secret, it will never be shown again: {secret}"
+"Please note down the following client secret, it will never be shown again."
 msgstr ""
-"สร้างไคลเอนต์ SSO เรียบร้อยแล้ว โปรดจดบันทึกรหัสลับไคลเอนต์ (Client secret) ต่อไปนี้ไว้ เนื่อ"
-"งจากจะไม่แสดงซ้ำอีก: {secret}"
-
-#: pretix/control/views/organizer.py
-#, python-brace-format
-msgid ""
-"Your changes have been saved. Please note down the following client secret, "
-"it will never be shown again: {secret}"
-msgstr ""
-"บันทึกการเปลี่ยนแปลงของคุณเรียบร้อยแล้ว โปรดจดบันทึกรหัสลับไคลเอนต์ (Client secret) ต่อไปนี้ไ"
-"ว้ เนื่องจากจะไม่แสดงซ้ำอีก: {secret}"
+"บันทึกการเปลี่ยนแปลงของคุณเรียบร้อยแล้ว โปรดจดบันทึกรหัสลับไคลเอนต์ (Client secret) "
+"ต่อไปนี้ไว้ เนื่องจากจะไม่แสดงซ้ำอีก: {secret}"
 
 #: pretix/control/views/organizer.py
 msgid ""
 "We've sent the customer an email with further instructions on resetting your "
 "password."
-msgstr ""
-"เราได้ส่งอีเมลพร้อมคำแนะนำเพิ่มเติมเกี่ยวกับการรีเซ็ตรหัสผ่านไปยังลูกค้าเรียบร้อยแล้ว"
+msgstr "เราได้ส่งอีเมลพร้อมคำแนะนำเพิ่มเติมเกี่ยวกับการรีเซ็ตรหัสผ่านไปยังลูกค้าเรียบร้อยแล้ว"
 
 #: pretix/control/views/organizer.py
 msgid "The customer account has been anonymized."
@@ -28456,8 +28495,7 @@ msgstr "ลบช่องทางการขายที่เลือกเ
 msgid ""
 "The channel could not be deleted as some constraints (e.g. data created by "
 "plug-ins) did not allow it."
-msgstr ""
-"ไม่สามารถลบช่องทางได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน)"
+msgstr "ไม่สามารถลบช่องทางได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน)"
 
 #: pretix/control/views/organizer.py
 msgid "The order of sales channels has been updated."
@@ -28500,8 +28538,8 @@ msgid ""
 "The date could not be deleted as some constraints (e.g. data created by plug-"
 "ins) did not allow it. The date was disabled instead."
 msgstr ""
-"ไม่สามารถลบวันที่ได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน) ระบบจึงทำก"
-"ารปิดใช้งานวันที่นี้แทน"
+"ไม่สามารถลบวันที่ได้เนื่องจากติดข้อจำกัดบางประการ (เช่น ข้อมูลที่ถูกสร้างขึ้นโดยปลั๊กอิน) "
+"ระบบจึงทำการปิดใช้งานวันที่นี้แทน"
 
 #: pretix/control/views/subevents.py
 msgctxt "subevent"
@@ -28566,8 +28604,7 @@ msgstr "รหัสผ่านที่คุณระบุไม่ถูก
 
 #: pretix/control/views/user.py
 msgid "Security devices are only available if pretix is served via HTTPS."
-msgstr ""
-"อุปกรณ์ความปลอดภัยจะสามารถใช้งานได้เมื่อ pretix ให้บริการผ่าน HTTPS เท่านั้น"
+msgstr "อุปกรณ์ความปลอดภัยจะสามารถใช้งานได้เมื่อ pretix ให้บริการผ่าน HTTPS เท่านั้น"
 
 #: pretix/control/views/user.py
 msgid "A two-factor authentication device has been removed from your account."
@@ -28583,8 +28620,7 @@ msgstr "อุปกรณ์ความปลอดภัยนี้ถูก
 
 #: pretix/control/views/user.py
 msgid "A new two-factor authentication device has been added to your account."
-msgstr ""
-"เพิ่มอุปกรณ์ยืนยันตัวตนแบบสองปัจจัย (2FA) เครื่องใหม่ไปยังบัญชีของคุณเรียบร้อยแล้ว"
+msgstr "เพิ่มอุปกรณ์ยืนยันตัวตนแบบสองปัจจัย (2FA) เครื่องใหม่ไปยังบัญชีของคุณเรียบร้อยแล้ว"
 
 #: pretix/control/views/user.py
 msgid ""
@@ -28592,8 +28628,8 @@ msgid ""
 "account using the buttons below to make a second factor required for logging "
 "into your account."
 msgstr ""
-"โปรดทราบว่าคุณยังคงต้องเปิดใช้งานการยืนยันตัวตนแบบสองปัจจัยสำหรับบัญชีของคุณโดยใช้ปุ่มด้านล่าง เพื่"
-"อกำหนดให้ต้องใช้ปัจจัยที่สองในการเข้าสู่ระบบ"
+"โปรดทราบว่าคุณยังคงต้องเปิดใช้งานการยืนยันตัวตนแบบสองปัจจัยสำหรับบัญชีของคุณโดยใช้ปุ่มด้านล่าง "
+"เพื่อกำหนดให้ต้องใช้ปัจจัยที่สองในการเข้าสู่ระบบ"
 
 #: pretix/control/views/user.py
 msgid "The device has been verified and can now be used."
@@ -28608,8 +28644,8 @@ msgid ""
 "The code you entered was not valid. If this problem persists, please check "
 "that the date and time of your phone are configured correctly."
 msgstr ""
-"รหัสที่คุณระบุไม่ถูกต้อง หากยังคงพบปัญหานี้ โปรดตรวจสอบว่าได้ตั้งค่าวันที่และเวลาบนโทรศัพท์ของคุณอย่า"
-"งถูกต้องแล้ว"
+"รหัสที่คุณระบุไม่ถูกต้อง หากยังคงพบปัญหานี้ "
+"โปรดตรวจสอบว่าได้ตั้งค่าวันที่และเวลาบนโทรศัพท์ของคุณอย่างถูกต้องแล้ว"
 
 #: pretix/control/views/user.py
 msgid "You have left all teams that require two-factor authentication."
@@ -28619,8 +28655,7 @@ msgstr "คุณได้ออกจากทุกทีมที่กำห
 msgid ""
 "Please configure at least one device before enabling two-factor "
 "authentication."
-msgstr ""
-"โปรดตั้งค่าอุปกรณ์อย่างน้อยหนึ่งเครื่องก่อนเปิดใช้งานการยืนยันตัวตนแบบสองปัจจัย"
+msgstr "โปรดตั้งค่าอุปกรณ์อย่างน้อยหนึ่งเครื่องก่อนเปิดใช้งานการยืนยันตัวตนแบบสองปัจจัย"
 
 #: pretix/control/views/user.py
 msgid "Two-factor authentication is now enabled for your account."
@@ -28640,8 +28675,8 @@ msgid ""
 "Your emergency codes:\n"
 "{tokens}"
 msgstr ""
-"สร้างรหัสฉุกเฉินของคุณใหม่เรียบร้อยแล้ว โปรดอย่าลืมจัดเก็บรหัสไว้ในที่ปลอดภัย ในกรณีที่คุณไม่สามารถเ"
-"ข้าถึงอุปกรณ์ของคุณได้ คุณจะไม่สามารถดูรหัสเหล่านี้ที่นี่ได้อีก\n"
+"สร้างรหัสฉุกเฉินของคุณใหม่เรียบร้อยแล้ว โปรดอย่าลืมจัดเก็บรหัสไว้ในที่ปลอดภัย "
+"ในกรณีที่คุณไม่สามารถเข้าถึงอุปกรณ์ของคุณได้ คุณจะไม่สามารถดูรหัสเหล่านี้ที่นี่ได้อีก\n"
 "\n"
 "รหัสฉุกเฉินของคุณ:\n"
 "{tokens}"
@@ -28667,8 +28702,7 @@ msgstr "ที่อยู่อีเมลของคุณได้รับ
 msgid ""
 "Please enter the confirmation code we sent to your email address "
 "<strong>{email}</strong>."
-msgstr ""
-"โปรดระบุรหัสยืนยันที่เราส่งไปยังที่อยู่อีเมลของคุณ <strong>{email}</strong>"
+msgstr "โปรดระบุรหัสยืนยันที่เราส่งไปยังที่อยู่อีเมลของคุณ <strong>{email}</strong>"
 
 #: pretix/control/views/user.py
 msgid "We were unable to verify your confirmation code. Please try again."
@@ -28696,8 +28730,8 @@ msgid ""
 "This will usually happen if you lost access to your two-factor credentials "
 "and requested a reset of the credentials."
 msgstr ""
-"รหัสฉุกเฉินสำหรับการยืนยันตัวตนแบบสองปัจจัยถูกสร้างขึ้นโดยผู้ดูแลระบบ เหตุการณ์นี้มักจะเกิดขึ้นเมื่อคุณสู"
-"ญเสียการเข้าถึงข้อมูลประจำตัวสองปัจจัยและร้องขอการรีเซ็ตข้อมูลดังกล่าว"
+"รหัสฉุกเฉินสำหรับการยืนยันตัวตนแบบสองปัจจัยถูกสร้างขึ้นโดยผู้ดูแลระบบ "
+"เหตุการณ์นี้มักจะเกิดขึ้นเมื่อคุณสูญเสียการเข้าถึงข้อมูลประจำตัวสองปัจจัยและร้องขอการรีเซ็ตข้อมูลดังกล่าว"
 
 #: pretix/control/views/users.py
 #, python-brace-format
@@ -28707,9 +28741,9 @@ msgid ""
 "(other than email, if possible). Any previous emergency tokens for this user "
 "remain active."
 msgstr ""
-"โทเคนฉุกเฉินสำหรับผู้ใช้นี้คือ \"{token}\" ซึ่งสามารถใช้งานได้เพียงครั้งเดียวเท่านั้น โปรดตรวจสอบ"
-"ให้แน่ใจว่าได้ส่งรหัสนี้ผ่านช่องทางที่มีการยืนยันตัวตนเท่านั้น (หากเป็นไปได้ โปรดเลี่ยงการส่งทางอีเม"
-"ล) ทั้งนี้ โทเคนฉุกเฉินก่อนหน้านี้ทั้งหมดของผู้ใช้นี้จะยังคงใช้งานได้อยู่"
+"โทเคนฉุกเฉินสำหรับผู้ใช้นี้คือ \"{token}\" ซึ่งสามารถใช้งานได้เพียงครั้งเดียวเท่านั้น "
+"โปรดตรวจสอบให้แน่ใจว่าได้ส่งรหัสนี้ผ่านช่องทางที่มีการยืนยันตัวตนเท่านั้น (หากเป็นไปได้ "
+"โปรดเลี่ยงการส่งทางอีเมล) ทั้งนี้ โทเคนฉุกเฉินก่อนหน้านี้ทั้งหมดของผู้ใช้นี้จะยังคงใช้งานได้อยู่"
 
 #: pretix/control/views/users.py
 msgid "The drift values for TOTP devices have been reset."
@@ -28843,8 +28877,7 @@ msgstr "จนถึง"
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload a "
 "picture with smaller dimensions."
-msgstr ""
-"ไฟล์ที่คุณอัปโหลดมีขนาดพิกเซลใหญ่เกินไป โปรดอัปโหลดรูปภาพที่มีขนาดภาพเล็กกว่านี้"
+msgstr "ไฟล์ที่คุณอัปโหลดมีขนาดพิกเซลใหญ่เกินไป โปรดอัปโหลดรูปภาพที่มีขนาดภาพเล็กกว่านี้"
 
 #: pretix/helpers/payment.py
 msgid "Open BezahlCode in your banking app to start the payment process."
@@ -29022,8 +29055,9 @@ msgid ""
 "download the badges in the backend or automatically print them with our "
 "check-in apps."
 msgstr ""
-"สร้างป้ายชื่อหรือป้ายติดหน้าอกสำหรับผู้ร่วมงานของคุณโดยอัตโนมัติ คุณสามารถดาวน์โหลดป้ายชื่อได้จากระ"
-"บบส่วนหลัง (Backend) หรือสั่งพิมพ์โดยอัตโนมัติผ่านแอปพลิเคชันเช็คอินของเรา"
+"สร้างป้ายชื่อหรือป้ายติดหน้าอกสำหรับผู้ร่วมงานของคุณโดยอัตโนมัติ "
+"คุณสามารถดาวน์โหลดป้ายชื่อได้จากระบบส่วนหลัง (Backend) "
+"หรือสั่งพิมพ์โดยอัตโนมัติผ่านแอปพลิเคชันเช็คอินของเรา"
 
 #: pretix/plugins/badges/exporters.py
 msgid "One badge per page"
@@ -29061,8 +29095,7 @@ msgstr "ชุดไฟล์ PDF"
 
 #: pretix/plugins/badges/exporters.py
 msgid "Download all attendee badges as one large PDF for printing."
-msgstr ""
-"ดาวน์โหลดป้ายชื่อผู้ร่วมงานทั้งหมดเป็นไฟล์ PDF รวมไฟล์เดียวเพื่อทำการพิมพ์"
+msgstr "ดาวน์โหลดป้ายชื่อผู้ร่วมงานทั้งหมดเป็นไฟล์ PDF รวมไฟล์เดียวเพื่อทำการพิมพ์"
 
 #: pretix/plugins/badges/exporters.py
 #: pretix/plugins/ticketoutputpdf/exporters.py
@@ -29084,9 +29117,9 @@ msgid ""
 "Please note that your individual badge layouts must already be in the "
 "correct size."
 msgstr ""
-"ตัวเลือกนี้ช่วยให้คุณจัดวางป้ายชื่อหลายใบในหน้าเดียวได้ เช่น กรณีที่คุณต้องการพิมพ์ลงบนแผ่นสติกเกอร์ด้ว"
-"ยเครื่องพิมพ์สำนักงานทั่วไป โปรดทราบว่าเค้าโครงป้ายชื่อแต่ละใบของคุณต้องได้รับการกำหนดขนาดให้ถูก"
-"ต้องเรียบร้อยแล้ว"
+"ตัวเลือกนี้ช่วยให้คุณจัดวางป้ายชื่อหลายใบในหน้าเดียวได้ เช่น "
+"กรณีที่คุณต้องการพิมพ์ลงบนแผ่นสติกเกอร์ด้วยเครื่องพิมพ์สำนักงานทั่วไป "
+"โปรดทราบว่าเค้าโครงป้ายชื่อแต่ละใบของคุณต้องได้รับการกำหนดขนาดให้ถูกต้องเรียบร้อยแล้ว"
 
 #: pretix/plugins/badges/exporters.py
 msgid "Start event date"
@@ -29133,8 +29166,8 @@ msgid ""
 "invalid values in your databases, such as answers to number questions which "
 "are not a number."
 msgstr ""
-"ไม่สามารถแปลงข้อมูลของคุณตามที่ร้องขอได้ สาเหตุอาจเกิดจากค่าที่ไม่ถูกต้องในฐานข้อมูลของคุณ เช่น ค"
-"ำตอบของคำถามประเภทตัวเลขที่ไม่ใช่ตัวเลข"
+"ไม่สามารถแปลงข้อมูลของคุณตามที่ร้องขอได้ สาเหตุอาจเกิดจากค่าที่ไม่ถูกต้องในฐานข้อมูลของคุณ เช่น "
+"คำตอบของคำถามประเภทตัวเลขที่ไม่ใช่ตัวเลข"
 
 #: pretix/plugins/badges/forms.py
 msgid "Template"
@@ -29144,8 +29177,7 @@ msgstr "แม่แบบ"
 msgid ""
 "You can modify the layout or change to a different page size in the next "
 "step."
-msgstr ""
-"คุณสามารถแก้ไขเค้าโครงหรือเปลี่ยนไปใช้ขนาดหน้ากระดาษอื่นได้ในขั้นตอนถัดไป"
+msgstr "คุณสามารถแก้ไขเค้าโครงหรือเปลี่ยนไปใช้ขนาดหน้ากระดาษอื่นได้ในขั้นตอนถัดไป"
 
 #: pretix/plugins/badges/forms.py
 msgid "(Do not print badges)"
@@ -29213,8 +29245,7 @@ msgstr "พิมพ์ป้ายชื่อ"
 #, python-format
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
-msgstr ""
-"คุณแน่ใจหรือไม่ว่าต้องการลบเค้าโครงป้ายชื่อ <strong>%(layout)s</strong>?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบเค้าโครงป้ายชื่อ <strong>%(layout)s</strong>?"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html
 #, python-format
@@ -29259,8 +29290,7 @@ msgstr "การโอนเงินผ่านธนาคาร"
 msgid ""
 "Accept payments from your customers using classical wire transfer methods "
 "with your own bank account."
-msgstr ""
-"รับชำระเงินจากลูกค้าของคุณด้วยวิธีการโอนเงินผ่านธนาคารแบบทั่วไปโดยใช้บัญชีธนาคารของคุณเอง"
+msgstr "รับชำระเงินจากลูกค้าของคุณด้วยวิธีการโอนเงินผ่านธนาคารแบบทั่วไปโดยใช้บัญชีธนาคารของคุณเอง"
 
 #: pretix/plugins/banktransfer/apps.py pretix/plugins/banktransfer/signals.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html
@@ -29290,10 +29320,10 @@ msgid ""
 "import a digital bank statement in order to give pretix the required "
 "information."
 msgstr ""
-"ฉันเข้าใจดีว่าผู้ซื้อจะโอนเงินค่าตั๋วเข้าบัญชีธนาคารของฉันโดยตรง และ pretix ไม่สามารถรับรู้ได้โดยอั"
-"ตโนมัติว่ามียอดชำระเงินใดเข้ามาบ้าง ดังนั้น ฉันจะทำการทำเครื่องหมายชำระเงินเรียบร้อยด้วยตนเอง "
-"หรือนำเข้ารายการเดินบัญชีอิเล็กทรอนิกส์ (Bank statement) เป็นประจำเพื่อส่งข้อมูลที่จำเป็นให้แก่ "
-"pretix"
+"ฉันเข้าใจดีว่าผู้ซื้อจะโอนเงินค่าตั๋วเข้าบัญชีธนาคารของฉันโดยตรง และ pretix "
+"ไม่สามารถรับรู้ได้โดยอัตโนมัติว่ามียอดชำระเงินใดเข้ามาบ้าง ดังนั้น "
+"ฉันจะทำการทำเครื่องหมายชำระเงินเรียบร้อยด้วยตนเอง หรือนำเข้ารายการเดินบัญชีอิเล็กทรอนิกส์ "
+"(Bank statement) เป็นประจำเพื่อส่งข้อมูลที่จำเป็นให้แก่ pretix"
 
 #: pretix/plugins/banktransfer/payment.py
 msgid "Bank account type"
@@ -29316,8 +29346,8 @@ msgid ""
 "Please note: special characters other than letters, numbers, and some "
 "punctuation can cause problems with some banks."
 msgstr ""
-"โปรดทราบ: อักขระพิเศษอื่นๆ นอกเหนือจากตัวอักษร ตัวเลข และเครื่องหมายวรรคตอนบางชนิด อาจก่อ"
-"ให้เกิดปัญหากับบางธนาคารได้"
+"โปรดทราบ: อักขระพิเศษอื่นๆ นอกเหนือจากตัวอักษร ตัวเลข และเครื่องหมายวรรคตอนบางชนิด "
+"อาจก่อให้เกิดปัญหากับบางธนาคารได้"
 
 #: pretix/plugins/banktransfer/payment.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html
@@ -29348,8 +29378,8 @@ msgid ""
 "transfer payment. If you have lots of international customers, they might "
 "need your full address and your bank's full address."
 msgstr ""
-"ระบุข้อมูลอื่นๆ ทั้งหมดที่ลูกค้าของคุณอาจจำเป็นต้องใช้ในการโอนเงินผ่านธนาคาร หากคุณมีลูกค้าต่างชาติจ"
-"ำนวนมาก พวกเขาอาจจำเป็นต้องใช้ที่อยู่เต็มของคุณและที่อยู่เต็มของธนาคาร"
+"ระบุข้อมูลอื่นๆ ทั้งหมดที่ลูกค้าของคุณอาจจำเป็นต้องใช้ในการโอนเงินผ่านธนาคาร "
+"หากคุณมีลูกค้าต่างชาติจำนวนมาก พวกเขาอาจจำเป็นต้องใช้ที่อยู่เต็มของคุณและที่อยู่เต็มของธนาคาร"
 
 #: pretix/plugins/banktransfer/payment.py
 msgid ""
@@ -29357,8 +29387,9 @@ msgid ""
 "everything that your customers need to transfer the money, e.g. account "
 "numbers, routing numbers, addresses, etc."
 msgstr ""
-"สำหรับบัญชี SEPA คุณสามารถเว้นว่างส่วนนี้ไว้ได้ มิฉะนั้น โปรดระบุข้อมูลทั้งหมดที่ลูกค้าจำเป็นต้องใช้ในก"
-"ารโอนเงิน เช่น เลขที่บัญชี, Routing number, ที่อยู่ เป็นต้น"
+"สำหรับบัญชี SEPA คุณสามารถเว้นว่างส่วนนี้ไว้ได้ มิฉะนั้น "
+"โปรดระบุข้อมูลทั้งหมดที่ลูกค้าจำเป็นต้องใช้ในการโอนเงิน เช่น เลขที่บัญชี, Routing number, ที่อยู่ "
+"เป็นต้น"
 
 #: pretix/plugins/banktransfer/payment.py
 msgid "Do not include hyphens in the payment reference."
@@ -29384,8 +29415,7 @@ msgstr "ข้อความเพิ่มเติมที่จะแสด
 msgid ""
 "This text will be shown on the order confirmation page for pending orders in "
 "addition to the standard text."
-msgstr ""
-"ข้อความนี้จะแสดงบนหน้ายืนยันคำสั่งซื้อสำหรับคำสั่งซื้อที่รอการชำระเงินเพิ่มเติมจากข้อความมาตรฐาน"
+msgstr "ข้อความนี้จะแสดงบนหน้ายืนยันคำสั่งซื้อสำหรับคำสั่งซื้อที่รอการชำระเงินเพิ่มเติมจากข้อความมาตรฐาน"
 
 #: pretix/plugins/banktransfer/payment.py
 msgid "IBAN blocklist for refunds"
@@ -29401,11 +29431,12 @@ msgid ""
 "can e.g. ban DE0012345 to ban all German IBANs with the bank identifier "
 "starting with 12345."
 msgstr ""
-"ป้อน IBAN หรือคำนำหน้า IBAN หนึ่งรายการต่อบรรทัด ระบบจะไม่ส่งเงินคืนไปยัง IBAN ใดๆ ในรายก"
-"ารนี้ ซึ่งมีประโยชน์ เช่น หากคุณได้รับ \"รายการโอนต่อ\" จำนวนมากจากผู้ให้บริการชำระเงินภายนอ"
-"ก คุณสามารถระบุรหัสประเทศ เช่น \"GB\" ได้ หากคุณไม่ต้องการส่งเงินคืนไปยัง IBAN จากประเทศนั้"
-"นๆ ทั้งนี้ ระบบจะมองข้ามตัวเลขตรวจสอบ (Check digits) ในการเปรียบเทียบ เช่น คุณสามารถระ"
-"บุ DE0012345 เพื่อบล็อก IBAN ของเยอรมนีทั้งหมดที่มีรหัสธนาคารเริ่มต้นด้วย 12345 ได้"
+"ป้อน IBAN หรือคำนำหน้า IBAN หนึ่งรายการต่อบรรทัด ระบบจะไม่ส่งเงินคืนไปยัง IBAN ใดๆ "
+"ในรายการนี้ ซึ่งมีประโยชน์ เช่น หากคุณได้รับ \"รายการโอนต่อ\" "
+"จำนวนมากจากผู้ให้บริการชำระเงินภายนอก คุณสามารถระบุรหัสประเทศ เช่น \"GB\" ได้ "
+"หากคุณไม่ต้องการส่งเงินคืนไปยัง IBAN จากประเทศนั้นๆ ทั้งนี้ ระบบจะมองข้ามตัวเลขตรวจสอบ "
+"(Check digits) ในการเปรียบเทียบ เช่น คุณสามารถระบุ DE0012345 เพื่อบล็อก IBAN "
+"ของเยอรมนีทั้งหมดที่มีรหัสธนาคารเริ่มต้นด้วย 12345 ได้"
 
 #: pretix/plugins/banktransfer/payment.py
 msgid "Restrict to business customers"
@@ -29459,8 +29490,7 @@ msgstr "บัญชีธนาคาร {iban}"
 
 #: pretix/plugins/banktransfer/payment.py
 msgid "Can only create a bank transfer refund from an existing payment."
-msgstr ""
-"สามารถสร้างรายการคืนเงินผ่านการโอนเงินธนาคารได้จากรายการชำระเงินที่มีอยู่แล้วเท่านั้น"
+msgstr "สามารถสร้างรายการคืนเงินผ่านการโอนเงินธนาคารได้จากรายการชำระเงินที่มีอยู่แล้วเท่านั้น"
 
 #: pretix/plugins/banktransfer/payment.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/new_refund_control_form.html
@@ -29511,8 +29541,8 @@ msgid ""
 "Please do not yet start a payment. We'll assign you a personal reference "
 "code after you completed the order."
 msgstr ""
-"โปรดอย่าเพิ่งทำการชำระเงิน ระบบจะกำหนดรหัสอ้างอิงส่วนบุคคลให้คุณหลังจากที่ทำรายการสั่งซื้อเสร็จส"
-"มบูรณ์"
+"โปรดอย่าเพิ่งทำการชำระเงิน "
+"ระบบจะกำหนดรหัสอ้างอิงส่วนบุคคลให้คุณหลังจากที่ทำรายการสั่งซื้อเสร็จสมบูรณ์"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html
@@ -29527,8 +29557,7 @@ msgstr "ระบบจะกำหนดรหัสอ้างอิงส่
 msgid ""
 "We will assign you a personal reference code to use after you completed the "
 "order."
-msgstr ""
-"ระบบจะกำหนดรหัสอ้างอิงส่วนบุคคลให้คุณใช้หลังจากที่ทำรายการสั่งซื้อเสร็จสมบูรณ์"
+msgstr "ระบบจะกำหนดรหัสอ้างอิงส่วนบุคคลให้คุณใช้หลังจากที่ทำรายการสั่งซื้อเสร็จสมบูรณ์"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html
 msgid ""
@@ -29559,8 +29588,8 @@ msgid ""
 "are aligned. Please help us by selecting which column contain what kind of "
 "data."
 msgstr ""
-"ระบบไม่สามารถระบุการจัดวางคอลัมน์ในไฟล์ของคุณโดยอัตโนมัติได้ โปรดช่วยเราโดยการเลือกชนิดข้อมูล"
-"สำหรับแต่ละคอลัมน์"
+"ระบบไม่สามารถระบุการจัดวางคอลัมน์ในไฟล์ของคุณโดยอัตโนมัติได้ "
+"โปรดช่วยเราโดยการเลือกชนิดข้อมูลสำหรับแต่ละคอลัมน์"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html
 msgid ""
@@ -29585,16 +29614,17 @@ msgid ""
 "In the payment settings of your event, you set the %(date)s as the last date "
 "of any payments. Therefore, you won't be able to mark any order as paid here."
 msgstr ""
-"ในการตั้งค่าการชำระเงินสำหรับอีเวนต์ของคุณ คุณได้กำหนดให้วันที่ %(date)s เป็นวันสุดท้ายของการรับ"
-"ชำระเงิน ดังนั้น คุณจะไม่สามารถทำเครื่องหมายว่าคำสั่งซื้อชำระเงินเรียบร้อยแล้วที่นี่ได้"
+"ในการตั้งค่าการชำระเงินสำหรับอีเวนต์ของคุณ คุณได้กำหนดให้วันที่ %(date)s "
+"เป็นวันสุดท้ายของการรับชำระเงิน ดังนั้น "
+"คุณจะไม่สามารถทำเครื่องหมายว่าคำสั่งซื้อชำระเงินเรียบร้อยแล้วที่นี่ได้"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html
 msgid ""
 "This page allows you to upload bank statement files to process incoming "
 "payments."
 msgstr ""
-"หน้านี้อนุญาตให้คุณอัปโหลดไฟล์รายการเดินบัญชีธนาคาร (Bank statement) เพื่อประมวลผลยอดเงินเข้"
-"า"
+"หน้านี้อนุญาตให้คุณอัปโหลดไฟล์รายการเดินบัญชีธนาคาร (Bank statement) "
+"เพื่อประมวลผลยอดเงินเข้า"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html
 msgid ""
@@ -29621,8 +29651,8 @@ msgid ""
 "On this page, you can import banking data on a per-event level. You also "
 "only see unmatched transactions imported directly for this event."
 msgstr ""
-"ในหน้านี้ คุณสามารถนำเข้าข้อมูลธนาคารในระดับรายอีเวนต์ได้ และคุณจะเห็นเฉพาะรายการธุรกรรมที่ไม่"
-"จับคู่กันซึ่งถูกนำเข้าสำหรับอีเวนต์นี้โดยตรงเท่านั้น"
+"ในหน้านี้ คุณสามารถนำเข้าข้อมูลธนาคารในระดับรายอีเวนต์ได้ "
+"และคุณจะเห็นเฉพาะรายการธุรกรรมที่ไม่จับคู่กันซึ่งถูกนำเข้าสำหรับอีเวนต์นี้โดยตรงเท่านั้น"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html
 msgid "Go to organizer-level import"
@@ -29714,8 +29744,8 @@ msgid ""
 "<strong>%(num_new)s</strong> Bank transfer refunds have been placed and are "
 "not yet part of an export."
 msgstr ""
-"มีรายการคืนเงินผ่านการโอนเงินธนาคารจำนวน <strong>%(num_new)s</strong> รายการ ที่ถูกส่ง"
-"เรื่องแล้วและยังไม่ได้รวมอยู่ในไฟล์ส่งออก"
+"มีรายการคืนเงินผ่านการโอนเงินธนาคารจำนวน <strong>%(num_new)s</strong> รายการ "
+"ที่ถูกส่งเรื่องแล้วและยังไม่ได้รวมอยู่ในไฟล์ส่งออก"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid "In test mode, your exports will only contain test mode orders."
@@ -29725,8 +29755,7 @@ msgstr "ในโหมดทดสอบ ไฟล์ส่งออกขอ�
 msgid ""
 "If you want, you can now also create these exports for multiple events "
 "combined."
-msgstr ""
-"หากคุณต้องการ คุณสามารถสร้างไฟล์ส่งออกเหล่านี้สำหรับหลายอีเวนต์รวมกันได้แล้วในขณะนี้"
+msgstr "หากคุณต้องการ คุณสามารถสร้างไฟล์ส่งออกเหล่านี้สำหรับหลายอีเวนต์รวมกันได้แล้วในขณะนี้"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid "Go to organizer-level exports"
@@ -29750,10 +29779,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"                    โปรดระวังว่ารายการคืนเงินจะถูกทำเครื่องหมายว่าเสร็จสมบูรณ์ทันทีที่สร้างไฟ"
-"ล์ส่งออก\n"
-"                    ตรวจสอบให้แน่ใจว่าคุณได้ดาวน์โหลดไฟล์ส่งออกและดำเนินการคืนเงินเรียบร้อ"
-"ยแล้ว\n"
+"                    โปรดระวังว่ารายการคืนเงินจะถูกทำเครื่องหมายว่าเสร็จสมบูรณ์ทันทีที่สร้างไฟล์ส่งออก\n"
+"                    ตรวจสอบให้แน่ใจว่าคุณได้ดาวน์โหลดไฟล์ส่งออกและดำเนินการคืนเงินเรียบร้อยแล้ว\n"
 "                "
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
@@ -29797,8 +29824,8 @@ msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
 msgstr[0] ""
-"คุณกำลังพยายามดาวน์โหลดไฟล์ส่งออกการคืนเงินจากวันที่ %(date)s ซึ่งมี %(cnt)s คำสั่งซื้อ และมียอ"
-"ดรวม %(sum)s"
+"คุณกำลังพยายามดาวน์โหลดไฟล์ส่งออกการคืนเงินจากวันที่ %(date)s ซึ่งมี %(cnt)s คำสั่งซื้อ "
+"และมียอดรวม %(sum)s"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html
 msgid ""
@@ -29857,8 +29884,7 @@ msgstr "ยกเลิกรายการ"
 msgid ""
 "Negative amount but refund can't be logged, please create manual refund "
 "first."
-msgstr ""
-"ยอดเงินเป็นลบแต่ไม่สามารถบันทึกการคืนเงินได้ โปรดสร้างรายการคืนเงินด้วยตนเองก่อน"
+msgstr "ยอดเงินเป็นลบแต่ไม่สามารถบันทึกการคืนเงินได้ โปรดสร้างรายการคืนเงินด้วยตนเองก่อน"
 
 #: pretix/plugins/banktransfer/views.py
 msgid "Unknown order code"
@@ -29903,15 +29929,13 @@ msgstr "ระบบไม่สามารถประมวลผลข้อ
 msgid ""
 "I'm sorry, but we were unable to import this CSV file. Please contact "
 "support for help."
-msgstr ""
-"ขออภัย ระบบไม่สามารถนำเข้าไฟล์ CSV นี้ได้ โปรดติดต่อฝ่ายสนับสนุนเพื่อขอความช่วยเหลือ"
+msgstr "ขออภัย ระบบไม่สามารถนำเข้าไฟล์ CSV นี้ได้ โปรดติดต่อฝ่ายสนับสนุนเพื่อขอความช่วยเหลือ"
 
 #: pretix/plugins/banktransfer/views.py
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
-msgstr ""
-"ขออภัย ระบบตรวจพบว่าไฟล์นี้เป็นไฟล์ว่างเปล่า โปรดติดต่อฝ่ายสนับสนุนเพื่อขอความช่วยเหลือ"
+msgstr "ขออภัย ระบบตรวจพบว่าไฟล์นี้เป็นไฟล์ว่างเปล่า โปรดติดต่อฝ่ายสนับสนุนเพื่อขอความช่วยเหลือ"
 
 #: pretix/plugins/banktransfer/views.py
 msgid "Invalid input data."
@@ -29976,8 +30000,8 @@ msgid ""
 "Download a PDF version of a check-in list that can be used to check people "
 "in at the event without digital methods."
 msgstr ""
-"ดาวน์โหลดรายชื่อเช็คอินในรูปแบบ PDF เพื่อใช้ในการเช็คอินผู้ร่วมงานในสถานที่จัดงานโดยไม่ใช้ระบบดิจิ"
-"ทัล"
+"ดาวน์โหลดรายชื่อเช็คอินในรูปแบบ PDF "
+"เพื่อใช้ในการเช็คอินผู้ร่วมงานในสถานที่จัดงานโดยไม่ใช้ระบบดิจิทัล"
 
 #. Translators: maximum 5 characters
 #: pretix/plugins/checkinlists/exporters.py
@@ -30068,10 +30092,10 @@ msgid ""
 "even need a PayPal account. PayPal is one of the most popular payment "
 "methods world-wide."
 msgstr ""
-"รับชำระเงินด้วยบัญชี PayPal ของคุณ นอกเหนือจากการชำระเงินผ่าน PayPal ตามปกติแล้ว คุณยังสาม"
-"ารถเสนอวิธีการชำระเงินท้องถิ่นที่หลากหลาย เช่น eps, iDEAL และอื่นๆ อีกมากมายให้แก่ลูกค้าของคุ"
-"ณ โดยที่ลูกค้าไม่จำเป็นต้องมีบัญชี PayPal ด้วยซ้ำ PayPal เป็นหนึ่งในวิธีการชำระเงินที่ได้รับความนิยม"
-"มากที่สุดทั่วโลก"
+"รับชำระเงินด้วยบัญชี PayPal ของคุณ นอกเหนือจากการชำระเงินผ่าน PayPal ตามปกติแล้ว "
+"คุณยังสามารถเสนอวิธีการชำระเงินท้องถิ่นที่หลากหลาย เช่น eps, iDEAL และอื่นๆ "
+"อีกมากมายให้แก่ลูกค้าของคุณ โดยที่ลูกค้าไม่จำเป็นต้องมีบัญชี PayPal ด้วยซ้ำ PayPal "
+"เป็นหนึ่งในวิธีการชำระเงินที่ได้รับความนิยมมากที่สุดทั่วโลก"
 
 #: pretix/plugins/paypal2/apps.py pretix/plugins/paypal2/payment.py
 #: pretix/plugins/stripe/payment.py
@@ -30096,9 +30120,9 @@ msgid ""
 "have the option to revert back to paying with their PayPal account. For this "
 "reason, this payment method is always active."
 msgstr ""
-"แม้ว่าลูกค้าจะเลือกวิธีการชำระเงินทางเลือก (Alternative Payment Method) พวกเขายังคงมีตัวเ"
-"ลือกในการเปลี่ยนกลับไปชำระเงินด้วยบัญชี PayPal ได้เสมอ ด้วยเหตุนี้ วิธีการชำระเงินนี้จึงเปิดใช้งาน"
-"อยู่ตลอดเวลา"
+"แม้ว่าลูกค้าจะเลือกวิธีการชำระเงินทางเลือก (Alternative Payment Method) "
+"พวกเขายังคงมีตัวเลือกในการเปลี่ยนกลับไปชำระเงินด้วยบัญชี PayPal ได้เสมอ ด้วยเหตุนี้ "
+"วิธีการชำระเงินนี้จึงเปิดใช้งานอยู่ตลอดเวลา"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Alternative Payment Methods"
@@ -30113,10 +30137,11 @@ msgid ""
 "shoppers location. For German merchants, this is the direct successor of "
 "PayPal Plus."
 msgstr ""
-"นอกเหนือจากการชำระเงินผ่านบัญชี PayPal คุณยังสามารถเสนอตัวเลือกให้ลูกค้าชำระเงินด้วยบัตรเครดิ"
-"ตและวิธีการชำระเงินท้องถิ่นอื่นๆ เช่น eps, iDEAL และอื่นๆ อีกมากมาย แม้ว่าพวกเขาจะไม่มีบัญชี "
-"PayPal ก็ตาม วิธีการชำระเงินที่สามารถใช้งานได้จะพิจารณาจากตำแหน่งที่อยู่ของผู้ซื้อ สำหรับผู้ขายในเ"
-"ยอรมนี นี่คือระบบที่มาแทนที่ PayPal Plus โดยตรง"
+"นอกเหนือจากการชำระเงินผ่านบัญชี PayPal "
+"คุณยังสามารถเสนอตัวเลือกให้ลูกค้าชำระเงินด้วยบัตรเครดิตและวิธีการชำระเงินท้องถิ่นอื่นๆ เช่น eps, "
+"iDEAL และอื่นๆ อีกมากมาย แม้ว่าพวกเขาจะไม่มีบัญชี PayPal ก็ตาม "
+"วิธีการชำระเงินที่สามารถใช้งานได้จะพิจารณาจากตำแหน่งที่อยู่ของผู้ซื้อ สำหรับผู้ขายในเยอรมนี "
+"นี่คือระบบที่มาแทนที่ PayPal Plus โดยตรง"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Disable SEPA Direct Debit"
@@ -30130,10 +30155,10 @@ msgid ""
 "nature of your event - you might want to disabled the option of SEPA Direct "
 "Debit payments in order to reduce the risk of costly chargebacks."
 msgstr ""
-"ขณะที่วิธีการชำระเงินส่วนใหญ่ลูกค้าไม่สามารถดึงเงินคืนได้หากไม่ได้ระบุข้อร้องเรียนที่ชัดเจนกับผู้ขาย แ"
-"ต่ SEPA Direct Debit สามารถดึงเงินคืนได้เพียงกดปุ่มเดียว ด้วยเหตุนี้ (และขึ้นอยู่กับลักษณะอีเวนต์ข"
-"องคุณ) คุณอาจต้องการปิดใช้งานตัวเลือกการชำระเงินผ่าน SEPA Direct Debit เพื่อลดความเสี่ยงจา"
-"กการเรียกเงินคืน (Chargeback) ที่มีค่าใช้จ่ายสูง"
+"ขณะที่วิธีการชำระเงินส่วนใหญ่ลูกค้าไม่สามารถดึงเงินคืนได้หากไม่ได้ระบุข้อร้องเรียนที่ชัดเจนกับผู้ขาย "
+"แต่ SEPA Direct Debit สามารถดึงเงินคืนได้เพียงกดปุ่มเดียว ด้วยเหตุนี้ "
+"(และขึ้นอยู่กับลักษณะอีเวนต์ของคุณ) คุณอาจต้องการปิดใช้งานตัวเลือกการชำระเงินผ่าน SEPA Direct "
+"Debit เพื่อลดความเสี่ยงจากการเรียกเงินคืน (Chargeback) ที่มีค่าใช้จ่ายสูง"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Enable Buy Now Pay Later"
@@ -30145,8 +30170,8 @@ msgid ""
 "pay in multiple installments or within 30 days. You, as the merchant, are "
 "getting your money right away."
 msgstr ""
-"เสนอความเป็นไปได้ให้ลูกค้าของคุณซื้อสินค้าทันที (ไม่เกินวงเงินที่กำหนด) และผ่อนชำระหลายงวดหรือชำ"
-"ระภายใน 30 วัน โดยคุณในฐานะผู้ขายจะได้รับเงินทันที"
+"เสนอความเป็นไปได้ให้ลูกค้าของคุณซื้อสินค้าทันที (ไม่เกินวงเงินที่กำหนด) "
+"และผ่อนชำระหลายงวดหรือชำระภายใน 30 วัน โดยคุณในฐานะผู้ขายจะได้รับเงินทันที"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Allow further payments during compliance hold"
@@ -30161,10 +30186,10 @@ msgid ""
 "attempts during that window. This might result in them being charged twice "
 "if the original payment is approved."
 msgstr ""
-"ระบบป้องกันการทุจริตของ PayPal อาจบล็อกการประมวลผลการชำระเงินบางรายการเป็นเวลานาน รา"
-"ยการชำระเงินจะถูกทำเครื่องหมายว่า \"อยู่ระหว่างดำเนินการ\" (Pending) ในช่วงเวลานี้ คุณสามา"
-"รถอนุญาตให้ลูกค้าเริ่มพยายามชำระเงินอีกครั้งในช่วงเวลานั้นได้ ซึ่งอาจส่งผลให้ลูกค้าถูกเรียกเก็บเงินสอ"
-"งครั้งหากการชำระเงินเดิมได้รับการอนุมัติ"
+"ระบบป้องกันการทุจริตของ PayPal อาจบล็อกการประมวลผลการชำระเงินบางรายการเป็นเวลานาน "
+"รายการชำระเงินจะถูกทำเครื่องหมายว่า \"อยู่ระหว่างดำเนินการ\" (Pending) ในช่วงเวลานี้ "
+"คุณสามารถอนุญาตให้ลูกค้าเริ่มพยายามชำระเงินอีกครั้งในช่วงเวลานั้นได้ "
+"ซึ่งอาจส่งผลให้ลูกค้าถูกเรียกเก็บเงินสองครั้งหากการชำระเงินเดิมได้รับการอนุมัติ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Timeout further payment attempts"
@@ -30175,8 +30200,8 @@ msgid ""
 "Time duration in minutes after which another payment attempt is possible, "
 "while the last payment is still under investigation."
 msgstr ""
-"ระยะเวลาเป็นนาทีหลังจากที่สามารถพยายามชำระเงินอีกครั้งได้ ในขณะที่รายการชำระเงินล่าสุดยังคงอยู่"
-"ระหว่างการตรวจสอบ"
+"ระยะเวลาเป็นนาทีหลังจากที่สามารถพยายามชำระเงินอีกครั้งได้ "
+"ในขณะที่รายการชำระเงินล่าสุดยังคงอยู่ระหว่างการตรวจสอบ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Reference prefix"
@@ -30186,8 +30211,7 @@ msgstr "คำนำหน้ารหัสอ้างอิง"
 msgid ""
 "Any value entered here will be added in front of the regular booking "
 "reference containing the order number."
-msgstr ""
-"ค่าใดๆ ที่กรอกที่นี่จะถูกเพิ่มไว้ที่ด้านหน้าของรหัสอ้างอิงการจองปกติที่มีเลขที่คำสั่งซื้อ"
+msgstr "ค่าใดๆ ที่กรอกที่นี่จะถูกเพิ่มไว้ที่ด้านหน้าของรหัสอ้างอิงการจองปกติที่มีเลขที่คำสั่งซื้อ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "Reference postfix"
@@ -30197,8 +30221,7 @@ msgstr "คำต่อท้ายรหัสอ้างอิง"
 msgid ""
 "Any value entered here will be added behind the regular booking reference "
 "containing the order number."
-msgstr ""
-"ค่าใดๆ ที่กรอกที่นี่จะถูกเพิ่มไว้ที่ด้านหลังของรหัสอ้างอิงการจองปกติที่มีเลขที่คำสั่งซื้อ"
+msgstr "ค่าใดๆ ที่กรอกที่นี่จะถูกเพิ่มไว้ที่ด้านหลังของรหัสอ้างอิงการจองปกติที่มีเลขที่คำสั่งซื้อ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "-- Automatic --"
@@ -30214,8 +30237,8 @@ msgid ""
 "clicking on the following button, you can either create a new PayPal account "
 "or connect pretix to an existing one."
 msgstr ""
-"หากต้องการรับชำระเงินผ่าน PayPal คุณจะต้องมีบัญชี PayPal ก่อน โดยการคลิกที่ปุ่มต่อไปนี้ คุณสามาร"
-"ถสร้างบัญชี PayPal ใหม่ หรือเชื่อมต่อ pretix กับบัญชีที่มีอยู่แล้วได้"
+"หากต้องการรับชำระเงินผ่าน PayPal คุณจะต้องมีบัญชี PayPal ก่อน โดยการคลิกที่ปุ่มต่อไปนี้ "
+"คุณสามารถสร้างบัญชี PayPal ใหม่ หรือเชื่อมต่อ pretix กับบัญชีที่มีอยู่แล้วได้"
 
 #: pretix/plugins/paypal2/payment.py
 #, python-brace-format
@@ -30231,8 +30254,8 @@ msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
 msgstr ""
-"โปรดกำหนดค่า PayPal Webhook ไปยังเอนด์พอยต์ต่อไปนี้ เพื่อยกเลิกคำสั่งซื้อโดยอัตโนมัติเมื่อมีการคืน"
-"เงินจากภายนอกระบบ"
+"โปรดกำหนดค่า PayPal Webhook ไปยังเอนด์พอยต์ต่อไปนี้ "
+"เพื่อยกเลิกคำสั่งซื้อโดยอัตโนมัติเมื่อมีการคืนเงินจากภายนอกระบบ"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "PayPal does not process payments in your event's currency."
@@ -30251,10 +30274,11 @@ msgid ""
 "country and use the same currency. Out of country accounts will not be able "
 "to send any payments."
 msgstr ""
-"สกุลเงินของอีเวนต์ของคุณได้รับการรองรับโดย PayPal ในฐานะสกุลเงินสำหรับการชำระเงินและยอดคง"
-"เหลือเฉพาะบัญชีภายในประเทศเดียวกันเท่านั้น ซึ่งหมายความว่าทั้งบัญชี PayPal ผู้รับและผู้ส่งจะต้องถูกส"
-"ร้างขึ้นในประเทศเดียวกันและใช้สกุลเงินเดียวกัน โดยบัญชีต่างประเทศจะไม่สามารถทำรายการชำระเงิน"
-"ได้"
+"สกุลเงินของอีเวนต์ของคุณได้รับการรองรับโดย PayPal "
+"ในฐานะสกุลเงินสำหรับการชำระเงินและยอดคงเหลือเฉพาะบัญชีภายในประเทศเดียวกันเท่านั้น "
+"ซึ่งหมายความว่าทั้งบัญชี PayPal "
+"ผู้รับและผู้ส่งจะต้องถูกสร้างขึ้นในประเทศเดียวกันและใช้สกุลเงินเดียวกัน "
+"โดยบัญชีต่างประเทศจะไม่สามารถทำรายการชำระเงินได้"
 
 #: pretix/plugins/paypal2/payment.py pretix/plugins/paypal2/views.py
 msgid "An error occurred during connecting with PayPal, please try again."
@@ -30265,8 +30289,8 @@ msgid ""
 "The PayPal sandbox is being used, you can test without actually sending "
 "money but you will need a PayPal sandbox user to log in."
 msgstr ""
-"ขณะนี้กำลังใช้งานระบบทดสอบ (PayPal sandbox) คุณสามารถทดสอบได้โดยไม่ต้องโอนเงินจริง แต่จะ"
-"ต้องใช้บัญชีผู้ใช้ PayPal sandbox ในการเข้าสู่ระบบ"
+"ขณะนี้กำลังใช้งานระบบทดสอบ (PayPal sandbox) คุณสามารถทดสอบได้โดยไม่ต้องโอนเงินจริง "
+"แต่จะต้องใช้บัญชีผู้ใช้ PayPal sandbox ในการเข้าสู่ระบบ"
 
 #: pretix/plugins/paypal2/payment.py
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
@@ -30275,9 +30299,9 @@ msgid ""
 "again, there is a high chance of the payment succeeding on a second or third "
 "attempt. You can also try other payment methods, if available."
 msgstr ""
-"การชำระเงินของคุณล้มเหลวเนื่องจากปัญหาที่พบเป็นประจำในระบบ PayPal โปรดลองใหม่อีกครั้ง เนื่อง"
-"จากมีโอกาสสูงที่การชำระเงินจะสำเร็จในการลองครั้งที่สองหรือสาม คุณยังสามารถลองใช้วิธีการชำระเงิ"
-"นอื่นได้หากมีให้เลือก"
+"การชำระเงินของคุณล้มเหลวเนื่องจากปัญหาที่พบเป็นประจำในระบบ PayPal โปรดลองใหม่อีกครั้ง "
+"เนื่องจากมีโอกาสสูงที่การชำระเงินจะสำเร็จในการลองครั้งที่สองหรือสาม "
+"คุณยังสามารถลองใช้วิธีการชำระเงินอื่นได้หากมีให้เลือก"
 
 #: pretix/plugins/paypal2/payment.py
 msgid "We had trouble communicating with PayPal"
@@ -30303,16 +30327,15 @@ msgstr ""
 msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
-msgstr ""
-"PayPal ยังไม่อนุมัติการชำระเงินนี้ เราจะแจ้งให้คุณทราบทันทีที่การชำระเงินเสร็จสมบูรณ์"
+msgstr "PayPal ยังไม่อนุมัติการชำระเงินนี้ เราจะแจ้งให้คุณทราบทันทีที่การชำระเงินเสร็จสมบูรณ์"
 
 #: pretix/plugins/paypal2/payment.py
 msgid ""
 "Refunding the amount via PayPal failed: The original payment does not "
 "contain the required information to issue an automated refund."
 msgstr ""
-"การคืนเงินผ่าน PayPal ล้มเหลว: รายการชำระเงินเดิมไม่มีข้อมูลที่จำเป็นในการออกเงินคืนแบบอัตโนมั"
-"ติ"
+"การคืนเงินผ่าน PayPal ล้มเหลว: "
+"รายการชำระเงินเดิมไม่มีข้อมูลที่จำเป็นในการออกเงินคืนแบบอัตโนมัติ"
 
 #: pretix/plugins/paypal2/payment.py
 #, python-brace-format
@@ -30400,8 +30423,7 @@ msgstr "PayPal ISU/Connect: Partner Merchant ID"
 msgid ""
 "This is not the BN-code, but rather the ID of the merchant account which "
 "holds branding information for ISU."
-msgstr ""
-"นี่ไม่ใช่รหัส BN-code แต่เป็น ID ของบัญชีผู้ขายที่บรรจุข้อมูลแบรนด์สำหรับ ISU"
+msgstr "นี่ไม่ใช่รหัส BN-code แต่เป็น ID ของบัญชีผู้ขายที่บรรจุข้อมูลแบรนด์สำหรับ ISU"
 
 #: pretix/plugins/paypal2/signals.py
 msgid "PayPal ISU/Connect Endpoint"
@@ -30417,36 +30439,32 @@ msgstr "โปรดคลิกที่ปุ่ม \"ชำระเงิน
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
 msgid "We will then charge your PayPal account and finalize the order."
-msgstr ""
-"จากนั้นระบบจะทำการเรียกเก็บเงินจากบัญชี PayPal ของคุณและเสร็จสิ้นคำสั่งซื้อ"
+msgstr "จากนั้นระบบจะทำการเรียกเก็บเงินจากบัญชี PayPal ของคุณและเสร็จสิ้นคำสั่งซื้อ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
 msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
-msgstr ""
-"ยอดรวมทั้งหมดที่ระบุไว้ด้านบนจะถูกหักจากบัญชี PayPal ของคุณหลังจากที่คุณยืนยันการสั่งซื้อ"
+msgstr "ยอดรวมทั้งหมดที่ระบุไว้ด้านบนจะถูกหักจากบัญชี PayPal ของคุณหลังจากที่คุณยืนยันการสั่งซื้อ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html
 msgid ""
 "After placing your order, you will be able to select your desired payment "
 "method, including PayPal."
-msgstr ""
-"หลังจากทำรายการสั่งซื้อแล้ว คุณจะสามารถเลือกวิธีการชำระเงินที่ต้องการได้ รวมถึง PayPal"
+msgstr "หลังจากทำรายการสั่งซื้อแล้ว คุณจะสามารถเลือกวิธีการชำระเงินที่ต้องการได้ รวมถึง PayPal"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html
 msgid ""
 "A PayPal account is required to use this online payment method. Please keep "
 "your account information ready to enter in the next step."
 msgstr ""
-"จำเป็นต้องมีบัญชี PayPal เพื่อใช้วิธีการชำระเงินออนไลน์นี้ โปรดเตรียมข้อมูลบัญชีของคุณให้พร้อมสำหรับ"
-"กรอกในขั้นตอนถัดไป"
+"จำเป็นต้องมีบัญชี PayPal เพื่อใช้วิธีการชำระเงินออนไลน์นี้ "
+"โปรดเตรียมข้อมูลบัญชีของคุณให้พร้อมสำหรับกรอกในขั้นตอนถัดไป"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html
 msgid ""
 "Please click the \"Pay with PayPal\" button below to start your payment."
-msgstr ""
-"โปรดคลิกปุ่ม \"ชำระเงินด้วย PayPal\" ด้านล่างเพื่อเริ่มดำเนินการชำระเงิน"
+msgstr "โปรดคลิกปุ่ม \"ชำระเงินด้วย PayPal\" ด้านล่างเพื่อเริ่มดำเนินการชำระเงิน"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html
 msgid ""
@@ -30454,8 +30472,9 @@ msgid ""
 "and to fill in your payment details. You will then be redirected back here "
 "to review and confirm your order."
 msgstr ""
-"หลังจากคลิกดำเนินการต่อ คุณจะสามารถเลือกวิธีการชำระเงินที่ต้องการและกรอกรายละเอียดการชำระเ"
-"งินได้ จากนั้นระบบจะนำคุณกลับมายังหน้านี้เพื่อตรวจสอบและยืนยันคำสั่งซื้อ"
+"หลังจากคลิกดำเนินการต่อ "
+"คุณจะสามารถเลือกวิธีการชำระเงินที่ต้องการและกรอกรายละเอียดการชำระเงินได้ "
+"จากนั้นระบบจะนำคุณกลับมายังหน้านี้เพื่อตรวจสอบและยืนยันคำสั่งซื้อ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html
 msgid ""
@@ -30463,8 +30482,9 @@ msgid ""
 "fail. If your payment fails, please just try again. You can also try with a "
 "different payment method, if you prefer."
 msgstr ""
-"ในขณะนี้พบปัญหาที่พบบ่อยในระบบ PayPal ซึ่งอาจส่งผลให้การชำระเงินบางรายการล้มเหลว หากการชำ"
-"ระเงินของคุณล้มเหลว โปรดลองใหม่อีกครั้ง หรือคุณสามารถเลือกใช้วิธีการชำระเงินอื่นได้ตามต้องการ"
+"ในขณะนี้พบปัญหาที่พบบ่อยในระบบ PayPal ซึ่งอาจส่งผลให้การชำระเงินบางรายการล้มเหลว "
+"หากการชำระเงินของคุณล้มเหลว โปรดลองใหม่อีกครั้ง "
+"หรือคุณสามารถเลือกใช้วิธีการชำระเงินอื่นได้ตามต้องการ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
@@ -30480,8 +30500,8 @@ msgid ""
 "This payment is being reviewed by PayPal. Until the review is lifted, the "
 "money will not be disbursed and the order remain in its pending state."
 msgstr ""
-"การชำระเงินนี้กำลังอยู่ระหว่างการตรวจสอบโดย PayPal เงินจะไม่ถูกโอนออกและคำสั่งซื้อจะยังคงอยู่ใ"
-"นสถานะรอการชำระเงินจนกว่าจะเสร็จสิ้นการตรวจสอบ"
+"การชำระเงินนี้กำลังอยู่ระหว่างการตรวจสอบโดย PayPal "
+"เงินจะไม่ถูกโอนออกและคำสั่งซื้อจะยังคงอยู่ในสถานะรอการชำระเงินจนกว่าจะเสร็จสิ้นการตรวจสอบ"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html
@@ -30526,26 +30546,27 @@ msgid ""
 "twice in case PayPal allows your initial payment attempt. Please contact us "
 "to resolve this case."
 msgstr ""
-"การชำระเงินของคุณกำลังอยู่ระหว่างการประมวลผลโดย PayPal ซึ่งใช้เวลานานกว่าปกติ คุณสามารถรอ"
-"จนกว่า PayPal จะรับยืนยันการชำระเงิน หรือลองชำระเงินอีกครั้งด้วยวิธีนี้หรือวิธีการชำระเงินอื่น ทั้ง"
-"นี้ อาจส่งผลให้คุณถูกเรียกเก็บเงินสองครั้งในกรณีที่ PayPal อนุมัติการพยายามชำระเงินในครั้งแรก โปร"
-"ดติดต่อเราเพื่อแก้ไขปัญหานี้"
+"การชำระเงินของคุณกำลังอยู่ระหว่างการประมวลผลโดย PayPal ซึ่งใช้เวลานานกว่าปกติ "
+"คุณสามารถรอจนกว่า PayPal จะรับยืนยันการชำระเงิน "
+"หรือลองชำระเงินอีกครั้งด้วยวิธีนี้หรือวิธีการชำระเงินอื่น ทั้งนี้ "
+"อาจส่งผลให้คุณถูกเรียกเก็บเงินสองครั้งในกรณีที่ PayPal อนุมัติการพยายามชำระเงินในครั้งแรก "
+"โปรดติดต่อเราเพื่อแก้ไขปัญหานี้"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html
 msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
-"ระบบกำลังรอการตอบรับจาก PayPal เกี่ยวกับการชำระเงินของคุณ โปรดติดต่อเราหากใช้เวลานานกว่า"
-"สองสามชั่วโมง"
+"ระบบกำลังรอการตอบรับจาก PayPal เกี่ยวกับการชำระเงินของคุณ "
+"โปรดติดต่อเราหากใช้เวลานานกว่าสองสามชั่วโมง"
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
 "try again."
 msgstr ""
-"เกิดข้อผิดพลาดขณะส่งตัวกลับมาจาก PayPal: พารามิเตอร์ของคำร้องขอขาดหายไป โปรดลองใหม่อีกครั้"
-"ง"
+"เกิดข้อผิดพลาดขณะส่งตัวกลับมาจาก PayPal: พารามิเตอร์ของคำร้องขอขาดหายไป "
+"โปรดลองใหม่อีกครั้ง"
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
@@ -30566,16 +30587,16 @@ msgid ""
 "The email address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
 msgstr ""
-"ที่อยู่อีเมลในบัญชี PayPal ของคุณยังไม่ได้รับการยืนยัน คุณจำเป็นต้องดำเนินการนี้ก่อนจึงจะสามารถเริ่มรั"
-"บชำระเงินได้"
+"ที่อยู่อีเมลในบัญชี PayPal ของคุณยังไม่ได้รับการยืนยัน "
+"คุณจำเป็นต้องดำเนินการนี้ก่อนจึงจะสามารถเริ่มรับชำระเงินได้"
 
 #: pretix/plugins/paypal2/views.py
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
-"บัญชี PayPal ของคุณเชื่อมต่อกับ pretix เรียบร้อยแล้ว คุณสามารถเปลี่ยนแปลงการตั้งค่าโดยละเอียดไ"
-"ด้ด้านล่าง"
+"บัญชี PayPal ของคุณเชื่อมต่อกับ pretix เรียบร้อยแล้ว "
+"คุณสามารถเปลี่ยนแปลงการตั้งค่าโดยละเอียดได้ด้านล่าง"
 
 #: pretix/plugins/paypal2/views.py
 msgid "Invalid response from PayPal received."
@@ -30607,8 +30628,7 @@ msgstr "รายงานทางบัญชี"
 #: pretix/plugins/reports/accountingreport.py
 msgid ""
 "Download a PDF report of all sales and payments within a given time frame."
-msgstr ""
-"ดาวน์โหลดรายงานยอดขายและการชำระเงินทั้งหมดในรูปแบบ PDF ตามช่วงเวลาที่กำหนด"
+msgstr "ดาวน์โหลดรายงานยอดขายและการชำระเงินทั้งหมดในรูปแบบ PDF ตามช่วงเวลาที่กำหนด"
 
 #: pretix/plugins/reports/accountingreport.py
 #: pretix/plugins/reports/exporters.py
@@ -30635,9 +30655,9 @@ msgid ""
 "might therefore be inaccurate with regards to orders that were changed in "
 "the time frame."
 msgstr ""
-"ช่วงเวลาของรายงานนี้รวมถึงข้อมูลที่สร้างขึ้นด้วยซอฟต์แวร์เวอร์ชันเก่า ซึ่งยังไม่ได้จัดเก็บข้อมูลทั้งหมดที่จ"
-"ำเป็นสำหรับการสร้างรายงานนี้ ดังนั้น รายงานอาจมีความคลาดเคลื่อนเกี่ยวกับคำสั่งซื้อที่มีการเปลี่ยนแปล"
-"งในช่วงเวลาดังกล่าว"
+"ช่วงเวลาของรายงานนี้รวมถึงข้อมูลที่สร้างขึ้นด้วยซอฟต์แวร์เวอร์ชันเก่า "
+"ซึ่งยังไม่ได้จัดเก็บข้อมูลทั้งหมดที่จำเป็นสำหรับการสร้างรายงานนี้ ดังนั้น "
+"รายงานอาจมีความคลาดเคลื่อนเกี่ยวกับคำสั่งซื้อที่มีการเปลี่ยนแปลงในช่วงเวลาดังกล่าว"
 
 #: pretix/plugins/reports/accountingreport.py
 #, python-brace-format
@@ -30769,8 +30789,8 @@ msgid ""
 "This plugin allows to link to payments and redirect back afterwards. This is "
 "useful in combination with our API."
 msgstr ""
-"พลักอินนี้ช่วยให้สามารถลิงก์ไปยังการชำระเงินและเปลี่ยนเส้นทางกลับมาหลังจากนั้นได้ ซึ่งมีประโยชน์อย่า"
-"งยิ่งเมื่อใช้งานร่วมกับ API ของเรา"
+"พลักอินนี้ช่วยให้สามารถลิงก์ไปยังการชำระเงินและเปลี่ยนเส้นทางกลับมาหลังจากนั้นได้ "
+"ซึ่งมีประโยชน์อย่างยิ่งเมื่อใช้งานร่วมกับ API ของเรา"
 
 #: pretix/plugins/returnurl/apps.py pretix/plugins/returnurl/signals.py
 msgid "Redirection"
@@ -30781,8 +30801,8 @@ msgid ""
 "This feature is useful if you use only the payment component of pretix but "
 "build your own checkout interface for other steps."
 msgstr ""
-"ฟีเจอร์นี้มีประโยชน์อย่างมากหากคุณใช้งานเฉพาะส่วนประกอบการชำระเงินของ pretix แต่สร้างอินเทอ"
-"ร์เฟซหน้าชำระเงิน (Checkout) ขึ้นเองสำหรับขั้นตอนอื่นๆ"
+"ฟีเจอร์นี้มีประโยชน์อย่างมากหากคุณใช้งานเฉพาะส่วนประกอบการชำระเงินของ pretix "
+"แต่สร้างอินเทอร์เฟซหน้าชำระเงิน (Checkout) ขึ้นเองสำหรับขั้นตอนอื่นๆ"
 
 #: pretix/plugins/returnurl/views.py
 msgid "Base redirection URLs"
@@ -30794,14 +30814,13 @@ msgid ""
 "prefixes. Enter one allowed URL prefix per line. URL prefixes must include a "
 "slash after the hostname."
 msgstr ""
-"ระบบจะอนุญาตให้เปลี่ยนเส้นทางไปยัง URL ที่เริ่มต้นด้วยคำนำหน้าเหล่านี้เท่านั้น กรอกคำนำหน้า URL ที่"
-"อนุญาตบรรทัดละหนึ่งรายการ คำนำหน้า URL ต้องมีเครื่องหมายทับ (slash) ต่อท้ายชื่อโฮสต์"
+"ระบบจะอนุญาตให้เปลี่ยนเส้นทางไปยัง URL ที่เริ่มต้นด้วยคำนำหน้าเหล่านี้เท่านั้น กรอกคำนำหน้า URL "
+"ที่อนุญาตบรรทัดละหนึ่งรายการ คำนำหน้า URL ต้องมีเครื่องหมายทับ (slash) ต่อท้ายชื่อโฮสต์"
 
 #: pretix/plugins/returnurl/views.py
 msgid ""
 "All values must be URLs that include at last one slash after the hostname."
-msgstr ""
-"ค่าทั้งหมดต้องเป็น URL ที่มีเครื่องหมายทับ (slash) อย่างน้อยหนึ่งตัวต่อท้ายชื่อโฮสต์"
+msgstr "ค่าทั้งหมดต้องเป็น URL ที่มีเครื่องหมายทับ (slash) อย่างน้อยหนึ่งตัวต่อท้ายชื่อโฮสต์"
 
 #: pretix/plugins/sendmail/apps.py
 msgid "Send out emails to all your customers or specific groups of customers."
@@ -30817,8 +30836,8 @@ msgid ""
 "being sorted into spam folders. We recommend only using PDFs of no more than "
 "2 MB in size."
 msgstr ""
-"การส่งไฟล์แนบเพิ่มโอกาสที่อีเมลของคุณจะไม่ส่งถึงผู้รับหรือถูกจัดประเภทเป็นสแปม เราขอแนะนำให้ใช้เฉ"
-"พาะไฟล์ PDF ที่มีขนาดไม่เกิน 2 MB เท่านั้น"
+"การส่งไฟล์แนบเพิ่มโอกาสที่อีเมลของคุณจะไม่ส่งถึงผู้รับหรือถูกจัดประเภทเป็นสแปม "
+"เราขอแนะนำให้ใช้เฉพาะไฟล์ PDF ที่มีขนาดไม่เกิน 2 MB เท่านั้น"
 
 #: pretix/plugins/sendmail/forms.py
 msgctxt "sendmail_form"
@@ -30851,6 +30870,16 @@ msgid "Restrict to products"
 msgstr "จำกัดเฉพาะสินค้า"
 
 #: pretix/plugins/sendmail/forms.py
+msgctxt "sendmail_form"
+msgid ""
+"There may be multiple mails sent out to the same mail address if one order "
+"contains multiple attendee products for it, if you restrict to products "
+"while also restricting mails to attendees only. This is intended, as every "
+"one of those get linked to their own separate order page restricted to only "
+"that product."
+msgstr ""
+
+#: pretix/plugins/sendmail/forms.py
 msgid "Filter check-in status"
 msgstr "กรองตามสถานะการเช็คอิน"
 
@@ -30877,13 +30906,11 @@ msgstr "ทุกคนที่ทำรายการสั่งซื้อ
 msgid ""
 "Every attendee (falling back to the order contact when no attendee email "
 "address is given)"
-msgstr ""
-"ผู้เข้าร่วมทุกคน (จะใช้ข้อมูลติดต่อของผู้สั่งซื้อหากไม่ได้ระบุอีเมลของผู้เข้าร่วม)"
+msgstr "ผู้เข้าร่วมทุกคน (จะใช้ข้อมูลติดต่อของผู้สั่งซื้อหากไม่ได้ระบุอีเมลของผู้เข้าร่วม)"
 
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/models.py
 msgid "Both (all order contact addresses and all attendee email addresses)"
-msgstr ""
-"ทั้งสองกลุ่ม (อีเมลติดต่อของผู้สั่งซื้อทั้งหมด และอีเมลของผู้เข้าร่วมทั้งหมด)"
+msgstr "ทั้งสองกลุ่ม (อีเมลติดต่อของผู้สั่งซื้อทั้งหมด และอีเมลของผู้เข้าร่วมทั้งหมด)"
 
 #: pretix/plugins/sendmail/forms.py
 msgid "Attachment of tickets is disabled in this event's email settings."
@@ -30895,8 +30922,7 @@ msgstr "อยู่ระหว่างรอการชำระเงิน
 
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/views.py
 msgid "payment pending (except unapproved or already confirmed)"
-msgstr ""
-"อยู่ระหว่างรอการชำระเงิน (ยกเว้นรายการที่ไม่ได้รับอนุมัติหรือยืนยันแล้ว)"
+msgstr "อยู่ระหว่างรอการชำระเงิน (ยกเว้นรายการที่ไม่ได้รับอนุมัติหรือยืนยันแล้ว)"
 
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/views.py
 msgid "pending with payment overdue"
@@ -31094,8 +31120,7 @@ msgstr "กฎการส่งอีเมล {val}"
 msgid ""
 "This page shows you all mass emails you sent out manually. It does not "
 "include emails sent out automatically."
-msgstr ""
-"หน้านี้แสดงอีเมลกลุ่มทั้งหมดที่คุณส่งด้วยตนเอง โดยไม่รวมอีเมลที่ส่งโดยอัตโนมัติ"
+msgstr "หน้านี้แสดงอีเมลกลุ่มทั้งหมดที่คุณส่งด้วยตนเอง โดยไม่รวมอีเมลที่ส่งโดยอัตโนมัติ"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html
 msgid "Send a new email based on this"
@@ -31139,8 +31164,8 @@ msgid ""
 "your configured date. Typically, this will not be more than 10 minutes. Your "
 "email will never be sent earlier than the time you configured."
 msgstr ""
-"เนื่องจากเหตุผลทางเทคนิค อีเมลอาจถูกส่งช้ากว่าวันที่และเวลาที่คุณกำหนดไว้เล็กน้อย โดยทั่วไปจะไม่เกิ"
-"น 10 นาที และอีเมลของคุณจะไม่มีทางถูกส่งก่อนเวลาที่คุณกำหนดไว้อย่างแน่นอน"
+"เนื่องจากเหตุผลทางเทคนิค อีเมลอาจถูกส่งช้ากว่าวันที่และเวลาที่คุณกำหนดไว้เล็กน้อย "
+"โดยทั่วไปจะไม่เกิน 10 นาที และอีเมลของคุณจะไม่มีทางถูกส่งก่อนเวลาที่คุณกำหนดไว้อย่างแน่นอน"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html
 msgid "Delete Email Rule"
@@ -31181,8 +31206,7 @@ msgstr "กฎการตั้งเวลาส่งอีเมล"
 msgid ""
 "Email rules allow you to automatically send emails to your customers at a "
 "specific time before or after your event."
-msgstr ""
-"กฎการส่งอีเมลช่วยให้คุณสามารถส่งอีเมลถึงลูกค้าโดยอัตโนมัติตามเวลาที่กำหนดก่อนหรือหลังอีเวนต์ของคุณ"
+msgstr "กฎการส่งอีเมลช่วยให้คุณสามารถส่งอีเมลถึงลูกค้าโดยอัตโนมัติตามเวลาที่กำหนดก่อนหรือหลังอีเวนต์ของคุณ"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html
 msgid "Create a new rule"
@@ -31218,8 +31242,8 @@ msgid ""
 "This email has already been sent for all existing dates. Changing it will "
 "have no effect unless you create additional dates in this event series."
 msgstr ""
-"อีเมลนี้ถูกส่งไปแล้วสำหรับทุกวันที่ที่มีอยู่ การแก้ไขจะไม่มีผลใดๆ เว้นแต่คุณจะสร้างวันที่เพิ่มเติมในอีเวนต์แ"
-"บบซีรีส์นี้"
+"อีเมลนี้ถูกส่งไปแล้วสำหรับทุกวันที่ที่มีอยู่ การแก้ไขจะไม่มีผลใดๆ "
+"เว้นแต่คุณจะสร้างวันที่เพิ่มเติมในอีเวนต์แบบซีรีส์นี้"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html
 msgid "This email has already been sent. Changing it will have no effect."
@@ -31250,8 +31274,7 @@ msgstr "ไม่พบผู้รับที่ตรงกับรายก
 msgid ""
 "Your message has been queued and will be sent to the contact addresses of %s "
 "in the next few minutes."
-msgstr ""
-"ข้อความของคุณถูกเข้าคิวแล้วและจะถูกส่งไปยังที่อยู่ติดต่อของ %s ภายในไม่กี่นาทีข้างหน้า"
+msgstr "ข้อความของคุณถูกเข้าคิวแล้วและจะถูกส่งไปยังที่อยู่ติดต่อของ %s ภายในไม่กี่นาทีข้างหน้า"
 
 #: pretix/plugins/sendmail/views.py
 msgid "Orders or attendees"
@@ -31261,8 +31284,7 @@ msgstr "คำสั่งซื้อหรือผู้เข้าร่ว
 msgid ""
 "Send an email to every customer, or to every person a ticket has been "
 "purchased for, or a combination of both."
-msgstr ""
-"ส่งอีเมลถึงลูกค้าทุกคน หรือทุกคนที่ได้รับการซื้อตั๋วให้ หรือส่งทั้งสองกลุ่มร่วมกัน"
+msgstr "ส่งอีเมลถึงลูกค้าทุกคน หรือทุกคนที่ได้รับการซื้อตั๋วให้ หรือส่งทั้งสองกลุ่มร่วมกัน"
 
 #: pretix/plugins/sendmail/views.py
 #, python-format
@@ -31303,9 +31325,9 @@ msgid ""
 "orders."
 msgstr ""
 "คำสั่งซื้อที่ชำระเงินหลายครั้งจะแสดงตามวันที่ชำระเงินครั้งสุดท้าย ทั้งนี้ คำสั่งซื้อที่ถูกทำรายการ "
-"(Placed orders) จะรวมคำสั่งซื้อทุกสถานะ (รอชำระเงิน, ชำระเงินแล้ว, ยกเลิก และหมดอายุ) ส่"
-"วนคำสั่งซื้อที่ชำระเงินแล้วจะรวมเฉพาะคำสั่งซื้อที่ชำระเงินเรียบร้อยแล้วเท่านั้น และไม่รวมคำสั่งซื้อที่ถูกย"
-"กเลิกทั้งหมด"
+"(Placed orders) จะรวมคำสั่งซื้อทุกสถานะ (รอชำระเงิน, ชำระเงินแล้ว, ยกเลิก และหมดอายุ) "
+"ส่วนคำสั่งซื้อที่ชำระเงินแล้วจะรวมเฉพาะคำสั่งซื้อที่ชำระเงินเรียบร้อยแล้วเท่านั้น "
+"และไม่รวมคำสั่งซื้อที่ถูกยกเลิกทั้งหมด"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Attendees by day"
@@ -31320,11 +31342,13 @@ msgid ""
 "(pending, paid, canceled, and expired); attendees in paid orders include "
 "only those from paid orders and exclude those from canceled orders."
 msgstr ""
-"ผู้เข้าร่วมในคำสั่งซื้อที่ชำระเงินหลายครั้งจะแสดงโดยใช้วันที่ชำระเงินครั้งสุดท้าย วันที่สั่งซื้อจะสะท้อนถึงเ"
-"วลาที่ทำรายการสั่งซื้อเป็นครั้งแรก ผู้เข้าร่วมที่เพิ่มเข้ามาในภายหลังผ่านทางตำแหน่งสั่งซื้อเพิ่มเติมยังคงใ"
-"ช้วันที่สั่งซื้อเดิม ผู้เข้าร่วมในคำสั่งซื้อที่ถูกทำรายการจะรวมผู้เข้าร่วมจากทุกสถานะคำสั่งซื้อ (รอชำระเงิ"
-"น, ชำระเงินแล้ว, ยกเลิก และหมดอายุ) ส่วนผู้เข้าร่วมในคำสั่งซื้อที่ชำระเงินแล้วจะรวมเฉพาะผู้เข้าร่ว"
-"มจากคำสั่งซื้อที่ชำระเงินเรียบร้อยแล้วเท่านั้น และไม่รวมผู้เข้าร่วมจากคำสั่งซื้อที่ถูกยกเลิก"
+"ผู้เข้าร่วมในคำสั่งซื้อที่ชำระเงินหลายครั้งจะแสดงโดยใช้วันที่ชำระเงินครั้งสุดท้าย "
+"วันที่สั่งซื้อจะสะท้อนถึงเวลาที่ทำรายการสั่งซื้อเป็นครั้งแรก "
+"ผู้เข้าร่วมที่เพิ่มเข้ามาในภายหลังผ่านทางตำแหน่งสั่งซื้อเพิ่มเติมยังคงใช้วันที่สั่งซื้อเดิม "
+"ผู้เข้าร่วมในคำสั่งซื้อที่ถูกทำรายการจะรวมผู้เข้าร่วมจากทุกสถานะคำสั่งซื้อ (รอชำระเงิน, "
+"ชำระเงินแล้ว, ยกเลิก และหมดอายุ) "
+"ส่วนผู้เข้าร่วมในคำสั่งซื้อที่ชำระเงินแล้วจะรวมเฉพาะผู้เข้าร่วมจากคำสั่งซื้อที่ชำระเงินเรียบร้อยแล้วเท่านั้น "
+"และไม่รวมผู้เข้าร่วมจากคำสั่งซื้อที่ถูกยกเลิก"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid "Attendees by time"
@@ -31340,8 +31364,8 @@ msgid ""
 "If you select a single date, payment method fees will not be listed here as "
 "it might not be clear which date they belong to."
 msgstr ""
-"หากคุณเลือกวันที่เดียว ค่าธรรมเนียมวิธีการชำระเงินจะไม่แสดงรายการไว้ที่นี่ เนื่องจากอาจไม่ชัดเจนว่า"
-"ค่าธรรมเนียมดังกล่าวเป็นของวันที่ใด"
+"หากคุณเลือกวันที่เดียว ค่าธรรมเนียมวิธีการชำระเงินจะไม่แสดงรายการไว้ที่นี่ "
+"เนื่องจากอาจไม่ชัดเจนว่าค่าธรรมเนียมดังกล่าวเป็นของวันที่ใด"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid ""
@@ -31349,8 +31373,9 @@ msgid ""
 "shown with the date of their last payment. Revenue excludes all fees, "
 "including cancellation fees."
 msgstr ""
-"จะนับเฉพาะคำสั่งซื้อที่ชำระเงินเต็มจำนวนแล้วเท่านั้น คำสั่งซื้อที่ชำระเงินหลายครั้งจะแสดงตามวันที่ชำระ"
-"เงินครั้งสุดท้าย รายได้ไม่รวมค่าธรรมเนียมทั้งหมด รวมถึงค่าธรรมเนียมการยกเลิก"
+"จะนับเฉพาะคำสั่งซื้อที่ชำระเงินเต็มจำนวนแล้วเท่านั้น "
+"คำสั่งซื้อที่ชำระเงินหลายครั้งจะแสดงตามวันที่ชำระเงินครั้งสุดท้าย รายได้ไม่รวมค่าธรรมเนียมทั้งหมด "
+"รวมถึงค่าธรรมเนียมการยกเลิก"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid ""
@@ -31358,8 +31383,9 @@ msgid ""
 "shown with the date of their last payment. Revenue includes all fees, "
 "including cancellation fees from canceled orders."
 msgstr ""
-"จะนับเฉพาะคำสั่งซื้อที่ชำระเงินเต็มจำนวนแล้วเท่านั้น คำสั่งซื้อที่ชำระเงินหลายครั้งจะแสดงตามวันที่ชำระ"
-"เงินครั้งสุดท้าย รายได้รวมค่าธรรมเนียมทั้งหมด รวมถึงค่าธรรมเนียมการยกเลิกจากคำสั่งซื้อที่ถูกยกเลิก"
+"จะนับเฉพาะคำสั่งซื้อที่ชำระเงินเต็มจำนวนแล้วเท่านั้น "
+"คำสั่งซื้อที่ชำระเงินหลายครั้งจะแสดงตามวันที่ชำระเงินครั้งสุดท้าย รายได้รวมค่าธรรมเนียมทั้งหมด "
+"รวมถึงค่าธรรมเนียมการยกเลิกจากคำสั่งซื้อที่ถูกยกเลิก"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html
 msgid ""
@@ -31418,8 +31444,7 @@ msgstr "ที่นั่งที่ไม่ได้ระบุระบุ
 msgid ""
 "We will show you a variety of statistics about your sales right here, as "
 "soon as the first orders are submitted!"
-msgstr ""
-"เราจะแสดงสถิติยอดขายที่หลากหลายของคุณตรงนี้ ทันทีที่มีการส่งคำสั่งซื้อแรกเข้ามา!"
+msgstr "เราจะแสดงสถิติยอดขายที่หลากหลายของคุณตรงนี้ ทันทีที่มีการส่งคำสั่งซื้อแรกเข้ามา!"
 
 #: pretix/plugins/stripe/apps.py pretix/plugins/stripe/payment.py
 msgid "Stripe"
@@ -31431,16 +31456,16 @@ msgid ""
 "Stripe supports payments via credit cards as well as many local payment "
 "methods such as iDEAL, Alipay,and many more."
 msgstr ""
-"รับชำระเงินผ่าน Stripe ผู้ให้บริการชำระเงินที่ได้รับความนิยมทั่วโลก Stripe รองรับการชำระเงินผ่า"
-"นบัตรเครดิต รวมถึงวิธีการชำระเงินท้องถิ่นที่หลากหลาย เช่น iDEAL, Alipay และอื่นๆ อีกมากมาย"
+"รับชำระเงินผ่าน Stripe ผู้ให้บริการชำระเงินที่ได้รับความนิยมทั่วโลก Stripe "
+"รองรับการชำระเงินผ่านบัตรเครดิต รวมถึงวิธีการชำระเงินท้องถิ่นที่หลากหลาย เช่น iDEAL, Alipay "
+"และอื่นๆ อีกมากมาย"
 
 #: pretix/plugins/stripe/forms.py
 #, python-format
 msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
-msgstr ""
-"คีย์ \"%(value)s\" ที่ระบุดูเหมือนไม่ถูกต้อง ควรเริ่มต้นด้วย \"%(prefix)s\""
+msgstr "คีย์ \"%(value)s\" ที่ระบุดูเหมือนไม่ถูกต้อง ควรเริ่มต้นด้วย \"%(prefix)s\""
 
 #: pretix/plugins/stripe/forms.py pretix/plugins/stripe/signals.py
 msgid "Stripe Connect: App fee (percent)"
@@ -31460,8 +31485,8 @@ msgid ""
 "clicking on the following button, you can either create a new Stripe account "
 "connect pretix to an existing one."
 msgstr ""
-"หากต้องการรับชำระเงินผ่าน Stripe คุณจะต้องมีบัญชี Stripe โดยการคลิกปุ่มต่อไปนี้ คุณสามารถสร้าง"
-"บัญชี Stripe ใหม่ หรือเชื่อมต่อ pretix กับบัญชีที่มีอยู่แล้วได้"
+"หากต้องการรับชำระเงินผ่าน Stripe คุณจะต้องมีบัญชี Stripe โดยการคลิกปุ่มต่อไปนี้ "
+"คุณสามารถสร้างบัญชี Stripe ใหม่ หรือเชื่อมต่อ pretix กับบัญชีที่มีอยู่แล้วได้"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Connect with Stripe"
@@ -31479,8 +31504,9 @@ msgid ""
 "process asynchronous payment methods like SOFORT."
 msgstr ""
 "โปรดกำหนดค่า <a href=\"https://dashboard.stripe.com/account/webhooks\">Stripe "
-"Webhook</a> ไปยังเอนด์พอยต์ต่อไปนี้ เพื่อยกเลิกคำสั่งซื้อโดยอัตโนมัติเมื่อมีการคืนเงินจากภายนอกระบ"
-"บ และเพื่อประมวลผลวิธีการชำระเงินแบบไม่ประสานเวลา (Asynchronous) เช่น SOFORT"
+"Webhook</a> ไปยังเอนด์พอยต์ต่อไปนี้ "
+"เพื่อยกเลิกคำสั่งซื้อโดยอัตโนมัติเมื่อมีการคืนเงินจากภายนอกระบบ "
+"และเพื่อประมวลผลวิธีการชำระเงินแบบไม่ประสานเวลา (Asynchronous) เช่น SOFORT"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Enable MOTO payments for resellers"
@@ -31490,8 +31516,8 @@ msgstr "เปิดใช้งานการชำระเงินแบบ
 msgid ""
 "Gated feature (needs to be enabled for your account by Stripe support first)"
 msgstr ""
-"ฟีเจอร์ที่ได้รับการจำกัดสิทธิ์ (ต้องได้รับการเปิดใช้งานสำหรับบัญชีของคุณโดยฝ่ายซัพพอร์ตของ Stripe ก่"
-"อน)"
+"ฟีเจอร์ที่ได้รับการจำกัดสิทธิ์ (ต้องได้รับการเปิดใช้งานสำหรับบัญชีของคุณโดยฝ่ายซัพพอร์ตของ Stripe "
+"ก่อน)"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Stripe Integration security guide"
@@ -31508,9 +31534,10 @@ msgid ""
 "this subject."
 msgstr ""
 "เราสามารถติดแฟล็กรายการบัตรเครดิตที่คุณทำผ่านอินเทอร์เฟซของตัวแทนจำหน่ายให้เป็น MOTO (Mail "
-"Order / Telephone Order) ได้ ซึ่งจะได้รับการยกเว้นจากข้อกำหนดการยืนยันตัวตนลูกค้าอย่างเข้มง"
-"วด (SCA) อย่างไรก็ตาม: การเปิดใช้งานฟีเจอร์นี้ คุณจะต้องกรอกแบบประเมินตนเอง PCI-DSS ประจ"
-"ำปี เช่น SAQ D ที่มีความยาว 40 หน้า โปรดอ่านรายละเอียดเพิ่มเติมใน %s"
+"Order / Telephone Order) ได้ "
+"ซึ่งจะได้รับการยกเว้นจากข้อกำหนดการยืนยันตัวตนลูกค้าอย่างเข้มงวด (SCA) อย่างไรก็ตาม: "
+"การเปิดใช้งานฟีเจอร์นี้ คุณจะต้องกรอกแบบประเมินตนเอง PCI-DSS ประจำปี เช่น SAQ D "
+"ที่มีความยาว 40 หน้า โปรดอ่านรายละเอียดเพิ่มเติมใน %s"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Stripe account"
@@ -31531,8 +31558,8 @@ msgid ""
 "If your event is in test mode, we will always use Stripe's test API, "
 "regardless of this setting."
 msgstr ""
-"หากอีเวนต์ของคุณอยู่ในโหมดทดสอบ ระบบจะใช้ API ทดสอบของ Stripe เสมอ โดยไม่คำนึงถึงการตั้ง"
-"ค่านี้"
+"หากอีเวนต์ของคุณอยู่ในโหมดทดสอบ ระบบจะใช้ API ทดสอบของ Stripe เสมอ "
+"โดยไม่คำนึงถึงการตั้งค่านี้"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Publishable key"
@@ -31548,8 +31575,8 @@ msgid ""
 "generate you API keys with the recommended permission level for optimal "
 "usage with pretix."
 msgstr ""
-"ปุ่มด้านบนจะทำการติดตั้งแอป Stripe ของเราไปยังบัญชีของคุณ และจะสร้างคีย์ API ที่มีระดับสิทธิ์การใ"
-"ช้งานที่แนะนำ เพื่อการใช้งานที่มีประสิทธิภาพสูงสุดร่วมกับ pretix"
+"ปุ่มด้านบนจะทำการติดตั้งแอป Stripe ของเราไปยังบัญชีของคุณ และจะสร้างคีย์ API "
+"ที่มีระดับสิทธิ์การใช้งานที่แนะนำ เพื่อการใช้งานที่มีประสิทธิภาพสูงสุดร่วมกับ pretix"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Secret key"
@@ -31709,6 +31736,10 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py
 msgid "MobilePay"
 msgstr "MobilePay"
+
+#: pretix/plugins/stripe/payment.py
+msgid "Wero"
+msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "Destination"
@@ -33262,8 +33293,9 @@ msgid ""
 "cookie to remember who you are and what is in your cart. Please change your "
 "browser settings accordingly."
 msgstr ""
-"เบราว์เซอร์ของคุณไม่ยอมรับคุกกี้จากเรา อย่างไรก็ตาม เราจำเป็นต้องบันทึกคุกกี้เพื่อจดจำตัวตนของคุณแ"
-"ละรายการในตะกร้า โปรดเปลี่ยนการตั้งค่าเบราว์เซอร์ของคุณให้เหมาะสม"
+"เบราว์เซอร์ของคุณไม่ยอมรับคุกกี้จากเรา อย่างไรก็ตาม "
+"เราจำเป็นต้องบันทึกคุกกี้เพื่อจดจำตัวตนของคุณและรายการในตะกร้า "
+"โปรดเปลี่ยนการตั้งค่าเบราว์เซอร์ของคุณให้เหมาะสม"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #, python-format
@@ -33282,8 +33314,7 @@ msgstr[0] "คุณสามารถเลือกได้สูงสุด
 msgid ""
 "You can choose between %(min_count)s and %(max_count)s options from this "
 "category."
-msgstr ""
-"คุณสามารถเลือกได้ระหว่าง %(min_count)s ถึง %(max_count)s ตัวเลือกจากหมวดหมู่นี้"
+msgstr "คุณสามารถเลือกได้ระหว่าง %(min_count)s ถึง %(max_count)s ตัวเลือกจากหมวดหมู่นี้"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
@@ -34265,8 +34296,9 @@ msgid ""
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
 msgstr ""
-"คุณสามารถยื่นคำร้องขอยกเลิกคำสั่งซื้อนี้ได้ หากคำร้องขอของคุณได้รับการอนุมัติ จะมีการหักค่าธรรมเนียม"
-"การยกเลิกจำนวน <strong>%(fee)s</strong>และคุณจะได้รับเงินคืนในส่วนที่เหลือ"
+"คุณสามารถยื่นคำร้องขอยกเลิกคำสั่งซื้อนี้ได้ หากคำร้องขอของคุณได้รับการอนุมัติ "
+"จะมีการหักค่าธรรมเนียมการยกเลิกจำนวน <strong>%(fee)s</"
+"strong>และคุณจะได้รับเงินคืนในส่วนที่เหลือ"
 
 #: pretix/presale/templates/pretixpresale/event/order.html
 #, python-format
@@ -34998,8 +35030,7 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"        เราไม่สามารถทำรายการเข้าสู่ระบบของคุณให้เสร็จสิ้นได้เนื่องจากมีบางอย่างขัดจังหวะกระบว"
-"นการ\n"
+"        เราไม่สามารถทำรายการเข้าสู่ระบบของคุณให้เสร็จสิ้นได้เนื่องจากมีบางอย่างขัดจังหวะกระบวนการ\n"
 "    "
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
@@ -35011,8 +35042,8 @@ msgid ""
 "You started logging in from a link opened inside an app (such as Instagram "
 "or an email app), and then continued the login in your main browser."
 msgstr ""
-"คุณเริ่มเข้าสู่ระบบจากลิงก์ที่เปิดภายในแอป (เช่น Instagram หรือแอปอีเมล) แล้วไปดำเนินการเข้าสู่ร"
-"ะบบต่อในเบราว์เซอร์หลักของคุณ"
+"คุณเริ่มเข้าสู่ระบบจากลิงก์ที่เปิดภายในแอป (เช่น Instagram หรือแอปอีเมล) "
+"แล้วไปดำเนินการเข้าสู่ระบบต่อในเบราว์เซอร์หลักของคุณ"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "You refreshed the page or used the back button during login."
@@ -35039,8 +35070,7 @@ msgstr "ปิดหน้านี้"
 msgid ""
 "Open this website again directly in your main browser (for example Safari or "
 "Chrome)."
-msgstr ""
-"เปิดเว็บไซต์นี้ใหม่อีกครั้งโดยตรงในเบราว์เซอร์หลักของคุณ (เช่น Safari หรือ Chrome)"
+msgstr "เปิดเว็บไซต์นี้ใหม่อีกครั้งโดยตรงในเบราว์เซอร์หลักของคุณ (เช่น Safari หรือ Chrome)"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
@@ -35048,8 +35078,8 @@ msgid ""
 "browser window, without refreshing the page, opening new tabs, or switching "
 "apps part-way through."
 msgstr ""
-"เริ่มกระบวนการชำระเงินหรือเข้าสู่ระบบใหม่อีกครั้งและทำรายการให้เสร็จสมบูรณ์ในหน้าต่างเบราว์เซอร์"
-"เดิม โดยไม่กดรีเฟรชหน้าเว็บ ไม่เปิดแท็บใหม่ หรือไม่สลับแอปกลางคัน"
+"เริ่มกระบวนการชำระเงินหรือเข้าสู่ระบบใหม่อีกครั้งและทำรายการให้เสร็จสมบูรณ์ในหน้าต่างเบราว์เซอร์เดิม "
+"โดยไม่กดรีเฟรชหน้าเว็บ ไม่เปิดแท็บใหม่ หรือไม่สลับแอปกลางคัน"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
@@ -35057,8 +35087,8 @@ msgid ""
 "before retrying can help. As a last step, try using a different browser or "
 "another device (for example, a desktop or laptop computer)."
 msgstr ""
-"หากยังมีปัญหาอยู่ การปิดหน้าต่างเบราว์เซอร์ทั้งหมดและล้างคุกกี้ก่อนลองใหม่อีกครั้งอาจช่วยได้ และเป็นขั้"
-"นตอนสุดท้าย ลองใช้เบราว์เซอร์อื่นหรืออุปกรณ์อื่น (เช่น คอมพิวเตอร์ตั้งโต๊ะหรือแล็ปท็อป)"
+"หากยังมีปัญหาอยู่ การปิดหน้าต่างเบราว์เซอร์ทั้งหมดและล้างคุกกี้ก่อนลองใหม่อีกครั้งอาจช่วยได้ "
+"และเป็นขั้นตอนสุดท้าย ลองใช้เบราว์เซอร์อื่นหรืออุปกรณ์อื่น (เช่น คอมพิวเตอร์ตั้งโต๊ะหรือแล็ปท็อป)"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
 msgid "Your membership"
@@ -35533,6 +35563,17 @@ msgstr "สิทธิ์ในการเขียนข้อมูล"
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr "โคโซโว"
+
+#~ msgid "SSO provider:"
+#~ msgstr "ผู้ให้บริการ SSO:"
+
+#, python-brace-format
+#~ msgid ""
+#~ "The SSO client has been created. Please note down the following client "
+#~ "secret, it will never be shown again: {secret}"
+#~ msgstr ""
+#~ "สร้างไคลเอนต์ SSO เรียบร้อยแล้ว โปรดจดบันทึกรหัสลับไคลเอนต์ (Client secret) ต่อไปนี้ไว้ "
+#~ "เนื่องจากจะไม่แสดงซ้ำอีก: {secret}"
 
 #~ msgid ""
 #~ "This option currently only affects the calendar of this event series, not "

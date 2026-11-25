@@ -93,7 +93,7 @@ class Gate(LoggedModel):
         if instance:
             qs = qs.exclude(pk=instance.pk)
         if qs.exists():
-            raise ValidationError(_('This identifier is already used for a different question.'))
+            raise ValidationError(_('This identifier is already used for a different gate.'))
 
     def save(self, *args, **kwargs):
         if not self.identifier:

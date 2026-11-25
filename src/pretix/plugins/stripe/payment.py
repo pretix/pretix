@@ -1161,33 +1161,6 @@ class StripeCC(StripeMethod):
         }
         return template.render(ctx)
 
-    def _migrate_session(self, request):
-        # todo: remove after pretix 2023.8 was released
-        keymap = {
-            'payment_stripe_payment_method_id': 'payment_stripe_card_payment_method_id',
-            'payment_stripe_brand': 'payment_stripe_card_brand',
-            'payment_stripe_last4': 'payment_stripe_card_last4',
-        }
-        for old, new in keymap.items():
-            if old in request.session:
-                request.session[new] = request.session[old]
-                del request.session[old]
-
-    def checkout_prepare(self, request, cart):
-        self._migrate_session(request)
-        request.session['payment_stripe_card_brand'] = request.POST.get('stripe_card_brand', '')
-        request.session['payment_stripe_card_last4'] = request.POST.get('stripe_card_last4', '')
-
-        return super().checkout_prepare(request, cart)
-
-    def payment_is_valid_session(self, request):
-        self._migrate_session(request)
-        return super().payment_is_valid_session(request)
-
-    def _handle_payment_intent(self, request, payment, intent=None):
-        self._migrate_session(request)
-        return super()._handle_payment_intent(request, payment, intent)
-
     def is_moto(self, request, payment=None) -> bool:
         # We don't have a payment yet when checking if we should display the MOTO-flag
         # However, before we execute the payment, we absolutely have to check if the request-SalesChannel as well as the

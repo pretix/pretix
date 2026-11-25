@@ -51,6 +51,7 @@ from pretix.base.forms import I18nMarkdownTextarea
 from pretix.base.models import InvoiceAddress, Order, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.templatetags.money import money_filter
+from pretix.base.templatetags.rich_text import markdown_email_escape
 from pretix.helpers.payment import generate_payment_qr_codes
 from pretix.plugins.banktransfer.templatetags.ibanformat import ibanformat
 from pretix.presale.views.cart import cart_session
@@ -308,7 +309,7 @@ class BankTransfer(BasePaymentProvider):
                 (_("Reference"), self._code(order, force=True)),
                 (_("Amount"), money_filter(payment.amount, self.event.currency)),
             )
-        t += md_nl2br.join([f"**{k}:** {v}" for k, v in bankdetails])
+        t += md_nl2br.join([f"**{markdown_email_escape(k)}:** {markdown_email_escape(v)}" for k, v in bankdetails])
         if self.settings.get('bank_details', as_type=LazyI18nString):
             t += md_nl2br
         t += str(self.settings.get('bank_details', as_type=LazyI18nString))

@@ -44,12 +44,10 @@ input[type=number]::-webkit-outer-spin-button {
   box-shadow: 0px 0px 0px 1px $input-border inset;
   box-sizing: border-box;
 }
-
 .btn-default:hover, .btn-default:focus {
   box-shadow: 0px 0px 0px 1px $input-border inset, inset 0 1px 3px 0 #BFBFBF;
   background: $btn-default-bg;
 }
-
 .btn-default:active, .btn-default:active:hover, .btn-default:active:focus {
   background: $btn-default-bg;
   outline: 0;
@@ -57,6 +55,19 @@ input[type=number]::-webkit-outer-spin-button {
 .btn-default.active, .btn-default.active:hover, .btn-default.active:focus {
   box-shadow: 0px 0px 0px 1px $input-border inset, inset 0 1px 8px 0 #BFBFBF;  
 }
+.btn-default.disabled, .btn-default[disabled], fieldset[disabled] .btn-default {
+  &, &:hover, &:focus {
+    box-shadow: 0px 0px 0px 1px $btn-default-border-disabled inset, inset 0 1px 3px 0 #d9d9d9;
+    background: $btn-default-bg-disabled;
+    opacity: 0.7;
+  }
+}
+
+.btn-link.disabled, .btn-link[disabled], fieldset[disabled] .btn-link {
+  box-shadow: none;
+  background: none;
+}
+
 
 .btn-primary:hover, .btn-primary:focus {
   box-shadow: inset 0 1px 3px 0 var(--pretix-brand-primary-shade-25);
@@ -115,16 +126,6 @@ input[type=number]::-webkit-outer-spin-button {
 .btn-invisible {
   background: transparent;
   border: transparent;
-}
-
-.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
-  box-shadow: 0px 0px 0px 1px #ccc inset, inset 0 1px 3px 0 #d9d9d9;
-  background: #eee;
-  opacity: 0.7;
-}
-.btn-link.disabled, .btn-link[disabled], fieldset[disabled] .btn-link {
-  box-shadow: none;
-  background: none;
 }
 
 .btn-group-flex { display: flex; }

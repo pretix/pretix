@@ -4,14 +4,14 @@
 {% if answer %}
     {% if answer.file %}
         <span class="fa fa-file" aria-hidden="true"></span>
-        <a href="{{ answer.frontend_file_url }}?token={% answer_token request answer %}">
+        <a href="{% answer_url request answer %}">
             {{ answer.file_name }}
         </a>
         {% if answer.is_image %}
             <br>
-            <a href="{{ answer.frontend_file_url }}?token={% answer_token request answer %}" data-lightbox="order"
+            <a href="{% answer_url request answer %}" data-lightbox="order"
                     class="answer-thumb">
-                <img src="{{ answer.frontend_file_url }}?token={% answer_token request answer %}" alt="{% trans "The image you previously uploaded" %}">
+                <img src="{% answer_url request answer %}" alt="{% trans "The image you previously uploaded" %}">
             </a>
         {% endif %}
     {% elif question.type == "M" %}

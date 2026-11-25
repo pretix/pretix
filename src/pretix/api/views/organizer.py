@@ -44,16 +44,16 @@ from pretix.api.models import OAuthAccessToken
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.organizer import (
     CustomerCreateSerializer, CustomerSerializer, DeviceSerializer,
-    EventMetaPropertiesSerializer, GiftCardSerializer,
+    EventMetaPropertiesSerializer, GateSerializer, GiftCardSerializer,
     GiftCardTransactionSerializer, MembershipSerializer,
     MembershipTypeSerializer, OrganizerSerializer, OrganizerSettingsSerializer,
     SalesChannelSerializer, SeatingPlanSerializer, TeamAPITokenSerializer,
     TeamInviteSerializer, TeamMemberSerializer, TeamSerializer,
 )
 from pretix.base.models import (
-    Customer, Device, Event, EventMetaProperty, GiftCard, GiftCardTransaction,
-    LogEntry, Membership, MembershipType, Organizer, SalesChannel, SeatingPlan,
-    Team, TeamAPIToken, TeamInvite, User,
+    Customer, Device, Event, EventMetaProperty, Gate, GiftCard,
+    GiftCardTransaction, LogEntry, Membership, MembershipType, Organizer,
+    SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
@@ -564,6 +564,52 @@ class DeviceViewSet(mixins.CreateModelMixin,
         inst = serializer.save()
         inst.log_action(
             'pretix.device.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+        return inst
+
+
+class GateViewSet(viewsets.ModelViewSet):
+    serializer_class = GateSerializer
+    queryset = Gate.objects.none()
+    permission = 'organizer.devices:read'
+    write_permission = 'organizer.devices:write'
+
+    def get_queryset(self):
+        return self.request.organizer.gates.order_by('pk')
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        return ctx
+
+    @transaction.atomic()
+    def perform_destroy(self, instance):
+        instance.log_action(
+            'pretix.gate.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
+            data={'id': instance.pk}
+        )
+        instance.delete()
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        inst = serializer.save(organizer=self.request.organizer)
+        inst.log_action(
+            'pretix.gate.created',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=merge_dicts(self.request.data, {'id': inst.pk})
+        )
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        inst = serializer.save()
+        inst.log_action(
+            'pretix.gate.changed',
             user=self.request.user,
             auth=self.request.auth,
             data=self.request.data

@@ -970,7 +970,7 @@ def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: Li
     gift_cards = []  # for backwards compatibility
     for p in payment_requests:
         if p['provider'] == 'giftcard':
-            gift_cards.append(GiftCard.objects.get(pk=p['info_data']['gift_card']))
+            gift_cards.extend(event.organizer.accepted_gift_cards.filter(pk=p['info_data']['gift_card']))
 
     for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address, total=total, payment_requests=payment_requests,
                                                  meta_info=meta_info, positions=positions, gift_cards=gift_cards):
@@ -2176,7 +2176,8 @@ class OrderChangeManager:
                 subevent=a.subevent,
                 voucher=None,
                 base_qs=Item.objects.filter(pk=a.item.pk),
-                allow_addons=True
+                allow_addons=True,
+                ignore_hide_sold_out_for_item_ids={a.item.pk}
             )
             if (not items) or items[0].current_unavailability_reason:
                 return False

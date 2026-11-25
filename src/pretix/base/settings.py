@@ -1322,6 +1322,7 @@ DEFAULTS = {
     'invoice_generate_only_business': {
         'default': 'False',
         'type': bool,
+        'write_permission': 'event.settings.invoicing:write',
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(

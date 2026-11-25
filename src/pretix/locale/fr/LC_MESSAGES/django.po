@@ -3,9 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-10-21 19:00+0000\n"
-"Last-Translator: Daniel Jaraud <acomv41@yahoo.com>\n"
+"POT-Creation-Date: 2026-10-28 10:48+0000\n"
+"PO-Revision-Date: 2026-10-29 17:00+0000\n"
+"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
 "fr/>\n"
 "Language: fr\n"
@@ -198,11 +198,12 @@ msgid "Allowed Post Logout URIs list, space separated"
 msgstr "Liste des URI de déconnexion autorisées, séparées par des espaces"
 
 #: pretix/api/models.py pretix/base/models/customers.py
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
 #: pretix/plugins/paypal2/payment.py
 msgid "Client ID"
 msgstr "Numéro de client"
 
-#: pretix/api/models.py
+#: pretix/api/models.py pretix/control/views/organizer.py
 msgid "Client secret"
 msgstr "Secret de client"
 
@@ -845,8 +846,8 @@ msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
 msgstr ""
-"Veuillez mettre à jour la correspondance des valeurs du champ « {field_name} "
-"» - l'option « {val} » n'a pas de correspondance"
+"Veuillez mettre à jour la correspondance des valeurs du champ "
+"« {field_name} » - l'option « {val} » n'a pas de correspondance"
 
 #: pretix/base/datasync/sourcefields.py
 msgid "Order position details"
@@ -1877,7 +1878,7 @@ msgstr "Catégorie de produit"
 #: pretix/control/forms/organizer.py
 #: pretix/control/templates/pretixcontrol/items/discounts.html
 msgid "Internal name"
-msgstr "Commentaire interne"
+msgstr "Nom interne"
 
 #: pretix/base/exporters/items.py pretix/base/models/items.py
 msgid "Item name"
@@ -2982,8 +2983,9 @@ msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
-"Pour des raisons techniques, vous ne pouvez pas attribuer la valeur %(value)"
-"s aux champs dont la saisie doit être masquée (un mot de passe, par exemple)."
+"Pour des raisons techniques, vous ne pouvez pas attribuer la valeur "
+"%(value)s aux champs dont la saisie doit être masquée (un mot de passe, par "
+"exemple)."
 
 #: pretix/base/forms/auth.py
 msgid "Keep me logged in"
@@ -3839,7 +3841,7 @@ msgstr "Plusieurs produits correspondants ont été trouvés."
 #: pretix/base/models/items.py pretix/base/models/vouchers.py
 #: pretix/base/models/waitinglist.py
 msgid "Product variation"
-msgstr "Variation du produit"
+msgstr "Variantes du produit"
 
 #: pretix/base/modelimport_orders.py
 msgid "The variation can be specified by its internal ID or full name."
@@ -3977,7 +3979,7 @@ msgstr "Un bon de réduction avec ce code existe déjà."
 #: pretix/base/models/vouchers.py pretix/control/views/vouchers.py
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
 msgid "Maximum usages"
-msgstr "Utilisations maximales"
+msgstr "Nombre maximal d'utilisations"
 
 #: pretix/base/modelimport_vouchers.py
 msgid "The maximum number of usages must be set."
@@ -3998,7 +4000,7 @@ msgstr "Réserver un billet à partir du quota"
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 msgid "Allow to bypass quota"
-msgstr "Permettre de contourner le quota"
+msgstr "Autoriser le dépassement du quota"
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
@@ -4006,7 +4008,7 @@ msgstr "Permettre de contourner le quota"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html
 #: pretix/control/views/vouchers.py
 msgid "Price effect"
-msgstr "Effet prix"
+msgstr "Effet de prix"
 
 #: pretix/base/modelimport_vouchers.py
 #, python-brace-format
@@ -4017,7 +4019,7 @@ msgstr ""
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 msgid "Voucher value"
-msgstr "Valeur du bon"
+msgstr "Valeur du bon d'achat"
 
 #: pretix/base/modelimport_vouchers.py
 msgid "It is pointless to set a value without a price effect."
@@ -4062,7 +4064,7 @@ msgstr "Balise"
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 msgid "Shows hidden products that match this voucher"
-msgstr "Affiche les produits cachés qui correspondent à ce bon"
+msgstr "Affiche les produits masqués correspondant à ce bon de réduction"
 
 #: pretix/base/modelimport_vouchers.py pretix/base/models/vouchers.py
 msgid "Offer all add-on products for free when redeeming this voucher"
@@ -4948,7 +4950,7 @@ msgstr "Destinataires supplémentaires (copie cachée)"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html
 #: pretix/plugins/sendmail/forms.py pretix/plugins/sendmail/models.py
 msgid "Subject"
-msgstr "Sujet"
+msgstr "Objet"
 
 #: pretix/base/models/exports.py pretix/control/forms/orders.py
 #: pretix/control/forms/vouchers.py pretix/plugins/sendmail/forms.py
@@ -7043,8 +7045,8 @@ msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
-"S'il est activé, le détenteur de ce code promotionnel peut acheter des "
-"billets, même s'il n'en reste plus."
+"Si cette option est activée, le détenteur de ce code promotionnel peut "
+"acheter des billets, même s'il n'y en a plus en stock."
 
 #: pretix/base/models/vouchers.py pretix/control/forms/vouchers.py
 msgid ""
@@ -7059,12 +7061,15 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py
 msgid "This variation of the product select above is being used."
-msgstr "Cette variante du produit choisi ci-dessus est utilisée."
+msgstr ""
+"C'est cette variante du produit sélectionné ci-dessus qui est utilisée."
 
 #: pretix/base/models/vouchers.py
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
-msgstr "Si activé, le bon est valable pour tout produit concerné par ce quota."
+msgstr ""
+"Si cette option est activée, le bon d'achat est valable pour tout produit "
+"concerné par ce quota."
 
 #: pretix/base/models/vouchers.py
 msgid "Specific seat"
@@ -7076,9 +7081,9 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
-"Vous pouvez utiliser cette zone pour regrouper plusieurs pièces "
-"justificatives. Si vous saisissez la même valeur pour plusieurs bons, vous "
-"pouvez obtenir des statistiques sur le nombre de bons échangés, etc."
+"Ce champ vous permet de regrouper plusieurs bons. Si vous saisissez la même "
+"valeur pour plusieurs bons, vous pourrez obtenir des statistiques sur le "
+"nombre de bons utilisés, etc."
 
 #: pretix/base/models/vouchers.py pretix/base/permissions.py
 #: pretix/control/navigation.py
@@ -7700,6 +7705,16 @@ msgstr ""
 #: pretix/base/payment.py
 msgid "This gift card was used in the meantime. Please try again."
 msgstr "Cette carte-cadeau a été utilisée entre-temps. Veuillez réessayer."
+
+#: pretix/base/payment.py
+msgid "Gift card not found."
+msgstr "Carte cadeau introuvable."
+
+#: pretix/base/payment.py
+msgid "Only test gift card can be used in test mode and vice versa."
+msgstr ""
+"Seule la carte cadeau de test peut être utilisée en mode test, et "
+"inversement."
 
 #: pretix/base/payment.py
 msgid ""
@@ -15142,13 +15157,13 @@ msgstr "Suivi dû"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html
 #: pretix/plugins/sendmail/models.py
 msgid "All products"
-msgstr "Tous les articles"
+msgstr "Tous les produits"
 
 #: pretix/control/forms/filter.py pretix/control/forms/vouchers.py
 #: pretix/control/views/typeahead.py
 #, python-brace-format
 msgid "{product} – Any variation"
-msgstr "{product} - Toute les variantes"
+msgstr "{product} – N'importe quelle variante"
 
 #: pretix/control/forms/filter.py pretix/control/forms/orders.py
 msgctxt "subevent"
@@ -15414,7 +15429,7 @@ msgstr "Chercher un bon de réduction"
 #: pretix/control/views/typeahead.py pretix/control/views/vouchers.py
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
-msgstr "Tout produit dans le quota \"{quota}\""
+msgstr "Tout produit relevant du contingent « {quota} »"
 
 #: pretix/control/forms/filter.py
 msgid "Refund status"
@@ -16834,8 +16849,8 @@ msgstr "Téléphone"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
-msgid "Base URL"
-msgstr "URL de base"
+msgid "Base URL / issuer"
+msgstr "URL de base / émetteur"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
@@ -16907,9 +16922,17 @@ msgstr ""
 "Paramètres de requête facultatifs qui seront ajoutés aux appels au terminal. "
 "Saisissez-les sous la forme suivante : {example}"
 
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+msgid "Base URL / issuer"
+msgstr "URL de base / émetteur"
+
 #: pretix/control/forms/organizer.py
 msgid "Invalidate old client secret and generate a new one"
 msgstr "Invalider l’ancienne clé secrète client et en générer une nouvelle"
+
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+msgid "(will be generated)"
+msgstr "(sera généré)"
 
 #: pretix/control/forms/organizer.py
 msgid "Organizer short name"
@@ -17078,15 +17101,15 @@ msgstr "ID de siège spécifique"
 
 #: pretix/control/forms/vouchers.py pretix/presale/forms/waitinglist.py
 msgid "Invalid product selected."
-msgstr "Produit non valide sélectionné."
+msgstr "Produit sélectionné non valide."
 
 #: pretix/control/forms/vouchers.py
 msgid ""
 "The voucher only matches hidden products but you have not selected that it "
 "should show them."
 msgstr ""
-"Le bon ne correspond qu’aux produits cachés, mais vous n’avez pas "
-"sélectionné qu’il les affiche."
+"Le bon de réduction ne s'applique qu'aux produits masqués, mais vous n'avez "
+"pas choisi de les afficher."
 
 #: pretix/control/forms/vouchers.py
 #, python-format
@@ -18202,7 +18225,7 @@ msgstr "Le fournisseur SSO a été modifié."
 msgid "The SSO provider has been deleted."
 msgstr "Le fournisseur SSO a été supprimé."
 
-#: pretix/control/logdisplay.py
+#: pretix/control/logdisplay.py pretix/control/views/organizer.py
 msgid "The SSO client has been created."
 msgstr "Le client SSO a été créé."
 
@@ -26573,8 +26596,38 @@ msgstr "Client SSO :"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
-msgid "Create a new SSO client"
-msgstr "Créer un nouveau client SSO"
+msgid "Create credentials for a new SSO client"
+msgstr "Créer des identifiants pour un nouveau client SSO"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+msgid ""
+"After submitting this form, client credentials for your SSO client will be "
+"generated."
+msgstr ""
+"Une fois ce formulaire envoyé, les identifiants de votre client SSO seront "
+"générés."
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a "
+"href=\"%(url)s\">Using pretix as an SSO provider with external SSO clients</"
+"a>."
+msgstr ""
+"Pour plus d'informations, consultez notre documentation sur <a href=\"%(url)"
+"s\">L'utilisation de Pretix en tant que fournisseur SSO avec des clients SSO "
+"externes</a>."
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+msgid ""
+"\n"
+"    \t\"Login with pretix\" in external systems\n"
+"    "
+msgstr ""
+"\n"
+"    \t« Se connecter avec pretix » dans les systèmes externes\n"
+"    "
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 msgid ""
@@ -26602,18 +26655,38 @@ msgstr ""
 "Ce fournisseur SSO ne peut pas être supprimé car il a déjà été utilisé."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
-msgid "SSO provider:"
-msgstr "Fournisseur SSO :"
+msgid "External SSO provider:"
+msgstr "Fournisseur SSO externe :"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
-msgid "Create a new SSO provider"
-msgstr "Créer un nouveau fournisseur SSO"
+msgid "Connect to an external SSO provider"
+msgstr "Se connecter à un fournisseur SSO externe"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a href=\"%(url)s\" "
+"target=\"_blank\">Using pretix as an SSO client</a>."
+msgstr ""
+"Pour plus d'informations, consultez notre documentation sur <a href=\"%(url)"
+"s\" target=\"_blank\">L'utilisation de pretix en tant que client SSO</a>."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 msgctxt "sso"
 msgid "Redirection URL"
 msgstr "URL de redirection"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+msgid ""
+"\n"
+"    \tConnect to an external login provider\n"
+"    "
+msgstr ""
+"\n"
+"    \tSe connecter à un fournisseur d'authentification externe\n"
+"    "
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 msgid ""
@@ -28717,14 +28790,17 @@ msgstr "Code invalide, veuillez réessayer."
 #, python-brace-format
 msgid "Invalid code. Please try again after waiting {value} minute."
 msgid_plural "Invalid code. Please try again after waiting {value} minutes."
-msgstr[0] "Code invalide. Veuillez réessayer après avoir patienté {value} minute."
-msgstr[1] "Code invalide. Veuillez réessayer après avoir patienté {value} minutes."
+msgstr[0] ""
+"Code invalide. Veuillez réessayer après avoir patienté {value} minute."
+msgstr[1] ""
+"Code invalide. Veuillez réessayer après avoir patienté {value} minutes."
 
 #: pretix/control/views/auth.py
 #, python-brace-format
 msgid "Invalid code. Please try again after waiting {value} second."
 msgid_plural "Invalid code. Please try again after waiting {value} seconds."
-msgstr[0] "Code invalide. Veuillez réessayer après avoir patienté {value} seconde."
+msgstr[0] ""
+"Code invalide. Veuillez réessayer après avoir patienté {value} seconde."
 msgstr[1] ""
 "Code invalide. Veuillez réessayer après avoir patienté {value} secondes."
 
@@ -28753,8 +28829,8 @@ msgstr "La nouvelle liste d'enregistrement a été créée."
 #: pretix/plugins/stripe/views.py pretix/plugins/ticketoutputpdf/views.py
 msgid "We could not save your changes. See below for details."
 msgstr ""
-"Nous n'avons pas pu enregistrer vos modifications. Voir ci-dessous pour plus "
-"de détails."
+"Nous n'avons pas pu enregistrer vos modifications. Vous trouverez ci-dessous "
+"plus de détails."
 
 #: pretix/control/views/checkin.py
 msgid "The requested list does not exist."
@@ -30190,22 +30266,10 @@ msgid "The provider has been created."
 msgstr "Le fournisseur a été créé."
 
 #: pretix/control/views/organizer.py
-#, python-brace-format
 msgid ""
-"The SSO client has been created. Please note down the following client "
-"secret, it will never be shown again: {secret}"
+"Please note down the following client secret, it will never be shown again."
 msgstr ""
-"Le client SSO a été créé. Veuillez noter la clé secrète client suivante, "
-"elle ne sera plus jamais affichée : {secret}"
-
-#: pretix/control/views/organizer.py
-#, python-brace-format
-msgid ""
-"Your changes have been saved. Please note down the following client secret, "
-"it will never be shown again: {secret}"
-msgstr ""
-"Vos modifications ont été enregistrées. Veuillez noter la clé secrète client "
-"suivante, elle ne sera plus jamais affichée : {secret}"
+"Veuillez noter le secret client suivant ; il ne s'affichera plus jamais."
 
 #: pretix/control/views/organizer.py
 msgid ""
@@ -32782,6 +32846,22 @@ msgid "Restrict to products"
 msgstr "Limiter aux produits"
 
 #: pretix/plugins/sendmail/forms.py
+msgctxt "sendmail_form"
+msgid ""
+"There may be multiple mails sent out to the same mail address if one order "
+"contains multiple attendee products for it, if you restrict to products "
+"while also restricting mails to attendees only. This is intended, as every "
+"one of those get linked to their own separate order page restricted to only "
+"that product."
+msgstr ""
+"Il se peut que plusieurs e-mails soient envoyés à la même adresse e-mail si "
+"une commande comprend plusieurs produits destinés à des participants, "
+"lorsque vous limitez l'accès aux produits tout en restreignant les e-mails "
+"aux seuls participants. Ce comportement est normal, car chacun de ces "
+"produits est associé à sa propre page de commande, dont l'accès est limité à "
+"ce produit uniquement."
+
+#: pretix/plugins/sendmail/forms.py
 msgid "Filter check-in status"
 msgstr "Filtrer le statut d'enregistrement"
 
@@ -33692,6 +33772,10 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py
 msgid "MobilePay"
 msgstr "MobilePay"
+
+#: pretix/plugins/stripe/payment.py
+msgid "Wero"
+msgstr "Wero"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Destination"
@@ -37819,6 +37903,17 @@ msgstr "Accès en écriture"
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#~ msgid "SSO provider:"
+#~ msgstr "Fournisseur SSO :"
+
+#, python-brace-format
+#~ msgid ""
+#~ "The SSO client has been created. Please note down the following client "
+#~ "secret, it will never be shown again: {secret}"
+#~ msgstr ""
+#~ "Le client SSO a été créé. Veuillez noter la clé secrète client suivante, "
+#~ "elle ne sera plus jamais affichée : {secret}"
 
 #~ msgid ""
 #~ "This option currently only affects the calendar of this event series, not "

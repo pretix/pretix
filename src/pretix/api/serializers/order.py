@@ -117,6 +117,7 @@ class TransmissionInfoSerializer(serializers.Serializer):
         super().__init__(*args, **kwargs)
         for k, v in transmission_type.invoice_address_form_fields.items():
             self.fields[k] = form_field_to_serializer_field(v)
+            self.fields[k].required = False  # invoice_address_form_fields_required is checked by parent serializer
 
 
 class InvoiceAddressSerializer(I18nAwareModelSerializer):
@@ -1240,6 +1241,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             return None
         if pp not in self.context['event'].get_payment_providers():
             raise ValidationError('The given payment provider is not known.')
+        if pp == "giftcard":
+            raise serializers.ValidationError("Cannot create giftcard payment. Use `use_gift_cards` instead")
+
         return pp
 
     def validate_payment_info(self, info):
@@ -1960,10 +1964,15 @@ class OrderPaymentCreateSerializer(I18nAwareModelSerializer):
         model = OrderPayment
         fields = ('state', 'amount', 'payment_date', 'provider', 'info')
 
+    def validate_provider(self, value):
+        if value == "giftcard":
+            raise serializers.ValidationError("Cannot create giftcard payment")
+        return value
+
     def create(self, validated_data):
-        order = OrderPayment(order=self.context['order'], **validated_data)
-        order.save()
-        return order
+        payment = OrderPayment(order=self.context['order'], **validated_data)
+        payment.save()
+        return payment
 
 
 class OrderRefundCreateSerializer(I18nAwareModelSerializer):
@@ -1974,6 +1983,12 @@ class OrderRefundCreateSerializer(I18nAwareModelSerializer):
     class Meta:
         model = OrderRefund
         fields = ('state', 'source', 'amount', 'payment', 'execution_date', 'provider', 'info', 'comment')
+
+    def validate_provider(self, value):
+        if value == "giftcard":
+            raise serializers.ValidationError("Cannot create giftcard payment")
+
+        return value
 
     def create(self, validated_data):
         pid = validated_data.pop('payment', None)

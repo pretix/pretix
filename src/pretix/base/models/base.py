@@ -24,7 +24,6 @@ import uuid
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.db.models.constants import LOOKUP_SEP
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.urls import reverse
@@ -151,12 +150,29 @@ class LoggingMixin:
         logentry = LogEntry(content_object=self, user=user, action_type=action, event=event,
                             organizer_id=organizer_id, **kwargs)
         if isinstance(data, dict):
-            sensitivekeys = ['password', 'secret', 'api_key']
+            # sensitivekeys are matched whether contained, not exactly
+            sensitivekeys = [
+                'auth',
+                'key',
+                'token',
+                'password',
+                'Password',
+                '_pass',
+                'salt',
+                'secret',
+            ]
 
-            for sensitivekey in sensitivekeys:
-                for k, v in data.items():
-                    if (sensitivekey in k) and v:
+            def clean_recursive(d):
+                data = d
+                data_iterator = d.items() if isinstance(d, dict) else enumerate(d)
+                for k, v in data_iterator:
+                    if v and any([sensitivekey in str(k) for sensitivekey in sensitivekeys]):
                         data[k] = "********"
+                    elif isinstance(v, (list, dict)):
+                        data[k] = clean_recursive(v)
+                return data
+
+            data = clean_recursive(data)
 
             logentry.data = json.dumps(data, cls=CustomJSONEncoder, sort_keys=True)
         elif data:
@@ -228,49 +244,3 @@ class LoggedModel(models.Model, LoggingMixin):
         return LogEntry.objects.filter(
             content_type=self.logs_content_type, object_id=self.pk
         ).select_related('user', 'event', 'event__organizer', 'oauth_application', 'api_token', 'device')
-
-
-class LockModel:
-    def refresh_for_update(self, fields=None, using=None, **kwargs):
-        """
-        Like refresh_from_db(), but with select_for_update().
-        See also https://code.djangoproject.com/ticket/28344
-        """
-        if fields is not None:
-            if not fields:
-                return
-            if any(LOOKUP_SEP in f for f in fields):
-                raise ValueError(
-                    'Found "%s" in fields argument. Relations and transforms '
-                    'are not allowed in fields.' % LOOKUP_SEP)
-
-        hints = {'instance': self}
-        db_instance_qs = self.__class__._base_manager.db_manager(using, hints=hints).filter(pk=self.pk).select_for_update(**kwargs)
-
-        # Use provided fields, if not set then reload all non-deferred fields.
-        deferred_fields = self.get_deferred_fields()
-        if fields is not None:
-            fields = list(fields)
-            db_instance_qs = db_instance_qs.only(*fields)
-        elif deferred_fields:
-            fields = [f.attname for f in self._meta.concrete_fields
-                      if f.attname not in deferred_fields]
-            db_instance_qs = db_instance_qs.only(*fields)
-
-        db_instance = db_instance_qs.get()
-        non_loaded_fields = db_instance.get_deferred_fields()
-        for field in self._meta.concrete_fields:
-            if field.attname in non_loaded_fields:
-                # This field wasn't refreshed - skip ahead.
-                continue
-            setattr(self, field.attname, getattr(db_instance, field.attname))
-            # Clear cached foreign keys.
-            if field.is_relation and field.is_cached(self):
-                field.delete_cached_value(self)
-
-        # Clear cached relations.
-        for field in self._meta.related_objects:
-            if field.is_cached(self):
-                field.delete_cached_value(self)
-
-        self._state.db = db_instance._state.db

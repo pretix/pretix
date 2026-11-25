@@ -28,7 +28,6 @@ from zoneinfo import ZoneInfo
 
 import celery.exceptions
 from celery import states
-from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import (
@@ -41,6 +40,7 @@ from django.shortcuts import render
 from django.test import RequestFactory
 from django.utils import timezone, translation
 from django.utils.datastructures import MultiValueDict
+from django.utils.functional import classproperty
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import get_language, gettext as _
 from django.views import View
@@ -50,6 +50,7 @@ from redis import ResponseError
 from pretix.base.models import CachedFile, User
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
+from pretix.helpers.celery import get_task_result
 from pretix.helpers.http import redirect_to_url
 
 logger = logging.getLogger('pretix.base.tasks')
@@ -60,6 +61,10 @@ class AsyncMixin:
     success_url = None
     error_url = None
     known_errortypes = []
+
+    @classproperty
+    def task(self):
+        raise NotImplementedError("Needs to be supplied by child class")
 
     def get_success_url(self, value):
         return self.success_url
@@ -137,7 +142,8 @@ class AsyncMixin:
             raise BadRequest("No async_id given")
         if not RE_ASYNC_ID.match(request.GET.get('async_id')):
             raise BadRequest("Invalid async_id given")
-        res = AsyncResult(request.GET.get('async_id'))
+
+        res = get_task_result(request.GET.get('async_id'), task_name=self.task)
         if 'ajax' in self.request.GET:
             return JsonResponse(self._return_ajax_result(res, timeout=0.25))
         else:
@@ -317,6 +323,10 @@ class AsyncFormView(AsyncMixin, FormView):
             throws=cls.expected_exceptions
         )(async_execute)
 
+    @classproperty
+    def task(cls):  # noqa
+        return cls.async_execute
+
     def async_form_valid(self, task, form):
         pass
 
@@ -449,6 +459,10 @@ class AsyncPostView(AsyncMixin, View):
 
     def async_post(self, request, *args, **kwargs):
         pass
+
+    @classproperty
+    def task(cls):  # noqa
+        return cls.async_execute
 
     def get(self, request, *args, **kwargs):
         if 'async_id' in request.GET and settings.HAS_CELERY:

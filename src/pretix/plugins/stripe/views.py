@@ -175,60 +175,51 @@ def oauth_return(request, *args, **kwargs):
 @require_POST
 @scopes_disabled()
 def webhook(request, *args, **kwargs):
-    event_json = json.loads(request.body.decode('utf-8'))
+    untrusted_json = json.loads(request.body.decode('utf-8'))
+    untrusted_obj = untrusted_json['data']['object']
 
     # We do not check for the event type as we are not interested in the event it self,
     # we just use it as a trigger to look the charge up to be absolutely sure.
     # Another reason for this is that stripe events are not authenticated, so they could
     # come from anywhere.
 
-    if event_json['data']['object']['object'] == "charge":
-        func = charge_webhook
-        objid = event_json['data']['object']['id']
-        lookup_ids = [
-            objid,
-            (event_json['data']['object'].get('source') or {}).get('id')
-        ]
-    elif event_json['data']['object']['object'] == "dispute":
-        func = charge_webhook
-        objid = event_json['data']['object']['charge']
-        lookup_ids = [objid]
-    elif event_json['data']['object']['object'] == "source":
-        func = source_webhook
-        objid = event_json['data']['object']['id']
-        lookup_ids = [objid]
-    elif event_json['data']['object']['object'] == "payment_intent":
-        func = paymentintent_webhook
-        objid = event_json['data']['object']['id']
-        lookup_ids = [objid]
+    rso_qs = ReferencedStripeObject.objects.select_related('order', 'order__event')
+
+    if untrusted_obj['object'] == "payment_intent":
+        pi_id = untrusted_obj['id']
+        try:
+            rso = rso_qs.get(reference=pi_id)
+        except ReferencedStripeObject.DoesNotExist:
+            return HttpResponse("Unable to detect event", status=200)
+        else:
+            return paymentintent_webhook(untrusted_json, pi_id, rso)
+
+    elif untrusted_obj['object'] == "charge":
+        charge_id = untrusted_obj['id']
+    elif untrusted_obj['object'] == "dispute":
+        charge_id = untrusted_obj['charge']
     else:
         return HttpResponse("Not interested in this data type", status=200)
 
-    rso = ReferencedStripeObject.objects.select_related('order', 'order__event').filter(
-        reference__in=[lid for lid in lookup_ids if lid]
-    ).first()
-    if rso:
-        return func(rso.order.event, event_json, objid, rso)
-    else:
-        if event_json['data']['object']['object'] == "charge" and 'payment_intent' in event_json['data']['object']:
+    rso = None
+    try:
+        rso = rso_qs.get(reference=charge_id)
+    except ReferencedStripeObject.DoesNotExist:
+        if 'payment_intent' in untrusted_obj:
             # If we receive a charge webhook *before* the payment intent webhook, we don't know the charge ID yet
-            # and can't match it -- but we know the payment intent ID!
+            # and can't match it -- but we know the payment intent ID! In charge_webhook, we validate that the
+            # RSO's pi_id actually matches the pi_id returned by stripe API for the charge.
             try:
-                rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(
-                    reference=event_json['data']['object']['payment_intent']
-                )
-                return func(rso.order.event, event_json, objid, rso)
+                rso = rso_qs.get(reference=untrusted_obj['payment_intent'])
             except ReferencedStripeObject.DoesNotExist:
-                return HttpResponse("Unable to detect event", status=200)
-        elif hasattr(request, 'event') and func != paymentintent_webhook:
-            # This is a legacy integration from back when didn't have ReferencedStripeObject. This can't happen for
-            # payment intents or charges connected with payment intents since they didn't exist back then. Our best
-            # hope is to go for request.event and see if we can find the order ID.
-            return func(request.event, event_json, objid, None)
-        else:
-            # Okay, this is probably not an event that concerns us, maybe other applications talk to the same stripe
-            # account
-            return HttpResponse("Unable to detect event", status=200)
+                pass
+
+    if rso:
+        return charge_webhook(untrusted_json, charge_id, rso)
+    else:
+        # Okay, this is probably not an event that concerns us, maybe other applications talk to the same stripe
+        # account
+        return HttpResponse("Unable to detect event", status=200)
 
 
 SOURCE_TYPES = {
@@ -243,12 +234,12 @@ SOURCE_TYPES = {
 }
 
 
-def charge_webhook(event, event_json, charge_id, rso):
+def charge_webhook(untrusted_json, charge_id, rso):
     import stripe
 
     from pretix.plugins.stripe.payment import StripeCC
 
-    prov = StripeCC(event)
+    prov = StripeCC(rso.order.event)
     prov._init_api()
 
     try:
@@ -258,51 +249,34 @@ def charge_webhook(event, event_json, charge_id, rso):
             **prov.api_kwargs
         )
     except stripe.error.StripeError:
-        logger.exception('Stripe error on webhook. Event data: %s' % str(event_json))
+        logger.exception('Stripe error on webhook. Event data: %s' % str(untrusted_json))
         return HttpResponse('Charge not found', status=500)
 
     metadata = charge['metadata']
     if 'event' not in metadata:
         return HttpResponse('Event not given in charge metadata', status=200)
 
-    if int(metadata['event']) != event.pk:
+    if int(metadata['event']) != rso.order.event.pk:
         return HttpResponse('Not interested in this event', status=200)
 
-    if rso and rso.payment:
-        order = rso.payment.order
-        payment = rso.payment
-    elif rso:
-        order = rso.order
-        payment = None
-    else:
-        try:
-            order = event.orders.get(id=metadata['order'])
-        except Order.DoesNotExist:
-            return HttpResponse('Order not found', status=200)
-        payment = None
+    # Check the charge we fetched from stripe actually matches our RSO, and as such our own payment and order objects
+    allowed_references = [charge.id]
+    if getattr(charge, "payment_intent", None):
+        allowed_references.append(charge.payment_intent.id)
+    if rso.reference not in allowed_references:
+        return HttpResponse('Charge mismatched', status=200)
+
+    order = rso.payment.order
+    payment = rso.payment
 
     with transaction.atomic():
-        if payment:
-            payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
-        else:
-            payment = order.payments.filter(
-                info__icontains=charge['id'],
-                provider__startswith='stripe',
-                amount=prov._amount_to_decimal(charge['amount']),
-            ).select_for_update(of=OF_SELF).last()
-        if not payment:
-            payment = order.payments.create(
-                state=OrderPayment.PAYMENT_STATE_CREATED,
-                provider=SOURCE_TYPES.get(charge['source'].get('type', charge['source'].get('object', 'card')), 'stripe'),
-                amount=prov._amount_to_decimal(charge['amount']),
-                info=str(charge),
-            )
+        payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
 
         if payment.provider != prov.identifier:
             prov = payment.payment_provider
             prov._init_api()
 
-        order.log_action('pretix.plugins.stripe.event', data=event_json)
+        order.log_action('pretix.plugins.stripe.event', data=untrusted_json)
 
         is_refund = charge['amount_refunded'] or charge['refunds']['total_count'] or charge['dispute']
         if is_refund:
@@ -350,91 +324,18 @@ def charge_webhook(event, event_json, charge_id, rso):
     return HttpResponse(status=200)
 
 
-def source_webhook(event, event_json, source_id, rso):
+def paymentintent_webhook(untrusted_json, paymentintent_id, rso):
     import stripe
 
     from pretix.plugins.stripe.payment import StripeCC
 
-    prov = StripeCC(event)
-    prov._init_api()
-    try:
-        src = stripe.Source.retrieve(source_id, **prov.api_kwargs)
-    except stripe.error.StripeError:
-        logger.exception('Stripe error on webhook. Event data: %s' % str(event_json))
-        return HttpResponse('Charge not found', status=500)
-
-    metadata = src['metadata']
-    if 'event' not in metadata:
-        return HttpResponse('Event not given in charge metadata', status=200)
-
-    if int(metadata['event']) != event.pk:
-        return HttpResponse('Not interested in this event', status=200)
-
-    with transaction.atomic():
-        if rso and rso.payment:
-            order = rso.payment.order
-            payment = rso.payment
-        elif rso:
-            order = rso.order
-            payment = None
-        else:
-            try:
-                order = event.orders.get(id=metadata['order'])
-            except Order.DoesNotExist:
-                return HttpResponse('Order not found', status=200)
-            payment = None
-
-        if payment:
-            payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
-        else:
-            payment = order.payments.filter(
-                info__icontains=src['id'],
-                provider__startswith='stripe',
-                amount=prov._amount_to_decimal(src['amount']) if src['amount'] is not None else order.total,
-            ).select_for_update(of=OF_SELF).last()
-        if not payment:
-            payment = order.payments.create(
-                state=OrderPayment.PAYMENT_STATE_CREATED,
-                provider=SOURCE_TYPES.get(src['type'], 'stripe'),
-                amount=prov._amount_to_decimal(src['amount']) if src['amount'] is not None else order.total,
-                info=str(src),
-            )
-
-        if payment.provider != prov.identifier:
-            prov = payment.payment_provider
-            prov._init_api()
-
-        order.log_action('pretix.plugins.stripe.event', data=event_json)
-        go = (event_json['type'] == 'source.chargeable' and
-              payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED) and
-              src.status == 'chargeable')
-        if go:
-            try:
-                prov._charge_source(None, source_id, payment)
-            except PaymentException:
-                logger.exception('Webhook error')
-        elif src.status == 'failed':
-            payment.fail(info=str(src))
-        elif src.status == 'canceled' and payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
-            payment.info = str(src)
-            payment.state = OrderPayment.PAYMENT_STATE_CANCELED
-            payment.save()
-
-    return HttpResponse(status=200)
-
-
-def paymentintent_webhook(event, event_json, paymentintent_id, rso):
-    import stripe
-
-    from pretix.plugins.stripe.payment import StripeCC
-
-    prov = StripeCC(event)
+    prov = StripeCC(rso.order.event)
     prov._init_api()
 
     try:
         paymentintent = stripe.PaymentIntent.retrieve(paymentintent_id, expand=["latest_charge"], **prov.api_kwargs)
     except stripe.error.StripeError:
-        logger.exception('Stripe error on webhook. Event data: %s' % str(event_json))
+        logger.exception('Stripe error on webhook. Event data: %s' % str(untrusted_json))
         return HttpResponse('Charge not found', status=500)
 
     if paymentintent.latest_charge:
@@ -443,13 +344,15 @@ def paymentintent_webhook(event, event_json, paymentintent_id, rso):
             defaults={'order': rso.payment.order, 'payment': rso.payment}
         )
 
-    if event_json["type"] == "payment_intent.payment_failed":
-        rso.payment.fail(info=event_json)
+    # We consider the risk acceptable that someone who knows the payment intent ID can
+    # mark a pending payment as failed, therefore we 'trust' the event type here:
+    if untrusted_json["type"] == "payment_intent.payment_failed":
+        rso.payment.fail(info=str(paymentintent), log_data=untrusted_json)
 
     return HttpResponse(status=200)
 
 
-@event_permission_required('event.settings.general:write')
+@event_permission_required('event.settings.payment:write')
 def oauth_disconnect(request, **kwargs):
     if request.method != "POST":
         return render(request, 'pretixplugins/stripe/oauth_disconnect.html', {})
@@ -494,59 +397,6 @@ class StripeOrderView:
             'order': self.order.code,
             'secret': self.order.secret
         }) + ('?paid=yes' if self.order.status == Order.STATUS_PAID else ''))
-
-
-@method_decorator(xframe_options_exempt, 'dispatch')
-class ReturnView(StripeOrderView, View):
-    def get(self, request, *args, **kwargs):
-        import stripe
-
-        prov = self.pprov
-        prov._init_api()
-        try:
-            src = stripe.Source.retrieve(request.GET.get('source'), **prov.api_kwargs)
-        except stripe.error.InvalidRequestError:
-            logger.exception('Could not retrieve source')
-            messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
-                                           'in your emails to continue.'))
-            return redirect_to_url(eventreverse(self.request.event, 'presale:event.index'))
-
-        if src.client_secret != request.GET.get('client_secret'):
-            messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
-                                           'in your emails to continue.'))
-            return redirect_to_url(eventreverse(self.request.event, 'presale:event.index'))
-
-        with transaction.atomic():
-            self.order.refresh_from_db()
-            self.payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=self.payment.pk)
-            if self.payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
-                if 'payment_stripe_token' in request.session:
-                    del request.session['payment_stripe_token']
-                return self._redirect_to_order()
-
-            if src.status == 'chargeable':
-                try:
-                    prov._charge_source(request, src.id, self.payment)
-                except PaymentException as e:
-                    messages.error(request, str(e))
-                    return self._redirect_to_order()
-                finally:
-                    if 'payment_stripe_token' in request.session:
-                        del request.session['payment_stripe_token']
-            elif src.status == 'consumed':
-                # Webhook was faster, wow! ;)
-                if 'payment_stripe_token' in request.session:
-                    del request.session['payment_stripe_token']
-                return self._redirect_to_order()
-            elif src.status == 'pending':
-                self.payment.state = OrderPayment.PAYMENT_STATE_PENDING
-                self.payment.info = str(src)
-                self.payment.save()
-            else:  # failed or canceled
-                self.payment.fail(info=str(src))
-                messages.error(self.request, _('We had trouble authorizing your card payment. Please try again and '
-                                               'get in touch with us if this problem persists.'))
-        return self._redirect_to_order()
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')

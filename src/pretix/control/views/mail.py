@@ -130,6 +130,7 @@ class OutgoingMailDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequir
 
 
 class OutgoingMailBulkAction(OutgoingMailQueryMixin, OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, View):
+    # Yes, read permission here includes retry and cancelling emails, this is intentional and documented
     permission = 'organizer.outgoingmails:read'
 
     @transaction.atomic

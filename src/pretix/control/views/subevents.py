@@ -60,7 +60,7 @@ from django.views.generic import (
 )
 
 from pretix.base.models import CartPosition, LogEntry, OrderPosition
-from pretix.base.models.checkin import CheckinList
+from pretix.base.models.checkin import Checkin, CheckinList
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import (
     Item, ItemVariation, Quota, SubEventItem, SubEventItemVariation,
@@ -85,6 +85,7 @@ from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
 from pretix.helpers import GroupConcat
 from pretix.helpers.compat import CompatDeleteView
+from pretix.helpers.database import UnixTimestamp
 from pretix.helpers.i18n import get_format_without_seconds
 from pretix.helpers.models import modelcopy
 
@@ -1319,9 +1320,13 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         extra = 0
         kwargs = {}
 
-        if self.sampled_lists is None:
+        if self.block_list_change:
             return None
-        kwargs['instance'] = self.get_queryset()[0]
+        if self.sampled_lists is not None:
+            try:
+                kwargs['instance'] = self.get_queryset()[0]
+            except IndexError:
+                raise Http404("No matching dates")
 
         formsetclass = inlineformset_factory(
             SubEvent, CheckinList,
@@ -1334,13 +1339,28 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         )
 
     def save_list_formset(self, log_entries):
-        if self.sampled_lists is None or not self.list_formset.has_changed():
+        if self.block_list_change or not self.list_formset.has_changed():
             return
         qidx = 0
         subevents = list(self.get_queryset().prefetch_related('checkinlist_set'))
         to_save_products = []
         to_save_gates = []
         to_delete_list_ids = []
+
+        if self.sampled_lists is None:
+            if len(self.list_formset.forms) == 0:
+                return
+            else:
+                for se in subevents:
+                    for q in se.checkinlist_set.all():
+                        to_delete_list_ids.append(q.pk)
+                        log_entries += [
+                            q.log_action(action='pretix.event.checkinlist.deleted', user=self.request.user, save=False),
+                        ]
+
+                if to_delete_list_ids:
+                    CheckinList.objects.filter(id__in=to_delete_list_ids).delete()
+                    to_delete_list_ids = []
 
         for f in self.list_formset.forms:
             if self.list_formset._should_delete_form(f) and f in self.list_formset.extra_forms:
@@ -1493,6 +1513,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         ctx['filter_form'] = self.filter_form
         ctx['sampled_quotas'] = self.sampled_quotas
         ctx['sampled_lists'] = self.sampled_lists
+        ctx['block_list_change'] = self.block_list_change
         ctx['formset'] = self.quota_formset
         ctx['cl_formset'] = self.list_formset
         ctx['itemvar_forms'] = self.itemvar_forms
@@ -1519,6 +1540,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
         quotas_by_subevent = defaultdict(set)
         for q in all_quotas:
+            # Normalize lists returned from PostgreSQL
             if q['item_list']:
                 q['item_list'] = ",".join(sorted(q['item_list'].split(',')))
             if q['var_list']:
@@ -1539,6 +1561,14 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         return se.quotas.all()
 
     @cached_property
+    def block_list_change(self):
+        if self.sampled_lists:
+            return False  # all the same, safe to change
+        return Checkin.all.filter(
+            list__subevent__in=self.get_queryset()
+        ).exists()
+
+    @cached_property
     def sampled_lists(self):
         all_lists = CheckinList.objects.filter(
             subevent__in=self.get_queryset()
@@ -1557,6 +1587,11 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
         lists_by_subevent = defaultdict(list)
         for cl in all_lists:
+            # Normalize lists returned from PostgreSQL
+            if cl['item_list']:
+                cl['item_list'] = ",".join(sorted(cl['item_list'].split(',')))
+            if cl['gates_list']:
+                cl['gates_list'] = ",".join(sorted(cl['gates_list'].split(',')))
             lists_by_subevent[cl.pop('subevent')].append(cl)
 
         prev = None
@@ -1583,21 +1618,6 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
         mixed_values = set()
         qs = self.get_queryset()
 
-        qs = qs.annotate(
-            **{
-                # TODO: Once we're on Django 3.2, pass a tzinfo parameter
-                # Before Django 3.2, it uses the current timezone, which is hopefully fine
-                # as well in all cases we are concerned about
-                # See also: https://code.djangoproject.com/ticket/31948
-                k + '_day': TruncDate(k)
-                for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end')
-            },
-            **{
-                k + '_time': TruncTime(k)
-                for k in ('date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end')
-            },
-        )
-
         fields = {
             'name',
             'location',
@@ -1611,18 +1631,72 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             'date_from_time',
             'date_to_day',
             'date_to_time',
-            'date_admission_day',
-            'date_admission_time',
-            'presale_start_day',
-            'presale_start_time',
-            'presale_end_day',
-            'presale_end_time',
         }
+        rel_fields = {'date_admission', 'presale_start', 'presale_end'}
+
+        qs = qs.annotate(
+            **{
+                k + '_day': TruncDate(k, tzinfo=self.request.event.timezone)
+                for k in ('date_from', 'date_to', 'date_admission')
+            },
+            **{
+                k + '_time': TruncTime(k, tzinfo=self.request.event.timezone)
+                for k in ('date_from', 'date_to', 'date_admission')
+            },
+            **{
+                k + '_rel_min': (UnixTimestamp('date_from') - UnixTimestamp(k)) / 60
+                for k in rel_fields
+            },
+            **{
+                k + '_rel_days': TruncDate('date_from', tzinfo=self.request.event.timezone) - TruncDate(k, tzinfo=self.request.event.timezone)
+                for k in rel_fields
+            }
+        )
+
         for k in fields:
-            existing_values = list(qs.order_by(k).values(k).annotate(c=Count('*')))
+            existing_values = list(qs.order_by(k).values(k).distinct())
             if len(existing_values) == 1:
                 initial[k] = existing_values[0][k]
             elif len(existing_values) > 1:
+                mixed_values.add(k)
+                initial[k] = None
+
+        for k in rel_fields:
+            existing_fixed_values = list(qs.order_by(k).values(k).distinct())
+            existing_rel_days_values = list(qs.order_by(f'{k}_rel_days').values(f'{k}_rel_days').distinct())
+            existing_rel_min_values = list(qs.order_by(f'{k}_rel_min').values(f'{k}_rel_min').distinct())
+
+            if len(existing_fixed_values) == 1:
+                if existing_fixed_values[0][k]:
+                    initial[f"{k}_rel"] = RelativeDateWrapper(existing_fixed_values[0][k])
+                else:
+                    initial[f"{k}_rel"] = None
+
+            elif len(existing_rel_min_values) == 1:
+                if rel_min := existing_rel_min_values[0][f'{k}_rel_min']:
+                    initial[f"{k}_rel"] = RelativeDateWrapper(RelativeDate(
+                        days=0,
+                        base_date_name='event__date_from',
+                        time=None,
+                        minutes=abs(rel_min),
+                        is_after=rel_min < 0,
+                    ))
+                else:
+                    initial[f"{k}_rel"] = None
+
+            elif len(existing_rel_days_values) == 1:
+                if rel_days := existing_rel_days_values[0][f'{k}_rel_days']:
+                    initial[f"{k}_rel"] = RelativeDateWrapper(RelativeDate(
+                        days=abs(rel_days.days),
+                        base_date_name='event__date_from',
+                        time=None,
+                        minutes=None,
+                        is_after=rel_days.days < 0,
+                    ))
+                else:
+                    initial[f"{k}_rel"] = None
+
+            elif len(existing_fixed_values) > 1 or len(existing_rel_days_values) > 1 or len(existing_rel_min_values) > 1:
                 mixed_values.add(k)
                 initial[k] = None
 

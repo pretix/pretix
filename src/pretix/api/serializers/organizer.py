@@ -41,10 +41,9 @@ from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.auth import get_auth_backends
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
-    Customer, Device, EventMetaProperty, GiftCard, GiftCardAcceptance,
-    GiftCardTransaction, Membership, MembershipType, OrderPosition, Organizer,
-    ReusableMedium, SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite,
-    User,
+    Customer, Device, EventMetaProperty, Gate, GiftCard, GiftCardTransaction,
+    Membership, MembershipType, OrderPosition, Organizer, ReusableMedium,
+    SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.permissions import (
@@ -270,15 +269,7 @@ class GiftCardSerializer(I18nAwareModelSerializer):
         data = super().validate(data)
         if 'secret' in data:
             s = data['secret']
-            qs = GiftCard.objects.filter(
-                secret=s
-            ).filter(
-                Q(issuer=self.context["organizer"]) |
-                Q(issuer__in=GiftCardAcceptance.objects.filter(
-                    acceptor=self.context["organizer"],
-                    active=True,
-                ).values_list('issuer', flat=True))
-            )
+            qs = self.context["organizer"].accepted_gift_cards.filter(secret=s)
             if self.instance:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():
@@ -484,6 +475,13 @@ class DeviceSerializer(serializers.ModelSerializer):
         self.fields['security_profile'].choices = [(k, v.verbose_name) for k, v in get_all_security_profiles().items()]
         if not self.context['can_see_tokens']:
             del self.fields['initialization_token']
+
+
+class GateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Gate
+        fields = ('id', 'name', 'identifier')
 
 
 class TeamInviteSerializer(serializers.ModelSerializer):

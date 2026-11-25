@@ -55,9 +55,10 @@ from openpyxl.comments import Comment
 from openpyxl.styles import Font, PatternFill
 
 from pretix.base.models import (
-    Checkin, GiftCard, GiftCardTransaction, Invoice, InvoiceAddress, Order,
+    Checkin, GiftCardTransaction, Invoice, InvoiceAddress, Order,
     OrderPosition, Question,
 )
+from pretix.base.models.giftcards import GiftCard
 from pretix.base.models.orders import (
     OrderFee, OrderPayment, OrderRefund, Transaction,
 )
@@ -1326,12 +1327,12 @@ class GiftcardRedemptionListExporter(ListExporter):
             order__event__in=self.events,
             provider='giftcard',
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
-        ).order_by('created')
+        ).order_by('created').select_related("order__event__organizer")
         refunds = OrderRefund.objects.filter(
             order__event__in=self.events,
             provider='giftcard',
             state=OrderRefund.REFUND_STATE_DONE
-        ).order_by('created')
+        ).order_by('created').select_related("order__event__organizer")
 
         objs = sorted(list(payments) + list(refunds), key=lambda o: (o.order.code, o.created))
 
@@ -1348,9 +1349,9 @@ class GiftcardRedemptionListExporter(ListExporter):
                 obj.order.code,
                 obj.full_id,
                 obj.created.astimezone(tz).date().strftime('%Y-%m-%d'),
-                gc.secret,
+                gc.secret if gc.accepted_by(obj.order.event.organizer) else '?',
                 obj.amount * (-1 if isinstance(obj, OrderRefund) else 1),
-                gc.issuer
+                gc.issuer.slug
             ]
             yield row
 

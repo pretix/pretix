@@ -87,7 +87,7 @@ fabric.Textcontainer = fabric.util.createClass(fabric.Rect, {
 				fontSize: fontSize,
 				lineHeight: this.lineHeight,
 				fill: this.fill,
-				fontFamily: this.fontFamily,
+				fontFamily: this.fontFamily || '',
 				fontWeight: this.fontWeight,
 				fontStyle: this.fontStyle,
 				text: text,
@@ -377,7 +377,7 @@ var editor = {
 			o.set('fill', 'rgb(' + d.color[0] + ',' + d.color[1] + ',' + d.color[2] + ')')
 			o.set('fontSize', editor._pt2px(d.fontsize))
 			o.set('lineHeight', d.lineheight || 1)
-			o.set('fontFamily', d.fontfamily)
+			o.set('fontFamily', d.fontfamily || '')
 			o.set('fontWeight', d.bold ? 'bold' : 'normal')
 			o.set('fontStyle', d.italic ? 'italic' : 'normal')
 			o.content = d.content
@@ -407,7 +407,7 @@ var editor = {
 			o.set('fill', 'rgb(' + d.color[0] + ',' + d.color[1] + ',' + d.color[2] + ')')
 			o.set('fontSize', editor._pt2px(d.fontsize))
 			o.set('lineHeight', d.lineheight || 1)
-			o.set('fontFamily', d.fontfamily)
+			o.set('fontFamily', d.fontfamily || '')
 			o.set('fontWeight', d.bold ? 'bold' : 'normal')
 			o.set('fontStyle', d.italic ? 'italic' : 'normal')
 			o.downward = d.downward || false
@@ -618,18 +618,21 @@ var editor = {
 				$('#loading-initial').remove()
 			})
 		}
-		editor._update_version_notice()
+		editor._update_notices()
 	},
 
-	_update_version_notice: function () {
+	_update_notices: function () {
 		$('#version-notice').toggle(
 			editor._other_page_objects.some((o) => o.type === 'textcontainer')
 			|| editor.fabric.getObjects().some((o) => o.type === 'textcontainer')
 		)
+		$('#nocheckin-notice').toggle(
+			!editor.fabric.getObjects().some((o) => o.type === 'barcodearea' && (!o.content || o.content === 'secret'))
+		)
 	},
 
 	_update_toolbox_values: function () {
-		editor._update_version_notice()
+		editor._update_notices()
 		let o = editor.fabric.getActiveObject()
 		if (!o) {
 			return
@@ -809,7 +812,7 @@ var editor = {
 			o.set('fill', $('#toolbox-col').val())
 			o.set('fontSize', editor._pt2px($('#toolbox-fontsize').val()))
 			o.set('lineHeight', $('#toolbox-lineheight').val() || 1)
-			o.set('fontFamily', $('#toolbox-fontfamily').val())
+			o.set('fontFamily', $('#toolbox-fontfamily').val() || '')
 			o.set('fontWeight', $('#toolbox').find('button[data-action=bold]').is('.active') ? 'bold' : 'normal')
 			o.set('fontStyle', $('#toolbox').find('button[data-action=italic]').is('.active') ? 'italic' : 'normal')
 			var align = $('#toolbox-align').find('.active').attr('data-action')
@@ -853,7 +856,7 @@ var editor = {
 			o.set('fill', $('#toolbox-col').val())
 			o.set('fontSize', editor._pt2px($('#toolbox-fontsize').val()))
 			o.set('lineHeight', $('#toolbox-lineheight').val() || 1)
-			o.set('fontFamily', $('#toolbox-fontfamily').val())
+			o.set('fontFamily', $('#toolbox-fontfamily').val() || '')
 			o.set('fontWeight', $('#toolbox').find('button[data-action=bold]').is('.active') ? 'bold' : 'normal')
 			o.set('fontStyle', $('#toolbox').find('button[data-action=italic]').is('.active') ? 'italic' : 'normal')
 			var align = $('#toolbox-align').find('.active').attr('data-action')
@@ -898,6 +901,7 @@ var editor = {
 
 		o.setCoords()
 		editor.fabric.renderAll()
+		editor._update_notices()
 	},
 
 	_update_toolbox: function () {

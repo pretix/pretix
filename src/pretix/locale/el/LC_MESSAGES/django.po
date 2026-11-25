@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 07:26+0000\n"
+"POT-Creation-Date: 2026-10-28 10:48+0000\n"
 "PO-Revision-Date: 2026-02-25 23:00+0000\n"
 "Last-Translator: David Ibáñez Cerdeira <dibanez@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/"
@@ -206,11 +206,12 @@ msgid "Allowed Post Logout URIs list, space separated"
 msgstr "Επιτρεπόμενη λίστα URI, διαχωρισμένος χώρος"
 
 #: pretix/api/models.py pretix/base/models/customers.py
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
 #: pretix/plugins/paypal2/payment.py
 msgid "Client ID"
 msgstr "ταυτότητα πελάτη"
 
-#: pretix/api/models.py
+#: pretix/api/models.py pretix/control/views/organizer.py
 msgid "Client secret"
 msgstr "Μυστικό πελάτη"
 
@@ -8256,6 +8257,20 @@ msgid "This gift card was used in the meantime. Please try again."
 msgstr ""
 "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος. Παρακαλώ προσπαθήστε "
 "ξανά αργότερα."
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid "Gift card"
+msgid "Gift card not found."
+msgstr "Δωροκάρτα"
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid "Permanently delete all orders created in test mode"
+msgid "Only test gift card can be used in test mode and vice versa."
+msgstr ""
+"Διαγράψτε μόνιμα όλες τις παραγγελίες που δημιουργούνται στη λειτουργία "
+"δοκιμής"
 
 #: pretix/base/payment.py
 #, fuzzy
@@ -17852,7 +17867,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Target URL"
 msgctxt "sso_oidc"
-msgid "Base URL"
+msgid "Base URL / issuer"
 msgstr "Διεύθυνση URL προορισμού"
 
 #: pretix/control/forms/organizer.py
@@ -17926,12 +17941,24 @@ msgid ""
 "endpoint. Enter as: {example}"
 msgstr ""
 
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgid "Target URL"
+msgid "Base URL / issuer"
+msgstr "Διεύθυνση URL προορισμού"
+
 #: pretix/control/forms/organizer.py
 #, fuzzy
 #| msgid "A new client secret has been generated and is now effective."
 msgid "Invalidate old client secret and generate a new one"
 msgstr ""
 "Δημιουργήθηκε ένας νέος μυστικός πελάτης και είναι πλέον αποτελεσματικός."
+
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgid "Amount not refunded"
+msgid "(will be generated)"
+msgstr "Δεν γίνεται επιστροφή χρημάτων για το ποσό"
 
 #: pretix/control/forms/organizer.py
 #, fuzzy
@@ -19382,7 +19409,7 @@ msgstr "Η παραγγελία έχει αλλάξει."
 msgid "The SSO provider has been deleted."
 msgstr "Η παραγγελία διαγράφηκε."
 
-#: pretix/control/logdisplay.py
+#: pretix/control/logdisplay.py pretix/control/views/organizer.py
 #, fuzzy
 #| msgid "The event has been created."
 msgid "The SSO client has been created."
@@ -28246,8 +28273,30 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 #, fuzzy
 #| msgid "Create a new event"
-msgid "Create a new SSO client"
+msgid "Create credentials for a new SSO client"
 msgstr "Δημιουργήστε εκδήλωση"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+msgid ""
+"After submitting this form, client credentials for your SSO client will be "
+"generated."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a "
+"href=\"%(url)s\">Using pretix as an SSO provider with external SSO clients</"
+"a>."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+msgid ""
+"\n"
+"    \t\"Login with pretix\" in external systems\n"
+"    "
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 msgid ""
@@ -28276,16 +28325,24 @@ msgstr "Ένα κουπόνι δεν μπορεί να διαγραφεί αν �
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #, fuzzy
-#| msgid "Payment provider:"
-msgid "SSO provider:"
-msgstr "Πάροχος πληρωμής:"
+#| msgid "Delete product"
+msgid "External SSO provider:"
+msgstr "Διαγραφή προϊόντος"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 #, fuzzy
 #| msgid "Create a new product"
-msgid "Create a new SSO provider"
+msgid "Connect to an external SSO provider"
 msgstr "Δημιουργήστε ένα νέο προϊόν"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a href=\"%(url)s\" "
+"target=\"_blank\">Using pretix as an SSO client</a>."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #, fuzzy
@@ -28293,6 +28350,13 @@ msgstr "Δημιουργήστε ένα νέο προϊόν"
 msgctxt "sso"
 msgid "Redirection URL"
 msgstr "URI ανακατεύθυνση"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+msgid ""
+"\n"
+"    \tConnect to an external login provider\n"
+"    "
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 msgid ""
@@ -32044,20 +32108,12 @@ msgid "The provider has been created."
 msgstr "Η παραγγελία έχει δημιουργηθεί."
 
 #: pretix/control/views/organizer.py
-#, python-brace-format
-msgid ""
-"The SSO client has been created. Please note down the following client "
-"secret, it will never be shown again: {secret}"
-msgstr ""
-
-#: pretix/control/views/organizer.py
-#, fuzzy, python-brace-format
+#, fuzzy
 #| msgid ""
 #| "Your changes have been saved. Please note that it can take a short period "
 #| "of time until your changes become active."
 msgid ""
-"Your changes have been saved. Please note down the following client secret, "
-"it will never be shown again: {secret}"
+"Please note down the following client secret, it will never be shown again."
 msgstr ""
 "Οι αλλαγές σας έχουν αποθηκευτεί. Λάβετε υπόψη ότι μπορεί να διαρκέσει λίγο "
 "χρονικό διάστημα μέχρι να ενεργοποιηθούν οι αλλαγές σας."
@@ -34811,6 +34867,16 @@ msgid "Restrict to products"
 msgstr "Περιορίστε σε χώρες"
 
 #: pretix/plugins/sendmail/forms.py
+msgctxt "sendmail_form"
+msgid ""
+"There may be multiple mails sent out to the same mail address if one order "
+"contains multiple attendee products for it, if you restrict to products "
+"while also restricting mails to attendees only. This is intended, as every "
+"one of those get linked to their own separate order page restricted to only "
+"that product."
+msgstr ""
+
+#: pretix/plugins/sendmail/forms.py
 #, fuzzy
 #| msgid "Check-in status"
 msgid "Filter check-in status"
@@ -35811,6 +35877,10 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "MobilePay"
+msgstr ""
+
+#: pretix/plugins/stripe/payment.py
+msgid "Wero"
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py
@@ -40321,6 +40391,11 @@ msgstr "Πρόσβαση για εγγραφή"
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Payment provider:"
+#~ msgid "SSO provider:"
+#~ msgstr "Πάροχος πληρωμής:"
 
 #~ msgid "PayPal account"
 #~ msgstr "Λογαριασμός PayPal"

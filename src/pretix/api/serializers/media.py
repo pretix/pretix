@@ -197,6 +197,8 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             'linked_giftcard',
             'info',
             'notes',
+            # When adding fields, check if they should be hidden in ReusableMediaViewSet
+            # for cross-organizer lookups
         )
 
 

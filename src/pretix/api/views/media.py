@@ -39,7 +39,7 @@ from pretix.api.serializers.media import (
 )
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
-    Checkin, GiftCard, GiftCardAcceptance, GiftCardTransaction, OrderPosition,
+    Checkin, GiftCardAcceptance, GiftCardTransaction, OrderPosition,
     ReusableMedium,
 )
 from pretix.base.models.orders import PrintLog
@@ -88,7 +88,7 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
             ),
             Prefetch(
                 'linked_giftcard',
-                queryset=GiftCard.objects.annotate(
+                queryset=self.request.organizer.accepted_gift_cards.annotate(
                     cached_value=Coalesce(Subquery(s), Decimal('0.00'))
                 )
             )
@@ -183,9 +183,18 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
                         type=s.validated_data["type"],
                         identifier=s.validated_data["identifier"],
                     )
-                m.customer = None  # not relevant for cross-organizer
                 s = self.get_serializer(m)
-                return Response({"result": s.data})
+                data = s.data
+                # Remove fields that are not relevant for cross-organizer usage
+                data["customer"] = None
+                data["linked_orderposition"] = None
+                data["linked_orderpositions"] = []
+                data["info"] = {}
+                data["notes"] = None
+                data["claim_token"] = None
+                data["label"] = None
+
+                return Response({"result": data})
             except ReusableMedium.DoesNotExist:
                 mt = MEDIA_TYPES.get(s.validated_data["type"])
                 if mt:

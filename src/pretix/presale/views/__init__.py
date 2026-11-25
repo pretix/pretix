@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 import copy
 import warnings
-from collections import Counter, defaultdict
+from collections import defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
 from functools import wraps
@@ -266,10 +266,6 @@ class CartMixin:
             minutes_left = None
             seconds_left = None
 
-        itemvarsums = Counter()
-        for p in cartpos:
-            itemvarsums[p.variation or p.item] += 1
-
         return {
             'positions': positions,
             'invoice_address': self.invoice_address,
@@ -291,7 +287,6 @@ class CartMixin:
                 not self.request.event.settings.display_net_prices and
                 sum(c.price_includes_rounding_correction for c in positions) + sum(f.price_includes_rounding_correction for f in fees)
             ),
-            'itemvarsums': itemvarsums,
             'current_selected_payments': [
                 p for p in self.current_selected_payments(lcp, fees, self.invoice_address)
                 if p.get('multi_use_supported')

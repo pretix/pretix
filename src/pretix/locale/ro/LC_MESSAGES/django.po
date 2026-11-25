@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 07:26+0000\n"
+"POT-Creation-Date: 2026-10-28 10:48+0000\n"
 "PO-Revision-Date: 2025-10-09 16:00+0000\n"
 "Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -203,11 +203,12 @@ msgid "Allowed Post Logout URIs list, space separated"
 msgstr "Lista URI-urilor permise, separate prin spații"
 
 #: pretix/api/models.py pretix/base/models/customers.py
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
 #: pretix/plugins/paypal2/payment.py
 msgid "Client ID"
 msgstr "ID Client"
 
-#: pretix/api/models.py
+#: pretix/api/models.py pretix/control/views/organizer.py
 msgid "Client secret"
 msgstr "Cheie secretă Client"
 
@@ -7950,6 +7951,18 @@ msgstr "Acest card cadou nu este acceptat de acest organizator de evenimente."
 msgid "This gift card was used in the meantime. Please try again."
 msgstr ""
 "Acest card cadou a fost folosit între timp. Vă rugăm să încercați din nou."
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid "Gift card code"
+msgid "Gift card not found."
+msgstr "Codul cardului cadou"
+
+#: pretix/base/payment.py
+#, fuzzy
+#| msgid "Only test gift cards can be used in test mode."
+msgid "Only test gift card can be used in test mode and vice versa."
+msgstr "Numai cardurile cadou de test pot fi utilizate în modul de testare."
 
 #: pretix/base/payment.py
 #, fuzzy
@@ -17416,7 +17429,7 @@ msgstr "Telefon"
 #, fuzzy
 #| msgid "Target URL"
 msgctxt "sso_oidc"
-msgid "Base URL"
+msgid "Base URL / issuer"
 msgstr "URL țintă"
 
 #: pretix/control/forms/organizer.py
@@ -17492,11 +17505,23 @@ msgid ""
 "endpoint. Enter as: {example}"
 msgstr ""
 
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgid "Target URL"
+msgid "Base URL / issuer"
+msgstr "URL țintă"
+
 #: pretix/control/forms/organizer.py
 #, fuzzy
 #| msgid "A new client secret has been generated and is now effective."
 msgid "Invalidate old client secret and generate a new one"
 msgstr "Un nou secret de client a fost generat și este acum în vigoare."
+
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+#, fuzzy
+#| msgid "You will be refunded"
+msgid "(will be generated)"
+msgstr "Veți primi o rambursare"
 
 #: pretix/control/forms/organizer.py
 #, fuzzy
@@ -18894,7 +18919,7 @@ msgstr "Comanda a fost schimbată."
 msgid "The SSO provider has been deleted."
 msgstr "Comanda a fost ștearsă."
 
-#: pretix/control/logdisplay.py
+#: pretix/control/logdisplay.py pretix/control/views/organizer.py
 #, fuzzy
 #| msgid "The event has been created."
 msgid "The SSO client has been created."
@@ -27543,8 +27568,30 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 #, fuzzy
 #| msgid "Create a new event"
-msgid "Create a new SSO client"
+msgid "Create credentials for a new SSO client"
 msgstr "Creați un nou eveniment"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+msgid ""
+"After submitting this form, client credentials for your SSO client will be "
+"generated."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a "
+"href=\"%(url)s\">Using pretix as an SSO provider with external SSO clients</"
+"a>."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+msgid ""
+"\n"
+"    \t\"Login with pretix\" in external systems\n"
+"    "
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 msgid ""
@@ -27575,16 +27622,24 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #, fuzzy
-#| msgid "Payment provider:"
-msgid "SSO provider:"
-msgstr "Procesator de plăți:"
+#| msgid "Delete property:"
+msgid "External SSO provider:"
+msgstr "Ștergeți proprietatea:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 #, fuzzy
 #| msgid "Create a new property"
-msgid "Create a new SSO provider"
+msgid "Connect to an external SSO provider"
 msgstr "Creați o nouă proprietate"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a href=\"%(url)s\" "
+"target=\"_blank\">Using pretix as an SSO client</a>."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #, fuzzy
@@ -27592,6 +27647,13 @@ msgstr "Creați o nouă proprietate"
 msgctxt "sso"
 msgid "Redirection URL"
 msgstr "URI-uri de redirecționare"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+msgid ""
+"\n"
+"    \tConnect to an external login provider\n"
+"    "
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 msgid ""
@@ -31228,20 +31290,12 @@ msgid "The provider has been created."
 msgstr "Comanda a fost creată."
 
 #: pretix/control/views/organizer.py
-#, python-brace-format
-msgid ""
-"The SSO client has been created. Please note down the following client "
-"secret, it will never be shown again: {secret}"
-msgstr ""
-
-#: pretix/control/views/organizer.py
-#, fuzzy, python-brace-format
+#, fuzzy
 #| msgid ""
 #| "Your changes have been saved. Please note that it can take a short period "
 #| "of time until your changes become active."
 msgid ""
-"Your changes have been saved. Please note down the following client secret, "
-"it will never be shown again: {secret}"
+"Please note down the following client secret, it will never be shown again."
 msgstr ""
 "Modificările dvs. au fost salvate. Vă rugăm să rețineți că poate dura o "
 "perioadă scurtă de timp până când modificările dvs. devin active."
@@ -33909,6 +33963,16 @@ msgid "Restrict to products"
 msgstr "Limitat la țările"
 
 #: pretix/plugins/sendmail/forms.py
+msgctxt "sendmail_form"
+msgid ""
+"There may be multiple mails sent out to the same mail address if one order "
+"contains multiple attendee products for it, if you restrict to products "
+"while also restricting mails to attendees only. This is intended, as every "
+"one of those get linked to their own separate order page restricted to only "
+"that product."
+msgstr ""
+
+#: pretix/plugins/sendmail/forms.py
 msgid "Filter check-in status"
 msgstr "Filtrează după status check-in"
 
@@ -34849,6 +34913,10 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "MobilePay"
+msgstr ""
+
+#: pretix/plugins/stripe/payment.py
+msgid "Wero"
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py
@@ -39127,6 +39195,11 @@ msgstr "Acces la scriere"
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#, fuzzy
+#~| msgid "Payment provider:"
+#~ msgid "SSO provider:"
+#~ msgstr "Procesator de plăți:"
 
 #~ msgid ""
 #~ "Accept payments with your PayPal account. PayPal is one of the most "

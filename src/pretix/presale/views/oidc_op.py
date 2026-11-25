@@ -235,6 +235,11 @@ class AuthorizeView(View):
         if response_type not in RESPONSE_TYPES_SUPPORTED:
             return self._final_error("unsupported_response_type", "response_type unsupported")
 
+        if client.authorization_grant_type == "authorization-code" and response_type != "code":
+            # with authorization_grant_type=implicit, response_type=code is still allowed, otherwise "hybrid flow" would be impossible
+            return self._final_error("unsupported_response_type", "For clients with grant type set "
+                                                                  "to authorization code, using implicit or hybrid flows is not allowed")
+
         if response_type != "code" and response_mode == "query":
             return self._final_error("invalid_request", "response_mode query must not be used with implicit or hybrid flow")
         elif not response_mode:

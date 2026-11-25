@@ -21,7 +21,6 @@
 #
 from datetime import timedelta
 
-from celery.result import AsyncResult
 from django.conf import settings
 from django.db import transaction
 from django.db.models import QuerySet
@@ -38,6 +37,7 @@ from rest_framework.reverse import reverse
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
+from pretix.helpers.celery import get_task_result
 
 from ...api.serializers.fields import UploadedFileField
 from ...base.models import CachedFile, OrderPosition, SalesChannel
@@ -98,19 +98,32 @@ class TicketLayoutSerializer(I18nAwareModelSerializer):
         return d
 
     def validate(self, attrs):
-        if attrs.get('default') and self.context['event'].ticket_layouts.filter(default=True).exists:
+        if attrs.get('default') and self.context['event'].ticket_layouts.filter(default=True).exists():
             raise ValidationError('You cannot have two layouts with default = True')
         return attrs
 
     def create(self, validated_data):
         validated_data["event"] = self.context["event"]
-        return super().create(validated_data)
+        background = validated_data.pop("background", None)
+        instance = super().create(validated_data)
+        if background:
+            instance.background.save('background.pdf', background)
+        return instance
+
+    def update(self, instance, validated_data):
+        background = validated_data.pop("background", None)
+        if background:
+            if instance.background and TicketLayout.objects.filter(background=instance.background).count() == 1:
+                instance.background.delete()
+            instance.background.save('background.pdf', background)
+        return super().update(instance, validated_data)
 
 
 class TicketLayoutViewSet(viewsets.ModelViewSet):
     serializer_class = TicketLayoutSerializer
     queryset = TicketLayout.objects.none()
     lookup_field = 'id'
+    write_permission = 'event.settings.general:write'
 
     def get_queryset(self):
         return self.request.event.ticket_layouts.all()
@@ -228,7 +241,7 @@ class TicketRendererViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['GET'], url_name='download', url_path='download/(?P<asyncid>[^/]+)/(?P<cfid>[^/]+)')
     def download(self, *args, **kwargs):
-        cf = get_object_or_404(CachedFile, id=kwargs['cfid'])
+        cf = get_object_or_404(CachedFile, id=kwargs['cfid'], web_download=True)
         if not cf.allowed_for_session(self.request, "ticketoutputpdf-api"):
             return Response(
                 {'status': 'failed', 'message': 'Unknown file ID or export failed'},
@@ -244,7 +257,7 @@ class TicketRendererViewSet(viewsets.ViewSet):
                 status=status.HTTP_410_GONE
             )
 
-        res = AsyncResult(kwargs['asyncid'])
+        res = get_task_result(kwargs['asyncid'], task_name=bulk_render)
         if res.failed():
             if isinstance(res.info, dict) and res.info['exc_type'] == 'ExportError':
                 msg = res.info['exc_message']
@@ -269,7 +282,7 @@ class TicketRendererViewSet(viewsets.ViewSet):
         })
         serializer.is_valid(raise_exception=True)
 
-        cf = CachedFile(web_download=False)
+        cf = CachedFile(web_download=True)
         cf.bind_to_session(self.request, "ticketoutputpdf-api")
         cf.date = now()
         cf.expires = now() + timedelta(hours=24)

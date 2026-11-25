@@ -70,7 +70,8 @@ from pretix.helpers.http import redirect_to_url
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.productlist import (
-    get_item_option_count, item_group_by_category, prepare_item_list_for_shop,
+    get_item_option_count, get_item_var_sums, item_group_by_category,
+    prepare_item_list_for_shop,
 )
 from pretix.presale.views import (
     CartMixin, EventViewMixin, allow_cors_if_namespaced,
@@ -246,8 +247,7 @@ def _items_from_post_data(request, warn_if_empty=True):
         pass
 
     items = []
-    if 'raw' in request.POST:
-        items += json.loads(request.POST.get("raw"))
+
     for key, values in req_items:
         for value in values:
             try:
@@ -262,6 +262,7 @@ def _items_from_post_data(request, warn_if_empty=True):
     if len(items) == 0 and warn_if_empty:
         messages.warning(request, _('You did not select any products.'))
         return []
+
     return items
 
 
@@ -453,7 +454,7 @@ class CartApplyVoucher(EventViewMixin, CartActionMixin, AsyncAction, View):
 
             if not self.request.event.vouchers.filter(code__iexact=code):
                 try:
-                    gc = self.request.event.organizer.accepted_gift_cards.get(secret=code)
+                    gc = self.request.organizer.accepted_gift_cards.get(secret=code)
                     gcp = GiftCardPayment(self.request.event)
                     if not gcp.is_enabled or not gcp.is_allowed(self.request, Decimal("1.00")):
                         raise ValidationError(error_messages['voucher_invalid'])
@@ -701,6 +702,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
         )
 
         context['cart'] = self.get_cart()
+        context['itemvarsums'] = get_item_var_sums(context['cart'].get('raw', []), self.subevent)
         context['show_cart'] = context['cart']['positions']
 
         # Regroup those by category

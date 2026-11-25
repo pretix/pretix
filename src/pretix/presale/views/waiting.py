@@ -57,6 +57,7 @@ class WaitingView(EventViewMixin, FormView):
             self.request.event,
             subevent=self.subevent,
             require_seat=None,
+            base_qs=self.request.event.items.filter(require_voucher=False),
             channel=self.request.organizer.sales_channels.get(identifier="web"),
             memberships=(
                 customer.usable_memberships(

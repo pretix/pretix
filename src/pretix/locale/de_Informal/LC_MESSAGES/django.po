@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 07:26+0000\n"
-"PO-Revision-Date: 2026-10-13 14:40+0000\n"
-"Last-Translator: Martin Gross <gross@rami.io>\n"
+"POT-Creation-Date: 2026-10-28 10:48+0000\n"
+"PO-Revision-Date: 2026-11-06 22:00+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10\n"
+"X-Generator: Weblate 2026.11.1\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -201,11 +201,12 @@ msgid "Allowed Post Logout URIs list, space separated"
 msgstr "Liste erlaubter URIs nach Abmeldung, mit Leerzeichen getrennt"
 
 #: pretix/api/models.py pretix/base/models/customers.py
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
 #: pretix/plugins/paypal2/payment.py
 msgid "Client ID"
 msgstr "Client-ID"
 
-#: pretix/api/models.py
+#: pretix/api/models.py pretix/control/views/organizer.py
 msgid "Client secret"
 msgstr "Geheimer Schlüssel"
 
@@ -7641,6 +7642,14 @@ msgstr ""
 "versuchen."
 
 #: pretix/base/payment.py
+msgid "Gift card not found."
+msgstr "Wertgutschein nicht gefunden."
+
+#: pretix/base/payment.py
+msgid "Only test gift card can be used in test mode and vice versa."
+msgstr "Im Testmodus können nur Testgutscheine verwendet werden und umgekehrt."
+
+#: pretix/base/payment.py
 msgid ""
 "This payment provider exists for historical purposes only and is no longer "
 "usable."
@@ -12543,17 +12552,16 @@ msgid ""
 msgstr ""
 "Hallo {name},\n"
 "\n"
-"vielen Dank für deine Anmeldung für ein Kundenkonto bei {organizer}!\n"
+"du hast angefragt, die E-Mail-Adresse für dein Kundenkonto bei {organizer} "
+"zu ändern.\n"
 "\n"
-"Um dein Kundenkonto zu aktivieren und ein Passwort zu wählen, klicke bitte "
-"hier:\n"
+"Um die Änderung zu bestätigen, klicke bitte hier:\n"
 "\n"
 "{url}\n"
 "\n"
 "Dieser Link ist gültig für einen Tag.\n"
 "\n"
-"Wenn du dich nicht selbst angemeldet hast, kannst du diese E-Mail "
-"ignorieren.\n"
+"Wenn du dies nicht angefordert hast, kannst du diese E-Mail ignorieren.\n"
 "\n"
 "Viele Grüße\n"
 "\n"
@@ -16676,8 +16684,8 @@ msgstr "Telefon"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
-msgid "Base URL"
-msgstr "Basis-URL"
+msgid "Base URL / issuer"
+msgstr "Basis-URL / Aussteller"
 
 #: pretix/control/forms/organizer.py
 msgctxt "sso_oidc"
@@ -16749,10 +16757,18 @@ msgstr ""
 "Optionale Query-Parameter, die zu Aufrufen des Autorisierungs-Endpunktes "
 "hinzugefügt werden. Beispiel: {example}"
 
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+msgid "Base URL / issuer"
+msgstr "Basis-URL / Aussteller"
+
 #: pretix/control/forms/organizer.py
 msgid "Invalidate old client secret and generate a new one"
 msgstr ""
 "Bestehendes Client-Secret invalidieren und neues Client-Secret erzeugen"
+
+#: pretix/control/forms/organizer.py pretix/control/views/organizer.py
+msgid "(will be generated)"
+msgstr "(wird generiert)"
 
 #: pretix/control/forms/organizer.py
 msgid "Organizer short name"
@@ -18042,7 +18058,7 @@ msgstr "Der SSO-Provider wurde geändert."
 msgid "The SSO provider has been deleted."
 msgstr "Der SSO-Provider wurde gelöscht."
 
-#: pretix/control/logdisplay.py
+#: pretix/control/logdisplay.py pretix/control/views/organizer.py
 msgid "The SSO client has been created."
 msgstr "Der SSO-Client wurde erstellt."
 
@@ -26338,8 +26354,37 @@ msgstr "SSO-Client:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
-msgid "Create a new SSO client"
-msgstr "Neuen SSO-Client erstellen"
+msgid "Create credentials for a new SSO client"
+msgstr "Zugangsdaten für neuen SSO-Client erstellen"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+msgid ""
+"After submitting this form, client credentials for your SSO client will be "
+"generated."
+msgstr ""
+"Nach Abschicken dieses Formulars werden die Zugangsdaten für den neuen SSO-"
+"Client erstellt."
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a "
+"href=\"%(url)s\">Using pretix as an SSO provider with external SSO clients</"
+"a>."
+msgstr ""
+"Für weitere Informationen beachte bitte unsere Dokumentation zum Thema <a "
+"href=\"%(url)s\">Nutzung von pretix als SSO-Provider</a>."
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
+msgid ""
+"\n"
+"    \t\"Login with pretix\" in external systems\n"
+"    "
+msgstr ""
+"\n"
+"    \t\"Login mit pretix\" in externen Systemen\n"
+"    "
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html
 msgid ""
@@ -26365,18 +26410,38 @@ msgstr ""
 "Dieser SSO-Provider kann nicht gelöscht werden, da er bereits genutzt wurde."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
-msgid "SSO provider:"
-msgstr "SSO-Provider:"
+msgid "External SSO provider:"
+msgstr "Externer SSO-Provider:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
-msgid "Create a new SSO provider"
-msgstr "Neuen SSO-Provider erstellen"
+msgid "Connect to an external SSO provider"
+msgstr "Mit externem SSO-Provider verbinden"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+#, python-format
+msgid ""
+"For more information, refer to our documentation on <a href=\"%(url)s\" "
+"target=\"_blank\">Using pretix as an SSO client</a>."
+msgstr ""
+"Für weitere Informationen beachte bitte unsere Dokumentation zum Thema <a "
+"href=\"%(url)s\" target=\"_blank\">Nutzung von pretix als SSO-Client</a>."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html
 msgctxt "sso"
 msgid "Redirection URL"
 msgstr "Weiterleitungs-URLs"
+
+#: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
+msgid ""
+"\n"
+"    \tConnect to an external login provider\n"
+"    "
+msgstr ""
+"\n"
+"    \tMit externem Login-Anbieter verbinden\n"
+"    "
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html
 msgid ""
@@ -29914,22 +29979,10 @@ msgid "The provider has been created."
 msgstr "Der Provider wurde erstellt."
 
 #: pretix/control/views/organizer.py
-#, python-brace-format
 msgid ""
-"The SSO client has been created. Please note down the following client "
-"secret, it will never be shown again: {secret}"
+"Please note down the following client secret, it will never be shown again."
 msgstr ""
-"Der SSO-Client wurde erstellt. Bitte notiere das folgende Client-Secret, es "
-"wird nicht erneut angezeigt: {secret}"
-
-#: pretix/control/views/organizer.py
-#, python-brace-format
-msgid ""
-"Your changes have been saved. Please note down the following client secret, "
-"it will never be shown again: {secret}"
-msgstr ""
-"Deine Änderungen wurden gespeichert. Bitte notiere das folgende Client-"
-"Secret, es wird nicht erneut angezeigt: {secret}"
+"Bitte notiere das folgende Client-Secret, es wird nicht erneut angezeigt."
 
 #: pretix/control/views/organizer.py
 msgid ""
@@ -32457,6 +32510,21 @@ msgid "Restrict to products"
 msgstr "Auf Produkte einschränken"
 
 #: pretix/plugins/sendmail/forms.py
+msgctxt "sendmail_form"
+msgid ""
+"There may be multiple mails sent out to the same mail address if one order "
+"contains multiple attendee products for it, if you restrict to products "
+"while also restricting mails to attendees only. This is intended, as every "
+"one of those get linked to their own separate order page restricted to only "
+"that product."
+msgstr ""
+"Es können mehrere E-Mails an die gleiche Adresse verschickt werden, wenn "
+"eine Bestellung mehrere Produkte mit dieser Adresse enthält, wenn der "
+"Versand auf Produkte eingeschränkt ist und gleichzeitig nur an Teilnehmer "
+"erfolgt. Dies ist beabsichtigt, da jedes Ticket einen eigenen Link zu einer "
+"Bestätigungsseite mit nur diesem Produkt enthält."
+
+#: pretix/plugins/sendmail/forms.py
 msgid "Filter check-in status"
 msgstr "Nach Check-in-Status filtern"
 
@@ -33357,6 +33425,10 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py
 msgid "MobilePay"
 msgstr "MobilePay"
+
+#: pretix/plugins/stripe/payment.py
+msgid "Wero"
+msgstr "Wero"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Destination"
@@ -37442,6 +37514,17 @@ msgstr "Schreibzugriff"
 #: pretix/settings.py
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#~ msgid "SSO provider:"
+#~ msgstr "SSO-Provider:"
+
+#, python-brace-format
+#~ msgid ""
+#~ "The SSO client has been created. Please note down the following client "
+#~ "secret, it will never be shown again: {secret}"
+#~ msgstr ""
+#~ "Der SSO-Client wurde erstellt. Bitte notiere das folgende Client-Secret, "
+#~ "es wird nicht erneut angezeigt: {secret}"
 
 #~ msgid ""
 #~ "This option currently only affects the calendar of this event series, not "

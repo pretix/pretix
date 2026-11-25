@@ -235,6 +235,7 @@ class LayoutGetDefault(EventPermissionRequiredMixin, View):
 
 
 class LayoutEditorView(BaseEditorView):
+    checkin_qr_warning = True
 
     @cached_property
     def layout(self):
