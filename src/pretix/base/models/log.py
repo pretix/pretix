@@ -38,6 +38,7 @@ import logging
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ImproperlyConfigured
 from django.db import connections, models
 from django.utils.functional import cached_property
 
@@ -143,12 +144,14 @@ class LogEntry(models.Model):
         if log_entry_type:
             sender = self.event if self.event else self.organizer
             link_info = log_entry_type.get_object_link_info(self)
-            if is_app_active(sender, meta['plugin']):
-                return make_link(link_info, log_entry_type.object_link_wrapper)
-            else:
-                return make_link(link_info, log_entry_type.object_link_wrapper, is_active=False,
-                                 event=self.event, plugin_name=meta['plugin'] and getattr(meta['plugin'], 'name'))
-
+            try:
+                if is_app_active(sender, meta['plugin']):
+                    return make_link(link_info, log_entry_type.object_link_wrapper)
+                else:
+                    return make_link(link_info, log_entry_type.object_link_wrapper, is_active=False,
+                                     event=self.event, plugin_name=meta['plugin'] and getattr(meta['plugin'], 'name'))
+            except ImproperlyConfigured:
+                return ''
         try:
             if self.content_type.model_class() is Event:
                 return ''
