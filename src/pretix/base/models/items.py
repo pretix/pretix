@@ -839,13 +839,17 @@ class Item(LoggedModel):
                 qs = qs.filter(Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels=sales_channel))
             return qs
 
-    def get_asked_questions(self, questionnaire_type=None, sales_channel=None):
+    def get_asked_questions(self,
+                            questionnaire_type: "Questionnaire.QuestionnaireType | list[Questionnaire.QuestionnaireType] | None"=None,
+                            sales_channel=None):
         qs = QuestionnaireRow.objects.filter(
             Q(system_datafield__isnull=False) | Q(user_datafield_id__isnull=False),
             questionnaire__items=self,
         )  # .prefetch_related('user_datafield')
-        if questionnaire_type is not None:
+        if isinstance(questionnaire_type, Questionnaire.QuestionnaireType):
             qs = qs.filter(questionnaire__type=questionnaire_type)
+        elif isinstance(questionnaire_type, list):
+            qs = qs.filter(questionnaire__type__in=questionnaire_type)
         if sales_channel is not None:
             qs = qs.filter(Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels=sales_channel))
         return qs

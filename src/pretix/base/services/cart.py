@@ -31,6 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+import copy
 import re
 import uuid
 from collections import Counter, defaultdict, namedtuple
@@ -61,10 +62,10 @@ from pretix.base.models import (
     Seat, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
+from pretix.base.models.items import Questionnaire
 from pretix.base.models.orders import CheckoutSession, OrderFee
 from pretix.base.models.tax import TaxRule
 from pretix.base.reldate import RelativeDateWrapper
-from pretix.base.services.checkin import _save_answers
 from pretix.base.services.locking import LockTimeoutException, lock_objects
 from pretix.base.services.pricing import (
     apply_discounts, apply_rounding, get_line_price, get_listed_price,
@@ -473,7 +474,7 @@ class CartManager:
                     raise CartError(error_messages['payment_ended'])
 
     def _ensure_checkout_session(self):
-        CheckoutSession.objects.get_or_create(
+        cs, created = CheckoutSession.objects.get_or_create(
             event=self.event,
             cart_id=self.cart_id,
             defaults={
@@ -481,6 +482,27 @@ class CartManager:
                 "testmode": self.event.testmode,
             },
         )
+        if created:
+            widget_answers = []
+            for k, v in self._widget_data.items():
+                if not k.startswith('question-'):
+                    continue
+
+                q = (
+                    self.event.get_asked_questions(sales_channel=self._sales_channel, questionnaire_type=Questionnaire.QuestionnaireType.ORDER_PURCHASE)
+                    .filter(user_datafield__identifier__iexact=k[9:])
+                    .first()
+                )
+                if not q:
+                    continue
+
+                try:
+                    v = q.clean_answer(v)
+                except ValidationError:
+                    continue
+                widget_answers.append({"question": q.user_datafield, "answer": v})
+            if widget_answers:
+                cs.set_answers(widget_answers)
 
     def _extend_expiry_of_valid_existing_positions(self):
         # real_now_dt is initialized at CartManager instantiation, so it's slightly in the past. Add a small
@@ -1365,6 +1387,35 @@ class CartManager:
                         available_count = 0
                         err = err or error_messages['seat_unavailable']
 
+                    widget_answers = []
+                    name_asked = False
+                    email_asked = False
+                    if available_count:
+                        asked_questions = op.item.get_asked_questions(
+                            sales_channel=self._sales_channel,
+                            questionnaire_type=[Questionnaire.QuestionnaireType.POSITION_PURCHASE, Questionnaire.QuestionnaireType.POSITION_HIDDEN]
+                        )
+                        for k, v in self._widget_data.items():
+                            if not k.startswith('question-'):
+                                continue
+
+                            q = (
+                                asked_questions
+                                .filter(user_datafield__identifier__iexact=k[9:])
+                                .first()
+                            )
+                            if not q:
+                                continue
+
+                            try:
+                                v = q.clean_answer(v)
+                            except ValidationError:
+                                continue
+                            widget_answers.append({"question": q.user_datafield, "answer": v})
+
+                        name_asked = asked_questions.filter(system_datafield='@attendee_name_parts').exists()
+                        email_asked = asked_questions.filter(system_datafield='@attendee_email').exists()
+
                     for k in range(available_count):
                         line_price = get_line_price(
                             price_after_voucher=op.price_after_voucher,
@@ -1393,7 +1444,8 @@ class CartManager:
                             tax_rate=line_price.rate,
                             price=line_price.gross,
                         )
-                        if self.event.settings.attendee_names_asked:
+
+                        if name_asked:
                             scheme = PERSON_NAME_SCHEMES.get(self.event.settings.name_scheme)
                             if 'attendee-name' in self._widget_data:
                                 cp.attendee_name_parts = {'_legacy': self._widget_data['attendee-name']}
@@ -1403,20 +1455,11 @@ class CartManager:
                                     k: self._widget_data.get('attendee-name-{}'.format(k.replace('_', '-')), '')
                                     for k, l, w in scheme['fields']
                                 }
-                        if self.event.settings.attendee_emails_asked and 'email' in self._widget_data:
+
+                        if email_asked and 'email' in self._widget_data:
                             cp.attendee_email = self._widget_data.get('email')
 
-                        cp._answers = {}
-                        for k, v in self._widget_data.items():
-                            if not k.startswith('question-'):
-                                continue
-                            # TODO(questionnaires)  -  switch to QuestionnaireRow
-                            q = cp.item.questions.filter(ask_during_checkin=False, identifier__iexact=k[9:]).first()
-                            if q:
-                                try:
-                                    cp._answers[q] = q.clean_answer(v)  # TODO(questionnaires)  -  switch to row.clean_answer
-                                except ValidationError:
-                                    pass
+                        cp._answers = copy.copy(widget_answers)
 
                         if op.bundled:
                             cp.save()  # Needs to be in the database already so we have a PK that we can reference
@@ -1518,7 +1561,8 @@ class CartManager:
             if getattr(p, '_answers', None):
                 if not p.pk:  # We stored some to the database already before
                     p.save()
-                _save_answers(p, {}, p._answers)
+                p.set_answers(p._answers)
+
         CartPosition.objects.bulk_create([p for p in new_cart_positions if not getattr(p, '_answers', None) and not p.pk])
 
         if 'sleep-before-commit' in debugflags_var.get():

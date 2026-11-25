@@ -77,12 +77,14 @@ from pretix.helpers.hierarkey import clean_filename
 from pretix.helpers.json import CustomJSONEncoder, safe_string
 from pretix.helpers.thumb import get_thumbnail
 
+from ...helpers.models import copy_objects, filter_with_cache
 from ..settings import settings_hierarkey
 from .organizer import Organizer, Team
-from ...helpers.models import copy_objects, filter_with_cache
 
 if TYPE_CHECKING:
     from hierarkey.proxy import HierarkeyProxy
+
+    from . import Questionnaire
 
 logger = logging.getLogger(__name__)
 
@@ -752,7 +754,6 @@ class Event(EventMixin, LoggedModel):
                 system_datafield=QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS)
         return questionnaire
 
-
     @property
     def social_image(self):
         from pretix.multidomain.urlreverse import eventreverse_absolute
@@ -911,7 +912,8 @@ class Event(EventMixin, LoggedModel):
         from ..signals import event_copy_data
         from . import (
             Discount, Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue,
-            ItemProgramTime, ItemVariationMetaValue, Question, Questionnaire, Quota,
+            ItemProgramTime, ItemVariationMetaValue, Question, Questionnaire,
+            Quota,
         )
 
         is_cross_organizer = other.organizer_id != self.organizer_id
@@ -1569,6 +1571,22 @@ class Event(EventMixin, LoggedModel):
     def positiondatafields(self):
         from . import Question
         return filter_with_cache(self.questions, container_type=Question.ContainerType.ORDERPOSITION)
+
+    def get_asked_questions(self,
+                            questionnaire_type: "Questionnaire.QuestionnaireType | list[Questionnaire.QuestionnaireType] | None"=None,
+                            sales_channel=None):
+        from . import Questionnaire, QuestionnaireRow
+        qs = QuestionnaireRow.objects.filter(
+            Q(system_datafield__isnull=False) | Q(user_datafield_id__isnull=False),
+            questionnaire__event=self,
+        )
+        if isinstance(questionnaire_type, Questionnaire.QuestionnaireType):
+            qs = qs.filter(questionnaire__type=questionnaire_type)
+        elif isinstance(questionnaire_type, list):
+            qs = qs.filter(questionnaire__type__in=questionnaire_type)
+        if sales_channel is not None:
+            qs = qs.filter(Q(questionnaire__all_sales_channels=True) | Q(questionnaire__limit_sales_channels=sales_channel))
+        return qs
 
 
 class SubEvent(EventMixin, LoggedModel):

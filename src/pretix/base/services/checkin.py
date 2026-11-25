@@ -43,8 +43,8 @@ from dateutil.tz import datetime_exists
 from django.core.files import File
 from django.db import IntegrityError
 from django.db.models import (
-    BooleanField, Case, Count, Exists, ExpressionWrapper, F, IntegerField, Max, Min,
-    OuterRef, Q, Subquery, TextField, Value, When,
+    BooleanField, Case, Count, Exists, ExpressionWrapper, F, IntegerField, Max,
+    Min, OuterRef, Q, Subquery, TextField, Value, When,
 )
 from django.db.models.functions import Coalesce, TruncDate
 from django.dispatch import receiver
@@ -877,73 +877,6 @@ class RequiredMediaExchangeError(Exception):
         self.media_policy = media_policy
         self.media_type = media_type
         super().__init__(msg)
-
-
-def _save_answers(op, existing_answer_objects, given_answers):
-    # used by perform_checkin to store `answers`, as well as by CartManager to store widget_data
-    def _create_answer(question, answer):
-        try:
-            return op.answers.create(question=question, answer=answer)
-        except IntegrityError:
-            # Since we prefetch answers in _checkin_list_position_queryset, there's a possible race condition
-            # here if the user submits their scan a second time while the first one is still running,
-            # thus leading to duplicate QuestionAnswer objects. Since Django doesn't support UPSERT, the "proper"
-            # fix would be a transaction with select_for_update(), or at least fetching using get_or_create here
-            # again. However, both of these approaches have a significant performance overhead for *all* requests,
-            # while the issue happens very very rarely. So we opt for just catching the error and retrying properly.
-            qa = op.answers.get(question=question)
-            qa.answer = answer
-            qa.save(update_fields=['answer'])
-            qa.options.clear()
-            return qa
-
-    written = False
-    for q, a in given_answers.items():
-        if not a:
-            if q.id in existing_answer_objects:
-                written = True
-                existing_answer_objects[q.id].delete()
-            else:
-                continue
-        if isinstance(a, QuestionOption):
-            if q.id in existing_answer_objects:
-                qa = existing_answer_objects[q.id]
-                qa.answer = str(a.answer)
-                qa.save()
-                written = True
-                qa.options.clear()
-            else:
-                qa = _create_answer(question=q, answer=str(a.answer))
-            qa.options.add(a)
-        elif isinstance(a, list):
-            if q.id in existing_answer_objects:
-                qa = existing_answer_objects[q.id]
-                qa.answer = ", ".join([str(o) for o in a])
-                qa.save()
-                written = True
-                qa.options.clear()
-            else:
-                qa = _create_answer(question=q, answer=", ".join([str(o) for o in a]))
-            qa.options.add(*a)
-        elif isinstance(a, File):
-            if q.id in existing_answer_objects:
-                qa = existing_answer_objects[q.id]
-            else:
-                qa = _create_answer(question=q, answer=str(a))
-            qa.set_file(a)
-            qa.save()
-            written = True
-        else:
-            if q.id in existing_answer_objects:
-                qa = existing_answer_objects[q.id]
-                qa.answer = str(a)
-                qa.save()
-            else:
-                _create_answer(question=q, answer=str(a))
-            written = True
-
-    if written:
-        op.answers._remove_prefetched_objects()
 
 
 def _get_checkin_questions(op):

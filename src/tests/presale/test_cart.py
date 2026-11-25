@@ -53,8 +53,10 @@ from pretix.base.models import (
     Voucher,
 )
 from pretix.base.models.items import (
-    ItemAddOn, ItemBundle, Questionnaire, SubEventItem, SubEventItemVariation,
+    ItemAddOn, ItemBundle, Questionnaire, QuestionnaireRow, SubEventItem,
+    SubEventItemVariation,
 )
+from pretix.base.models.orders import CheckoutSession
 from pretix.base.services.cart import CartError, CartManager, error_messages
 from pretix.testutils.scope import classscope
 from pretix.testutils.sessions import get_cart_session_key
@@ -102,7 +104,6 @@ class CartTestMixin:
 
 
 class CartTest(CartTestMixin, TestCase):
-
     def test_after_presale(self):
         self.event.presale_end = now() - timedelta(days=1)
         self.event.save()
@@ -169,12 +170,12 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].price, 23)
 
     def test_widget_data_post(self):
-        self.event.settings.attendee_names_asked = True
-        self.event.settings.attendee_emails_asked = True
         with scopes_disabled():
             q = self.event.questions.create(internal_name='What is your shoe size?', type=Question.TYPE_NUMBER)
             qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='Questions')
             qaire.rows.create(user_datafield=q, label='What is your shoe size?', required=True)
+            qaire.rows.create(system_datafield=QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS, label='Attendee Name', required=True)
+            qaire.rows.create(system_datafield=QuestionnaireRow.SystemDatafield.ATTENDEE_EMAIL, label='Attendee Email', required=True)
             qaire.items.add(self.ticket)
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
@@ -227,12 +228,12 @@ class CartTest(CartTestMixin, TestCase):
             assert not objs[0].answers.exists()
 
     def test_widget_data_session(self):
-        self.event.settings.attendee_names_asked = True
-        self.event.settings.attendee_emails_asked = True
         with scopes_disabled():
             q = self.event.questions.create(internal_name='What is your shoe size?', type=Question.TYPE_NUMBER)
             qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='Questions')
             qaire.rows.create(user_datafield=q, label='What is your shoe size?', required=True)
+            qaire.rows.create(system_datafield=QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS, label='Attendee Name', required=True)
+            qaire.rows.create(system_datafield=QuestionnaireRow.SystemDatafield.ATTENDEE_EMAIL, label='Attendee Email', required=True)
             qaire.items.add(self.ticket)
         self._set_session('widget_data', {
             'attendee-name': 'John Doe',
@@ -240,19 +241,41 @@ class CartTest(CartTestMixin, TestCase):
             'question-' + q.identifier: '43'
         })
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
-            'item_%d' % self.ticket.id: '1',
+            'item_%d' % self.ticket.id: 2,
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         with scopes_disabled():
             objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
-            self.assertEqual(len(objs), 1)
-            self.assertEqual(objs[0].item, self.ticket)
-            self.assertIsNone(objs[0].variation)
-            self.assertEqual(objs[0].price, 23)
-            self.assertEqual(objs[0].attendee_email, "foo@example.com")
-            self.assertEqual(objs[0].attendee_name, "John Doe")
-            a = objs[0].answers.first()
+            self.assertEqual(len(objs), 2)
+            for obj in objs:
+                self.assertEqual(obj.item, self.ticket)
+                self.assertIsNone(obj.variation)
+                self.assertEqual(obj.price, 23)
+                self.assertEqual(obj.attendee_email, "foo@example.com")
+                self.assertEqual(obj.attendee_name, "John Doe")
+                a = obj.answers.first()
+                self.assertEqual(a.answer, "43")
+                self.assertEqual(a.question, q)
+
+    def test_widget_data_session_order_level(self):
+        with scopes_disabled():
+            q = self.event.questions.create(internal_name='What is your shoe size?', type=Question.TYPE_NUMBER, container_type=Question.ContainerType.ORDER)
+            qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.ORDER_PURCHASE, internal_name='Questions')
+            qaire.rows.create(user_datafield=q, label='What is your shoe size?', required=True)
+
+        self._set_session('widget_data', {
+            'email': 'foo@example.com',
+            'question-' + q.identifier: '43'
+        })
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: 2,
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        with scopes_disabled():
+            session = CheckoutSession.objects.get(cart_id=self.session_key)
+            a = session.answers.first()
             self.assertEqual(a.answer, "43")
             self.assertEqual(a.question, q)
 
@@ -1377,7 +1400,7 @@ class CartTest(CartTestMixin, TestCase):
             )
             q1 = self.event.questions.create(internal_name='Age', type=Question.TYPE_NUMBER)
             qaire = self.event.questionnaires.create(type=Questionnaire.QuestionnaireType.POSITION_PURCHASE, internal_name='Questions')
-            qaire.rows.create(user_datafield=q, label='Age', required=True)
+            qaire.rows.create(user_datafield=q1, label='Age', required=True)
             qaire.items.add(self.ticket)
             cr1.answers.add(QuestionAnswer.objects.create(
                 cartposition=cr1, question=q1, answer='23'
