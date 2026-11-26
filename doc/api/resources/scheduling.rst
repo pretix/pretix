@@ -3,7 +3,7 @@ Scheduling
 
 .. note:: This API is only available when the plugin **pretix-scheduling** is installed (pretix Hosted and Enterprise only).
 
-The scheduling plugin lets you book people, rooms, equipment, and other resources for the dates of your event. 
+The scheduling plugin lets you book people, rooms, equipment, and other resources for the dates of your event.
 Resources belong to a resource type, which defines the emails sent when a resource is booked, and the properties they can have, such as a guide's language.
 A resource's availability is defined by rules, which repeat on certain weekdays across a date range, and shifts, which cover a single period of time.
 A planning books a resource for a date to fill one of its requirements.
