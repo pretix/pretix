@@ -186,6 +186,7 @@ Resource type endpoints
       GET /api/v1/organizers/bigevents/resourcetypes/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -255,6 +256,7 @@ Resource type endpoints
       POST /api/v1/organizers/bigevents/resourcetypes/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
       {
         "name": {
@@ -353,6 +355,7 @@ Resource type endpoints
       GET /api/v1/organizers/bigevents/resourcetypes/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -521,6 +524,7 @@ Property endpoints
       GET /api/v1/organizers/bigevents/resourcetypes/1/properties/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -561,6 +565,7 @@ Property endpoints
       POST /api/v1/organizers/bigevents/resourcetypes/1/properties/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
       {
         "name": "My Property"
@@ -599,6 +604,7 @@ Property endpoints
       GET /api/v1/organizers/bigevents/resourcetypes/1/properties/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -706,6 +712,7 @@ Value endpoints
       GET /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -747,6 +754,7 @@ Value endpoints
       POST /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
       {
         "value": "My Value"
@@ -786,6 +794,7 @@ Value endpoints
       GET /api/v1/organizers/bigevents/resourcetypes/1/properties/1/values/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -896,6 +905,7 @@ Resource endpoints
       GET /api/v1/organizers/bigevents/resources/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -951,6 +961,7 @@ Resource endpoints
       POST /api/v1/organizers/bigevents/resources/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
       {
         "type": 5,
@@ -1015,6 +1026,7 @@ Resource endpoints
       GET /api/v1/organizers/bigevents/resources/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -1147,6 +1159,7 @@ Invite endpoints
       GET /api/v1/organizers/bigevents/resources/7/invites/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -1187,6 +1200,7 @@ Invite endpoints
       POST /api/v1/organizers/bigevents/resources/7/invites/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
       {
         "email": "mark@example.org"
@@ -1226,6 +1240,7 @@ Invite endpoints
       GET /api/v1/organizers/bigevents/resources/7/invites/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -1288,6 +1303,7 @@ Invite endpoints
       POST /api/v1/organizers/bigevents/resources/7/invites/1/resend/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -1323,6 +1339,7 @@ Manager endpoints
       GET /api/v1/organizers/bigevents/resources/7/managers/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -1363,6 +1380,7 @@ Manager endpoints
       POST /api/v1/organizers/bigevents/resources/7/managers/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
       {
         "email": "mark@example.org"
@@ -1401,6 +1419,7 @@ Manager endpoints
       GET /api/v1/organizers/bigevents/resources/7/managers/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -1466,6 +1485,7 @@ Availability rule endpoints
       GET /api/v1/organizers/bigevents/resources/7/rules/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -1512,6 +1532,7 @@ Availability rule endpoints
       POST /api/v1/organizers/bigevents/resources/7/rules/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
       {
           "available": true,
@@ -1562,6 +1583,7 @@ Availability rule endpoints
       GET /api/v1/organizers/bigevents/resources/7/rules/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -1681,6 +1703,7 @@ Availability shift endpoints
       GET /api/v1/organizers/bigevents/resources/7/shifts/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -1724,6 +1747,7 @@ Availability shift endpoints
       POST /api/v1/organizers/bigevents/resources/7/shifts/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
       {
             "available": true,
@@ -1768,6 +1792,7 @@ Availability shift endpoints
       GET /api/v1/organizers/bigevents/resources/7/shifts/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -1881,6 +1906,7 @@ Planning endpoints
       GET /api/v1/organizers/bigevents/plannings/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
@@ -1930,6 +1956,7 @@ Planning endpoints
       GET /api/v1/organizers/bigevents/plannings/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
+      Content-Type: application/json
 
    **Example response**:
 
