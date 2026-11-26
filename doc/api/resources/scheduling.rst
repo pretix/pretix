@@ -1178,7 +1178,7 @@ Invite endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/resources/(resource)/invites/
 
-   Create an invite to manage a resource.  Can only be used for resources where the type has ``is_human`` set.  If the resource has an existing manager, it will be removed.
+   Create an invite to manage a resource.  If the resource has an existing manager, it will be removed.
 
    **Example request**:
 
@@ -1354,7 +1354,7 @@ Manager endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/resources/(resource)/managers/
 
-   Set the manager for this resource.  Can only be used for resources where the type has ``is_human`` set, otherwise use ``notification_email``.
+   Set the manager for this resource.  If the resource has an existing manager, it will be removed.
 
    **Example request**:
 
