@@ -268,7 +268,14 @@ class MixedAnswerListSerializer(ListSerializer):
             elif qc.system_datafield and (sys_answer := container_obj.system_answers[qc.system_datafield]) is not None:
                 if qc.system_datafield == QuestionnaireRow.SystemDatafield.ATTENDEE_NAME_PARTS:
                     name_parts = container_obj.attendee_name_parts
-                    settings = self.context['event'].settings
+                    if 'settings' in self.context:
+                        settings = self.context['event'].settings
+                    elif isinstance(container_obj, Order):
+                        settings = container_obj.event.settings
+                    elif isinstance(container_obj, OrderPosition):
+                        settings = container_obj.order.event.settings
+                    else:
+                        raise ValidationError("Unknown container object")
                     for k, v, w, *__ in PERSON_NAME_SCHEMES.get(settings.name_scheme)['fields']:
                         if k in name_parts:
                             options = []
