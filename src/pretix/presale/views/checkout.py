@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from urllib.parse import quote, urlencode
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.contrib import messages
