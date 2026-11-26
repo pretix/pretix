@@ -120,7 +120,7 @@ Rule resource
 -------------
 The rule resource contains the following public fields:
 
- .. rst-class:: rest-resource-table
+.. rst-class:: rest-resource-table
 
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
@@ -140,7 +140,7 @@ Shift resource
 --------------
 The shift resource contains the following public fields:
 
- .. rst-class:: rest-resource-table
+.. rst-class:: rest-resource-table
 
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
