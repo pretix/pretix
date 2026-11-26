@@ -1996,7 +1996,6 @@ class StripeRedirectWithPhoneNumberMethod(StripeRedirectMethod):
         return False
 
     def _payment_intent_kwargs(self, request, payment):
-        breakpoint()
         return {
             "payment_method_data": {
                 "type": self.method,
