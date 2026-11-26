@@ -2794,6 +2794,15 @@ class OrderPosition(AbstractPosition):
                     'order_code': order.code
                 })
 
+            if medium := cartpos.linked_reusable_medium:
+                medium.linked_orderpositions.add(op)
+                medium.log_action(
+                    'pretix.reusable_medium.linked_orderposition.added',
+                    data={
+                        'linked_orderposition': op,
+                    }
+                )
+
         # Delete afterwards. Deleting in between might cause deletion of things related to add-ons
         # due to the deletion cascade.
         for cartpos in cp:
@@ -3258,6 +3267,12 @@ class CartPosition(AbstractPosition):
     )
     requested_valid_from = models.DateTimeField(
         null=True,
+    )
+    linked_reusable_medium = models.ForeignKey(
+        "ReusableMedium",
+        verbose_name=_('Linked reusable medium'),
+        null=True,
+        on_delete=models.CASCADE,
     )
 
     objects = ScopedManager(organizer='event__organizer')
