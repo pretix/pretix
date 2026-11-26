@@ -424,6 +424,16 @@ class AnswerSerializer(I18nAwareModelSerializer):
             return data
         if data['answer'] == 'file:keep':
             return data
+
+        # Instead of file:keep, clients can also mirror the current value so they don't need to know about question types
+        if data['answer'].startswith('http') and self.parent and self.parent.parent and self.parent.parent.instance:
+            try:
+                a = self.parent.parent.instance.answers.get(question=data['question'])
+                if data['answer'] == self.to_representation(a)['answer']:
+                    return {**data, 'answer': 'file:keep'}
+            except QuestionAnswer.DoesNotExist:
+                pass
+
         try:
             cf = CachedFile.objects.get(
                 file__isnull=False,

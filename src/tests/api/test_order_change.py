@@ -31,6 +31,8 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
+
+from pretix.api.serializers.order import AnswerSerializer
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
@@ -1386,6 +1388,28 @@ def test_position_update_question_handling(token_client, organizer, event, order
         answ = op.answers.get()
     assert answ.file
     assert answ.answer.startswith("file://")
+    assert resp.data["answers"][0]["answer"].startswith("http")
+
+    payload = {
+        'answers': [
+            {
+                "datafield": question.identifier,
+                "answer": resp.data["answers"][0]["answer"],
+            }
+        ]
+    }
+    question.type = Question.TYPE_FILE
+    question.save()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        answ_after = op.answers.get()
+    assert answ.file == answ_after.file
+    assert answ.answer == answ_after.answer
 
 
 @pytest.mark.django_db
