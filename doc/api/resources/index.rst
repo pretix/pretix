@@ -65,3 +65,4 @@ at :ref:`plugin-docs`.
    shipping
    billing_invoices
    billing_var
+   scheduling
