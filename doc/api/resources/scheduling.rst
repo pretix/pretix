@@ -1191,7 +1191,8 @@ Invite endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/resources/(resource)/invites/
 
-   Create an invite to manage a resource.  If the resource has an existing manager, it will be removed.
+   Create an invite to manage a resource.
+   If the resource has ``type.is_human`` set then an existing manager **or** invite will be removed by by this operation.
 
    **Example request**:
 
@@ -1371,7 +1372,8 @@ Manager endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/resources/(resource)/managers/
 
-   Set the manager for this resource.  If the resource has an existing manager, it will be removed.
+   Set the manager for this resource.
+   If the resource has ``type.is_human`` set then an existing manager **or** invite will be removed by by this operation.
 
    **Example request**:
 
