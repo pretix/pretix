@@ -453,6 +453,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 if not should_hide_subevent(self.request.event.settings, se, voucher)
             ]
             context['visible_events'] = len(subevents) > 0
+        context['is_single'] = self.request.event.subevents.filter(active=True).count() == 1
         return context
 
 
