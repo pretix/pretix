@@ -45,6 +45,7 @@ at :ref:`plugin-docs`.
    carts
    teams
    devices
+   gates
    webhooks
    seatingplans
    exporters
