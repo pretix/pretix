@@ -76,13 +76,13 @@ Field                                 Type                                   Des
 ===================================== ====================================== =======================================================
 id                                    integer                                Internal ID in pretix
 type                                  integer                                Internal ID for resource type in pretix (read-only after creation)
-property_values                       list of {id, property, value} objects  Property values assigned to the resource.  When writing there are 3 shorthands which can be used: ``{"property": 2, "value": "My value"}``, ``{"id": 2, "property": 2}``, and ``{"id": 2}``.
+property_values                       list of ``{id, property, value}`` objects  Property values assigned to the resource.  When writing there are 3 shorthands which can be used: ``{"property": 2, "value": "My value"}``, ``{"id": 2, "property": 2}``, and ``{"id": 2}``.
 name                                  string                                 Resource name
 locale                                string                                 The locale used for communication with this resource
 active                                boolean                                Deleted resources will have this set to false
 phone                                 string                                 The resource's phone number (or ``null``)
 address                               string                                 The resource's address
-notification_email                    string                                 The email address to send planning change emails to.  Ignored and left out of responses when type.is_human is True
+notification_email                    string                                 The email address to send planning change emails to.  Ignored and left out of responses when ``type.is_human`` is ``true``
 confirmation_required                 boolean                                Does this resource require confirmation when a planning is created for it.
 can_invoice                           boolean                                Can this resource invoice the organizer?
 external_identifier                   string                                 External ID of the resource (or ``null``)
@@ -167,7 +167,7 @@ resource                              integer                    Internal ID in 
 subevent                              integer                    Internal ID in pretix for the planning's subevent (read-only)
 status                                string                     Status for the planning, can be one of ``requested``, ``confirmed``, ``completed``, ``canceled``, or ``denied``.  Only ``confirmed``, ``canceled``, or ``denied`` can be set.
 created_at                            datetime                   When the Planning was created (read-only)
-cost                                  decimal (string)           How much the resource for this planning cost
+cost                                  decimal (string)           How much the resource for this planning costs, in the event's currency
 paid                                  boolean                    Whether the resource has been paid for this planning
 invoiced                              boolean                    Should this planning be invoiced?
 ===================================== ========================== =======================================================
