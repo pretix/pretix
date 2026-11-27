@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-28 10:48+0000\n"
-"PO-Revision-Date: 2026-10-29 17:00+0000\n"
+"PO-Revision-Date: 2026-11-27 09:36+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
 "fr/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.10.1\n"
+"X-Generator: Weblate 2026.11.2\n"
 
 #: pretix/_base_settings.py
 msgid "English"
@@ -17043,7 +17043,7 @@ msgstr "dernier"
 #: pretix/control/forms/rrule.py
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html
 msgid "Day"
-msgstr "Journée"
+msgstr "Jour"
 
 #: pretix/control/forms/rrule.py
 msgid "Weekend day"
