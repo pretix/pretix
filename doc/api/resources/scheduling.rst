@@ -484,7 +484,7 @@ Resource type endpoints
 
 .. http:delete:: /api/v1/organizers/(organizer)/resourcetypes/(id)/
 
-   Delete a type.
+   Delete a type. Only possible if there are no resources of this type.
 
    **Example request**:
 
@@ -671,7 +671,7 @@ Property endpoints
 
 .. http:delete:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(id)/
 
-   Delete a property.
+   Delete a property. Only possible if a requirement is not being satisfied by one of its values.
 
    **Example request**:
 
@@ -745,7 +745,7 @@ Property value endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/
 
-   Create a value for a property and an organizer.
+   Create a value for a property.
 
    **Example request**:
 
@@ -863,7 +863,7 @@ Property value endpoints
 
 .. http:delete:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/(id)/
 
-   Delete a value.
+   Delete a value. Only possible if it is not satisfying a requirement.
 
    **Example request**:
 
@@ -1119,7 +1119,7 @@ Resource endpoints
 
 .. http:delete:: /api/v1/organizers/(organizer)/resources/(id)/
 
-   Delete a resource.  A resource with plannings will be inactive instead.
+   Delete a resource.  A resource with plannings will be marked inactive instead.
 
    **Example request**:
 
