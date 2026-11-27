@@ -601,7 +601,7 @@ class OrderDetail(OrderView):
             'item', 'variation', 'addon_to', 'tax_rule', 'used_membership', 'used_membership__membership_type',
             'discount',
         ).prefetch_related(
-            prefetch_relevant_questionnaires(None, None),
+            prefetch_relevant_questionnaires(None, None, questionnaire_lookup='item__questionnaires'),
             #'item__questionnaires',
             'issued_gift_cards', 'owned_gift_cards', 'linked_media',  # TODO(questionnaires) : item__questions gibts nicht mehr
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),

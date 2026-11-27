@@ -130,7 +130,7 @@ class ItemList(ListView):
             requires_seat=requires_seat,
         ).prefetch_related(
             "category", "limit_sales_channels",
-            prefetch_relevant_questionnaires(None, None, questionnaire_lookup='questionnaires'),
+            prefetch_relevant_questionnaires(None, None),
         ).order_by(
             F('category__position').asc(nulls_first=True),
             'category', 'position'

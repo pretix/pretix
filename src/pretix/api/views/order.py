@@ -256,10 +256,11 @@ class OrderViewSetMixin:
         serializer = self.get_serializer()
         if ('positions' in serializer.fields and 'answers' in serializer.fields['positions'].child.fields
                 and serializer.fields['positions'].child.fields['answers'].is_compat_request()):
-            opq = opq.prefetch_related(
-                prefetch_relevant_questionnaires(None, None)
-            )
+            item_prefetch = [prefetch_relevant_questionnaires(None, None)]
+        else:
+            item_prefetch = []
         if request.query_params.get('pdf_data', 'false').lower() == 'true' and getattr(request, 'event', None):
+            # This can somehow trigger a 404!
             prefetch_related_objects([request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [request.event],
@@ -274,7 +275,8 @@ class OrderViewSetMixin:
                     Prefetch('checkins', queryset=Checkin.objects.select_related('device')),
                     Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
                     Prefetch('item', queryset=self.request.event.items.prefetch_related(
-                        Prefetch('meta_values', ItemMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
+                        Prefetch('meta_values', ItemMetaValue.objects.select_related('property'), to_attr='meta_values_cached'),
+                        *item_prefetch,
                     )),
                     Prefetch('variation', queryset=ItemVariation.objects.prefetch_related(
                         Prefetch('meta_values', ItemVariationMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
@@ -1133,6 +1135,10 @@ class OrderPositionViewSetMixin:
         else:
             qs = OrderPosition.objects
         qs = qs.filter(order__event__organizer=self.request.organizer)
+        if self.get_serializer().fields['answers'].is_compat_request():
+            item_prefetch = [prefetch_relevant_questionnaires(None, None)]
+        else:
+            item_prefetch = []
         if self.request.query_params.get('pdf_data', 'false').lower() == 'true' and getattr(self.request, 'event', None):
             prefetch_related_objects([self.request.organizer], 'meta_properties')
             prefetch_related_objects(
@@ -1146,7 +1152,8 @@ class OrderPositionViewSetMixin:
                 Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
                 Prefetch('item', queryset=self.request.event.items.prefetch_related(
                     Prefetch('meta_values', ItemMetaValue.objects.select_related('property'),
-                             to_attr='meta_values_cached')
+                             to_attr='meta_values_cached'),
+                    *item_prefetch,
                 )),
                 'variation',
                 'answers', 'answers__options', 'answers__question',
@@ -1191,10 +1198,6 @@ class OrderPositionViewSetMixin:
                 'answers', 'answers__options', 'answers__question', 'order__event', 'order__event__organizer'
             ).select_related(
                 'item', 'order', 'seat'
-            )
-        if self.get_serializer().fields['answers'].is_compat_request():
-            qs = qs.prefetch_related(
-                prefetch_relevant_questionnaires(None, None)
             )
         return qs
 

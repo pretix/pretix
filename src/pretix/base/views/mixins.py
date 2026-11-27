@@ -356,7 +356,7 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
             Prefetch('answers',
                      QuestionAnswer.objects.prefetch_related('options'),
                      to_attr='answerlist'),
-            prefetch_relevant_questionnaires(self.order.sales_channel.identifier, type),
+            prefetch_relevant_questionnaires(self.order.sales_channel.identifier, type, questionnaire_lookup='item__questionnaires'),
         ))
 
     @cached_property
