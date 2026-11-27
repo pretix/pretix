@@ -50,8 +50,8 @@ id                                    integer                    Internal ID in 
 name                                  string                     Property name.  Must be unique within the resource type.
 ===================================== ========================== =======================================================
 
-Value resource
---------------
+Property value resource
+-----------------------
 
 The value resource contains the following public fields:
 
@@ -698,8 +698,8 @@ Property endpoints
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it **or** the property has values linked to a requirement.
    :statuscode 404: The requested type or property does not exist
 
-Value endpoints
----------------
+Property value endpoints
+------------------------
 
 .. http:get:: /api/v1/organizers/(organizer)/resourcetypes/(resource_type)/properties/(property)/values/
 
