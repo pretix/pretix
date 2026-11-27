@@ -339,6 +339,8 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False, allow_
     if not allow_cross_sell:
         q &= Q(Q(category__isnull=True) | ~Q(category__cross_selling_mode='only'))
 
+    q &= ~Q(media_policy__in=(Item.MEDIA_POLICY_REUSE, Item.MEDIA_POLICY_APPEND))
+
     if voucher:
         if voucher.item_id:
             q &= Q(pk=voucher.item_id)
