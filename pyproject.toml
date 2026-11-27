@@ -55,7 +55,7 @@ dependencies = [
   "django-phonenumber-field==8.5.*",
   "django-querytagger==0.0.3",
   "django-redis==7.0.*",
-  "django-scopes==2.1.*",
+  "django-scopes==2.2.*",
   "django-statici18n==2.8.*",
   "djangorestframework>=3.18.3",
   "drf_ujson2==1.7.*",

@@ -68,7 +68,8 @@ def env():
 def test_perform_refund(client, env):
     event, user, payment = env
     client.login(email='dummy@dummy.dummy', password='dummy')
-    assert not OrderRefund.objects.exists()
+    with scope(organizer=event.organizer):
+        assert not OrderRefund.objects.exists()
     url = "/control/event/dummy/dummy/orders/1Z3AS/refund"
     r = client.post(url, {
         f"refund-{payment.id}": "23.00",
