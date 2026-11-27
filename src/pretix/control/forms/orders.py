@@ -942,6 +942,9 @@ class EventCancelForm(FormPlaceholderMixin, forms.Form):
     )
     send_subject = forms.CharField()
     send_message = forms.CharField()
+    send_attendees = forms.BooleanField()
+    send_subject_attendees = forms.CharField()
+    send_message_attendees = forms.CharField()
     send_waitinglist = forms.BooleanField(
         label=_("Send information to waiting list"),
         required=False
@@ -976,11 +979,45 @@ class EventCancelForm(FormPlaceholderMixin, forms.Form):
                 'Your {event} team'
             ))
         )
+        self.fields['send_attendees'] = forms.BooleanField(
+            label=_("Send an email to attendees"),
+            help_text=_('If the order contains attendees with email addresses different from the person who orders the '
+                        'tickets, the following email will be sent out to the attendees.'),
+            required=False,
+            initial=True,
+        )
+        self.fields['send_subject_attendees'] = I18nFormField(
+            label=_("Subject sent to attendees"),
+            required=True,
+            widget_kwargs={'attrs': {'data-display-dependency': '#id_send_attendees'}},
+            initial=LazyI18nString.from_gettext(gettext_noop('Canceled: {event}')),
+            widget=I18nTextInput,
+            locales=self.event.settings.get('locales'),
+        )
+        self.fields['send_message_attendees'] = I18nFormField(
+            label=_("Text sent to attendees"),
+            required=True,
+            widget=I18nMarkdownTextarea,
+            widget_kwargs={'attrs': {'data-display-dependency': '#id_send_attendees'}},
+            locales=self.event.settings.get('locales'),
+            initial=LazyI18nString.from_gettext(gettext_noop(
+                'Hello,\n\n'
+                'with this email, we regret to inform you that {event} has been canceled.\n\n'
+                'You can view the current state of your order here:\n\n{url}\n\nBest regards,  \n\n'
+                'Your {event} team'
+            ))
+        )
 
         self._set_field_placeholders('send_subject', ['event_or_subevent', 'refund_amount', 'position_or_address',
                                                       'order', 'event'])
         self._set_field_placeholders('send_message', ['event_or_subevent', 'refund_amount', 'position_or_address',
                                                       'order', 'event'], rich=True)
+        self._set_field_placeholders('send_subject_attendees',
+                                     ['event_or_subevent', 'refund_amount', 'position_or_address',
+                                      'order', 'event'])
+        self._set_field_placeholders('send_message_attendees',
+                                     ['event_or_subevent', 'refund_amount', 'position_or_address',
+                                      'order', 'event'], rich=True)
         self.fields['send_waitinglist_subject'] = I18nFormField(
             label=_("Subject"),
             required=True,
