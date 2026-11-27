@@ -86,7 +86,7 @@ def create_membership(customer: Customer, position: OrderPosition):
 def validate_memberships_in_order(customer: Customer, positions: List[AbstractPosition], event: Event, lock=False, ignored_order: Order = None, testmode=False,
                                   valid_from_not_chosen=False):
     """
-    Validate that a set of cart or order positions. This currently does not validate
+    Validate that a set of cart or order positions.
 
     :param customer: Customer to validate for
     :param positions: List of order or cart positions
