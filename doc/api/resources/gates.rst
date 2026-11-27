@@ -1,3 +1,6 @@
+Gates
+=====
+
 Gate resource
 -------------
 
@@ -14,7 +17,7 @@ identifier                            string                     Internal identi
 ===================================== ========================== =======================================================
 
 Endpoints
-----------------
+---------
 
 .. http:get:: /api/v1/organizers/(organizer)/gates/
 
